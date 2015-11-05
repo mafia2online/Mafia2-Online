@@ -1,0 +1,470 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{A3A3B8B8-9578-4B38-95C9-42A6B4D29A07}</ProjectGuid>
+    <RootNamespace>m2mp</RootNamespace>
+    <ProjectName>Client.Core</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>NotSet</CharacterSet>
+    <UseOfMfc>false</UseOfMfc>
+    <UseOfAtl>false</UseOfAtl>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
+    <CharacterSet>NotSet</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)Binary\debug</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <TargetExt>.dll</TargetExt>
+    <TargetName>m2mp_d</TargetName>
+    <LinkIncremental>
+    </LinkIncremental>
+    <IncludePath>$(ProjectDir)..\Libraries\DXSDK\Include;$(ProjectDir)..\Libraries\Detours;$(ProjectDir)..\Libraries\lua\Source;$(ProjectDir)..\Libraries\zlib-1.2.5;$(ProjectDir)..\Libraries\squirrel;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)..\Libraries\DXSDK\Lib;$(ProjectDir)..\Libraries\Detours;$(ProjectDir)..\Libraries\RakNet\Lib;$(ProjectDir)..\Libraries\lua\Lib;$(ProjectDir)..\Libraries\zlib-1.2.5\projects\Debug;$(ProjectDir)..\Libraries\squirrel\Lib;$(ProjectDir)..\Libraries\libpng\projects\Debug;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)Binary\Release</OutDir>
+    <TargetName>m2mp</TargetName>
+    <TargetExt>.dll</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>../Libraries/CrashRpt;../Libraries/cegui-0.4.0-custom/include;../Libraries/DXSDK/include;../Libraries/squirrel;../Libraries/lua;../Libraries/RakNet/Source;../Shared;../Libraries/Detours;../Libraries/zlib-1.2.5;../Libraries/lpng142;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_WIN32;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_CLIENT;_DEBUG;CEGUI_STATIC;LOGGER;WIN32_LEAN_AND_MEAN;NO_GARBAGE_COLLECTOR;DEBUG_LOG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4996;4409;4482;4800;4305;4018;4390;4099;4244;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>crashrpt1401.lib;winmm.lib;ws2_32.lib;comctl32.lib;d3dx9.lib;dxguid.lib;dinput8.lib;DxErr9.lib;detours.lib;RakNetStatic_d.lib;zlib_d.lib;libpng_d.lib;dbghelp.lib;CEGUIBase_d.lib;CEGUIFalagardBase_d.lib;DirectX9GUIRenderer_d.lib;freetype2110_D.lib;tinyxml_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../Libraries/CrashRpt;../Libraries/cegui-0.4.0-custom/lib;../Libraries/DXSDK/Lib;../Libraries/Detours;../Libraries/RakNet/Lib;../Libraries/zlib-1.2.5/projects/Debug;../Libraries/lpng142/projects/Debug;../Libraries/tinyxml/Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreAllDefaultLibraries>
+      </IgnoreAllDefaultLibraries>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
+      <ModuleDefinitionFile>
+      </ModuleDefinitionFile>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>Full</Optimization>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <OmitFramePointers>true</OmitFramePointers>
+      <PreprocessorDefinitions>_WIN32;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_CLIENT;_RELEASE;CEGUI_STATIC;LOGGER;WIN32_LEAN_AND_MEAN;NO_GARBAGE_COLLECTOR;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <CompileAs>Default</CompileAs>
+      <DisableSpecificWarnings>4996;4409;4482;4800;4305;4018;4390;4099;4244;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalIncludeDirectories>../Libraries/CrashRpt;../Libraries/cegui-0.4.0-custom/include;../Libraries/DXSDK/include;../Libraries/squirrel;../Libraries/lua;../Libraries/RakNet/Source;../Shared;../Libraries/Detours;../Libraries/zlib-1.2.5;../Libraries/lpng142;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <RandomizedBaseAddress>true</RandomizedBaseAddress>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+      <TargetMachine>MachineX86</TargetMachine>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
+      <AdditionalDependencies>crashrpt1401.lib;winmm.lib;ws2_32.lib;comctl32.lib;d3dx9.lib;dxguid.lib;dinput8.lib;DxErr9.lib;detours.lib;RakNetStatic.lib;zlib.lib;libpng.lib;dbghelp.lib;CEGUIBase.lib;CEGUIFalagardBase.lib;DirectX9GUIRenderer.lib;freetype2110.lib;tinyxml.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../Libraries/CrashRpt;../Libraries/cegui-0.4.0-custom/lib;../Libraries/DXSDK/Lib;../Libraries/Detours;../Libraries/RakNet/Lib;../Libraries/zlib-1.2.5/projects/Release;../Libraries/lpng142/projects/Release;../Libraries/tinyxml/Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Libraries\lua\lauxlib.h" />
+    <ClInclude Include="..\Libraries\lua\lua.h" />
+    <ClInclude Include="..\Libraries\lua\lua.hpp" />
+    <ClInclude Include="..\Libraries\lua\luaconf.h" />
+    <ClInclude Include="..\Libraries\lua\lualib.h" />
+    <ClInclude Include="..\Libraries\squirrel\sqarray.h" />
+    <ClInclude Include="..\Libraries\squirrel\sqclass.h" />
+    <ClInclude Include="..\Libraries\squirrel\sqclosure.h" />
+    <ClInclude Include="..\Libraries\squirrel\sqcompiler.h" />
+    <ClInclude Include="..\Libraries\squirrel\sqfuncproto.h" />
+    <ClInclude Include="..\Libraries\squirrel\sqfuncstate.h" />
+    <ClInclude Include="..\Libraries\squirrel\sqlexer.h" />
+    <ClInclude Include="..\Libraries\squirrel\sqobject.h" />
+    <ClInclude Include="..\Libraries\squirrel\sqopcodes.h" />
+    <ClInclude Include="..\Libraries\squirrel\sqpcheader.h" />
+    <ClInclude Include="..\Libraries\squirrel\sqstate.h" />
+    <ClInclude Include="..\Libraries\squirrel\sqstdaux.h" />
+    <ClInclude Include="..\Libraries\squirrel\sqstdblob.h" />
+    <ClInclude Include="..\Libraries\squirrel\sqstdblobimpl.h" />
+    <ClInclude Include="..\Libraries\squirrel\sqstdio.h" />
+    <ClInclude Include="..\Libraries\squirrel\sqstdmath.h" />
+    <ClInclude Include="..\Libraries\squirrel\sqstdstream.h" />
+    <ClInclude Include="..\Libraries\squirrel\sqstdstring.h" />
+    <ClInclude Include="..\Libraries\squirrel\sqstdsystem.h" />
+    <ClInclude Include="..\Libraries\squirrel\sqstring.h" />
+    <ClInclude Include="..\Libraries\squirrel\sqtable.h" />
+    <ClInclude Include="..\Libraries\squirrel\squirrel.h" />
+    <ClInclude Include="..\Libraries\squirrel\squserdata.h" />
+    <ClInclude Include="..\Libraries\squirrel\squtils.h" />
+    <ClInclude Include="..\Libraries\squirrel\sqvm.h" />
+    <ClInclude Include="..\Shared\CColor.h" />
+    <ClInclude Include="..\Shared\CCommands.h" />
+    <ClInclude Include="..\Shared\CCommon.h" />
+    <ClInclude Include="..\Shared\CEvents.h" />
+    <ClInclude Include="..\Shared\CExceptionHandler.h" />
+    <ClInclude Include="..\Shared\CLogFile.h" />
+    <ClInclude Include="..\Shared\CNetworkRPC.h" />
+    <ClInclude Include="..\Shared\CPatcher.h" />
+    <ClInclude Include="..\Shared\CrashRpt.h" />
+    <ClInclude Include="..\Shared\CRC.h" />
+    <ClInclude Include="..\Shared\CSettings.h" />
+    <ClInclude Include="..\Shared\CString.h" />
+    <ClInclude Include="..\Shared\CSync.h" />
+    <ClInclude Include="..\Shared\CWPMHook.h" />
+    <ClInclude Include="..\Shared\CXML.h" />
+    <ClInclude Include="..\Shared\CZlib.h" />
+    <ClInclude Include="..\Shared\DbgView.h" />
+    <ClInclude Include="..\Shared\Game\CGame.h" />
+    <ClInclude Include="..\Shared\Math\CMaths.h" />
+    <ClInclude Include="..\Shared\Math\CMatrix.h" />
+    <ClInclude Include="..\Shared\Math\CQuaternion.h" />
+    <ClInclude Include="..\Shared\Math\CVector3.h" />
+    <ClInclude Include="..\Shared\md5\md5.h" />
+    <ClInclude Include="..\Shared\Network\CHttpClient.h" />
+    <ClInclude Include="..\Shared\Network\CNetworkStats.h" />
+    <ClInclude Include="..\Shared\Scripting\CScriptingManager.h" />
+    <ClInclude Include="..\Shared\Scripting\CSquirrel.h" />
+    <ClInclude Include="..\Shared\Scripting\CSquirrelArguments.h" />
+    <ClInclude Include="..\Shared\Scripting\CSquirrelCommon.h" />
+    <ClInclude Include="..\Shared\Scripting\Natives\CAreaNatives.h" />
+    <ClInclude Include="..\Shared\Scripting\Natives\CBlipNatives.h" />
+    <ClInclude Include="..\Shared\Scripting\Natives\CEventNatives.h" />
+    <ClInclude Include="..\Shared\Scripting\Natives\CHashNatives.h" />
+    <ClInclude Include="..\Shared\Scripting\Natives\CPedNatives.h" />
+    <ClInclude Include="..\Shared\Scripting\Natives\CSharedPlayerNatives.h" />
+    <ClInclude Include="..\Shared\Scripting\Natives\CSharedVehicleNatives.h" />
+    <ClInclude Include="..\Shared\Scripting\Natives\CSystemNatives.h" />
+    <ClInclude Include="..\Shared\Scripting\Natives\CTimerNatives.h" />
+    <ClInclude Include="..\Shared\Scripting\Natives\CUtilNatives.h" />
+    <ClInclude Include="..\Shared\Scripting\Natives\CXMLNatives.h" />
+    <ClInclude Include="..\Shared\SharedUtility.h" />
+    <ClInclude Include="..\Shared\Threading\CMutex.h" />
+    <ClInclude Include="..\Shared\Threading\CThread.h" />
+    <ClInclude Include="..\Shared\Timers\CTimer.h" />
+    <ClInclude Include="..\Shared\Timers\CTimerManager.h" />
+    <ClInclude Include="CBlip.h" />
+    <ClInclude Include="CBlipManager.h" />
+    <ClInclude Include="CBlipRPC.h" />
+    <ClInclude Include="CCameraNatives.h" />
+    <ClInclude Include="CChat.h" />
+    <ClInclude Include="CClientNatives.h" />
+    <ClInclude Include="CClientScriptGUIManager.h" />
+    <ClInclude Include="CClientScriptingManager.h" />
+    <ClInclude Include="CCore.h" />
+    <ClInclude Include="CDirect3D9Hook.h" />
+    <ClInclude Include="CDirect3D9Proxy.h" />
+    <ClInclude Include="CDirect3DDevice9Proxy.h" />
+    <ClInclude Include="CDirectInput8Hook.h" />
+    <ClInclude Include="CDirectInput8Proxy.h" />
+    <ClInclude Include="CDirectInputDevice8Proxy.h" />
+    <ClInclude Include="CDoorManager.h" />
+    <ClInclude Include="CDownloadProgress.h" />
+    <ClInclude Include="CFileTransfer.h" />
+    <ClInclude Include="CFileTransferManager.h" />
+    <ClInclude Include="CFont.h" />
+    <ClInclude Include="CFPSCounter.h" />
+    <ClInclude Include="CMafia.h" />
+    <ClInclude Include="CGameFiles.h" />
+    <ClInclude Include="CGameNatives.h" />
+    <ClInclude Include="CGraphics.h" />
+    <ClInclude Include="CGUI.h" />
+    <ClInclude Include="CGUICallback.h" />
+    <ClInclude Include="CGUIEvent.h" />
+    <ClInclude Include="CGUINatives.h" />
+    <ClInclude Include="CGUITypes.h" />
+    <ClInclude Include="CIE.h" />
+    <ClInclude Include="CKeyBinds.h" />
+    <ClInclude Include="CLoadingScreen.h" />
+    <ClInclude Include="CLocalPlayer.h" />
+    <ClInclude Include="CLua.h" />
+    <ClInclude Include="CM2Camera.h" />
+    <ClInclude Include="CM2EntityMessage.h" />
+    <ClInclude Include="CM2Enums.h" />
+    <ClInclude Include="CM2Hud.h" />
+    <ClInclude Include="CM2PhysFS.h" />
+    <ClInclude Include="CM2PhysFSFile.h" />
+    <ClInclude Include="CM2SyncObject.h" />
+    <ClInclude Include="CM2VideoSettings.h" />
+    <ClInclude Include="CMainMenu.h" />
+    <ClInclude Include="CMasterList.h" />
+    <ClInclude Include="CModelManager.h" />
+    <ClInclude Include="CMouseHandler.h" />
+    <ClInclude Include="CNetworkModelManager.h" />
+    <ClInclude Include="CNetworkModule.h" />
+    <ClInclude Include="CNetworkPlayer.h" />
+    <ClInclude Include="CNetworkRPC.h" />
+    <ClInclude Include="CNetworkVehicle.h" />
+    <ClInclude Include="COffsets.h" />
+    <ClInclude Include="CPatches.h" />
+    <ClInclude Include="CPed.h" />
+    <ClInclude Include="CPedManager.h" />
+    <ClInclude Include="CPlayerManager.h" />
+    <ClInclude Include="CPlayerNatives.h" />
+    <ClInclude Include="CPlayerRPC.h" />
+    <ClInclude Include="CRemotePlayer.h" />
+    <ClInclude Include="CM2ScriptMachine.h" />
+    <ClInclude Include="CScreenShot.h" />
+    <ClInclude Include="CScriptingRPC.h" />
+    <ClInclude Include="CServerPassword.h" />
+    <ClInclude Include="CServerQuery.h" />
+    <ClInclude Include="CStreamableEntity.h" />
+    <ClInclude Include="CStreamer.h" />
+    <ClInclude Include="CVehicleRPC.h" />
+    <ClInclude Include="CServerBrowser.h" />
+    <ClInclude Include="CServerList.h" />
+    <ClInclude Include="CMenuSettings.h" />
+    <ClInclude Include="CVehicleManager.h" />
+    <ClInclude Include="CWindowSubclass.h" />
+    <ClInclude Include="CGraphicsNatives.h" />
+    <ClInclude Include="engine\CM2BaseEntity.h" />
+    <ClInclude Include="engine\CM2Core.h" />
+    <ClInclude Include="engine\CM2Door.h" />
+    <ClInclude Include="engine\CM2Entity.h" />
+    <ClInclude Include="engine\CM2Misc.h" />
+    <ClInclude Include="engine\CM2Navigation.h" />
+    <ClInclude Include="engine\CM2Object.h" />
+    <ClInclude Include="engine\CM2ObjectTable.h" />
+    <ClInclude Include="engine\CM2Ped.h" />
+    <ClInclude Include="engine\CM2PlayerPed.h" />
+    <ClInclude Include="engine\CM2SDSTables.h" />
+    <ClInclude Include="engine\CM2Vehicle.h" />
+    <ClInclude Include="engine\CM2SlotManager.h" />
+    <ClInclude Include="gui_impl\CGUIButton_Impl.h" />
+    <ClInclude Include="gui_impl\CGUICheckBox_Impl.h" />
+    <ClInclude Include="gui_impl\CGUIComboBox_Impl.h" />
+    <ClInclude Include="gui_impl\CGUIEdit_Impl.h" />
+    <ClInclude Include="gui_impl\CGUIElement_Impl.h" />
+    <ClInclude Include="gui_impl\CGUIFont_Impl.h" />
+    <ClInclude Include="gui_Impl\CGUIGridList_Impl.h" />
+    <ClInclude Include="gui_impl\CGUILabel_Impl.h" />
+    <ClInclude Include="gui_impl\CGUIListItem_Impl.h" />
+    <ClInclude Include="gui_impl\CGUIMessageBox_Impl.h" />
+    <ClInclude Include="gui_impl\CGUIProgressBar_Impl.h" />
+    <ClInclude Include="gui_impl\CGUIRadioButton_Impl.h" />
+    <ClInclude Include="gui_impl\CGUIScrollBar_Impl.h" />
+    <ClInclude Include="gui_impl\CGUIScrollPane_Impl.h" />
+    <ClInclude Include="gui_impl\CGUIStaticImage_Impl.h" />
+    <ClInclude Include="gui_impl\CGUITabPanel_Impl.h" />
+    <ClInclude Include="gui_impl\CGUITab_Impl.h" />
+    <ClInclude Include="gui_impl\CGUITexture_Impl.h" />
+    <ClInclude Include="gui_impl\CGUIWindow_Impl.h" />
+    <ClInclude Include="gui_impl\CGUI_Impl.h" />
+    <ClInclude Include="StdInc.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\Libraries\squirrel\sqapi.cpp" />
+    <ClCompile Include="..\Libraries\squirrel\sqbaselib.cpp" />
+    <ClCompile Include="..\Libraries\squirrel\sqclass.cpp" />
+    <ClCompile Include="..\Libraries\squirrel\sqcompiler.cpp" />
+    <ClCompile Include="..\Libraries\squirrel\sqdebug.cpp" />
+    <ClCompile Include="..\Libraries\squirrel\sqfuncstate.cpp" />
+    <ClCompile Include="..\Libraries\squirrel\sqlexer.cpp" />
+    <ClCompile Include="..\Libraries\squirrel\sqmem.cpp" />
+    <ClCompile Include="..\Libraries\squirrel\sqobject.cpp" />
+    <ClCompile Include="..\Libraries\squirrel\sqstate.cpp" />
+    <ClCompile Include="..\Libraries\squirrel\sqstdaux.cpp" />
+    <ClCompile Include="..\Libraries\squirrel\sqstdblob.cpp" />
+    <ClCompile Include="..\Libraries\squirrel\sqstdio.cpp" />
+    <ClCompile Include="..\Libraries\squirrel\sqstdmath.cpp" />
+    <ClCompile Include="..\Libraries\squirrel\sqstdrex.cpp" />
+    <ClCompile Include="..\Libraries\squirrel\sqstdstream.cpp" />
+    <ClCompile Include="..\Libraries\squirrel\sqstdstring.cpp" />
+    <ClCompile Include="..\Libraries\squirrel\sqstdsystem.cpp" />
+    <ClCompile Include="..\Libraries\squirrel\sqtable.cpp" />
+    <ClCompile Include="..\Libraries\squirrel\sqvm.cpp" />
+    <ClCompile Include="..\Shared\CCommands.cpp" />
+    <ClCompile Include="..\Shared\CEvents.cpp" />
+    <ClCompile Include="..\Shared\CExceptionHandler.cpp" />
+    <ClCompile Include="..\Shared\CLogFile.cpp" />
+    <ClCompile Include="..\Shared\CPatcher.cpp" />
+    <ClCompile Include="..\Shared\CrashRpt.cpp" />
+    <ClCompile Include="..\Shared\CSettings.cpp" />
+    <ClCompile Include="..\Shared\CString.cpp" />
+    <ClCompile Include="..\Shared\CWPMHook.cpp" />
+    <ClCompile Include="..\Shared\CXML.cpp" />
+    <ClCompile Include="..\Shared\CZlib.cpp" />
+    <ClCompile Include="..\Shared\DbgView.cpp" />
+    <ClCompile Include="..\Shared\Game\CGame.cpp" />
+    <ClCompile Include="..\Shared\md5\md5.cpp" />
+    <ClCompile Include="..\Shared\Network\CHttpClient.cpp" />
+    <ClCompile Include="..\Shared\Network\CNetworkStats.cpp" />
+    <ClCompile Include="..\Shared\Scripting\CScriptingManager.cpp" />
+    <ClCompile Include="..\Shared\Scripting\CSquirrel.cpp" />
+    <ClCompile Include="..\Shared\Scripting\CSquirrelArguments.cpp" />
+    <ClCompile Include="..\Shared\Scripting\CSquirrelCommon.cpp" />
+    <ClCompile Include="..\Shared\Scripting\Natives\CAreaNatives.cpp" />
+    <ClCompile Include="..\Shared\Scripting\Natives\CBlipNatives.cpp" />
+    <ClCompile Include="..\Shared\Scripting\Natives\CEventNatives.cpp" />
+    <ClCompile Include="..\Shared\Scripting\Natives\CHashNatives.cpp" />
+    <ClCompile Include="..\Shared\Scripting\Natives\CPedNatives.cpp" />
+    <ClCompile Include="..\Shared\Scripting\Natives\CSharedPlayerNatives.cpp" />
+    <ClCompile Include="..\Shared\Scripting\Natives\CSharedVehicleNatives.cpp" />
+    <ClCompile Include="..\Shared\Scripting\Natives\CSystemNatives.cpp" />
+    <ClCompile Include="..\Shared\Scripting\Natives\CTimerNatives.cpp" />
+    <ClCompile Include="..\Shared\Scripting\Natives\CUtilNatives.cpp" />
+    <ClCompile Include="..\Shared\Scripting\Natives\CXMLNatives.cpp" />
+    <ClCompile Include="..\Shared\SharedUtility.cpp" />
+    <ClCompile Include="..\Shared\Threading\CMutex.cpp" />
+    <ClCompile Include="..\Shared\Threading\CThread.cpp" />
+    <ClCompile Include="..\Shared\Timers\CTimer.cpp" />
+    <ClCompile Include="..\Shared\Timers\CTimerManager.cpp" />
+    <ClCompile Include="CBlip.cpp" />
+    <ClCompile Include="CBlipManager.cpp" />
+    <ClCompile Include="CBlipRPC.cpp" />
+    <ClCompile Include="CCameraNatives.cpp" />
+    <ClCompile Include="CChat.cpp" />
+    <ClCompile Include="CClientNatives.cpp" />
+    <ClCompile Include="CClientScriptGUIManager.cpp" />
+    <ClCompile Include="CClientScriptingManager.cpp" />
+    <ClCompile Include="CCore.cpp" />
+    <ClCompile Include="CDirect3D9Hook.cpp" />
+    <ClCompile Include="CDirect3D9Proxy.cpp" />
+    <ClCompile Include="CDirect3DDevice9Proxy.cpp" />
+    <ClCompile Include="CDirectInput8Hook.cpp" />
+    <ClCompile Include="CDirectInput8Proxy.cpp" />
+    <ClCompile Include="CDirectInputDevice8Proxy.cpp" />
+    <ClCompile Include="CDoorManager.cpp" />
+    <ClCompile Include="CDownloadProgress.cpp" />
+    <ClCompile Include="CFileTransfer.cpp" />
+    <ClCompile Include="CFileTransferManager.cpp" />
+    <ClCompile Include="CFont.cpp" />
+    <ClCompile Include="CFPSCounter.cpp" />
+    <ClCompile Include="CMafia.cpp" />
+    <ClCompile Include="CGameFiles.cpp" />
+    <ClCompile Include="CGameNatives.cpp" />
+    <ClCompile Include="CGraphics.cpp" />
+    <ClCompile Include="CGUI.cpp" />
+    <ClCompile Include="CGUINatives.cpp" />
+    <ClCompile Include="CIE.cpp" />
+    <ClCompile Include="CKeyBinds.cpp" />
+    <ClCompile Include="CLoadingScreen.cpp" />
+    <ClCompile Include="CLocalPlayer.cpp" />
+    <ClCompile Include="CLua.cpp" />
+    <ClCompile Include="CM2Camera.cpp" />
+    <ClCompile Include="CM2EntityMessage.cpp" />
+    <ClCompile Include="CM2Hud.cpp" />
+    <ClCompile Include="CM2PhysFS.cpp" />
+    <ClCompile Include="CM2PhysFSFile.cpp" />
+    <ClCompile Include="CM2SyncObject.cpp" />
+    <ClCompile Include="CM2VideoSettings.cpp" />
+    <ClCompile Include="CMainMenu.cpp" />
+    <ClCompile Include="CMasterList.cpp" />
+    <ClCompile Include="CMenuSettings.cpp" />
+    <ClCompile Include="CModelManager.cpp" />
+    <ClCompile Include="CMouseHandler.cpp" />
+    <ClCompile Include="CNetworkModelManager.cpp" />
+    <ClCompile Include="CNetworkModule.cpp" />
+    <ClCompile Include="CNetworkPlayer.cpp" />
+    <ClCompile Include="CNetworkRPC.cpp" />
+    <ClCompile Include="CNetworkVehicle.cpp" />
+    <ClCompile Include="COffsets.cpp" />
+    <ClCompile Include="CPatches.cpp" />
+    <ClCompile Include="CPed.cpp" />
+    <ClCompile Include="CPedManager.cpp" />
+    <ClCompile Include="CPlayerManager.cpp" />
+    <ClCompile Include="CPlayerNatives.cpp" />
+    <ClCompile Include="CPlayerRPC.cpp" />
+    <ClCompile Include="CRemotePlayer.cpp" />
+    <ClCompile Include="CScreenShot.cpp" />
+    <ClCompile Include="CScriptingRPC.cpp" />
+    <ClCompile Include="CServerPassword.cpp" />
+    <ClCompile Include="CServerQuery.cpp" />
+    <ClCompile Include="CStreamableEntity.cpp" />
+    <ClCompile Include="CStreamer.cpp" />
+    <ClCompile Include="CVehicleRPC.cpp" />
+    <ClCompile Include="CServerBrowser.cpp" />
+    <ClCompile Include="CServerList.cpp" />
+    <ClCompile Include="CVehicleManager.cpp" />
+    <ClCompile Include="CWindowSubclass.cpp" />
+    <ClCompile Include="CGraphicsNatives.cpp" />
+    <ClCompile Include="engine\CM2Core.cpp" />
+    <ClCompile Include="engine\CM2Door.cpp" />
+    <ClCompile Include="engine\CM2Entity.cpp" />
+    <ClCompile Include="engine\CM2Misc.cpp" />
+    <ClCompile Include="engine\CM2Navigation.cpp" />
+    <ClCompile Include="engine\CM2Object.cpp" />
+    <ClCompile Include="engine\CM2ObjectTable.cpp" />
+    <ClCompile Include="engine\CM2Ped.cpp" />
+    <ClCompile Include="engine\CM2Vehicle.cpp" />
+    <ClCompile Include="engine\CM2SlotManager.cpp" />
+    <ClCompile Include="gui_impl\CGUIButton_Impl.cpp" />
+    <ClCompile Include="gui_impl\CGUICheckBox_Impl.cpp" />
+    <ClCompile Include="gui_impl\CGUIComboBox_Impl.cpp" />
+    <ClCompile Include="gui_impl\CGUIEdit_Impl.cpp" />
+    <ClCompile Include="gui_impl\CGUIElement_Impl.cpp" />
+    <ClCompile Include="gui_impl\CGUIFont_Impl.cpp" />
+    <ClCompile Include="gui_Impl\CGUIGridList_Impl.cpp" />
+    <ClCompile Include="gui_impl\CGUILabel_Impl.cpp" />
+    <ClCompile Include="gui_impl\CGUIListItem_Impl.cpp" />
+    <ClCompile Include="gui_impl\CGUIMessageBox_Impl.cpp" />
+    <ClCompile Include="gui_impl\CGUIProgressBar_Impl.cpp" />
+    <ClCompile Include="gui_impl\CGUIRadioButton_Impl.cpp" />
+    <ClCompile Include="gui_impl\CGUIScrollBar_Impl.cpp" />
+    <ClCompile Include="gui_impl\CGUIScrollPane_Impl.cpp" />
+    <ClCompile Include="gui_impl\CGUIStaticImage_Impl.cpp" />
+    <ClCompile Include="gui_impl\CGUITabPanel_Impl.cpp" />
+    <ClCompile Include="gui_impl\CGUITab_Impl.cpp" />
+    <ClCompile Include="gui_impl\CGUITexture_Impl.cpp" />
+    <ClCompile Include="gui_impl\CGUIWindow_Impl.cpp" />
+    <ClCompile Include="gui_impl\CGUI_Impl.cpp" />
+    <ClCompile Include="Main.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

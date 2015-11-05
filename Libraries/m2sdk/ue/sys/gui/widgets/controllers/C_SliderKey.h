@@ -1,0 +1,46 @@
+// auto-generated file (rttidump-exporter by h0pk1nz)
+
+#pragma once
+
+#include <ue/sys/gui/widgets/controllers/C_ControllerKey.h>
+
+namespace ue
+{
+
+namespace sys
+{
+
+namespace gui
+{
+
+namespace widgets
+{
+
+namespace controllers
+{
+
+/** ue::sys::gui::widgets::controllers::C_SliderKey (VTable=0x01E88740) */
+class C_SliderKey : public C_ControllerKey
+{
+public:
+	virtual void vfn_0001_01599A58() = 0;
+	virtual void vfn_0002_01599A58() = 0;
+	virtual void vfn_0003_01599A58() = 0;
+	virtual void vfn_0004_01599A58() = 0;
+	virtual void vfn_0005_01599A58() = 0;
+	virtual void vfn_0006_01599A58() = 0;
+	virtual void vfn_0007_01599A58() = 0;
+	virtual void vfn_0008_01599A58() = 0;
+	virtual void vfn_0009_01599A58() = 0;
+	virtual void vfn_0010_01599A58() = 0;
+};
+
+} // namespace controllers
+
+} // namespace widgets
+
+} // namespace gui
+
+} // namespace sys
+
+} // namespace ue
