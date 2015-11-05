@@ -1,0 +1,91 @@
+// auto-generated file (rttidump-exporter by h0pk1nz)
+
+#pragma once
+
+/** NxFluid (VTable=0x01EBFF80) */
+class NxFluid
+{
+public:
+	virtual void vfn_0001_DC291289() = 0;
+	virtual void vfn_0002_DC291289() = 0;
+	virtual void vfn_0003_DC291289() = 0;
+	virtual void vfn_0004_DC291289() = 0;
+	virtual void vfn_0005_DC291289() = 0;
+	virtual void vfn_0006_DC291289() = 0;
+	virtual void vfn_0007_DC291289() = 0;
+	virtual void vfn_0008_DC291289() = 0;
+	virtual void vfn_0009_DC291289() = 0;
+	virtual void vfn_0010_DC291289() = 0;
+	virtual void vfn_0011_DC291289() = 0;
+	virtual void vfn_0012_DC291289() = 0;
+	virtual void vfn_0013_DC291289() = 0;
+	virtual void vfn_0014_DC291289() = 0;
+	virtual void vfn_0015_DC291289() = 0;
+	virtual void vfn_0016_DC291289() = 0;
+	virtual void vfn_0017_DC291289() = 0;
+	virtual void vfn_0018_DC291289() = 0;
+	virtual void vfn_0019_DC291289() = 0;
+	virtual void vfn_0020_DC291289() = 0;
+	virtual void vfn_0021_DC291289() = 0;
+	virtual void vfn_0022_DC291289() = 0;
+	virtual void vfn_0023_DC291289() = 0;
+	virtual void vfn_0024_DC291289() = 0;
+	virtual void vfn_0025_DC291289() = 0;
+	virtual void vfn_0026_DC291289() = 0;
+	virtual void vfn_0027_DC291289() = 0;
+	virtual void vfn_0028_DC291289() = 0;
+	virtual void vfn_0029_DC291289() = 0;
+	virtual void vfn_0030_DC291289() = 0;
+	virtual void vfn_0031_DC291289() = 0;
+	virtual void vfn_0032_DC291289() = 0;
+	virtual void vfn_0033_DC291289() = 0;
+	virtual void vfn_0034_DC291289() = 0;
+	virtual void vfn_0035_DC291289() = 0;
+	virtual void vfn_0036_DC291289() = 0;
+	virtual void vfn_0037_DC291289() = 0;
+	virtual void vfn_0038_DC291289() = 0;
+	virtual void vfn_0039_DC291289() = 0;
+	virtual void vfn_0040_DC291289() = 0;
+	virtual void vfn_0041_DC291289() = 0;
+	virtual void vfn_0042_DC291289() = 0;
+	virtual void vfn_0043_DC291289() = 0;
+	virtual void vfn_0044_DC291289() = 0;
+	virtual void vfn_0045_DC291289() = 0;
+	virtual void vfn_0046_DC291289() = 0;
+	virtual void vfn_0047_DC291289() = 0;
+	virtual void vfn_0048_DC291289() = 0;
+	virtual void vfn_0049_DC291289() = 0;
+	virtual void vfn_0050_DC291289() = 0;
+	virtual void vfn_0051_DC291289() = 0;
+	virtual void vfn_0052_DC291289() = 0;
+	virtual void vfn_0053_DC291289() = 0;
+	virtual void vfn_0054_DC291289() = 0;
+	virtual void vfn_0055_DC291289() = 0;
+	virtual void vfn_0056_DC291289() = 0;
+	virtual void vfn_0057_DC291289() = 0;
+	virtual void vfn_0058_DC291289() = 0;
+	virtual void vfn_0059_DC291289() = 0;
+	virtual void vfn_0060_DC291289() = 0;
+	virtual void vfn_0061_DC291289() = 0;
+	virtual void vfn_0062_DC291289() = 0;
+	virtual void vfn_0063_DC291289() = 0;
+	virtual void vfn_0064_DC291289() = 0;
+	virtual void vfn_0065_DC291289() = 0;
+	virtual void vfn_0066_DC291289() = 0;
+	virtual void vfn_0067_DC291289() = 0;
+	virtual void vfn_0068_DC291289() = 0;
+	virtual void vfn_0069_DC291289() = 0;
+	virtual void vfn_0070_DC291289() = 0;
+	virtual void vfn_0071_DC291289() = 0;
+	virtual void vfn_0072_DC291289() = 0;
+	virtual void vfn_0073_DC291289() = 0;
+	virtual void vfn_0074_DC291289() = 0;
+	virtual void vfn_0075_DC291289() = 0;
+	virtual void vfn_0076_DC291289() = 0;
+	virtual void vfn_0077_DC291289() = 0;
+	virtual void vfn_0078_DC291289() = 0;
+	virtual void vfn_0079_DC291289() = 0;
+	virtual void vfn_0080_DC291289() = 0;
+	virtual void vfn_0081_DC291289() = 0;
+	virtual void vfn_0082_DC291289() = 0;
+};
