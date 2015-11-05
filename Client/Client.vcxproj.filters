@@ -1,0 +1,1241 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Header Files\Client">
+      <UniqueIdentifier>{ee6e7262-60c4-48d9-b5dd-abae7fb8e2f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Client">
+      <UniqueIdentifier>{65d668a0-4059-4f78-8683-87d1f8798b54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Client\Game">
+      <UniqueIdentifier>{adf90b95-bbb9-4867-ac5c-146a6d0ec971}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Client\Game">
+      <UniqueIdentifier>{287224e4-c79a-4908-a3cd-f26f7f5443d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Client\Shared">
+      <UniqueIdentifier>{e11555bf-2991-40b8-bc2d-204e3c70e20c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Client\Shared">
+      <UniqueIdentifier>{b9dc75b0-847f-4e3c-93e8-ad630fcfc65f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Client\Game\Engine">
+      <UniqueIdentifier>{618d8b0f-3234-4a76-987a-0fb30cf73365}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Client\Game\Engine">
+      <UniqueIdentifier>{61575cb0-744a-4d0a-9946-a27598d8dcaf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Client\Network">
+      <UniqueIdentifier>{af3294e1-8ffa-4da4-92f9-23d553f4415e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Client\Network">
+      <UniqueIdentifier>{020f2ed0-aede-43f5-93e8-b03e030f99c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Client\Network\Players">
+      <UniqueIdentifier>{9d708c92-b0f9-4355-a89b-0674285fb0d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Client\Network\Players">
+      <UniqueIdentifier>{282d2d3a-7823-4e57-9de0-62f1a27063ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Client\Shared\Math">
+      <UniqueIdentifier>{0da7121f-18c6-48c1-898a-e27071d0adee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Client\Game\Hooks">
+      <UniqueIdentifier>{11073cc5-1736-43aa-9720-919b7b30e29b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Client\Game\Hooks\Direct X">
+      <UniqueIdentifier>{a05dfab5-6ab9-409e-b2ad-9d4d6fc611ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Client\Game\Hooks">
+      <UniqueIdentifier>{12e516c0-d5f5-4ac0-ba5a-b4fe2ce440ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Client\Game\Hooks\Direct X">
+      <UniqueIdentifier>{29d52f52-eb37-4dfc-a0d9-4c98af825a37}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Client\Game\Hooks\Direct Input">
+      <UniqueIdentifier>{4b5c1fdd-4ebd-4fcb-a1a8-80ddecc579b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Client\Game\Hooks\Direct Input">
+      <UniqueIdentifier>{308f6948-9667-4625-ba7f-8a743517032d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Client\Game\Hooks\Window">
+      <UniqueIdentifier>{90132c48-403c-4878-b252-449760d9b186}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Client\Game\Hooks\Window">
+      <UniqueIdentifier>{11301ef9-2239-4e0c-8ef4-abf6740c00e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Client\Shared\md5">
+      <UniqueIdentifier>{b73de508-9a63-4d67-b068-407e64fd421b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Client\Shared\md5">
+      <UniqueIdentifier>{53d1e8b4-7335-4ef4-8abc-29dd5f33d9af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Client\Scripting">
+      <UniqueIdentifier>{a14740be-c6ad-4f48-90f4-ff07e4c23585}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Client\Scripting">
+      <UniqueIdentifier>{18cea8e7-debc-4bd7-a65d-94937803cdfc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Client\Shared\Scripting">
+      <UniqueIdentifier>{a76e7372-5b8e-432e-912b-fa1ce269382c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Client\Shared\Scripting">
+      <UniqueIdentifier>{4dbbdb6c-a027-48fa-9be2-c4ebe5ac2993}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Client\Scripting\Natives">
+      <UniqueIdentifier>{bd97ff10-8c0e-44f9-ad10-471defecb1c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Client\Scripting\Natives">
+      <UniqueIdentifier>{f4cfa370-6d90-4ea2-b6e1-7e4d52f17c9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Client\Shared\Scripting\Natives">
+      <UniqueIdentifier>{22d36ec7-c341-4809-8505-f92452978acd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Client\Shared\Scripting\Natives">
+      <UniqueIdentifier>{ec1d3359-c015-429e-b135-f8619b036478}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Client\Shared\Threading">
+      <UniqueIdentifier>{33c55805-1599-4fd4-9c4e-fc38262ffefb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Client\Shared\Threading">
+      <UniqueIdentifier>{10dd6e5a-7624-4a75-bf00-a34e6fe0004c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Client\Shared\Timers">
+      <UniqueIdentifier>{d330e525-8b83-4ef8-b56d-e1a9db2998a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Client\Shared\Timers">
+      <UniqueIdentifier>{6e1ac05f-25b4-4280-aaab-f9ceefb8d086}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Client\Shared\Network">
+      <UniqueIdentifier>{25a5a461-c879-4161-a3bd-101ab7b19c3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Client\Shared\Network">
+      <UniqueIdentifier>{53e181e2-c0e3-426e-8b95-f44ba4daeb6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Client\Network\Blips">
+      <UniqueIdentifier>{93a19b02-a5e9-44d8-914f-4bcee55a4752}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Client\Network\Blips">
+      <UniqueIdentifier>{3163dd92-41d9-469f-b4bc-25006a22000d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Client\Game\Hooks\Mouse">
+      <UniqueIdentifier>{b22ba6d4-00e9-47a3-b702-25f4d0f865c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Client\Game\Hooks\Mouse">
+      <UniqueIdentifier>{d6dadaa8-e618-47bf-b422-ae1b58e67451}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Client\Network\Vehicles">
+      <UniqueIdentifier>{ab6d1dfe-cabd-403d-adca-7d3579c21b3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Client\Shared\Game">
+      <UniqueIdentifier>{25cd4e6d-842a-4fc0-9877-5014b1331048}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Client\Shared\Game">
+      <UniqueIdentifier>{4b064cd9-624c-4993-b5f6-a311ae23a429}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Client\GUI">
+      <UniqueIdentifier>{74ce26f6-b3cf-42d4-8e92-64f3881806c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Client\GUI">
+      <UniqueIdentifier>{25024621-f973-43f0-9c46-c71c892812dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Client\Libraries">
+      <UniqueIdentifier>{029a4a2b-2254-46aa-ac70-3192f31a0354}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Client\Libraries">
+      <UniqueIdentifier>{3a55279e-755d-4c43-802a-1b11a69e794f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Client\Libraries\squirrel">
+      <UniqueIdentifier>{ec95c1ca-3d21-42fe-ab50-c39b79e0dcd2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Client\Libraries\squirrel">
+      <UniqueIdentifier>{49031662-0a29-4219-8fde-17bcae0102c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Client\GUI\Impl">
+      <UniqueIdentifier>{bedadcfd-bcaa-4aa0-9b40-257bbf5b7f0d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Client\GUI\Impl">
+      <UniqueIdentifier>{d1dfa9ff-ec63-454a-99ea-155f1d6d8f6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Client\Network\Server Browser">
+      <UniqueIdentifier>{82cb0e7b-7fa8-4f07-9118-5de56eb9374c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Client\Network\Server Browser">
+      <UniqueIdentifier>{0af10764-6da2-4b11-8303-258aefc3507b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Client\Network\Peds">
+      <UniqueIdentifier>{abd683bd-d019-4193-a1da-ea45fa4945bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Client\Network\Peds">
+      <UniqueIdentifier>{0ddb4499-24e6-4695-a5d6-b74f2da91975}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Client\Libraries\lua">
+      <UniqueIdentifier>{8aba20fb-3c7d-44c5-b47e-7c71aa8e98c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Client\Libraries\lua">
+      <UniqueIdentifier>{a923833b-546e-4a53-b500-4c2ab7e9bc5b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Client\Network\Vehicles">
+      <UniqueIdentifier>{0efe3106-bd39-4289-ab1b-b1d9f610cf4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Client\Network\RPCs">
+      <UniqueIdentifier>{8a4548b3-6006-47f7-9bc7-62d05f803b6b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Client\Network\RPCs">
+      <UniqueIdentifier>{c9dc4352-d207-45c6-86c1-daf43cf0ebd3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Client\Anti Cheat">
+      <UniqueIdentifier>{2b1fbfb5-907f-4796-ab4f-37fc2d69cb36}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Client\Anti Cheat">
+      <UniqueIdentifier>{ddd9d9c4-64ce-4609-a344-9239fe8bd5e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Client\Game\Streamer">
+      <UniqueIdentifier>{566e7c1d-6a6b-40cd-b0cc-d28478fc257c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Client\Game\Streamer">
+      <UniqueIdentifier>{a228d167-3b62-4a22-b0a7-3c6f7befde3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Client\Graphics">
+      <UniqueIdentifier>{c28d056b-0e85-4dc3-8ba2-a57dcaa50859}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Client\Graphics">
+      <UniqueIdentifier>{1eeb9ec4-88d9-42f6-b29c-7bfd757dc891}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Client\Network\File Transfer">
+      <UniqueIdentifier>{1924678c-de4e-48bb-817e-6c9aa3394816}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Client\Network\File Transfer">
+      <UniqueIdentifier>{32cffbf4-053c-4cfb-9b16-e88503cf063b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Shared\CRC.h">
+      <Filter>Header Files\Client\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="CGameFiles.h">
+      <Filter>Header Files\Client\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\SharedUtility.h">
+      <Filter>Header Files\Client\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\CLogFile.h">
+      <Filter>Header Files\Client\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\CString.h">
+      <Filter>Header Files\Client\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\CCommon.h">
+      <Filter>Header Files\Client\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="COffsets.h">
+      <Filter>Header Files\Client\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\CPatcher.h">
+      <Filter>Header Files\Client\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="CPatches.h">
+      <Filter>Header Files\Client\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="CNetworkModule.h">
+      <Filter>Header Files\Client\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="CLocalPlayer.h">
+      <Filter>Header Files\Client\Network\Players</Filter>
+    </ClInclude>
+    <ClInclude Include="CNetworkPlayer.h">
+      <Filter>Header Files\Client\Network\Players</Filter>
+    </ClInclude>
+    <ClInclude Include="CRemotePlayer.h">
+      <Filter>Header Files\Client\Network\Players</Filter>
+    </ClInclude>
+    <ClInclude Include="CChat.h">
+      <Filter>Header Files\Client\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="CGraphics.h">
+      <Filter>Header Files\Client\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\CColor.h">
+      <Filter>Header Files\Client\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\Math\CVector3.h">
+      <Filter>Header Files\Client\Shared\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="CDirect3D9Hook.h">
+      <Filter>Header Files\Client\Game\Hooks\Direct X</Filter>
+    </ClInclude>
+    <ClInclude Include="CDirect3D9Proxy.h">
+      <Filter>Header Files\Client\Game\Hooks\Direct X</Filter>
+    </ClInclude>
+    <ClInclude Include="CDirect3DDevice9Proxy.h">
+      <Filter>Header Files\Client\Game\Hooks\Direct X</Filter>
+    </ClInclude>
+    <ClInclude Include="CPlayerManager.h">
+      <Filter>Header Files\Client\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\CSync.h">
+      <Filter>Header Files\Client\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\CNetworkRPC.h">
+      <Filter>Header Files\Client\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="CIE.h">
+      <Filter>Header Files\Client\Game\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="CM2Camera.h">
+      <Filter>Header Files\Client\Game\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="CLua.h">
+      <Filter>Header Files\Client\Game\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="CM2ScriptMachine.h">
+      <Filter>Header Files\Client\Game\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="CDirectInput8Hook.h">
+      <Filter>Header Files\Client\Game\Hooks\Direct Input</Filter>
+    </ClInclude>
+    <ClInclude Include="CDirectInput8Proxy.h">
+      <Filter>Header Files\Client\Game\Hooks\Direct Input</Filter>
+    </ClInclude>
+    <ClInclude Include="CDirectInputDevice8Proxy.h">
+      <Filter>Header Files\Client\Game\Hooks\Direct Input</Filter>
+    </ClInclude>
+    <ClInclude Include="CWindowSubclass.h">
+      <Filter>Header Files\Client\Game\Hooks\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\Math\CMaths.h">
+      <Filter>Header Files\Client\Shared\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\CSettings.h">
+      <Filter>Header Files\Client\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\md5\md5.h">
+      <Filter>Header Files\Client\Shared\md5</Filter>
+    </ClInclude>
+    <ClInclude Include="CM2EntityMessage.h">
+      <Filter>Header Files\Client\Game\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="CM2Enums.h">
+      <Filter>Header Files\Client\Game\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\DbgView.h">
+      <Filter>Header Files\Client\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\CZlib.h">
+      <Filter>Header Files\Client\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="CM2SyncObject.h">
+      <Filter>Header Files\Client\Game\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\CEvents.h">
+      <Filter>Header Files\Client\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\Scripting\CScriptingManager.h">
+      <Filter>Header Files\Client\Shared\Scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\Scripting\CSquirrel.h">
+      <Filter>Header Files\Client\Shared\Scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\Scripting\CSquirrelArguments.h">
+      <Filter>Header Files\Client\Shared\Scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\Scripting\CSquirrelCommon.h">
+      <Filter>Header Files\Client\Shared\Scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="CClientScriptingManager.h">
+      <Filter>Header Files\Client\Scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\Scripting\Natives\CEventNatives.h">
+      <Filter>Header Files\Client\Shared\Scripting\Natives</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\Scripting\Natives\CSystemNatives.h">
+      <Filter>Header Files\Client\Shared\Scripting\Natives</Filter>
+    </ClInclude>
+    <ClInclude Include="CM2Hud.h">
+      <Filter>Header Files\Client\Game\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="CFPSCounter.h">
+      <Filter>Header Files\Client\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="CScreenShot.h">
+      <Filter>Header Files\Client\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\Threading\CMutex.h">
+      <Filter>Header Files\Client\Shared\Threading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\Threading\CThread.h">
+      <Filter>Header Files\Client\Shared\Threading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\Timers\CTimer.h">
+      <Filter>Header Files\Client\Shared\Timers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\Timers\CTimerManager.h">
+      <Filter>Header Files\Client\Shared\Timers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\Scripting\Natives\CTimerNatives.h">
+      <Filter>Header Files\Client\Shared\Scripting\Natives</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\Network\CHttpClient.h">
+      <Filter>Header Files\Client\Shared\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="CPlayerNatives.h">
+      <Filter>Header Files\Client\Scripting\Natives</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\Scripting\Natives\CAreaNatives.h">
+      <Filter>Header Files\Client\Shared\Scripting\Natives</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\Scripting\Natives\CBlipNatives.h">
+      <Filter>Header Files\Client\Shared\Scripting\Natives</Filter>
+    </ClInclude>
+    <ClInclude Include="CBlip.h">
+      <Filter>Header Files\Client\Network\Blips</Filter>
+    </ClInclude>
+    <ClInclude Include="CGUINatives.h">
+      <Filter>Header Files\Client\Scripting\Natives</Filter>
+    </ClInclude>
+    <ClInclude Include="CGraphicsNatives.h">
+      <Filter>Header Files\Client\Scripting\Natives</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\Scripting\Natives\CUtilNatives.h">
+      <Filter>Header Files\Client\Shared\Scripting\Natives</Filter>
+    </ClInclude>
+    <ClInclude Include="CGameNatives.h">
+      <Filter>Header Files\Client\Scripting\Natives</Filter>
+    </ClInclude>
+    <ClInclude Include="CCameraNatives.h">
+      <Filter>Header Files\Client\Scripting\Natives</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\CExceptionHandler.h">
+      <Filter>Header Files\Client\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="CMouseHandler.h">
+      <Filter>Header Files\Client\Game\Hooks\Mouse</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\CCommands.h">
+      <Filter>Header Files\Client\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="CNetworkVehicle.h">
+      <Filter>Header Files\Client\Network\Vehicles</Filter>
+    </ClInclude>
+    <ClInclude Include="CVehicleManager.h">
+      <Filter>Header Files\Client\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\Game\CGame.h">
+      <Filter>Header Files\Client\Shared\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\Math\CMatrix.h">
+      <Filter>Header Files\Client\Shared\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="CGUI.h">
+      <Filter>Header Files\Client\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="CFont.h">
+      <Filter>Header Files\Client\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libraries\squirrel\sqarray.h">
+      <Filter>Header Files\Client\Libraries\squirrel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libraries\squirrel\sqclass.h">
+      <Filter>Header Files\Client\Libraries\squirrel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libraries\squirrel\sqclosure.h">
+      <Filter>Header Files\Client\Libraries\squirrel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libraries\squirrel\sqcompiler.h">
+      <Filter>Header Files\Client\Libraries\squirrel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libraries\squirrel\sqfuncproto.h">
+      <Filter>Header Files\Client\Libraries\squirrel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libraries\squirrel\sqfuncstate.h">
+      <Filter>Header Files\Client\Libraries\squirrel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libraries\squirrel\sqlexer.h">
+      <Filter>Header Files\Client\Libraries\squirrel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libraries\squirrel\sqobject.h">
+      <Filter>Header Files\Client\Libraries\squirrel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libraries\squirrel\sqopcodes.h">
+      <Filter>Header Files\Client\Libraries\squirrel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libraries\squirrel\sqpcheader.h">
+      <Filter>Header Files\Client\Libraries\squirrel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libraries\squirrel\sqstate.h">
+      <Filter>Header Files\Client\Libraries\squirrel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libraries\squirrel\sqstdaux.h">
+      <Filter>Header Files\Client\Libraries\squirrel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libraries\squirrel\sqstdblob.h">
+      <Filter>Header Files\Client\Libraries\squirrel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libraries\squirrel\sqstdblobimpl.h">
+      <Filter>Header Files\Client\Libraries\squirrel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libraries\squirrel\sqstdio.h">
+      <Filter>Header Files\Client\Libraries\squirrel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libraries\squirrel\sqstdmath.h">
+      <Filter>Header Files\Client\Libraries\squirrel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libraries\squirrel\sqstdstring.h">
+      <Filter>Header Files\Client\Libraries\squirrel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libraries\squirrel\sqstdstream.h">
+      <Filter>Header Files\Client\Libraries\squirrel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libraries\squirrel\sqstdsystem.h">
+      <Filter>Header Files\Client\Libraries\squirrel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libraries\squirrel\sqstring.h">
+      <Filter>Header Files\Client\Libraries\squirrel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libraries\squirrel\sqtable.h">
+      <Filter>Header Files\Client\Libraries\squirrel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libraries\squirrel\squirrel.h">
+      <Filter>Header Files\Client\Libraries\squirrel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libraries\squirrel\squserdata.h">
+      <Filter>Header Files\Client\Libraries\squirrel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libraries\squirrel\squtils.h">
+      <Filter>Header Files\Client\Libraries\squirrel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libraries\squirrel\sqvm.h">
+      <Filter>Header Files\Client\Libraries\squirrel</Filter>
+    </ClInclude>
+    <ClInclude Include="CDownloadProgress.h">
+      <Filter>Header Files\Client\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="gui_impl\CGUIWindow_Impl.h">
+      <Filter>Header Files\Client\GUI\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="gui_impl\CGUIElement_Impl.h">
+      <Filter>Header Files\Client\GUI\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="gui_impl\CGUI_Impl.h">
+      <Filter>Header Files\Client\GUI\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="gui_impl\CGUIFont_Impl.h">
+      <Filter>Header Files\Client\GUI\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="gui_impl\CGUIProgressBar_Impl.h">
+      <Filter>Header Files\Client\GUI\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="gui_impl\CGUIStaticImage_Impl.h">
+      <Filter>Header Files\Client\GUI\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="gui_impl\CGUITexture_Impl.h">
+      <Filter>Header Files\Client\GUI\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="gui_impl\CGUIButton_Impl.h">
+      <Filter>Header Files\Client\GUI\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="gui_impl\CGUICheckBox_Impl.h">
+      <Filter>Header Files\Client\GUI\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="gui_impl\CGUIEdit_Impl.h">
+      <Filter>Header Files\Client\GUI\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="gui_impl\CGUILabel_Impl.h">
+      <Filter>Header Files\Client\GUI\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="gui_impl\CGUIRadioButton_Impl.h">
+      <Filter>Header Files\Client\GUI\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="gui_impl\CGUITabPanel_Impl.h">
+      <Filter>Header Files\Client\GUI\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="gui_impl\CGUITab_Impl.h">
+      <Filter>Header Files\Client\GUI\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="CGUICallback.h">
+      <Filter>Header Files\Client\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="CMainMenu.h">
+      <Filter>Header Files\Client\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="CServerBrowser.h">
+      <Filter>Header Files\Client\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="CMasterList.h">
+      <Filter>Header Files\Client\Network\Server Browser</Filter>
+    </ClInclude>
+    <ClInclude Include="gui_Impl\CGUIGridList_Impl.h">
+      <Filter>Header Files\Client\GUI\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="CServerList.h">
+      <Filter>Header Files\Client\Network\Server Browser</Filter>
+    </ClInclude>
+    <ClInclude Include="gui_impl\CGUIListItem_Impl.h">
+      <Filter>Header Files\Client\GUI\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="CM2VideoSettings.h">
+      <Filter>Header Files\Client\Game\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="CM2PhysFS.h">
+      <Filter>Header Files\Client\Game\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="CM2PhysFSFile.h">
+      <Filter>Header Files\Client\Game\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="CClientScriptGUIManager.h">
+      <Filter>Header Files\Client\Scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\CM2Ped.h">
+      <Filter>Header Files\Client\Game\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\CM2Entity.h">
+      <Filter>Header Files\Client\Game\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\CM2PlayerPed.h">
+      <Filter>Header Files\Client\Game\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\CM2BaseEntity.h">
+      <Filter>Header Files\Client\Game\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\CM2Vehicle.h">
+      <Filter>Header Files\Client\Game\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\Scripting\Natives\CPedNatives.h">
+      <Filter>Header Files\Client\Shared\Scripting\Natives</Filter>
+    </ClInclude>
+    <ClInclude Include="CPedManager.h">
+      <Filter>Header Files\Client\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="CPed.h">
+      <Filter>Header Files\Client\Network\Peds</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libraries\lua\lauxlib.h">
+      <Filter>Header Files\Client\Libraries\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libraries\lua\lua.h">
+      <Filter>Header Files\Client\Libraries\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libraries\lua\luaconf.h">
+      <Filter>Header Files\Client\Libraries\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libraries\lua\lualib.h">
+      <Filter>Header Files\Client\Libraries\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libraries\lua\lua.hpp">
+      <Filter>Source Files\Client\Libraries\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="CLoadingScreen.h">
+      <Filter>Header Files\Client\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\CM2SDSTables.h">
+      <Filter>Header Files\Client\Game\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="CClientNatives.h">
+      <Filter>Header Files\Client\Scripting\Natives</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\CM2Navigation.h">
+      <Filter>Header Files\Client\Game\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="CMenuSettings.h">
+      <Filter>Header Files\Client\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\CXML.h">
+      <Filter>Header Files\Client\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\Scripting\Natives\CXMLNatives.h">
+      <Filter>Header Files\Client\Shared\Scripting\Natives</Filter>
+    </ClInclude>
+    <ClInclude Include="gui_impl\CGUIScrollBar_Impl.h">
+      <Filter>Header Files\Client\GUI\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="gui_impl\CGUIScrollPane_Impl.h">
+      <Filter>Header Files\Client\GUI\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="gui_impl\CGUIMessageBox_Impl.h">
+      <Filter>Header Files\Client\GUI\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="gui_impl\CGUIComboBox_Impl.h">
+      <Filter>Header Files\Client\GUI\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\CM2Misc.h">
+      <Filter>Header Files\Client\Game\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="CGUIEvent.h">
+      <Filter>Header Files\Client\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="CGUITypes.h">
+      <Filter>Header Files\Client\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="CKeyBinds.h">
+      <Filter>Header Files\Client\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\Scripting\Natives\CSharedVehicleNatives.h">
+      <Filter>Header Files\Client\Shared\Scripting\Natives</Filter>
+    </ClInclude>
+    <ClInclude Include="CVehicleRPC.h">
+      <Filter>Header Files\Client\Network\RPCs</Filter>
+    </ClInclude>
+    <ClInclude Include="CNetworkRPC.h">
+      <Filter>Header Files\Client\Network\RPCs</Filter>
+    </ClInclude>
+    <ClInclude Include="CScriptingRPC.h">
+      <Filter>Header Files\Client\Network\RPCs</Filter>
+    </ClInclude>
+    <ClInclude Include="CPlayerRPC.h">
+      <Filter>Header Files\Client\Network\RPCs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\Math\CQuaternion.h">
+      <Filter>Header Files\Client\Shared\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\CWPMHook.h">
+      <Filter>Header Files\Client\Anti Cheat</Filter>
+    </ClInclude>
+    <ClInclude Include="CBlipManager.h">
+      <Filter>Header Files\Client\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="CStreamer.h">
+      <Filter>Header Files\Client\Game\Streamer</Filter>
+    </ClInclude>
+    <ClInclude Include="CStreamableEntity.h">
+      <Filter>Header Files\Client\Game\Streamer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\Network\CNetworkStats.h">
+      <Filter>Header Files\Client\Shared\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="CModelManager.h">
+      <Filter>Header Files\Client\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\CM2SlotManager.h">
+      <Filter>Header Files\Client\Game\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\CM2Core.h">
+      <Filter>Header Files\Client\Game\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="CNetworkModelManager.h">
+      <Filter>Header Files\Client\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\CM2Door.h">
+      <Filter>Header Files\Client\Game\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\CM2Object.h">
+      <Filter>Header Files\Client\Game\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\CM2ObjectTable.h">
+      <Filter>Header Files\Client\Game\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="CDoorManager.h">
+      <Filter>Header Files\Client\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="CCore.h">
+      <Filter>Header Files\Client</Filter>
+    </ClInclude>
+    <ClInclude Include="CMafia.h">
+      <Filter>Header Files\Client\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\CrashRpt.h">
+      <Filter>Header Files\Client\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="CServerQuery.h">
+      <Filter>Header Files\Client\Network\Server Browser</Filter>
+    </ClInclude>
+    <ClInclude Include="CFileTransferManager.h">
+      <Filter>Header Files\Client\Network\File Transfer</Filter>
+    </ClInclude>
+    <ClInclude Include="CFileTransfer.h">
+      <Filter>Header Files\Client\Network\File Transfer</Filter>
+    </ClInclude>
+    <ClInclude Include="StdInc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CServerPassword.h">
+      <Filter>Header Files\Client\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\Scripting\Natives\CHashNatives.h">
+      <Filter>Header Files\Client\Shared\Scripting\Natives</Filter>
+    </ClInclude>
+    <ClInclude Include="CBlipRPC.h">
+      <Filter>Header Files\Client\Network\RPCs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\Scripting\Natives\CSharedPlayerNatives.h">
+      <Filter>Header Files\Client\Shared\Scripting\Natives</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CGameFiles.cpp">
+      <Filter>Source Files\Client\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Shared\SharedUtility.cpp">
+      <Filter>Source Files\Client\Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Shared\CLogFile.cpp">
+      <Filter>Source Files\Client\Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Shared\CString.cpp">
+      <Filter>Source Files\Client\Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="COffsets.cpp">
+      <Filter>Source Files\Client\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="CPatches.cpp">
+      <Filter>Source Files\Client\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Shared\CPatcher.cpp">
+      <Filter>Source Files\Client\Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="CNetworkModule.cpp">
+      <Filter>Source Files\Client\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="CLocalPlayer.cpp">
+      <Filter>Source Files\Client\Network\Players</Filter>
+    </ClCompile>
+    <ClCompile Include="CNetworkPlayer.cpp">
+      <Filter>Source Files\Client\Network\Players</Filter>
+    </ClCompile>
+    <ClCompile Include="CRemotePlayer.cpp">
+      <Filter>Source Files\Client\Network\Players</Filter>
+    </ClCompile>
+    <ClCompile Include="CChat.cpp">
+      <Filter>Source Files\Client\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="CGraphics.cpp">
+      <Filter>Source Files\Client\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="CDirect3D9Hook.cpp">
+      <Filter>Source Files\Client\Game\Hooks\Direct X</Filter>
+    </ClCompile>
+    <ClCompile Include="CDirect3D9Proxy.cpp">
+      <Filter>Source Files\Client\Game\Hooks\Direct X</Filter>
+    </ClCompile>
+    <ClCompile Include="CDirect3DDevice9Proxy.cpp">
+      <Filter>Source Files\Client\Game\Hooks\Direct X</Filter>
+    </ClCompile>
+    <ClCompile Include="CPlayerManager.cpp">
+      <Filter>Source Files\Client\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="CIE.cpp">
+      <Filter>Source Files\Client\Game\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="CM2Camera.cpp">
+      <Filter>Source Files\Client\Game\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="CLua.cpp">
+      <Filter>Source Files\Client\Game\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="CDirectInput8Hook.cpp">
+      <Filter>Source Files\Client\Game\Hooks\Direct Input</Filter>
+    </ClCompile>
+    <ClCompile Include="CDirectInput8Proxy.cpp">
+      <Filter>Source Files\Client\Game\Hooks\Direct Input</Filter>
+    </ClCompile>
+    <ClCompile Include="CDirectInputDevice8Proxy.cpp">
+      <Filter>Source Files\Client\Game\Hooks\Direct Input</Filter>
+    </ClCompile>
+    <ClCompile Include="CWindowSubclass.cpp">
+      <Filter>Source Files\Client\Game\Hooks\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Shared\CSettings.cpp">
+      <Filter>Source Files\Client\Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Shared\md5\md5.cpp">
+      <Filter>Source Files\Client\Shared\md5</Filter>
+    </ClCompile>
+    <ClCompile Include="CM2EntityMessage.cpp">
+      <Filter>Source Files\Client\Game\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Shared\DbgView.cpp">
+      <Filter>Source Files\Client\Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Shared\CZlib.cpp">
+      <Filter>Source Files\Client\Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="CM2SyncObject.cpp">
+      <Filter>Source Files\Client\Game\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Shared\CEvents.cpp">
+      <Filter>Source Files\Client\Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Shared\Scripting\CScriptingManager.cpp">
+      <Filter>Source Files\Client\Shared\Scripting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Shared\Scripting\CSquirrel.cpp">
+      <Filter>Source Files\Client\Shared\Scripting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Shared\Scripting\CSquirrelArguments.cpp">
+      <Filter>Source Files\Client\Shared\Scripting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Shared\Scripting\CSquirrelCommon.cpp">
+      <Filter>Source Files\Client\Shared\Scripting</Filter>
+    </ClCompile>
+    <ClCompile Include="CClientScriptingManager.cpp">
+      <Filter>Source Files\Client\Scripting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Shared\Scripting\Natives\CEventNatives.cpp">
+      <Filter>Source Files\Client\Shared\Scripting\Natives</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Shared\Scripting\Natives\CSystemNatives.cpp">
+      <Filter>Source Files\Client\Shared\Scripting\Natives</Filter>
+    </ClCompile>
+    <ClCompile Include="CFPSCounter.cpp">
+      <Filter>Source Files\Client\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="CScreenShot.cpp">
+      <Filter>Source Files\Client\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Shared\Threading\CMutex.cpp">
+      <Filter>Source Files\Client\Shared\Threading</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Shared\Threading\CThread.cpp">
+      <Filter>Source Files\Client\Shared\Threading</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Shared\Timers\CTimer.cpp">
+      <Filter>Source Files\Client\Shared\Timers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Shared\Timers\CTimerManager.cpp">
+      <Filter>Source Files\Client\Shared\Timers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Shared\Network\CHttpClient.cpp">
+      <Filter>Source Files\Client\Shared\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="CPlayerNatives.cpp">
+      <Filter>Source Files\Client\Scripting\Natives</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Shared\Scripting\Natives\CAreaNatives.cpp">
+      <Filter>Source Files\Client\Shared\Scripting\Natives</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Shared\Scripting\Natives\CTimerNatives.cpp">
+      <Filter>Source Files\Client\Shared\Scripting\Natives</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Shared\Scripting\Natives\CBlipNatives.cpp">
+      <Filter>Source Files\Client\Shared\Scripting\Natives</Filter>
+    </ClCompile>
+    <ClCompile Include="CBlip.cpp">
+      <Filter>Source Files\Client\Network\Blips</Filter>
+    </ClCompile>
+    <ClCompile Include="CGUINatives.cpp">
+      <Filter>Source Files\Client\Scripting\Natives</Filter>
+    </ClCompile>
+    <ClCompile Include="CGraphicsNatives.cpp">
+      <Filter>Source Files\Client\Scripting\Natives</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Shared\Scripting\Natives\CUtilNatives.cpp">
+      <Filter>Source Files\Client\Shared\Scripting\Natives</Filter>
+    </ClCompile>
+    <ClCompile Include="CGameNatives.cpp">
+      <Filter>Source Files\Client\Scripting\Natives</Filter>
+    </ClCompile>
+    <ClCompile Include="CCameraNatives.cpp">
+      <Filter>Source Files\Client\Scripting\Natives</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Shared\CExceptionHandler.cpp">
+      <Filter>Source Files\Client\Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="CMouseHandler.cpp">
+      <Filter>Source Files\Client\Game\Hooks\Mouse</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Shared\CCommands.cpp">
+      <Filter>Source Files\Client\Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="CNetworkVehicle.cpp">
+      <Filter>Source Files\Client\Network\Vehicles</Filter>
+    </ClCompile>
+    <ClCompile Include="CVehicleManager.cpp">
+      <Filter>Source Files\Client\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Shared\Game\CGame.cpp">
+      <Filter>Source Files\Client\Shared\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="CM2Hud.cpp">
+      <Filter>Source Files\Client\Game\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="CGUI.cpp">
+      <Filter>Source Files\Client\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="CFont.cpp">
+      <Filter>Source Files\Client\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Libraries\squirrel\sqbaselib.cpp">
+      <Filter>Source Files\Client\Libraries\squirrel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Libraries\squirrel\sqclass.cpp">
+      <Filter>Source Files\Client\Libraries\squirrel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Libraries\squirrel\sqapi.cpp">
+      <Filter>Source Files\Client\Libraries\squirrel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Libraries\squirrel\sqcompiler.cpp">
+      <Filter>Source Files\Client\Libraries\squirrel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Libraries\squirrel\sqfuncstate.cpp">
+      <Filter>Source Files\Client\Libraries\squirrel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Libraries\squirrel\sqdebug.cpp">
+      <Filter>Source Files\Client\Libraries\squirrel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Libraries\squirrel\sqlexer.cpp">
+      <Filter>Source Files\Client\Libraries\squirrel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Libraries\squirrel\sqmem.cpp">
+      <Filter>Source Files\Client\Libraries\squirrel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Libraries\squirrel\sqobject.cpp">
+      <Filter>Source Files\Client\Libraries\squirrel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Libraries\squirrel\sqstate.cpp">
+      <Filter>Source Files\Client\Libraries\squirrel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Libraries\squirrel\sqstdaux.cpp">
+      <Filter>Source Files\Client\Libraries\squirrel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Libraries\squirrel\sqstdblob.cpp">
+      <Filter>Source Files\Client\Libraries\squirrel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Libraries\squirrel\sqstdio.cpp">
+      <Filter>Source Files\Client\Libraries\squirrel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Libraries\squirrel\sqstdmath.cpp">
+      <Filter>Source Files\Client\Libraries\squirrel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Libraries\squirrel\sqstdrex.cpp">
+      <Filter>Source Files\Client\Libraries\squirrel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Libraries\squirrel\sqstdstream.cpp">
+      <Filter>Source Files\Client\Libraries\squirrel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Libraries\squirrel\sqstdstring.cpp">
+      <Filter>Source Files\Client\Libraries\squirrel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Libraries\squirrel\sqstdsystem.cpp">
+      <Filter>Source Files\Client\Libraries\squirrel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Libraries\squirrel\sqvm.cpp">
+      <Filter>Source Files\Client\Libraries\squirrel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Libraries\squirrel\sqtable.cpp">
+      <Filter>Source Files\Client\Libraries\squirrel</Filter>
+    </ClCompile>
+    <ClCompile Include="gui_impl\CGUIWindow_Impl.cpp">
+      <Filter>Source Files\Client\GUI\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="gui_impl\CGUI_Impl.cpp">
+      <Filter>Source Files\Client\GUI\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="gui_impl\CGUIElement_Impl.cpp">
+      <Filter>Source Files\Client\GUI\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="gui_impl\CGUIFont_Impl.cpp">
+      <Filter>Source Files\Client\GUI\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="gui_impl\CGUIProgressBar_Impl.cpp">
+      <Filter>Source Files\Client\GUI\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="gui_impl\CGUIStaticImage_Impl.cpp">
+      <Filter>Source Files\Client\GUI\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="gui_impl\CGUITexture_Impl.cpp">
+      <Filter>Source Files\Client\GUI\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="gui_impl\CGUIButton_Impl.cpp">
+      <Filter>Source Files\Client\GUI\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="gui_impl\CGUICheckBox_Impl.cpp">
+      <Filter>Source Files\Client\GUI\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="gui_impl\CGUIEdit_Impl.cpp">
+      <Filter>Source Files\Client\GUI\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="gui_impl\CGUILabel_Impl.cpp">
+      <Filter>Source Files\Client\GUI\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="gui_impl\CGUIRadioButton_Impl.cpp">
+      <Filter>Source Files\Client\GUI\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="gui_impl\CGUITab_Impl.cpp">
+      <Filter>Source Files\Client\GUI\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="gui_impl\CGUITabPanel_Impl.cpp">
+      <Filter>Source Files\Client\GUI\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="CMainMenu.cpp">
+      <Filter>Source Files\Client\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="CServerBrowser.cpp">
+      <Filter>Source Files\Client\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="CDownloadProgress.cpp">
+      <Filter>Source Files\Client\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="CMasterList.cpp">
+      <Filter>Source Files\Client\Network\Server Browser</Filter>
+    </ClCompile>
+    <ClCompile Include="gui_Impl\CGUIGridList_Impl.cpp">
+      <Filter>Source Files\Client\GUI\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="CServerList.cpp">
+      <Filter>Source Files\Client\Network\Server Browser</Filter>
+    </ClCompile>
+    <ClCompile Include="gui_impl\CGUIListItem_Impl.cpp">
+      <Filter>Source Files\Client\GUI\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="CM2VideoSettings.cpp">
+      <Filter>Source Files\Client\Game\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="CM2PhysFS.cpp">
+      <Filter>Source Files\Client\Game\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="CM2PhysFSFile.cpp">
+      <Filter>Source Files\Client\Game\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="CClientScriptGUIManager.cpp">
+      <Filter>Source Files\Client\Scripting</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\CM2Ped.cpp">
+      <Filter>Source Files\Client\Game\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\CM2Entity.cpp">
+      <Filter>Source Files\Client\Game\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\CM2Vehicle.cpp">
+      <Filter>Source Files\Client\Game\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Shared\Scripting\Natives\CPedNatives.cpp">
+      <Filter>Source Files\Client\Shared\Scripting\Natives</Filter>
+    </ClCompile>
+    <ClCompile Include="CPed.cpp">
+      <Filter>Source Files\Client\Network\Peds</Filter>
+    </ClCompile>
+    <ClCompile Include="CPedManager.cpp">
+      <Filter>Source Files\Client\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="CLoadingScreen.cpp">
+      <Filter>Source Files\Client\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="CClientNatives.cpp">
+      <Filter>Source Files\Client\Scripting\Natives</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\CM2Navigation.cpp">
+      <Filter>Source Files\Client\Game\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="CMenuSettings.cpp">
+      <Filter>Source Files\Client\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Shared\CXML.cpp">
+      <Filter>Source Files\Client\Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Shared\Scripting\Natives\CXMLNatives.cpp">
+      <Filter>Source Files\Client\Shared\Scripting\Natives</Filter>
+    </ClCompile>
+    <ClCompile Include="gui_impl\CGUIScrollBar_Impl.cpp">
+      <Filter>Source Files\Client\GUI\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="gui_impl\CGUIScrollPane_Impl.cpp">
+      <Filter>Source Files\Client\GUI\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="gui_impl\CGUIMessageBox_Impl.cpp">
+      <Filter>Source Files\Client\GUI\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="gui_impl\CGUIComboBox_Impl.cpp">
+      <Filter>Source Files\Client\GUI\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\CM2Misc.cpp">
+      <Filter>Source Files\Client\Game\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="CKeyBinds.cpp">
+      <Filter>Source Files\Client\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Shared\Scripting\Natives\CSharedVehicleNatives.cpp">
+      <Filter>Source Files\Client\Shared\Scripting\Natives</Filter>
+    </ClCompile>
+    <ClCompile Include="CVehicleRPC.cpp">
+      <Filter>Source Files\Client\Network\RPCs</Filter>
+    </ClCompile>
+    <ClCompile Include="CNetworkRPC.cpp">
+      <Filter>Source Files\Client\Network\RPCs</Filter>
+    </ClCompile>
+    <ClCompile Include="CScriptingRPC.cpp">
+      <Filter>Source Files\Client\Network\RPCs</Filter>
+    </ClCompile>
+    <ClCompile Include="CPlayerRPC.cpp">
+      <Filter>Source Files\Client\Network\RPCs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Shared\CWPMHook.cpp">
+      <Filter>Source Files\Client\Anti Cheat</Filter>
+    </ClCompile>
+    <ClCompile Include="CBlipManager.cpp">
+      <Filter>Source Files\Client\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="CStreamer.cpp">
+      <Filter>Source Files\Client\Game\Streamer</Filter>
+    </ClCompile>
+    <ClCompile Include="CStreamableEntity.cpp">
+      <Filter>Source Files\Client\Game\Streamer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Shared\Network\CNetworkStats.cpp">
+      <Filter>Source Files\Client\Shared\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="CModelManager.cpp">
+      <Filter>Source Files\Client\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\CM2SlotManager.cpp">
+      <Filter>Source Files\Client\Game\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\CM2Core.cpp">
+      <Filter>Source Files\Client\Game\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="CNetworkModelManager.cpp">
+      <Filter>Source Files\Client\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\CM2Door.cpp">
+      <Filter>Source Files\Client\Game\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\CM2Object.cpp">
+      <Filter>Source Files\Client\Game\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\CM2ObjectTable.cpp">
+      <Filter>Source Files\Client\Game\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="CDoorManager.cpp">
+      <Filter>Source Files\Client\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="CCore.cpp">
+      <Filter>Source Files\Client</Filter>
+    </ClCompile>
+    <ClCompile Include="CMafia.cpp">
+      <Filter>Source Files\Client\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Shared\CrashRpt.cpp">
+      <Filter>Source Files\Client\Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="CServerQuery.cpp">
+      <Filter>Source Files\Client\Network\Server Browser</Filter>
+    </ClCompile>
+    <ClCompile Include="CFileTransfer.cpp">
+      <Filter>Source Files\Client\Network\File Transfer</Filter>
+    </ClCompile>
+    <ClCompile Include="CFileTransferManager.cpp">
+      <Filter>Source Files\Client\Network\File Transfer</Filter>
+    </ClCompile>
+    <ClCompile Include="CServerPassword.cpp">
+      <Filter>Source Files\Client\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Shared\Scripting\Natives\CHashNatives.cpp">
+      <Filter>Source Files\Client\Shared\Scripting\Natives</Filter>
+    </ClCompile>
+    <ClCompile Include="CBlipRPC.cpp">
+      <Filter>Source Files\Client\Network\RPCs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Shared\Scripting\Natives\CSharedPlayerNatives.cpp">
+      <Filter>Source Files\Client\Shared\Scripting\Natives</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

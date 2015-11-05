@@ -1,0 +1,1 @@
+g++ -m32 *.cpp ../Shared/Scripting/CScriptingManager.cpp ../Shared/SharedUtility.cpp ../Shared/Scripting/CSquirrel.cpp ../Shared/md5/md5.cpp -I../Shared -Wno-write-strings -D_SERVER -D_SERVER -D_NO_GARBAGE_COLLECT -o ../Binary/m2mp-svr-32

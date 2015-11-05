@@ -1,0 +1,31 @@
+------------------------------------------------------------------------------------
+Mafia 2 Multiplayer Software License Agreement
+Version 1.00 - 07/06/2012
+------------------------------------------------------------------------------------
+
+You must agree and abide by all the terms below to use this software.
+Violation of these terms will result in suspension or removal of these services.
+This Software Agreement is only valid to license holders of Mafia II (PC).
+
+(a) The author of this software has the right to change/modify the terms of this license at anytime.
+
+(b) The author of this software has the right to revoke this license at anytime.
+
+(c) You may not modify the software in any way without written permission from the author.
+
+(d) This software may not be exploited for personal and/or financial gain.
+
+(e) This software may not be used for any illegal purposes.
+
+(f) You must have a valid license for Mafia II (PC) to use the client software.
+
+(g) You may not redistribute this software without written permission from the author.
+
+------------------------------------------------------------------------------------
+(c) 2010-2014 m2-multiplayer.com team.
+
+Mafia 2 Multiplayer (m2-multiplayer.com) is not affiliated with or endorsed by
+Take-Two Interactive Software.
+
+Mafia and Mafia 2 are registered trademarks of Take-Two Interactive Software.
+------------------------------------------------------------------------------------

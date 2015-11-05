@@ -1,0 +1,12 @@
+<settings>
+    <hostname>Linux test</hostname>
+    <port>5555</port>
+    <httpport>91</httpport>
+    <maxplayers>1000</maxplayers>
+    <weburl>www.m2-multiplayer.com</weburl>
+    <password>123qwe123</password>
+    <resources>
+        <resource>default</resource>
+    </resources>
+    <modules></modules>
+</settings>

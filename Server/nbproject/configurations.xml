@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="88">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <df root="." name="Server">
+      <df name="Interfaces">
+        <in>CBlipManagerInterface.h</in>
+        <in>CCoreInterface.h</in>
+        <in>CMultiplayerInterfaces.h</in>
+        <in>CNetworkModuleInterface.h</in>
+        <in>CPlayerManagerInterface.h</in>
+        <in>CVehicleManagerInterface.h</in>
+      </df>
+      <in>CBanManager.cpp</in>
+      <in>CBanManager.h</in>
+      <in>CBanNatives.cpp</in>
+      <in>CBanNatives.h</in>
+      <in>CBlip.h</in>
+      <in>CBlipManager.h</in>
+      <in>CClientScriptingManager.h</in>
+      <in>CCore.h</in>
+      <in>CEventsInterface.h</in>
+      <in>CHttpNatives.h</in>
+      <in>CMasterList.h</in>
+      <in>CModule.h</in>
+      <in>CModuleManager.h</in>
+      <in>CNetworkModule.h</in>
+      <in>CNetworkPlayer.h</in>
+      <in>CNetworkRPC.h</in>
+      <in>CNetworkVehicle.h</in>
+      <in>CPlayerManager.h</in>
+      <in>CPlayerNatives.h</in>
+      <in>CQuery.h</in>
+      <in>CResourceManager.h</in>
+      <in>CServerNatives.h</in>
+      <in>CVehicleManager.h</in>
+      <in>CVehicleNatives.h</in>
+      <in>CWebRequest.h</in>
+      <in>CWebServer.h</in>
+      <in>CWhoWas.h</in>
+      <in>InterfaceCommon.h</in>
+      <in>StdInc.h</in>
+    </df>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>makefile</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <sourceFolderFilter>^(nbproject)$</sourceFolderFilter>
+  <sourceRootList>
+    <Elem>.</Elem>
+  </sourceRootList>
+  <projectmakefile>makefile</projectmakefile>
+  <confs>
+    <conf name="Default" type="0">
+      <toolsSet>
+        <remote-sources-mode>LOCAL_SOURCES</remote-sources-mode>
+        <compilerSet>default</compilerSet>
+      </toolsSet>
+      <codeAssistance>
+      </codeAssistance>
+      <makefileType>
+        <makeTool>
+          <buildCommandWorkingDir>.</buildCommandWorkingDir>
+          <buildCommand>${MAKE} -f Makefile</buildCommand>
+          <cleanCommand>${MAKE} -f Makefile clean</cleanCommand>
+          <executablePath></executablePath>
+        </makeTool>
+      </makefileType>
+      <item path="CBanManager.cpp" ex="false" tool="1" flavor2="0">
+        <ccTool>
+          <incDir>
+            <pElem>../Shared</pElem>
+            <pElem>../Libraries/squirrel</pElem>
+            <pElem>../Libraries</pElem>
+            <pElem>.</pElem>
+          </incDir>
+          <preprocessorList>
+            <Elem>_LINUX</Elem>
+            <Elem>_SERVER</Elem>
+          </preprocessorList>
+        </ccTool>
+      </item>
+      <item path="CBanManager.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="CBanNatives.cpp" ex="false" tool="1" flavor2="0">
+        <ccTool>
+          <incDir>
+            <pElem>../Shared</pElem>
+            <pElem>../Libraries/squirrel</pElem>
+            <pElem>../Libraries</pElem>
+            <pElem>.</pElem>
+          </incDir>
+          <preprocessorList>
+            <Elem>_LINUX</Elem>
+            <Elem>_SERVER</Elem>
+          </preprocessorList>
+        </ccTool>
+      </item>
+      <item path="CBanNatives.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="CBlip.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="CBlipManager.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="CClientScriptingManager.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="CCore.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="CEventsInterface.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="CHttpNatives.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="CMasterList.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="CModule.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="CModuleManager.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="CNetworkModule.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="CNetworkPlayer.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="CNetworkRPC.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="CNetworkVehicle.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="CPlayerManager.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="CPlayerNatives.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="CQuery.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="CResourceManager.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="CServerNatives.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="CVehicleManager.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="CVehicleNatives.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="CWebRequest.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="CWebServer.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="CWhoWas.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="InterfaceCommon.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Interfaces/CBlipManagerInterface.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Interfaces/CCoreInterface.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Interfaces/CMultiplayerInterfaces.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Interfaces/CNetworkModuleInterface.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Interfaces/CPlayerManagerInterface.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Interfaces/CVehicleManagerInterface.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="StdInc.h" ex="false" tool="1" flavor2="0">
+      </item>
+    </conf>
+  </confs>
+</configurationDescriptor>
