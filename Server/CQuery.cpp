@@ -186,7 +186,7 @@ std::string CQuery::QueryLight( void )
 			_snprintf ( szName, 255, "%s", pPlayer->GetNick () );
 			_snprintf ( szPing, 255, "%u", pPlayer->GetPing () );
 #else
-			snprintf ( szTemp, 255, "%s", pPlayer->GetNick () );
+			snprintf ( szName, 255, "%s", pPlayer->GetNick () );
 			snprintf ( szPing, 255, "%u", pPlayer->GetPing () );
 #endif
 
