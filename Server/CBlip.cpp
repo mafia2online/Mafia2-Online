@@ -23,7 +23,9 @@ CBlip::CBlip( EntityId blipId, Vector2 vecPosition, int iLibrary, int iIcon )
 	m_pAttachedToPlayer = NULL;
 	m_pAttachedToVehicle = NULL;
 	m_pAttachedToPed = NULL;
-	m_blipType = eBlipType::BLIP_TYPE_STANDALONE;
+	
+	//To fix ???
+	//m_blipType = eBlipType::BLIP_TYPE_STANDALONE;
 }
 
 CBlip::~CBlip( void )
@@ -138,7 +140,9 @@ void CBlip::AttachToPlayer ( CNetworkPlayer * pPlayer )
 	m_pAttachedToPed = NULL;
 
 	// Set the blip type
-	m_blipType = eBlipType::BLIP_TYPE_PLAYER;
+
+	//To fix ???
+	//m_blipType = eBlipType::BLIP_TYPE_PLAYER;
 }
 
 void CBlip::AttachToVehicle ( CNetworkVehicle * pVehicle )
@@ -172,7 +176,9 @@ void CBlip::AttachToVehicle ( CNetworkVehicle * pVehicle )
 	m_pAttachedToPed = NULL;
 
 	// Set the blip type
-	m_blipType = eBlipType::BLIP_TYPE_VEHICLE;
+	
+	//To fix ???
+	//m_blipType = eBlipType::BLIP_TYPE_VEHICLE;
 }
 
 void CBlip::AttachToPed ( CPed * pPed )
@@ -206,5 +212,7 @@ void CBlip::AttachToPed ( CPed * pPed )
 	m_pAttachedToPed = pPed;
 
 	// Set the blip type
-	m_blipType = eBlipType::BLIP_TYPE_PED;
+	
+	//To fix ???
+	//m_blipType = eBlipType::BLIP_TYPE_PED;
 }
