@@ -132,7 +132,7 @@ bool CCore::Initialise( int argc, char * argv[] )
 	CLogFile::Printf( "= Server name    : %s", CVAR_GET_STRING( "hostname" ) );
 	CLogFile::Printf( "= Server port    : %d", CVAR_GET_INTEGER( "port" ) );
 	CLogFile::Printf( "= Max players    : %d%s", CVAR_GET_INTEGER( "maxplayers" ), !IsPasswordProtected() ? "\n" : "" );
-
+	
 	// Is the server passworded?
 	if( IsPasswordProtected() )
 	{
@@ -227,6 +227,10 @@ bool CCore::Initialise( int argc, char * argv[] )
 
 void CCore::Deinitialise( void )
 {
+	// First call the shutdown event
+	if (m_pEvents)
+		m_pEvents->Call( "onServerShutdown" );
+	
 	// Delete ourselfs
 	delete this;
 }
