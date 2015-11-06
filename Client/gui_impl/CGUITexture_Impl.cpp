@@ -25,7 +25,7 @@ CGUITexture_Impl::~CGUITexture_Impl( void )
 		m_pRenderer->destroyTexture( m_pTexture );
 }
 
-bool CGUITexture_Impl::LoadFromFile(String strFile, String strDirectory)
+bool CGUITexture_Impl::LoadFromFile(String strFile)
 {
 	// Does the file not exist?
 	if( !SharedUtility::Exists( strFile.Get() ) )
@@ -34,7 +34,7 @@ bool CGUITexture_Impl::LoadFromFile(String strFile, String strDirectory)
 	// Try and load the file
 	try
 	{
-		m_pTexture->loadFromFile( "%s\\%s", strDirectory.Get(), strFile.Get() );
+		m_pTexture->loadFromFile(strFile.Get(), "");
 	}
 	catch( CEGUI::Exception )
 	{
