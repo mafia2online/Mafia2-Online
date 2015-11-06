@@ -39,7 +39,13 @@ void SignalHandler( int iSignal )
         {
             Shutdown();
             break;
-        }
+        };
+
+        case SIGINT:
+        {
+        	CLogFile::Print( "Please use the 'quit' command instead of ctrl+c" );
+        	break;
+        };
     }
 }
 #endif
@@ -292,5 +298,7 @@ void Shutdown( void )
 
 #ifdef WIN32
 	TerminateProcess( GetCurrentProcess(), 0 );
+#else
+	exit(42);
 #endif
 }
