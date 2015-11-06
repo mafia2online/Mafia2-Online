@@ -15,7 +15,6 @@
 #else
 #define	CORE_MODULE	"m2mp.dll"
 #endif
-
 CUpdate * pUpdater = NULL;
 CGUI * pGUI = NULL;
 
@@ -83,7 +82,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 			// Did they not find the registry?
 			if( !bFoundCustomDirectory )
 			{
-				ShowMessageBox( "Failed to find Mafia II install directory. Can't launch "MOD_NAME"." );
+				ShowMessageBox( "Failed to find Mafia II install directory. Can't launch." );
 				return 1;
 			}
 		}
@@ -98,7 +97,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	// Does Mafia2.exe not exist?
 	if( !SharedUtility::Exists( strApplicationPath.Get() ) )
 	{
-		ShowMessageBox( "Failed to find Mafia2.exe. Can't launch "MOD_NAME"." );
+		ShowMessageBox( "Failed to find Mafia2.exe. Can't launch." );
 		return 1;
 	}
 
@@ -112,7 +111,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	// Does m2mp.dll not exist?
 	if( !SharedUtility::Exists( strModulePath.Get() ) )
 	{
-		ShowMessageBox( "Failed to find "CORE_MODULE". Can't launch "MOD_NAME"." );
+		ShowMessageBox( "Failed to find DLL. Can't launch." );
 		return 1;
 	}
 
@@ -130,7 +129,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	// Create the Mafia II process
 	if( !CreateProcess( strApplicationPath.Get(), NULL, NULL, NULL, TRUE, CREATE_SUSPENDED, NULL, SharedUtility::GetAppPath(), &siStartupInfo, &piProcessInfo ) )
 	{
-		ShowMessageBox( "Failed to start Mafia2.exe. Can't launch "MOD_NAME"." );
+		ShowMessageBox( "Failed to start Mafia2.exe. Can't launch." );
 		return 1;
 	}
 
@@ -144,15 +143,15 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 		TerminateProcess( piProcessInfo.hProcess, 0 );
 
 		// Generate the error string
-		String strError( "Unknown Error. Can't launch "MOD_NAME"." );
+		String strError( "Unknown Error. Can't launch." );
 
 		// Find the cause of the error
 		if( iReturn == 1 )
-			strError = "Failed to write library path into remote process. Can't launch "MOD_NAME".";
+			strError = "Failed to write library path into remote process. Can't launch.";
 		else if( iReturn == 2 )
-			strError = "Failed to create remote thread in remote process. Can't launch "MOD_NAME".";
+			strError = "Failed to create remote thread in remote process. Can't launch.";
 		else if( iReturn == 2 )
-			strError = "Failed to open the remote process. Can't launch "MOD_NAME".";
+			strError = "Failed to open the remote process. Can't launch.";
 
 		// Show the error message
 		ShowMessageBox( strError.Get() );
