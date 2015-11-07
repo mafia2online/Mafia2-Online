@@ -443,6 +443,11 @@ void CServerBrowser::StartConnection ( void )
 	}
 	else
 	{
+		//If multiplayer not started, we execute 
+		if (!pCore->IsMultiplayerStarted()) {
+			pCore->StartMultiplayer();
+		}
+
 		// Move to the next step
 		m_connectionState = CONNECTION_STATE_CONNECTING;
 
@@ -470,7 +475,7 @@ void CServerBrowser::ProcessConnection( void )
 	}
 
 	// Show the message box
-	SetMessageBox ( ((int)response == 0 ? "Connecting" : "Failed to connect"), strMessage.Get () );
+	SetMessageBox ( (response == NETWORK_RESPONSE_SUCCESS ? "Connecting" : "Failed to connect"), strMessage.Get () );
 
 	// Did we fail to connect?
 	if( (int)response > 0 )
