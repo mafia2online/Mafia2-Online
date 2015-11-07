@@ -95,7 +95,7 @@ eNetworkResponse CNetworkModule::Connect( String strHost, unsigned short usPort,
 	SetNetworkState( NETSTATE_CONNECTING );
 
 	// Did we fail to connect?
-	if( iConnectionResult != 0 )
+	if (iConnectionResult != RakNet::INVALID_PARAMETER )
 	{
 		// Set the network state
 		SetNetworkState( NETSTATE_NONE );
