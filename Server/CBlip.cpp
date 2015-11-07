@@ -173,8 +173,6 @@ void CBlip::AttachToVehicle ( CNetworkVehicle * pVehicle )
 	m_pAttachedToPed = NULL;
 
 	// Set the blip type
-	
-	//To fix ???
 	m_blipType = eBlipType::BLIP_TYPE_VEHICLE;
 }
 
@@ -209,7 +207,5 @@ void CBlip::AttachToPed ( CPed * pPed )
 	m_pAttachedToPed = pPed;
 
 	// Set the blip type
-	
-	//To fix ???
 	m_blipType = eBlipType::BLIP_TYPE_PED;
 }
