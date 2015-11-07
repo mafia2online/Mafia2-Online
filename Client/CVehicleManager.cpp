@@ -141,7 +141,7 @@ void CVehicleManager::Process( void )
 			fSteerError = m_pNetworkVehicle[i]->m_Interpolation.steer.fError;
 
 			// Draw
-			pCore->GetGraphics()->DrawText ( m_vecScreenPosition[i].fX, m_vecScreenPosition[i].fY, 0xFFFFFFFF, 1.0f, "tahoma-bold", true, (DT_NOCLIP | DT_CENTER), 
+			/*pCore->GetGraphics()->DrawText ( m_vecScreenPosition[i].fX, m_vecScreenPosition[i].fY, 0xFFFFFFFF, 1.0f, "tahoma-bold", true, (DT_NOCLIP | DT_CENTER), 
 				"Position: %f %f %f\n"
 				"Rotation: %f, %f, %f\n"
 				"Position interpolation - Target: %f, %f, %f - Error: %f, %f, %f - Alpha: %f\n"
@@ -156,7 +156,7 @@ void CVehicleManager::Process( void )
 				vecRotInterpError.fX, vecRotInterpError.fY, vecRotInterpError.fZ,
 				fRotInterpAlpha,
 				fSteerTarget, fSteerAlpha, fSteerError
-			);
+			);*/
 		}
 	}
 }

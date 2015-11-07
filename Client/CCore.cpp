@@ -411,6 +411,7 @@ void CCore::OnDeviceRender( void )
 	if( m_pPedManager )
 		m_pPedManager->Pulse();
 
+	// TODO: remove
 	if ( m_pPlayerManager && m_pPlayerManager->GetLocalPlayer() && m_pPlayerManager->GetLocalPlayer()->IsSpawned() ) {
 		CM2Ped * pPlayerPed = m_pPlayerManager->GetLocalPlayer()->GetPlayerPed();
 		C_PlayerControls playerControls = pPlayerPed->GetPed()->m_playerControls;
@@ -418,6 +419,7 @@ void CCore::OnDeviceRender( void )
 		pCore->GetGraphics()->DrawText ( 300, 300, D3DCOLOR_ARGB(255,255,0,0), 1.0f, "tahoma-bold", true, "Is Moving: %s\nMovement State: %d\nModifiers: %d\nMouse Flags: %d\nKeyboard Flags: %d\nIs Aiming: %s\nIs Crouching: %s", playerControls.m_bIsMoving ? "Yes" : "No", playerControls.m_ePlayerMovementState, playerControls.m_byteModifiers, playerControls.m_byteMouseFlags, playerControls.m_byteKeyboardFlags, playerControls.m_bIsAiming ? "Yes" : "No", playerControls.m_bIsCrouching ? "Yes" : "No" );
 	}
 
+	// TODO: remove
 	if ( m_pPlayerManager && m_pPlayerManager->GetLocalPlayer() && m_pPlayerManager->GetLocalPlayer()->IsInVehicle() ) {
 		CNetworkVehicle * pNetworkVehicle = m_pPlayerManager->GetLocalPlayer()->GetVehicle ();
 		CVector3 vecSpeed = pNetworkVehicle->GetVehicle()->GetVehicle()->m_vecMoveSpeed;

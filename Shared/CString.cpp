@@ -225,6 +225,14 @@ void String::Replace( size_t sOffset, String strString )
 	// todo
 }
 
+void String::Insert(size_t sOffset, char cChar)
+{
+	m_strString.insert(sOffset, 1, cChar);
+
+	// Ensure we haven't passed the string limit
+	LimitTruncate();
+}
+
 void String::Insert(size_t sOffset, const char * szString)
 {
 	m_strString.insert(sOffset, szString);
