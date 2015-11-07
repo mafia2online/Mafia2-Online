@@ -65,6 +65,7 @@ public:
 	void				Replace( size_t sOffset, const char * szString );
 	void				Replace( size_t sOffset, String strString );
 
+	void				Insert(size_t sOffset, char cChar);
 	void				Insert(size_t sOffset, const char * szString);
 
 	String				substr( size_t sOffset, size_t sCount )
