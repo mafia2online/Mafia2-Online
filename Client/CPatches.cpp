@@ -317,7 +317,7 @@ void CPatches::Initialise( void )
 	CPatcher::InstallNopPatch ( 0x4CE577, 0x8 ); // enter vehicle 2
 	CPatcher::InstallNopPatch ( 0x94504F, 0x12 ); // exit vehicle
 
-	// Hook for when vehicle fuel tank is shot
+	// Hook for when vehicle fuel tank is shot - crashy
 	//CPatcher::InstallCallPatch ( 0x4E48F1, (DWORD)C_Vehicle__OnFuelTankShot );
 
 	// Disable vehicle exit
@@ -446,11 +446,8 @@ int __fastcall CPatches::HOOK_CEntMgr__ProcessEntities( void * This, void * _EDX
 
 int CPatches::HOOK_OnGameProcessStart( HINSTANCE hInstance, int a2, int a3, int a4 )
 {
-#ifndef _DEBUG
 	// Install the crash reporter
 	CrashRpt::InstallMain( MOD_NAME, MOD_VERS_STR );
-#endif
-
 	CLogFile::Printf ( "HOOK_OnGameProcessStart" );
 
 	return onGameProcessStart( hInstance, a2, a3, a4 );

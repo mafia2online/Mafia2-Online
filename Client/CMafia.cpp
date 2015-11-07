@@ -32,7 +32,6 @@ void CMafia::LoadPointers( void )
 {
 	// Load the physfs pointer
 	m_pFileSystem = new CM2PhysFS( *(M2PhysFS **)COffsets::VAR_CPhysFS );
-
 	// Load the navigation pointer
 	m_pNavigation = new CM2Navigation( *(M2Navigation **)COffsets::VAR_CNavigation );
 }

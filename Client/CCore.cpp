@@ -19,7 +19,7 @@ bool					bInputHookCreated = false;
 extern					DWORD sub_CD00A0__ECX;
 
 #define					EXE_VERSION_SKIDROW		0xAE196A1E //M2:MP patched version
-#define					EXE_VERSION_STEAM		0xB1ADE8F2
+#define					EXE_VERSION_STEAM		0xB1ADE8F2 //Steam version
 
 DWORD					GetModelHasFromModelName_ECX;
 
@@ -138,6 +138,7 @@ bool CCore::Initialise( void )
 
 	// Subtract the image size from the base address
 	m_uiBaseAddress -= 0x400000;
+
 
 	// Create the game instance
 	m_pGame = new CMafia;
