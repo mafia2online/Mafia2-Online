@@ -105,14 +105,14 @@ bool CCore::Initialise( int argc, char * argv[] )
 	const struct tm * tm = localtime( &t );
 
 	// Get the log file path and name
-	String strLogFile( "logs/%s/m2mp-server-%d-%d-%d.log", szDateStr, tm->tm_mday, (tm->tm_mon + 1), (1900 + tm->tm_year) );
+	String strLogFile( "logs/%s/m2online-server-%d-%d-%d.log", szDateStr, tm->tm_mday, (tm->tm_mon + 1), (1900 + tm->tm_year) );
 
 	// Open the log file
 	CLogFile::Open( (char *)strLogFile.Get(), true );
 
 #ifdef _WIN324
 	// Install the crash reporter
-	CrashRpt::InstallMain( "Mafia 2 Multiplayer (Server)", MOD_VERS_STR );
+	CrashRpt::InstallMain( MOD_NAME" (Server)", MOD_VERS_STR );
 
 	// Check if restarted after crash	
 	if ( strstr( GetCommandLineA(), "/restart_crash_occurred" ) )
@@ -120,7 +120,7 @@ bool CCore::Initialise( int argc, char * argv[] )
 #endif
 
 	CLogFile::Print( "==============================================================" );
-	CLogFile::Printf( "= Mafia 2 Multiplayer v%s [%s]", MOD_VERS_STR, MOD_OS_STRING );
+	CLogFile::Printf("= %s v%s [%s]", MOD_NAME, MOD_VERS_STR, MOD_OS_STRING);
 	CLogFile::Print( "==============================================================" );
 
 	// Load the server settings

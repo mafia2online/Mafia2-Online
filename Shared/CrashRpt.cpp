@@ -74,8 +74,8 @@ bool CrashRpt::InstallMain( char * pszName, char * pszVersion )
 	CrInstallInfo.pszRestartCmdLine = "/restart_crash_occurred";
 #endif
 
-	CrInstallInfo.pszUrl = "http://m2-multiplayer.com/crashreport/report.php";
-	CrInstallInfo.pszPrivacyPolicyURL = "http://m2-multiplayer.com/crashreport/policy.html";
+	CrInstallInfo.pszUrl = CRASHRPT_HOST;
+	CrInstallInfo.pszPrivacyPolicyURL = CRASHRPT_POLICY;
 
 	if ( crInstall( &CrInstallInfo ) != 0 )
 	{

@@ -412,7 +412,7 @@ void CCore::OnDeviceRender( void )
 		m_pPedManager->Pulse();
 
 	// TODO: remove
-	if ( m_pPlayerManager && m_pPlayerManager->GetLocalPlayer() && m_pPlayerManager->GetLocalPlayer()->IsSpawned() ) {
+	if (m_pPlayerManager && m_pPlayerManager->GetLocalPlayer() && m_pPlayerManager->GetLocalPlayer()->IsSpawned() && !m_pPlayerManager->GetLocalPlayer()->IsInVehicle()) {
 		CM2Ped * pPlayerPed = m_pPlayerManager->GetLocalPlayer()->GetPlayerPed();
 		C_PlayerControls playerControls = pPlayerPed->GetPed()->m_playerControls;
 
@@ -424,7 +424,7 @@ void CCore::OnDeviceRender( void )
 		CNetworkVehicle * pNetworkVehicle = m_pPlayerManager->GetLocalPlayer()->GetVehicle ();
 		CVector3 vecSpeed = pNetworkVehicle->GetVehicle()->GetVehicle()->m_vecMoveSpeed;
 
-		pCore->GetGraphics()->DrawText ( 300, 300, D3DCOLOR_ARGB(255, 255, 0, 0), 1.0f, "tahoma-bold", true, "Fuel: %f, Speed: %f (%f, %f, %f), Wheels: %f (%f), Lights: %s", pNetworkVehicle->GetFuel (), pNetworkVehicle->GetSpeed(), vecSpeed.fX, vecSpeed.fY, vecSpeed.fZ, pNetworkVehicle->GetVehicle()->GetSteer(), pNetworkVehicle->GetSteer(), pNetworkVehicle->GetVehicle()->GetLightState() ? "Enabled" : "Disabled" );
+		pCore->GetGraphics()->DrawText ( 300, 300, D3DCOLOR_ARGB(255, 255, 0, 0), 1.0f, "tahoma-bold", true, "Fuel: %f\nSpeed: %f (%f, %f, %f)\nWheels: %f (%f)\nLights: %s", pNetworkVehicle->GetFuel (), pNetworkVehicle->GetSpeed(), vecSpeed.fX, vecSpeed.fY, vecSpeed.fZ, pNetworkVehicle->GetVehicle()->GetSteer(), pNetworkVehicle->GetSteer(), pNetworkVehicle->GetVehicle()->GetLightState() ? "Enabled" : "Disabled" );
 	}
 
 	// Was the hide stuff key pressed?
