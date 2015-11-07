@@ -26,7 +26,7 @@ void CMasterList::WorkerThread ( CThread * pCreator )
 			RakNet::TCPInterface * tcp = pMasterList->GetTCPInterface ();
 
 			// Connect to the website
-			tcp->Connect ( "master.m2-multiplayer.com", 80, true );
+			tcp->Connect ( MASTERLIST_HOST, 80, true );
 
 			// Wait for the connection
 			RakSleep ( 100 );
@@ -41,9 +41,9 @@ void CMasterList::WorkerThread ( CThread * pCreator )
 				{
 					// Generate the string for RakNet
 					if ( strlen ( CVAR_GET_STRING ( "serverip" ) ) > 0 )
-						post = RakNet::RakString::FormatForGET ( RakNet::RakString ( "master.m2-multiplayer.com/query.php?type=add&port=%d&ip=%s", pMasterList->GetServerPort(), CVAR_GET_STRING ( "serverip" ) ), RakNet::RakString ( "User-Agent: Mafia2Multiplayer/1.0" ) );
+						post = RakNet::RakString::FormatForGET ( RakNet::RakString ( MASTERLIST_HOST"/query.php?type=add&port=%d&ip=%s", pMasterList->GetServerPort(), CVAR_GET_STRING ( "serverip" ) ), RakNet::RakString ( "User-Agent: Mafia2Multiplayer/1.0" ) );
 					else
-						post = RakNet::RakString::FormatForGET ( RakNet::RakString ( "master.m2-multiplayer.com/query.php?type=add&port=%d", pMasterList->GetServerPort() ), RakNet::RakString ( "User-Agent: Mafia2Multiplayer/1.0" ) );
+						post = RakNet::RakString::FormatForGET ( RakNet::RakString ( MASTERLIST_HOST"m/query.php?type=add&port=%d", pMasterList->GetServerPort() ), RakNet::RakString ( "User-Agent: Mafia2Multiplayer/1.0" ) );
 					break;
 				}
 
@@ -51,9 +51,9 @@ void CMasterList::WorkerThread ( CThread * pCreator )
 				{
 					// Generate the string for RakNet
 					if ( strlen ( CVAR_GET_STRING ( "serverip" ) ) > 0 )
-						post = RakNet::RakString::FormatForGET ( RakNet::RakString ( "master.m2-multiplayer.com/query.php?type=pong&port=%dplayers=%d&ip=%s", pMasterList->GetServerPort(), pCore->GetPlayerManager()->GetCount(), CVAR_GET_STRING ( "serverip" ) ), RakNet::RakString ( "User-Agent: Mafia2Multiplayer/1.0" ) );
+						post = RakNet::RakString::FormatForGET ( RakNet::RakString ( MASTERLIST_HOST"/query.php?type=pong&port=%dplayers=%d&ip=%s", pMasterList->GetServerPort(), pCore->GetPlayerManager()->GetCount(), CVAR_GET_STRING ( "serverip" ) ), RakNet::RakString ( "User-Agent: Mafia2Multiplayer/1.0" ) );
 					else
-						post = RakNet::RakString::FormatForGET ( RakNet::RakString ( "master.m2-multiplayer.com/query.php?type=pong&port=%d&players=%d", pMasterList->GetServerPort(), pCore->GetPlayerManager()->GetCount() ), RakNet::RakString ( "User-Agent: Mafia2Multiplayer/1.0" ) );
+						post = RakNet::RakString::FormatForGET ( RakNet::RakString ( MASTERLIST_HOST"/query.php?type=pong&port=%d&players=%d", pMasterList->GetServerPort(), pCore->GetPlayerManager()->GetCount() ), RakNet::RakString ( "User-Agent: Mafia2Multiplayer/1.0" ) );
 					break;
 				}
 			}

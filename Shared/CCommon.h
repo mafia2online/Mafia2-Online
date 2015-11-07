@@ -13,11 +13,20 @@
 // Core defines
 
 #ifdef _DEBUG
-#define		MOD_NAME				"Mafia 2 Multiplayer - DEBUG MODE"
+#define		MOD_NAME				"Mafia2-Online - DEBUG MODE"
 #else
-#define		MOD_NAME				"Mafia 2 Multiplayer"
+#define		MOD_NAME				"Mafia2-Online"
 #endif
-#define		MOD_VERS_STR			"0.1b-rc3"
+#define		MOD_VERS_STR			"0.1-rc1"
+
+// MasterList stuff
+
+#define MASTERLIST_HOST				"masterlist.mafia2-online.com"
+
+// Crash Reporter
+
+#define CRASHRPT_HOST				"http://mafia2-online.com/crashreport/report.php"
+#define CRASHRPT_POLICY				"http://mafia2-online.com"
 
 // Server stuff
 #define		SERVER_TITLE			MOD_NAME " - " MOD_OS_STRING " Dedicated Server"
