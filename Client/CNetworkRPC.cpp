@@ -448,11 +448,11 @@ void EnterVehicle( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 				if ( pRealDriver )
 				{
 					// Is the real driver not in a vehicle?
-					//if ( !pRealDriver->InternalIsInVehicle () )
-					//{
+					if ( !pRealDriver->InternalIsInVehicle () )
+					{
 						// Force the real driver back into the vehicle
-					//	pRealDriver->PutInVehicle ( pCurrentVehicle, 0 );
-					//}
+						pRealDriver->PutInVehicle ( pCurrentVehicle, 0 );
+					}
 
 					pCore->GetChat()->AddDebugMessage ( "Real Driver: %d (0x%p), Vehicle: 0x%p, InternalVehicle: 0x%p", pRealDriver->GetId (), pRealDriver, pRealDriver->GetVehicle(), pRealDriver->GetPlayerPed()->GetCurrentVehicle() );
 				}
