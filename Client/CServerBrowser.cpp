@@ -766,13 +766,13 @@ void CServerBrowser::ProcessNetworkPacket( DefaultMessageIDTypes packet )
 	bool bLost = false;
 	switch( packet )
 	{
-	case ID_NO_FREE_INCOMING_CONNECTIONS: strMessage.Set( "The maximum number of players has been reached." ); break;
-	case ID_DISCONNECTION_NOTIFICATION: strMessage.Set( "The connection with the server was closed." ); bLost = true; break;
-	case ID_INVALID_PASSWORD: strMessage.Set( "The password you entered was invalid." ); break;
-	case ID_CONNECTION_BANNED: strMessage.Set( "You're banned from playing on this server." ); break;
-	case ID_CONNECTION_LOST: strMessage.Set( "The connection with the server was lost." ); bLost = true; break;
-	case ID_CONNECTION_ATTEMPT_FAILED: strMessage.Set( "Failed to connect to the server." ); break;
-	case ID_ALREADY_CONNECTED: strMessage.Set( "You're already connected to a server." ); break;
+		case ID_NO_FREE_INCOMING_CONNECTIONS: strMessage.Set( "The maximum number of players has been reached." ); break;
+		case ID_DISCONNECTION_NOTIFICATION: strMessage.Set( "The connection with the server was closed." ); bLost = true; break;
+		case ID_INVALID_PASSWORD: strMessage.Set( "The password you entered was invalid." ); break;
+		case ID_CONNECTION_BANNED: strMessage.Set( "You're banned from playing on this server." ); break;
+		case ID_CONNECTION_LOST: strMessage.Set( "The connection with the server was lost." ); bLost = true; break;
+		case ID_CONNECTION_ATTEMPT_FAILED: strMessage.Set( "Failed to connect to the server." ); break;
+		case ID_ALREADY_CONNECTED: strMessage.Set( "You're already connected to a server." ); break;
 	}
 
 	// Show the message box

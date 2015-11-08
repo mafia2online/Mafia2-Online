@@ -606,10 +606,10 @@ void CCore::OnGameProcess( void )
 
 void CCore::HandleAntiCheatEvent( DWORD dwMessage, unsigned int uiBaseAddress, size_t nSize )
 {
-	//CLogFile::Printf( "HandleAntiCheatEvent - %d, 0x%p, %d", dwMessage, uiBaseAddress, nSize );
+	CLogFile::Printf( "HandleAntiCheatEvent - %d, 0x%p, %d", dwMessage, uiBaseAddress, nSize );
 
 	// Shutdown the core
-	//Shutdown();
+	Shutdown();
 }
 
 void CCore::StartMultiplayer( void )
