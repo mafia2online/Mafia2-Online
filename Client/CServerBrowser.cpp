@@ -20,9 +20,6 @@ bool CServerBrowser::Event_QuickConnectSubmitClick ( CGUIElement_Impl * pElement
 
 	// Does we have an IP an port ?
 	if (m_strServerIP.GetLength() > 0 && m_iServerPort > 0){
-		m_pQuickConnectAddress->SetText ( "" );
-		m_pQuickConnectPort->SetText ( "" );
-		m_pQuickConnectPassword->SetText ( "" );
 
 		// If an invalid port is set, use the default?
 		if ( m_iServerPort == 0 )
