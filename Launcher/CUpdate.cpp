@@ -67,11 +67,11 @@ CUpdate::CUpdate ( void )
 	char szGameDir[MAX_PATH], szModDir[MAX_PATH];
 
 	// Try read the game directory string from the registry
-	if ( !SharedUtility::ReadRegistryString( HKEY_LOCAL_MACHINE, "Software\\Wow6432Node\\Mafia 2 Multiplayer", "GameDir", NULL, szGameDir, sizeof(szGameDir) ) )
+	if ( !SharedUtility::ReadRegistryString( HKEY_LOCAL_MACHINE, "Software\\Wow6432Node\\Mafia2-Online", "GameDir", NULL, szGameDir, sizeof(szGameDir) ) )
 		void;
 	
 	// Try read the install location string from the registry
-	if ( !SharedUtility::ReadRegistryString( HKEY_LOCAL_MACHINE, "Software\\Wow6432Node\\Mafia 2 Multiplayer", "InstallLocation", NULL, szModDir, sizeof(szModDir) ) )
+	if ( !SharedUtility::ReadRegistryString( HKEY_LOCAL_MACHINE, "Software\\Wow6432Node\\Mafia2-Online", "InstallLocation", NULL, szModDir, sizeof(szModDir) ) )
 		void;
 
 	// Set the game directories
