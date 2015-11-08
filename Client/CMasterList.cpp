@@ -9,10 +9,6 @@
 
 #include "StdInc.h"
 
-#define MASTER_SERVER_HOST "master.m2-multiplayer.com"
-#define MASTER_SERVER_NONE_URL_PATH "/list.php"
-#define MASTER_SERVER_HOSTED_URL_PATH "/list.php?hosted"
-
 extern CCore *pCore;
 
 /*static*/ bool DummyReceiveHandler( const char *, unsigned int, void * )
@@ -59,18 +55,18 @@ void CMasterList::WorkerThread( eRefreshType type )
 			if ( m_refreshState == RefreshState_UpdateRequired )
 			{
 				// Create the path string
-				String strPath( MASTER_SERVER_NONE_URL_PATH );
+				String strPath( MASTERLIST_NONE_URL_PATH );
 
 				// Are we requesting hosted tab servers?
 				if ( type == eRefreshType::E_REFRESH_HOSTED )
-					strPath = MASTER_SERVER_HOSTED_URL_PATH;
+					strPath = MASTERLIST_HOSTED_URL_PATH;
 
 				// Update the last refresh time
 				m_lastRefreshTime = SharedUtility::GetTime();
 
 				// Update the state
 				m_refreshState = RefreshState_InProgress;
-
+				
 				// Send the http request
 				m_pHttpClient->Get( strPath );
 
@@ -134,7 +130,7 @@ CMasterList::CMasterList( QueryHandler_t handler )
 	m_pHttpClient->SetReceiveHandle( DummyReceiveHandler, this );
 
 	// Set the http client host
-	m_pHttpClient->SetHost( MASTER_SERVER_HOST );
+	m_pHttpClient->SetHost( MASTERLIST_HOST );
 
 	// Reset
 	m_lastRefreshTime = SharedUtility::GetTime();
@@ -163,8 +159,8 @@ bool CMasterList::Refresh( eRefreshType type )
 		return false;
 
 	// Make sure they're not spamming!
-	//if( (SharedUtility::GetTime() - m_ulLastRefreshTime) > 2000 )
-	//	return false;
+	if ((SharedUtility::GetTime() - m_lastRefreshTime) > 2000)
+		return false;
 
 	// Reset the http client
 	m_pHttpClient->Reset();

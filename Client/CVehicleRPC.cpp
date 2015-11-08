@@ -325,6 +325,23 @@ void SetVehicleLightState( RakNet::BitStream * pBitStream, RakNet::Packet * pPac
 	}
 }
 
+void SetVehicleModel(RakNet::BitStream * pBitStream, RakNet::Packet * Packet)
+{
+	//Read the vehicle id
+	EntityId vehicleId;
+	pBitStream->ReadCompressed( vehicleId );
+
+	// Read the model
+	int bModel;
+	pBitStream->ReadCompressed(bModel);
+
+	// Does the vehicle exist?
+	if (pCore->GetVehicleManager()->IsActive( vehicleId )){
+		// Set the vehicle model
+		pCore->GetVehicleManager()->Get( vehicleId )->SetModel( bModel);
+	}
+}
+
 void CVehicleRPC::Register( RakNet::RPC4 * pRPC )
 {
 	// Are we already registered?
@@ -338,6 +355,7 @@ void CVehicleRPC::Register( RakNet::RPC4 * pRPC )
 	pRPC->RegisterFunction( RPC_SETVEHICLEPLATETEXT, SetVehiclePlateText );
 	pRPC->RegisterFunction( RPC_REPAIRVEHICLE, RepairVehicle );
 	pRPC->RegisterFunction( RPC_EXPLODEVEHICLE, ExplodeVehicle );
+	pRPC->RegisterFunction( RPC_SETVEHICLEMODEL, SetVehicleModel);
 	pRPC->RegisterFunction( RPC_SETVEHICLEDIRTLEVEL, SetVehicleDirtLevel );
 	pRPC->RegisterFunction( RPC_SETVEHICLEENGINESTATE, SetVehicleEngineState );
 	pRPC->RegisterFunction( RPC_SETVEHICLEPARTOPEN, SetVehiclePartOpen );
@@ -364,6 +382,7 @@ void CVehicleRPC::Unregister( RakNet::RPC4 * pRPC )
 	pRPC->UnregisterFunction( RPC_SETVEHICLEPLATETEXT );
 	pRPC->UnregisterFunction( RPC_REPAIRVEHICLE );
 	pRPC->UnregisterFunction( RPC_EXPLODEVEHICLE );
+	pRPC->UnregisterFunction( RPC_SETVEHICLEMODEL);
 	pRPC->UnregisterFunction( RPC_SETVEHICLEDIRTLEVEL );
 	pRPC->UnregisterFunction( RPC_SETVEHICLEENGINESTATE );
 	pRPC->UnregisterFunction( RPC_SETVEHICLEPARTOPEN );
