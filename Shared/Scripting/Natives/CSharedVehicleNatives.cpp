@@ -46,6 +46,7 @@ void CSharedVehicleNatives::Register( CScriptingManager * pScriptingManager )
 	pScriptingManager->RegisterFunction( "setVehicleWheelTexture", SetWheelTexture, 3, "iii" );
 	pScriptingManager->RegisterFunction( "getVehicleWheelTexture", GetWheelTexture, 2, "ii" );
 	pScriptingManager->RegisterFunction( "getVehicleModel", GetModel, 1, "i" );
+	//pScriptingManager->RegisterFunction( "setVehicleModel", SetM, 2, "ii" );
 	pScriptingManager->RegisterFunction( "getVehicles", GetVehicles, 0, NULL );
 	pScriptingManager->RegisterFunction( "setVehicleSpeed", SetSpeed, 3, "ifff" );
 	pScriptingManager->RegisterFunction( "getVehicleSpeed", GetSpeed, 1, "i" );

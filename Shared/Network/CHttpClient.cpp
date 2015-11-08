@@ -28,8 +28,8 @@
 // OS Independent Defines
 #define MAX_BUFFER				8192
 #define DEFAULT_PORT			80
-#define DEFAULT_USER_AGENT		"Mafia2Multiplayer/1.0"
-#define DEFAULT_REFERER			"http://m2-multiplayer.com"
+#define DEFAULT_USER_AGENT		"Mafia2Online/1.0"
+#define DEFAULT_REFERER			"http://mafia2-online.com"
 
 CHttpClient::CHttpClient()
 {

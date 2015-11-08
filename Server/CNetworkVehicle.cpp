@@ -70,6 +70,7 @@ CNetworkVehicle::CNetworkVehicle( void )
 	m_lastSyncData.m_bWheelModels[ 0 ] = 0xFF;
 	m_lastSyncData.m_bWheelModels[ 1 ] = 0xFF;
 	m_lastSyncData.m_bWheelModels[ 2 ] = 0xFF;
+	m_lastSyncData.m_model = 0;
 	memcpy( &m_lastSyncData.m_primaryColour, &predefinedColours[ rand() % 20 ], sizeof(CColor) );
 	memcpy( &m_lastSyncData.m_secondaryColour, &predefinedColours[ rand() % 20 ], sizeof(CColor) );
 	strcpy( m_lastSyncData.m_szPlateText, "M2MP01" );
@@ -78,15 +79,6 @@ CNetworkVehicle::CNetworkVehicle( void )
 
 CNetworkVehicle::~CNetworkVehicle( void )
 {
-}
-
-void CNetworkVehicle::SetModel( int iModel )
-{
-	// Store the model id
-	m_iModel = iModel;
-
-	// Send it to all clients
-	// todo: change vehicle models
 }
 
 void CNetworkVehicle::SetSpawnPosition( CVector3 vecSpawnPosition )
@@ -674,6 +666,27 @@ void CNetworkVehicle::SetLightState ( bool bLightState )
 bool CNetworkVehicle::GetLightState ()
 {
 	return m_lastSyncData.m_bLightState;
+}
+
+void CNetworkVehicle::SetModel(int iModel)
+{
+	// Store the model id
+	m_iModel = iModel;
+
+	// Construct a new bitstream
+	RakNet::BitStream pBitStream;
+
+	// Write the vehicle id
+	pBitStream.WriteCompressed(m_vehicleId);
+
+	// Write the position
+	pBitStream.Write(m_iModel);
+
+	// Send it to all clients
+	pCore->GetNetworkModule()->Call(RPC_SETVEHICLEMODEL, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, INVALID_ENTITY_ID, true);
+
+	// Save model
+	m_lastSyncData.m_model = m_iModel;
 }
 
 void CNetworkVehicle::HandlePlayerEnter( CNetworkPlayer * pNetworkPlayer, int iSeat )
