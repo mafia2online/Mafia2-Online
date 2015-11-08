@@ -27,12 +27,12 @@ CCore::CCore( void )
 {
 	// Get the game directory from the registry
 	char szGameDir[MAX_PATH];
-	SharedUtility::ReadRegistryString( HKEY_LOCAL_MACHINE, "Software\\Wow6432Node\\Mafia 2 Multiplayer", "GameDir", NULL, szGameDir, sizeof(szGameDir) );
+	SharedUtility::ReadRegistryString( HKEY_LOCAL_MACHINE, "Software\\Wow6432Node\\Mafia2-Online", "GameDir", NULL, szGameDir, sizeof(szGameDir) );
 	SetGameDirectory( szGameDir );
 
 	// Get the mod directory from the registry
 	char szModDir[MAX_PATH];
-	SharedUtility::ReadRegistryString( HKEY_LOCAL_MACHINE, "Software\\Wow6432Node\\Mafia 2 Multiplayer", "InstallLocation", NULL, szModDir, sizeof(szModDir) );
+	SharedUtility::ReadRegistryString( HKEY_LOCAL_MACHINE, "Software\\Wow6432Node\\Mafia2-Online", "InstallLocation", NULL, szModDir, sizeof(szModDir) );
 	SetModDirectory( szModDir );
 
 	// Reset
@@ -48,7 +48,7 @@ CCore::CCore( void )
 	SetMultiplayerStarted( false );
 
 	// Set default server info
-	SetServerName( "M2-MP Server" );
+	SetServerName( "M2-Online Server" );
 	SetServerMaxPlayers( 0 );
 	SetGlobalSpeedLimited ( false );
 	SetSummer ( true );
@@ -101,7 +101,7 @@ bool CCore::Initialise( void )
 	// Did the anti-cheat fail to start?
 	if( !CWPMHook::Install() )
 	{
-		MessageBox( NULL, "Failed to start anti-cheat module.\n\nCan't start Mafia 2 Multiplayer", "Mafia 2 Multiplayer - Error", MB_OK|MB_ICONERROR );
+		MessageBox( NULL, "Failed to start anti-cheat module.\n\nCan't start Mafia2-Online", "Mafia2-Online - Error", MB_OK|MB_ICONERROR );
 		return false;
 	}
 
@@ -114,8 +114,8 @@ bool CCore::Initialise( void )
 	// Is this not the v1 exe?
 	if( pChecksum.GetChecksum() != EXE_VERSION_SKIDROW && pChecksum.GetChecksum() != EXE_VERSION_STEAM)
 	{
-		if ( MessageBox ( NULL, "Invalid game version detected.\n\nCan't start Mafia 2 Multiplayer\n\nDo you want to goto the downloads page now?", "Mafia 2 Multiplayer - Error", MB_OK|MB_ICONERROR ) == MB_OK ) {
-			ShellExecute ( NULL, "open", "http://m2-multiplayer.com/page/download", NULL, NULL, SW_SHOWNORMAL );
+		if ( MessageBox ( NULL, "Invalid game version detected.\n\nCan't start Mafia 2 Online\n\nDo you want to goto the downloads page now?", "Mafia2-Online - Error", MB_OK|MB_ICONERROR ) == MB_OK ) {
+			ShellExecute ( NULL, "open", "http://mafia2-online.com", NULL, NULL, SW_SHOWNORMAL );
 		}
 		return false;
 	}
@@ -123,7 +123,7 @@ bool CCore::Initialise( void )
 	// Check the game files
 	if( !CGameFiles::CheckFiles() )
 	{
-		MessageBox( NULL, String( "%s\n\nPlease reinstall Mafia 2 or Mafia 2 Multiplayer", CGameFiles::GetLastError().Get() ).Get(), "Mafia 2 Multiplayer - Error", MB_OK|MB_ICONERROR );
+		MessageBox( NULL, String( "%s\n\nPlease reinstall Mafia 2 or Mafia2-Online", CGameFiles::GetLastError().Get() ).Get(), "Mafia2-ONline - Error", MB_OK|MB_ICONERROR );
 		return false;
 	}
 

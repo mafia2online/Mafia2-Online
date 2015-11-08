@@ -1,10 +1,10 @@
 !include "MUI2.nsh"
 !define MUI_ABORTWARNING
 
-!define MOD_NAME	"Mafia 2 Multiplayer"
-!define	MOD_VERS	"v0.1b"
-!define MOD_NAME_S	"M2MP"
-!define MOD_OUTPUT	"m2mp-01b-rc3.exe"
+!define MOD_NAME	"Mafia2-Online"
+!define	MOD_VERS	"v0.1-rc1"
+!define MOD_NAME_S	"M2Online"
+!define MOD_OUTPUT	"m2online-01-rc1.exe"
 !define REG_NODE	"SOFTWARE\Wow6432Node\${MOD_NAME}"
 !define MOD_DIR 	"$PROGRAMFILES\${MOD_NAME}"
 
@@ -67,8 +67,8 @@ FunctionEnd
 
 # After they choose the Mafia 2 Multiplayer directory
 Function OnChosenM2MPDirectory
-	!undef MOD_DIR
-	!define MOD_DIR "$INSTDIR\${MOD_NAME}"
+	#!undef MOD_DIR
+	#!define MOD_DIR "${MOD_NAME}"
 FunctionEnd
 
 # Find the Mafia 2 install directory
@@ -181,7 +181,7 @@ Section "Install"
 	WriteRegStr HKLM "${REG_NODE}" "Version" "${MOD_VERS}"
 	
 	# Write the URI scheme
-	WriteRegStr HKCR "m2mp" "" "Mafia 2 Multiplayer Protocol"
+	WriteRegStr HKCR "m2mp" "" "Mafia2-Online Protocol"
 	WriteRegStr HKCR "m2mp" "URL Protocol" ""
 	WriteRegStr HKCR "m2mp\DefaultIcon" "" "$\"${MOD_DIR}\m2mp_d.exe$\",1"
 	WriteRegStr HKCR "m2mp\shell\open\command" "" "$\"${MOD_DIR}\m2mp_d.exe$\" $\"-uri %1$\""
