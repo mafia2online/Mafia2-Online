@@ -68,9 +68,8 @@ void CQuery::WorkerThread ( CThread * pCreator )
 
 				// Get the port
 				unsigned short usPort = ntohs ( address.sin_port );
-
 				// Is this packet for us?
-				if ( szBuffer[0] == 'M' && szBuffer[1] == '2' && szBuffer[2] == 'M' && szBuffer[3] == 'P' )
+				if (szBuffer[0] == 'M' && szBuffer[1] == '2' && szBuffer[2] == 'O' && szBuffer[3] == 'n' && szBuffer[4] == 'l' && szBuffer[5] == 'i' && szBuffer[6] == 'n' && szBuffer[7] == 'e')
 				{
 					// Generate a reply string
 					std::string reply = pQuery->QueryLight ();
@@ -144,7 +143,7 @@ std::string CQuery::QueryLight( void )
 {
 	//
 	std::stringstream reply;
-	reply << "M2MP";
+	reply << "M2Online";
 
 	// hostname
 	reply << ( unsigned char )( strlen( CVAR_GET_STRING( "hostname" ) ) + 1 );
@@ -167,7 +166,7 @@ std::string CQuery::QueryLight( void )
 	// password
 	reply << ( unsigned char )( pCore->IsPasswordProtected() ? 1 : 0 );
 
-	//
+	// Players def
 	CNetworkPlayer * pPlayer = NULL;
 	char szName[256] = { '\0' };
 	char szPing[256] = { '\0' };

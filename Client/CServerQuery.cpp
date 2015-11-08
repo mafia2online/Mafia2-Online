@@ -78,8 +78,8 @@ void CServerQuery::WorkerThread ( CThread * pCreator )
 			int iBytesRead = -1;
 			while ( (iBytesRead = recvfrom ( pServerQuery->GetSocket (), szBuffer, sizeof ( szBuffer ), NULL, (sockaddr *)&address, &iFromLen )) != -1 )
 			{
-				// Is this query for m2mp?
-				if ( szBuffer [ 0 ] == 'M' && szBuffer [ 1 ] == '2' && szBuffer [ 2 ] == 'M' && szBuffer [ 3 ] == 'P' )
+				// Is this query for M2Online?
+				if ( szBuffer [ 0 ] == 'M' && szBuffer [ 1 ] == '2' && szBuffer [ 2 ] == 'O' && szBuffer [ 3 ] == 'n' && szBuffer[4] == 'l' && szBuffer[5] == 'i' && szBuffer[6] == 'n' && szBuffer[7] == 'e')
 				{
 					// Convert the socket address into an IP
 					char szIpAddress [ 64 ];
@@ -150,7 +150,7 @@ bool CServerQuery::Query ( CServerListItem * pServerItem )
 #endif
 
 	// Send the query to the server
-	if ( sendto ( m_iSocket, "M2MP", 4, NULL, (sockaddr *)&address, sizeof ( sockaddr_in ) ) == 4 )
+	if ( sendto ( m_iSocket, "M2Online", 8, NULL, (sockaddr *)&address, sizeof ( sockaddr_in ) ) == 4 )
 	{
 		// Set the query start time
 		pServerItem->ulQueryStart = SharedUtility::GetTime ();

@@ -47,7 +47,7 @@ bool CServerListItem::Query ( void )
 	}
 
 	// Send the query
-	if ( sendto ( m_iSocket, "M2MP", 4, 0, (sockaddr *)&addr, sizeof(addr) ) == 4 )
+	if ( sendto ( m_iSocket, "M2Online", 4, 0, (sockaddr *)&addr, sizeof(addr) ) == 4 )
 	{
 		// Set the query start time
 		ulQueryStart = SharedUtility::GetTime ();
@@ -60,7 +60,7 @@ bool CServerListItem::Query ( void )
 bool CServerListItem::Parse( const char * szBuffer, unsigned int uiLength )
 {
 	// Check the header
-	if( strncmp( szBuffer, "M2MP", 4 ) != 0 )
+	if( strncmp( szBuffer, "M2Online", 4 ) != 0 )
 		return false;
 
 	// Calculate the ping
