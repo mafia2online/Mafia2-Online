@@ -219,7 +219,7 @@ void CNetworkVehicle::HandleRespawn( void )
 		m_pVehicle->SetColour( m_primarySpawnColour, m_secondarySpawnColour );
 
 		// Reset the platetext
-		m_pVehicle->SetPlateText( "M2MP01" );
+		m_pVehicle->SetPlateText( "EB01" );
 
 		// Reset the speed
 		m_pVehicle->SetSpeed( 0.0f );
@@ -605,7 +605,7 @@ const char * CNetworkVehicle::GetPlateText( void )
 	if( m_pVehicle )
 		return m_pVehicle->GetPlateText();
 
-	return "M2MP01b";
+	return "Unknow";
 }
 
 void CNetworkVehicle::Repair( void )

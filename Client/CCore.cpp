@@ -259,7 +259,7 @@ void CCore::OnDeviceCreate( IDirect3DDevice9 * pDevice, D3DPRESENT_PARAMETERS * 
 	// Create the gui instance
 	m_pGUI = new CGUI( pDevice );
 
-	// Setup m2mp gui instances
+	// Setup mod gui instances
 	m_pGUI->SetupGUI();
 
 	// Initialise the loading screen

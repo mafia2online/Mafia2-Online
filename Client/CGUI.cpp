@@ -40,7 +40,7 @@ CGUI::~CGUI( void )
 	if( m_pServerBrowser )
 		SAFE_DELETE( m_pServerBrowser );
 
-	// Destroy the m2mp gui instancse
+	// Destroy the mod gui instancse
 	if( m_pDownloadProgress )
 		SAFE_DELETE( m_pDownloadProgress );
 
