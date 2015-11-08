@@ -21,7 +21,7 @@
 
 // MasterList stuff
 
-#define MASTERLIST_HOST				"masterlist.mafia2-online.com"
+#define MASTERLIST_HOST				"http://dev.stuartd.co.uk/mafia2-online/"
 
 // Crash Reporter
 
