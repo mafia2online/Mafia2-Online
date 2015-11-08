@@ -37,27 +37,16 @@ void CMasterList::WorkerThread ( CThread * pCreator )
 			// Switch the thread state
 			switch( pMasterList->GetThreadState() )
 			{
-			case E_STATE_ADD:
+				case E_STATE_ADD:
 				{
 					// Generate the string for RakNet
 					if ( strlen ( CVAR_GET_STRING ( "serverip" ) ) > 0 )
-						post = RakNet::RakString::FormatForGET ( RakNet::RakString ( MASTERLIST_HOST"/query?port=%d&ip=%s", pMasterList->GetServerPort(), CVAR_GET_STRING ( "serverip" ) ), RakNet::RakString ( "User-Agent: Mafia2Online/1.0" ) );
+						post = RakNet::RakString::FormatForGET ( RakNet::RakString ( "http://"MASTERLIST_HOST"/query?port=%d&ip=%s", pMasterList->GetServerPort(), CVAR_GET_STRING ( "serverip" ) ), RakNet::RakString ( "User-Agent: Mafia2Online/1.0" ) );
 					else
-						post = RakNet::RakString::FormatForGET ( RakNet::RakString ( MASTERLIST_HOST"/query?port=%d", pMasterList->GetServerPort() ), RakNet::RakString ( "User-Agent: Mafia2Online/1.0" ) );
+						post = RakNet::RakString::FormatForGET ( RakNet::RakString ( "http://"MASTERLIST_HOST"/query?port=%d", pMasterList->GetServerPort() ), RakNet::RakString ( "User-Agent: Mafia2Online/1.0" ) );
 					break;
 				}
-
-			/*case E_STATE_UPDATE:
-				{
-					// Generate the string for RakNet
-					if ( strlen ( CVAR_GET_STRING ( "serverip" ) ) > 0 )
-						post = RakNet::RakString::FormatForGET ( RakNet::RakString ( MASTERLIST_HOST"/query.php?type=pong&port=%dplayers=%d&ip=%s", pMasterList->GetServerPort(), pCore->GetPlayerManager()->GetCount(), CVAR_GET_STRING ( "serverip" ) ), RakNet::RakString ( "User-Agent: Mafia2Online/1.0" ) );
-					else
-						post = RakNet::RakString::FormatForGET ( RakNet::RakString ( MASTERLIST_HOST"/query.php?type=pong&port=%d&players=%d", pMasterList->GetServerPort(), pCore->GetPlayerManager()->GetCount() ), RakNet::RakString ( "User-Agent: Mafia2Online/1.0" ) );
-					break;
-				}*/
 			}
-
 			// Send the data to the website
 			tcp->Send ( post.C_String(), post.GetLength(), tcp->HasCompletedConnectionAttempt(), false );
 
