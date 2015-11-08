@@ -42,6 +42,7 @@ struct InVehicleSync
 	float			m_fTurnSpeed;
 	float			m_fEngineDamage;
 	char			m_szPlateText[6];
+	int				m_model;
 	CColor			m_primaryColour;
 	CColor			m_secondaryColour;
 	bool			m_bPower;

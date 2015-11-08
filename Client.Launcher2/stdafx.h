@@ -16,10 +16,10 @@
 #include <ShlObj.h>
 
 // Shared
-#include <Threading/CThread.h>
-#include <SharedUtility.h>
-#include <md5/md5.h>
-#include <Network/CHttpClient.h>
+#include "../Shared/Threading/CThread.h"
+#include "../Shared/SharedUtility.h"
+#include "../Shared/md5/md5.h"
+#include "../Shared/Network/CHttpClient.h"
 
 // Project
 #include "CUpdate.h"

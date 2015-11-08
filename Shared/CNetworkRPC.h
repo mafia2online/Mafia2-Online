@@ -80,6 +80,7 @@
 #define		RPC_SETVEHICLEDIRTLEVEL		"RPC_Script_SetVehicleDirtLevel"
 #define		RPC_SETVEHICLEENGINESTATE	"RPC_Script_SetVehicleEngineState"
 #define		RPC_EXPLODEVEHICLE			"RPC_Script_ExplodeVehicle"
+#define		RPC_SETVEHICLEMODEL			"RPC_Script_SetVehicleModel"
 #define		RPC_SETVEHICLEPARTOPEN		"RPC_Script_SetVehiclePartOpen"
 #define		RPC_SETVEHICLESIRENSTATE	"RPC_Script_SetVehicleSirenState"
 #define		RPC_SETVEHICLEHORNSTATE		"RPC_Script_SetVehicleHornState"
