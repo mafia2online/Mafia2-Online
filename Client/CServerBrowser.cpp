@@ -18,27 +18,32 @@ bool CServerBrowser::Event_QuickConnectSubmitClick ( CGUIElement_Impl * pElement
 	m_iServerPort = m_pQuickConnectPort->GetText().ToInteger ();
 	m_strServerPassword = m_pQuickConnectPassword->GetText ();
 
-	// Reset input text
-	m_pQuickConnectAddress->SetText ( "" );
-	m_pQuickConnectPort->SetText ( "" );
-	m_pQuickConnectPassword->SetText ( "" );
+	// Does we have an IP an port ?
+	if (m_strServerIP.GetLength() > 0 && m_iServerPort > 0){
+		m_pQuickConnectAddress->SetText ( "" );
+		m_pQuickConnectPort->SetText ( "" );
+		m_pQuickConnectPassword->SetText ( "" );
 
-	// If an invalid port is set, use the default?
-	if ( m_iServerPort == 0 )
-		m_iServerPort = 27015;
+		// If an invalid port is set, use the default?
+		if ( m_iServerPort == 0 )
+			m_iServerPort = 27015;
 
-	// Start the connection
-	StartConnection ();
+		// Start the connection
+		StartConnection ();
 
-	// Hide the quick connect window
-	m_pQuickConnectWindow->SetVisible ( false );
+		// Hide the quick connect window
+		m_pQuickConnectWindow->SetVisible ( false );
 
-	// Store the last server information
-	CVAR_SET ( "last-server-ip", m_strServerIP.Get () );
-	CVAR_SET ( "last-server-port", m_iServerPort );
-	CVAR_SET ( "last-server-password", m_strServerPassword.Get () );
+		// Store the last server information
+		CVAR_SET ( "last-server-ip", m_strServerIP.Get () );
+		CVAR_SET ( "last-server-port", m_iServerPort );
+		CVAR_SET ( "last-server-password", m_strServerPassword.Get () );
 
-	return true;
+		return (true);
+	}
+	else {
+		return (false);
+	}
 }
 
 bool CServerBrowser::Event_QuickConnectCancelClick ( CGUIElement_Impl * pElement )
