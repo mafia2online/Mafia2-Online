@@ -159,8 +159,8 @@ bool CMasterList::Refresh( eRefreshType type )
 		return false;
 
 	// Make sure they're not spamming!
-	if ((SharedUtility::GetTime() - m_lastRefreshTime) > 2000)
-		return false;
+	/*if ((SharedUtility::GetTime() - m_lastRefreshTime) > 2000)
+		return false;*/
 
 	// Reset the http client
 	m_pHttpClient->Reset();
