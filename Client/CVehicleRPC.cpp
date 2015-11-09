@@ -162,9 +162,9 @@ void SetVehiclePartOpen( RakNet::BitStream * pBitStream, RakNet::Packet * pPacke
 	EntityId vehicleId;
 	pBitStream->ReadCompressed( vehicleId );
 
-	// Read the seat id
-	int iSeat;
-	pBitStream->ReadCompressed( iSeat );
+	// Read the part id
+	int iPart;
+	pBitStream->ReadCompressed( iPart );
 
 	// Read the part state
 	bool bState = pBitStream->ReadBit();
@@ -172,8 +172,7 @@ void SetVehiclePartOpen( RakNet::BitStream * pBitStream, RakNet::Packet * pPacke
 	// Does the vehicle exist?
 	if( pCore->GetVehicleManager()->IsActive( vehicleId ) )
 	{
-		// Set the vehicle part open state
-		// todo
+		pCore->GetVehicleManager()->Get(vehicleId)->SetPartOpen(iPart, bState);
 	}
 }
 
