@@ -484,7 +484,7 @@ void CNetworkVehicle::SetPartOpen( int iPart, bool bOpen )
 bool CNetworkVehicle::IsPartOpen( int iPart )
 {
 	if( iPart > 1 )
-		return false;
+		return (false);
 
 	return (m_lastSyncData.m_bPartState[ iPart ]);
 }
