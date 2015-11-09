@@ -50,6 +50,7 @@ struct InVehicleSync
 	BYTE			m_bWheelModels[3];
 	bool			m_bHandbrake;
 	bool			m_bLightState;
+	int				m_bPartState[2];
 };
 
 struct InPassengerSync
