@@ -89,12 +89,12 @@ bool CM2Vehicle::IsEngineOn( void )
 	return false;
 }
 
-void CM2Vehicle::OpenHood( void )
+void CM2Vehicle::OpenHood(void)
 {
 	DEBUG_TRACE("CM2Vehicle::OpenHood");
 
 	// Is the vehicle valid?
-	if( m_pVehicle )
+	if (m_pVehicle)
 	{
 		M2Vehicle * pVehicle = m_pVehicle;
 

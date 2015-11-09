@@ -668,8 +668,16 @@ void CNetworkVehicle::SetPartOpen( int iPart, bool bOpen )
 
 bool CNetworkVehicle::IsPartOpen( int iPart )
 {
-	// todo
-	return false;
+	// Todo : fix with isHoodOpen/isTrunkOpen
+
+	// Is the vehicle instance valid ?
+	if (m_pVehicle){
+		if (iPart == 0)//Hood
+			return (0);
+		else//Trunk
+			return (0);
+	}
+	return (false);
 }
 
 void CNetworkVehicle::SetSirenState( bool bState )
