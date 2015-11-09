@@ -21,9 +21,9 @@
 
 // MasterList stuff
 
-#define MASTERLIST_HOST				"dev.stuartd.co.uk"
-#define MASTERLIST_NONE_URL_PATH	"/mafia2-online/master"
-#define MASTERLIST_HOSTED_URL_PATH	"/mafia2-online/hosted"
+#define MASTERLIST_HOST				"masterlist.mafia2-online.com"
+#define MASTERLIST_NONE_URL_PATH	"/master"
+#define MASTERLIST_HOSTED_URL_PATH	"/hosted"
 
 // Crash Reporter
 
