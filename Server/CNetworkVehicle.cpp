@@ -476,15 +476,17 @@ void CNetworkVehicle::SetPartOpen( int iPart, bool bOpen )
 
 	// Send it to all clients
 	pCore->GetNetworkModule()->Call( RPC_SETVEHICLEPARTOPEN, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, INVALID_ENTITY_ID, true );
+
+	// Set the part state
+	m_lastSyncData.m_bPartState[iPart] = bOpen;
 }
 
 bool CNetworkVehicle::IsPartOpen( int iPart )
 {
-	//if( iPart > 1 )
-	//	return false;
+	if( iPart > 1 )
+		return false;
 
-	//return m_lastSyncData.m_bPartState[ iPart ];
-	return false;
+	return (m_lastSyncData.m_bPartState[ iPart ]);
 }
 
 void CNetworkVehicle::SetSirenState( bool bState )
