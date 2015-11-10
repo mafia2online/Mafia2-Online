@@ -230,7 +230,7 @@ int main( int argc, char * argv[] )
 #ifdef _WIN32
 		TerminateProcess( GetCurrentProcess(), 0 );
 #else
-		_exit(0);
+		_exit(42);
 #endif
 	}
 
@@ -299,6 +299,6 @@ void Shutdown( void )
 #ifdef WIN32
 	TerminateProcess( GetCurrentProcess(), 0 );
 #else
-	exit(42);
+	_exit(42);
 #endif
 }
