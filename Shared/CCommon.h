@@ -139,3 +139,8 @@ enum eBlipType {
 	BLIP_TYPE_VEHICLE,
 	BLIP_TYPE_PED
 };
+
+enum eVehiclePart {
+	VEHICLE_PART_HOOD = 0,
+	VEHICLE_PART_TRUNK = 1
+};
