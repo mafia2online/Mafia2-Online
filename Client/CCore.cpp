@@ -425,7 +425,18 @@ void CCore::OnDeviceRender( void )
 		CNetworkVehicle * pNetworkVehicle = m_pPlayerManager->GetLocalPlayer()->GetVehicle ();
 		CVector3 vecSpeed = pNetworkVehicle->GetVehicle()->GetVehicle()->m_vecMoveSpeed;
 
-		pCore->GetGraphics()->DrawText ( 300, 300, D3DCOLOR_ARGB(255, 255, 0, 0), 1.0f, "tahoma-bold", true, "Fuel: %f\nSpeed: %f (%f, %f, %f)\nWheels: %f (%f)\nLights: %s", pNetworkVehicle->GetFuel (), pNetworkVehicle->GetSpeed(), vecSpeed.fX, vecSpeed.fY, vecSpeed.fZ, pNetworkVehicle->GetVehicle()->GetSteer(), pNetworkVehicle->GetSteer(), pNetworkVehicle->GetVehicle()->GetLightState() ? "Enabled" : "Disabled" );
+		pCore->GetGraphics()->DrawText ( 300, 300, D3DCOLOR_ARGB(255, 255, 0, 0), 1.0f, "tahoma-bold", true, "Fuel: %f\nSpeed: %f (%f, %f, %f)\nWheels: %f (%f)\nLights: %s\nHood : %s\nTrunk : %s", 
+			pNetworkVehicle->GetFuel (), 
+			pNetworkVehicle->GetSpeed(),
+			vecSpeed.fX, 
+			vecSpeed.fY, 
+			vecSpeed.fZ, 
+			pNetworkVehicle->GetVehicle()->GetSteer(), 
+			pNetworkVehicle->GetSteer(), 
+			pNetworkVehicle->GetVehicle()->GetLightState() ? "Enabled" : "Disabled" ,
+			pNetworkVehicle->GetVehicle()->GetVehiclePart(VEHICLE_PART_HOOD) ? "Open" : "Closed",
+			pNetworkVehicle->GetVehicle()->GetVehiclePart(VEHICLE_PART_TRUNK) ? "Open" : "Closed"
+		);
 	}
 
 	// Was the hide stuff key pressed?
