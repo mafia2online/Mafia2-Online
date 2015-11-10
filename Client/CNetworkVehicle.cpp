@@ -672,10 +672,12 @@ bool CNetworkVehicle::IsPartOpen( int iPart )
 
 	// Is the vehicle instance valid ?
 	if (m_pVehicle){
-		if (iPart == 0)//Hood
+		if (iPart == VEHICLE_PART_HOOD)
 			return (0);
-		else//Trunk
+		else if (iPart == VEHICLE_PART_TRUNK)
 			return (0);
+		else
+			return (false);
 	}
 	return (false);
 }
