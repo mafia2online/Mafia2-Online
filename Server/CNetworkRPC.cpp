@@ -333,7 +333,8 @@ void PlayerChangeNick( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket 
 	if( pNetworkPlayer )
 	{
 		// Change the player nick
-		pNetworkPlayer->ChangeNick( sNewNick.C_String() );
+		if( !pCore->GetPlayerManager()->IsNickInUse( sNewNick.C_String() ) )
+			pNetworkPlayer->ChangeNick( sNewNick.C_String() );
 	}
 }
 
