@@ -228,7 +228,7 @@ bool CCore::Initialise( int argc, char * argv[] )
 void CCore::Deinitialise( void )
 {
 	// First call the shutdown event
-	if (m_pEvents)
+	if (m_pEvents)//Todo : move to Main.cpp
 		m_pEvents->Call( "onServerShutdown" );
 	
 	// Delete ourselfs
