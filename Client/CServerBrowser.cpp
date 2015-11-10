@@ -779,7 +779,10 @@ void CServerBrowser::ProcessNetworkPacket( DefaultMessageIDTypes packet )
 		case ID_ALREADY_CONNECTED: strMessage.Set( "You're already connected to a server." ); break;
 	}
 
-	// We show back the server 
+	// We disconnect
+	CServerBrowser::SetDisconnectReason(true, strMessage);
+
+	// We show back the main menu 
 	pCore->GetGUI()->GetMainMenu()->SetVisible(true);
 }
 
