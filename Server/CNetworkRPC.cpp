@@ -332,9 +332,11 @@ void PlayerChangeNick( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket 
 	// Is the player pointer valid?
 	if( pNetworkPlayer )
 	{
-		// Change the player nick
-		if( !pCore->GetPlayerManager()->IsNickInUse( sNewNick.C_String() ) )
+		// If new kick is not already took
+		if( !pCore->GetPlayerManager()->IsNickInUse( sNewNick.C_String() ) ){
+			// Change the player nick
 			pNetworkPlayer->ChangeNick( sNewNick.C_String() );
+		}
 	}
 }
 
