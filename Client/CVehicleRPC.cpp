@@ -102,8 +102,16 @@ void RepairVehicle( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 	// Does the vehicle exist?
 	if( pCore->GetVehicleManager()->IsActive( vehicleId ) )
 	{
+		// We store the current lightState
+		int oldState = pCore->GetVehicleManager()->Get(vehicleId)->GetLightState();
+
 		// Repair the vehicle
 		pCore->GetVehicleManager()->Get( vehicleId )->Repair();
+
+		// We restore the light state
+		if (oldState){
+			pCore->GetVehicleManager()->Get(vehicleId)->SetLightState(true);
+		}
 	}
 }
 
