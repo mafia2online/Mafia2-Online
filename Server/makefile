@@ -1,4 +1,4 @@
-CFLAGS = -m32 -c -g -Wno-write-strings -D_SERVER -D_LINUX -D_NO_GARBAGE_COLLECT -I../Shared -I../Libraries/squirrel -I../Libraries/ -I.
+CFLAGS = -m32 -c -g -std=c++0x -Wno-write-strings -D_SERVER -D_LINUX -D_NO_GARBAGE_COLLECT -I../Shared -I../Libraries/squirrel -I../Libraries/ -I.
 LDFLAGS = -m32 -lpthread -ldl
 SOURCES = $(wildcard *.cpp)
 SOURCES += $(wildcard ../Libraries/tinyxml/*.cpp)
