@@ -41,9 +41,9 @@ void CMasterList::WorkerThread ( CThread * pCreator )
 				{
 					// Generate the string for RakNet
 					if ( strlen ( CVAR_GET_STRING ( "serverip" ) ) > 0 )
-						post = RakNet::RakString::FormatForGET ( RakNet::RakString ( "http://"MASTERLIST_HOST"/mafia2-online/query?port=%d&ip=%s", pMasterList->GetServerPort(), CVAR_GET_STRING ( "serverip" ) ), RakNet::RakString ( "User-Agent: Mafia2Online/1.0" ) );
+						post = RakNet::RakString::FormatForGET ( RakNet::RakString ( "http://"MASTERLIST_HOST"/query?port=%d&ip=%s", pMasterList->GetServerPort(), CVAR_GET_STRING ( "serverip" ) ), RakNet::RakString ( "User-Agent: Mafia2Online/1.0" ) );
 					else
-						post = RakNet::RakString::FormatForGET ( RakNet::RakString ( "http://"MASTERLIST_HOST"/mafia2-online/query?port=%d", pMasterList->GetServerPort() ), RakNet::RakString ( "User-Agent: Mafia2Online/1.0" ) );
+						post = RakNet::RakString::FormatForGET ( RakNet::RakString ( "http://"MASTERLIST_HOST"/query?port=%d", pMasterList->GetServerPort() ), RakNet::RakString ( "User-Agent: Mafia2Online/1.0" ) );
 					break;
 				}
 			}
