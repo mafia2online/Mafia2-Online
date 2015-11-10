@@ -341,6 +341,10 @@ void CScriptingManager::RegisterDefaultConstants( void )
 	RegisterConstant( "HTTP_TYPE_GET", HTTP_TYPE_GET );
 	RegisterConstant( "HTTP_TYPE_POST", HTTP_TYPE_POST );
 #endif
+
+	// Vehicle
+	RegisterConstant( "VEHICLE_PART_HOOD", VEHICLE_PART_HOOD);
+	RegisterConstant( "VEHICLE_PART_TRUNK", VEHICLE_PART_TRUNK);
 }
 
 void CScriptingManager::Call( SQObjectPtr pFunction, CSquirrelArguments * pArguments, SQVM * pVM )
