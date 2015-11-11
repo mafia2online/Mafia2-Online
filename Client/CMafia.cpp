@@ -130,6 +130,7 @@ void CMafia::Spawn( bool bFade )
 	// Hide the main menu
 	if( pCore->GetGUI()->GetMainMenu() )
 		pCore->GetGUI()->GetMainMenu()->SetVisible( false );
+		pCore->GetGUI()->SetCursorVisible( false );
 
 	// Change the weather
 	//ChangeWeather ( (pCore->IsSummer () ? "DT_RTRclear_day_afternoon" : "DTFreeRideDaySnow"), 500 );
