@@ -139,6 +139,8 @@ Section "Install"
 	File ..\Binary\guifiles\4.jpg
 	File ..\Binary\guifiles\loadingscreen.png
 	File ..\Binary\guifiles\logo.png
+	File ..\Binary\guifiles\logo_m2mp.png
+	File ..\Binary\guifiles\logo_raknet.jpg
 	File ..\Binary\guifiles\quick_connect.png
 	File ..\Binary\guifiles\connect.png
 	File ..\Binary\guifiles\disconnect.png
