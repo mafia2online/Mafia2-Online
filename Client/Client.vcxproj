@@ -116,7 +116,7 @@
       <TargetMachine>MachineX86</TargetMachine>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
-      <AdditionalDependencies>crashrpt1401.lib;winmm.lib;ws2_32.lib;comctl32.lib;d3dx9.lib;dxguid.lib;dinput8.lib;DxErr9.lib;detours.lib;RakNetStatic.lib;zlib.lib;libpng.lib;dbghelp.lib;CEGUIBase.lib;CEGUIFalagardBase.lib;DirectX9GUIRenderer.lib;freetype2110.lib;tinyxml.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>crashrpt1401.lib;winmm.lib;ws2_32.lib;comctl32.lib;d3d9.lib;d3dx9.lib;dxguid.lib;dinput8.lib;DxErr9.lib;detours.lib;RakNetStatic.lib;zlib.lib;libpng.lib;dbghelp.lib;CEGUIBase.lib;CEGUIFalagardBase.lib;DirectX9GUIRenderer.lib;freetype2110.lib;tinyxml.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>../Libraries/CrashRpt;../Libraries/cegui-0.4.0-custom/lib;../Libraries/DXSDK/Lib;../Libraries/Detours;../Libraries/RakNet/Lib;../Libraries/zlib-1.2.5/projects/Release;../Libraries/lpng142/projects/Release;../Libraries/tinyxml/Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
