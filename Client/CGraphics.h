@@ -97,6 +97,7 @@ public:
 
 	// AMD Detection
 	bool							IsUsingAMD( void );
+	bool							IsUsingNVIDIA(void);
 	bool							IsUsingChipset( void );
 	//
 	bool							GetFrontBufferPixels						( unsigned char ** ucData );
