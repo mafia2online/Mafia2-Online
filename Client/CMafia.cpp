@@ -128,14 +128,13 @@ void CMafia::ChangeSeason ( bool bSummer )
 void CMafia::Spawn( bool bFade )
 {
 	// Hide the main menu
-	if( pCore->GetGUI()->GetMainMenu() )
-		pCore->GetGUI()->GetMainMenu()->SetVisible( false );
-		pCore->GetGUI()->SetCursorVisible( false );
+	if (pCore->GetGUI()->GetMainMenu()) {
+		pCore->GetGUI()->GetMainMenu()->SetVisible(false);
+		pCore->GetGUI()->SetCursorVisible(false);
+		m_bSummer = !m_bSummer;
+		ChangeSeason(!m_bSummer);
+	}
 
-	// Change the weather
-	//ChangeWeather ( (pCore->IsSummer () ? "DT_RTRclear_day_afternoon" : "DTFreeRideDaySnow"), 500 );
-	//ChangeWeather ( "DT_RTRclear_day_afternoon", 500 );
-	
 	// Set the default sensitity multiplier
 	SetMouseSensitivityMultiplier( 1.0f );
 

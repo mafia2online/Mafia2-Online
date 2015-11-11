@@ -14,7 +14,9 @@ class CLoadingScreen
 
 private:
 
-	static	CGUIStaticImage_Impl	* m_pImage;
+	static	CGUIStaticImage_Impl	* m_pLogo;
+	static	CGUIStaticImage_Impl	* m_pLogoM2MP;
+	static	CGUIStaticImage_Impl	* m_pLogoRakNet;
 
 public:
 
