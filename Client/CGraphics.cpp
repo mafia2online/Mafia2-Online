@@ -78,17 +78,32 @@ void CGraphics::Initialise( IDirect3DDevice9 * pDevice )
 	}
 }
 
-bool CGraphics::IsUsingAMD( void )
+bool CGraphics::IsUsingNVIDIA(void)
 {
 	m_pDirect->GetAdapterIdentifier(0, 0, &m_pD3Identifier);
-	CLogFile::Printf("Card : %d|%s",m_pD3Identifier.VendorId, m_pD3Identifier.Description);
-	return true;
+	if (strstr(m_pD3Identifier.Description, "NVIDIA") != NULL){
+		return (true);
+	}
+	else {
+		return (false);
+	}
+}
+
+bool CGraphics::IsUsingAMD(void)
+{
+	m_pDirect->GetAdapterIdentifier(0, 0, &m_pD3Identifier);
+	if (strstr(m_pD3Identifier.Description, "AMD") != NULL){
+		return (true);
+	}
+	else {
+		return (false);
+	}
 }
 
 bool CGraphics::IsUsingChipset( void )
 {
 	m_pDirect->GetAdapterIdentifier(0, 0, &m_pD3Identifier);
-	if (strcmp(m_pD3Identifier.Description, "Intel(R) HD Graphics Family") == 0){
+	if (strstr(m_pD3Identifier.Description, "Intel(R) HD Graphics Family") != NULL){
 		return (true);
 	} else {
 		return (false);
