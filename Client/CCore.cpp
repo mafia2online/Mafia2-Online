@@ -71,6 +71,7 @@ CCore::CCore( void )
 	m_pStreamer = NULL;
 	m_pModelManager = NULL;
 	m_pUpdater = NULL;
+	m_pAudioManager = NULL;
 }
 
 CCore::~CCore( void )
@@ -85,6 +86,7 @@ CCore::~CCore( void )
 	SAFE_DELETE(m_pFPSCounter);
 	SAFE_DELETE(m_pStreamer);
 	SAFE_DELETE(m_pModelManager);
+	SAFE_DELETE(m_pAudioManager);
 
 	// Uninstall anti-cheat
 	CWPMHook::Uninstall();
@@ -170,6 +172,13 @@ bool CCore::Initialise( void )
 
 	// Create the model mgr instance
 	m_pModelManager = new CModelManager;
+
+	// Create the audio instance
+	m_pAudioManager = new CAudioManager;
+
+	// Init autio manager
+	if (!m_pAudioManager->Initialize())
+		CLogFile::Print("Failed to init CAudioManager");
 
 	// We detect the graphic card
 	if (m_pGraphics->IsUsingChipset()){
@@ -463,6 +472,17 @@ void CCore::OnDeviceRender( void )
 		);
 	}
 
+	// TEST
+	if (GetAsyncKeyState(VK_F9) & 0x1)
+	{
+		CAudio *pAudio = new CAudio("http://mafia2-online.com/sounds/cat.mp3", false, true);
+		if (pAudio && pAudio->Load())
+		{
+			pCore->GetAudioManager()->Add(pAudio);
+			pAudio->Play();
+		}
+	}
+
 	// Was the hide stuff key pressed?
 	if ( GetAsyncKeyState ( VK_F10 ) & 0x1 )
 	{
@@ -564,6 +584,10 @@ void CCore::OnGameProcess( void )
 	// Process the streamer
 	if( m_pStreamer )
 		m_pStreamer->Process ();
+
+	// Process the audio manager
+	if (m_pAudioManager)
+		m_pAudioManager->Process();
 
 	// Pulse the video settings
 	CM2VideoSettings::Pulse ();
