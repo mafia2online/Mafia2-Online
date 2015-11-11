@@ -58,6 +58,7 @@
 #include <Network/CNetworkStats.h>
 #include <Game/CGame.h>
 #include <CrashRpt.h>
+#include "../bass/bass.h"
 
 // RakNet includes
 #include <RakPeerInterface.h>
@@ -125,6 +126,9 @@
 
 // Model Mgr
 #include "CModelManager.h"
+
+// Audio
+#include "CAudioManager.h"
 
 // GUI
 #include "CGUIEvent.h"
@@ -205,6 +209,7 @@
 #include "CGameNatives.h"
 #include "CCameraNatives.h"
 #include "CClientNatives.h"
+#include "CAudioNatives.h"
 
 // Clientscripts
 #include <Timers/CTimer.h>

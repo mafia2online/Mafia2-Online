@@ -108,4 +108,6 @@ namespace SharedUtility
 	String				str_rand ( unsigned int uiLength );
 	int					int_concat ( int a, int b );
 	bool				IsValidIP ( const char * szIpAddress );
+
+	bool				GetHTTPHeaderAndData(String host, String page, String post, String *header, String *data);
 };

@@ -15,6 +15,9 @@
 #else
 #define	CORE_MODULE	"m2mp.dll"
 #endif
+
+#define BASS_MODULE "bass.dll"
+
 CUpdate * pUpdater = NULL;
 CGUI * pGUI = NULL;
 
@@ -111,9 +114,18 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	// Does m2mp.dll not exist?
 	if( !SharedUtility::Exists( strModulePath.Get() ) )
 	{
-		ShowMessageBox( "Failed to find DLL. Can't launch." );
+		ShowMessageBox( "Failed to find m2mp.dll ! Can't launch." );
 		return 1;
 	}
+
+	String strBassPath("%s\\%s", SharedUtility::GetAppPath(), BASS_MODULE);
+	// Does m2mp.dll not exist?
+	if (!SharedUtility::Exists(strBassPath.Get()))
+	{
+		ShowMessageBox("Failed to find bass.dll ! Can't launch.");
+		return 1;
+	}
+
 
 	// Terminate Mafia II process if it's already running?
 	if( SharedUtility::IsProcessRunning( "Mafia2.exe" ) )
@@ -136,8 +148,11 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	// Inject m2mp.dll into Mafia2.exe
 	int iReturn = SharedUtility::InjectLibraryIntoProcess( piProcessInfo.hProcess, strModulePath.Get() );
 
+	// Inject bass.dll into Mafia2.exe
+	int iBass = SharedUtility::InjectLibraryIntoProcess(piProcessInfo.hProcess, strBassPath.Get());
+
 	// Did m2mp.dll fail to inject?
-	if( iReturn > 0 )
+	if( iReturn > 0 || iBass > 0)
 	{
 		// Terminate Mafia2.exe
 		TerminateProcess( piProcessInfo.hProcess, 0 );

@@ -771,4 +771,50 @@ namespace SharedUtility
 		return ( inet_pton( AF_INET, szIpAddress, &( sa.sin_addr ) ) != 0 );
 	}
 
+	bool GetHTTPHeaderAndData(String host, String page, String post, String *header, String *data)
+	{
+		SOCKET Socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+
+		SOCKADDR_IN SockAddr;
+		SockAddr.sin_port = htons(80);
+		SockAddr.sin_family = AF_INET;
+		SockAddr.sin_addr.s_addr = *(DWORD*)gethostbyname(host.Get())->h_addr;
+
+		if (connect(Socket, (SOCKADDR*)&SockAddr, sizeof(SockAddr)) != 0)
+			return false;
+
+		String sendme = String(
+			"GET %s HTTP/1.1\r\n"
+			"Host: %s\r\n"
+			"User-Agent: IV-Network\r\n"
+			"Connection: close\r\n"
+			"%s\r\n",
+			page.Get(),
+			host.Get(),
+			post.Get()
+			);
+
+		send(Socket, sendme.Get(), sendme.GetLength(), 0);
+
+		char* _buffer = new char[1000];
+		memset(_buffer, 0, 1000);
+		if (recv(Socket, _buffer, 1000, 0) == 0)
+			return false;
+
+		if (header)
+		{
+			*header = _buffer;
+			(*header).Erase((*header).Find("\r\n\r\n") + strlen("\r\n\r\n"), (*header).GetLength());
+		}
+		if (data)
+		{
+			*data = _buffer;
+			(*data).Erase(0, (*data).Find("\r\n\r\n") + strlen("\r\n\r\n"));
+		}
+		delete[] _buffer;
+
+		closesocket(Socket);
+		return true;
+	}
+
 };

@@ -216,6 +216,12 @@
     <Filter Include="Source Files\Client\Network\File Transfer">
       <UniqueIdentifier>{32cffbf4-053c-4cfb-9b16-e88503cf063b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Client\Audio">
+      <UniqueIdentifier>{8d052fc8-5588-4b7c-8379-09e2662bff35}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Client\Audio">
+      <UniqueIdentifier>{73d5825f-f948-4f5a-8d4b-d4893ee68135}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Shared\CRC.h">
@@ -767,6 +773,15 @@
     <ClInclude Include="..\Shared\Scripting\Natives\CSharedPlayerNatives.h">
       <Filter>Header Files\Client\Shared\Scripting\Natives</Filter>
     </ClInclude>
+    <ClInclude Include="CAudio.h">
+      <Filter>Header Files\Client\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="CAudioManager.h">
+      <Filter>Header Files\Client\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="CAudioNatives.h">
+      <Filter>Header Files\Client\Scripting\Natives</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -1236,6 +1251,15 @@
     </ClCompile>
     <ClCompile Include="..\Shared\Scripting\Natives\CSharedPlayerNatives.cpp">
       <Filter>Source Files\Client\Shared\Scripting\Natives</Filter>
+    </ClCompile>
+    <ClCompile Include="CAudio.cpp">
+      <Filter>Source Files\Client\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="CAudioManager.cpp">
+      <Filter>Source Files\Client\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="CAudioNatives.cpp">
+      <Filter>Source Files\Client\Scripting\Natives</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
