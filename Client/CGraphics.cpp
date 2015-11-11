@@ -53,6 +53,9 @@ CGraphics::~CGraphics( void )
 
 	// Clear the custom fonts list
 	m_customFonts.clear();
+
+	// Delete device
+	SAFE_DELETE(m_pDirect);
 }
 
 void CGraphics::Initialise( IDirect3DDevice9 * pDevice )
