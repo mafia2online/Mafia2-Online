@@ -13,6 +13,6 @@ extern	CCore			* pCore;
 
 void CCameraNatives::Register(CScriptingManager * pScriptingManager)
 {
-	pScriptingManager->RegisterFunction("getCameraPosition", GetPosition, 0, NULL);
-	pScriptingManager->RegisterFunction("getCameraRotation", GetRotation, 0, NULL);
+	/*pScriptingManager->RegisterFunction("getCameraPosition", GetPosition, 0, NULL);
+	pScriptingManager->RegisterFunction("getCameraRotation", GetRotation, 0, NULL);*/
 }
