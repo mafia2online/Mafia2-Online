@@ -171,6 +171,16 @@ bool CCore::Initialise( void )
 	// Create the model mgr instance
 	m_pModelManager = new CModelManager;
 
+	// Are we using a chipset ?
+	if (m_pGraphics->IsUsingChipset()){
+		CLogFile::Print("[WARNING] : Using chipset");
+	}
+
+	// Are we using AMD ?
+	if (m_pGraphics->IsUsingAMD()){
+		CLogFile::Print("[WARNING] : Using AMD");
+	}
+
 	return true;
 }
 

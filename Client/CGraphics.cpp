@@ -35,6 +35,9 @@ CGraphics::CGraphics( void )
 
 	// Install the direct input 8 hook
 	CDirectInput8Hook::Install ();
+
+	// Init Direct3Device
+	m_pDirect = Direct3DCreate9(D3D_SDK_VERSION);
 }
 
 CGraphics::~CGraphics( void )
@@ -72,6 +75,23 @@ void CGraphics::Initialise( IDirect3DDevice9 * pDevice )
 
 		// Create drawing devices
 		D3DXCreateTextureFromFileInMemory( pDevice,  g_szPixel, sizeof( g_szPixel ), &m_pPixelTexture );
+	}
+}
+
+bool CGraphics::IsUsingAMD( void )
+{
+	m_pDirect->GetAdapterIdentifier(0, 0, &m_pD3Identifier);
+	CLogFile::Printf("Card : %d|%s",m_pD3Identifier.VendorId, m_pD3Identifier.Description);
+	return true;
+}
+
+bool CGraphics::IsUsingChipset( void )
+{
+	m_pDirect->GetAdapterIdentifier(0, 0, &m_pD3Identifier);
+	if (strcmp(m_pD3Identifier.Description, "Intel(R) HD Graphics Family") == 0){
+		return (true);
+	} else {
+		return (false);
 	}
 }
 

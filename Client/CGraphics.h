@@ -27,6 +27,10 @@ private:
 	IDirect3DTexture9				* m_pPixelTexture;
 	IDirect3DSurface9				* m_pOriginalTarget;
 
+	//Graphic card detection
+	IDirect3D9						*m_pDirect;
+	D3DADAPTER_IDENTIFIER9			m_pD3Identifier;
+
 	std::list< CFont* >				m_fonts;
 	std::list< CFont* >				m_bigFonts;
 	std::list< CFont* >				m_customFonts;
@@ -91,6 +95,9 @@ public:
 
 	IDirect3DDevice9				* GetDevice( void ) { return m_pDevice; }
 
+	// AMD Detection
+	bool							IsUsingAMD( void );
+	bool							IsUsingChipset( void );
 	//
 	bool							GetFrontBufferPixels						( unsigned char ** ucData );
 
