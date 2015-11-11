@@ -24,6 +24,7 @@ struct OnFootSync
 	BYTE			m_bControlState;
 	bool			m_bAiming;
 	bool			m_bShooting;
+	bool			m_bCrouching;
 	unsigned int	m_uiModelIndex;
 	CVector3		m_vecLookAt;
 };

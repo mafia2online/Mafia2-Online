@@ -29,6 +29,7 @@ CNetworkPlayer::CNetworkPlayer( bool bLocalPlayer )
 	m_dwDeathTime = 0;
 	m_bAiming = false;
 	m_bShooting = false;
+	m_bCrouching = false;
 	m_iControlStyle = 0;
 	m_usPing = 0;
 	m_dwWeaponSelect = NULL;
@@ -519,18 +520,11 @@ void CNetworkPlayer::RemoveWeapon( DWORD dwWeapon, DWORD dwAmmo )
 		m_pPlayerPed->RemoveWeapon( dwWeapon, dwAmmo );
 }
 
-void CNetworkPlayer::SetCrouching( bool bCrouching )
-{
-	// todo
-}
-
-bool CNetworkPlayer::IsCrouching( void )
+bool CNetworkPlayer::IsMoving(void)
 {
 	// Is the player ped valid?
-	//if( m_pPlayerPed )
-	//	return m_pPlayerPed->IsCrouching();
-
-	return false;
+	if (m_pPlayerPed)
+		return m_pPlayerPed->IsMoving();
 }
 
 void CNetworkPlayer::UpdateAim( bool bAiming )

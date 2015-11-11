@@ -47,6 +47,7 @@ private:
 
 	bool							m_bAiming;
 	bool							m_bShooting;
+	bool							m_bCrouching;
 
 	CVector3						m_vecLookAt;
 
@@ -104,6 +105,9 @@ public:
 	void							SetAiming( bool bAiming ) { m_bAiming = bAiming; }
 	bool							IsAiming( void ) { return m_bAiming; }
 
+	void							SetCrouching(bool bCrouching) { m_bCrouching = bCrouching; }
+	bool							IsCrouching( void ) { return m_bCrouching; }
+
 	void							SetShooting( bool bShooting ) { m_bShooting = bShooting; }
 	bool							IsShooting( void ) { return m_bShooting; }
 
@@ -142,6 +146,7 @@ public:
 
 	void							SetCrouching( bool bCrouching );
 	bool							IsCrouching( void );
+	bool							IsMoving( void );
 
 	CM2Ped							* GetPlayerPed( void ) { return m_pPlayerPed; }
 

@@ -23,7 +23,8 @@ CPlayerManager::~CPlayerManager( void )
 	for( int i = 0; i < MAX_PLAYERS; i++ )
 	{
 		// Remove the current player
-		Remove( i, DISCONNECT_QUIT );
+		if (IsActive(i))
+			Remove( i, DISCONNECT_QUIT );
 	}
 }
 
