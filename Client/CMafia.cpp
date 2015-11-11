@@ -131,6 +131,7 @@ void CMafia::Spawn( bool bFade )
 	if (pCore->GetGUI()->GetMainMenu()) {
 		pCore->GetGUI()->GetMainMenu()->SetVisible(false);
 		pCore->GetGUI()->SetCursorVisible(false);
+		// We reload the weather to prevent black ground with winter
 		m_bSummer = !m_bSummer;
 		ChangeSeason(!m_bSummer);
 	}
