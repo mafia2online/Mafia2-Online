@@ -173,13 +173,14 @@ bool CCore::Initialise( void )
 
 	// We detect the graphic card
 	if (m_pGraphics->IsUsingChipset()){
-		CLogFile::Print("[WARNING] : Using chipset");
+		MessageBox(NULL, "Your game is currently starting on graphic chipset\n\nYou may encounter graphical problems thats not belong to M2-Online", "Mafia2-Online - Warning", MB_OK | MB_ICONWARNING);
+		CLogFile::Print("[GRAPHIC] : Using chipset");
 	} else if (m_pGraphics->IsUsingAMD()){
-		CLogFile::Print("[WARNING] : Using AMD");
+		CLogFile::Print("[GRAPHIC] : Using AMD");
 	} else if (m_pGraphics->IsUsingNVIDIA()){
-		CLogFile::Print("[WARNING] : Using NVIDIA");
+		CLogFile::Print("[GRAPHIC] : Using NVIDIA");
 	} else {
-		CLogFile::Print("[WARNING] : Unknow graphic card");
+		CLogFile::Print("[RAPHIC] : Unknow graphic card");
 	}
 
 	return true;
