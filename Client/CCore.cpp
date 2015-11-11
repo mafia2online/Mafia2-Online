@@ -79,8 +79,12 @@ CCore::~CCore( void )
 	CLogFile::Printf( "CCore::~CCore" );
 #endif
 
-	// Delete the network manager
+	// Delete the instances
 	SAFE_DELETE( m_pNetworkModule );
+	SAFE_DELETE(m_pGraphics);
+	SAFE_DELETE(m_pFPSCounter);
+	SAFE_DELETE(m_pStreamer);
+	SAFE_DELETE(m_pModelManager);
 
 	// Uninstall anti-cheat
 	CWPMHook::Uninstall();
