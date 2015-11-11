@@ -144,8 +144,6 @@ public:
 	void							GiveWeapon( DWORD dwWeapon, DWORD dwAmmo );
 	void							RemoveWeapon( DWORD dwWeapon, DWORD dwAmmo = 0 );
 
-	void							SetCrouching( bool bCrouching );
-	bool							IsCrouching( void );
 	bool							IsMoving( void );
 
 	CM2Ped							* GetPlayerPed( void ) { return m_pPlayerPed; }
