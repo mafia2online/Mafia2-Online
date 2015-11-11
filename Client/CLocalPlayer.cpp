@@ -187,6 +187,9 @@ void CLocalPlayer::SendOnFootSync( void )
 	// Get the shooting state
 	onFootSync.m_bShooting = m_pPlayerPed->IsShooting ();
 
+	// Get the crouching state
+	onFootSync.m_bCrouching = m_pPlayerPed->IsCrouching();
+
 	// Write the model index
 	onFootSync.m_uiModelIndex = Game::GetIdFromPlayerModel ( m_pPlayerModelManager->GetModelName() );
 

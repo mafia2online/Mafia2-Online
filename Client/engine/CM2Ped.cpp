@@ -120,6 +120,28 @@ bool CM2Ped::IsShooting( void )
 	return false;
 }
 
+bool CM2Ped::IsCrouching(void)
+{
+	DEBUG_TRACE("CM2Ped::IsCrouching");
+
+	// Is the ped valid
+	if (m_pPed)
+		return (m_pPed->m_playerControls.m_bIsCrouching);
+
+	return false;
+}
+
+bool CM2Ped::IsMoving(void)
+{
+	DEBUG_TRACE("CM2Ped::IsMoving");
+
+	// Is the ped valid
+	if (m_pPed)
+		return (m_pPed->m_playerControls.m_bIsMoving);
+
+	return false;
+}
+
 void CM2Ped::SetHealth( float fHealth )
 {
 	DEBUG_TRACE("CM2Ped::SetHealth");

@@ -289,13 +289,11 @@ void Shutdown( void )
 	// Stop the input thread
 	inputThread.SetUserData<bool>( false );
 	inputThread.Stop( false, true );
-
 	// Log the event
 	CLogFile::Printf( "Server shutting down..." );
 
 	// Delete the core
 	SAFE_DELETE( pCore );
-
 #ifdef WIN32
 	TerminateProcess( GetCurrentProcess(), 0 );
 #else

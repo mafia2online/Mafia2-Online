@@ -28,6 +28,7 @@ private:
 	InPassengerSync												m_passengerSync;
 
 	bool														m_bAiming;
+	bool														m_bCrouching;
 	bool														m_bShooting;
 
 	CNetworkVehicle												* m_pVehicle;
