@@ -63,7 +63,7 @@ CCore::~CCore( void )
 	SAFE_DELETE( m_pNetworkModule );
 	SAFE_DELETE( m_pClientScriptingManager );
 	SAFE_DELETE( m_pScriptingManager );
-	SAFE_DELETE( m_pWebServer );
+	SAFE_DELETE( m_pWebServer );//Todo: fix causes crash
 	SAFE_DELETE( m_pWebRequest );
 	SAFE_DELETE( m_pCommands );
 	SAFE_DELETE( m_pEvents );

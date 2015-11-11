@@ -140,6 +140,9 @@ void CRemotePlayer::StoreOnFootSync( OnFootSync * onFootSync )
 		// Update their shot
 		UpdateShot( onFootSync->m_bShooting );
 
+		// Update their crouch
+		/* UpdateCrouching( onFootSync->m_bCrouching ); */
+
 		// Are we not shooting?
 		if( !onFootSync->m_bShooting )
 		{

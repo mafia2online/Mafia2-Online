@@ -165,6 +165,7 @@ CNetworkPlayer::CNetworkPlayer( void )
 	m_onFootSync.m_uiModelIndex = 0;
 	m_bAiming = false;
 	m_bShooting = false;
+	m_bCrouching = false;
 	m_State = PLAYERSTATE_UNKNOWN;
 	m_ulLastPingTime = 0;
 
