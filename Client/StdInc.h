@@ -127,9 +127,6 @@
 // Model Mgr
 #include "CModelManager.h"
 
-// Audio
-#include "CAudioManager.h"
-
 // GUI
 #include "CGUIEvent.h"
 #include "CGUICallback.h"
@@ -209,7 +206,6 @@
 #include "CGameNatives.h"
 #include "CCameraNatives.h"
 #include "CClientNatives.h"
-#include "CAudioNatives.h"
 
 // Clientscripts
 #include <Timers/CTimer.h>

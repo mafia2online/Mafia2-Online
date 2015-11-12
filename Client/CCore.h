@@ -6,6 +6,8 @@
 * Developers : AaronLad <aaron@m2-multiplayer.com>
 *
 ***************************************************************/
+// Audio
+#include "CAudioManager.h"
 
 class CCore
 {
@@ -33,7 +35,6 @@ private:
 	CKeyBinds						* m_pKeyBinds;
 	CStreamer						* m_pStreamer;
 	CModelManager					* m_pModelManager;
-	CAudioManager					* m_pAudioManager;
 
 	HWND							m_gameHwnd;
 
@@ -101,7 +102,6 @@ public:
 	CKeyBinds						* GetKeyBinds				( void ) { return m_pKeyBinds; }
 	CStreamer						* GetStreamer				( void ) { return m_pStreamer; }
 	CModelManager					* GetModelManager			( void ) { return m_pModelManager; }
-	CAudioManager					* GetAudioManager			( void ) { return m_pAudioManager; }
 
 	void							SetGameHwnd					( HWND hwnd ) { m_gameHwnd = hwnd; }
 	HWND							GetGameHwnd					( void ) { return m_gameHwnd; }
