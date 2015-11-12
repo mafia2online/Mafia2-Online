@@ -8,7 +8,6 @@
 ***************************************************************/
 
 #include "CAudioManager.h"
-#include "StdInc.h"
 
 CAudioManager::CAudioManager() : m_bMuted(false)
 {

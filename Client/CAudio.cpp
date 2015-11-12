@@ -8,7 +8,6 @@
 ***************************************************************/
 
 #include "CAudio.h"
-#include "StdInc.h"
 
 extern CCore * pCore;
 

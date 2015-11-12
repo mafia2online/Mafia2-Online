@@ -45,8 +45,6 @@ CScriptingManager::CScriptingManager( void )
 	// Register the camera natives
 	CCameraNatives::Register( this );
 
-	// Register the audio natives
-	CAudioNatives::Register( this );
 #else
 	// Register server natives
 	CServerNatives::Register( this );
