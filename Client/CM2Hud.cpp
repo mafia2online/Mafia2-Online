@@ -328,5 +328,5 @@ void CM2Hud::ShowMessage(const char * text, int delay)
 void CM2Hud::SetDrunkLevel(int level)
 {
 	CLua::Execute( "game.hud:EffectAlcoholHit()" ); // Initiate drunk effect
-	CLua::Executef( "game.hud:EffectAlcoholDrunk(\"%d\")" ); // Set drunk level
+	CLua::Executef( "game.hud:EffectAlcoholDrunk(\"%d\")", level ); // Set drunk level
 }
