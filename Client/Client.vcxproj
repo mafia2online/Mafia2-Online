@@ -199,7 +199,6 @@
     <ClInclude Include="..\Shared\Timers\CTimerManager.h" />
     <ClInclude Include="CAudio.h" />
     <ClInclude Include="CAudioManager.h" />
-    <ClInclude Include="CAudioNatives.h" />
     <ClInclude Include="CBlip.h" />
     <ClInclude Include="CBlipManager.h" />
     <ClInclude Include="CBlipRPC.h" />
@@ -368,7 +367,6 @@
     <ClCompile Include="..\Shared\Timers\CTimerManager.cpp" />
     <ClCompile Include="CAudio.cpp" />
     <ClCompile Include="CAudioManager.cpp" />
-    <ClCompile Include="CAudioNatives.cpp" />
     <ClCompile Include="CBlip.cpp" />
     <ClCompile Include="CBlipManager.cpp" />
     <ClCompile Include="CBlipRPC.cpp" />

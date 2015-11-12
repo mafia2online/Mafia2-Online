@@ -779,9 +779,6 @@
     <ClInclude Include="CAudioManager.h">
       <Filter>Header Files\Client\Audio</Filter>
     </ClInclude>
-    <ClInclude Include="CAudioNatives.h">
-      <Filter>Header Files\Client\Scripting\Natives</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -1257,9 +1254,6 @@
     </ClCompile>
     <ClCompile Include="CAudioManager.cpp">
       <Filter>Source Files\Client\Audio</Filter>
-    </ClCompile>
-    <ClCompile Include="CAudioNatives.cpp">
-      <Filter>Source Files\Client\Scripting\Natives</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
