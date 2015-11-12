@@ -394,8 +394,7 @@ void CCore::OnDeviceRender( void )
 		// We render the player nameTags
 		for (int i = 0; i < MAX_PLAYERS; i++)
 		{
-			//&& pCore->GetPlayerManager()->Get(i)->GetPlayerPed()->IsOnScreen() - buggy function
-			if (i != pCore->GetPlayerManager()->GetLocalPlayer()->GetId() && pCore->GetPlayerManager()->IsActive(i))
+			if (i != pCore->GetPlayerManager()->GetLocalPlayer()->GetId() && pCore->GetPlayerManager()->IsActive(i) && pCore->GetPlayerManager()->Get(i)->GetPlayerPed() && pCore->GetPlayerManager()->Get(i)->GetPlayerPed()->IsOnScreen())
 			{
 				// Get the player position
 				CVector3 localPos;
@@ -423,10 +422,14 @@ void CCore::OnDeviceRender( void )
 
 					float fScale = 1.0;
 
+					// Font dimensions
 					float dimensionWidth = pCore->GetGraphics()->GetTextWidth(text, fScale, "tahoma-bold");
 					float dimensionHeight = pCore->GetGraphics()->GetFontHeight(fScale, "tahoma-bold");
 
+					// Progress by current health
 					int healthWidth = (((Math::Clamp< float >(0.0, pCore->GetPlayerManager()->Get(i)->GetHealth(), 720.0) * 100.0) / 720.0) / 100 * (boxWidth - 4.0));
+					
+					// Colors
 					CColor color1(0, 0, 0, 160);
 					CColor color2(0, 110, 0, 160);
 					CColor color3(0, 255, 0, 160);
@@ -435,6 +438,7 @@ void CCore::OnDeviceRender( void )
 					pCore->GetGraphics()->DrawTextA((vecScreen.fX - dimensionWidth / 2) + 1, vecScreen.fY + 1, (DWORD)0xFF000000, fScale, "tahoma-bold", false, text.Get());
 					pCore->GetGraphics()->DrawTextA((vecScreen.fX - dimensionWidth / 2), vecScreen.fY, pCore->GetPlayerManager()->Get(i)->GetColour(), fScale, "tahoma-bold", false, text.Get());
 
+					// We draw boxes
 					pCore->GetGraphics()->DrawBox((vecScreen.fX - (boxWidth / 2)), (vecScreen.fY + 16.0), boxWidth, boxHeight, color1.dwHexColor);
 					pCore->GetGraphics()->DrawBox((vecScreen.fX - (boxWidth / 2) + 2.0), (vecScreen.fY + 18.0), (boxWidth - 4.0), (boxHeight - 4.0), color2.dwHexColor);
 					pCore->GetGraphics()->DrawBox((vecScreen.fX - (boxWidth / 2) + 2.0), (vecScreen.fY + 18.0), healthWidth, (boxHeight - 4.0), color3.dwHexColor);
