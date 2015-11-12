@@ -67,6 +67,8 @@ public:
 	bool			OpenMap					( bool bOpen );
 	bool			IsMapOpen				( void ) { return m_bMapOpen; }
 
+	void 			ShowMessage				(const char * text, int delay)
+
 	// Main Menu
 	void			OnGameStart				( void );
 

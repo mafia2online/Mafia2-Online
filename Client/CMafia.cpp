@@ -82,6 +82,11 @@ void CMafia::StopMusic( void )
 	CLua::Execute( "game.game:StopMusic(1)" );
 }
 
+void CMafia::ShowMessage(const char * text, int delay)
+{
+	CLua::Executef( "game.hud:MessageShowQuick( \"%s\", \"%d\")", text, delay);
+}
+
 void CMafia::ChangeWeather( String strWeather, int iChangeTime )
 {
 	DWORD C_Game__SetWeatherTemplate = 0xB29F50;
