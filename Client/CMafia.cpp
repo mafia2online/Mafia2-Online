@@ -82,18 +82,6 @@ void CMafia::StopMusic( void )
 	CLua::Execute( "game.game:StopMusic(1)" );
 }
 
-void CMafia::ShowMessage(const char * text, int delay)
-{
-	CLua::Executef( "game.hud:MessageShowQuick( \"%s\", \"%d\")", text, delay); // Idk if we can show custom message, gonna try
-	// Maybe we should call game.hud:MessageAreaShow(true) ?
-}
-
-void CMafia::SetDrunkLevel(int level)
-{
-	CLua::Execute( "game.hud:EffectAlcoholHit()" ); // Initiate drunk effect
-	CLua::Executef( "game.hud:EffectAlcoholDrunk(\"%d\")" ); // Set drunk level
-}
-
 void CMafia::ChangeWeather( String strWeather, int iChangeTime )
 {
 	DWORD C_Game__SetWeatherTemplate = 0xB29F50;
