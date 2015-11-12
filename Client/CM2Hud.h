@@ -166,4 +166,7 @@ public:
 	void				ShowLowHealthFX( bool bShow );
 	void				SpeedoShow( bool bShow );
 
+	void 				ShowMessage(const char * text, int delay);
+	void 				SetDrunkLevel(int level);
+
 };

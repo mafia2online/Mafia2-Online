@@ -319,3 +319,14 @@ void CM2Hud::SpeedoShow ( bool bShow )
 		_asm call C_HudSpeedo__Show;
 	}
 }
+
+void CM2Hud::ShowMessage(const char * text, int delay)
+{
+	CLua::Executef( "game.hud:MessageShowQuick( \"%s\", \"%d\")", text, delay); // Idk if we can show custom message, gonna try
+}
+
+void CM2Hud::SetDrunkLevel(int level)
+{
+	CLua::Execute( "game.hud:EffectAlcoholHit()" ); // Initiate drunk effect
+	CLua::Executef( "game.hud:EffectAlcoholDrunk(\"%d\")" ); // Set drunk level
+}
