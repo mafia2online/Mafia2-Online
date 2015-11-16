@@ -167,6 +167,7 @@
 #include "CFPSCounter.h"
 #include "CScreenShot.h"
 #include "CLoadingScreen.h"
+#include "CNameTag.h"
 
 // Network
 #include "CNetworkModelManager.h"

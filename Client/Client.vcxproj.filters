@@ -779,6 +779,9 @@
     <ClInclude Include="CAudioManager.h">
       <Filter>Header Files\Client\Audio</Filter>
     </ClInclude>
+    <ClInclude Include="CNameTag.h">
+      <Filter>Header Files\Client\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -1254,6 +1257,9 @@
     </ClCompile>
     <ClCompile Include="CAudioManager.cpp">
       <Filter>Source Files\Client\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="CNameTag.cpp">
+      <Filter>Source Files\Client\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
