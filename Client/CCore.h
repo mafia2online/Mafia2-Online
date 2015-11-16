@@ -35,6 +35,7 @@ private:
 	CKeyBinds						* m_pKeyBinds;
 	CStreamer						* m_pStreamer;
 	CModelManager					* m_pModelManager;
+	CNameTag						* m_pNameTag;
 
 	HWND							m_gameHwnd;
 

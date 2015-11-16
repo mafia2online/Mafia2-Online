@@ -246,6 +246,7 @@
     <ClInclude Include="CMasterList.h" />
     <ClInclude Include="CModelManager.h" />
     <ClInclude Include="CMouseHandler.h" />
+    <ClInclude Include="CNameTag.h" />
     <ClInclude Include="CNetworkModelManager.h" />
     <ClInclude Include="CNetworkModule.h" />
     <ClInclude Include="CNetworkPlayer.h" />
@@ -411,6 +412,7 @@
     <ClCompile Include="CMenuSettings.cpp" />
     <ClCompile Include="CModelManager.cpp" />
     <ClCompile Include="CMouseHandler.cpp" />
+    <ClCompile Include="CNameTag.cpp" />
     <ClCompile Include="CNetworkModelManager.cpp" />
     <ClCompile Include="CNetworkModule.cpp" />
     <ClCompile Include="CNetworkPlayer.cpp" />
