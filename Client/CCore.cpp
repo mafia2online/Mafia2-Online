@@ -72,6 +72,7 @@ CCore::CCore( void )
 	m_pModelManager = NULL;
 	m_pUpdater = NULL;
 	m_pNameTag = NULL;
+	m_pAudioManager = NULL;
 }
 
 CCore::~CCore( void )
@@ -86,6 +87,7 @@ CCore::~CCore( void )
 	SAFE_DELETE(m_pFPSCounter);
 	SAFE_DELETE(m_pStreamer);
 	SAFE_DELETE(m_pModelManager);
+	SAFE_DELETE(m_pAudioManager);
 
 	// Uninstall anti-cheat
 	CWPMHook::Uninstall();
@@ -289,6 +291,12 @@ void CCore::OnDeviceCreate( IDirect3DDevice9 * pDevice, D3DPRESENT_PARAMETERS * 
 	// Refresh server browser
 	m_pGUI->GetServerBrowser()->Refresh ();
 
+	// Create the audio manager
+	m_pAudioManager = new CAudioManager;
+
+	if (m_pAudioManager)
+		m_pAudioManager->Initialize();
+
 #ifdef _DEBUG
 	CLogFile::Printf ( "CCore::OnDeviceCreate - Done" );
 #endif
@@ -486,7 +494,15 @@ void CCore::OnDeviceRender( void )
 
 	if (GetAsyncKeyState(VK_F5) & 0x1)
 	{
-		pCore->GetHud()->ShowMessage("Coucou", 5);
+		CLogFile::Print("Gonna play");
+		CAudio *pAudio = new CAudio("http://mafia2-online.com/sounds/cat.mp3", true, true);
+		if (pAudio && pAudio->Load())
+		{
+			CLogFile::Print("Playing");
+			pCore->GetAudioManager()->Add(pAudio);
+			pAudio->Play();
+			CLogFile::Print("Played");
+		}
 	}
 
 	// Was the screenshot key pressed?
@@ -573,6 +589,10 @@ void CCore::OnGameProcess( void )
 	// Process the streamer
 	if( m_pStreamer )
 		m_pStreamer->Process ();
+
+	// Process the audio manager
+	if (m_pAudioManager)
+		m_pAudioManager->Process();
 
 	// Pulse the video settings
 	CM2VideoSettings::Pulse ();
