@@ -7,7 +7,9 @@
 *
 ***************************************************************/
 
-#include "CAudioManager.h"
+#include "StdInc.h"
+
+extern CCore * pCore;
 
 CAudioManager::CAudioManager() : m_bMuted(false)
 {
@@ -32,8 +34,12 @@ bool CAudioManager::Initialize()
 	}
 
 	// Initialize BASS audio library
-	BASS_Init(-1, 44100, 0, 0, NULL);
-	return true;
+	if(BASS_Init(-1, 44100, 0, 0, NULL) == TRUE)
+		return true;
+	else {
+		CLogFile::Printf("Init error : %d", BASS_ErrorGetCode());
+		return false;
+	}
 }
 
 void CAudioManager::Add(CAudio * pAudio)
