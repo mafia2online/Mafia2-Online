@@ -16,6 +16,9 @@ private:
 
 	EntityId						m_pedId;
 	unsigned int					m_uiModelIndex;
+	String							m_pNick;
+	bool							m_pShowNick;
+
 	CM2Ped							* m_pPed;
 	M2ModelMgr						* m_pPedModelManager;
 
@@ -29,6 +32,11 @@ public:
 
 	void							SetModel				( unsigned int uiModelIndex );
 	unsigned int					GetModel				( void ) { return m_uiModelIndex; }
+
+	void							SetNick					( const char * szNick );
+	String							GetNick					( void ) { return m_pNick; }
+	void							ShowNick				( bool bShow) { m_pShowNick = bShow; }
+	bool							GetShowNick				( void ) { return m_pShowNick; }
 
 	/*
 	void							SetPosition				( CVector3 vecPosition );

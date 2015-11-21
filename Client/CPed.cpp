@@ -51,3 +51,8 @@ void CPed::SetModel( unsigned int uiModelIndex )
 	// Store the model
 	m_uiModelIndex = uiModelIndex;
 }
+
+void CPed::SetNick(const char *szNick)
+{
+	m_pNick.Set(szNick);
+}

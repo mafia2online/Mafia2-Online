@@ -22,6 +22,31 @@ CNameTag::~CNameTag(void)
 void CNameTag::All(void)
 {
 	Player();
+	Ped();
+}
+
+void CNameTag::Ped(void)
+{
+	// Loop through all peds
+	for (EntityId i = 0; i < MAX_PEDS; i++)
+	{
+		// Is the current ped valid?
+		if (pCore->GetPedManager()->IsActive(i) && pCore->GetPedManager()->Get(i)->GetPed()->IsOnScreen())
+		{
+			// Get a pointer to the ped
+			CPed * pPed = pCore->GetPedManager()->Get(i);
+
+			// Is ped valid?
+			if (pPed)
+			{
+				CVector3 vecPos, vecScreen;
+				pPed->GetPed()->GetPosition(&vecPos);
+
+				pCore->GetGraphics()->WorldToScreen(vecPos, &vecScreen);
+				pCore->GetGraphics()->DrawText(vecScreen.fX, vecScreen.fY, 0xFFFFFFFF, 1.0f, "tahoma-bold", true, "Ped (%d)", pPed->GetPed()->GetGUID());
+			}
+		}
+	}
 }
 
 void CNameTag::Player(void)

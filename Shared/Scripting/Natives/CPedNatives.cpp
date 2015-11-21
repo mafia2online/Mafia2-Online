@@ -26,6 +26,8 @@ void CPedNatives::Register( CScriptingManager * pScriptingManager )
 {
 	pScriptingManager->RegisterFunction( "createPed", CreatePed, 7, "iffffff" );
 	pScriptingManager->RegisterFunction( "destroyPed", DestroyPed, 1, "i" );
+	pScriptingManager->RegisterFunction( "setPedName", SetPedName, 2, "is");
+	pScriptingManager->RegisterFunction( "getPedName", GetPedName, 1, "i");
 }
 
 SQInteger CPedNatives::CreatePed( SQVM * pVM )
@@ -58,6 +60,46 @@ SQInteger CPedNatives::DestroyPed( SQVM * pVM )
 
 	// Delete the ped from the manager
 	sq_pushbool( pVM, pCore->GetPedManager()->Delete( pedId ) );
+	return 1;
+}
+
+SQInteger CPedNatives::SetPedName(SQVM * pVM)
+{
+	SQInteger pedId;
+	const SQChar *pedName;
+
+	sq_getinteger(pVM, -2, &pedId);
+	sq_getstring(pVM, -1, &pedName);
+
+	if (pCore->GetPedManager()->IsActive(pedId) && pCore->GetPedManager()->Get(pedId) != NULL)
+	{
+		// Change nick
+		pCore->GetPedManager()->Get(pedId)->SetNick(pedName);
+
+		// Push the return
+		sq_pushbool(pVM, true);
+		return (1);
+	}
+	sq_pushbool(pVM, false);
+	return 1;
+}
+
+SQInteger CPedNatives::GetPedName(SQVM * pVM)
+{
+	SQInteger pedId;
+
+	sq_getinteger(pVM, -1, &pedId);
+
+	if (pCore->GetPedManager()->IsActive(pedId) && pCore->GetPedManager()->Get(pedId))
+	{
+		// Get the nick
+		String nick = pCore->GetPedManager()->Get(pedId)->GetNick();
+
+		// Push the return
+		sq_pushstring(pVM, nick.Get(), nick.GetLength());
+		return (1);
+	}
+	sq_pushbool(pVM, false);
 	return 1;
 }
 #endif
