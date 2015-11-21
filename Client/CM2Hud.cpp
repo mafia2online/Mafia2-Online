@@ -126,6 +126,8 @@ CM2Hud::CM2Hud( M2Hud * pHud )
 
 	// Reset
 	m_bShowing = true;
+	m_drunkLevel = 0;
+	m_wantedLevel = 0;
 }
 
 CM2Hud::~CM2Hud( void )
@@ -327,6 +329,17 @@ void CM2Hud::ShowMessage(const char * text, int delay)
 
 void CM2Hud::SetDrunkLevel(int level)
 {
-	CLua::Execute( "game.hud:EffectAlcoholHit()" ); // Initiate drunk effect
+	if (level > 0){
+		CLua::Execute("game.hud:EffectAlcoholHit()"); // Initiate drunk effect
+	}
 	CLua::Executef( "game.hud:EffectAlcoholDrunk(\"%d\")", level ); // Set drunk level
+
+	m_drunkLevel = level;
+}
+
+void CM2Hud::SetWantedLevel(int level)
+{
+	CLua::Executef("game.hud:PoliceWantedSet(\"%d\")", level);//Set wanted level
+
+	m_wantedLevel = level;
 }

@@ -26,6 +26,11 @@ void CPlayerNatives::Register( CScriptingManager * pScriptingManager )
 	pScriptingManager->RegisterFunction( "togglePlayerControls", ToggleControls, 1, "b" );
 	pScriptingManager->RegisterFunction( "isPlayerInVehicle", IsInVehicle, 1, "i" );
 	pScriptingManager->RegisterFunction( "getPlayerVehicle", GetVehicle, 1, "i" );
+	pScriptingManager->RegisterFunction( "setPlayerDrunkLevel", SetDrunkLevel, 1, "i");
+	pScriptingManager->RegisterFunction( "getPlayerDrunkLevel", GetDrunkLevel, 0, NULL);
+	pScriptingManager->RegisterFunction( "resetPlayerDrunkLevel", ResetDrunkLevel, 0, NULL);
+	pScriptingManager->RegisterFunction( "setPlayerWantedLevel", SetWantedLevel, 1, "i");
+	pScriptingManager->RegisterFunction( "getPlayerWantedLevel", GetWantedLevel, 0, NULL);
 }
 
 // getLocalPlayer();
@@ -323,4 +328,68 @@ SQInteger CPlayerNatives::GetVehicle( SQVM * pVM )
 
 	sq_pushinteger( pVM, vehicleId );
 	return 1;
+}
+
+SQInteger CPlayerNatives::SetDrunkLevel( SQVM *pVM )
+{
+	SQInteger drunkLevel;
+
+	// Get the drunk level
+	sq_getinteger(pVM, -1, &drunkLevel);
+
+	if (pCore->GetHud() != NULL){
+
+		// Set the drunk level
+		pCore->GetHud()->SetDrunkLevel(drunkLevel);
+
+		sq_pushbool(pVM, true);
+		return (1);
+
+	}
+	sq_pushbool(pVM, false);
+	return (1);
+}
+
+SQInteger CPlayerNatives::GetDrunkLevel(SQVM *pVM)
+{
+	// Return the value
+	sq_pushinteger(pVM, pCore->GetHud()->GetDrunkLevel());
+	return (1);
+}
+
+SQInteger CPlayerNatives::ResetDrunkLevel(SQVM *pVM)
+{
+	// Reset drunk level
+	pCore->GetHud()->SetDrunkLevel(0);
+
+	// Return the value
+	sq_pushbool(pVM, true);
+	return (1);
+}
+
+SQInteger CPlayerNatives::SetWantedLevel(SQVM *pVM)
+{
+	SQInteger wantedLevel;
+
+	// Get the drunk level
+	sq_getinteger(pVM, -1, &wantedLevel);
+
+	if (pCore->GetHud() != NULL){
+
+		// Set the drunk level
+		pCore->GetHud()->SetWantedLevel(wantedLevel);
+
+		sq_pushbool(pVM, true);
+		return (1);
+
+	}
+	sq_pushbool(pVM, false);
+	return (1);
+}
+
+SQInteger CPlayerNatives::GetWantedLevel(SQVM *pVM)
+{
+	// Return the value
+	sq_pushinteger(pVM, pCore->GetHud()->GetWantedLevel());
+	return (1);
 }
