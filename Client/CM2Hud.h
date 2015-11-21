@@ -142,6 +142,9 @@ public:
 	CM2Hud( M2Hud * pHud );
 	~CM2Hud( void );
 
+	int					m_drunkLevel;
+	int					m_wantedLevel;
+
 	void				SetHud( M2Hud * pHud ) { m_pHud = pHud; }
 	M2Hud				* GetHud( void ) { return m_pHud; }
 
@@ -167,6 +170,11 @@ public:
 	void				SpeedoShow( bool bShow );
 
 	void 				ShowMessage(const char * text, int delay);
+
 	void 				SetDrunkLevel(int level);
+	int					GetDrunkLevel(void) { return (m_drunkLevel); }
+
+	void				SetWantedLevel(int level);
+	int					GetWantedLevel(void) { return (m_wantedLevel); }
 
 };
