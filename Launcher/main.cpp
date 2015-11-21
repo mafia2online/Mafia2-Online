@@ -149,10 +149,10 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	int iReturn = SharedUtility::InjectLibraryIntoProcess( piProcessInfo.hProcess, strModulePath.Get() );
 
 	// Inject bass.dll into Mafia2.exe
-	int iBass = SharedUtility::InjectLibraryIntoProcess(piProcessInfo.hProcess, strBassPath.Get());
+	iReturn += SharedUtility::InjectLibraryIntoProcess(piProcessInfo.hProcess, strBassPath.Get());
 
 	// Did m2mp.dll fail to inject?
-	if( iReturn > 0 || iBass > 0)
+	if( iReturn > 0)
 	{
 		// Terminate Mafia2.exe
 		TerminateProcess( piProcessInfo.hProcess, 0 );
@@ -162,11 +162,11 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 
 		// Find the cause of the error
 		if( iReturn == 1 )
-			strError = "Failed to write library path into remote process. Can't launch.";
+			strError = "[M2O] : Failed to write library path into remote process. Can't launch.";
 		else if( iReturn == 2 )
-			strError = "Failed to create remote thread in remote process. Can't launch.";
+			strError = "[M2O] : Failed to create remote thread in remote process. Can't launch.";
 		else if( iReturn == 2 )
-			strError = "Failed to open the remote process. Can't launch.";
+			strError = "[M2O] : Failed to open the remote process. Can't launch.";
 
 		// Show the error message
 		ShowMessageBox( strError.Get() );
