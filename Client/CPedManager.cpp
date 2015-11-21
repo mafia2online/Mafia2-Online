@@ -50,6 +50,9 @@ EntityId CPedManager::Add( unsigned int iModelIndex, CVector3 vecPosition, CVect
 	// Set the id
 	m_pPed[ pedId ]->SetId( pedId );
 
+	// Set the nick
+	m_pPed[pedId]->SetNick("Unknow");
+	m_pPed[pedId]->ShowNick(false);
 	return pedId;
 }
 
@@ -105,24 +108,5 @@ EntityId CPedManager::FindFreeSlot( void )
 
 void CPedManager::Pulse( void )
 {
-	// Loop through all peds
-	for( EntityId i = 0; i < MAX_PEDS; i++ )
-	{
-		// Is the current ped valid?
-		if( IsActive( i ) )
-		{
-			// Get a pointer to the ped
-			CPed * pPed = Get( i );
-
-			// Is ped valid?
-			if( pPed )
-			{
-				CVector3 vecPos, vecScreen;
-				pPed->GetPed()->GetPosition( &vecPos );
-
-				pCore->GetGraphics()->WorldToScreen( vecPos, &vecScreen );
-				pCore->GetGraphics()->DrawText( vecScreen.fX, vecScreen.fY, 0xFFFFFFFF, 1.0f, "tahoma-bold", true, "Ped (%d)", pPed->GetPed()->GetGUID() );
-			}
-		}
-	}
+	//Todo : delete this func
 }

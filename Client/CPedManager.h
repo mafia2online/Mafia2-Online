@@ -15,6 +15,7 @@ class CPedManager
 private:
 
 	CPed							* m_pPed[ MAX_PEDS ];
+	String							m_pNick[ MAX_PEDS ];
 
 public:
 
