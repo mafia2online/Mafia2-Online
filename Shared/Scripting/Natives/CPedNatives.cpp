@@ -28,6 +28,7 @@ void CPedNatives::Register( CScriptingManager * pScriptingManager )
 	pScriptingManager->RegisterFunction( "destroyPed", DestroyPed, 1, "i" );
 	pScriptingManager->RegisterFunction( "setPedName", SetPedName, 2, "is");
 	pScriptingManager->RegisterFunction( "getPedName", GetPedName, 1, "i");
+	pScriptingManager->RegisterFunction( "showPedName", ShowPedName, 2, "ib" );
 }
 
 SQInteger CPedNatives::CreatePed( SQVM * pVM )
@@ -90,13 +91,34 @@ SQInteger CPedNatives::GetPedName(SQVM * pVM)
 
 	sq_getinteger(pVM, -1, &pedId);
 
-	if (pCore->GetPedManager()->IsActive(pedId) && pCore->GetPedManager()->Get(pedId))
+	if (pCore->GetPedManager()->IsActive(pedId) && pCore->GetPedManager()->Get(pedId) != NULL)
 	{
 		// Get the nick
 		String nick = pCore->GetPedManager()->Get(pedId)->GetNick();
 
 		// Push the return
 		sq_pushstring(pVM, nick.Get(), nick.GetLength());
+		return (1);
+	}
+	sq_pushbool(pVM, false);
+	return 1;
+}
+
+SQInteger CPedNatives::ShowPedName(SQVM *pVM)
+{
+	SQInteger	pedId;
+	SQBool		bShow;
+
+	sq_getinteger(pVM, -2, &pedId);
+	sq_getbool(pVM, -1, &bShow);
+
+	if (pCore->GetPedManager()->IsActive(pedId) && pCore->GetPedManager()->Get(pedId) != NULL)
+	{
+		// Change nick state
+		pCore->GetPedManager()->Get(pedId)->ShowNick(bShow);
+
+		// Return
+		sq_pushbool(pVM, true);
 		return (1);
 	}
 	sq_pushbool(pVM, false);
