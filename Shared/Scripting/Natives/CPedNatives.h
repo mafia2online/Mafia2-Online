@@ -22,6 +22,10 @@ private:
 	static	SQInteger		GetPedName					( SQVM * pVM);
 	static	SQInteger		DestroyPed					( SQVM * pVM );
 	static	SQInteger		ShowPedName					( SQVM * pVM );
+	static	SQInteger		SetPedPosition				( SQVM * pVM );
+	static	SQInteger		GetPedPosition				( SQVM * pVM );
+	static	SQInteger		SetPedModel					( SQVM * pVM );
+	static	SQInteger		GetPedModel					( SQVM * pVM);
 
 public:
 

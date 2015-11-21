@@ -26,9 +26,12 @@ void CPedNatives::Register( CScriptingManager * pScriptingManager )
 {
 	pScriptingManager->RegisterFunction( "createPed", CreatePed, 7, "iffffff" );
 	pScriptingManager->RegisterFunction( "destroyPed", DestroyPed, 1, "i" );
-	pScriptingManager->RegisterFunction( "setPedName", SetPedName, 2, "is");
-	pScriptingManager->RegisterFunction( "getPedName", GetPedName, 1, "i");
+	pScriptingManager->RegisterFunction( "setPedName", SetPedName, 2, "is" );
+	pScriptingManager->RegisterFunction( "getPedName", GetPedName, 1, "i" );
 	pScriptingManager->RegisterFunction( "showPedName", ShowPedName, 2, "ib" );
+	pScriptingManager->RegisterFunction( "setPedModel", SetPedModel, 2, "ii" );
+	pScriptingManager->RegisterFunction( "getPedModel", GetPedModel, 1, "i" );
+	pScriptingManager->RegisterFunction( "getPedPosition", GetPedPosition, 1, "i" );
 }
 
 SQInteger CPedNatives::CreatePed( SQVM * pVM )
@@ -120,6 +123,72 @@ SQInteger CPedNatives::ShowPedName(SQVM *pVM)
 		// Return
 		sq_pushbool(pVM, true);
 		return (1);
+	}
+	sq_pushbool(pVM, false);
+	return 1;
+}
+
+SQInteger CPedNatives::GetPedModel(SQVM *pVM)
+{
+	SQInteger	pedId;
+
+	sq_getinteger(pVM, -1, &pedId);
+	if (pCore->GetPedManager()->IsActive(pedId) && pCore->GetPedManager()->Get(pedId) != NULL)
+	{
+		sq_pushinteger(pVM, pCore->GetPedManager()->Get(pedId)->GetModel());
+		return (1);
+	}
+	sq_pushbool(pVM, false);
+	return 1;
+}
+
+SQInteger CPedNatives::SetPedModel(SQVM *pVM)
+{
+	SQInteger	pedId;
+	SQInteger	pedModel;
+
+	sq_getinteger(pVM, -2, &pedId);
+	sq_getinteger(pVM, -1, &pedModel);
+
+	if (pCore->GetPedManager()->IsActive(pedId) && pCore->GetPedManager()->Get(pedId) != NULL)
+	{
+		pCore->GetPedManager()->Get(pedId)->SetModel(pedModel);
+
+		sq_pushbool(pVM, true);
+		return (1);
+	}
+	sq_pushbool(pVM, false);
+	return 1;
+}
+
+SQInteger CPedNatives::GetPedPosition(SQVM *pVM)
+{
+	SQInteger	pedId;
+
+	sq_getinteger(pVM, -1, &pedId);
+
+	if (pCore->GetPedManager()->IsActive(pedId) && pCore->GetPedManager()->Get(pedId) != NULL)
+	{
+		CVector3 pos;
+		
+		// Get the position
+		pCore->GetPedManager()->Get(pedId)->GetPed()->GetPosition(&pos);
+
+		// Create array
+		sq_newarray(pVM, 0);
+
+		sq_pushfloat(pVM, pos.fX);
+		sq_arrayappend(pVM, -2);
+
+		sq_pushfloat(pVM, pos.fY);
+		sq_arrayappend(pVM, -2);
+
+		sq_pushfloat(pVM, pos.fZ);
+		sq_arrayappend(pVM, -2);
+
+		// Return
+		sq_push(pVM, -1);
+		return 1;
 	}
 	sq_pushbool(pVM, false);
 	return 1;
