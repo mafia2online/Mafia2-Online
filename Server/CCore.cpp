@@ -34,6 +34,7 @@ CCore::CCore( void )
 	m_pResourceManager = NULL;
 	m_pWebRequest = NULL;
 	m_pPedManager = NULL;
+	m_p3DTextManager = NULL;
 
 	// Set the default gamemode text, map and weather
 	SetGameModeText( "Unknown" );
@@ -67,6 +68,7 @@ CCore::~CCore( void )
 	SAFE_DELETE( m_pWebRequest );
 	SAFE_DELETE( m_pCommands );
 	SAFE_DELETE( m_pEvents );
+	SAFE_DELETE( m_p3DTextManager );
 
 	// Close the log file
 	CLogFile::Close();
@@ -165,6 +167,9 @@ bool CCore::Initialise( int argc, char * argv[] )
 
 	// Create the blip manager instance
 	m_pBlipManager = new CBlipManager;
+
+	// Create the 3DTextLabel manager
+	m_p3DTextManager = new C3DTextLabelManager;
 
 	// Create the vehicle manager instance
 	m_pVehicleManager = new CVehicleManager;

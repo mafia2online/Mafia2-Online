@@ -45,6 +45,7 @@
 #define		MAX_VEHICLES			1000
 #define		MAX_BLIPS				256
 #define		MAX_PEDS				500
+#define		MAX_3DTEXTS				128
 #define		MAX_PLAYER_NAME			32
 
 // Network
