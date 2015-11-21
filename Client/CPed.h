@@ -27,6 +27,9 @@ public:
 									CPed					( unsigned int uiModelIndex, CVector3 vecPosition, CVector3 vecRotation );
 									~CPed					( void );
 
+	void							Create					( CVector3 position, CVector3 rotation );
+	void							Destroy					( void );
+
 	void							SetId					( EntityId pedId ) { m_pedId = pedId; }
 	EntityId						GetId					( void ) { return m_pedId; }
 
