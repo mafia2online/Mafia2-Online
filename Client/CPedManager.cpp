@@ -51,7 +51,7 @@ EntityId CPedManager::Add( unsigned int iModelIndex, CVector3 vecPosition, CVect
 	m_pPed[ pedId ]->SetId( pedId );
 
 	// Set the nick
-	m_pPed[pedId]->SetNick("Unknow");
+	m_pPed[pedId]->SetNick(String("Ped %d", pedId));
 	m_pPed[pedId]->ShowNick(false);
 	return pedId;
 }

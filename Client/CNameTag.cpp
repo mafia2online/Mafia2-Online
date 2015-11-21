@@ -39,11 +39,14 @@ void CNameTag::Ped(void)
 			// Is ped valid?
 			if (pPed)
 			{
-				CVector3 vecPos, vecScreen;
-				pPed->GetPed()->GetPosition(&vecPos);
+				// Do we want to show this ped's nick ?
+				if (pPed->GetShowNick() == true){
+					CVector3 vecPos, vecScreen;
+					pPed->GetPed()->GetPosition(&vecPos);
 
-				pCore->GetGraphics()->WorldToScreen(vecPos, &vecScreen);
-				pCore->GetGraphics()->DrawText(vecScreen.fX, vecScreen.fY, 0xFFFFFFFF, 1.0f, "tahoma-bold", true, "Ped (%d)", pPed->GetPed()->GetGUID());
+					pCore->GetGraphics()->WorldToScreen(vecPos, &vecScreen);
+					pCore->GetGraphics()->DrawText(vecScreen.fX, vecScreen.fY, 0xFFFFFFFF, 1.0f, "tahoma-bold", true, "%s", pPed->GetNick().Get());
+				}
 			}
 		}
 	}
