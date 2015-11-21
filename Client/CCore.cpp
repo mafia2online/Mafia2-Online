@@ -494,14 +494,11 @@ void CCore::OnDeviceRender( void )
 
 	if (GetAsyncKeyState(VK_F5) & 0x1)
 	{
-		CLogFile::Print("Gonna play");
 		CAudio *pAudio = new CAudio("http://mafia2-online.com/sounds/cat.mp3", true, true);
 		if (pAudio && pAudio->Load())
 		{
-			CLogFile::Print("Playing");
 			pCore->GetAudioManager()->Add(pAudio);
 			pAudio->Play();
-			CLogFile::Print("Played");
 		}
 	}
 
