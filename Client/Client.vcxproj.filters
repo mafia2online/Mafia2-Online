@@ -782,6 +782,9 @@
     <ClInclude Include="CNameTag.h">
       <Filter>Header Files\Client\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="C3DTextLabelNatives.h">
+      <Filter>Header Files\Client\Scripting\Natives</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -1260,6 +1263,9 @@
     </ClCompile>
     <ClCompile Include="CNameTag.cpp">
       <Filter>Source Files\Client\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="C3DTextLabelNatives.cpp">
+      <Filter>Source Files\Client\Scripting\Natives</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

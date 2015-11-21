@@ -147,6 +147,12 @@
     <Filter Include="Source Files\Server\Network\Peds">
       <UniqueIdentifier>{1daa6651-c2c3-4433-aefd-5c547f727a0e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Server\Network\3DTextLabels">
+      <UniqueIdentifier>{8420ccd3-f126-4453-b34e-4e9fbf4bbbbd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Server\Network\C3DTextLabels">
+      <UniqueIdentifier>{9c567236-6c2a-4955-ba33-ea364fe2234b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -412,6 +418,15 @@
     </ClCompile>
     <ClCompile Include="..\Shared\Scripting\Natives\CSharedPlayerNatives.cpp">
       <Filter>Source Files\Server\Shared\Scripting\Natives</Filter>
+    </ClCompile>
+    <ClCompile Include="C3DTextLabelNatives.cpp">
+      <Filter>Source Files\Server\Scripting\Natives</Filter>
+    </ClCompile>
+    <ClCompile Include="C3DTextLabelManager.cpp">
+      <Filter>Source Files\Server\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="C3DTextLabel.cpp">
+      <Filter>Source Files\Server\Network\C3DTextLabels</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -735,6 +750,18 @@
     </ClInclude>
     <ClInclude Include="..\Shared\Scripting\Natives\CSharedPlayerNatives.h">
       <Filter>Header Files\Server\Shared\Scripting\Natives</Filter>
+    </ClInclude>
+    <ClInclude Include="C3DTextLabelNatives.h">
+      <Filter>Header Files\Server\Scripting\Natives</Filter>
+    </ClInclude>
+    <ClInclude Include="C3DTextLabelManager.h">
+      <Filter>Header Files\Server\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="CMultiplayer3DTextLabelManager.h">
+      <Filter>Header Files\Server\Modules\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="C3DTextLabel.h">
+      <Filter>Header Files\Server\Network\3DTextLabels</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

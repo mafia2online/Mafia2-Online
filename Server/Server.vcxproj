@@ -147,6 +147,9 @@
     <ClCompile Include="..\Shared\Threading\CThread.cpp" />
     <ClCompile Include="..\Shared\Timers\CTimer.cpp" />
     <ClCompile Include="..\Shared\Timers\CTimerManager.cpp" />
+    <ClCompile Include="C3DTextLabel.cpp" />
+    <ClCompile Include="C3DTextLabelManager.cpp" />
+    <ClCompile Include="C3DTextLabelNatives.cpp" />
     <ClCompile Include="CBanManager.cpp" />
     <ClCompile Include="CBanNatives.cpp" />
     <ClCompile Include="CBlip.cpp" />
@@ -249,6 +252,9 @@
     <ClInclude Include="..\Shared\Threading\CThread.h" />
     <ClInclude Include="..\Shared\Timers\CTimer.h" />
     <ClInclude Include="..\Shared\Timers\CTimerManager.h" />
+    <ClInclude Include="C3DTextLabel.h" />
+    <ClInclude Include="C3DTextLabelManager.h" />
+    <ClInclude Include="C3DTextLabelNatives.h" />
     <ClInclude Include="CBanManager.h" />
     <ClInclude Include="CBanNatives.h" />
     <ClInclude Include="CBlip.h" />
@@ -259,6 +265,7 @@
     <ClInclude Include="CMasterList.h" />
     <ClInclude Include="CModule.h" />
     <ClInclude Include="CModuleManager.h" />
+    <ClInclude Include="CMultiplayer3DTextLabelManager.h" />
     <ClInclude Include="CNetworkModule.h" />
     <ClInclude Include="CNetworkPlayer.h" />
     <ClInclude Include="CNetworkRPC.h" />

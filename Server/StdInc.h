@@ -35,6 +35,7 @@
 #include	"Interfaces/CMultiplayerBlipManager.h"
 #include	"Interfaces/CMultiplayerVehicleManager.h"
 #include	"Interfaces/CMultiplayerPlayerManager.h"
+#include	"CMultiplayer3DTextLabelManager.h"
 #include	"Interfaces/CCoreInterface.h"
 
 // Shared Library
@@ -82,6 +83,7 @@
 #include	"../Shared/Scripting/Natives/CHashNatives.h"
 
 // Server Scripting Natives
+#include	"C3DTextLabelNatives.h"
 #include	"CServerNatives.h"
 #include	"CPlayerNatives.h"
 #include	"CBanNatives.h"
@@ -101,6 +103,7 @@
 #include	"CNetworkPlayer.h"
 #include	"CPlayerManager.h"
 #include	"CBlipManager.h"
+#include	"C3DTextLabelManager.h"
 #include	"CNetworkRPC.h"
 #include	"CNetworkModule.h"
 #include	"CMasterList.h"
