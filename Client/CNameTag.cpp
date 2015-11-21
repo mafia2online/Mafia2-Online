@@ -9,6 +9,9 @@
 
 #include	"StdInc.h"
 
+#define RENDER_DISTANCE_PLAYER	35.0
+#define RENDER_DISTANCE_PED		10.0
+
 extern	CCore			* pCore;
 
 CNameTag::CNameTag(void)
@@ -27,6 +30,10 @@ void CNameTag::All(void)
 
 void CNameTag::Ped(void)
 {
+	// Get the player position
+	CVector3 localPos;
+	pCore->GetPlayerManager()->GetLocalPlayer()->GetPosition(&localPos);
+
 	// Loop through all peds
 	for (EntityId i = 0; i < MAX_PEDS; i++)
 	{
@@ -36,16 +43,31 @@ void CNameTag::Ped(void)
 			// Get a pointer to the ped
 			CPed * pPed = pCore->GetPedManager()->Get(i);
 
-			// Is ped valid?
-			if (pPed)
+			// Is ped valid and we want to show nick ?
+			if (pPed && pPed->GetShowNick() == true)
 			{
-				// Do we want to show this ped's nick ?
-				if (pPed->GetShowNick() == true){
-					CVector3 vecPos, vecScreen;
-					pPed->GetPed()->GetPosition(&vecPos);
+				CVector3 vecPos, vecScreen;
 
+				// Get the ped's position
+				pPed->GetPed()->GetPosition(&vecPos);
+
+				// Get the distance
+				float fDistance = Math::GetDistanceBetweenPoints(localPos, vecPos);
+
+				// Make sure distance is ok
+				if (fDistance <= RENDER_DISTANCE_PED){
+					// The text to display
+					String text = String("%s", pPed->GetNick().Get());
+
+					// Little edit to fix text position...
+					vecPos.fZ += 1.95f;
+					vecPos.fX += 0.17f;
+
+					// Convert position to screen position
 					pCore->GetGraphics()->WorldToScreen(vecPos, &vecScreen);
-					pCore->GetGraphics()->DrawText(vecScreen.fX, vecScreen.fY, 0xFFFFFFFF, 1.0f, "tahoma-bold", true, "%s", pPed->GetNick().Get());
+
+					// Draw the tag
+					pCore->GetGraphics()->DrawText(vecScreen.fX, vecScreen.fY, 0xFFFFFFFF, 1.0f, "tahoma-bold", true, text.Get());
 				}
 			}
 		}
@@ -62,6 +84,7 @@ void CNameTag::Player(void)
 			CVector3 localPos;
 			pCore->GetPlayerManager()->GetLocalPlayer()->GetPosition(&localPos);
 
+			// Get distant player pos
 			CVector3 playerPos;
 			pCore->GetPlayerManager()->Get(i)->GetPosition(&playerPos);
 
@@ -72,7 +95,7 @@ void CNameTag::Player(void)
 			CVector3 vecScreen;
 			pCore->GetGraphics()->WorldToScreen(playerPos, &vecScreen);
 
-			if (fDistance <= 35.0){
+			if (fDistance <= RENDER_DISTANCE_PLAYER){
 
 				// We get the remote player name and ID
 				String strNick = pCore->GetPlayerManager()->Get(i)->GetNick();
