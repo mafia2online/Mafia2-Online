@@ -28,6 +28,13 @@ private:
 	static	SQInteger		IsInVehicle( SQVM * pVM );
 	static	SQInteger		GetVehicle( SQVM * pVM );
 
+	static SQInteger		SetDrunkLevel( SQVM *pVM );
+	static SQInteger		GetDrunkLevel(SQVM *pVM);
+	static SQInteger		ResetDrunkLevel(SQVM *pVM);
+
+	static SQInteger		SetWantedLevel(SQVM *pVM);
+	static SQInteger		GetWantedLevel(SQVM *pVM);
+
 public:
 
 	static	void			Register( CScriptingManager * pScriptingManager );
