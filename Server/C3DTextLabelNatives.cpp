@@ -33,7 +33,7 @@ SQInteger C3DTextLabelNatives::Create(SQVM *pVM)
 	sq_getfloat(pVM, -2, &posZ);
 	sq_getfloat(pVM, -1, &drawDistance);
 
-	sq_pushinteger(pVM, pCore->Get3DTextLabelManager()->Add(text, color, posX, posY, posY, drawDistance));
+	sq_pushinteger(pVM, pCore->Get3DTextLabelManager()->Add(text, color, posX, posY, posZ, drawDistance));
 	return (1);
 }
 
