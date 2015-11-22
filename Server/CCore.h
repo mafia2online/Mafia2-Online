@@ -36,7 +36,6 @@ private:
 	CResourceManager											* m_pResourceManager;
 	CWebRequest													* m_pWebRequest;
 	CPedManager													* m_pPedManager;
-	C3DTextLabelManager											* m_p3DTextManager;
 
 	String														m_strGameModeText;
 	String														m_strMapName;
@@ -77,7 +76,6 @@ public:
 	CResourceManager				* GetResourceManager		( void ) { return m_pResourceManager; }
 	CWebRequest						* GetWebRequest				( void ) { return m_pWebRequest; }
 	CPedManager						* GetPedManager				( void ) { return m_pPedManager; }
-	C3DTextLabelManager				* Get3DTextLabelManager		( void ) { return m_p3DTextManager; }
 
 	void							SetGameModeText				( const char * szGameModeText ) { m_strGameModeText.Set ( szGameModeText ); }
 	const char						* GetGameModeText			( void ) { return m_strGameModeText.Get(); }

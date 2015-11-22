@@ -11,16 +11,24 @@
 
 extern	CCore			* pCore;
 
-C3DTextLabel::C3DTextLabel(float fX, float fY, float fZ, String text, int color, float distance)
+C3DTextLabel::C3DTextLabel(void)
+{
+
+}
+
+bool	C3DTextLabel::Init(EntityId serverID/*, float fX, float fY, float fZ, String text, int color, float distance*/)
 {
 	// Save the variables
-	m_fX = fX;
+	m_serverID = serverID;
+	/*m_fX = fX;
 	m_fY = fY;
 	m_fZ = fZ;
 	m_text = text;
 	m_color = color;
-	m_distance = distance;
+	m_distance = distance;*/
 	m_active = false;
+
+	return (true);
 }
 
 C3DTextLabel::~C3DTextLabel(void)

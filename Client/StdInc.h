@@ -201,7 +201,6 @@
 #include <Scripting/Natives/CHashNatives.h>
 
 // Client scripting natives
-#include "C3DTextLabelNatives.h"
 #include "CGraphicsNatives.h"
 #include "CPlayerNatives.h"
 #include "CGUINatives.h"
@@ -217,9 +216,6 @@
 
 // Audio
 #include "CAudioManager.h"
-
-// 3DTextLabel
-#include "C3DTextLabelManager.h"
 
 // Project
 #include "CMafia.h"
