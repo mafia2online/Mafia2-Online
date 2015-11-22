@@ -105,12 +105,20 @@ void RepairVehicle( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 		// We store the current lightState
 		int oldState = pCore->GetVehicleManager()->Get(vehicleId)->GetLightState();
 
+		// We store the current moveSpeed
+		float speed = pCore->GetVehicleManager()->Get(vehicleId)->GetSpeed();
+
 		// Repair the vehicle
 		pCore->GetVehicleManager()->Get( vehicleId )->Repair();
 
 		// We restore the light state
 		if (oldState){
 			pCore->GetVehicleManager()->Get(vehicleId)->SetLightState(true);
+		}
+
+		// We restore the speed
+		if (speed > 0.0){
+			pCore->GetVehicleManager()->Get(vehicleId)->SetSpeed(speed);
 		}
 	}
 }
