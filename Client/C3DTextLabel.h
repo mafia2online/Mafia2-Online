@@ -13,6 +13,7 @@ class C3DTextLabel
 {
 private:
 
+	EntityId				m_serverID;
 	float					m_fX;
 	float					m_fY;
 	float					m_fZ;
@@ -24,9 +25,10 @@ private:
 
 public:
 
-							C3DTextLabel				(float fX, float fY, float fZ, String text, int color, float distance);
+							C3DTextLabel				(void);
 							~C3DTextLabel				(void);
 
+	bool					Init						(EntityId serverID/*, float fX, float fY, float fZ, String text, int color, float distance*/);
 	bool					IsActive					(void) { return m_active; }
 	void					SetActive					(bool active) { m_active = active; }
 
