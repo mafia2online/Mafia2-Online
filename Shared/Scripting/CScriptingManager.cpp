@@ -61,7 +61,6 @@ CScriptingManager::CScriptingManager( void )
 	// Register http natives
 	CHttpNatives::Register( this );
 
-	C3DTextLabelNatives::Register( this );
 #endif
 
 	// Register player natives

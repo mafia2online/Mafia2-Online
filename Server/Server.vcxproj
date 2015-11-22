@@ -147,9 +147,6 @@
     <ClCompile Include="..\Shared\Threading\CThread.cpp" />
     <ClCompile Include="..\Shared\Timers\CTimer.cpp" />
     <ClCompile Include="..\Shared\Timers\CTimerManager.cpp" />
-    <ClCompile Include="C3DTextLabel.cpp" />
-    <ClCompile Include="C3DTextLabelManager.cpp" />
-    <ClCompile Include="C3DTextLabelNatives.cpp" />
     <ClCompile Include="CBanManager.cpp" />
     <ClCompile Include="CBanNatives.cpp" />
     <ClCompile Include="CBlip.cpp" />

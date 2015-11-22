@@ -782,12 +782,6 @@
     <ClInclude Include="CNameTag.h">
       <Filter>Header Files\Client\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="C3DTextLabelManager.h">
-      <Filter>Header Files\Client\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="C3DTextLabel.h">
-      <Filter>Header Files\Client\Graphics</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -1265,12 +1259,6 @@
       <Filter>Source Files\Client\Audio</Filter>
     </ClCompile>
     <ClCompile Include="CNameTag.cpp">
-      <Filter>Source Files\Client\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="C3DTextLabelManager.cpp">
-      <Filter>Source Files\Client\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="C3DTextLabel.cpp">
       <Filter>Source Files\Client\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
