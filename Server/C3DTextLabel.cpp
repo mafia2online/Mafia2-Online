@@ -31,25 +31,19 @@ void C3DTextLabel::AddForPlayer(EntityId playerId)
 	RakNet::BitStream pBitStream;
 
 	// Write the textLabel id
-	pBitStream.WriteCompressed(m_text);
+	pBitStream.WriteCompressed(m_textID);
 
-	// Write the x coordinate
-	pBitStream.Write(m_position.fX);
-
-	// Write the y coordinate
-	pBitStream.Write(m_position.fY);
-
-	// Write the z coordinate
-	pBitStream.Write(m_position.fZ);
+	// Write the coordinates
+	pBitStream.WriteVector(m_position.fX, m_position.fY, m_position.fZ);
 
 	// Write the color
 	pBitStream.WriteCompressed(m_color);
 
 	// Write the drawDistance
-	pBitStream.WriteCompressed(m_distance);
+	pBitStream.Write(m_distance);
 
 	// Write the text
-	pBitStream.WriteCompressed(m_text);
+	pBitStream.Write(m_text);
 
 	// Send it to the player
 	pCore->GetNetworkModule()->Call(RPC_NEWTEXTLABEL, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, playerId, false);

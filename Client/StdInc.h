@@ -215,9 +215,13 @@
 #include "CClientScriptGUIManager.h"
 #include "CClientScriptingManager.h"
 
+// Audio
+#include "CAudioManager.h"
+
+// 3DTextLabel
+#include "C3DTextLabelManager.h"
+
 // Project
 #include "CMafia.h"
 #include "CCore.h"
-
-// Audio
-#include "CAudioManager.h"
+// DON'T PUT ANYTHING BESIDE OF THIS - LAST LINE IS CCORE.H
