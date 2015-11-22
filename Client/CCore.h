@@ -35,7 +35,6 @@ private:
 	CModelManager					* m_pModelManager;
 	CNameTag						* m_pNameTag;
 	CAudioManager					* m_pAudioManager;
-	C3DTextLabelManager				* m_p3DTextLabelManager;
 
 	HWND							m_gameHwnd;
 
@@ -104,7 +103,6 @@ public:
 	CStreamer						* GetStreamer				( void ) { return m_pStreamer; }
 	CModelManager					* GetModelManager			( void ) { return m_pModelManager; }
 	CAudioManager					* GetAudioManager			( void ) { return m_pAudioManager; }
-	C3DTextLabelManager				* Get3DTextLabelManager		( void ) { return m_p3DTextLabelManager; }
 
 	void							SetGameHwnd					( HWND hwnd ) { m_gameHwnd = hwnd; }
 	HWND							GetGameHwnd					( void ) { return m_gameHwnd; }
