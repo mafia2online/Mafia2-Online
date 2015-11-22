@@ -793,6 +793,58 @@ void DeleteFile( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 	}
 }
 
+void NewTextLabel(RakNet::BitStream * pBitStream, RakNet::Packet * pPacket)
+{
+	// Read the textID
+	EntityId m_textID;
+	pBitStream->ReadCompressed(m_textID);
+
+	// Read the coordinates
+	CVector3 pos;
+	pBitStream->ReadVector(pos.fX, pos.fY, pos.fZ);
+
+	// Read the color
+	int m_color;
+	pBitStream->ReadCompressed(m_color);
+
+	// Read the draw distance
+	float drawDistance;
+	pBitStream->Read(drawDistance);
+
+	// Read the text
+	RakNet::RakString string;
+	String text;
+
+	pBitStream->Read(string);
+	text.Set(string);
+
+	// Create the 3DTextLabel
+	if (pCore->Get3DTextLabelManager()->Add(m_textID, pos.fX, pos.fY, pos.fZ, text, m_color, drawDistance) == true){
+		CLogFile::Printf("Created textLabel id %d coordinates %f %f %f color %d draw distance %f text %s", m_textID, pos.fX, pos.fY, pos.fZ, m_color, drawDistance, text.Get());
+	}
+	else {
+		CLogFile::Printf("Unable to create the textLabel #%d", m_textID);
+	}
+	CLogFile::Print("NewTextLabel-7");
+}
+
+void RemoveTextLabel(RakNet::BitStream * pBitStream, RakNet::Packet * pPacket)
+{
+	// Read the textID
+	EntityId textID;
+	pBitStream->ReadCompressed( textID );
+
+	// Delete the 3DTextLabel
+	if (pCore->Get3DTextLabelManager()->Remove(textID) == true){
+		CLogFile::Printf("Removed textLabel id %d", textID);
+	}
+	else {
+		CLogFile::Printf("Unable to remove the textLabel #%d", textID);
+	}
+	
+
+}
+
 void TriggerEvent( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 {
 	CSquirrelArguments * pArgs = new CSquirrelArguments( pBitStream );
@@ -846,6 +898,8 @@ void CNetworkRPC::Register( RakNet::RPC4 * pRPC )
 	pRPC->RegisterFunction( RPC_MOVETODRIVER, MoveToDriver );
 	pRPC->RegisterFunction( RPC_NEWFILE, NewFile );
 	pRPC->RegisterFunction( RPC_DELETEFILE, DeleteFile );
+	pRPC->RegisterFunction( RPC_NEWTEXTLABEL, NewTextLabel );
+	pRPC->RegisterFunction( RPC_REMOVETEXTLABEL, RemoveTextLabel );
 
 	// Scripting
 	pRPC->RegisterFunction( RPC_TRIGGEREVENT, TriggerEvent );
@@ -886,6 +940,8 @@ void CNetworkRPC::Unregister( RakNet::RPC4 * pRPC )
 	pRPC->UnregisterFunction( RPC_MOVETODRIVER );
 	pRPC->UnregisterFunction( RPC_NEWFILE );
 	pRPC->UnregisterFunction( RPC_DELETEFILE );
+	pRPC->UnregisterFunction(RPC_NEWTEXTLABEL);
+	pRPC->UnregisterFunction(RPC_REMOVETEXTLABEL);
 
 	// Scripting
 	pRPC->UnregisterFunction( RPC_TRIGGEREVENT );
