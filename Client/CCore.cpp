@@ -537,6 +537,10 @@ void CCore::OnDeviceRender( void )
 		m_pGraphics->DrawText( (m_pGUI->GetCEGUI()->GetResolution().fX - 275), 30, 0xFFFFFFFF, 1.0f, "tahoma-bold", false, DT_NOCLIP, CNetworkStats::GetStats().Get() );
 	}
 
+	// Render the nameTags
+	if (m_pNameTag)
+		m_pNameTag->All();
+
 	// Is the scripting manager active?
 	if( m_pClientScriptingManager && !m_pGUI->GetMainMenu()->IsVisible () )
 	{
@@ -545,9 +549,6 @@ void CCore::OnDeviceRender( void )
 		m_pClientScriptingManager->GetEvents()->Call( "onClientFrameRender", &pArguments );
 		pArguments.clear();
 	}
-
-	if (m_pNameTag)
-		m_pNameTag->All();
 
 	// Restore the old device state
 	if ( pStateBlock )
