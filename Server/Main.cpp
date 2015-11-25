@@ -275,7 +275,7 @@ int main( int argc, char * argv[] )
 		}
 
 		// Sleep
-		Sleep( 5 );
+		//Sleep( 5 );
 	}
 
 	// Shutdown
