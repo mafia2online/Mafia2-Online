@@ -62,7 +62,6 @@ void CMasterList::WorkerThread ( CThread * pCreator )
 				// Have we just added the server?
 				if( pMasterList->GetThreadState() == E_STATE_ADD )
 				{
-					CLogFile::Printf("%s", pPacket->data);
 					CLogFile::Print ( "[network] Server successfully posted to the masterlist." );
 
 					// Set the thread state
@@ -118,9 +117,4 @@ CMasterList::~CMasterList( void )
 
 	// Delete the TCP interface
 	SAFE_DELETE( tcp );
-}
-
-// todo: REMOVE
-void CMasterList::Pulse ( void )
-{
 }

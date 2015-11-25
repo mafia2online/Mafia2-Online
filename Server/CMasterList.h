@@ -39,8 +39,6 @@ public:
 									CMasterList							( void );
 									~CMasterList						( void );
 
-	void							Pulse								( void );
-
 	void							SetServerPort						( unsigned short usPort ) { m_usPort = usPort; }
 	unsigned short					GetServerPort						( void ) { return m_usPort; }
 	void							SetThreadState						( eThreadState state ) { m_threadState = state; }
