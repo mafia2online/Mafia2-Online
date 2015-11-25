@@ -261,10 +261,6 @@ void CCore::Pulse( void )
 	if( m_pModuleManager )
 		m_pModuleManager->Pulse ();
 
-	// Pulse the masterlist
-	if( m_pMasterList )
-		m_pMasterList->Pulse ();
-
 	// Call the pulse event
 	if( m_pEvents )
 		m_pEvents->Call( "onServerPulse" );
