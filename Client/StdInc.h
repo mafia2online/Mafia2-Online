@@ -207,6 +207,7 @@
 #include "CGameNatives.h"
 #include "CCameraNatives.h"
 #include "CClientNatives.h"
+#include "CAudioNatives.h"
 
 // Clientscripts
 #include <Timers/CTimer.h>
