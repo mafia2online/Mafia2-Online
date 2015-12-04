@@ -222,7 +222,7 @@ void TogglePlayerControls( RakNet::BitStream * pBitStream, RakNet::Packet * pPac
 	if( pCore->GetPlayerManager()->GetLocalPlayer() )
 	{
 		// Toggle the controls
-		pCore->GetPlayerManager()->GetLocalPlayer()->LockControls( !bToggle );
+		pCore->GetPlayerManager()->GetLocalPlayer()->LockControls( bToggle );
 	}
 }
 
