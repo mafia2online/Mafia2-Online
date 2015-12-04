@@ -114,6 +114,7 @@ Section "Install"
 	
 	File ..\Binary\release\m2mp.exe
 	File ..\Binary\release\m2mp.dll
+	File ..\Binary\bass.dll
 	File ..\Binary\crashprt\crashrpt_lang.ini
 	File ..\Binary\crashprt\CrashRpt1401.dll
 	File ..\Binary\crashprt\CrashSender1401.exe
