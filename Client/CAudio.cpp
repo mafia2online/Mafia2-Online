@@ -66,6 +66,13 @@ bool CAudio::Play()
 	return false;
 }
 
+void CAudio::Stop()
+{
+	// Do we have a valid channel?
+	if (m_dwChannel != 0)
+		BASS_ChannelStop(m_dwChannel);
+}
+
 void CAudio::Pause()
 {
 	// Do we have a valid channel?
@@ -98,13 +105,6 @@ bool CAudio::IsStalled()
 		return (BASS_ChannelIsActive(m_dwChannel) == BASS_ACTIVE_STALLED);
 
 	return false;
-}
-
-void CAudio::Stop()
-{
-	// Do we have a valid channel?
-	if (m_dwChannel != 0)
-		BASS_ChannelStop(m_dwChannel);
 }
 
 void CAudio::SetUsePosition(bool bUsePosition)
