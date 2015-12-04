@@ -11,45 +11,83 @@
 
 extern	CCore			* pCore;
 
-SQInteger CAudioNatives::Create(SQVM *pVM)
+_MEMBER_FUNCTION_IMPL(Audio, constructor);
+_MEMBER_FUNCTION_IMPL(Audio, deleteSound);
+_MEMBER_FUNCTION_IMPL(Audio, play);
+_MEMBER_FUNCTION_IMPL(Audio, stop);
+_MEMBER_FUNCTION_IMPL(Audio, pause);
+_MEMBER_FUNCTION_IMPL(Audio, isStarted);
+_MEMBER_FUNCTION_IMPL(Audio, isPlaying);
+_MEMBER_FUNCTION_IMPL(Audio, isPaused);
+_MEMBER_FUNCTION_IMPL(Audio, setVolume);
+_MEMBER_FUNCTION_IMPL(Audio, getVolume);
+_MEMBER_FUNCTION_IMPL(Audio, resetVolume);
+_MEMBER_FUNCTION_IMPL(Audio, getLength);
+
+_BEGIN_CLASS(Audio)
+_MEMBER_FUNCTION(Audio, constructor, 3, "bbs")
+_MEMBER_FUNCTION(Audio, deleteSound, 0, NULL)
+_MEMBER_FUNCTION(Audio, play, 0, NULL)
+_MEMBER_FUNCTION(Audio, stop, 0, NULL)
+_MEMBER_FUNCTION(Audio, pause, 0, NULL)
+_MEMBER_FUNCTION(Audio, isStarted, 0, NULL)
+_MEMBER_FUNCTION(Audio, isPlaying, 0, NULL)
+_MEMBER_FUNCTION(Audio, isPaused, 0, NULL)
+_MEMBER_FUNCTION(Audio, setVolume, 1, "f")
+_MEMBER_FUNCTION(Audio, getVolume, 0, NULL)
+_MEMBER_FUNCTION(Audio, resetVolume, 0, NULL)
+_MEMBER_FUNCTION(Audio, getLength, 0, NULL)
+_END_CLASS(Audio)
+
+void CAudioNatives::Register(CScriptingManager * pScriptingManager)
+{
+	pScriptingManager->NewClass(&_CLASS_DECL(Audio));
+}
+
+_MEMBER_FUNCTION_RELEASE_HOOK(Audio)
+{
+	return 1;
+}
+
+_MEMBER_FUNCTION_IMPL(Audio, constructor)
 {
 	// Required variables
-	SQBool		bReplay;
-	SQBool		bOnlineStream;
-	const char	* streamName;
+	SQBool sqbIsOnlineStream;
+	SQBool sqbReplay;
+	const char * szSoundName;
 
 	// Fetch values
-	sq_getbool(pVM, -1, &bReplay);
-	sq_getbool(pVM, -2, &bOnlineStream);
-	sq_getstring(pVM, -3, &streamName);
+	sq_getbool(pVM, -3, &sqbIsOnlineStream);
+	bool bIsOnlineStream = (sqbIsOnlineStream != 0);
+	sq_getbool(pVM, -2, &sqbReplay);
+	bool bReplay = (sqbReplay != 0);
+	sq_getstring(pVM, -1, &szSoundName);
 
-	// Is local file stream ?
-	if (bOnlineStream == false){
-		streamName = SharedUtility::GetAbsolutePath("files\\%s", streamName);
-	}
+	// Local stream ?
+	if (!bIsOnlineStream)
+		szSoundName = SharedUtility::GetAbsolutePath("files\\%s", szSoundName);
 
-	// Declare audio
-	CAudio *pAudio = new CAudio(streamName, bReplay, bOnlineStream);
+	// Construct
+	CAudio * pAudio = new CAudio(szSoundName, bReplay, bIsOnlineStream);
 
-	// Succeed ?
-	if (!pAudio || !pAudio->Load() || SQ_FAILED(sq_setinstance(pVM, pAudio))){
-		CLogFile::Printf("Failed to load audio from file %s", streamName);
+	// Init
+	if (!pAudio || !pAudio->Load() || SQ_FAILED(sq_setinstance(pVM, pAudio)))
+	{
+		CLogFile::Printf("Failed to load Audio from file %s", szSoundName);
 		SAFE_DELETE(pAudio);
 		sq_pushbool(pVM, false);
 		return 1;
 	}
 
-	// Add to manager
+	// Add and return
 	pCore->GetAudioManager()->Add(pAudio);
-
-	// Return
 	sq_pushbool(pVM, true);
-	return (1);
+	return 1;
 }
 
-SQInteger CAudioNatives::Delete(SQVM * pVM)
+_MEMBER_FUNCTION_IMPL(Audio, deleteSound)
 {
-	// Get the audio instance
+	// Get the Audio instance
 	CAudio * pAudio = sq_getinstance<CAudio *>(pVM);
 
 	// Is valid instance ?
@@ -66,79 +104,118 @@ SQInteger CAudioNatives::Delete(SQVM * pVM)
 	return (1);
 }
 
-SQInteger CAudioNatives::Play(SQVM * pVM)
+void PlayAudioThread(LPVOID lpAudio)
 {
-	CAudio * pAudio = sq_getinstance<CAudio *>(pVM);
-	if (!pAudio)
-	{
-		sq_pushbool(pVM, false);
-		return 1;
-	}
-	sq_pushbool(pVM, pAudio->Play());
-	return 1;
+	((CAudio*)lpAudio)->Play();
 }
 
-SQInteger CAudioNatives::Stop(SQVM * pVM)
+void StopAudioThread(LPVOID lpAudio)
 {
+	((CAudio*)lpAudio)->Stop();
+}
+
+_MEMBER_FUNCTION_IMPL(Audio, play)
+{
+	// Get the Audio instance
 	CAudio * pAudio = sq_getinstance<CAudio *>(pVM);
+
+	// Is valid instance ?
 	if (!pAudio)
 	{
 		sq_pushbool(pVM, false);
 		return 1;
 	}
-	pAudio->Stop();
+	// Play and return
+	CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)PlayAudioThread, pAudio, NULL, NULL);
 	sq_pushbool(pVM, true);
 	return 1;
 }
 
-SQInteger CAudioNatives::Pause(SQVM * pVM)
+_MEMBER_FUNCTION_IMPL(Audio, stop)
 {
+	// Get the Audio instance
 	CAudio * pAudio = sq_getinstance<CAudio *>(pVM);
+
+	// Is valid instance ?
 	if (!pAudio)
 	{
 		sq_pushbool(pVM, false);
 		return 1;
 	}
+
+	// Stop and return
+	CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)StopAudioThread, pAudio, NULL, NULL);
+	sq_pushbool(pVM, true);
+	return 1;
+}
+
+_MEMBER_FUNCTION_IMPL(Audio, pause)
+{
+	// Get the Audio instance
+	CAudio * pAudio = sq_getinstance<CAudio *>(pVM);
+
+	// Is valid instance ?
+	if (!pAudio)
+	{
+		sq_pushbool(pVM, false);
+		return 1;
+	}
+
+	// Pause and return
 	pAudio->Pause();
 	sq_pushbool(pVM, true);
 	return 1;
 }
 
-SQInteger CAudioNatives::GetVolume(SQVM * pVM)
+_MEMBER_FUNCTION_IMPL(Audio, getVolume)
 {
+	// Get the Audio instance
 	CAudio * pAudio = sq_getinstance<CAudio *>(pVM);
+
+	// Is valid instance ?
 	if (!pAudio)
 	{
 		sq_pushbool(pVM, false);
 		return 1;
 	}
+
+	// Get and return volume
 	sq_pushfloat(pVM, pAudio->GetVolume());
 	return 1;
 }
 
-SQInteger CAudioNatives::ResetVolume(SQVM * pVM)
+_MEMBER_FUNCTION_IMPL(Audio, resetVolume)
 {
+	// Get the Audio instance
 	CAudio * pAudio = sq_getinstance<CAudio *>(pVM);
+
+	// Is valid instance ?
 	if (!pAudio)
 	{
 		sq_pushbool(pVM, false);
 		return 1;
 	}
 
+	// Reset and return
 	pAudio->Unmute();
 
 	sq_pushbool(pVM, true);
 	return 1;
 }
 
-SQInteger CAudioNatives::SetVolume(SQVM * pVM)
+_MEMBER_FUNCTION_IMPL(Audio, setVolume)
 {
+	// Get the Audio instnace
 	CAudio * pAudio = sq_getinstance<CAudio *>(pVM);
+
+	// Is valid instance ?
 	if (!pAudio)
 	{
 		sq_pushbool(pVM, false);
 		return 1;
 	}
+
+	// Get, set and return
 	float fVolume;
 	sq_getfloat(pVM, 2, &fVolume);
 
@@ -148,14 +225,70 @@ SQInteger CAudioNatives::SetVolume(SQVM * pVM)
 	return 1;
 }
 
-void CAudioNatives::Register(CScriptingManager * pScriptingManager)
+_MEMBER_FUNCTION_IMPL(Audio, isStarted)
 {
-	pScriptingManager->RegisterFunction("createAudio", Create, 3, "sbb");
-	pScriptingManager->RegisterFunction("deleteAudio", Delete, 0, NULL);
-	pScriptingManager->RegisterFunction("playAudio", Play, 0, NULL);
-	pScriptingManager->RegisterFunction("stopAudio", Stop, 0, NULL);
-	pScriptingManager->RegisterFunction("pauseAudio", Pause, 0, NULL);
-	pScriptingManager->RegisterFunction("setVolume", SetVolume, 1, "f");
-	pScriptingManager->RegisterFunction("getVolume", GetVolume, 0, NULL);
-	pScriptingManager->RegisterFunction("resetVolume", ResetVolume, 0, NULL);
+	// Get the Audio instance
+	CAudio * pAudio = sq_getinstance<CAudio *>(pVM);
+
+	// Is valid instance ?
+	if (!pAudio)
+	{
+		sq_pushbool(pVM, false);
+		return 1;
+	}
+
+	// Return
+	sq_pushbool(pVM, (pAudio->IsPlaying() || pAudio->IsStalled()));
+	return 1;
+}
+
+_MEMBER_FUNCTION_IMPL(Audio, isPlaying)
+{
+	// Get the Audio instance
+	CAudio * pAudio = sq_getinstance<CAudio *>(pVM);
+
+	// Is valid instance ?
+	if (!pAudio)
+	{
+		sq_pushbool(pVM, false);
+		return 1;
+	}
+
+	// Return
+	sq_pushbool(pVM, pAudio->IsPlaying());
+	return 1;
+}
+
+_MEMBER_FUNCTION_IMPL(Audio, isPaused)
+{
+	// Get the Audio instance
+	CAudio * pAudio = sq_getinstance<CAudio *>(pVM);
+
+	// Is valid instance ?
+	if (!pAudio)
+	{
+		sq_pushbool(pVM, false);
+		return 1;
+	}
+
+	// Return
+	sq_pushbool(pVM, pAudio->IsPaused());
+	return 1;
+}
+
+_MEMBER_FUNCTION_IMPL(Audio, getLength)
+{
+	// Get the Audio instance
+	CAudio * pAudio = sq_getinstance<CAudio *>(pVM);
+
+	// Is valid instance ?
+	if (!pAudio)
+	{
+		sq_pushbool(pVM, false);
+		return 1;
+	}
+
+	// Return
+	sq_pushinteger(pVM, pAudio->GetLength());
+	return 1;
 }
