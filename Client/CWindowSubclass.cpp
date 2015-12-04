@@ -54,6 +54,8 @@ LRESULT APIENTRY CWindowSubclass::WndProc_Hook( HWND hWnd, UINT uMsg, WPARAM wPa
 			pArgs.clear();
 		}
 
+		// Unmute audio
+		pCore->GetAudioManager()->UnmuteAll();
 		return true;
 	}
 	else if( !bFocus && pCore->GetGame()->Focused() )
@@ -77,6 +79,8 @@ LRESULT APIENTRY CWindowSubclass::WndProc_Hook( HWND hWnd, UINT uMsg, WPARAM wPa
 			pArgs.clear();
 		}
 
+		// Mute audio
+		pCore->GetAudioManager()->MuteAll();
 		return true;
 	}
 
