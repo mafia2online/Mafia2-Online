@@ -554,6 +554,7 @@ void CM2Vehicle::SetVehiclePart( int iPart, bool bToggle )
 	}
 }
 
+//Todo: fix with CM2Enums::eVehiclePart
 bool CM2Vehicle::GetVehiclePart( int iPart )
 {
 	// Is the vehicle valid?
