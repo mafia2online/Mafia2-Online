@@ -492,16 +492,6 @@ void CCore::OnDeviceRender( void )
 		m_bRenderNetworkStats = !m_bRenderNetworkStats;
 	}
 
-	if (GetAsyncKeyState(VK_F5) & 0x1)
-	{
-		CAudio *pAudio = new CAudio("http://mafia2-online.com/sounds/cat.mp3", true, true);
-		if (pAudio && pAudio->Load())
-		{
-			pCore->GetAudioManager()->Add(pAudio);
-			pAudio->Play();
-		}
-	}
-
 	// Was the screenshot key pressed?
 	if( GetAsyncKeyState( VK_F12 ) & 0x1 )
 	{
@@ -595,25 +585,7 @@ void CCore::OnGameProcess( void )
 	// Pulse the video settings
 	CM2VideoSettings::Pulse ();
 
-#ifdef DEBUG
-	if( GetAsyncKeyState( VK_F3 ) & 0x1 )
-	{
-		CVector3 vecPos;
-		m_pPlayerManager->GetLocalPlayer()->GetPosition(&vecPos);
-
-		m_pPlayerManager->Add(10, "Player", 0xFFFFFFFF);
-		m_pPlayerManager->Get(10)->Create();
-		m_pPlayerManager->Get(10)->Teleport(vecPos);
-
-		pCore->GetChat()->AddDebugMessage ( "Ped: 0x%p", m_pPlayerManager->Get(10)->GetPlayerPed()->GetEntity() );
-	}
-
-	if( GetAsyncKeyState( VK_F7 ) & 0x1 )
-	{
-		m_pPlayerManager->GetLocalPlayer()->GetVehicle()->GetVehicle()->SetLightState ( !m_pPlayerManager->GetLocalPlayer()->GetVehicle()->GetVehicle()->GetLightState() );
-		//pCore->GetChat()->AddDebugMessage ( "Player: 0x%p", m_pPlayerManager->GetLocalPlayer()->GetPlayerPed()->GetPed() );
-	}
-
+	// DEBUG
 	if( GetAsyncKeyState( VK_F8 ) & 0x1 )
 	{
 		CVector3 vecPos;
@@ -626,21 +598,7 @@ void CCore::OnGameProcess( void )
 		pCore->GetChat()->AddDebugMessage ( "Ped: 0x%p", pPlayerPed->GetPed() );
 	}
 
-	if ( pPlayerPed ) {
-		//memcpy ( &pPlayerPed->GetPed()->m_playerControls, &m_pPlayerManager->GetLocalPlayer()->GetPlayerPed()->GetPed()->m_playerControls, sizeof ( C_PlayerControls ) );
-
-		C_PlayerControls local = m_pPlayerManager->GetLocalPlayer()->GetPlayerPed()->GetPed()->m_playerControls;
-		C_PlayerControls remote = pPlayerPed->GetPed()->m_playerControls;
-
-		// TODO: LOOK INTO THIS
-		remote.m_ePlayerMovementState = local.m_ePlayerMovementState;
-		remote.m_byteKeyboardFlags = local.m_byteKeyboardFlags;
-		remote.m_bIsMoving = local.m_bIsMoving;
-		remote.m_bIsCrouching = local.m_bIsCrouching;
-		remote.m_byteUnknown1 = local.m_byteUnknown1;
-	}
-
-	/*if( GetAsyncKeyState( VK_F9 ) & 0x1 )
+	if( GetAsyncKeyState( VK_F9 ) & 0x1 )
 	{
 		//float steer = m_pPlayerManager->GetLocalPlayer()->GetPlayerPed()->GetCurrentVehicle()->m_fSteer;
 		CNetworkVehicle * net_vehicle = m_pVehicleManager->Get(0);
@@ -658,8 +616,8 @@ void CCore::OnGameProcess( void )
 		_asm call dwFunc;
 
 		//pCore->GetChat()->AddDebugMessage ( "Steer: %f, Added: %f", vehicle->m_fSteer, vehicle->m_fAddedSteer );
-	}*/
-#endif
+	}
+	// END DEBUG
 
 	// Call the script event
 	if( m_pClientScriptingManager )
