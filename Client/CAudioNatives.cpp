@@ -64,8 +64,9 @@ _MEMBER_FUNCTION_IMPL(Audio, constructor)
 	sq_getstring(pVM, -1, &szSoundName);
 
 	// Local stream ?
-	if (!bIsOnlineStream)
+	if (!bIsOnlineStream) {
 		szSoundName = SharedUtility::GetAbsolutePath("files\\%s", szSoundName);
+	}
 
 	// Construct
 	CAudio * pAudio = new CAudio(szSoundName, bReplay, bIsOnlineStream);
