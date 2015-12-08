@@ -12,11 +12,6 @@
 
 extern	CCore		* pCore;
 
-// Enums:
-//	852007 - CAR_BREAK_IN
-//	852055 - DOOR_OPEN
-//	852054 - DOOR_KICK
-
 bool CM2EntityMessage::HandleEntityEvent( M2EntityMessage * pMessage )
 {
 	// Is the event invalid?
@@ -42,34 +37,72 @@ bool CM2EntityMessage::HandleEntityEvent( M2EntityMessage * pMessage )
 	{
 		switch( pMessage->m_dwMessage )
 		{
-			/*
-		case 852055:
+			
+		case M2Enums::ON_USE_DOOR:
 			{
 				pCore->GetChat()->AddDebugMessage( "DOOR_OPEN (0x%p, %d, %d)", pMessage, pMessage->m_dwSenderGUID, pMessage->m_dwReceiveGUID );
 				break;
 			}
 
-		case 852054:
+		case M2Enums::ON_DOOR_KICK:
 			{
 				pCore->GetChat()->AddDebugMessage( "DOOR_KICK (0x%p, %d, %d)", pMessage, pMessage->m_dwSenderGUID, pMessage->m_dwReceiveGUID );
 				break;
 			}
-			*/
+		
+		case M2Enums::ON_SHOOT:
+			{
+				pCore->GetChat()->AddDebugMessage("ON_SHOOT (0x%p, %d, %d)", pMessage, pMessage->m_dwSenderGUID, pMessage->m_dwReceiveGUID);
+				break;
+			}
+
+		case M2Enums::ON_SHOT_HIT_ENTITY:
+			{
+				pCore->GetChat()->AddDebugMessage("ON_SHOT_HIT_ENTITY (0x%p, %d, %d)", pMessage, pMessage->m_dwSenderGUID, pMessage->m_dwReceiveGUID);
+				break;
+			}
+
+		case M2Enums::ON_DAMAGE:
+			{
+				pCore->GetChat()->AddDebugMessage("ON_DAMAGE (0x%p, %d, %d)", pMessage, pMessage->m_dwSenderGUID, pMessage->m_dwReceiveGUID);
+				break;
+			}
+
+		case M2Enums::ON_AIM_ENTER:
+			{
+				pCore->GetChat()->AddDebugMessage("ON_AIM_ENTER (0x%p, %d, %d)", pMessage, pMessage->m_dwSenderGUID, pMessage->m_dwReceiveGUID);
+				break;
+			}
+
+		case M2Enums::ON_AIM_LEAVE:
+			{
+				pCore->GetChat()->AddDebugMessage("ON_AIM_LEAVE (0x%p, %d, %d)", pMessage, pMessage->m_dwSenderGUID, pMessage->m_dwReceiveGUID);
+				break;
+			}
+
+		case M2Enums::CAR_BREAK_IN:
+			{
+				pCore->GetChat()->AddDebugMessage("CAR_BREAK_IN (0x%p, %d, %d)", pMessage, pMessage->m_dwSenderGUID, pMessage->m_dwReceiveGUID);
+				break;
+			}
 
 		case M2Enums::ON_VEHICLE_START_ENTER:
 			{
+				// Call our event
 				pLocalPlayer->OnEnterVehicle();
 				break;
 			}
 
 		case M2Enums::ON_VEHICLE_ENTER:
 			{
+				// Call our event
 				pLocalPlayer->OnEnterVehicleDone();
 				break;
 			}
 
 		case M2Enums::ON_VEHICLE_EXIT:
 			{
+				// Call our event
 				pLocalPlayer->OnLeaveVehicle();
 				break;
 			}
@@ -79,7 +112,7 @@ bool CM2EntityMessage::HandleEntityEvent( M2EntityMessage * pMessage )
 				// Find the killer from the ped guid
 				CNetworkPlayer * pKiller = pCore->GetPlayerManager()->GetFromGameGUID( pMessage->M2HumanDeathMessage__dwKillerGUID );
 
-				// Call the event
+				// Call our event
 				pLocalPlayer->OnDeath( pKiller );
 				break;
 			}
