@@ -499,6 +499,8 @@ void CCore::OnDeviceRender( void )
 		{
 			pCore->GetAudioManager()->Add(pAudio);
 			pAudio->Play();
+			pCore->GetAudioManager()->RemoveAll();
+			SAFE_DELETE(pAudio);
 		}
 	}
 
