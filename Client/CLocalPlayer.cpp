@@ -181,7 +181,7 @@ void CLocalPlayer::SendOnFootSync( void )
 	// Get the look at position
 	pCore->GetCamera()->GetLookAt ( &onFootSync.m_vecLookAt );
 
-	// Get the aim state
+	// Get the aiming state
 	onFootSync.m_bAiming = m_pPlayerPed->IsAiming ();
 
 	// Get the shooting state
