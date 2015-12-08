@@ -28,10 +28,6 @@ bool CM2EntityMessage::HandleEntityEvent( M2EntityMessage * pMessage )
 	// Get the localplayer ped
 	CM2Ped * pLocalPed = pLocalPlayer->GetPlayerPed();
 
-#ifdef _DEBUG
-	//	pCore->GetChat()->AddDebugMessage( "CM2EntityMessage::HandleEntityEvent( %d ) - Sender: %d (LocalPlayer: %s), Receiver: %d (LocalPlayer: %s)", pMessage->m_dwMessage, pMessage->m_dwSenderGUID, (pMessage->m_dwSenderGUID == pLocalPed->GetGUID() ? "Yes" : "No"), pMessage->m_dwReceiveGUID, (pMessage->m_dwReceiveGUID == pLocalPed->GetGUID() ? "Yes" : "No") );
-#endif
-
 	// Is this event for the localplayer?
 	if( pMessage->m_dwReceiveGUID == pLocalPed->GetGUID() )
 	{
@@ -40,7 +36,7 @@ bool CM2EntityMessage::HandleEntityEvent( M2EntityMessage * pMessage )
 			
 		case M2Enums::ON_USE_DOOR:
 			{
-				pCore->GetChat()->AddDebugMessage( "DOOR_OPEN (0x%p, %d, %d)", pMessage, pMessage->m_dwSenderGUID, pMessage->m_dwReceiveGUID );
+				pCore->GetChat()->AddDebugMessage( "DOOR_OPEN (0x%p, %d, %d, %d, %d)", pMessage, pMessage->m_dwSenderGUID, pMessage->m_dwReceiveGUID, pMessage->m_dwUnknown1, pMessage->m_dwUnknown2 );
 				break;
 			}
 
@@ -85,6 +81,18 @@ bool CM2EntityMessage::HandleEntityEvent( M2EntityMessage * pMessage )
 				pCore->GetChat()->AddDebugMessage("CAR_BREAK_IN (0x%p, %d, %d)", pMessage, pMessage->m_dwSenderGUID, pMessage->m_dwReceiveGUID);
 				break;
 			}
+
+		case M2Enums::ON_ACTION:
+		{
+			pCore->GetChat()->AddDebugMessage("ON_ACTION (0x%p, %d, %d)", pMessage, pMessage->m_dwSenderGUID, pMessage->m_dwReceiveGUID);
+			break;
+		}
+
+		default:
+		{
+			pCore->GetChat()->AddDebugMessage("Unhandled entity message %d", pMessage->m_dwMessage);
+			break;
+		}
 
 		case M2Enums::ON_VEHICLE_START_ENTER:
 			{

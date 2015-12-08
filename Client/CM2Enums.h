@@ -28,7 +28,8 @@ namespace M2Enums
 		ON_AIM_LEAVE			= 852042,	// Stop aiming
 		ON_ACTION				= 851987,	// Using the action (e) key
 		ON_USE_PHONE			= 851989,	// Using a phone
-		CAR_BREAK_IN			= 852007	// When break a car and enter - To be tested
+		CAR_BREAK_IN			= 852007,	// When break a car and enter - To be tested
+		ON_TRIGGER_ENGINE		= 851972	// Trigger on/off engine - To be tested
 	};
 
 	enum eMoveType
