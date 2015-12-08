@@ -475,162 +475,161 @@ bool CChat::HandleKeyDown(CGUIKeyEventArgs keyArgs)
 	// Switch the scancode
 	switch (keyArgs.scancode)
 	{
-	case CGUIKeys::ArrowUp:
-	{
-		// Is the input visible?
-		if (IsInputVisible())
+		case CGUIKeys::ArrowUp:
 		{
-			// Move the history up
-			HistoryUp();
+			// Is the input visible?
+			if (IsInputVisible())
+			{
+				// Move the history up
+				HistoryUp();
+			}
+			break;
 		}
-		break;
-	}
 
-	case CGUIKeys::ArrowDown:
-	{
-		// Is the input visible?
-		if (IsInputVisible())
+		case CGUIKeys::ArrowDown:
 		{
-			// Move the history down
-			HistoryDown();
+			// Is the input visible?
+			if (IsInputVisible())
+			{
+				// Move the history down
+				HistoryDown();
+			}
+			break;
 		}
-		break;
-	}
 
-	case CGUIKeys::ArrowLeft:
-	{
-		// Is the input visible?
-		if (IsInputVisible())
+		case CGUIKeys::ArrowLeft:
 		{
-			// todo: move cursor position left
-			if (m_iTextCursorPosition > 0)
+			// Is the input visible?
+			if (IsInputVisible())
+			{
+				// todo: move cursor position left
+				if (m_iTextCursorPosition > 0)
+				{
+					if (keyArgs.sysKeys & CEGUI::SystemKey::Shift)
+						++m_iCountSelectedChars;
+					else
+						m_iCountSelectedChars = 0;
+
+					--m_iTextCursorPosition;
+				}
+			}
+			break;
+		}
+
+		case CGUIKeys::ArrowRight:
+		{
+			// Is the input visible?
+			if (IsInputVisible())
+			{
+				// todo: move cursor position right
+				if (m_iTextCursorPosition < m_strInput.GetLength())
+				{
+					if (keyArgs.sysKeys & CEGUI::SystemKey::Shift)
+						--m_iCountSelectedChars;
+					else
+						m_iCountSelectedChars = 0;
+
+					++m_iTextCursorPosition;
+				}
+			}
+			break;
+		}
+
+		case CGUIKeys::End:
+		{
+			// Is the input visible?
+			if (IsInputVisible())
 			{
 				if (keyArgs.sysKeys & CEGUI::SystemKey::Shift)
-					++m_iCountSelectedChars;
+				{
+					m_iCountSelectedChars = m_iTextCursorPosition - m_strInput.GetLength();
+				}
 				else
+				{
 					m_iCountSelectedChars = 0;
-
-				--m_iTextCursorPosition;
+				}
+				// Move cursor to end
+				m_iTextCursorPosition = m_strInput.GetLength();
 			}
+			break;
 		}
-		break;
-	}
 
-	case CGUIKeys::ArrowRight:
-	{
-		// Is the input visible?
-		if (IsInputVisible())
+		case CGUIKeys::Home:
 		{
-			// todo: move cursor position right
-			if (m_iTextCursorPosition < m_strInput.GetLength())
+			// Is the input visible?
+			if (IsInputVisible())
 			{
 				if (keyArgs.sysKeys & CEGUI::SystemKey::Shift)
-					--m_iCountSelectedChars;
+				{
+					m_iCountSelectedChars = m_iTextCursorPosition;
+				}
 				else
+				{
 					m_iCountSelectedChars = 0;
-
-				++m_iTextCursorPosition;
+				}
+				// Move cursor to start
+				m_iTextCursorPosition = 0;
 			}
+			break;
 		}
-		break;
-	}
 
-	case CGUIKeys::End:
-	{
-		// Is the input visible?
-		if (IsInputVisible())
+		/*case CGUIKeys::C:
+		case CGUIKeys::X:
 		{
-			if (keyArgs.sysKeys & CEGUI::SystemKey::Shift)
-			{
-				m_iCountSelectedChars = m_iTextCursorPosition - m_strInput.GetLength();
-			}
-			else
-			{
-				m_iCountSelectedChars = 0;
-			}
-			// Move cursor to end
-			m_iTextCursorPosition = m_strInput.GetLength();
-		}
-		break;
-	}
-
-	case CGUIKeys::Home:
-	{
-		// Is the input visible?
-		if (IsInputVisible())
+		// Is the control key down and the input is visible?
+		if( (keyArgs.sysKeys & CEGUI::SystemKey::Control) && IsInputVisible () )
 		{
-			if (keyArgs.sysKeys & CEGUI::SystemKey::Shift)
-			{
-				m_iCountSelectedChars = m_iTextCursorPosition;
-			}
-			else
-			{
-				m_iCountSelectedChars = 0;
-			}
-			// Move cursor to start
-			m_iTextCursorPosition = 0;
+		// Do we have select text?
+		if( m_iCountSelectedChars != 0 )
+		{
+		int start = m_iTextCursorPosition + ( m_iCountSelectedChars > 0 ? 0 : m_iCountSelectedChars );
+		SharedUtility::SetClipboardText( m_strInput.substr(start, abs(m_iCountSelectedChars)), abs(m_iCountSelectedChars) + 1);
+
+		// Are we cutting data?
+		if ( keyArgs.scancode == CGUIKeys::X )
+		{
+		// Clear the current input text
+		ClearInputText ();
+		m_iTextCursorPosition = start;
+		}
+		}
 		}
 		break;
-	}
+		}
 
-	/*case CGUIKeys::C:
-	case CGUIKeys::X:
-	{
-	// Is the control key down and the input is visible?
-	if( (keyArgs.sysKeys & CEGUI::SystemKey::Control) && IsInputVisible () )
-	{
-	// Do we have select text?
-	if( m_iCountSelectedChars != 0 )
-	{
-	int start = m_iTextCursorPosition + ( m_iCountSelectedChars > 0 ? 0 : m_iCountSelectedChars );
-	SharedUtility::SetClipboardText( m_strInput.substr(start, abs(m_iCountSelectedChars)), abs(m_iCountSelectedChars) + 1);
+		case CGUIKeys::V:
+		{
+		// Is the control key down and the input is visible?
+		if( (keyArgs.sysKeys & CEGUI::SystemKey::Control) && IsInputVisible () )
+		{
+		// Get data from the clipboard
+		const char * szClipboard = SharedUtility::GetClipboardText ();
 
-	// Are we cutting data?
-	if ( keyArgs.scancode == CGUIKeys::X )
-	{
-	// Clear the current input text
-	ClearInputText ();
-	m_iTextCursorPosition = start;
-	}
-	}
-	}
-	break;
-	}
+		// Do we have data in the clipboard?
+		if ( strlen ( szClipboard ) )
+		{
+		//Clear the select text
+		ClearSelectText();
 
-	case CGUIKeys::V:
-	{
-	// Is the control key down and the input is visible?
-	if( (keyArgs.sysKeys & CEGUI::SystemKey::Control) && IsInputVisible () )
-	{
-	// Get data from the clipboard
-	const char * szClipboard = SharedUtility::GetClipboardText ();
+		// Update the input
+		m_strInput.Insert(m_iTextCursorPosition, strlen( szClipboard ));
+		m_iTextCursorPosition = m_iTextCursorPosition + strlen (szClipboard) - 1;
+		}
+		}
+		break;
+		}
 
-	// Do we have data in the clipboard?
-	if ( strlen ( szClipboard ) )
-	{
-	//Clear the select text
-	ClearSelectText();
-
-	// Update the input
-	m_strInput.Insert(m_iTextCursorPosition, strlen( szClipboard ));
-	m_iTextCursorPosition = m_iTextCursorPosition + strlen (szClipboard) - 1;
+		case CGUIKeys::A:
+		{
+			// Is the control key down and the input is visible?
+			if ((keyArgs.sysKeys & CEGUI::SystemKey::Control) && IsInputVisible())
+			{
+				m_iTextCursorPosition = m_strInput.GetLength();
+				m_iCountSelectedChars = -1 * m_strInput.GetLength();
+			}
+			break;
+		}*/
 	}
-	}
-	break;
-	}
-
-	case CGUIKeys::A:
-	{
-	// Is the control key down and the input is visible?
-	if( (keyArgs.sysKeys & CEGUI::SystemKey::Control) && IsInputVisible () )
-	{
-	m_iTextCursorPosition = m_strInput.GetLength();
-	m_iCountSelectedChars = -1 * m_strInput.GetLength();
-	}
-	break;
-	}*/
-	}
-
 	return true;
 }
 
