@@ -5,12 +5,14 @@
 * File       : CGame.cpp
 * Developers : AaronLad <aaron@m2-multiplayer.com>
 *			   h0pk1nz <> (Vehicle Model names)
+*			   Tyldar <tyldar@mafia2-online.com> (Weapon names)
 *
 ***************************************************************/
 
 #include	"CGame.h"
 #include	"../CLogFile.h"
 #include	"../Math/CMaths.h"
+#include	"../SharedUtility.h"
 
 static char * PlayerModels[][2] =
 {
@@ -108,6 +110,78 @@ static char * VehicleWheelModels[] =
 	"wheel_civ11",		"wheel_sport",		"wheel_jeep",		"wheel_hank_f",		"wheel_truckciv01",
 	"wheel_truckciv02",	
 };
+
+static char * WeaponName[] = 
+{
+	"Model 12 Revolver", "Mauser C96", "Colt M1911A1", "Colt M1911 Special", "Model 19 Revolver", "MK2 Frag Grenade",
+	"Remington Model 870 Field gun", "M3 Grease Gun", "MP40", "	Thompson 1928", "M1A1 Thompson", "Beretta Model 38A",
+	"MG42", "M1 Garand", "Kar98k", "Molotov Cocktail"
+};
+
+static int WeaponNameID[] = 
+{
+	2, 3, 4, 5, 6, 7, 8, 9,
+	10, 11, 12, 13, 14, 15,
+	17, 21
+};
+
+unsigned int Game::GetWeaponIdFromName(String strName)
+{
+	int foundId = -1;
+	int found = 0;
+
+	// Name not in array ?
+	for (unsigned int i = 0; i < sizeof(WeaponName) / sizeof(*WeaponName); i++)
+	{
+		if (!strName.Compare(WeaponName[i])){
+			found = 1;
+			break;
+		}
+	}
+	if (found == 0)
+		return (0);
+
+	// Loop each name
+	for (unsigned int i = 0; i < sizeof(WeaponName); i++)
+	{
+		// Name match ?
+		if (!strName.Compare(WeaponName[i])){
+			foundId = i;
+			break;
+		}
+	}
+
+	// Found weapon ?
+	if (foundId == -1)
+		return (0);
+	else {
+		return (WeaponNameID[foundId]);
+	}
+}
+
+String Game::GetWeaponNameFromId(unsigned int uiModel)
+{
+	String retn = "";
+	int found = -1;
+
+	// Loop each weapon
+	for (unsigned int i = 0; i < sizeof(WeaponNameID); i++)
+	{
+		// ID match ?
+		if (WeaponNameID[i] == uiModel){
+			found = i;
+			break;
+		}
+	}
+
+	// Found weapon ?
+	if (found == -1)
+		return (retn);
+	else {
+		retn.Set(WeaponName[found]);
+		return (retn);
+	}
+}
 
 unsigned int Game::GetIdFromPlayerModel( String strModel )
 {

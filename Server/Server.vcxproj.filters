@@ -150,6 +150,12 @@
     <Filter Include="Header Files\Server\Network\3DTextLabels">
       <UniqueIdentifier>{8420ccd3-f126-4453-b34e-4e9fbf4bbbbd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Server\Shared\Game">
+      <UniqueIdentifier>{990bfec7-cb12-4fbe-8e15-6ae894cfcfbc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Server\Shared\Game">
+      <UniqueIdentifier>{97f0631a-5f09-4c08-8481-aa0f9139dd56}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -415,6 +421,9 @@
     </ClCompile>
     <ClCompile Include="..\Shared\Scripting\Natives\CSharedPlayerNatives.cpp">
       <Filter>Source Files\Server\Shared\Scripting\Natives</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Shared\Game\CGame.cpp">
+      <Filter>Source Files\Server\Shared\Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -750,6 +759,9 @@
     </ClInclude>
     <ClInclude Include="C3DTextLabel.h">
       <Filter>Header Files\Server\Network\3DTextLabels</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\Game\CGame.h">
+      <Filter>Header Files\Server\Shared\Game</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
