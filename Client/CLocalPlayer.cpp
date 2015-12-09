@@ -75,6 +75,16 @@ void CLocalPlayer::Pulse( void )
 	memcpy ( &m_vecLastGoodPosition, &vecCurrentPosition, sizeof ( CVector3 ) );
 	memcpy ( &m_vecLastGoodRotation, &vecCurrentRotation, sizeof ( CVector3 ) );
 
+	// Is player flagged as shooting ?
+	if (pCore->GetPlayerManager()->GetLocalPlayer()->IsShooting())
+	{
+		// Store mouse controls
+		C_PlayerControls playerControls = m_pPlayerPed->GetPed()->m_playerControls;
+		if (pCore->GetPlayerManager()->GetLocalPlayer()->GetPlayerPed()->GetSelectedWeapon() == 0 || playerControls.m_byteUnknown1 != 3){
+			pCore->GetPlayerManager()->GetLocalPlayer()->SetShooting(false);
+		}
+	}
+
 	// Do we need a full sync?
 	if( IsFullSyncNeeded () )
 	{
@@ -185,7 +195,7 @@ void CLocalPlayer::SendOnFootSync( void )
 	onFootSync.m_bAiming = m_pPlayerPed->IsAiming ();
 
 	// Get the shooting state
-	onFootSync.m_bShooting = m_pPlayerPed->IsShooting ();
+	onFootSync.m_bShooting = pCore->GetPlayerManager()->GetLocalPlayer()->IsShooting();
 
 	// Get the crouching state
 	onFootSync.m_bCrouching = m_pPlayerPed->IsCrouching();
