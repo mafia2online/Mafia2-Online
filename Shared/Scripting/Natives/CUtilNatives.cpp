@@ -48,7 +48,10 @@ SQInteger CUtilNatives::WeaponIdFromName(SQVM * pVM)
 	// Get and store name
 	const SQChar * weaponName;
 	sq_getstring(pVM, -1, &weaponName);
-	String name = weaponName;
+
+	// Set the name
+	String name;
+	name.Set(weaponName);
 
 	// Get id
 	int Id;
