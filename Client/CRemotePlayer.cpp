@@ -143,18 +143,18 @@ void CRemotePlayer::StoreOnFootSync( OnFootSync * onFootSync )
 		// Are we aiming ?
 		if (onFootSync->m_bAiming)
 		{
-			pCore->GetChat()->AddDebugMessage("Remote entity is aiming");//Todo: remove after debug
-			// Update their aim
-			UpdateAim(onFootSync->m_bAiming);
+			//pCore->GetChat()->AddDebugMessage("Remote entity is aiming");//Todo: remove after debug
 		}
+		// Update their aim
+		UpdateAim(onFootSync->m_bAiming);
 
 		// Are we shooting?
 		if (onFootSync->m_bShooting)
 		{
-			pCore->GetChat()->AddDebugMessage("Remote entity is shooting");//Todo: remove after debug
-			// Update their shot
-			UpdateShot(onFootSync->m_bShooting);
+			//pCore->GetChat()->AddDebugMessage("Remote entity is shooting");//Todo: remove after debug
 		}
+		// Update their shot
+		UpdateShot(onFootSync->m_bShooting);
 
 		// Has the player model changed?
 		if( GetModel() != onFootSync->m_uiModelIndex )
