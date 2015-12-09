@@ -23,4 +23,7 @@ namespace Game
 	unsigned int		GetIdFromVehicleWheelModel		( String strModel );
 	String				GetVehicleWheelModelFromId		( unsigned int uiModel );
 
+	unsigned int		GetWeaponIdFromName				( String strName );
+	String				GetWeaponNameFromId				( unsigned int uiModel );
+
 };
