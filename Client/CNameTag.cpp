@@ -70,45 +70,34 @@ void CNameTag::PrePed(void)
 
 void CNameTag::Ped(void)
 {
-	// Get the player position
 	CVector3 localPos;
-	pCore->GetPlayerManager()->GetLocalPlayer()->GetPosition(&localPos);
+	CVector3 pedPos;
+	float fDistance;
+	float fScale = 1.0;
+	float dimensionHeight;
+	float dimensionWidth;
+	String text;
+	int	healthWidth;
 
-	// Loop through all peds
 	for (EntityId i = 0; i < MAX_PEDS; i++)
 	{
-		// Is the current ped valid?
-		if (pCore->GetPedManager()->IsActive(i) && pCore->GetPedManager()->Get(i)->GetPed()->IsOnScreen())
+		if (pCore->GetPedManager()->IsActive(i) && pCore->GetPedManager()->Get(i)->GetPed() && pCore->GetPedManager()->Get(i)->GetPed()->IsOnScreen())
 		{
-			// Get a pointer to the ped
-			CPed * pPed = pCore->GetPedManager()->Get(i);
+			pCore->GetPlayerManager()->GetLocalPlayer()->GetPosition(&localPos);
+			pCore->GetPedManager()->Get(i)->GetPed()->GetPosition(&pedPos);
+			fDistance = Math::GetDistanceBetweenPoints(localPos, pedPos);
 
-			// Is ped valid and we want to show nick ?
-			if (pPed && pPed->GetShowNick() == true)
+			if (fDistance <= RENDER_DISTANCE_PED)
 			{
-				CVector3 vecPos, vecScreen;
+				// Thing to draw
+				text = String("%s", pCore->GetPedManager()->Get(i)->GetNick().Get());
 
-				// Get the ped's position
-				pPed->GetPed()->GetPosition(&vecPos);
+				// Dimensions
+				dimensionWidth = pCore->GetGraphics()->GetTextWidth(text, fScale, "tahoma-bold");
+				dimensionHeight = pCore->GetGraphics()->GetFontHeight(fScale, "tahoma-bold");
 
-				// Get the distance
-				float fDistance = Math::GetDistanceBetweenPoints(localPos, vecPos);
-
-				// Make sure distance is ok
-				if (fDistance <= RENDER_DISTANCE_PED){
-					// The text to display
-					String text = String("%s", pPed->GetNick().Get());
-
-					// Little edit to fix text position...
-					vecPos.fZ += 1.95f;
-					vecPos.fX += 0.17f;
-
-					// Convert position to screen position
-					pCore->GetGraphics()->WorldToScreen(vecPos, &vecScreen);
-
-					// Draw the tag
-					pCore->GetGraphics()->DrawText(vecScreen.fX, vecScreen.fY, 0xFFFFFFFF, 1.0f, "tahoma-bold", true, text.Get());
-				}
+				// We draw texts
+				pCore->GetGraphics()->DrawTextA((m_pedVectors[i].fX - dimensionWidth / 2) + 1, m_pedVectors[i].fY + 1, (DWORD)0xFFFFFFFF, fScale, "tahoma-bold", false, text.Get());
 			}
 		}
 	}
@@ -153,37 +142,38 @@ void CNameTag::Player(void)
 
 	for (EntityId i = 0; i < MAX_PLAYERS; i++)
 	{
-		if (i != pCore->GetPlayerManager()->GetLocalPlayer()->GetId() && pCore->GetPlayerManager()->IsActive(i) && pCore->GetPlayerManager()->Get(i)->GetPlayerPed() && pCore->GetPlayerManager()->Get(i)->GetPlayerPed()->IsOnScreen())
-		{
-			pCore->GetPlayerManager()->Get(i)->GetPosition(&playerPos);
-			pCore->GetPlayerManager()->GetLocalPlayer()->GetPosition(&localPos);
-			fDistance = Math::GetDistanceBetweenPoints(localPos, playerPos);
-
-			if (fDistance <= RENDER_DISTANCE_PLAYER)
+		if (pCore->GetGUI()->GetMainMenu()->IsVisible() == false){
+			if (i != pCore->GetPlayerManager()->GetLocalPlayer()->GetId() && pCore->GetPlayerManager()->IsActive(i) && pCore->GetPlayerManager()->Get(i)->GetPlayerPed() && pCore->GetPlayerManager()->Get(i)->GetPlayerPed()->IsOnScreen())
 			{
-				// Thing to draw
-				text = String("%s (%d)", pCore->GetPlayerManager()->Get(i)->GetNick().Get());
+				pCore->GetPlayerManager()->Get(i)->GetPosition(&playerPos);
+				pCore->GetPlayerManager()->GetLocalPlayer()->GetPosition(&localPos);
+				fDistance = Math::GetDistanceBetweenPoints(localPos, playerPos);
 
-				// Dimensions
-				dimensionWidth = pCore->GetGraphics()->GetTextWidth(text, fScale, "tahoma-bold");
-				dimensionHeight = pCore->GetGraphics()->GetFontHeight(fScale, "tahoma-bold");
+				if (fDistance <= RENDER_DISTANCE_PLAYER)
+				{
+					// Thing to draw
+					text = String("%s (%d)", pCore->GetPlayerManager()->Get(i)->GetNick().Get(), i);
 
-				// Health bar
-				healthWidth = (((Math::Clamp< float >(0.0, pCore->GetPlayerManager()->Get(i)->GetHealth(), 720.0) * 100.0) / 720.0) / 100 * (BOX_WIDTH - 4.0));
+					// Dimensions
+					dimensionWidth = pCore->GetGraphics()->GetTextWidth(text, fScale, "tahoma-bold");
+					dimensionHeight = pCore->GetGraphics()->GetFontHeight(fScale, "tahoma-bold");
 
-				// Colors
-				CColor color1(0, 0, 0, 160);
-				CColor color2(0, 110, 0, 160);
-				CColor color3(0, 255, 0, 160);
+					// Health bar
+					healthWidth = (((Math::Clamp< float >(0.0, pCore->GetPlayerManager()->Get(i)->GetHealth(), 720.0) * 100.0) / 720.0) / 100 * (BOX_WIDTH - 4.0));
 
-				// We draw texts
-				pCore->GetGraphics()->DrawTextA((m_playerVectors[i].fX - dimensionWidth / 2) + 1, m_playerVectors[i].fY + 1, (DWORD)0xFF000000, fScale, "tahoma-bold", false, text.Get());
-				pCore->GetGraphics()->DrawTextA((m_playerVectors[i].fX - dimensionWidth / 2), m_playerVectors[i].fY, pCore->GetPlayerManager()->Get(i)->GetColour(), fScale, "tahoma-bold", false, text.Get());
+					// Colors
+					CColor color1(0, 0, 0, 160);
+					CColor color2(0, 110, 0, 160);
+					CColor color3(0, 255, 0, 160);
 
-				// We draw boxes
-				pCore->GetGraphics()->DrawBox((m_playerVectors[i].fX - (BOX_WIDTH / 2)), (m_playerVectors[i].fY + 16.0), BOX_WIDTH, BOX_HEIGHT, color1.dwHexColor);
-				pCore->GetGraphics()->DrawBox((m_playerVectors[i].fX - (BOX_WIDTH / 2) + 2.0), (m_playerVectors[i].fY + 18.0), (BOX_WIDTH - 4.0), (BOX_HEIGHT - 4.0), color2.dwHexColor);
-				pCore->GetGraphics()->DrawBox((m_playerVectors[i].fX - (BOX_WIDTH / 2) + 2.0), (m_playerVectors[i].fY + 18.0), healthWidth, (BOX_HEIGHT - 4.0), color3.dwHexColor);
+					// We draw texts
+					pCore->GetGraphics()->DrawTextA((m_playerVectors[i].fX - dimensionWidth / 2) + 1, m_playerVectors[i].fY + 1, (DWORD)0xFFFFFFFF, fScale, "tahoma-bold", false, text.Get());
+
+					// We draw boxes
+					pCore->GetGraphics()->DrawBox((m_playerVectors[i].fX - (BOX_WIDTH / 2)), (m_playerVectors[i].fY + 16.0), BOX_WIDTH, BOX_HEIGHT, color1.dwHexColor);
+					pCore->GetGraphics()->DrawBox((m_playerVectors[i].fX - (BOX_WIDTH / 2) + 2.0), (m_playerVectors[i].fY + 18.0), (BOX_WIDTH - 4.0), (BOX_HEIGHT - 4.0), color2.dwHexColor);
+					pCore->GetGraphics()->DrawBox((m_playerVectors[i].fX - (BOX_WIDTH / 2) + 2.0), (m_playerVectors[i].fY + 18.0), healthWidth, (BOX_HEIGHT - 4.0), color3.dwHexColor);
+				}
 			}
 		}
 	}
