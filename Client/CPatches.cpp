@@ -50,6 +50,7 @@ void __declspec( naked ) sub_98B630( void )
 
 			// Handle the water enter with the localplayer
 			pCore->GetPlayerManager()->GetLocalPlayer()->OnEnterWater();
+			pCore->GetChat()->AddDebugMessage("Entered water !");
 		}
 	}
 
@@ -317,8 +318,8 @@ void CPatches::Initialise( void )
 	CPatcher::InstallNopPatch ( 0x4CE577, 0x8 ); // enter vehicle 2
 	CPatcher::InstallNopPatch ( 0x94504F, 0x12 ); // exit vehicle
 
-	// Hook for when vehicle fuel tank is shot - crashy
-	//CPatcher::InstallCallPatch ( 0x4E48F1, (DWORD)C_Vehicle__OnFuelTankShot );
+	// Hook for when vehicle fuel tank is shot - bugged
+	CPatcher::InstallCallPatch ( 0x4E48F1, (DWORD)C_Vehicle__OnFuelTankShot );
 
 	// Disable vehicle exit
 	//CPatcher::InstallNopPatch ( 0x43B85B, 0x13 );
@@ -386,7 +387,7 @@ int CPatches::HOOK_CGame__OnGameInit( lua_State * a1, signed int a2, const PCHAR
 			// Loaded
 			bFirstLoad = false;
 
-			//
+			// Return to init
 			return onGameInit( a1, a2, a3 );
 		}
 
