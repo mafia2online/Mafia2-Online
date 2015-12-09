@@ -339,7 +339,10 @@ void CM2Hud::SetDrunkLevel(int level)
 
 void CM2Hud::SetWantedLevel(int level)
 {
-	CLua::Executef("game.hud:PoliceWantedSet(\"%d\")", level);//Set wanted level
-
-	m_wantedLevel = level;
+	if (m_pHud){
+		if (level == 1 || level == 2){
+			CLua::Executef("game.hud:PoliceWantedSet(\"%d\")", level);//Set wanted level
+			m_wantedLevel = level;
+		}
+	}
 }
