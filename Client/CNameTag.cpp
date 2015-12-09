@@ -16,10 +16,12 @@ extern	CCore			* pCore;
 
 CNameTag::CNameTag(void)
 {
+	// Reset values
 	for (EntityId id; id < MAX_PLAYERS; id++)
 	{
 		m_playerVectors[id] = { 0.0, 0.0, 0.0 };
 	}
+	// Reset values
 	for (EntityId id; id < MAX_PEDS; id++)
 	{
 		m_pedVectors[id] = { 0.0, 0.0, 0.0 };
@@ -44,7 +46,24 @@ void CNameTag::All(void)
 
 void CNameTag::PrePed(void)
 {
+	for (EntityId id = 0; id < MAX_PEDS; id++)
+	{
+		// Is ped connected ?
+		if (pCore->GetPedManager()->IsActive(id))
+		{
+			// Current player position
+			CVector3 pos;
+			pCore->GetPedManager()->Get(id)->GetPed()->GetPosition(&pos);
+			pos.fZ += 2.0;
 
+			// Convert coordinates
+			CVector3 vecScreen;
+			pCore->GetGraphics()->WorldToScreen(pos, &vecScreen);
+
+			// Store values
+			m_pedVectors[id] = vecScreen;
+		}
+	}
 }
 
 void CNameTag::Ped(void)
@@ -95,7 +114,7 @@ void CNameTag::Ped(void)
 
 void CNameTag::PrePlayer(void)
 {
-	for (EntityId id; id < MAX_PLAYERS; id++)
+	for (EntityId id = 0; id < MAX_PLAYERS; id++)
 	{
 		// We don't want localPlayer
 		if (id != pCore->GetPlayerManager()->GetLocalPlayer()->GetId())
