@@ -203,9 +203,6 @@ void CNetworkPlayer::Respawn( void )
 	// Deactivate the player ped
 	m_pPlayerPed->Deactivate();
 
-	// Activate the player ped
-	m_pPlayerPed->Activate();
-
 	// Restore invulnerability
 	m_pPlayerPed->SetInvulnerable( true );
 
@@ -220,6 +217,9 @@ void CNetworkPlayer::Respawn( void )
 
 	// Reset the playerstate
 	m_playerState = ePlayerState::PLAYERSTATE_ONFOOT;
+
+	// Activate the player ped
+	m_pPlayerPed->Activate();
 }
 
 void CNetworkPlayer::SetModel( unsigned int uiModelIndex, bool bRebuild )

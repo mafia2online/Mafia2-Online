@@ -207,7 +207,7 @@ void CLocalPlayer::SendOnFootSync( void )
 	pBitStream.Write( (char *)&onFootSync, sizeof(OnFootSync) );
 
 	// Send the bitstream to the server
-	pCore->GetNetworkModule()->Call( RPC_PLAYER_SYNC, &pBitStream, LOW_PRIORITY, UNRELIABLE_SEQUENCED, true );
+	pCore->GetNetworkModule()->Call( RPC_PLAYER_SYNC, &pBitStream, IMMEDIATE_PRIORITY, UNRELIABLE_SEQUENCED, true );
 }
 
 void CLocalPlayer::SendInVehicleSync( void )
@@ -293,7 +293,7 @@ void CLocalPlayer::SendInVehicleSync( void )
 	pBitStream.Write( (char *)&inVehicleSync, sizeof(InVehicleSync) );
 
 	// Send the bitstream to the server
-	pCore->GetNetworkModule()->Call( RPC_VEHICLE_SYNC, &pBitStream, LOW_PRIORITY, UNRELIABLE_SEQUENCED, true );
+	pCore->GetNetworkModule()->Call(RPC_VEHICLE_SYNC, &pBitStream, IMMEDIATE_PRIORITY, UNRELIABLE_SEQUENCED, true);
 }
 
 void CLocalPlayer::SendPassengerSync( void )
@@ -329,7 +329,7 @@ void CLocalPlayer::SendPassengerSync( void )
 	pBitStream.Write( (char *)&passengerSync, sizeof(InPassengerSync) );
 
 	// Send the bitstream to the server
-	pCore->GetNetworkModule()->Call( RPC_PASSENGER_SYNC, &pBitStream, LOW_PRIORITY, UNRELIABLE_SEQUENCED, true );
+	pCore->GetNetworkModule()->Call(RPC_PASSENGER_SYNC, &pBitStream, IMMEDIATE_PRIORITY, UNRELIABLE_SEQUENCED, true);
 }
 
 void CLocalPlayer::SendUnoccupiedVehicleSync( CNetworkVehicle * pNetworkVehicle )
@@ -339,25 +339,25 @@ void CLocalPlayer::SendUnoccupiedVehicleSync( CNetworkVehicle * pNetworkVehicle 
 		return;
 
 	// Construct a new bitstream
-	//RakNet::BitStream pBitStream;
+	RakNet::BitStream pBitStream;
 
 	// Write the vehicle id
-	//pBitStream.WriteCompressed( pNetworkVehicle->GetId() );
+	pBitStream.WriteCompressed( pNetworkVehicle->GetId() );
 
 	// Construct a new unoccupied vehicle sync structure
-	//UnoccupiedVehicleSync unoccupiedVehicleSync;
+	UnoccupiedVehicleSync unoccupiedVehicleSync;
 
 	// Get the vehicle position
-	//pNetworkVehicle->GetPosition( &unoccupiedVehicleSync.m_vecPosition );
+	pNetworkVehicle->GetPosition( &unoccupiedVehicleSync.m_vecPosition );
 
 	// Get the vehicle rotation
-	//pNetworkVehicle->GetRotation( &unoccupiedVehicleSync.m_quatRotation );
+	pNetworkVehicle->GetRotation( &unoccupiedVehicleSync.m_vecRotation );
 
 	// Write the sync structure to the bitstream
-	//pBitStream.Write( (char *)&unoccupiedVehicleSync, sizeof(UnoccupiedVehicleSync) );
+	pBitStream.Write( (char *)&unoccupiedVehicleSync, sizeof(UnoccupiedVehicleSync) );
 	
 	// Send the bitstream to the server
-	//pCore->GetNetworkModule()->Call( RPC_UNOCCUPIED_SYNC, &pBitStream, LOW_PRIORITY, UNRELIABLE_SEQUENCED, true );
+	pCore->GetNetworkModule()->Call(RPC_UNOCCUPIED_SYNC, &pBitStream, IMMEDIATE_PRIORITY, UNRELIABLE_SEQUENCED, true);
 }
 
 void CLocalPlayer::Ping ( void )
