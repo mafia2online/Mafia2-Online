@@ -5,6 +5,7 @@
 * File       : CGame.cpp
 * Developers : AaronLad <aaron@m2-multiplayer.com>
 *			   h0pk1nz <> (Vehicle Model names)
+*			   Tyldar <tyldar@mafia2-online.com> (Weapon names)
 *
 ***************************************************************/
 
