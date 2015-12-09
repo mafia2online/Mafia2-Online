@@ -816,5 +816,4 @@ namespace SharedUtility
 		closesocket(Socket);
 		return true;
 	}
-
 };

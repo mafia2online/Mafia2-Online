@@ -20,6 +20,7 @@ extern		CCore			* pCore;
 void CSharedPlayerNatives::Register( CScriptingManager * pScriptingManager )
 {
 	pScriptingManager->RegisterFunction( "getPlayerMoney", GetMoney, 1, "i" );
+	pScriptingManager->RegisterFunction( "getPlayers", GetPlayers, 0, NULL);
 }
 
 // getPlayers();
