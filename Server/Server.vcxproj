@@ -122,6 +122,7 @@
     <ClCompile Include="..\Shared\CSQLite.cpp" />
     <ClCompile Include="..\Shared\CString.cpp" />
     <ClCompile Include="..\Shared\CXML.cpp" />
+    <ClCompile Include="..\Shared\Game\CGame.cpp" />
     <ClCompile Include="..\Shared\Linux.cpp" />
     <ClCompile Include="..\Shared\md5\md5.cpp" />
     <ClCompile Include="..\Shared\Network\CHttpClient.cpp" />
@@ -222,6 +223,7 @@
     <ClInclude Include="..\Shared\CString.h" />
     <ClInclude Include="..\Shared\CSync.h" />
     <ClInclude Include="..\Shared\CXML.h" />
+    <ClInclude Include="..\Shared\Game\CGame.h" />
     <ClInclude Include="..\Shared\Linux.h" />
     <ClInclude Include="..\Shared\Math\CMaths.h" />
     <ClInclude Include="..\Shared\Math\CVector3.h" />
