@@ -30,24 +30,31 @@ void CUtilNatives::Register( CScriptingManager * pScriptingManager )
 
 SQInteger CUtilNatives::WeaponNameFromId(SQVM * pVM)
 {
+	// Get and store ID
 	SQInteger id;
 	sq_getinteger(pVM, -1, &id);
 
+	// Get name
 	String name;
 	name = Game::GetWeaponNameFromId(id);
+
+	// Return name
 	sq_pushstring(pVM, name.Get(), name.GetLength());
 	return (true);
 }
 
 SQInteger CUtilNatives::WeaponIdFromName(SQVM * pVM)
 {
+	// Get and store name
 	const SQChar * weaponName;
 	sq_getstring(pVM, -1, &weaponName);
 	String name = weaponName;
 
+	// Get id
 	int Id;
 	Id = Game::GetWeaponIdFromName(name);
 
+	// Return id
 	sq_pushinteger(pVM, Id);
 	return (true);
 }
