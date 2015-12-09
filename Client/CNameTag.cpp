@@ -16,16 +16,35 @@ extern	CCore			* pCore;
 
 CNameTag::CNameTag(void)
 {
+	for (EntityId id; id < MAX_PLAYERS; id++)
+	{
+		m_playerVectors[id] = { 0.0, 0.0, 0.0 };
+	}
+	for (EntityId id; id < MAX_PEDS; id++)
+	{
+		m_pedVectors[id] = { 0.0, 0.0, 0.0 };
+	}
 }
 
 CNameTag::~CNameTag(void)
 {
 }
 
+void CNameTag::PreAll(void)
+{
+	PrePlayer();
+	PrePed();
+}
+
 void CNameTag::All(void)
 {
 	Player();
 	Ped();
+}
+
+void CNameTag::PrePed(void)
+{
+
 }
 
 void CNameTag::Ped(void)
@@ -69,6 +88,32 @@ void CNameTag::Ped(void)
 					// Draw the tag
 					pCore->GetGraphics()->DrawText(vecScreen.fX, vecScreen.fY, 0xFFFFFFFF, 1.0f, "tahoma-bold", true, text.Get());
 				}
+			}
+		}
+	}
+}
+
+void CNameTag::PrePlayer(void)
+{
+	for (EntityId id; id < MAX_PLAYERS; id++)
+	{
+		// We don't want localPlayer
+		if (id != pCore->GetPlayerManager()->GetLocalPlayer()->GetId())
+		{
+			// Is player connected ?
+			if (pCore->GetPlayerManager()->IsActive(id))
+			{
+				// Current player position
+				CVector3 pos;
+				pCore->GetPlayerManager()->Get(id)->GetPosition(&pos);
+				pos.fZ += 2.0;
+				
+				// Convert coordinates
+				CVector3 vecScreen;
+				pCore->GetGraphics()->WorldToScreen(pos, &vecScreen);
+
+				// Store values
+				m_playerVectors[id] = vecScreen;
 			}
 		}
 	}
