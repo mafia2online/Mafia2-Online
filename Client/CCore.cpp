@@ -375,6 +375,11 @@ void CCore::OnDevicePreRender( void )
 	// Call the script event
 	if( m_pClientScriptingManager && !m_pGUI->GetMainMenu()->IsVisible () )
 		m_pClientScriptingManager->GetEvents()->Call( "onClientFramePreRender" );
+
+	// Call the nameTag preRender
+	if (m_pNameTag){
+		m_pNameTag->PreAll();
+	}
 }
 
 void CCore::OnDeviceRender( void )
@@ -442,14 +447,16 @@ void CCore::OnDeviceRender( void )
 		CM2Ped * pPlayerPed = m_pPlayerManager->GetLocalPlayer()->GetPlayerPed();
 		C_PlayerControls playerControls = pPlayerPed->GetPed()->m_playerControls;
 
-		pCore->GetGraphics()->DrawText ( 300, 300, D3DCOLOR_ARGB(255,255,0,0), 1.0f, "tahoma-bold", true, "Is Moving: %s\nMovement State: %d\nModifiers: %d\nMouse Flags: %d\nKeyboard Flags: %d\nIs Aiming: %s\nIs Crouching: %s", 
+		pCore->GetGraphics()->DrawText ( 300, 300, D3DCOLOR_ARGB(255,255,0,0), 1.0f, "tahoma-bold", true, "Is Moving: %s\nMovement State: %d\nModifiers: %d\nMouse Flags: %d\nKeyboard Flags: %d\nIs Aiming: %s\nIs Crouching: %s\nB1 : %d\nB2 : %d", 
 			playerControls.m_bIsMoving ? "Yes" : "No",
 			playerControls.m_ePlayerMovementState, 
 			playerControls.m_byteModifiers, 
 			playerControls.m_byteMouseFlags, 
 			playerControls.m_byteKeyboardFlags, 
 			playerControls.m_bIsAiming ? "Yes" : "No", 
-			playerControls.m_bIsCrouching ? "Yes" : "No" 
+			playerControls.m_bIsCrouching ? "Yes" : "No",
+			playerControls.m_byteUnknown1,
+			playerControls.m_byteUnknown2
 		);
 	}
 

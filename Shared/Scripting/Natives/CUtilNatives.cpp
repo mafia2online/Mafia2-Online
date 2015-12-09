@@ -21,11 +21,45 @@ extern	CCore			* pCore;
 void CUtilNatives::Register( CScriptingManager * pScriptingManager )
 {
 	pScriptingManager->RegisterFunction( "getPlayerIdFromName", PlayerIdFromName, 1, "s" );
-	//pScriptingManager->RegisterFunction( "getWeaponNameFromId", WeaponNameFromId, 1, "i" );
-	//pScriptingManager->RegisterFunction( "getWeaponIdFromName", WeaponIdFromName, 1, "s" );
+	pScriptingManager->RegisterFunction( "getWeaponNameFromId", WeaponNameFromId, 1, "i" );
+	pScriptingManager->RegisterFunction( "getWeaponIdFromName", WeaponIdFromName, 1, "s" );
 	pScriptingManager->RegisterFunction( "toRGBA", ToRGBA, 1, "i" );
 	pScriptingManager->RegisterFunction( "fromRGB", FromRGB, -1, NULL );
 	pScriptingManager->RegisterFunction( "clamp", Clamp, 3, "fff" );
+}
+
+SQInteger CUtilNatives::WeaponNameFromId(SQVM * pVM)
+{
+	// Get and store ID
+	SQInteger id;
+	sq_getinteger(pVM, -1, &id);
+
+	// Get name
+	String name;
+	name = Game::GetWeaponNameFromId(id);
+
+	// Return name
+	sq_pushstring(pVM, name.Get(), name.GetLength());
+	return (true);
+}
+
+SQInteger CUtilNatives::WeaponIdFromName(SQVM * pVM)
+{
+	// Get and store name
+	const SQChar * weaponName;
+	sq_getstring(pVM, -1, &weaponName);
+
+	// Set the name
+	String name;
+	name.Set(weaponName);
+
+	// Get id
+	int Id;
+	Id = Game::GetWeaponIdFromName(name);
+
+	// Return id
+	sq_pushinteger(pVM, Id);
+	return (true);
 }
 
 SQInteger CUtilNatives::PlayerIdFromName( SQVM * pVM )

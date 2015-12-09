@@ -62,6 +62,7 @@
 #include	"../Shared/Timers/CTimerManager.h"
 #include	"../Shared/Network/CNetworkStats.h"
 #include	"../Shared/CXML.h"
+#include	"../Shared/Game/CGame.h"
 
 // RakNet
 #include	"../Libraries/RakNet/Source/RakPeerInterface.h"
