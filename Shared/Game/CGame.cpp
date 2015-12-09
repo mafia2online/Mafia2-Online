@@ -12,6 +12,7 @@
 #include	"CGame.h"
 #include	"../CLogFile.h"
 #include	"../Math/CMaths.h"
+#include	"../SharedUtility.h"
 
 static char * PlayerModels[][2] =
 {
@@ -126,23 +127,35 @@ static int WeaponNameID[] =
 
 unsigned int Game::GetWeaponIdFromName(String strName)
 {
-	int found = -1;
+	int foundId = -1;
+	int found = 0;
+
+	// Name not in array ?
+	for (unsigned int i = 0; i < sizeof(WeaponName) / sizeof(*WeaponName); i++)
+	{
+		if (!strName.Compare(WeaponName[i])){
+			found = 1;
+			break;
+		}
+	}
+	if (found == 0)
+		return (0);
 
 	// Loop each name
 	for (unsigned int i = 0; i < sizeof(WeaponName); i++)
 	{
 		// Name match ?
 		if (!strName.Compare(WeaponName[i])){
-			found = i;
+			foundId = i;
 			break;
 		}
 	}
 
 	// Found weapon ?
-	if (found == -1)
+	if (foundId == -1)
 		return (0);
 	else {
-		return (WeaponNameID[found]);
+		return (WeaponNameID[foundId]);
 	}
 }
 
