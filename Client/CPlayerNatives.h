@@ -35,6 +35,8 @@ private:
 	static SQInteger		SetWantedLevel(SQVM *pVM);
 	static SQInteger		GetWantedLevel(SQVM *pVM);
 
+	static SQInteger		GetMoveState(SQVM *pVM);
+
 public:
 
 	static	void			Register( CScriptingManager * pScriptingManager );
