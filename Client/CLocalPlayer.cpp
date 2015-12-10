@@ -24,6 +24,7 @@ CLocalPlayer::CLocalPlayer( void ) : CNetworkPlayer( true )
 	m_ulSpawnTime = 0;
 	m_ulLastFullSyncTime = 0;
 	m_ulLastPingTime = 0;
+	m_oldMoveState = -1;
 }
 
 CLocalPlayer::~CLocalPlayer( void )
@@ -69,6 +70,24 @@ void CLocalPlayer::Pulse( void )
 
 		// Return so we don't overwrite the last good position with invalid positions
 		return;
+	}
+
+	// Is our move state still the same ?
+	int newState = pCore->GetPlayerManager()->GetLocalPlayer()->GetPlayerPed()->GetPed()->m_playerControls.m_ePlayerMovementState;
+	if (m_oldMoveState != newState)
+	{
+		// Call the event
+		if (m_oldMoveState != -1){
+			CSquirrelArguments pArguments;
+
+			pArguments.push(pCore->GetPlayerManager()->GetLocalPlayer()->GetId());
+			pArguments.push(m_oldMoveState);
+			pArguments.push(newState);
+
+			pCore->GetClientScriptingManager()->GetEvents()->Call("onClientPlayerMoveStateChange", &pArguments);
+		}
+		// Update stored state
+		m_oldMoveState = newState;
 	}
 
 	// Save this current position and rotation
