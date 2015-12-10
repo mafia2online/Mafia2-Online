@@ -72,8 +72,11 @@ void CLocalPlayer::Pulse( void )
 		return;
 	}
 
+	// Store controls
+	C_PlayerControls playerControls = m_pPlayerPed->GetPed()->m_playerControls;
+
 	// Is our move state still the same ?
-	int newState = pCore->GetPlayerManager()->GetLocalPlayer()->GetPlayerPed()->GetPed()->m_playerControls.m_ePlayerMovementState;
+	int newState = playerControls.m_ePlayerMovementState;
 	if (m_oldMoveState != newState)
 	{
 		// Call the event
@@ -98,7 +101,6 @@ void CLocalPlayer::Pulse( void )
 	if (pCore->GetPlayerManager()->GetLocalPlayer()->IsShooting())
 	{
 		// Store mouse controls
-		C_PlayerControls playerControls = m_pPlayerPed->GetPed()->m_playerControls;
 		if (pCore->GetPlayerManager()->GetLocalPlayer()->GetPlayerPed()->GetSelectedWeapon() == 0 || playerControls.m_byteUnknown1 != 3){
 			pCore->GetPlayerManager()->GetLocalPlayer()->SetShooting(false);
 		}
