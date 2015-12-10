@@ -26,6 +26,8 @@ private:
 
 	unsigned long					m_ulLastPingTime;
 
+	int								m_oldMoveState;
+
 public:
 
 									CLocalPlayer							( void );
