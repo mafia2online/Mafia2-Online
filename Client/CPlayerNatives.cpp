@@ -13,6 +13,7 @@ extern	CCore			* pCore;
 
 void CPlayerNatives::Register( CScriptingManager * pScriptingManager )
 {
+	// Functions
 	pScriptingManager->RegisterFunction( "getLocalPlayer", GetLocalPlayer, 0, NULL );
 	pScriptingManager->RegisterFunction( "getPlayerName", GetName, 1, "i" );
 	pScriptingManager->RegisterFunction( "getPlayerPing", GetPing, 1, "i" );
@@ -31,6 +32,50 @@ void CPlayerNatives::Register( CScriptingManager * pScriptingManager )
 	pScriptingManager->RegisterFunction( "resetPlayerDrunkLevel", ResetDrunkLevel, 0, NULL);
 	pScriptingManager->RegisterFunction( "setPlayerWantedLevel", SetWantedLevel, 1, "i");
 	pScriptingManager->RegisterFunction( "getPlayerWantedLevel", GetWantedLevel, 0, NULL);
+	pScriptingManager->RegisterFunction( "getPlayerMoveState", GetMoveState, 1, "i" );
+
+	// Constants
+	pScriptingManager->RegisterConstant("MOVE_STATE_WALK", ePlayerMovementState::E_WALK);
+	pScriptingManager->RegisterConstant("MOVE_STATE_JOGGING", ePlayerMovementState::E_JOG);
+	pScriptingManager->RegisterConstant("MOVE_STATE_SPRINT", ePlayerMovementState::E_SPRINT);
+	pScriptingManager->RegisterConstant("MOVE_STATE_IDLE", ePlayerMovementState::E_IDLE);
+	pScriptingManager->RegisterConstant("MOVE_STATE_STOP", ePlayerMovementState::E_STOPPING);
+}
+
+// getPlayerMoveState(playerid);
+SQInteger CPlayerNatives::GetMoveState(SQVM *pVM)
+{
+	// Get the playerId
+	SQInteger playerId;
+	sq_getinteger(pVM, -1, &playerId);
+
+	// Player control structure
+	C_PlayerControls controls;
+
+	// Is this not the localPlayer ?
+	if (playerId != pCore->GetPlayerManager()->GetLocalPlayer()->GetId())
+	{
+		if (pCore->GetPlayerManager()->Get(playerId))
+		{
+			// Get the controls
+			controls = pCore->GetPlayerManager()->Get(playerId)->GetPlayerPed()->GetPed()->m_playerControls;
+
+			// Return it
+			sq_pushinteger(pVM, controls.m_ePlayerMovementState);
+			return (true);
+		}
+	}
+	else {
+		// Get the controls
+		controls = pCore->GetPlayerManager()->GetLocalPlayer()->GetPlayerPed()->GetPed()->m_playerControls;
+
+		// Return it
+		sq_pushinteger(pVM, controls.m_ePlayerMovementState);
+		return (true);
+	}
+
+	// In case of failure
+	return (false);
 }
 
 // getLocalPlayer();
