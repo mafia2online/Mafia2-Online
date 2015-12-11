@@ -260,7 +260,5 @@ void CKeyBinds::ProcessInput( UINT uMsg, WPARAM wParam, LPARAM lParam )
 		return;
 
 	// Call the keybind handler
-	pCore->GetChat()->AddDebugMessage("PreTrigger");
 	pKeyBind->Trigger();
-	pCore->GetChat()->AddDebugMessage("AfterTrigger");
 }

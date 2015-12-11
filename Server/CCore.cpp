@@ -264,8 +264,4 @@ void CCore::Pulse( void )
 	// Call the pulse event
 	if( m_pEvents )
 		m_pEvents->Call( "onServerPulse" );
-
-	// Call the webServer
-	if (m_pWebServer)
-		m_pWebServer->Pulse();
 }

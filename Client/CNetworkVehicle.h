@@ -40,8 +40,6 @@ private:
 	CBlip							* m_pAttachedBlip;
 	bool							m_bBlipAttached;
 
-	bool							m_bPartState[1];
-
 	struct
 	{
 		struct

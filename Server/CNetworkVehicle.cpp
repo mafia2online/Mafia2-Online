@@ -70,8 +70,8 @@ CNetworkVehicle::CNetworkVehicle( void )
 	m_lastSyncData.m_bWheelModels[ 0 ] = 0xFF;
 	m_lastSyncData.m_bWheelModels[ 1 ] = 0xFF;
 	m_lastSyncData.m_bWheelModels[ 2 ] = 0xFF;
-	m_lastSyncData.m_bPartState_Hood = 1;
-	m_lastSyncData.m_bPartState_Trunk = 1;
+	m_lastSyncData.m_bPartState_Hood = 0;
+	m_lastSyncData.m_bPartState_Trunk = 0;
 	m_lastSyncData.m_model = 0;
 	memcpy( &m_lastSyncData.m_primaryColour, &predefinedColours[ rand() % 20 ], sizeof(CColor) );
 	memcpy( &m_lastSyncData.m_secondaryColour, &predefinedColours[ rand() % 20 ], sizeof(CColor) );
@@ -261,7 +261,7 @@ void CNetworkVehicle::RespawnForWorld( void )
 void CNetworkVehicle::Pulse( void )
 {
 	// Has this vehicle been empty for the respawn time? - BUGGY AS HELL
-	if ( GetRespawnTime() > 0 && (SharedUtility::GetTime() - m_ulLastOccupantTime) > GetRespawnTime() )
+	/*if ( GetRespawnTime() > 0 && (SharedUtility::GetTime() - m_ulLastOccupantTime) > GetRespawnTime() )
 	{
 		// Reset the last occupant time
 		m_ulLastOccupantTime = SharedUtility::GetTime ();
@@ -275,7 +275,7 @@ void CNetworkVehicle::Pulse( void )
 			//
 			CLogFile::Printf ( "Vehicle %d has respawned! (%d milliseconds of inactivity)", m_vehicleId, GetRespawnTime () );
 		}
-	}
+	}*/
 }
 
 void CNetworkVehicle::SetPosition( CVector3 vecPosition, bool bBroadcast )
@@ -464,6 +464,7 @@ bool CNetworkVehicle::GetEngineState( void )
 
 void CNetworkVehicle::SetPartOpen( int iPart, bool bOpen )
 {
+	CLogFile::Printf("[1] : Part : %d|Open : %d", iPart, bOpen);
 	// Construct a new bitstream
 	RakNet::BitStream pBitStream;
 	
@@ -479,7 +480,7 @@ void CNetworkVehicle::SetPartOpen( int iPart, bool bOpen )
 	// Send it to all clients
 	pCore->GetNetworkModule()->Call( RPC_SETVEHICLEPARTOPEN, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, INVALID_ENTITY_ID, true );
 
-	// Store the part state
+	// Set the part state
 	switch (iPart)
 	{
 		case VEHICLE_PART_HOOD:
@@ -503,11 +504,11 @@ bool CNetworkVehicle::IsPartOpen( int iPart )
 	switch (iPart)
 	{
 		case VEHICLE_PART_HOOD:
-			retn = (bool) m_lastSyncData.m_bPartState_Hood;
+			retn = m_lastSyncData.m_bPartState_Hood;
 		break;
 
 		case VEHICLE_PART_TRUNK:
-			retn = (bool) m_lastSyncData.m_bPartState_Trunk;
+			retn = m_lastSyncData.m_bPartState_Trunk;
 		break;
 	}
 	return (retn);
