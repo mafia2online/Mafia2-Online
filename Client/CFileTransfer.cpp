@@ -72,6 +72,10 @@ CFileTransfer::CFileTransfer ( String strFileName, CFileChecksum fileChecksum, b
 
 	// Set the http header handler
 	m_httpClient.SetHeaderHandler ( HeaderHandler, this );
+
+	// Hide the main menu and show only the download progress
+	pCore->GetGUI()->GetMainMenu()->SetVisible(false);
+	pCore->GetGUI()->GetServerBrowser()->SetVisible(false);
 }
 
 CFileTransfer::~CFileTransfer ( void )
