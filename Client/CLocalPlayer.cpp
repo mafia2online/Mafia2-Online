@@ -77,7 +77,9 @@ void CLocalPlayer::Pulse( void )
 
 	// Is our move state still the same ?
 	int newState = playerControls.m_ePlayerMovementState;
-	if (m_oldMoveState != newState)
+
+	// State changed and not locked ?
+	if (m_oldMoveState != newState && pCore->GetPlayerManager()->GetLocalPlayer()->AreControlsLocked() == false)
 	{
 		// Call the event
 		if (m_oldMoveState != -1){
