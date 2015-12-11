@@ -14,6 +14,7 @@
 #endif
 
 #include	<limits>
+#include	"../../Libraries/RakNet/Source/BitStream.h"
 
 #ifdef max
 #undef max
@@ -107,6 +108,28 @@ public:
 		fX = (fX * (180.0f / M_PI));
 		fY = (fY * (180.0f / M_PI));
 		fZ = (fZ * (180.0f / M_PI));
+	}
+
+	void Serialize(RakNet::BitStream *pBitStream)
+	{
+		pBitStream->Write(this->fX);
+		pBitStream->Write(this->fY);
+		pBitStream->Write(this->fZ);
+	}
+
+	void Deserialize(RakNet::BitStream *pBitStream)
+	{
+		pBitStream->Read(this->fX);
+		pBitStream->Read(this->fY);
+		pBitStream->Read(this->fZ);
+	}
+	void SerializeCompressed(RakNet::BitStream *pBitStream)
+	{
+		pBitStream->WriteVector(this->fX, this->fY, this->fZ);
+	}
+	void DeserializeCompressed(RakNet::BitStream *pBitStream)
+	{
+		pBitStream->ReadVector(this->fX, this->fY, this->fZ);
 	}
 
 	CVector3 operator+ (const CVector3& vecRight) const
