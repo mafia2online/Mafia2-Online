@@ -67,15 +67,19 @@ bool CM2EntityMessage::HandleEntityEvent( M2EntityMessage * pMessage )
 
 		case M2Enums::ON_AIM_ENTER:
 			{
-				pCore->GetChat()->AddDebugMessage("ON_AIM_ENTER (0x%p, %d, %d)", pMessage, pMessage->m_dwSenderGUID, pMessage->m_dwReceiveGUID);
-				pCore->GetPlayerManager()->GetLocalPlayer()->SetAiming(true);
+				if (pCore->GetPlayerManager()->GetLocalPlayer()->GetPlayerPed()->GetSelectedWeapon() != 0){
+					pCore->GetChat()->AddDebugMessage("ON_AIM_ENTER (0x%p, %d, %d)", pMessage, pMessage->m_dwSenderGUID, pMessage->m_dwReceiveGUID);
+					pCore->GetPlayerManager()->GetLocalPlayer()->SetAiming(true);
+				}
 				break;
 			}
 
 		case M2Enums::ON_AIM_LEAVE:
 			{
-				pCore->GetChat()->AddDebugMessage("ON_AIM_LEAVE (0x%p, %d, %d)", pMessage, pMessage->m_dwSenderGUID, pMessage->m_dwReceiveGUID);
-				pCore->GetPlayerManager()->GetLocalPlayer()->SetAiming(false);
+				if (pCore->GetPlayerManager()->GetLocalPlayer()->GetPlayerPed()->GetSelectedWeapon() != 0){
+					pCore->GetChat()->AddDebugMessage("ON_AIM_LEAVE (0x%p, %d, %d)", pMessage, pMessage->m_dwSenderGUID, pMessage->m_dwReceiveGUID);
+					pCore->GetPlayerManager()->GetLocalPlayer()->SetAiming(false);
+				}
 				break;
 			}
 
