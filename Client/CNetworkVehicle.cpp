@@ -27,6 +27,8 @@ CNetworkVehicle::CNetworkVehicle( void )
 	m_ulSpawnTime = 0;
 	m_pAttachedBlip = NULL;
 	m_bBlipAttached = false;
+	m_bPartState[VEHICLE_PART_HOOD] = 0;
+	m_bPartState[VEHICLE_PART_TRUNK] = 0;
 
 	// Reset occupants
 	m_pDriver = NULL;
@@ -659,23 +661,27 @@ void CNetworkVehicle::SetPartOpen( int iPart, bool bOpen )
 	// Is the vehicle instance valid?
 	if( m_pVehicle )
 	{
-		if( iPart == 0 )
+		if (iPart == 0){
 			bOpen ? m_pVehicle->OpenHood() : m_pVehicle->CloseHood();
-		else
+			m_bPartState[VEHICLE_PART_HOOD] = bOpen;
+		}
+		else {
 			bOpen ? m_pVehicle->OpenTrunk() : m_pVehicle->CloseTrunk();
+			m_bPartState[VEHICLE_PART_TRUNK] = bOpen;
+		}
 	}
 }
 
 bool CNetworkVehicle::IsPartOpen( int iPart )
 {
-	// Todo : fix with isHoodOpen/isTrunkOpen
+	//Todo : manage it with game engine feature
 
 	// Is the vehicle instance valid ?
 	if (m_pVehicle){
 		if (iPart == VEHICLE_PART_HOOD)
-			return (0);
+			return (m_bPartState[VEHICLE_PART_HOOD]);
 		else if (iPart == VEHICLE_PART_TRUNK)
-			return (0);
+			return (m_bPartState[VEHICLE_PART_TRUNK]);
 		else
 			return (false);
 	}

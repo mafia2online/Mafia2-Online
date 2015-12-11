@@ -110,7 +110,8 @@ namespace M2Enums
 		E_REAR_BUMPER			= 1,
 		E_FRONT_BUMPER,
 		E_BOOT,
-		E_HOOD,
+		E_HOOD					= 32, // Require testing
+		E_TRUNK					= 33, // Require testing
 		E_HOOD_HEMI_COVER,
 		E_REAR_DOOR_LEFT,
 		E_REAR_DOOR_GLASS_LEFT,
@@ -125,7 +126,7 @@ namespace M2Enums
 		E_EXHAUST,
 		E_REAR_WINDSCREEN,
 		E_FRONT_WINDSCREEN,
-		E_ENGINE,
+		E_ENGINE				= 34, // Require testing
 		E_REAR_WHEEL_RIGHT		= 29,
 		E_REAR_WHEEL_HUB_RIGHT,
 		E_REAR_WHEEL_TYRE_RIGHT,
