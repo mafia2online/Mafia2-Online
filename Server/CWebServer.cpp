@@ -12,82 +12,65 @@
 extern	CCore		* pCore;
 CMutex				webMutex;
 
-void * CWebServer::MongooseEventHandler( mg_event event, mg_connection * connection, const mg_request_info * request_info )
+static struct mg_serve_http_opts s_http_server_opts;
+
+void CWebServer::ev_handler(struct mg_connection *nc, int ev, void *ev_data)
 {
-	if( event == MG_NEW_REQUEST )
-	{
-		// Lock the web mutex
-		webMutex.Lock ();
+	struct http_message *hm = (struct http_message *) ev_data;
+	switch (ev) {
+		case MG_EV_HTTP_REQUEST:
+		{
+			mg_serve_http(nc, hm, s_http_server_opts);  // Serve static content
+		}
+		break;
 
-		// Get the IP address
-		in_addr sa;
-		memset( &sa, 0, sizeof(in_addr) );
-		sa.s_addr = htonl( request_info->remote_ip );
-		char * szIpAddress = inet_ntoa( sa );
-
-		// Call the scripting event
-		CSquirrelArguments pArguments;
-		pArguments.push( szIpAddress );
-		pArguments.push( request_info->remote_port );
-		pArguments.push( request_info->uri );
-		pArguments.push( request_info->request_method );
-		pCore->GetEvents()->Call( "onWebRequest", &pArguments );
-
-		// Unlock the web mutex
-		webMutex.Unlock ();
+		default:
+			break;
 	}
-
-	// Not handled
-	return NULL;
 }
 
 CWebServer::CWebServer( void )
 {
-	// Reset the mongoose context pointer
-	m_pMongooseContext = NULL;
-
 	// Do we not have external webserver configred?
 	if( strlen( CVAR_GET_STRING( "httpserver" ) ) == 0 )
 	{
-		// Allocate the options
-		char * options[7];
+		/* Start and bind webServer */
+		mg_mgr_init(&mgr, NULL);
+		nc = mg_bind(&mgr, String("%d", (CVAR_GET_INTEGER("port") + 1)), ev_handler);
 
-		for( int i = 0; i < 6; i++ )
-			options[i] = new char[256];
+		/* Failed to bind ? */
+		if (nc == NULL){
+			CLogFile::Printf("Cannot bind webServer on port %d", String("%d", (CVAR_GET_INTEGER("port") + 1)));
+			exit(1);
+		}
+		/* Set the options */
+		mg_set_protocol_http_websocket(nc);
 
-		// Set the options
-		strcpy( options[0], "listening_ports" );
-		strcpy( options[1], String( "%d", (CVAR_GET_INTEGER ( "port" ) + 1) ).Get() );
-		strcpy( options[2], "document_root" );
-		strcpy( options[3], SharedUtility::GetAbsolutePath( "webserver" ).Get() );
-		strcpy( options[4], "num_threads" );
-		strcpy( options[5], "50" );
-		options[6] = NULL;
+		/* Set the webRoot */
+		s_http_server_opts.document_root = "./webserver";
 
-		// Start mongoose
-		m_pMongooseContext = mg_start( MongooseEventHandler, (const char **)options );
+		/* Authorize the directory listing */
+		s_http_server_opts.enable_directory_listing = "yes";
 
-		// Free the options
-		for( int i = 0; i < 6; i++ )
-			delete [] options[i];
-
-		// Did mongoose fail to start?
-		if( !m_pMongooseContext )
-			CLogFile::Printf( "[error] Failed to start webserver on port %d!", (CVAR_GET_INTEGER ( "port" ) + 1) );
+		/* Failed to find the webRoot directory ? */
+		if (mg_stat(s_http_server_opts.document_root, &st) != 0){
+			CLogFile::Printf("Cannot find the root directory (%s)...", s_http_server_opts.document_root);
+			exit(1);
+		}
+		CLogFile::Printf("Starting web server on port %d", (CVAR_GET_INTEGER("port") + 1));
 	}
 }
 
 CWebServer::~CWebServer( void )
 {
-	// Do we have a valid mongoose context pointer?
-	if( m_pMongooseContext )
-	{
-		// Stop mongoose
-		mg_stop( m_pMongooseContext );
-
-		// Reset the mongoose context pointer
-		m_pMongooseContext = NULL;
+	if (nc != NULL){
+		mg_mgr_free(&mgr);
 	}
+}
+
+void CWebServer::Pulse()
+{
+	mg_mgr_poll(&mgr, 1000);
 }
 
 bool CWebServer::FileCopy( String strDirectory, String strFileName, CFileChecksum * pChecksum, bool bIsScript )
