@@ -72,10 +72,6 @@ CFileTransfer::CFileTransfer ( String strFileName, CFileChecksum fileChecksum, b
 
 	// Set the http header handler
 	m_httpClient.SetHeaderHandler ( HeaderHandler, this );
-
-	// Hide the main menu and show only the download progress
-	pCore->GetGUI()->GetMainMenu()->SetVisible(false);
-	pCore->GetGUI()->GetServerBrowser()->SetVisible(false);
 }
 
 CFileTransfer::~CFileTransfer ( void )
@@ -123,7 +119,6 @@ void CFileTransfer::Pulse ( String strHost, unsigned short usHttpPort )
 	// Did the file fail to open?
 	if ( !pFile )
 	{
-		CLogFile::Printf("7 - Failed");
 		// Finish
 		m_bComplete = true;
 		m_bSucceeded = false;
@@ -134,7 +129,7 @@ void CFileTransfer::Pulse ( String strHost, unsigned short usHttpPort )
 	m_httpClient.SetFile ( pFile );
 
 	// Process the http client
-	//while ( m_httpClient.IsBusy () ) - This cause client freeze
+	while ( m_httpClient.IsBusy () )
 		m_httpClient.Process ();
 
 	// Close the download file

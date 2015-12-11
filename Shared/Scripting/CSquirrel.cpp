@@ -121,7 +121,7 @@ void CSquirrel::CompileErrorFunction( SQVM * pVM, const SQChar * szError, const 
 		pCore->GetClientScriptingManager()->GetEvents()->Call( "onScriptCompileError", &pArguments, pScript );
 #endif
 
-		CLogFile::Printf( "CompileError: %s|%s|%d|%", (const char *)szError , (const char *)szSource, iLine, iColumn);
+		CLogFile::Printf( "CompileError: %s", (const char *)szError );
 	}
 }
 

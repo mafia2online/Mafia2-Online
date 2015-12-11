@@ -16,18 +16,15 @@ class CWebServer
 {
 
 private:
-	struct					mg_mgr							mgr;
-	struct					mg_connection					*nc;
-	cs_stat_t												st;
+
+	mg_context				* m_pMongooseContext;
+	static	void			* MongooseEventHandler			( mg_event event, mg_connection * connection, const mg_request_info * request_info );
 
 public:
 
 							CWebServer						( void );
 							~CWebServer						( void );
 
-	void					Pulse							( void );
-
 	bool					FileCopy						( String strDirectroy, String strFileName, CFileChecksum * pChecksum, bool bIsScript = true );
-	static void				ev_handler						(struct mg_connection *nc, int ev, void *ev_data);
 
 };
