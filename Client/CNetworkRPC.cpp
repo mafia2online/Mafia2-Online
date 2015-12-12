@@ -81,6 +81,7 @@ void InitialData( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 
 void ConnectionRejected( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 {
+	CLogFile::Printf("ConnectionRejected");
 	// Read the rejection reason
 	BYTE byteReason;
 	pBitStream->Read( byteReason );
@@ -94,12 +95,13 @@ void ConnectionRejected( RakNet::BitStream * pBitStream, RakNet::Packet * pPacke
 	// Switch the reason
 	switch( byteReason )
 	{
-	case REJECT_REASON_VERSION: strReason.Format( "Your client version doesn't match the one required by the server." ); break;
-	case REJECT_REASON_NICKNAME: strReason.Format( "The nickname you're using is already in use." ); break;
-	case REJECT_REASON_BANNED: strReason.Format( "You're banned from playing on this server." ); break;
+		case REJECT_REASON_VERSION: strReason.Format( "Your client version doesn't match the one required by the server." ); break;
+		case REJECT_REASON_NICKNAME: strReason.Format( "The nickname you're using is already in use." ); break;
+		case REJECT_REASON_BANNED: strReason.Format( "You're banned from playing on this server." ); break;
 	}
 
-	// Set the main menu disconnect text
+	// Disconnected due to reject ?
+	CLogFile::Printf("Disconnect due to reason : %s", strReason.Get());
 	pCore->GetGUI()->GetServerBrowser()->SetDisconnectReason( true, strReason.Get() );
 }
 
