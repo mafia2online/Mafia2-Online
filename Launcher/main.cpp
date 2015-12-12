@@ -53,7 +53,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	char szInstallDirectory[ MAX_PATH ];
 
 	// Try get the custom directory
-	if( !SharedUtility::ReadRegistryString( HKEY_LOCAL_MACHINE, "Software\\Wow6432Node\\Mafia 2 Multiplayer", "GameDir", NULL, szInstallDirectory, sizeof(szInstallDirectory) ) )
+	if( !SharedUtility::ReadRegistryString( HKEY_LOCAL_MACHINE, "Software\\Wow6432Node\\Mafia2-Online", "GameDir", NULL, szInstallDirectory, sizeof(szInstallDirectory) ) )
 	{
 		// Ask them to find their own directory
 		if( ShowMessageBox( "Failed to find Mafia II install directory. Do you want to select it now?", (MB_ICONEXCLAMATION | MB_YESNO) ) == IDYES )
@@ -106,7 +106,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 
 	// If we have a custom directory, save it!
 	if( bFoundCustomDirectory )
-		SharedUtility::WriteRegistryString( HKEY_LOCAL_MACHINE, "Software\\Wow6432Node\\Mafia 2 Multiplayer", "GameDir", szInstallDirectory, sizeof(szInstallDirectory) );
+		SharedUtility::WriteRegistryString( HKEY_LOCAL_MACHINE, "Software\\Wow6432Node\\Mafia2-Online", "GameDir", szInstallDirectory, sizeof(szInstallDirectory) );
 
 	// Get the full path to m2mp.dll
 	String strModulePath( "%s\\%s", SharedUtility::GetAppPath(), CORE_MODULE );
