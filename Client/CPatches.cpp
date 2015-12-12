@@ -141,7 +141,7 @@ void C_Vehicle__OnFuelTankShot ( void )
 }
 
 int iiTargetSeat;
-DWORD C_Vehicle__PlayerStartEnter__JMP = 0x953B26;
+DWORD C_Vehicle__PlayerStartEnter__JMP = 0x953B26; // Steam: 0x0964EF6
 void __declspec(naked) C_Vehicle__PlayerStartEnter ( void )
 {
 	_asm push ebp;
@@ -162,8 +162,8 @@ void __declspec(naked) C_Vehicle__PlayerStartEnter ( void )
 	_asm jmp C_Vehicle__PlayerStartEnter__JMP;
 }
 
-DWORD C_Human__TakeDamage_JMP = 0x97EE6F;
-DWORD C_Human__TakeDamage_End = 0x97F392;
+DWORD C_Human__TakeDamage_JMP = 0x97EE6F; // Steam: 0x09907DF
+DWORD C_Human__TakeDamage_End = 0x97F392; // Steam: 0x0990D02
 M2Ped *pVehicleCrashPlayer, *pLocalPedddddd;
 CLocalPlayer * ppLocalPlayer;
 void __declspec(naked) C_Human__TakeDamage ( void )
@@ -214,7 +214,7 @@ end:
 	}
 }
 
-DWORD HOOK_C_Game__OnGameLoad__JMP = 0x587A25;
+DWORD HOOK_C_Game__OnGameLoad__JMP = 0x587A25; // Steam: 0x0597C15
 void __declspec ( naked ) HOOK_C_Game__OnGameLoad ( void )
 {
 	_asm pushad;
@@ -257,24 +257,24 @@ void CPatches::Initialise( void )
 
 	//
 	//CPatcher::InstallJmpPatch ( 0x5BD0C0, (DWORD)InitialiseGame );
-	CPatcher::InstallJmpPatch ( 0x587A20, (DWORD)HOOK_C_Game__OnGameLoad );
+	CPatcher::InstallJmpPatch ( 0x587A20, (DWORD)HOOK_C_Game__OnGameLoad ); // Steam: 0x0597C10
 	//CPatcher::InstallJmpPatch ( 0x5B1C90, (DWORD)C_Game__OnGameUnload );
 
 	// Hook to prevent remote player peds following the localplayer keyboard controls
 	C_Player__ProcessKeyboard = (C_Player__ProcessKeyboard_t) CPatcher::InstallJmpPatch ( 0x42A9E0, (DWORD)HOOK_C_Player__ProcessKeyboard );
-	CPatcher::InstallNopPatch ( 0x4387A3, 0x86 ); // Fix crash - NEED TO LOOK AT THIS MORE (CAUSES CRASH WITH LOCALPLAYER WHEN JUMPING)
+	CPatcher::InstallNopPatch ( 0x4387A3, 0x86 ); // Fix crash - NEED TO LOOK AT THIS MORE (CAUSES CRASH WITH LOCALPLAYER WHEN JUMPING) // Steam: 0x0438A43
 
 	// Hook C_HumanInventory__DoShot
 	CPatcher::InstallJmpPatch ( COffsets::FUNC_CHumanInventory__ProcessShot, (DWORD)HOOK_CHumanInventory__DoShot );
 
 	// Hook C_HumanInventory__DoReload
-	CPatcher::InstallJmpPatch( 0x958140, (DWORD)HOOK_CHumanInventory__DoReload );
+	CPatcher::InstallJmpPatch( 0x958140, (DWORD)HOOK_CHumanInventory__DoReload ); // Steam: 0x0969510
 
 	// Hook C_Human__TakeDamage
-	CPatcher::InstallJmpPatch ( 0x97EE60, (DWORD)C_Human__TakeDamage );
+	CPatcher::InstallJmpPatch ( 0x97EE60, (DWORD)C_Human__TakeDamage ); // Steam: 0x09907D0
 
 	// Vehicle enter stuff
-	CPatcher::InstallJmpPatch ( 0x953B20, (DWORD)C_Vehicle__PlayerStartEnter );
+	CPatcher::InstallJmpPatch ( 0x953B20, (DWORD)C_Vehicle__PlayerStartEnter ); // Steam: 0x0964EF0
 
 	// Try disable player moving to driver seat after entering from passenger side
 	CPatcher::InstallNopPatch ( 0x4CEBCF, 0xC );
@@ -298,13 +298,13 @@ void CPatches::Initialise( void )
 	*(BYTE *)0x93F961 = 0x75; // jz -> jnz
 
 	// Disable DLC from loading
-	CPatcher::PatchAddress( 0x119D8E0, 0xC300B0 ); // mov al, 0; retn
+	CPatcher::PatchAddress( 0x119D8E0, 0xC300B0 ); // mov al, 0; retn // Steam: 0x11A62C0
 
 	// Disable loading screens
-	CPatcher::PatchAddress( 0x8B9140, 0xC300B0 ); // mov al, 0; retn
+	CPatcher::PatchAddress( 0x8B9140, 0xC300B0 ); // mov al, 0; retn // Steam: 0x08CA820
 
 	// Disable save games
-	CPatcher::InstallNopPatch ( 0xB3A850, 0x27C );
+	CPatcher::InstallNopPatch ( 0xB3A850, 0x27C ); // Steam: 0x0B40570
 
 	// Crash fix #1 (Still another crash in-vehicle around this area - PhysX APEX stuff)
 	CPatcher::InstallNopPatch ( 0x567B3D, 0x1E );
@@ -331,9 +331,9 @@ void CPatches::Initialise( void )
 	//CPatcher::PatchAddress ( 0x9563C7, 0x1 );
 
 	// Stop game from changing vehicle light state
-	CPatcher::InstallNopPatch ( 0xCF6EC0, 0x65 );
-	CPatcher::InstallNopPatch ( 0x4473E3, 0x16 );
-	CPatcher::InstallNopPatch ( 0x447418, 0x16 );
+	CPatcher::InstallNopPatch ( 0xCF6EC0, 0x65 ); // Steam: 0x0CFDDA0
+	CPatcher::InstallNopPatch ( 0x4473E3, 0x16 ); // Steam: 0x0447B13
+	CPatcher::InstallNopPatch ( 0x447418, 0x16 ); // Steam: 00447B48
 
 #ifndef _DEBUG
 	// Disable pause when game is minimized or sent to background
@@ -455,7 +455,7 @@ int CPatches::HOOK_OnGameProcessStart( HINSTANCE hInstance, int a2, int a3, int 
 }
 
 M2WeaponData * pDoShotHumanInventory = NULL;
-DWORD FUNC_CHumanInventory__ProcessShot_END = 0x978016;
+DWORD FUNC_CHumanInventory__ProcessShot_END = 0x978016; // Steam: 0x09898E6
 void __declspec( naked ) CPatches::HOOK_CHumanInventory__DoShot( void )
 {
 	_asm mov		pDoShotHumanInventory, ecx;
@@ -482,7 +482,7 @@ void __declspec( naked ) CPatches::HOOK_CHumanInventory__DoShot( void )
 }
 
 M2WeaponData * pDoReloadHumanInventory = NULL;
-DWORD CHumanInventory__DoReload_CALL = 0x958149;
+DWORD CHumanInventory__DoReload_CALL = 0x958149; // Steam : 0x:0958149
 void __declspec( naked ) CPatches::HOOK_CHumanInventory__DoReload( void )
 {
 	_asm mov		pDoReloadHumanInventory, ecx;
