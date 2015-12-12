@@ -201,12 +201,12 @@ void COffsets::CommonInitialise( unsigned int uiBase )
 	FUNC_CGame__AllocateBuffer				= (uiBase + 0x4016F0);
 
 	// Misc
-	VAR_GuiMainSdsFolder					= (uiBase + 0x18E1D04);
-	VAR_GuiMainSds							= (uiBase + 0x18E4DA0);
-	VAR_GuiSds								= (uiBase + 0x18E4D30);
-	VAR_TablesSds							= (uiBase + 0x18E4CFC);
-	VAR_LoadingScreen						= (uiBase + 0x1949B58);
-	VAR_StreamBin							= (uiBase + 0x18E3A44);
+	VAR_GuiMainSdsFolder					= (uiBase + 0x18E1D04); // Steam : 0x18F5084
+	VAR_GuiMainSds							= (uiBase + 0x18E4DA0); // Steam : 0x18F8958
+	VAR_GuiSds								= (uiBase + 0x18E4D30); // Steam : 0x18F88E8
+	VAR_TablesSds							= (uiBase + 0x18E4CFC); // Steam : 0x18F88B4
+	VAR_LoadingScreen						= (uiBase + 0x1949B58); // Steam : 0x195D7A0
+	VAR_StreamBin							= (uiBase + 0x18E3A44); // Steam : 0x18F7364
 	FUNC_M2malloc							= (uiBase + 0x401730);
 	FUNC_OnGameProcessStart					= (uiBase + 0x401A80);
 
@@ -265,7 +265,7 @@ void COffsets::CommonInitialise( unsigned int uiBase )
 	FUNC_CLua__newthread					= (uiBase + CPatcher::FindPattern( (BYTE *)"\x55\x8B\xEC\x83\xEC\x08\x8B\x45\x08\x8B\x48\x10\x8B\x55\x08\x8B", "xxxxxxxxxxxxxxxx" ));
 
 	// Human
-	FUNC_CHumanInventory__ProcessShot		= (uiBase + 0x977FE0);
+	FUNC_CHumanInventory__ProcessShot		= (uiBase + 0x977FE0); // Steam: 0x0977FE0
 	FUNC_CHuman__ShowHat					= (uiBase + 0x90C880); // Steam: 0x91DCC0
 	FUNC_CHuman__DropHat					= (uiBase + 0x92A450); // Steam: 0x93B890
 	FUNC_CHuman__SetHealth					= (uiBase + 0x92A480); // Steam: 0x93B8C0
@@ -279,7 +279,7 @@ void COffsets::CommonInitialise( unsigned int uiBase )
 	FUNC_CHuman__ShootAt					= (uiBase + 0x982420); // Steam: 0x993C30
 	FUNC_CHuman__AimAt						= (uiBase + 0x982190); // Steam: 0x993B00
 	FUNC_CHuman__LookAt						= (uiBase + 0x981860); // Steam: 0x9931D0
-	FUNC_CHuman__LockControls				= (uiBase + 0x94B9C0);
+	FUNC_CHuman__LockControls				= (uiBase + 0x94B9C0); // Steam: 0x095CD80
 	FUNC_CHuman__AreControlsLocked			= (uiBase + 0x90CA00); // Steam: 0x91DE40
 	FUNC_CHuman__InventoryHaveItem			= (uiBase + 0x9D3000); // Steam: 0x9E3280
 	FUNC_CHuman__GetRealHealth				= (uiBase + 0x90CAF0);
@@ -295,24 +295,24 @@ void COffsets::CommonInitialise( unsigned int uiBase )
 	FUNC_CHuman__GetInOutCar				= (uiBase + 0x98C800); // Steam: 0x99E1E0
 
 	// Vehicle
-	FUNC_CVehicle__OpenHood					= (uiBase + 0x9AC050);
-	FUNC_CVehicle__CloseHood				= (uiBase + 0x9AC0D0);
-	FUNC_CVehicle__OpenTrunk				= (uiBase + 0x9ABF50);
-	FUNC_CVehicle__CloseTrunk				= (uiBase + 0x9ABFD0);
+	FUNC_CVehicle__OpenHood					= (uiBase + 0x9AC050); // Steam: 0x09BCFB0
+	FUNC_CVehicle__CloseHood				= (uiBase + 0x9AC0D0); // Steam: 0x09BD030
+	FUNC_CVehicle__OpenTrunk				= (uiBase + 0x9ABF50); // Steam: 0x09BCEB0
+	FUNC_CVehicle__CloseTrunk				= (uiBase + 0x9ABFD0); // Steam: 0x09BCF30
 	FUNC_CVehicle__SetDirtLevel				= (uiBase + 0x9BC1B0);
 	FUNC_CVehicle__SetEngineOn				= (uiBase + 0x1259FB0);
-	FUNC_CVehicle__SetPainting				= (uiBase + 0x446B70);
-	FUNC_CVehicle__SetActualTuningTable		= (uiBase + 0x9CA0D0);
+	FUNC_CVehicle__SetPainting				= (uiBase + 0x446B70); // Steam: 0x04472A0
+	FUNC_CVehicle__SetActualTuningTable		= (uiBase + 0x9CA0D0); // Steam: 0x09DA440
 	FUNC_CVehicle__SetSPZText				= (uiBase + 0x11EE750);
 	FUNC_CVehicle__SetSpeedFloat			= (uiBase + 0x98E7F0);
 	FUNC_CVehicle__SetBeaconLightOn			= (uiBase + 0x1203DD0);
 	FUNC_CVehicle__SetHandbrake				= (uiBase + 0x11FB6D0);
 	FUNC_CVehicle__OpenSeatWindow			= (uiBase + 0x990AA0);
 	FUNC_CVehicle__Explode					= (uiBase + 0xA032A0);
-	FUNC_CVehicle__Repair					= (uiBase + 0x4DA7B0);
+	FUNC_CVehicle__Repair					= (uiBase + 0x4DA7B0); // Steam: 0x04E9890
 	FUNC_CVehicle__SetEngineDamage			= (uiBase + 0x9A9E50);
-	FUNC_CVehicle__GetEngineDamage			= (uiBase + 0x9A9DC0);
-	FUNC_CVehicle__SetSpeedLimited			= (uiBase + 0x467BB0);
+	FUNC_CVehicle__GetEngineDamage			= (uiBase + 0x9A9DC0); // Steam: 0x09BAD20
+	FUNC_CVehicle__SetSpeedLimited			= (uiBase + 0x467BB0); // Steam: 0x046B7D0
 	FUNC_CVehicle__SetOnPart				= (uiBase + 0x125A600);
 	FUNC_CVehicle__SetOffPart				= (uiBase + 0x125A530);
 	FUNC_CVehicle__SetColors				= (uiBase + 0x9AB010);
