@@ -55,6 +55,9 @@ SQInteger CClientNatives::BindKey( SQVM * pVM )
 		sq_pushbool( pVM, pCore->GetKeyBinds()->BindKey( szKey, szState, pVM, pFunction ) );
 		return 1;
 	}
+	else {
+		CLogFile::Printf("[Error] : Key %s already bound", szKey);
+	}
 
 	sq_pushbool( pVM, false );
 	return 1;
@@ -74,6 +77,9 @@ SQInteger CClientNatives::UnbindKey( SQVM * pVM )
 		// Unbind the key
 		sq_pushbool( pVM, pCore->GetKeyBinds()->UnbindKey( szState, szState ) );
 		return 1;
+	}
+	else {
+		CLogFile::Printf("[Error] : Key %s don't bound", szKey);
 	}
 
 	sq_pushbool( pVM, false );
