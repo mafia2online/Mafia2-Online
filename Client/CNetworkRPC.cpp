@@ -62,7 +62,7 @@ void InitialData( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 	// Set the file transfer information
 	pCore->GetFileTransferManager()->SetServerInformation( strHttpServer.IsEmpty() ? pCore->GetHost() : strHttpServer.C_String(), iPort );
 
-	//
+	// Print success message
 	pCore->GetChat()->AddInfoMessage( "Successfully connected to %s.", strServerName.C_String() );
 
 	// Get the server folder string
