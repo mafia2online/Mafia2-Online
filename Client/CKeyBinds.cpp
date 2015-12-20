@@ -46,15 +46,19 @@ CKeyBinds::~CKeyBinds( void )
 bool CKeyBinds::BindKey( const char * szKey, const char * szState, SQVM * pVM, SQObjectPtr pFunction )
 {
 	// Is this key already bound?
-	if( IsKeyBound( szKey, szState ) )
+	if( IsKeyBound( szKey, szState ) ){
+		CLogFile::Printf("Key %s already bound", szKey);
 		return false;
+	}
 
 	// Create a new keybind instance
 	CKeyBind * pKeyBind = new CKeyBind( szKey, szState, pVM, pFunction );
 
 	// Did the keybind fail to create?
-	if( !pKeyBind )
+	if (!pKeyBind) {
+		CLogFile::Printf("Failed to create keybind");
 		return false;
+	}
 
 	// Set the keybind active
 	pKeyBind->SetActive( true );
@@ -71,8 +75,10 @@ bool CKeyBinds::UnbindKey( const char * szKey, const char * szState )
 	CKeyBind * pKeyBind = GetKeyBind( szKey, szState );
 
 	// Did we fail to find the keybind?
-	if( !pKeyBind )
+	if (!pKeyBind) {
+		CLogFile::Printf("[Error] : Failed to find the keybind");
 		return false;
+	}
 
 	// Remove the keybind from the list
 	m_keyBinds.remove( pKeyBind );
@@ -89,7 +95,9 @@ void CKeyBinds::UnbindAll( void )
 	for( std::list< CKeyBind* >::iterator iter = m_keyBinds.begin(); iter != m_keyBinds.end(); iter++ )
 	{
 		// Unbind this key
-		UnbindKey( (*iter)->GetKey(), (*iter)->GetState() );
+		if ((*iter) != NULL && (*iter)->GetKey() != NULL && (*iter)->GetState() != NULL){
+			//UnbindKey( (*iter)->GetKey(), (*iter)->GetState() ); - This cause crash of the client
+		}
 	}
 
 	// Clear the keybinds list

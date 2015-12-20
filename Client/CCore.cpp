@@ -1,4 +1,4 @@
-/*************************************************************
+﻿/*************************************************************
 *
 * Solution   : Mafia 2 Multiplayer
 * Project    : Client
@@ -164,9 +164,6 @@ bool CCore::Initialise( void )
 
 	// Create the fps counter instance
 	m_pFPSCounter = new CFPSCounter;
-
-	// Create the key binds instance
-	m_pKeyBinds = new CKeyBinds;
 
 	// Create the streamer instance
 	m_pStreamer = new CStreamer;
@@ -442,43 +439,6 @@ void CCore::OnDeviceRender( void )
 	if( m_pPedManager )
 		m_pPedManager->Pulse();
 
-	// TODO: remove
-	if (m_pPlayerManager && m_pPlayerManager->GetLocalPlayer() && m_pPlayerManager->GetLocalPlayer()->IsSpawned() && !m_pPlayerManager->GetLocalPlayer()->IsInVehicle()) {
-		CM2Ped * pPlayerPed = m_pPlayerManager->GetLocalPlayer()->GetPlayerPed();
-		C_PlayerControls playerControls = pPlayerPed->GetPed()->m_playerControls;
-
-		pCore->GetGraphics()->DrawText ( 300, 300, D3DCOLOR_ARGB(255,255,0,0), 1.0f, "tahoma-bold", true, "Is Moving: %s\nMovement State: %d\nModifiers: %d\nMouse Flags: %d\nKeyboard Flags: %d\nIs Aiming: %s\nIs Crouching: %s\nB1 : %d\nB2 : %d", 
-			playerControls.m_bIsMoving ? "Yes" : "No",
-			playerControls.m_ePlayerMovementState, 
-			playerControls.m_byteModifiers, 
-			playerControls.m_byteMouseFlags, 
-			playerControls.m_byteKeyboardFlags, 
-			playerControls.m_bIsAiming ? "Yes" : "No", 
-			playerControls.m_bIsCrouching ? "Yes" : "No",
-			playerControls.m_byteUnknown1,
-			playerControls.m_byteUnknown2
-		);
-	}
-
-	// TODO: remove
-	if ( m_pPlayerManager && m_pPlayerManager->GetLocalPlayer() && m_pPlayerManager->GetLocalPlayer()->IsInVehicle() ) {
-		CNetworkVehicle * pNetworkVehicle = m_pPlayerManager->GetLocalPlayer()->GetVehicle ();
-		CVector3 vecSpeed = pNetworkVehicle->GetVehicle()->GetVehicle()->m_vecMoveSpeed;
-
-		pCore->GetGraphics()->DrawText ( 300, 300, D3DCOLOR_ARGB(255, 255, 0, 0), 1.0f, "tahoma-bold", true, "Fuel: %f\nSpeed: %f (%f, %f, %f)\nWheels: %f (%f)\nLights: %s\nHood : %s\nTrunk : %s", 
-			pNetworkVehicle->GetFuel (), 
-			pNetworkVehicle->GetSpeed(),
-			vecSpeed.fX, 
-			vecSpeed.fY, 
-			vecSpeed.fZ, 
-			pNetworkVehicle->GetVehicle()->GetSteer(), 
-			pNetworkVehicle->GetSteer(), 
-			pNetworkVehicle->GetVehicle()->GetLightState() ? "Enabled" : "Disabled" ,
-			pNetworkVehicle->GetVehicle()->GetVehiclePart(VEHICLE_PART_HOOD) ? "Open" : "Closed",
-			pNetworkVehicle->GetVehicle()->GetVehiclePart(VEHICLE_PART_TRUNK) ? "Open" : "Closed"
-		);
-	}
-
 	// Was the hide stuff key pressed?
 	if ( GetAsyncKeyState ( VK_F10 ) & 0x1 )
 	{
@@ -605,26 +565,10 @@ void CCore::OnGameProcess( void )
 		pCore->GetChat()->AddDebugMessage ( "Ped: 0x%p", pPlayerPed->GetPed() );
 	}
 
-	if( GetAsyncKeyState( VK_F9 ) & 0x1 )
+	if (GetAsyncKeyState(VK_F7) & 0x1)
 	{
-		//float steer = m_pPlayerManager->GetLocalPlayer()->GetPlayerPed()->GetCurrentVehicle()->m_fSteer;
-		CNetworkVehicle * net_vehicle = m_pVehicleManager->Get(0);
-		M2Vehicle * vehicle = net_vehicle->GetVehicle()->GetVehicle();
-
-		//vehicle->m_fMaxSteerAngle
-
-		// 0.87 - 0.66
-
-		DWORD dwFunc = 0x11FB4E0;
-		DWORD dwVehicleData = (DWORD)(vehicle) + 0xA8;
-		float steer = 1.0;
-		_asm push steer;
-		_asm mov ecx, dwVehicleData;
-		_asm call dwFunc;
-
-		//pCore->GetChat()->AddDebugMessage ( "Steer: %f, Added: %f", vehicle->m_fSteer, vehicle->m_fAddedSteer );
+		pCore->GetHud()->SetDrunkLevel(1);
 	}
-	// END DEBUG
 
 	// Call the script event
 	if( m_pClientScriptingManager )
@@ -664,6 +608,9 @@ void CCore::StartMultiplayer( void )
 
 	// Lock player controls
 	pCore->GetPlayerManager()->GetLocalPlayer()->LockControls( true );
+
+	// Create the key binds instance
+	m_pKeyBinds = new CKeyBinds;
 
 	// Create the blip manager
 	m_pBlipManager = new CBlipManager;
@@ -720,6 +667,9 @@ void CCore::StopMultiplayer( void )
 
 	// Lock player controls
 	pCore->GetPlayerManager()->GetLocalPlayer()->LockControls( true );
+
+	// Delete the keybinds
+	SAFE_DELETE( m_pKeyBinds );
 
 	// Delete the clientscript manager
 	SAFE_DELETE( m_pClientScriptingManager );
