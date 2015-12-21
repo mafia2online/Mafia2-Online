@@ -194,8 +194,8 @@ FunctionEnd
 
 Section "Uninstall"
 
-	Delete "${MOD_DIR}\m2mp.exe"
-	Delete "${MOD_DIR}\m2mp.dll"
+	Delete "${MOD_DIR}\m2online.exe"
+	Delete "${MOD_DIR}\m2online.dll"
 	Delete "$INSTDIR\..\sds\missionscript\freeraid_m2mp.sds"
 	Delete "$INSTDIR\..\..\edit\tables\StreamM2MP.bin"
 	RMDir /r "${MOD_DIR}"
