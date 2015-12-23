@@ -119,7 +119,15 @@ bool CCore::Initialise( void )
 	CLogFile::Printf( "EXE signature: 0x%p", pChecksum.GetChecksum() );
 
 	// Is this not the v1 exe?
-	if( pChecksum.GetChecksum() != EXE_VERSION_SKIDROW && pChecksum.GetChecksum() != EXE_VERSION_STEAM)
+	if (pChecksum.GetChecksum() == EXE_VERSION_SKIDROW)
+	{
+		m_gameVersion = GAME_VERSION_NORMAL;
+	}
+	else if (pChecksum.GetChecksum() == EXE_VERSION_STEAM)
+	{
+		m_gameVersion = GAME_VERSION_STEAM;
+	}
+	else
 	{
 		if ( MessageBox ( NULL, "Invalid game version detected.\n\nCan't start Mafia 2 Online\n\nDo you want to goto the downloads page now?", "Mafia2-Online - Error", MB_OK|MB_ICONERROR ) == MB_OK ) {
 			ShellExecute ( NULL, "open", "http://mafia2-online.com", NULL, NULL, SW_SHOWNORMAL );
@@ -151,10 +159,10 @@ bool CCore::Initialise( void )
 	m_pGame = new CMafia;
 
 	// Initialise the offsets
-	COffsets::Initialise( 0, m_uiBaseAddress );
+	COffsets::Initialise( m_gameVersion, m_uiBaseAddress );
 
 	// Apply the patches
-	CPatches::Initialise ();
+	CPatches::Initialise (m_gameVersion);
 
 	// Initialise lua
 	CLua::Initialise ();

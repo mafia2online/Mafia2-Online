@@ -30,6 +30,9 @@
 #define CRASHRPT_HOST				"http://mafia2-online.com/crashreport/report.php"
 #define CRASHRPT_POLICY				"http://mafia2-online.com"
 
+#define GAME_VERSION_NORMAL			1
+#define GAME_VERSION_STEAM			2
+
 // Server stuff
 #define		SERVER_TITLE			MOD_NAME " - " MOD_OS_STRING " Dedicated Server"
 #ifdef _WIN32

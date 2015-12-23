@@ -9,9 +9,6 @@
 
 #pragma once
 
-#define	FUNC_CEntity__Activate				0x1189E20
-#define	FUNC_CEntity__Deactivate			0x1189E70
-
 class M2EntityVFTable
 {
 public:

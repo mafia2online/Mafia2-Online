@@ -35,7 +35,7 @@ void CM2Entity::Activate( void )
 	// Is the entity valid?
 	if( m_pEntity )
 	{
-		DWORD dwFunc = FUNC_CEntity__Activate;
+		DWORD dwFunc = COffsets::FUNC_CEntity__Activate;
 		M2Entity * pEntity = m_pEntity;
 
 		_asm mov ecx, pEntity;
@@ -48,7 +48,7 @@ void CM2Entity::Deactivate( void )
 	// Is the entity valid?
 	if( m_pEntity )
 	{
-		DWORD dwFunc = FUNC_CEntity__Deactivate;
+		DWORD dwFunc = COffsets::FUNC_CEntity__Deactivate;
 		M2Entity * pEntity = m_pEntity;
 
 		_asm mov ecx, pEntity;

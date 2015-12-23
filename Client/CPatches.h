@@ -41,6 +41,6 @@ private:
 
 public:
 	
-	static	void				Initialise											( void );
+	static	void				Initialise											( int m_gameVersion );
 
 };

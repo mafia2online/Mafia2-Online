@@ -73,12 +73,19 @@ public:
 	// Entity Manager
 	static	unsigned int		FUNC_CEntMgr__ProcessEntities;
 
+	// Entity
+	static	unsigned int		FUNC_CEntity__Create;
+	static	unsigned int		FUNC_CEntity__Activate;
+	static	unsigned int		FUNC_CEntity__Deactivate;
+	static	unsigned int		FUNC_CEntity__Delete;
+
 	// Entity wrapper
 	static	unsigned int		VAR_CWrapperList;
 	static	unsigned int		FUNC_CWrapperList__GetEntityByName;
 
 	// Camera
 	static	unsigned int		VAR_CCamera;
+	static	unsigned int		VAR_CCamera__State;
 	static	unsigned int		FUNC_CCamera__GetGameCameraFromIndex;
 
 	// Lua
@@ -145,6 +152,14 @@ public:
 	static	unsigned int		FUNC_CVehicle__SetSpeedLimited;
 	static	unsigned int		FUNC_CVehicle__SetOnPart;
 	static	unsigned int		FUNC_CVehicle__SetOffPart;
+	static	unsigned int		FUNC_CVehicle__SetSpeedVec;
+	static	unsigned int		FUNC_CVehicle__AddSteer;
+	static	unsigned int		FUNC_CVehicle__SetPower;
+	static	unsigned int		FUNC_CVehicle__SetBrake;
+	static	unsigned int		FUNC_CVehicle__FixCarPos;
+	static	unsigned int		FUNC_CVehicle__SetWheelMatrixAtIndex;
+	static	unsigned int		FUNC_CVehicle__GetWheelsMaterial;
+	static	unsigned int		FUNC_CVehicle__SetLightState;
 
 	// Sync Objects
 	static	unsigned int		FUNC_CSyncObject__Reactivate;
@@ -159,6 +174,7 @@ public:
 	static	unsigned int		FUNC_CHud__ScoreShow;
 	static	unsigned int		FUNC_CHud__RadarShow;
 	static	unsigned int		FUNC_CHud__SubtitlesShow;
+	static	unsigned int		FUNC_CHud__SpeedoShow;
 
 	// Map
 	static  unsigned int		VAR_CMap;
@@ -171,12 +187,28 @@ public:
 	static	unsigned int		FUNC_CNavigation__RegisterIconPos;
 	static	unsigned int		FUNC_CNavigation__UnregisterIconPos;
 	static	unsigned int		FUNC_CNavigation__UnregisterIconEntity;
+	static	unsigned int		FUNC_CNavigation__GetIconFromId;
+	static	unsigned int		FUNC_CNavigation__GetIconFromEntity;
 
 	// Physfs
 	static	unsigned int		VAR_CPhysFS;
 
-	static	void				Initialise( BYTE gameVersion, unsigned int uiBase );
-	static	void				CommonInitialise( unsigned int uiBase );
-	static	void				CommonInitialise__Steam( unsigned int uiBase );
+	static	void				Initialise(BYTE gameVersion, unsigned int uiBase);
+	static	void				CommonInitialise(unsigned int uiBase);
+	static	void				CommonInitialise__Steam(unsigned int uiBase);
 
+	// Video settings
+	static	unsigned int		FUNC_C_SystemRenderingModule__SetFullScreenEnabled;
+	static	unsigned int		FUNC_C_SystemRenderingModule__SetVerticalSyncEnabled;
+	static	unsigned int		FUNC_SetScreenResolution;
+	static	unsigned int		FUNC_SetMultisampleAntiAliasing;
+	static	unsigned int		FUNC_SetAnisotropicFiltering;
+	static	unsigned int		FUNC_EnableAmbientOcclusion;
+
+	// Audio settings
+	static	unsigned int		FUNC_SetAudioQuality;
+	static	unsigned int		FUNC_SetSFXVolume;
+	static	unsigned int		FUNC_SetVoicesVolume;
+	static	unsigned int		FUNC_SetMusicVolume;
+	static	unsigned int		FUNC_SetRadioVolume;
 };

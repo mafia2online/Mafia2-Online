@@ -61,6 +61,8 @@ private:
 
 	CUpdater						* m_pUpdater;
 
+	int								m_gameVersion;
+
 public:
 
 									CCore						( void );
@@ -155,5 +157,7 @@ public:
 	bool							IsConnectionProblem			( void ) { return m_bConnectionProblem; }
 
 	CUpdater						* GetUpdater				( void ) { return m_pUpdater; }
+
+	int								GetGameVersion				( void ) { return m_gameVersion; }
 
 };

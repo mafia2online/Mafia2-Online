@@ -236,7 +236,7 @@ void __fastcall HOOK_C_Player__ProcessKeyboard ( M2Entity * pEntity, void * _EDX
 		C_Player__ProcessKeyboard ( pEntity, a2, a3, a4 );
 }
 
-void CPatches::Initialise( void )
+void CPatches::Initialise( int m_gameVersion )
 {
 	CLogFile::Printf( "Installing patches..." );
 
