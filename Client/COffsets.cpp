@@ -465,7 +465,7 @@ void COffsets::CommonInitialise__Steam(unsigned int uiBase)
 	FUNC_fnv32 = (uiBase + 0x41C880);
 
 	// SDS
-	/*FUNC_CSDSManager__ActivateStreamMapLine = (uiBase + 0x5BF630);*/
+	FUNC_CSDSManager__ActivateStreamMapLine = (uiBase + 0x5CFCD0);
 
 	// Entity manager
 	FUNC_CEntMgr__ProcessEntities = (uiBase + 0x985460);
@@ -507,7 +507,7 @@ void COffsets::CommonInitialise__Steam(unsigned int uiBase)
 	FUNC_CHuman__LockControls = (uiBase + 0x095CD80);
 	FUNC_CHuman__AreControlsLocked = (uiBase + 0x91DE40);
 	FUNC_CHuman__InventoryHaveItem = (uiBase + 0x9E3280);
-	//FUNC_CHuman__GetRealHealth = (uiBase + 0x90CAF0);
+	FUNC_CHuman__GetRealHealth = (uiBase + 0x91DF30);
 	FUNC_CHuman__InventoryAddMoney = (uiBase + 0x95B060);
 	FUNC_CHuman__InventoryRemoveMoney = (uiBase + 0x94D250);
 	FUNC_CHuman__InventoryGetMoney = (uiBase + 0x942FB0);
@@ -524,14 +524,14 @@ void COffsets::CommonInitialise__Steam(unsigned int uiBase)
 	FUNC_CVehicle__CloseHood = (uiBase + 0x09BD030);
 	FUNC_CVehicle__OpenTrunk = (uiBase + 0x09BCEB0);
 	FUNC_CVehicle__CloseTrunk = (uiBase + 0x09BCF30);
-	/*FUNC_CVehicle__SetDirtLevel = (uiBase + 0x9BC1B0);
-	FUNC_CVehicle__SetEngineOn = (uiBase + 0x1259FB0);*/
+	FUNC_CVehicle__SetDirtLevel = (uiBase + 0x9CCB80);
+	FUNC_CVehicle__SetEngineOn = (uiBase + 0x1263850);
 	FUNC_CVehicle__SetPainting = (uiBase + 0x04472A0);
 	FUNC_CVehicle__SetActualTuningTable = (uiBase + 0x09DA440);
-	/*FUNC_CVehicle__SetSPZText = (uiBase + 0x11EE750);
-	FUNC_CVehicle__SetSpeedFloat = (uiBase + 0x98E7F0);
-	FUNC_CVehicle__SetBeaconLightOn = (uiBase + 0x1203DD0);
-	FUNC_CVehicle__SetHandbrake = (uiBase + 0x11FB6D0);
+	FUNC_CVehicle__SetSPZText = (uiBase + 0x11F75D0);
+	//FUNC_CVehicle__SetSpeedFloat = (uiBase + 0x98E7F0);
+	FUNC_CVehicle__SetBeaconLightOn = (uiBase + 0x120CC10);
+	/*FUNC_CVehicle__SetHandbrake = (uiBase + 0x11FB6D0);
 	FUNC_CVehicle__OpenSeatWindow = (uiBase + 0x990AA0);
 	FUNC_CVehicle__Explode = (uiBase + 0xA032A0);*/
 	FUNC_CVehicle__Repair = (uiBase + 0x04E9890);
@@ -543,37 +543,36 @@ void COffsets::CommonInitialise__Steam(unsigned int uiBase)
 	FUNC_CVehicle__SetColors = (uiBase + 0x9AB010);*/
 
 	// Sync Objects
-	/*FUNC_CSyncObject__Reactivate = (uiBase + 0x11DE7D0);
+	FUNC_CSyncObject__Reactivate = (uiBase + 0x11E7590);
 
 	// Hud
-	VAR_CHud = (uiBase + 0x1BA71F8);
-	VAR_CHudFader = (uiBase + 0x1AA3448);
+	VAR_CHud = (uiBase + 0x1CBA618);
+	/*VAR_CHudFader = (uiBase + 0x1AA3448);
 	FUNC_CHud__FaderFadeIn = (uiBase + 0x87FFA0);
-	FUNC_CHud__FaderFadeOut = (uiBase + 0x87FDF0);
-	FUNC_CHud__Toggle = (uiBase + 0x893B30);
-	FUNC_CHudComponent__Show = (uiBase + 0x87A0B0);
-	FUNC_CHud__ScoreShow = (uiBase + 0x87B760);
-	FUNC_CHud__RadarShow = (uiBase + 0x8823F0);
-	FUNC_CHud__SubtitlesShow = (uiBase + 0x8824B0);
+	FUNC_CHud__FaderFadeOut = (uiBase + 0x87FDF0);*/
+	FUNC_CHud__Toggle = (uiBase + 0x8A4CE0);
+	FUNC_CHudComponent__Show = (uiBase + 0x88B1D0);
+	FUNC_CHud__ScoreShow = (uiBase + 0x88C880);
+	FUNC_CHud__RadarShow = (uiBase + 0x893510);
+	FUNC_CHud__SubtitlesShow = (uiBase + 0x8935D0);
 
 	// Map (Unused)
-	VAR_CMap = (uiBase + 0x1AACD70);
+	/*VAR_CMap = (uiBase + 0x1AACD70);
 	FUNC_CMap__CreateEntityIcon = (uiBase + 0x83B420);
-	FUNC_CMap__DeleteEntityIcon = (uiBase + 0x83B540);
+	FUNC_CMap__DeleteEntityIcon = (uiBase + 0x83B540);*/
 
 	// Navigation
-	VAR_CNavigation = (uiBase + 0x1AA3398);
-	FUNC_CNavigation__RegisterIconEntity = (uiBase + 0x4D82E0);
-	FUNC_CNavigation__RegisterIconPos = (uiBase + 0x4D8270);
-	FUNC_CNavigation__UnregisterIconPos = (uiBase + 0x4C97C0);
-	FUNC_CNavigation__UnregisterIconEntity = (uiBase + 0x4C98F0);
+	VAR_CNavigation = (uiBase + 0x1AB6440);
+	FUNC_CNavigation__RegisterIconEntity = (uiBase + 0x4E7350);
+	FUNC_CNavigation__RegisterIconPos = (uiBase + 0x4E72E0);
+	FUNC_CNavigation__UnregisterIconPos = (uiBase + 0x4D7770);
+	FUNC_CNavigation__UnregisterIconEntity = (uiBase + 0x4D78A0);
 
 	// PhysFS
-	VAR_CPhysFS = (uiBase + 0x1AC94F0);
+	VAR_CPhysFS = (uiBase + 0x1BDC918);
 
 	// Entity
-	FUNC_CEntity__Activate = (uiBase + 0x1189E20);
-	FUNC_CEntity__Deactivate = (uiBase + 0x1189E70);
-	FUNC_CEntity__Delete = (uiBase + 0x1195580);
-	*/
+	FUNC_CEntity__Activate = (uiBase + 0x1192170);
+	FUNC_CEntity__Deactivate = (uiBase + 0x11921C0);
+	FUNC_CEntity__Delete = (uiBase + 0x119DDD0);
 }
