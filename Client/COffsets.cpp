@@ -529,27 +529,27 @@ void COffsets::CommonInitialise__Steam(unsigned int uiBase)
 	FUNC_CVehicle__SetPainting = (uiBase + 0x04472A0);
 	FUNC_CVehicle__SetActualTuningTable = (uiBase + 0x09DA440);
 	FUNC_CVehicle__SetSPZText = (uiBase + 0x11F75D0);
-	//FUNC_CVehicle__SetSpeedFloat = (uiBase + 0x98E7F0);
+	FUNC_CVehicle__SetSpeedFloat = (uiBase + 0x9A01A0);
 	FUNC_CVehicle__SetBeaconLightOn = (uiBase + 0x120CC10);
-	/*FUNC_CVehicle__SetHandbrake = (uiBase + 0x11FB6D0);
-	FUNC_CVehicle__OpenSeatWindow = (uiBase + 0x990AA0);
-	FUNC_CVehicle__Explode = (uiBase + 0xA032A0);*/
+	FUNC_CVehicle__SetHandbrake = (uiBase + 0x1204540);
+	FUNC_CVehicle__OpenSeatWindow = (uiBase + 0x9A2230);
+	FUNC_CVehicle__Explode = (uiBase + 0xA13950);
 	FUNC_CVehicle__Repair = (uiBase + 0x04E9890);
 	//FUNC_CVehicle__SetEngineDamage = (uiBase + 0x9A9E50);
 	FUNC_CVehicle__GetEngineDamage = (uiBase + 0x09BAD20);
 	FUNC_CVehicle__SetSpeedLimited = (uiBase + 0x046B7D0);
 	/*FUNC_CVehicle__SetOnPart = (uiBase + 0x125A600);
-	FUNC_CVehicle__SetOffPart = (uiBase + 0x125A530);
-	FUNC_CVehicle__SetColors = (uiBase + 0x9AB010);*/
+	FUNC_CVehicle__SetOffPart = (uiBase + 0x125A530);*/
+	FUNC_CVehicle__SetColors = (uiBase + 0x9BBF70);
 
 	// Sync Objects
 	FUNC_CSyncObject__Reactivate = (uiBase + 0x11E7590);
 
 	// Hud
 	VAR_CHud = (uiBase + 0x1CBA618);
-	/*VAR_CHudFader = (uiBase + 0x1AA3448);
-	FUNC_CHud__FaderFadeIn = (uiBase + 0x87FFA0);
-	FUNC_CHud__FaderFadeOut = (uiBase + 0x87FDF0);*/
+	VAR_CHudFader = (uiBase + 0x1AB64F0);
+	FUNC_CHud__FaderFadeIn = (uiBase + 0x08910C0);
+	FUNC_CHud__FaderFadeOut = (uiBase + 0x890F10);
 	FUNC_CHud__Toggle = (uiBase + 0x8A4CE0);
 	FUNC_CHudComponent__Show = (uiBase + 0x88B1D0);
 	FUNC_CHud__ScoreShow = (uiBase + 0x88C880);
