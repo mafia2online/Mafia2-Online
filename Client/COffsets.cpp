@@ -12,6 +12,7 @@
 unsigned int COffsets::VAR_CGame = 0;
 unsigned int COffsets::FUNC_CGame__OnGameInit = 0;
 unsigned int COffsets::FUNC_CGame__OnGameEvent = 0;
+unsigned int COffsets::FUNC_CGame__OnGameLoad = 0;
 unsigned int COffsets::VAR_CGame__ScriptEngine = 0;
 unsigned int COffsets::FUNC_CGame__Allocate = 0;
 unsigned int COffsets::FUNC_CGame__Free = 0;
@@ -229,6 +230,7 @@ void COffsets::CommonInitialise(unsigned int uiBase)
 	// Game
 	FUNC_CGame__OnGameInit = (uiBase + 0x410440); // Steam: 0x4105F0
 	FUNC_CGame__OnGameEvent = (uiBase + 0x1173A00); // Steam: 0x117BCA0
+	FUNC_CGame__OnGameLoad = (uiBase + 0x587A20); // Steam: 0x0597C10
 	FUNC_CGame__Allocate = (uiBase + 0x401730); // Steam: 0x401830
 	FUNC_CGame__Free = (uiBase + 0x4018F0);
 	FUNC_CGame__AllocateBuffer = (uiBase + 0x4016F0);
@@ -418,9 +420,10 @@ void COffsets::CommonInitialise__Steam(unsigned int uiBase)
 	// Game
 	FUNC_CGame__OnGameInit = (uiBase + 0x4105F0);
 	FUNC_CGame__OnGameEvent = (uiBase + 0x117BCA0);
+	FUNC_CGame__OnGameLoad = (uiBase + 0x0597C10);
 	FUNC_CGame__Allocate = (uiBase + 0x401830);
-	/*FUNC_CGame__Free = (uiBase + 0x4018F0);
-	FUNC_CGame__AllocateBuffer = (uiBase + 0x4016F0);*/
+	FUNC_CGame__Free = (uiBase + 0x4019F0);
+	FUNC_CGame__AllocateBuffer = (uiBase + 0x4017F0);
 
 	// Misc
 	VAR_GuiMainSdsFolder = (uiBase + 0x18F5084);
@@ -433,36 +436,36 @@ void COffsets::CommonInitialise__Steam(unsigned int uiBase)
 	FUNC_OnGameProcessStart = (uiBase + 0x401B80);
 
 	// Core
-	/*VAR_CCore = (uiBase + 0x1AAF6C8);
-	FUNC_CCore__AllocateModel = (uiBase + 0x14DFBB0);
+	VAR_CCore = (uiBase + 0x1AC277);
+	FUNC_CCore__AllocateModel = (uiBase + 0x14EBFB0);
 
 	// Door
-	FUNC_CDoor__Open = (uiBase + 0x4DBBA0);
+	/*FUNC_CDoor__Open = (uiBase + 0x4DBBA0);
 	FUNC_CDoor__Kick = (uiBase + 0x4E5600);
 	FUNC_CDoor__Close = (uiBase + 0x4DBC50);
 	FUNC_CDoor__Lock = (uiBase + 0x4E1700);
 	FUNC_CDoor__Unlock = (uiBase + 0x4E1730);
 	FUNC_CDoor__EnableAction = (uiBase + 0x449FF0);
-	FUNC_CDoor__DisableAction = (uiBase + 0x44A060);
+	FUNC_CDoor__DisableAction = (uiBase + 0x44A060);*/
 
 	// Model Manager
-	FUNC_CModelMgr__Load = (uiBase + 0x5BB590);
-	FUNC_CModelMgr__Free = (uiBase + 0x59F0F0);
-	FUNC_CModelMgr__Construct = (uiBase + 0x5A64E0);
-	FUNC_CModelMgr__ChangeModel = (uiBase + 0x5BB7E0);
+	FUNC_CModelMgr__Load = (uiBase + 0x5CBBE0);
+	FUNC_CModelMgr__Free = (uiBase + 0x5AF310);
+	FUNC_CModelMgr__Construct = (uiBase + 0x5B6680);
+	FUNC_CModelMgr__ChangeModel = (uiBase + 0x5CBE30);
 
 	// Slot Manager
-	VAR_CSlotManager = (uiBase + 0x1AACD8C);
+	VAR_CSlotManager = (uiBase + 0x1ABFE3C);
 
 	// Obj Manager
-	VAR_CObjectTable = (uiBase + 0x1AACD70);
+	VAR_CObjectTable = (uiBase + 0x1ABFE20);
 
 	// Hash
-	FUNC_fnv64 = (uiBase + 0x41C660);
-	FUNC_fnv32 = (uiBase + 0x41C6B0);
+	FUNC_fnv64 = (uiBase + 0x41C830);
+	FUNC_fnv32 = (uiBase + 0x41C880);
 
 	// SDS
-	FUNC_CSDSManager__ActivateStreamMapLine = (uiBase + 0x5BF630);*/
+	/*FUNC_CSDSManager__ActivateStreamMapLine = (uiBase + 0x5BF630);*/
 
 	// Entity manager
 	FUNC_CEntMgr__ProcessEntities = (uiBase + 0x985460);

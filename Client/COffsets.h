@@ -18,6 +18,7 @@ public:
 	static	unsigned int		VAR_CGame;
 	static	unsigned int		FUNC_CGame__OnGameInit;
 	static	unsigned int		FUNC_CGame__OnGameEvent;
+	static	unsigned int		FUNC_CGame__OnGameLoad;
 	static	unsigned int		VAR_CGame__ScriptEngine;
 	static	unsigned int		FUNC_CGame__Allocate;
 	static	unsigned int		FUNC_CGame__Free;

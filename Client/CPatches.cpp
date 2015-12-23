@@ -278,9 +278,8 @@ void CPatches::Initialise( int m_gameVersion )
 	// Hook OnGameProcessStart
 	onGameProcessStart = ( OnGameProcessStart_t ) CPatcher::InstallJmpPatch( COffsets::FUNC_OnGameProcessStart, (DWORD)HOOK_OnGameProcessStart, 0x6 );
 
-	//
 	//CPatcher::InstallJmpPatch ( 0x5BD0C0, (DWORD)InitialiseGame );
-	CPatcher::InstallJmpPatch ( 0x587A20, (DWORD)HOOK_C_Game__OnGameLoad ); // Steam: 0x0597C10
+	CPatcher::InstallJmpPatch ( COffsets::FUNC_CGame__OnGameLoad, (DWORD)HOOK_C_Game__OnGameLoad );
 	//CPatcher::InstallJmpPatch ( 0x5B1C90, (DWORD)C_Game__OnGameUnload );
 
 	// Hook to prevent remote player peds following the localplayer keyboard controls
