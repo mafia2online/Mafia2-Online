@@ -30,24 +30,20 @@ C3DTextLabelManager::~C3DTextLabelManager(void)
 
 bool	C3DTextLabelManager::Add(EntityId textID, float fX, float fY, float fZ, String text, int color, float distance)
 {
-	CLogFile::Printf("TextID : %d", textID);
-	CLogFile::Print("Add-1");
 	// Incorrect 3DText ?
 	if (textID < 0 || textID > MAX_3DTEXTS)
 		return (false);
-	CLogFile::Print("Add-2");
+
 	// Create the 3DText
-	m_p3DTextLabels[textID]->Init(textID/*,fX, fY, fZ, text, color, distance*/);
-	CLogFile::Print("Add-3");
+	m_p3DTextLabels[textID] = new C3DTextLabel(textID, fX, fY, fZ, text, color, distance);
+
 	// Failed ?
 	if (IsActive(textID) == false)
 		return (false);
-	CLogFile::Print("Add-4");
+
 	// Finished
 	m_p3DTextLabels[textID]->SetActive(true);
-	CLogFile::Print("Add-5");
-
-	return (textID);
+	return (true);
 }
 
 bool	C3DTextLabelManager::Remove(EntityId textID)
@@ -90,11 +86,11 @@ bool	C3DTextLabelManager::IsOnScreen(EntityId textID)
 
 EntityId C3DTextLabelManager::FindFreeSlot(void)
 {
-	// Loop over all blip instances
+	// Loop over all textlabel instances
 	for (EntityId i = 0; i < MAX_3DTEXTS; i++)
 	{
 		CLogFile::Print("Find-1");
-		// Is the current blip not active?
+		// Is the current textLabel not active?
 		if (IsActive(i) == false)
 			return i;
 		CLogFile::Print("Find-2");

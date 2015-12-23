@@ -73,6 +73,7 @@ CCore::CCore( void )
 	m_pUpdater = NULL;
 	m_pNameTag = NULL;
 	m_pAudioManager = NULL;
+	m_p3DTextLabelManager = NULL;
 }
 
 CCore::~CCore( void )
@@ -88,6 +89,7 @@ CCore::~CCore( void )
 	SAFE_DELETE(m_pStreamer);
 	SAFE_DELETE(m_pModelManager);
 	SAFE_DELETE(m_pAudioManager);
+	SAFE_DELETE(m_p3DTextLabelManager);
 
 	// Uninstall anti-cheat
 	CWPMHook::Uninstall();
@@ -633,6 +635,9 @@ void CCore::StartMultiplayer( void )
 	// Create the rendering interface
 	m_pNameTag = new CNameTag;
 
+	// Create the 3DTextLabelManager
+	m_p3DTextLabelManager = new C3DTextLabelManager;
+
 	// Mark as multiplayer started
 	SetMultiplayerStarted( true );
 
@@ -691,6 +696,9 @@ void CCore::StopMultiplayer( void )
 
 	// Delete the file transfer
 	SAFE_DELETE( m_pFileTransferManager );
+
+	// Delete the 3DTextLabel manager
+	SAFE_DELETE(m_p3DTextLabelManager);
 
 	// Clear the model manager
 	CNetworkModelManager::Cleanup ();
