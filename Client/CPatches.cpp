@@ -21,6 +21,15 @@ bool					bFirstLoad = true;
 typedef void			( __thiscall * C_Player__ProcessKeyboard_t )	( M2Entity * pEntity, int a2, int a3, float a4 );
 C_Player__ProcessKeyboard_t C_Player__ProcessKeyboard = NULL;
 
+/* OFFSETS */
+DWORD C_Vehicle__PlayerStartEnter__JMP = 0;
+DWORD HOOK_C_Game__OnGameLoad__JMP = 0;
+DWORD CHumanInventory__DoReload_CALL = 0;
+DWORD FUNC_CHumanInventory__ProcessShot_END = 0;
+DWORD C_Human__TakeDamage_JMP = 0;
+DWORD C_Human__TakeDamage_End = 0;
+/* OFFSETS END */
+
 M2Ped * pPed = NULL;
 DWORD sub_98B630_jmp = 0x98B63C;
 DWORD sub_98B630_edx = 0x0;
@@ -141,7 +150,6 @@ void C_Vehicle__OnFuelTankShot ( void )
 }
 
 int iiTargetSeat;
-DWORD C_Vehicle__PlayerStartEnter__JMP = 0x953B26; // Steam: 0x0964EF6
 void __declspec(naked) C_Vehicle__PlayerStartEnter ( void )
 {
 	_asm push ebp;
@@ -162,8 +170,6 @@ void __declspec(naked) C_Vehicle__PlayerStartEnter ( void )
 	_asm jmp C_Vehicle__PlayerStartEnter__JMP;
 }
 
-DWORD C_Human__TakeDamage_JMP = 0x97EE6F; // Steam: 0x09907DF
-DWORD C_Human__TakeDamage_End = 0x97F392; // Steam: 0x0990D02
 M2Ped *pVehicleCrashPlayer, *pLocalPedddddd;
 CLocalPlayer * ppLocalPlayer;
 void __declspec(naked) C_Human__TakeDamage ( void )
@@ -214,7 +220,6 @@ end:
 	}
 }
 
-DWORD HOOK_C_Game__OnGameLoad__JMP = 0x587A25; // Steam: 0x0597C15
 void __declspec ( naked ) HOOK_C_Game__OnGameLoad ( void )
 {
 	_asm pushad;
@@ -227,6 +232,7 @@ void __declspec ( naked ) HOOK_C_Game__OnGameLoad ( void )
 	_asm mov ebx, ecx;
 	_asm mov eax, [ebx];
 	_asm jmp HOOK_C_Game__OnGameLoad__JMP;
+	
 }
 
 void __fastcall HOOK_C_Player__ProcessKeyboard ( M2Entity * pEntity, void * _EDX, int a2, int a3, float a4 )
@@ -238,7 +244,24 @@ void __fastcall HOOK_C_Player__ProcessKeyboard ( M2Entity * pEntity, void * _EDX
 
 void CPatches::Initialise( int m_gameVersion )
 {
-	CLogFile::Printf( "Installing patches..." );
+	if (m_gameVersion == GAME_VERSION_NORMAL){
+		CLogFile::Printf("Installing patches for normal version...");
+		HOOK_C_Game__OnGameLoad__JMP = 0x587A25; // Steam 0x0597C15 
+		CHumanInventory__DoReload_CALL = 0x958149; // Steam : 0x:0958149
+		FUNC_CHumanInventory__ProcessShot_END = 0x978016; // Steam: 0x09898E6
+		C_Vehicle__PlayerStartEnter__JMP = 0x953B26; // Steam: 0x0964EF6
+		C_Human__TakeDamage_JMP = 0x97EE6F; // Steam: 0x09907DF
+		C_Human__TakeDamage_End = 0x97F392; // Steam: 0x0990D02
+	}
+	else if (m_gameVersion == GAME_VERSION_STEAM){
+		CLogFile::Printf("Installing patches for steam version...");
+		HOOK_C_Game__OnGameLoad__JMP = 0x0597C15; // Normal 0x587A25
+		CHumanInventory__DoReload_CALL = 0x958149; // Normal : 0x:0958149
+		FUNC_CHumanInventory__ProcessShot_END = 0x09898E6; // Normal: 0x978016
+		C_Vehicle__PlayerStartEnter__JMP = 0x0964EF6; // Normal: 0x953B26
+		C_Human__TakeDamage_JMP = 0x09907DF; // Normal: 0x97EE6F
+		C_Human__TakeDamage_End = 0x0990D02; // Normal: 0x97F392
+	}
 
 	// Unprotect the .text segment
 	CPatcher::Unprotect( (pCore->GetBaseAddress() + 0x400000 + 0x1000), 0x94C000 );
@@ -455,7 +478,6 @@ int CPatches::HOOK_OnGameProcessStart( HINSTANCE hInstance, int a2, int a3, int 
 }
 
 M2WeaponData * pDoShotHumanInventory = NULL;
-DWORD FUNC_CHumanInventory__ProcessShot_END = 0x978016; // Steam: 0x09898E6
 void __declspec( naked ) CPatches::HOOK_CHumanInventory__DoShot( void )
 {
 	_asm mov		pDoShotHumanInventory, ecx;
@@ -482,7 +504,6 @@ void __declspec( naked ) CPatches::HOOK_CHumanInventory__DoShot( void )
 }
 
 M2WeaponData * pDoReloadHumanInventory = NULL;
-DWORD CHumanInventory__DoReload_CALL = 0x958149; // Steam : 0x:0958149
 void __declspec( naked ) CPatches::HOOK_CHumanInventory__DoReload( void )
 {
 	_asm mov		pDoReloadHumanInventory, ecx;

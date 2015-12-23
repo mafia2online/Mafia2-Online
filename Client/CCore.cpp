@@ -121,10 +121,12 @@ bool CCore::Initialise( void )
 	// Is this not the v1 exe?
 	if (pChecksum.GetChecksum() == EXE_VERSION_SKIDROW)
 	{
+		CLogFile::Printf("Starting normal game version");
 		m_gameVersion = GAME_VERSION_NORMAL;
 	}
 	else if (pChecksum.GetChecksum() == EXE_VERSION_STEAM)
 	{
+		CLogFile::Printf("Starting steam game version");
 		m_gameVersion = GAME_VERSION_STEAM;
 	}
 	else
