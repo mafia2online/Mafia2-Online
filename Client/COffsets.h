@@ -102,6 +102,7 @@ public:
 
 	// Human
 	static	unsigned int		FUNC_CHumanInventory__ProcessShot;
+	static	unsigned int		FUNC_CHumanInventory__DoReload;
 	static	unsigned int		FUNC_CHuman__InventorySelect;
 	static	unsigned int		FUNC_CHuman__InventoryAddWeapon;
 	static  unsigned int		FUNC_CHuman__InventoryRemoveWeapon;
@@ -129,6 +130,7 @@ public:
 	static	unsigned int		FUNC_CHuman__IsOnScreen;
 	static	unsigned int		FUNC_CHuman__AnimationReset;
 	static	unsigned int		FUNC_CHuman__GetInOutCar;
+	static	unsigned int		FUNC_CHuman__TakeDamage;
 
 	// Vehicle
 	static	unsigned int		VAR_VehiclePool;
@@ -161,6 +163,7 @@ public:
 	static	unsigned int		FUNC_CVehicle__SetWheelMatrixAtIndex;
 	static	unsigned int		FUNC_CVehicle__GetWheelsMaterial;
 	static	unsigned int		FUNC_CVehicle__SetLightState;
+	static	unsigned int		FUNC_CVehicle__PlayerStartEnter;
 
 	// Sync Objects
 	static	unsigned int		FUNC_CSyncObject__Reactivate;
@@ -212,4 +215,7 @@ public:
 	static	unsigned int		FUNC_SetVoicesVolume;
 	static	unsigned int		FUNC_SetMusicVolume;
 	static	unsigned int		FUNC_SetRadioVolume;
+
+	// Player
+	static	unsigned int		FUNC_CPlayer_ProcessKeyboard;
 };

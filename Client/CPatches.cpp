@@ -242,7 +242,7 @@ void __fastcall HOOK_C_Player__ProcessKeyboard ( M2Entity * pEntity, void * _EDX
 		C_Player__ProcessKeyboard ( pEntity, a2, a3, a4 );
 }
 
-void CPatches::Initialise( int m_gameVersion )
+void CPatches::Initialise(int m_gameVersion)
 {
 	if (m_gameVersion == GAME_VERSION_NORMAL){
 		CLogFile::Printf("Installing patches for normal version...");
@@ -264,47 +264,64 @@ void CPatches::Initialise( int m_gameVersion )
 	}
 
 	// Unprotect the .text segment
-	CPatcher::Unprotect( (pCore->GetBaseAddress() + 0x400000 + 0x1000), 0x94C000 );
+	CPatcher::Unprotect((pCore->GetBaseAddress() + 0x400000 + 0x1000), 0x94C000);
 
 	// Hook C_Game__OnGameInit
-	onGameInit = (sub_410440) CPatcher::InstallJmpPatch( COffsets::FUNC_CGame__OnGameInit, (DWORD)HOOK_CGame__OnGameInit );
+	onGameInit = (sub_410440)CPatcher::InstallJmpPatch(COffsets::FUNC_CGame__OnGameInit, (DWORD)HOOK_CGame__OnGameInit);
 
 	// Hook C_Game__OnGameEvent
-	onGameEvent = (onGameEvent_t) CPatcher::InstallJmpPatch( COffsets::FUNC_CGame__OnGameEvent, (DWORD)HOOK_CGame__OnGameEvent );
+	onGameEvent = (onGameEvent_t)CPatcher::InstallJmpPatch(COffsets::FUNC_CGame__OnGameEvent, (DWORD)HOOK_CGame__OnGameEvent);
 
 	// Hook C_EntMgr__ProcessEntities
-	processEntities = (ProcessEntities_t) CPatcher::InstallJmpPatch( COffsets::FUNC_CEntMgr__ProcessEntities, (DWORD)HOOK_CEntMgr__ProcessEntities, 0x6 );
+	processEntities = (ProcessEntities_t)CPatcher::InstallJmpPatch(COffsets::FUNC_CEntMgr__ProcessEntities, (DWORD)HOOK_CEntMgr__ProcessEntities, 0x6);
 
 	// Hook OnGameProcessStart
-	onGameProcessStart = ( OnGameProcessStart_t ) CPatcher::InstallJmpPatch( COffsets::FUNC_OnGameProcessStart, (DWORD)HOOK_OnGameProcessStart, 0x6 );
+	onGameProcessStart = (OnGameProcessStart_t)CPatcher::InstallJmpPatch(COffsets::FUNC_OnGameProcessStart, (DWORD)HOOK_OnGameProcessStart, 0x6);
 
 	//CPatcher::InstallJmpPatch ( 0x5BD0C0, (DWORD)InitialiseGame );
-	CPatcher::InstallJmpPatch ( COffsets::FUNC_CGame__OnGameLoad, (DWORD)HOOK_C_Game__OnGameLoad );
+	CPatcher::InstallJmpPatch(COffsets::FUNC_CGame__OnGameLoad, (DWORD)HOOK_C_Game__OnGameLoad);
 	//CPatcher::InstallJmpPatch ( 0x5B1C90, (DWORD)C_Game__OnGameUnload );
 
 	// Hook to prevent remote player peds following the localplayer keyboard controls
-	C_Player__ProcessKeyboard = (C_Player__ProcessKeyboard_t) CPatcher::InstallJmpPatch ( 0x42A9E0, (DWORD)HOOK_C_Player__ProcessKeyboard );
-	CPatcher::InstallNopPatch ( 0x4387A3, 0x86 ); // Fix crash - NEED TO LOOK AT THIS MORE (CAUSES CRASH WITH LOCALPLAYER WHEN JUMPING) // Steam: 0x0438A43
+	C_Player__ProcessKeyboard = (C_Player__ProcessKeyboard_t)CPatcher::InstallJmpPatch(COffsets::FUNC_CPlayer_ProcessKeyboard, (DWORD)HOOK_C_Player__ProcessKeyboard);
+
+	// Fix crash - NEED TO LOOK AT THIS MORE (CAUSES CRASH WITH LOCALPLAYER WHEN JUMPING)
+	if (m_gameVersion == GAME_VERSION_NORMAL)
+		CPatcher::InstallNopPatch(0x4387A3, 0x86);
+	else
+		CPatcher::InstallNopPatch(0x0438A43, 0x86);
 
 	// Hook C_HumanInventory__DoShot
-	CPatcher::InstallJmpPatch ( COffsets::FUNC_CHumanInventory__ProcessShot, (DWORD)HOOK_CHumanInventory__DoShot );
+	CPatcher::InstallJmpPatch(COffsets::FUNC_CHumanInventory__ProcessShot, (DWORD)HOOK_CHumanInventory__DoShot);
 
 	// Hook C_HumanInventory__DoReload
-	CPatcher::InstallJmpPatch( 0x958140, (DWORD)HOOK_CHumanInventory__DoReload ); // Steam: 0x0969510
+	CPatcher::InstallJmpPatch(COffsets::FUNC_CHumanInventory__DoReload, (DWORD)HOOK_CHumanInventory__DoReload);
 
 	// Hook C_Human__TakeDamage
-	CPatcher::InstallJmpPatch ( 0x97EE60, (DWORD)C_Human__TakeDamage ); // Steam: 0x09907D0
+	CPatcher::InstallJmpPatch(COffsets::FUNC_CHuman__TakeDamage, (DWORD)C_Human__TakeDamage);
 
 	// Vehicle enter stuff
-	CPatcher::InstallJmpPatch ( 0x953B20, (DWORD)C_Vehicle__PlayerStartEnter ); // Steam: 0x0964EF0
+	CPatcher::InstallJmpPatch(COffsets::FUNC_CVehicle__PlayerStartEnter, (DWORD)C_Vehicle__PlayerStartEnter); // Steam: 0x0964EF0
 
 	// Try disable player moving to driver seat after entering from passenger side
-	CPatcher::InstallNopPatch ( 0x4CEBCF, 0xC );
-	CPatcher::InstallNopPatch ( 0x4CEBEA, 0xA );
-	CPatcher::InstallNopPatch ( 0x4CEC00, 0xA );
+	if (m_gameVersion == GAME_VERSION_NORMAL){
+		CPatcher::InstallNopPatch(0x4CEBCF, 0xC);
+		CPatcher::InstallNopPatch(0x4CEBEA, 0xA);
+		CPatcher::InstallNopPatch(0x4CEC00, 0xA);
+	}
+	else if (m_gameVersion == GAME_VERSION_STEAM){
+		CPatcher::InstallNopPatch(0x04DCE9F, 0xC);
+		CPatcher::InstallNopPatch(0x04DCEBA, 0xA);
+		CPatcher::InstallNopPatch(0x04DCED0, 0x1);
+	}
 
 	// Hook for when ped enters water (It's function that finds X, Y, Z coord for some things)
-	CPatcher::InstallJmpPatch( 0x98B630, (DWORD)sub_98B630 );
+	if (m_gameVersion == GAME_VERSION_NORMAL){
+		CPatcher::InstallJmpPatch(0x98B630, (DWORD)sub_98B630);
+	}
+	else if (m_gameVersion == GAME_VERSION_STEAM){
+		CPatcher::InstallJmpPatch(0x099D010, (DWORD)sub_98B630);
+	}
 
 	// Hook CDoor__OnUse
 	//CPatcher::InstallJmpPatch ( 0x4DB430, (DWORD)HOOK_CDoor__OnUse );
@@ -313,35 +330,71 @@ void CPatches::Initialise( int m_gameVersion )
 	//CPatcher::InstallJmpPatch ( 0x5BF630, (DWORD)HOOK_C_SDSManager__ActivateStreamMapLine );
 	//CPatcher::InstallNopPatch ( 0xAC88F7, 0xF );
 
-	// Always use CVector3 over M2Entity in C_AICommandAimAt::constructor
-	*(BYTE *)0x93FFEB = 0x75; // jz -> jnz
+	if (m_gameVersion = GAME_VERSION_NORMAL){
+		// Always use CVector3 over M2Entity in C_AICommandAimAt::constructor
+		*(BYTE *)0x93FFEB = 0x75; // jz -> jnz
 
-	// Always use CVector3 over M2Entity in C_AICommandLookAt::constructor
-	*(BYTE *)0x93F961 = 0x75; // jz -> jnz
+		// Always use CVector3 over M2Entity in C_AICommandLookAt::constructor
+		*(BYTE *)0x93F961 = 0x75; // jz -> jnz
+	}
+	else if (m_gameVersion == GAME_VERSION_STEAM){
+		// Always use CVector3 over M2Entity in C_AICommandAimAt::constructor
+		*(BYTE *)0x09513EB = 0x75;
+
+		// Always use CVector3 over M2Entity in C_AICommandLookAt::constructor
+		*(BYTE *)0x0950D61 = 0x75; // jz -> jnz
+	}
 
 	// Disable DLC from loading
-	CPatcher::PatchAddress( 0x119D8E0, 0xC300B0 ); // mov al, 0; retn // Steam: 0x11A62C0
+	if (m_gameVersion == GAME_VERSION_NORMAL)
+		CPatcher::PatchAddress(0x119D8E0, 0xC300B0); // mov al, 0; retn 
+	else
+		CPatcher::PatchAddress(0x11A62C0, 0xC300B0); // mov al, 0; retn // 0x0C368ED
 
 	// Disable loading screens
-	CPatcher::PatchAddress( 0x8B9140, 0xC300B0 ); // mov al, 0; retn // Steam: 0x08CA820
+	if (m_gameVersion == GAME_VERSION_NORMAL)
+		CPatcher::PatchAddress(0x8B9140, 0xC300B0); // mov al, 0; retn
+	else
+		CPatcher::PatchAddress(0x08CA820, 0xC300B0); // mov al, 0; retn
 
 	// Disable save games
-	CPatcher::InstallNopPatch ( 0xB3A850, 0x27C ); // Steam: 0x0B40570
+	if (m_gameVersion == GAME_VERSION_NORMAL)
+		CPatcher::InstallNopPatch(0xB3A850, 0x27C);
+	else
+		CPatcher::InstallNopPatch(0x0B40570, 0x27C);
 
 	// Crash fix #1 (Still another crash in-vehicle around this area - PhysX APEX stuff)
-	CPatcher::InstallNopPatch ( 0x567B3D, 0x1E );
-	CPatcher::InstallNopPatch ( 0x567C67, 0x1E );
+	if (m_gameVersion == GAME_VERSION_NORMAL){
+		CPatcher::InstallNopPatch(0x567B3D, 0x1E);
+		CPatcher::InstallNopPatch(0x567C67, 0x1E);
+	}
+	else if (m_gameVersion == GAME_VERSION_STEAM){
+		CPatcher::InstallNopPatch(0x056B31D, 0x1E);
+		CPatcher::InstallNopPatch(0x056B447, 0x1E);
+	}
 
 	// Disable remote players turning into zombies if they die in car explosion
-	CPatcher::InstallNopPatch ( 0xA033A1, 0x7 );
+	if (m_gameVersion == GAME_VERSION_NORMAL)
+		CPatcher::InstallNopPatch(0xA033A1, 0x7);
+	else
+		CPatcher::InstallNopPatch(0x0A13A51, 0x7);
 
 	// Disable the game having control over vehicle sirens
-	CPatcher::InstallNopPatch ( 0x4CE573, 0x2 ); // enter vehicle 1
-	CPatcher::InstallNopPatch ( 0x4CE577, 0x8 ); // enter vehicle 2
-	CPatcher::InstallNopPatch ( 0x94504F, 0x12 ); // exit vehicle
+	if (m_gameVersion == GAME_VERSION_NORMAL){
+		CPatcher::InstallNopPatch(0x4CE573, 0x2); // enter vehicle 1
+		CPatcher::InstallNopPatch(0x4CE577, 0x8); // enter vehicle 2
+		CPatcher::InstallNopPatch(0x94504F, 0x12); // exit vehicle
+	}
+	else if (m_gameVersion == GAME_VERSION_STEAM){
+		CPatcher::InstallNopPatch(0x04DC843, 0x2); // enter vehicle 1
+		CPatcher::InstallNopPatch(0x04DC847, 0x8); // enter vehicle 2
+	}
 
 	// Hook for when vehicle fuel tank is shot - bugged
-	CPatcher::InstallCallPatch ( 0x4E48F1, (DWORD)C_Vehicle__OnFuelTankShot );
+	if (m_gameVersion == GAME_VERSION_NORMAL)
+		CPatcher::InstallCallPatch(0x4E48F1, (DWORD)C_Vehicle__OnFuelTankShot);
+	else
+		CPatcher::InstallCallPatch(0x04F4401, (DWORD)C_Vehicle__OnFuelTankShot);
 
 	// Disable vehicle exit
 	//CPatcher::InstallNopPatch ( 0x43B85B, 0x13 );
@@ -353,20 +406,37 @@ void CPatches::Initialise( int m_gameVersion )
 	//CPatcher::PatchAddress ( 0x9563C7, 0x1 );
 
 	// Stop game from changing vehicle light state
-	CPatcher::InstallNopPatch ( 0xCF6EC0, 0x65 ); // Steam: 0x0CFDDA0
-	CPatcher::InstallNopPatch ( 0x4473E3, 0x16 ); // Steam: 0x0447B13
-	CPatcher::InstallNopPatch ( 0x447418, 0x16 ); // Steam: 00447B48
+	if (m_gameVersion == GAME_VERSION_NORMAL)
+	{
+		CPatcher::InstallNopPatch(0xCF6EC0, 0x65); // Steam: 0x0CFDDA0
+		CPatcher::InstallNopPatch(0x4473E3, 0x16); // Steam: 0x0447B13
+		CPatcher::InstallNopPatch(0x447418, 0x16); // Steam: 00447B48
+	}
+	else if (m_gameVersion == GAME_VERSION_STEAM){
+		CPatcher::InstallNopPatch(0x0CFDDA0, 0x65);
+		CPatcher::InstallNopPatch(0x0447B13, 0x16);
+		CPatcher::InstallNopPatch(0x0447B48, 0x16);
+	}
 
 #ifndef _DEBUG
 	// Disable pause when game is minimized or sent to background
-	CPatcher::InstallNopPatch( 0xAB6051, 7 );
-	CPatcher::InstallNopPatch( 0xAB6037, 7 );
-	CPatcher::InstallNopPatch( 0xAB6172, 7 );
-	CPatcher::InstallNopPatch( 0xAB61A2, 7 );
+	if (m_gameVersion == GAME_VERSION_NORMAL)
+	{
+		CPatcher::InstallNopPatch(0xAB6051, 7);
+		CPatcher::InstallNopPatch(0xAB6037, 7);
+		CPatcher::InstallNopPatch(0xAB6172, 7);
+		CPatcher::InstallNopPatch(0xAB61A2, 7);
+	}
+	else if (m_gameVersion == GAME_VERSION_STEAM){
+		//Todo
+	}
 #endif
 
 	// Disable garages being able to create vehicles
-	CPatcher::PatchAddress ( 0xCD00A0, 0xC300B0 ); // mov al, 0; retn
+	if (m_gameVersion == GAME_VERSION_NORMAL)
+		CPatcher::PatchAddress ( 0xCD00A0, 0xC300B0 ); // mov al, 0; retn
+	else
+		CPatcher::PatchAddress(0x0CD6E90, 0xC300B0); // mov al, 0; retn
 
 	// Patch the sds main folder address
 	unsigned char guiMain[26] = "/sds/multiplayer/gui-main";

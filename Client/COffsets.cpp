@@ -76,6 +76,7 @@ unsigned int COffsets::FUNC_CLua__tointeger = 0;
 unsigned int COffsets::FUNC_CLua__newthread = 0;
 
 unsigned int COffsets::FUNC_CHumanInventory__ProcessShot = 0;
+unsigned int COffsets::FUNC_CHumanInventory__DoReload = 0;
 unsigned int COffsets::FUNC_CHuman__InventorySelect = 0;
 unsigned int COffsets::FUNC_CHuman__InventoryAddWeapon = 0;
 unsigned int COffsets::FUNC_CHuman__InventoryRemoveWeapon = 0;
@@ -103,6 +104,7 @@ unsigned int COffsets::FUNC_CHuman__HaveThrowingWeaponInHand = 0;
 unsigned int COffsets::FUNC_CHuman__IsOnScreen = 0;
 unsigned int COffsets::FUNC_CHuman__AnimationReset = 0;
 unsigned int COffsets::FUNC_CHuman__GetInOutCar = 0;
+unsigned int COffsets::FUNC_CHuman__TakeDamage = 0;
 
 unsigned int COffsets::VAR_VehiclePool = 0;
 unsigned int COffsets::FUNC_CVehicle__OpenHood = 0;
@@ -134,6 +136,7 @@ unsigned int COffsets::FUNC_CVehicle__FixCarPos = 0;
 unsigned int COffsets::FUNC_CVehicle__SetWheelMatrixAtIndex = 0;
 unsigned int COffsets::FUNC_CVehicle__GetWheelsMaterial = 0;
 unsigned int COffsets::FUNC_CVehicle__SetLightState = 0;
+unsigned int COffsets::FUNC_CVehicle__PlayerStartEnter = 0;
 
 
 unsigned int COffsets::FUNC_CSyncObject__Reactivate = 0;
@@ -182,6 +185,9 @@ unsigned int COffsets::FUNC_SetSFXVolume = 0;
 unsigned int COffsets::FUNC_SetVoicesVolume = 0;
 unsigned int COffsets::FUNC_SetMusicVolume = 0;
 unsigned int COffsets::FUNC_SetRadioVolume = 0;
+
+// Player
+unsigned int COffsets::FUNC_CPlayer_ProcessKeyboard = 0;
 
 void COffsets::Initialise( BYTE byteVersion, unsigned int uiBase )
 {
@@ -302,6 +308,7 @@ void COffsets::CommonInitialise(unsigned int uiBase)
 
 	// Human
 	FUNC_CHumanInventory__ProcessShot = (uiBase + 0x977FE0); // Steam: 0x0977FE0
+	FUNC_CHumanInventory__DoReload = (uiBase + 0x958140); // Steam: 0x0969510
 	FUNC_CHuman__ShowHat = (uiBase + 0x90C880); // Steam: 0x91DCC0
 	FUNC_CHuman__DropHat = (uiBase + 0x92A450); // Steam: 0x93B890
 	FUNC_CHuman__SetHealth = (uiBase + 0x92A480); // Steam: 0x93B8C0
@@ -329,6 +336,7 @@ void COffsets::CommonInitialise(unsigned int uiBase)
 	FUNC_CHuman__IsOnScreen = (uiBase + 0xD74FE0); // Steam: 0xD7C150
 	FUNC_CHuman__AnimationReset = (uiBase + 0x98B960); // Steam: 0x99D340
 	FUNC_CHuman__GetInOutCar = (uiBase + 0x98C800); // Steam: 0x99E1E0
+	FUNC_CHuman__TakeDamage = (uiBase + 0x97EE60);
 
 	// Vehicle
 	FUNC_CVehicle__OpenHood = (uiBase + 0x9AC050); // Steam: 0x09BCFB0
@@ -360,6 +368,7 @@ void COffsets::CommonInitialise(unsigned int uiBase)
 	FUNC_CVehicle__SetWheelMatrixAtIndex = (uiBase + 0x9BE450);
 	FUNC_CVehicle__GetWheelsMaterial = (uiBase + 0x990CF0);
 	FUNC_CVehicle__SetLightState = (uiBase + 0x11EED00);
+	FUNC_CVehicle__PlayerStartEnter = (uiBase + 0x953B20);
 
 	// Sync Objects
 	FUNC_CSyncObject__Reactivate = (uiBase + 0x11DE7D0);
@@ -413,6 +422,9 @@ void COffsets::CommonInitialise(unsigned int uiBase)
 	FUNC_SetVoicesVolume = 0x836450;
 	FUNC_SetMusicVolume = 0x8364B0;
 	FUNC_SetRadioVolume = 0x836510;
+
+	// Player
+	FUNC_CPlayer_ProcessKeyboard = 0x42A9E0;
 }
 
 void COffsets::CommonInitialise__Steam(unsigned int uiBase)
@@ -491,6 +503,7 @@ void COffsets::CommonInitialise__Steam(unsigned int uiBase)
 
 	// Human
 	FUNC_CHumanInventory__ProcessShot = (uiBase + 0x0977FE0);
+	FUNC_CHumanInventory__DoReload = (uiBase + 0x0969510);
 	FUNC_CHuman__ShowHat = (uiBase + 0x91DCC0);
 	FUNC_CHuman__DropHat = (uiBase + 0x93B890);
 	FUNC_CHuman__SetHealth = (uiBase + 0x93B8C0);
@@ -518,6 +531,7 @@ void COffsets::CommonInitialise__Steam(unsigned int uiBase)
 	FUNC_CHuman__IsOnScreen = (uiBase + 0xD7C150);
 	FUNC_CHuman__AnimationReset = (uiBase + 0x99D340);
 	FUNC_CHuman__GetInOutCar = (uiBase + 0x99E1E0);
+	FUNC_CHuman__TakeDamage = (uiBase + 0x09907D0);
 
 	// Vehicle
 	FUNC_CVehicle__OpenHood = (uiBase + 0x09BCFB0);
@@ -541,6 +555,7 @@ void COffsets::CommonInitialise__Steam(unsigned int uiBase)
 	/*FUNC_CVehicle__SetOnPart = (uiBase + 0x125A600);
 	FUNC_CVehicle__SetOffPart = (uiBase + 0x125A530);*/
 	FUNC_CVehicle__SetColors = (uiBase + 0x9BBF70);
+	FUNC_CVehicle__PlayerStartEnter = (uiBase + 0x0964EF0);
 
 	// Sync Objects
 	FUNC_CSyncObject__Reactivate = (uiBase + 0x11E7590);
@@ -575,4 +590,7 @@ void COffsets::CommonInitialise__Steam(unsigned int uiBase)
 	FUNC_CEntity__Activate = (uiBase + 0x1192170);
 	FUNC_CEntity__Deactivate = (uiBase + 0x11921C0);
 	FUNC_CEntity__Delete = (uiBase + 0x119DDD0);
+
+	// Player
+	FUNC_CPlayer_ProcessKeyboard = 0x42ABE0;
 }

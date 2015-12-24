@@ -19,7 +19,7 @@ bool					bInputHookCreated = false;
 extern					DWORD sub_CD00A0__ECX;
 
 #define					EXE_VERSION_SKIDROW		0xAE196A1E //M2:MP patched version
-#define					EXE_VERSION_STEAM		0xB1ADE8F2 //Steam version
+#define					EXE_VERSION_STEAM		0x061063FC //Steam version
 
 DWORD					GetModelHasFromModelName_ECX;
 
