@@ -23,6 +23,7 @@ unsigned int COffsets::VAR_GuiMainSdsFolder = 0;
 unsigned int COffsets::VAR_GuiMainSds = 0;
 unsigned int COffsets::VAR_GuiSds = 0;
 unsigned int COffsets::VAR_TablesSds = 0;
+unsigned int COffsets::VAR_SDSConfigFile = 0;
 unsigned int COffsets::VAR_LoadingScreen = 0;
 unsigned int COffsets::VAR_StreamBin = 0;
 unsigned int COffsets::FUNC_M2malloc = 0;
@@ -248,6 +249,7 @@ void COffsets::CommonInitialise(unsigned int uiBase)
 	VAR_TablesSds = (uiBase + 0x18E4CFC); // Steam : 0x18F88B4
 	VAR_LoadingScreen = (uiBase + 0x1949B58); // Steam : 0x195D7A0
 	VAR_StreamBin = (uiBase + 0x18E3A44); // Steam : 0x18F7364
+	VAR_SDSConfigFile = (uiBase + 0x18F76A4);
 	FUNC_M2malloc = (uiBase + 0x401730);
 	FUNC_OnGameProcessStart = (uiBase + 0x401A80);
 
@@ -444,6 +446,7 @@ void COffsets::CommonInitialise__Steam(unsigned int uiBase)
 	VAR_TablesSds = (uiBase + 0x18F88B4);
 	VAR_LoadingScreen = (uiBase + 0x195D7A0);
 	VAR_StreamBin = (uiBase + 0x18F7364);
+	VAR_SDSConfigFile = (uiBase + 0x190B2A4);
 	FUNC_M2malloc = (uiBase + 0x401830);
 	FUNC_OnGameProcessStart = (uiBase + 0x401B80);
 

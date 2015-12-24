@@ -182,3 +182,24 @@ void CPatcher::DumpVFTable( DWORD dwAddress, int iFunctionCount )
 		CLogFile::Printf( "VFTable Offset: %d, Function: 0x%p (At Address: 0x%p)", (i * 4), *(PDWORD)(dwAddress + (i * 4)), (dwAddress + (i * 4)) );
 	}
 }
+
+void CPatcher::Initialize(void)
+{
+	// Prepare headers
+	PBYTE pbImageBase = (PBYTE)GetModuleHandle(NULL);
+	PIMAGE_DOS_HEADER pDosHeader = (PIMAGE_DOS_HEADER)pbImageBase;
+	PIMAGE_NT_HEADERS pNtHeaders = (PIMAGE_NT_HEADERS)(pbImageBase + pDosHeader->e_lfanew);
+	PIMAGE_SECTION_HEADER pSection = IMAGE_FIRST_SECTION(pNtHeaders);
+
+	// Loop thought all sections
+	for (int iSection = 0; iSection < pNtHeaders->FileHeader.NumberOfSections; iSection++, pSection++)
+	{
+		char * szSectionName = (char*)pSection->Name;
+		if (!strcmp(szSectionName, ".text") || !strcmp(szSectionName, ".rdata") || !strcmp(szSectionName, ".textnc"))
+		{
+			// Unprotect segment
+			DWORD dwOld = 0;//Temp variable
+			VirtualProtect((void *)(pbImageBase + pSection->VirtualAddress), ((pSection->Misc.VirtualSize + 4095)&~4095), PAGE_EXECUTE_READWRITE, &dwOld);
+		}
+	}
+}

@@ -57,4 +57,6 @@ public:
 
 	static	void				DumpVFTable( DWORD dwAddress, int iFunctionCount );
 
+	static	void				Initialize(void);
+
 };

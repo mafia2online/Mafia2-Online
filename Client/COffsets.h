@@ -32,6 +32,7 @@ public:
 	static	unsigned int		VAR_TablesSds;
 	static	unsigned int		VAR_LoadingScreen;
 	static	unsigned int		VAR_StreamBin;
+	static	unsigned int		VAR_SDSConfigFile;
 	static	unsigned int		FUNC_M2malloc;
 	static	unsigned int		FUNC_OnGameProcessStart;
 

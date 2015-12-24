@@ -242,6 +242,28 @@ void __fastcall HOOK_C_Player__ProcessKeyboard ( M2Entity * pEntity, void * _EDX
 		C_Player__ProcessKeyboard ( pEntity, a2, a3, a4 );
 }
 
+int _cdecl PrintAddress(unsigned int address)
+{
+	CLogFile::Printf("Retn: %p", address);
+	return 1;
+}
+
+unsigned int SomeSteamShitBack = 0x00DED147;
+void _declspec(naked) SomeSteamShit()
+{
+	_asm
+	{
+		pushad
+			push[esp + 20h]
+			call PrintAddress
+			add esp, 4h
+			popad
+
+			lea eax, [esp + 1004h]
+			jmp SomeSteamShit
+	}
+}
+
 void CPatches::Initialise(int m_gameVersion)
 {
 	if (m_gameVersion == GAME_VERSION_NORMAL){
@@ -263,8 +285,14 @@ void CPatches::Initialise(int m_gameVersion)
 		C_Human__TakeDamage_End = 0x0990D02; // Normal: 0x97F392
 	}
 
-	// Unprotect the .text segment
-	CPatcher::Unprotect((pCore->GetBaseAddress() + 0x400000 + 0x1000), 0x94C000);
+	if (m_gameVersion == GAME_VERSION_NORMAL){
+		// Unprotect the .text segment
+		CPatcher::Unprotect((pCore->GetBaseAddress() + 0x400000 + 0x1000), 0x94C000);
+	}
+	else if (m_gameVersion == GAME_VERSION_STEAM){
+		CPatcher::Initialize();
+		//CPatcher::InstallJmpPatch(0x00DED140, (DWORD)SomeSteamShit);
+	}
 
 	// Hook C_Game__OnGameInit
 	onGameInit = (sub_410440)CPatcher::InstallJmpPatch(COffsets::FUNC_CGame__OnGameInit, (DWORD)HOOK_CGame__OnGameInit);
@@ -460,13 +488,14 @@ void CPatches::Initialise(int m_gameVersion)
 
 	// Patch the SDS config file
 	unsigned char sdsConf[20] = "/sdsconfig_m2mp.bin";
-	CPatcher::PatchAddress( 0x18F76A4, sdsConf, sizeof(sdsConf) );
+	CPatcher::PatchAddress( COffsets::VAR_SDSConfigFile, sdsConf, sizeof(sdsConf) );
 
 	CLogFile::Printf( "Patches installed." );
 }
 
 int CPatches::HOOK_CGame__OnGameInit( lua_State * a1, signed int a2, const PCHAR a3 )
 {
+	CLogFile::Printf("HOOK_CGame__OnGameInit");
 	// Was this the game start?
 	if( !strcmp( a3, "onGameInit" ) )
 	{
