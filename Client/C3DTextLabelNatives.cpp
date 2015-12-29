@@ -13,6 +13,49 @@ extern	CCore			* pCore;
 
 void C3DTextLabelNatives::Register(CScriptingManager * pScriptingManager)
 {
-	/*pScriptingManager->RegisterFunction("getCameraPosition", GetPosition, 0, NULL);
-	pScriptingManager->RegisterFunction("getCameraRotation", GetRotation, 0, NULL);*/
+	pScriptingManager->RegisterFunction("create3DTextLabel", Create3DTextLabel, 6, "fffsif");
+	pScriptingManager->RegisterFunction("remove3DTextLabel", Remove3DTextLabel, 1, "i");
+}
+
+SQInteger C3DTextLabelNatives::Create3DTextLabel(SQVM * pVM)
+{
+	// Declare variables
+	SQFloat fX;
+	SQFloat fY;
+	SQFloat fZ;
+	const SQChar *text;
+	String str;
+	SQInteger color;
+	SQFloat distance;
+
+	// Fetch values
+	sq_getfloat(pVM, -6, &fX);
+	sq_getfloat(pVM, -5, &fY);
+	sq_getfloat(pVM, -4, &fZ);
+
+	sq_getstring(pVM, -3, &text);
+
+	sq_getinteger(pVM, -2, &color);
+	sq_getfloat(pVM, -1, &distance);
+
+
+	// Transform string
+	str.Set(text);
+
+	// Create and return
+	sq_pushbool(pVM, pCore->Get3DTextLabelManager()->Add(fX, fY, fZ, str, color, distance));
+	return (true);
+}
+
+SQInteger C3DTextLabelNatives::Remove3DTextLabel(SQVM * pVM)
+{
+	// Declare variable
+	SQInteger textId;
+
+	// Fetch value
+	sq_getinteger(pVM, -1, &textId);
+
+	// Remove and return
+	sq_pushbool(pVM, pCore->Get3DTextLabelManager()->Remove(textId));
+	return (true);
 }

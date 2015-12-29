@@ -24,7 +24,7 @@ public:
 									C3DTextLabelManager(void);
 									~C3DTextLabelManager(void);
 
-	bool							Add(EntityId textID, float fX, float fY, float fZ, String text, int color, float distance);
+	bool							Add(float fX, float fY, float fZ, String text, int color, float distance);
 	bool							Remove(EntityId textID);
 	bool							IsActive(EntityId textID);
 	bool							IsOnScreen(EntityId textID);

@@ -210,6 +210,7 @@
 #include "CCameraNatives.h"
 #include "CClientNatives.h"
 #include "CAudioNatives.h"
+#include "C3DTextLabelNatives.h"
 
 // Clientscripts
 #include <Timers/CTimer.h>
