@@ -83,7 +83,12 @@ bool	C3DTextLabelManager::IsActive(EntityId textID)
 		return (false);
 
 	// Return state
-	return(m_p3DTextLabels[textID]->IsActive());
+	if (m_p3DTextLabels[textID] != NULL){
+		return (m_p3DTextLabels[textID]->IsActive());
+	}
+	else {
+		return (false);
+	}
 }
 
 bool	C3DTextLabelManager::IsOnScreen(EntityId textID)
@@ -131,7 +136,7 @@ void	C3DTextLabelManager::Render(void)
 	for (EntityId i = 0; i < MAX_3DTEXTS; i++)
 	{
 		// Is active 3DTextLabel
-		if (m_p3DTextLabels[i]->IsActive() == true){
+		if (IsActive(i) == true){
 			// If we can see the textLabel on our screen
 			if (IsOnScreen(i))
 			{

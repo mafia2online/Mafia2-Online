@@ -24,6 +24,7 @@ SQInteger C3DTextLabelNatives::GetCount(SQVM * pVM)
 {
 	// Return value
 	sq_pushinteger(pVM, pCore->Get3DTextLabelManager()->GetCount());
+	return (true);
 }
 
 SQInteger C3DTextLabelNatives::Create3DTextLabel(SQVM * pVM)

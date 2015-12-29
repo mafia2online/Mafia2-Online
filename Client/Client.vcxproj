@@ -199,7 +199,7 @@
     <ClInclude Include="..\Shared\Timers\CTimerManager.h" />
     <ClInclude Include="C3DTextLabel.h" />
     <ClInclude Include="C3DTextLabelManager.h" />
-    <ClInclude Include="C3DTextLabelRPC.h" />
+    <ClInclude Include="C3DTextLabelNatives.h" />
     <ClInclude Include="CAudio.h" />
     <ClInclude Include="CAudioManager.h" />
     <ClInclude Include="CAudioNatives.h" />
@@ -372,7 +372,7 @@
     <ClCompile Include="..\Shared\Timers\CTimerManager.cpp" />
     <ClCompile Include="C3DTextLabel.cpp" />
     <ClCompile Include="C3DTextLabelManager.cpp" />
-    <ClCompile Include="C3DTextLabelRPC.cpp" />
+    <ClCompile Include="C3DTextLabelNatives.cpp" />
     <ClCompile Include="CAudio.cpp" />
     <ClCompile Include="CAudioManager.cpp" />
     <ClCompile Include="CAudioNatives.cpp" />
