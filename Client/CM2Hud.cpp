@@ -327,6 +327,12 @@ void CM2Hud::ShowMessage(const char * text, int delay)
 	CLua::Executef( "game.hud:MessageShowQuick( \"%s\", \"%d\")", text, delay); // Idk if we can show custom message, gonna try
 }
 
+
+void CM2Hud::ShowHelp(const char * text, int delay)
+{
+	CLua::Executef("game.hud:HelpHintShowQuick( \"%s\", \"%d\")", text, delay); // Idk if we can show custom message, gonna try
+}
+
 void CM2Hud::SetDrunkLevel(int level)
 {
 	if (level > 0){
