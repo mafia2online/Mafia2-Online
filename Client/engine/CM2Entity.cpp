@@ -22,7 +22,7 @@ CM2Entity::~CM2Entity( void )
 	// Is the entity valid?
 	if( m_pEntity )
 	{
-		DWORD C_Entity__Delete = 0x1195580;
+		DWORD C_Entity__Delete = COffsets::FUNC_CEntity__Delete;
 		M2Entity * pEntity = m_pEntity;
 
 		_asm mov ecx, pEntity;

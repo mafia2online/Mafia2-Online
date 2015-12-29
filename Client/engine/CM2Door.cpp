@@ -107,6 +107,8 @@ __int64 CM2Door::GetHash( void )
 
 	unsigned int uiHash = 0;
 
+
+	//TodoSteam
 	_asm push 0CBF29CE4h;						//.text:005AB1CB                 push    0CBF29CE4h
 	_asm push 84222325h;						//.text:005AB1D0                 push    84222325h
 	_asm push szDoorPos;

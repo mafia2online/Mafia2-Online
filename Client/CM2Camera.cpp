@@ -74,7 +74,7 @@ void CM2Camera::LockControl( bool bLock )
 
 bool CM2Camera::IsLocked( void )
 {
-	return (*(int *)0x1BAF07C != 0);
+	return (*(int *)COffsets::VAR_CCamera__State != 0);
 }
 
 float CM2Camera::GetNearClip( void )

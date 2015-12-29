@@ -44,7 +44,7 @@ int CM2Navigation::RegisterIconPos( Vector2 vecPosition, int iLibrary, int iIcon
 
 	void* pIcon = NULL;
 	bool bResult = false;
-	DWORD C_Navigation__GetIconFromId = 0x4963E0;
+	DWORD C_Navigation__GetIconFromId = COffsets::FUNC_CNavigation__GetIconFromId;
 	M2Navigation * pNavigation = m_pNavigation;
 
 	_asm lea ecx, pIcon;

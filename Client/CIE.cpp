@@ -214,7 +214,7 @@ namespace IE
 		M2Entity * pEntity;
 
 		// Create entity
-		DWORD dwFunc = 0x992E50;
+		DWORD dwFunc = COffsets::FUNC_CEntity__Create;
 		_asm push 4;
 		_asm call dwFunc;
 		_asm mov pEntity, eax;
@@ -226,7 +226,7 @@ namespace IE
 		_asm call dwFunc;
 
 		// Activate
-		dwFunc = 0x1189E20;
+		dwFunc = COffsets::FUNC_CEntity__Activate;
 		_asm mov ecx, pEntity;
 		_asm call dwFunc;
 

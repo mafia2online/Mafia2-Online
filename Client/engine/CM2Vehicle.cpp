@@ -18,9 +18,7 @@ CM2Vehicle::CM2Vehicle( M2Vehicle * pVehicle ) : CM2Entity( pVehicle )
 	// Set the vehicle
 	SetVehicle( pVehicle );
 
-#ifdef _DEBUG
 	CLogFile::Printf( "CM2Vehicle::CM2Vehicle( 0x%p )", pVehicle );
-#endif
 
 	// Prohibit the vehicle from entering garages (house garage)
 	// todo: make this a function!
@@ -479,6 +477,7 @@ void CM2Vehicle::SetSirenOn( bool bSirenOn )
 	{
 		//
 		DWORD dwVehicleData = (DWORD)(m_pVehicle) + 0xA8;
+		CLogFile::Printf("0x%p", dwVehicleData);
 
 		// Switch the siren state
 		if( bSirenOn )
@@ -926,7 +925,7 @@ void CM2Vehicle::SetLightState ( bool bLightState )
 		// Toggle the lights
 		M2Vehicle * pVehicle = m_pVehicle;
 		DWORD dwVehicleData = (DWORD)(pVehicle) + 0xA8;
-		DWORD C_Vehicle__SetLightState = 0x11EED00;
+		DWORD C_Vehicle__SetLightState = COffsets::FUNC_CVehicle__SetLightState;
 		int iLightState = (int)bLightState;
 
 		// Unlock light state
