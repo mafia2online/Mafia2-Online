@@ -43,7 +43,7 @@
     <OutDir>$(SolutionDir)Binary\Release</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <TargetName>m2mp</TargetName>
+    <TargetName>m2online</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)Binary\debug</OutDir>

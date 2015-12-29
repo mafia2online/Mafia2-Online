@@ -112,8 +112,8 @@ Section "Install"
 	File ..\Binary\dist\vcredist_x86.exe
 	Call vcredist2010installer
 	
-	File ..\Binary\release\m2mp.exe
-	File ..\Binary\release\m2mp.dll
+	File ..\Binary\release\m2online.exe
+	File ..\Binary\release\m2online.dll
 	File ..\Binary\bass.dll
 	File ..\Binary\crashprt\crashrpt_lang.ini
 	File ..\Binary\crashprt\CrashRpt1401.dll
@@ -170,11 +170,11 @@ Section "Install"
 	
 	# Create the desktop shortcut
 	SetOutPath "${MOD_DIR}"
-	CreateShortCut "$DESKTOP\${MOD_NAME}.lnk" "${MOD_DIR}\m2mp.exe"
+	CreateShortCut "$DESKTOP\${MOD_NAME}.lnk" "${MOD_DIR}\m2online.exe"
 	
 	# Create the start menu shortcuts
 	CreateDirectory "$SMPROGRAMS\${MOD_NAME}"
-	CreateShortCut "$SMPROGRAMS\${MOD_NAME}\${MOD_NAME}.lnk" "${MOD_DIR}\m2mp.exe"
+	CreateShortCut "$SMPROGRAMS\${MOD_NAME}\${MOD_NAME}.lnk" "${MOD_DIR}\m2online.exe"
 	CreateShortCut "$SMPROGRAMS\${MOD_NAME}\Uninstall.lnk" "${MOD_DIR}\Uninstall.exe"
 	
 	# Write the registry keys
@@ -184,10 +184,10 @@ Section "Install"
 	WriteRegStr HKLM "${REG_NODE}" "Version" "${MOD_VERS}"
 	
 	# Write the URI scheme
-	WriteRegStr HKCR "m2mp" "" "Mafia2-Online Protocol"
-	WriteRegStr HKCR "m2mp" "URL Protocol" ""
-	WriteRegStr HKCR "m2mp\DefaultIcon" "" "$\"${MOD_DIR}\m2mp_d.exe$\",1"
-	WriteRegStr HKCR "m2mp\shell\open\command" "" "$\"${MOD_DIR}\m2mp_d.exe$\" $\"-uri %1$\""
+	WriteRegStr HKCR "m2online" "" "Mafia2-Online Protocol"
+	WriteRegStr HKCR "m2online" "URL Protocol" ""
+	WriteRegStr HKCR "m2online\DefaultIcon" "" "$\"${MOD_DIR}\m2online.exe$\",1"
+	WriteRegStr HKCR "m2online\shell\open\command" "" "$\"${MOD_DIR}\m2online.exe$\" $\"-uri %1$\""
 	
 SectionEnd
 
@@ -206,8 +206,8 @@ FunctionEnd
 
 Section "Uninstall"
 
-	Delete "${MOD_DIR}\m2mp.exe"
-	Delete "${MOD_DIR}\m2mp.dll"
+	Delete "${MOD_DIR}\m2online.exe"
+	Delete "${MOD_DIR}\m2online.dll"
 	Delete "$INSTDIR\..\sds\missionscript\freeraid_m2mp.sds"
 	Delete "$INSTDIR\..\..\edit\tables\StreamM2MP.bin"
 	RMDir /r "${MOD_DIR}"

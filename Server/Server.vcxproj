@@ -49,7 +49,7 @@
     <OutDir>$(SolutionDir)\Binary\release</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <TargetName>m2mp-svr</TargetName>
+    <TargetName>m2online-svr</TargetName>
     <LibraryPath>$(LibraryPath)</LibraryPath>
     <IntDir>$(Configuration)\</IntDir>
   </PropertyGroup>
