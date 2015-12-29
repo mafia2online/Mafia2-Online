@@ -89,14 +89,17 @@ EntityId C3DTextLabelManager::FindFreeSlot(void)
 	// Loop over all textlabel instances
 	for (EntityId i = 0; i < MAX_3DTEXTS; i++)
 	{
-		CLogFile::Print("Find-1");
 		// Is the current textLabel not active?
 		if (IsActive(i) == false)
 			return i;
-		CLogFile::Print("Find-2");
 	}
 
 	return INVALID_ENTITY_ID;
+}
+
+void	C3DTextLabelManager::PreRender(void)
+{
+	//Todo
 }
 
 void	C3DTextLabelManager::Render(void)
