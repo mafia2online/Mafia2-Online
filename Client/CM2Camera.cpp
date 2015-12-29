@@ -200,6 +200,39 @@ void CM2Camera::GetWorldMatrix( Matrix43 * mat )
 	}
 }
 
+bool CM2Camera::IsOnScreen(const CVector3 & vecPosition)
+{
+#define CVEC_TO_D3DVEC(vec) &D3DXVECTOR3(vec.fX, vec.fY, vec.fZ)
+#define D3DVEC_TO_CVEC(vec) &CVector3(vec.x, vec.y, vec.z)
+	CVector3 vecCamPos;
+	pCore->GetCamera()->GetPosition(&vecCamPos);
+
+	CVector3 vecCamLookAt;
+	pCore->GetCamera()->GetLookAt(&vecCamLookAt);
+
+	D3DXMATRIX matView;
+	D3DXMatrixLookAtLH(&matView, CVEC_TO_D3DVEC(vecCamPos), CVEC_TO_D3DVEC(vecCamLookAt), &D3DXVECTOR3(0, 0, 1));
+
+	D3DVIEWPORT9 viewport;
+	pCore->GetGraphics()->GetDevice()->GetViewport(&viewport);
+
+	DWORD dwLenX = viewport.Width;
+	DWORD dwLenY = viewport.Height;
+
+	D3DXMATRIX matProj;
+	//pCore->GetCamera()->GetCamera()->pCamera1->m_fFovAngle
+	//pCore->GetCamera()->GetCamera()->pCamera2->pCameraData->m_fNear
+	D3DXMatrixPerspectiveFovLH(&matProj, pCore->GetCamera()->GetCamera()->pCamera1->m_fFovAngle, (float)dwLenX / (float)dwLenY, pCore->GetCamera()->GetCamera()->pCamera2->pCameraData->m_fNear, pCore->GetCamera()->GetCamera()->pCamera2->pCameraData->m_fFar);
+
+	D3DXMATRIX matWorld;
+	D3DXMatrixIdentity(&matWorld);
+
+	D3DXVECTOR3 vecSPos;
+	D3DXVec3Project(&vecSPos, CVEC_TO_D3DVEC(vecPosition), &viewport, &matProj, &matView, &matWorld);
+
+	return (vecSPos.z < 1.f);
+}
+
 void CM2Camera::GetViewMatrix( D3DXMATRIX * mat )
 {
 	// Is the camera active?
