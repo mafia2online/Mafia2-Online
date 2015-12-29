@@ -1,9 +1,9 @@
 /*************************************************************
 *
-* Solution   : Mafia 2 Multiplayer
+* Solution   : Mafia2-Online
 * Project    : Client
-* File       : CBlipRPC.cpp
-* Developers : AaronLad <aaron@m2-multiplayer.com>
+* File       : C3DTextLabelRPC.cpp
+* Developers : Tyldar <tyldar@mafia2-online.com>
 *
 ***************************************************************/
 
@@ -14,12 +14,12 @@ extern	CCore			* pCore;
 
 void NewTextLabel(RakNet::BitStream * pBitStream, RakNet::Packet * pPacket)
 {
-	CLogFile::Printf("Received order to create new textLabel");
+	pCore->GetChat->AddDebugMessage("Received order to create new textLabel");
 }
 
 void RemoveTextLabel(RakNet::BitStream * pBitStream, RakNet::Packet * pPacket)
 {
-	CLogFile::Printf("Received order to delete textLabel");
+	pCore->GetChat()->AddDebugMessage("Received order to delete textLabel");
 }
 
 void C3DTextLabelRPC::Register(RakNet::RPC4 * pRPC)

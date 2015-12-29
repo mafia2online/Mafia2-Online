@@ -28,6 +28,7 @@ public:
 	bool							Remove(EntityId textID);
 	bool							IsActive(EntityId textID);
 	bool							IsOnScreen(EntityId textID);
+	void							PreRender(void);
 	void							Render(void);
 	EntityId						FindFreeSlot(void);
 };

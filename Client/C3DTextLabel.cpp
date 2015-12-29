@@ -25,20 +25,24 @@ C3DTextLabel::C3DTextLabel(EntityId serverID, float fX, float fY, float fZ, Stri
 
 C3DTextLabel::~C3DTextLabel(void)
 {
+	// Mark current entity as not active
 	this->SetActive(false);
 }
 
 CVector3	* C3DTextLabel::GetPosition(CVector3 * pos)
 {
+	// Set values
 	pos->fX = m_fX;
 	pos->fY = m_fY;
 	pos->fZ = m_fZ;
 	
+	// Return array
 	return (pos);
 }
 
 void	C3DTextLabel::SetPosition(CVector3 pos)
 {
+	// Save values
 	this->m_fX = pos.fX;
 	this->m_fY = pos.fY;
 	this->m_fZ = pos.fZ;
