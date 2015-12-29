@@ -500,6 +500,10 @@ void CCore::OnDeviceRender( void )
 	if (m_pNameTag)
 		m_pNameTag->All();
 
+	// Render the 3DTextLabels
+	if (m_p3DTextLabelManager)
+		m_p3DTextLabelManager->Render();
+
 	// Is the scripting manager active?
 	if( m_pClientScriptingManager && !m_pGUI->GetMainMenu()->IsVisible () )
 	{

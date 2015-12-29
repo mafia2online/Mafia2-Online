@@ -797,8 +797,8 @@
     <ClInclude Include="C3DTextLabelManager.h">
       <Filter>Header Files\Client\Network</Filter>
     </ClInclude>
-    <ClInclude Include="C3DTextLabelRPC.h">
-      <Filter>Header Files\Client\Network\RPCs</Filter>
+    <ClInclude Include="C3DTextLabelNatives.h">
+      <Filter>Header Files\Client\Scripting\Natives</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1288,8 +1288,8 @@
     <ClCompile Include="C3DTextLabel.cpp">
       <Filter>Source Files\Client\Network\3DTextLabel</Filter>
     </ClCompile>
-    <ClCompile Include="C3DTextLabelRPC.cpp">
-      <Filter>Source Files\Client\Network\RPCs</Filter>
+    <ClCompile Include="C3DTextLabelNatives.cpp">
+      <Filter>Source Files\Client\Scripting\Natives</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

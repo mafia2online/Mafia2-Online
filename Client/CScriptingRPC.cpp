@@ -12,7 +12,6 @@
 #include	"CPlayerRPC.h"
 #include	"CVehicleRPC.h"
 #include	"CBlipRPC.h"
-#include	"C3DTextLabelRPC.h"
 
 extern	CCore			* pCore;
 bool	CScriptingRPC::m_bRegistered = false;
@@ -31,9 +30,6 @@ void CScriptingRPC::Register( RakNet::RPC4 * pRPC )
 
 	// Register the blip RPC's
 	CBlipRPC::Register ( pRPC );
-
-	// Register the 3DTextLabel RPC
-	C3DTextLabelRPC::Register( pRPC );
 
 }
 
