@@ -170,6 +170,7 @@ public:
 	void				SpeedoShow( bool bShow );
 
 	void 				ShowMessage(const char * text, int delay);
+	void				ShowHelp(const char * text, int delay);
 
 	void 				SetDrunkLevel(int level);
 	int					GetDrunkLevel(void) { return (m_drunkLevel); }
