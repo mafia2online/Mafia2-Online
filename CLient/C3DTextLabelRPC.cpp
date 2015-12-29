@@ -32,6 +32,6 @@ void C3DTextLabelRPC::Register(RakNet::RPC4 * pRPC)
 void C3DTextLabelRPC::Unregister(RakNet::RPC4 * pRPC)
 {
 	// TextLabel functions
-	pRPC->UnregisterFunction(RPC_ATTACHBLIPTOPLAYER);
+	pRPC->UnregisterFunction(RPC_NEWTEXTLABEL);
 	pRPC->UnregisterFunction(RPC_REMOVETEXTLABEL);
 }
