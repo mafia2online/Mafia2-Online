@@ -222,7 +222,7 @@ bool CM2Camera::IsOnScreen(const CVector3 & vecPosition)
 	D3DXMATRIX matProj;
 	//pCore->GetCamera()->GetCamera()->pCamera1->m_fFovAngle
 	//pCore->GetCamera()->GetCamera()->pCamera2->pCameraData->m_fNear
-	D3DXMatrixPerspectiveFovLH(&matProj, pCore->GetCamera()->GetCamera()->pCamera1->m_fFovAngle, (float)dwLenX / (float)dwLenY, pCore->GetCamera()->GetCamera()->pCamera2->pCameraData->m_fNear, pCore->GetCamera()->GetCamera()->pCamera2->pCameraData->m_fFar);
+	D3DXMatrixPerspectiveFovLH(&matProj, pCore->GetCamera()->GetCamera()->pCamera1->m_fFovAngle, (float)dwLenX / (float)dwLenY, pCore->GetCamera()->GetCamera()->pCamera1->pCameraData->m_fNear, pCore->GetCamera()->GetCamera()->pCamera1->pCameraData->m_fFar);
 
 	D3DXMATRIX matWorld;
 	D3DXMatrixIdentity(&matWorld);
