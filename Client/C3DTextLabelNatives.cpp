@@ -15,6 +15,15 @@ void C3DTextLabelNatives::Register(CScriptingManager * pScriptingManager)
 {
 	pScriptingManager->RegisterFunction("create3DTextLabel", Create3DTextLabel, 6, "fffsif");
 	pScriptingManager->RegisterFunction("remove3DTextLabel", Remove3DTextLabel, 1, "i");
+	pScriptingManager->RegisterFunction("count3DTextLabels", GetCount, 0, NULL);
+
+	pScriptingManager->RegisterConstant("MAX_3DTEXTLABELS", MAX_3DTEXTS);
+}
+
+SQInteger C3DTextLabelNatives::GetCount(SQVM * pVM)
+{
+	// Return value
+	sq_pushinteger(pVM, pCore->Get3DTextLabelManager()->GetCount());
 }
 
 SQInteger C3DTextLabelNatives::Create3DTextLabel(SQVM * pVM)
