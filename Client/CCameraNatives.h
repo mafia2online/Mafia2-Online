@@ -16,6 +16,7 @@ private:
 
 	static	SQInteger		GetPosition( SQVM * pVM );
 	static	SQInteger		GetRotation( SQVM * pVM );
+	static	SQInteger		SimpleShake( SQVM * pVM);
 
 public:
 
