@@ -93,7 +93,15 @@ bool	C3DTextLabelManager::IsActive(EntityId textID)
 
 bool	C3DTextLabelManager::IsOnScreen(EntityId textID)
 {
-	return (true);
+	// Text position
+	CVector3 textPos;
+	m_p3DTextLabels[textID]->GetPosition(&textPos);
+
+	// Convert coordinates
+	CVector3 vecScreen;
+	pCore->GetGraphics()->WorldToScreen(textPos, &vecScreen);
+
+	return (pCore->GetCamera()->IsOnScreen(textPos));
 }
 
 int		C3DTextLabelManager::GetCount(void)
@@ -137,22 +145,23 @@ void	C3DTextLabelManager::Render(void)
 	{
 		// Is active 3DTextLabel
 		if (IsActive(i) == true){
-			// If we can see the textLabel on our screen
-			if (IsOnScreen(i))
-			{
-				// We get the player pos
-				CVector3 localPos;
-				pCore->GetPlayerManager()->GetLocalPlayer()->GetPosition(&localPos);
+			// We get the player pos
+			CVector3 localPos;
+			pCore->GetPlayerManager()->GetLocalPlayer()->GetPosition(&localPos);
 
-				// We get the textLabel pos
-				CVector3 textPos;
-				m_p3DTextLabels[i]->GetPosition(&textPos);
+			// We get the textLabel pos
+			CVector3 textPos;
+			m_p3DTextLabels[i]->GetPosition(&textPos);
 
-				// We get the distance
-				float fDistance = Math::GetDistanceBetweenPoints(localPos, textPos);
+			// We get the distance
+			float fDistance = Math::GetDistanceBetweenPoints(localPos, textPos);
 
-				// We render on distance
-				if (fDistance <= m_p3DTextLabels[i]->GetDrawDistance()){
+			// We render on distance
+			if (fDistance <= m_p3DTextLabels[i]->GetDrawDistance()){
+
+				// If we can see the textLabel on our screen
+				if (IsOnScreen(i))
+				{
 					//Scale
 					float fScale = 1.0f;
 
