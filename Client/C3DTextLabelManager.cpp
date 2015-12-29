@@ -13,12 +13,16 @@ extern	CCore			* pCore;
 
 C3DTextLabelManager::C3DTextLabelManager(void)
 {
+	DEBUG_TRACE("C3DTextLabelManager::C3DTextLabelManager");
+
 	// Reset pointers
 	memset(m_p3DTextLabels, NULL, sizeof(m_p3DTextLabels));
 }
 
 C3DTextLabelManager::~C3DTextLabelManager(void)
 {
+	DEBUG_TRACE("C3DTextLabelManager::~C3DTextLabelManager");
+
 	// Loop and delete all active 3DTextLabel
 	for (EntityId textId = 0; textId < MAX_3DTEXTS; textId++)
 	{
@@ -85,6 +89,23 @@ bool	C3DTextLabelManager::IsActive(EntityId textID)
 bool	C3DTextLabelManager::IsOnScreen(EntityId textID)
 {
 	return (true);
+}
+
+int		C3DTextLabelManager::GetCount(void)
+{
+	// Declare counter
+	int count = 0;
+
+	// Loop over all entities
+	for (EntityId i = 0; i < MAX_3DTEXTS; i++)
+	{
+		// Is the current label active ?
+		if (IsActive(i) == true)
+			count++;
+	}
+
+	// Return counter
+	return (count);
 }
 
 EntityId C3DTextLabelManager::FindFreeSlot(void)

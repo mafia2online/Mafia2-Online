@@ -31,4 +31,5 @@ public:
 	void							PreRender(void);
 	void							Render(void);
 	EntityId						FindFreeSlot(void);
+	int								GetCount(void);
 };

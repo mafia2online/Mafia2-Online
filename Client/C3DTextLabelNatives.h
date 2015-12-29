@@ -16,6 +16,7 @@ private:
 
 	static	SQInteger		Create3DTextLabel(SQVM * pVM);
 	static	SQInteger		Remove3DTextLabel(SQVM * pVM);
+	static	SQInteger		GetCount(SQVM *pVM);
 
 public:
 
