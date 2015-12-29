@@ -28,8 +28,11 @@ C3DTextLabelManager::~C3DTextLabelManager(void)
 	}
 }
 
-bool	C3DTextLabelManager::Add(EntityId textID, float fX, float fY, float fZ, String text, int color, float distance)
+bool	C3DTextLabelManager::Add(float fX, float fY, float fZ, String text, int color, float distance)
 {
+	// Find free entityId
+	EntityId textID = FindFreeSlot();
+
 	// Incorrect 3DText ?
 	if (textID < 0 || textID > MAX_3DTEXTS)
 		return (false);
