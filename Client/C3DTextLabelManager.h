@@ -32,4 +32,6 @@ public:
 	void							Render(void);
 	EntityId						FindFreeSlot(void);
 	int								GetCount(void);
+
+	C3DTextLabel					* Get(EntityId textId) { return m_p3DTextLabels[textId]; }
 };
