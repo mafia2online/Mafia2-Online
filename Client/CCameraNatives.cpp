@@ -15,6 +15,26 @@ void CCameraNatives::Register( CScriptingManager * pScriptingManager )
 {
 	pScriptingManager->RegisterFunction( "getCameraPosition", GetPosition, 0, NULL );
 	pScriptingManager->RegisterFunction( "getCameraRotation", GetRotation, 0, NULL );
+	pScriptingManager->RegisterFunction( "simpleShake", SimpleShake, 3, "fff");
+}
+
+// simpleShake(float speed, float strength, float duration);
+SQInteger CCameraNatives::SimpleShake(SQVM * pVM)
+{
+	// Variables
+	SQFloat speed;
+	SQFloat strength;
+	SQFloat duration;
+
+	// Fetch params
+	sq_getfloat(pVM, -3, &speed);
+	sq_getfloat(pVM, -2, &strength);
+	sq_getfloat(pVM, -1, &duration);
+
+	// Apply and return
+	pCore->GetCamera()->SimpleShake(speed, strength, duration);
+	sq_pushbool(pVM, true);
+	return (true);
 }
 
 // getCameraPosition();
