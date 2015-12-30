@@ -116,4 +116,6 @@ public:
 	void						GetViewMatrix( D3DXMATRIX * mat );
 	void						GetProjectionMatrix( D3DXMATRIX * mat );
 	void						GetLookAt( CVector3 * vecLookAt );
+
+	void						SimpleShake(float speed, float strength, float duration);
 };
