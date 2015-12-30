@@ -139,6 +139,8 @@ public:
 	bool					IsShooting						( void );
 	bool					IsCrouching						( void );
 	bool					IsMoving						( void );
+
+	void					SetCrouching					( bool bCrouching );
 							
 	void					SetHealth						( float fHealth );
 	float					GetHealth						( void );
