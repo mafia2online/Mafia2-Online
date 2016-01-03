@@ -16,7 +16,11 @@ C3DTextLabelManager::C3DTextLabelManager(void)
 	DEBUG_TRACE("C3DTextLabelManager::C3DTextLabelManager");
 
 	// Reset pointers
-	memset(m_p3DTextLabels, NULL, sizeof(m_p3DTextLabels));
+	for (EntityId textId = 0; textId < MAX_3DTEXTS; textId++)
+	{
+		m_p3DTextLabels[textId] = NULL;
+	}
+	//memset(m_p3DTextLabels, NULL, sizeof(m_p3DTextLabels));
 }
 
 C3DTextLabelManager::~C3DTextLabelManager(void)
@@ -44,13 +48,17 @@ bool	C3DTextLabelManager::Add(float fX, float fY, float fZ, String text, int col
 	// Create the 3DText
 	m_p3DTextLabels[textID] = new C3DTextLabel(textID, fX, fY, fZ, text, color, distance);
 
-	// Failed ?
-	if (IsActive(textID) == false)
-		return (false);
-
 	// Finished
 	m_p3DTextLabels[textID]->SetActive(true);
-	return (true);
+
+	if (IsActive(textID) == false){
+		if (m_p3DTextLabels[textID] != NULL)
+			SAFE_DELETE(m_p3DTextLabels[textID]);
+		return (false);
+	}
+	else {
+		return (true);
+	}
 }
 
 bool	C3DTextLabelManager::Remove(EntityId textID)
