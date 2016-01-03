@@ -30,6 +30,7 @@ void CScriptingRPC::Register( RakNet::RPC4 * pRPC )
 
 	// Register the blip RPC's
 	CBlipRPC::Register ( pRPC );
+
 }
 
 void CScriptingRPC::Unregister( RakNet::RPC4 * pRPC )

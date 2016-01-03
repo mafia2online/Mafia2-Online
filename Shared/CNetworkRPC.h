@@ -95,3 +95,7 @@
 #define		RPC_ATTACHBLIPTOPLAYER		"RPC_Script_AttachBlipToPlayer"
 #define		RPC_ATTACHBLIPTOVEHICLE		"RPC_Script_AttachBlipToVehicle"
 #define		RPC_ATTACHBLIPTOPED			"RPC_Script_AttachBlipToPed"
+
+// 3DTextLabel's RPC
+#define		RPC_NEWTEXTLABEL			"RPC_Script_NewTextLabel"
+#define		RPC_REMOVETEXTLABEL			"RPC_Script_RemoveTextLabel"

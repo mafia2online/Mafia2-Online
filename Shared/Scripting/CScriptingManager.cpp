@@ -48,6 +48,8 @@ CScriptingManager::CScriptingManager( void )
 	// Register the audio natives
 	CAudioNatives::Register(this);
 
+	C3DTextLabelNatives::Register(this);
+
 #else
 	// Register server natives
 	CServerNatives::Register( this );

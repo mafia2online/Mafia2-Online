@@ -13,12 +13,20 @@ extern	CCore			* pCore;
 
 C3DTextLabelManager::C3DTextLabelManager(void)
 {
+	DEBUG_TRACE("C3DTextLabelManager::C3DTextLabelManager");
+
 	// Reset pointers
-	memset(m_p3DTextLabels, NULL, sizeof(m_p3DTextLabels));
+	for (EntityId textId = 0; textId < MAX_3DTEXTS; textId++)
+	{
+		m_p3DTextLabels[textId] = NULL;
+	}
+	//memset(m_p3DTextLabels, NULL, sizeof(m_p3DTextLabels));
 }
 
 C3DTextLabelManager::~C3DTextLabelManager(void)
 {
+	DEBUG_TRACE("C3DTextLabelManager::~C3DTextLabelManager");
+
 	// Loop and delete all active 3DTextLabel
 	for (EntityId textId = 0; textId < MAX_3DTEXTS; textId++)
 	{
@@ -28,26 +36,29 @@ C3DTextLabelManager::~C3DTextLabelManager(void)
 	}
 }
 
-bool	C3DTextLabelManager::Add(EntityId textID, float fX, float fY, float fZ, String text, int color, float distance)
+bool	C3DTextLabelManager::Add(float fX, float fY, float fZ, String text, int color, float distance)
 {
-	CLogFile::Printf("TextID : %d", textID);
-	CLogFile::Print("Add-1");
+	// Find free entityId
+	EntityId textID = FindFreeSlot();
+
 	// Incorrect 3DText ?
 	if (textID < 0 || textID > MAX_3DTEXTS)
 		return (false);
-	CLogFile::Print("Add-2");
+
 	// Create the 3DText
-	m_p3DTextLabels[textID]->Init(textID/*,fX, fY, fZ, text, color, distance*/);
-	CLogFile::Print("Add-3");
-	// Failed ?
-	if (IsActive(textID) == false)
-		return (false);
-	CLogFile::Print("Add-4");
+	m_p3DTextLabels[textID] = new C3DTextLabel(textID, fX, fY, fZ, text, color, distance);
+
 	// Finished
 	m_p3DTextLabels[textID]->SetActive(true);
-	CLogFile::Print("Add-5");
 
-	return (textID);
+	if (IsActive(textID) == false){
+		if (m_p3DTextLabels[textID] != NULL)
+			SAFE_DELETE(m_p3DTextLabels[textID]);
+		return (false);
+	}
+	else {
+		return (true);
+	}
 }
 
 bool	C3DTextLabelManager::Remove(EntityId textID)
@@ -80,27 +91,60 @@ bool	C3DTextLabelManager::IsActive(EntityId textID)
 		return (false);
 
 	// Return state
-	return(m_p3DTextLabels[textID]->IsActive());
+	if (m_p3DTextLabels[textID] != NULL){
+		return (m_p3DTextLabels[textID]->IsActive());
+	}
+	else {
+		return (false);
+	}
 }
 
 bool	C3DTextLabelManager::IsOnScreen(EntityId textID)
 {
-	return (true);
+	// Text position
+	CVector3 textPos;
+	m_p3DTextLabels[textID]->GetPosition(&textPos);
+
+	// Convert coordinates
+	CVector3 vecScreen;
+	pCore->GetGraphics()->WorldToScreen(textPos, &vecScreen);
+
+	return (pCore->GetCamera()->IsOnScreen(textPos));
+}
+
+int		C3DTextLabelManager::GetCount(void)
+{
+	// Declare counter
+	int count = 0;
+
+	// Loop over all entities
+	for (EntityId i = 0; i < MAX_3DTEXTS; i++)
+	{
+		// Is the current label active ?
+		if (IsActive(i) == true)
+			count++;
+	}
+
+	// Return counter
+	return (count);
 }
 
 EntityId C3DTextLabelManager::FindFreeSlot(void)
 {
-	// Loop over all blip instances
+	// Loop over all textlabel instances
 	for (EntityId i = 0; i < MAX_3DTEXTS; i++)
 	{
-		CLogFile::Print("Find-1");
-		// Is the current blip not active?
+		// Is the current textLabel not active?
 		if (IsActive(i) == false)
 			return i;
-		CLogFile::Print("Find-2");
 	}
 
 	return INVALID_ENTITY_ID;
+}
+
+void	C3DTextLabelManager::PreRender(void)
+{
+	//Todo
 }
 
 void	C3DTextLabelManager::Render(void)
@@ -108,23 +152,24 @@ void	C3DTextLabelManager::Render(void)
 	for (EntityId i = 0; i < MAX_3DTEXTS; i++)
 	{
 		// Is active 3DTextLabel
-		if (m_p3DTextLabels[i]->IsActive() == true){
-			// If we can see the textLabel on our screen
-			if (IsOnScreen(i))
-			{
-				// We get the player pos
-				CVector3 localPos;
-				pCore->GetPlayerManager()->GetLocalPlayer()->GetPosition(&localPos);
+		if (IsActive(i) == true){
+			// We get the player pos
+			CVector3 localPos;
+			pCore->GetPlayerManager()->GetLocalPlayer()->GetPosition(&localPos);
 
-				// We get the textLabel pos
-				CVector3 textPos;
-				m_p3DTextLabels[i]->GetPosition(&textPos);
+			// We get the textLabel pos
+			CVector3 textPos;
+			m_p3DTextLabels[i]->GetPosition(&textPos);
 
-				// We get the distance
-				float fDistance = Math::GetDistanceBetweenPoints(localPos, textPos);
+			// We get the distance
+			float fDistance = Math::GetDistanceBetweenPoints(localPos, textPos);
 
-				// We render on distance
-				if (fDistance <= m_p3DTextLabels[i]->GetDrawDistance()){
+			// We render on distance
+			if (fDistance <= m_p3DTextLabels[i]->GetDrawDistance()){
+
+				// If we can see the textLabel on our screen
+				if (IsOnScreen(i))
+				{
 					//Scale
 					float fScale = 1.0f;
 
