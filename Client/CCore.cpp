@@ -574,7 +574,7 @@ void CCore::OnGameProcess( void )
 
 	if (GetAsyncKeyState(VK_F7) & 0x1)
 	{
-		CLogFile::Printf("========Separator========");
+		//pCore->GetCamera()->SimpleShake();
 		//pCore->GetHud()->SetDrunkLevel(1);
 	}
 

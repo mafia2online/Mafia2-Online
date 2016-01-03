@@ -268,3 +268,9 @@ void CM2Camera::GetLookAt( CVector3 * vecLookAt )
 		memcpy( vecLookAt, &vecLook, sizeof(CVector3) );
 	}
 }
+
+void CM2Camera::SimpleShake(float speed, float strength, float duration)
+{
+	// Execute the camera shake
+	CLua::Executef("game.cameramanager:GetPlayerMainCamera(0):SimpleShake(%f,%f,%f)", speed, strength, duration);
+}
