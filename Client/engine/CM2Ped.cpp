@@ -131,6 +131,15 @@ bool CM2Ped::IsCrouching(void)
 	return false;
 }
 
+void CM2Ped::SetCrouching(bool bCrouching)
+{
+	DEBUG_TRACE("CM2Ped::IsCrouching");
+
+	// Is the ped valid
+	if (m_pPed)
+		m_pPed->m_playerControls.m_bIsCrouching = bCrouching;
+}
+
 bool CM2Ped::IsMoving(void)
 {
 	DEBUG_TRACE("CM2Ped::IsMoving");
