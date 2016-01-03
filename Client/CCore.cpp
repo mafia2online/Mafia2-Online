@@ -574,7 +574,8 @@ void CCore::OnGameProcess( void )
 
 	if (GetAsyncKeyState(VK_F7) & 0x1)
 	{
-		pCore->GetHud()->SetDrunkLevel(1);
+		CLogFile::Printf("========Separator========");
+		//pCore->GetHud()->SetDrunkLevel(1);
 	}
 
 	// Call the script event
