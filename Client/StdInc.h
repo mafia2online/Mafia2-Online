@@ -186,6 +186,8 @@
 #include "CScriptingRPC.h"
 #include "CNetworkModule.h"
 #include "CMasterList.h"
+#include "C3DTextLabel.h"
+#include "C3DTextLabelManager.h"
 
 // Shared scripting natives
 #include <Scripting/Natives/CEventNatives.h>
@@ -208,6 +210,7 @@
 #include "CCameraNatives.h"
 #include "CClientNatives.h"
 #include "CAudioNatives.h"
+#include "C3DTextLabelNatives.h"
 
 // Clientscripts
 #include <Timers/CTimer.h>

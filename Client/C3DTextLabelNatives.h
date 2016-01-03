@@ -14,8 +14,14 @@ class C3DTextLabelNatives
 
 private:
 
-	static	SQInteger		GetPosition(SQVM * pVM);
-	static	SQInteger		GetRotation(SQVM * pVM);
+	static	SQInteger		Create3DTextLabel(SQVM * pVM);
+	static	SQInteger		Remove3DTextLabel(SQVM * pVM);
+	static	SQInteger		GetCount(SQVM * pVM);
+	static	SQInteger		SetText(SQVM * pVM);
+	static	SQInteger		SetDrawDistance(SQVM * pVM);
+	static	SQInteger		SetColor(SQVM * pVM);
+	static	SQInteger		SetPosition(SQVM * pVM);
+	static	SQInteger		SetActive(SQVM * pVM);
 
 public:
 

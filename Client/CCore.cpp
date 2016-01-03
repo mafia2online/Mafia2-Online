@@ -73,6 +73,7 @@ CCore::CCore( void )
 	m_pUpdater = NULL;
 	m_pNameTag = NULL;
 	m_pAudioManager = NULL;
+	m_p3DTextLabelManager = NULL;
 }
 
 CCore::~CCore( void )
@@ -88,6 +89,7 @@ CCore::~CCore( void )
 	SAFE_DELETE(m_pStreamer);
 	SAFE_DELETE(m_pModelManager);
 	SAFE_DELETE(m_pAudioManager);
+	SAFE_DELETE(m_p3DTextLabelManager);
 
 	// Uninstall anti-cheat
 	CWPMHook::Uninstall();
@@ -498,6 +500,11 @@ void CCore::OnDeviceRender( void )
 	if (m_pNameTag)
 		m_pNameTag->All();
 
+	// Render the 3DTextLabels
+	if (m_p3DTextLabelManager && pCore->GetPlayerManager()->GetLocalPlayer()->IsSpawned() == true){
+		m_p3DTextLabelManager->Render();
+	}
+
 	// Is the scripting manager active?
 	if( m_pClientScriptingManager && !m_pGUI->GetMainMenu()->IsVisible () )
 	{
@@ -567,7 +574,8 @@ void CCore::OnGameProcess( void )
 
 	if (GetAsyncKeyState(VK_F7) & 0x1)
 	{
-		pCore->GetHud()->SetDrunkLevel(1);
+		CLogFile::Printf("========Separator========");
+		//pCore->GetHud()->SetDrunkLevel(1);
 	}
 
 	// Call the script event
@@ -623,6 +631,9 @@ void CCore::StartMultiplayer( void )
 
 	// Create the timer manager
 	m_pTimerManager = new CTimerManager;
+
+	// Create the 3DTextLabelManager
+	m_p3DTextLabelManager = new C3DTextLabelManager;
 
 	// Create the client scripting manager
 	m_pClientScriptingManager = new CClientScriptingManager;
@@ -691,6 +702,9 @@ void CCore::StopMultiplayer( void )
 
 	// Delete the file transfer
 	SAFE_DELETE( m_pFileTransferManager );
+
+	// Delete the 3DTextLabel manager
+	SAFE_DELETE(m_p3DTextLabelManager);
 
 	// Clear the model manager
 	CNetworkModelManager::Cleanup ();
