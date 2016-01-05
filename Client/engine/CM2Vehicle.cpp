@@ -885,6 +885,18 @@ void CM2Vehicle::SetWindowOpen(int iSeat, bool bState)
 	}
 }
 
+bool CM2Vehicle::IsWindowOpen(int iSeat)
+{
+	// Is the vehicle valid?
+	if (m_pVehicle)
+	{
+		//Todo - Maybe 0x0D646B0
+		return (0);
+	}
+
+	return 0;
+}
+
 void CM2Vehicle::SetWheelTexture ( int iWheelIndex, const char * szTexture )
 {
 	// Is the vehicle valid?
