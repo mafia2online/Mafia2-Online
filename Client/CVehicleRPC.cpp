@@ -243,7 +243,7 @@ void SetVehicleWindowOpen( RakNet::BitStream * pBitStream, RakNet::Packet * pPac
 	if( pCore->GetVehicleManager()->IsActive( vehicleId ) )
 	{
 		// Set the vehicle window state
-		// todo
+		pCore->GetVehicleManager()->Get(vehicleId)->SetWindowOpen(iSeat, bState);
 	}
 }
 

@@ -870,6 +870,21 @@ M2Ped * CM2Vehicle::GetSeatOccupant( int iSeat )
 	return NULL;
 }
 
+void CM2Vehicle::SetWindowOpen(int iSeat, bool bState)
+{
+	// Is the vehicle valid ?
+	if (m_pVehicle)
+	{
+		DWORD callOff = COffsets::FUNC_CVehicle__OpenSeatWindow;
+		M2Vehicle * pVehicle = m_pVehicle;
+
+		_asm push bState
+		_asm push iSeat
+		_asm mov ecx, pVehicle
+		_asm call callOff;
+	}
+}
+
 void CM2Vehicle::SetWheelTexture ( int iWheelIndex, const char * szTexture )
 {
 	// Is the vehicle valid?
