@@ -44,7 +44,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <TargetExt>.dll</TargetExt>
-    <TargetName>m2mp_d</TargetName>
+    <TargetName>m2online</TargetName>
     <LinkIncremental>
     </LinkIncremental>
     <IncludePath>$(ProjectDir)..\Libraries\DXSDK\Include;$(ProjectDir)..\Libraries\Detours;$(ProjectDir)..\Libraries\lua\Source;$(ProjectDir)..\Libraries\zlib-1.2.5;$(ProjectDir)..\Libraries\squirrel;$(IncludePath)</IncludePath>
@@ -71,8 +71,8 @@
       <DisableSpecificWarnings>4996;4409;4482;4800;4305;4018;4390;4099;4244;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>crashrpt1401.lib;winmm.lib;ws2_32.lib;comctl32.lib;d3dx9d.lib;dxguid.lib;dinput8.lib;DxErr9.lib;detours.lib;RakNetStatic.lib;zlib_d.lib;libpng_d.lib;dbghelp.lib;CEGUIBase_d.lib;CEGUIFalagardBase_d.lib;DirectX9GUIRenderer_d.lib;freetype2110.lib;tinyxml.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>../Libraries/CrashRpt;../Libraries/cegui-0.4.0-custom/lib;../Libraries/DXSDK/Lib;../Libraries/Detours;../Libraries/RakNet/Lib;../Libraries/zlib-1.2.5/projects/Debug;../Libraries/lpng142/projects/Debug;../Libraries/tinyxml/Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>crashrpt1401.lib;winmm.lib;ws2_32.lib;comctl32.lib;d3d9.lib;d3dx9d.lib;dxguid.lib;dinput8.lib;DxErr9.lib;detours.lib;RakNetStatic_d.lib;zlib_d.lib;libpng_d.lib;dbghelp.lib;CEGUIBase_d.lib;CEGUIFalagardBase_d.lib;DirectX9GUIRenderer_d.lib;freetype2110.lib;tinyxml.lib;bass.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../Libraries/CrashRpt;../Libraries/cegui-0.4.0-custom/lib;../Libraries/DXSDK/Lib;../Libraries/Detours;../Libraries/RakNet/Lib;../Libraries/zlib-1.2.5/projects/Debug;../Libraries/lpng142/projects/Debug;../Libraries/bass;../Libraries/tinyxml/Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreAllDefaultLibraries>
       </IgnoreAllDefaultLibraries>
       <IgnoreSpecificDefaultLibraries>
