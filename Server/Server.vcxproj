@@ -41,7 +41,7 @@
     <OutDir>$(SolutionDir)\Binary\debug</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <TargetName>m2mp-svr_d</TargetName>
+    <TargetName>m2online-svr</TargetName>
     <LibraryPath>$(LibraryPath)</LibraryPath>
     <IntDir>$(Configuration)\</IntDir>
   </PropertyGroup>

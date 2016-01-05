@@ -237,31 +237,33 @@ void CCore::Deinitialise( void )
 
 void CCore::Pulse( void )
 {
-	// Pulse the network module
-	if( m_pNetworkModule )
-		m_pNetworkModule->Pulse ();
+	if (this->IsActive() == true){
+		// Pulse the network module
+		if (m_pNetworkModule)
+			m_pNetworkModule->Pulse();
 
-	// Pulse the vehicle manager
-	if( m_pPlayerManager )
-		m_pPlayerManager->Pulse ();
+		// Pulse the vehicle manager
+		if (m_pPlayerManager)
+			m_pPlayerManager->Pulse();
 
-	// Pulse the vehicle manager
-	if( m_pVehicleManager )
-		m_pVehicleManager->Pulse ();
+		// Pulse the vehicle manager
+		if (m_pVehicleManager)
+			m_pVehicleManager->Pulse();
 
-	// Pulse the timer manager
-	if( m_pTimerManager )
-		m_pTimerManager->Pulse ();
+		// Pulse the timer manager
+		if (m_pTimerManager)
+			m_pTimerManager->Pulse();
 
-	// Pulse the ban manager
-	if( m_pBanManager )
-		m_pBanManager->Pulse ();
+		// Pulse the ban manager
+		if (m_pBanManager)
+			m_pBanManager->Pulse();
 
-	// Pulse the module
-	if( m_pModuleManager )
-		m_pModuleManager->Pulse ();
+		// Pulse the module
+		if (m_pModuleManager)
+			m_pModuleManager->Pulse();
 
-	// Call the pulse event
-	if( m_pEvents )
-		m_pEvents->Call( "onServerPulse" );
+		// Call the pulse event
+		if (m_pEvents)
+			m_pEvents->Call("onServerPulse");
+	}
 }

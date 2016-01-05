@@ -24,7 +24,8 @@ BOOL WINAPI EventHandler( DWORD dwEvent )
 	{
 	case CTRL_CLOSE_EVENT: case CTRL_LOGOFF_EVENT: case CTRL_SHUTDOWN_EVENT:
 		{
-			Shutdown();
+			// Shutdown the server
+			pCore->SetActive(false);
 			break;
 		}
 	}
@@ -37,7 +38,8 @@ void SignalHandler( int iSignal )
     {
         case 1:
         {
-            Shutdown();
+			// Shutdown the server
+			pCore->SetActive(false);
             break;
         };
 
