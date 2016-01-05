@@ -204,6 +204,11 @@ bool CM2Camera::IsOnScreen(const CVector3 & vecPosition)
 {
 #define CVEC_TO_D3DVEC(vec) &D3DXVECTOR3(vec.fX, vec.fY, vec.fZ)
 #define D3DVEC_TO_CVEC(vec) &CVector3(vec.x, vec.y, vec.z)
+
+	// If camera not init
+	if (pCore->GetCamera() == NULL)
+		return (false);
+
 	CVector3 vecCamPos;
 	pCore->GetCamera()->GetPosition(&vecCamPos);
 
@@ -220,9 +225,8 @@ bool CM2Camera::IsOnScreen(const CVector3 & vecPosition)
 	DWORD dwLenY = viewport.Height;
 
 	D3DXMATRIX matProj;
-	//pCore->GetCamera()->GetCamera()->pCamera1->m_fFovAngle
-	//pCore->GetCamera()->GetCamera()->pCamera2->pCameraData->m_fNear
-	D3DXMatrixPerspectiveFovLH(&matProj, pCore->GetCamera()->GetCamera()->pCamera1->m_fFovAngle, (float)dwLenX / (float)dwLenY, pCore->GetCamera()->GetCamera()->pCamera1->pCameraData->m_fNear, pCore->GetCamera()->GetCamera()->pCamera1->pCameraData->m_fFar);
+
+	D3DXMatrixPerspectiveFovLH(&matProj, pCore->GetCamera()->GetFovAngle(), (float)dwLenX / (float)dwLenY, pCore->GetCamera()->GetNearClip(), pCore->GetCamera()->GetFarClip());
 
 	D3DXMATRIX matWorld;
 	D3DXMatrixIdentity(&matWorld);
