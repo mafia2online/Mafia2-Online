@@ -19,12 +19,12 @@ extern	CCore			* pCore;
 CNameTag::CNameTag(void)
 {
 	// Reset values
-	for (EntityId id; id < MAX_PLAYERS; id++)
+	for (EntityId id = 0; id < MAX_PLAYERS; id++)
 	{
 		m_playerVectors[id] = { 0.0, 0.0, 0.0 };
 	}
 	// Reset values
-	for (EntityId id; id < MAX_PEDS; id++)
+	for (EntityId id = 0; id < MAX_PEDS; id++)
 	{
 		m_pedVectors[id] = { 0.0, 0.0, 0.0 };
 	}
