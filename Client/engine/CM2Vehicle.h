@@ -267,4 +267,7 @@ public:
 	void					SetLightState					( bool bLightState );
 	bool					GetLightState					( void );
 
+	void					SetWindowOpen					(int iSeat, bool bState);
+	bool					IsWindowOpen					(int iSeat);
+
 };

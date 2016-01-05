@@ -93,7 +93,6 @@ void CM2Entity::GetPosition( CVector3 * vecPosition, bool bCheckVehicle )
 		_asm call dwFunc;
 
 		// If the ped is in a vehicle, adjust the Z axis
-		// TODO: Use the engine function which does exactly this.
 		if( bCheckVehicle && ((M2Ped *)m_pEntity)->m_pCurrentVehicle )
 			vecPosition->fZ -= 1.0f;
 	}

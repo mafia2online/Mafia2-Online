@@ -723,7 +723,8 @@ bool CNetworkVehicle::GetHornState( void )
 
 void CNetworkVehicle::SetWindowOpen( int iSeat, bool bOpen )
 {
-	// todo
+	if (m_pVehicle)
+		m_pVehicle->SetWindowOpen(iSeat, bOpen);
 }
 
 bool CNetworkVehicle::IsWindowOpen( int iSeat )
