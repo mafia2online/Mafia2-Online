@@ -13,7 +13,7 @@
 #ifdef _DEBUG
 #define CORE_MODULE	"m2online_d.dll"
 #else
-#define	CORE_MODULE	"m2online.dll"
+#define	CORE_MODULE	"m2online.dll" 
 #endif
 
 #define BASS_MODULE "bass.dll"
@@ -119,7 +119,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	}
 
 	String strBassPath("%s\\%s", SharedUtility::GetAppPath(), BASS_MODULE);
-	// Does m2mp.dll not exist?
+	// Does m2online.dll not exist?
 	if (!SharedUtility::Exists(strBassPath.Get()))
 	{
 		ShowMessageBox("Failed to find bass.dll ! Can't launch.");

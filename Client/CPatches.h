@@ -16,7 +16,7 @@ class M2EntityMessage;
 typedef int				( __cdecl * sub_410440 )			( lua_State * a1, signed int a2, const PCHAR a3 );
 typedef int				( __cdecl * onGameEvent_t )			( lua_State * a1, void *, const char *, M2EntityMessage * );
 typedef int				( __thiscall * ProcessEntities_t )	( void * This, void * pUnk1 );
-typedef int				( __cdecl * OnGameProcessStart_t )	( HINSTANCE, int, int, int );
+typedef int				( __cdecl * OnGameProcessStart_t )	( HINSTANCE hInstance, int a2, int a3, int a4 );
 
 class CPatches
 {
