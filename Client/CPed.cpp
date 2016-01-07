@@ -26,8 +26,9 @@ CPed::~CPed( void )
 
 void CPed::Create(CVector3 vecPosition, CVector3 vecRotation)
 {
-	if (m_pPed)
-		Destroy();
+	/* This causes crash */
+	/*if (m_pPed)
+		Destroy();*/
 
 	CLogFile::Print("Loading ped model manager...");
 
@@ -51,9 +52,10 @@ void CPed::Create(CVector3 vecPosition, CVector3 vecRotation)
 
 void CPed::Destroy()
 {
-	// Deactivate the entity
-	m_pPed->Deactivate();
-
+	if (m_pPed){
+		// Deactivate the entity
+		m_pPed->Deactivate();
+	}
 	// Free the model
 	CNetworkModelManager::Unload(m_pPedModelManager);
 
