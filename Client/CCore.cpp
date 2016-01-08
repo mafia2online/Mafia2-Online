@@ -18,7 +18,8 @@ bool					bInputHookCreated = false;
 
 extern					DWORD sub_CD00A0__ECX;
 
-#define					EXE_VERSION_SKIDROW		0xAE196A1E //M2:MP patched version
+#define					EXE_VERSION_SKIDROW		0x97FA8A06 //Original skidrow version
+#define					EXE_VERSION_SKIDROW2	0xAE196A1E //M2:MP patched version
 #define					EXE_VERSION_STEAM		0xB1ADE8F2 //Steam version
 
 DWORD					GetModelHasFromModelName_ECX;
@@ -121,7 +122,7 @@ bool CCore::Initialise( void )
 	CLogFile::Printf( "EXE signature: 0x%p", pChecksum.GetChecksum() );
 
 	// Is this not the v1 exe?
-	if( pChecksum.GetChecksum() != EXE_VERSION_SKIDROW && pChecksum.GetChecksum() != EXE_VERSION_STEAM)
+	if (pChecksum.GetChecksum() != EXE_VERSION_SKIDROW && pChecksum.GetChecksum() != EXE_VERSION_STEAM && pChecksum.GetChecksum() != EXE_VERSION_SKIDROW2)
 	{
 		if ( MessageBox ( NULL, "Invalid game version detected.\n\nCan't start Mafia 2 Online\n\nDo you want to goto the downloads page now?", "Mafia2-Online - Error", MB_OK|MB_ICONERROR ) == MB_OK ) {
 			ShellExecute ( NULL, "open", "http://mafia2-online.com", NULL, NULL, SW_SHOWNORMAL );
@@ -574,8 +575,9 @@ void CCore::OnGameProcess( void )
 
 	if (GetAsyncKeyState(VK_F7) & 0x1)
 	{
-		//pCore->GetCamera()->SimpleShake();
-		//pCore->GetHud()->SetDrunkLevel(1);
+		/*pCore->GetChat()->AddDebugMessage("Etat : %d", pCore->GetVehicleManager()->Get(pCore->GetPlayerManager()->GetLocalPlayer()->GetVehicle()->GetId())->IsWindowOpen(0));
+		pCore->GetVehicleManager()->Get(pCore->GetPlayerManager()->GetLocalPlayer()->GetVehicle()->GetId())->SetWindowOpen(0, true);
+		pCore->GetChat()->AddDebugMessage("Etat : %d", pCore->GetVehicleManager()->Get(pCore->GetPlayerManager()->GetLocalPlayer()->GetVehicle()->GetId())->IsWindowOpen(0));*/
 	}
 
 	// Call the script event
