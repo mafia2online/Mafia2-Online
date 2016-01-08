@@ -164,6 +164,7 @@ Section "Install"
 	
 	SetOutPath "$INSTDIR\edit\tables"
 	File ..\Binary\gamefiles\StreamM2MP.bin
+	File ..\Binary\gamefiles\tables.sds
 	
 	# Write the uninstaller
 	WriteUninstaller "${MOD_DIR}\Uninstall.exe"
