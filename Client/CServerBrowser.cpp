@@ -816,7 +816,7 @@ void CServerBrowser::SetDisconnectReason( bool bDisconnect, const char * szReaso
 
 	// Disconnect from the network
 	if( bDisconnect )
-		pCore->GetNetworkModule()->Disconnect();
+		pCore->GetNetworkModule()->Disconnect(false);
 }
 
 void CServerBrowser::SetMessageBox ( const char * szTitle, const char * szCaption )
