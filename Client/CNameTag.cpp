@@ -36,14 +36,18 @@ CNameTag::~CNameTag(void)
 
 void CNameTag::PreAll(void)
 {
-	PrePlayer();
-	PrePed();
+	if (pCore->GetGUI()->GetMainMenu()->IsVisible() == false && pCore->GetGUI()->GetServerBrowser()->IsVisible() == false){
+		PrePlayer();
+		PrePed();
+	}
 }
 
 void CNameTag::All(void)
 {
-	Player();
-	Ped();
+	if (pCore->GetGUI()->GetMainMenu()->IsVisible() == false && pCore->GetGUI()->GetServerBrowser()->IsVisible() == false){
+		Player();
+		Ped();
+	}
 }
 
 void CNameTag::PrePed(void)
