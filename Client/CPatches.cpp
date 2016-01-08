@@ -319,7 +319,7 @@ void CPatches::Initialise( void )
 	CPatcher::InstallNopPatch ( 0x94504F, 0x12 ); // exit vehicle
 
 	// Hook for when vehicle fuel tank is shot - bugged
-	CPatcher::InstallCallPatch ( 0x4E48F1, (DWORD)C_Vehicle__OnFuelTankShot );
+	//CPatcher::InstallCallPatch ( 0x4E48F1, (DWORD)C_Vehicle__OnFuelTankShot );
 
 	// Disable vehicle exit
 	//CPatcher::InstallNopPatch ( 0x43B85B, 0x13 );

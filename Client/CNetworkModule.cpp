@@ -129,7 +129,7 @@ void CNetworkModule::Disconnect( bool bRestart )
 		Startup();
 
 		// Reset default server info
-		pCore->SetServerName( "M2-MP Server" );
+		pCore->SetServerName( "M2Online Server" );
 		pCore->SetServerMaxPlayers( 0 );
 
 		// Clear the chat
