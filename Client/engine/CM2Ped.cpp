@@ -590,3 +590,75 @@ C_SyncObject * CM2Ped::LookAt ( CVector3 vecPosition )
 
 	return NULL;
 }
+
+void CM2Ped::PlayAnimation(char *strAnimation)
+{
+	if (m_pPed && m_pPed->m_pEntityData)
+	{
+		M2EntityData * pEntityData = m_pPed->m_pEntityData;
+
+		int iAnimation = (int)strAnimation;// trololol
+		DWORD dwAddress = 0xD7FC50;//0xD80250 // hacky, todo fix
+
+		_asm push iAnimation;
+		_asm mov ecx, pEntityData;
+		_asm call dwAddress;
+	}
+}
+
+void CM2Ped::StopAnimation(char *strAnimation)
+{
+	if (m_pPed && m_pPed->m_pEntityData)
+	{
+		M2EntityData * pEntityData = m_pPed->m_pEntityData;
+
+		int iAnimation = (int)strAnimation;// trololol
+		DWORD dwAddress = 0xD6FD70; // hacky, todo fix
+
+		_asm push iAnimation;
+		_asm mov ecx, pEntityData;
+		_asm call dwAddress;
+	}
+}
+
+bool CM2Ped::IsAnimFinished(char *strAnimation)
+{
+	bool bReturn = false;
+
+	if (m_pPed && m_pPed->m_pEntityData)
+	{
+		M2EntityData * pEntityData = m_pPed->m_pEntityData;
+
+		int iAnimation = (int)strAnimation;// trololol
+		DWORD dwAddress = 0xD6FD40; // hacky, todo fix
+
+		_asm push iAnimation;
+		_asm mov ecx, pEntityData;
+		_asm call dwAddress;
+		_asm mov bReturn, al;
+
+		return bReturn;
+	}
+	return bReturn;
+}
+
+void CM2Ped::ModelToHands(int iHand, int iModel)
+{
+	if (iHand == 1 || iHand == 2) // 1 : right hand & 2 : left hand
+	{
+		if (iModel >= 2 && iModel <= 120)
+		{
+			if (m_pPed){
+				M2EntityData* pEntityData = m_pPed->m_pEntityData;
+
+				DWORD func = 0x90C860;
+
+				_asm push 0; // Hand or unk
+				_asm push iModel; // Model
+				_asm push iHand; // Unk or hand
+				_asm mov ecx, pEntityData;
+				_asm call func;
+			}
+		}
+	}
+}
