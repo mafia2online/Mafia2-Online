@@ -27,6 +27,7 @@
 #include	"../../Libraries/squirrel/sqstate.h"
 #include	"../../Libraries/squirrel/sqvm.h"
 #include	"CSquirrelArguments.h"
+#include	"../Threading/CMutex.h"
 
 #if defined(_WIN32) && defined(RegisterClass)
 #undef RegisterClass
@@ -61,6 +62,7 @@ private:
 	SQVM														* m_pVM;
 	String														m_strName;
 	String														m_strPath;
+	CMutex														m_squirrelCallMutex;
 
 	static void							PrintFunction				( SQVM * pVM, const SQChar * szFormat, ... );
 	static void							ErrorFunction				( SQVM * pVM, const SQChar * szFormat, ... );
