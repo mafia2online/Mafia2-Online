@@ -27,6 +27,10 @@ struct OnFootSync
 	bool			m_bCrouching;
 	unsigned int	m_uiModelIndex;
 	CVector3		m_vecLookAt;
+	int				m_iHandModel;
+	int				m_iHand;
+	const char		*m_styleName;
+	const char		*m_styleDirectory;
 };
 
 struct InVehicleSync

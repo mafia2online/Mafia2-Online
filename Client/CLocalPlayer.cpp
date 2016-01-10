@@ -226,6 +226,18 @@ void CLocalPlayer::SendOnFootSync( void )
 	// Write the model index
 	onFootSync.m_uiModelIndex = Game::GetIdFromPlayerModel ( m_pPlayerModelManager->GetModelName() );
 
+	// Write the hand
+	onFootSync.m_iHand = pCore->GetPlayerManager()->GetLocalPlayer()->GetHandModelHand();
+
+	// Write the handModel
+	onFootSync.m_iHandModel = pCore->GetPlayerManager()->GetLocalPlayer()->GetHandModelHand();
+
+	// Write the animStyle name
+	onFootSync.m_styleName = pCore->GetPlayerManager()->GetLocalPlayer()->GetAnimStyleName().Get();
+
+	// Write the animStyle directory
+	onFootSync.m_styleDirectory = pCore->GetPlayerManager()->GetLocalPlayer()->GetAnimStyleDirectory().Get();
+
 	// Write the sync structure into the bitstream
 	pBitStream.Write( (char *)&onFootSync, sizeof(OnFootSync) );
 

@@ -172,7 +172,12 @@ public:
 	CVector3						GetLookAt( void ) { return m_vecLookAt; }
 
 	void							SetAnimStyle(const char *directory, const char *style);
+	String							GetAnimStyleDirectory(void) { return m_styleDirectory; }
+	String							GetAnimStyleName(void) { return m_styleName; }
+
 	void							SetHandModel(int iHand, int iModel);
+	int								GetHandModelHand(void) { return m_iHand; }
+	int								GetHandModel(void)		{ return m_iHandModel; }
 
 	void							TerminateSyncObjects( void );
 

@@ -961,9 +961,12 @@ void CNetworkPlayer::SetHandModel(int iHand, int iModel)
 	// Construct bitstream
 	RakNet::BitStream pBitStream;
 
-	pBitStream.Write(iHand);
-	pBitStream.Write(iModel);
+	// Write the hand ID
+	pBitStream.WriteCompressed(iHand);
+
+	// Write the hand model
+	pBitStream.WriteCompressed(iModel);
 
 	// Send bitstream
-	pCore->GetNetworkModule()->Call(RPC_SETHANDMODEL, &pBitStream, HIGH_PRIORITY, RELIABLE, m_playerId, false);
+	pCore->GetNetworkModule()->Call(RPC_SETHANDMODEL, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, m_playerId, false);
 }
