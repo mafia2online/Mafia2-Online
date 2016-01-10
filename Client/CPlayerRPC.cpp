@@ -331,10 +331,6 @@ void RemovePlayerFromVehicle( RakNet::BitStream * pBitStream, RakNet::Packet * p
 
 void SetAnimStyle(RakNet::BitStream * pBitStream, RakNet::Packet * pPacket)
 {
-	// Read the player id
-	EntityId playerId;
-	pBitStream->ReadCompressed(playerId);
-
 	// Read the directory
 	RakNet::RakString directory;
 	pBitStream->Read(directory);
@@ -343,18 +339,12 @@ void SetAnimStyle(RakNet::BitStream * pBitStream, RakNet::Packet * pPacket)
 	RakNet::RakString style;
 	pBitStream->Read(style);
 
-	// Get the player instance
-	CNetworkPlayer * pPlayer = NULL;
-	if (playerId == pCore->GetPlayerManager()->GetLocalPlayer()->GetId())
-		pPlayer = pCore->GetPlayerManager()->GetLocalPlayer();
-	else
-		pPlayer = pCore->GetPlayerManager()->Get(playerId);
 
 	// Is the player instance valid?
-	if (pPlayer)
+	if (pCore->GetPlayerManager()->GetLocalPlayer())
 	{
 		// Set the anim style
-		pPlayer->SetAnimStyle(directory, style);
+		pCore->GetPlayerManager()->GetLocalPlayer()->SetAnimStyle(directory, style);
 	}
 }
 
