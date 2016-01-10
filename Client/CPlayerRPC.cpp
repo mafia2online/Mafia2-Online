@@ -293,7 +293,7 @@ void PutPlayerInVehicle( RakNet::BitStream * pBitStream, RakNet::Packet * pPacke
 	if ( playerId == pCore->GetPlayerManager()->GetLocalPlayer()->GetId () )
 		pPlayer = pCore->GetPlayerManager()->GetLocalPlayer();
 	else
-		pCore->GetPlayerManager()->Get ( playerId );
+		pPlayer = pCore->GetPlayerManager()->Get ( playerId );
 
 	CLogFile::Printf ( "PutPlayerInVehicle - %d, %d, %d", playerId, vehicleId, seatId );
 
@@ -317,7 +317,7 @@ void RemovePlayerFromVehicle( RakNet::BitStream * pBitStream, RakNet::Packet * p
 	if ( playerId == pCore->GetPlayerManager()->GetLocalPlayer()->GetId () )
 		pPlayer = pCore->GetPlayerManager()->GetLocalPlayer();
 	else
-		pCore->GetPlayerManager()->Get ( playerId );
+		pPlayer = pCore->GetPlayerManager()->Get ( playerId );
 
 	CLogFile::Printf ( "RemovePlayerFromVehicle - %d", playerId );
 
@@ -326,6 +326,64 @@ void RemovePlayerFromVehicle( RakNet::BitStream * pBitStream, RakNet::Packet * p
 	{
 		// Remove the player from the vehicle
 		pPlayer->RemoveFromVehicle ( pPlayer->GetVehicle() );
+	}
+}
+
+void SetAnimStyle(RakNet::BitStream * pBitStream, RakNet::Packet * pPacket)
+{
+	// Read the player id
+	EntityId playerId;
+	pBitStream->ReadCompressed(playerId);
+
+	// Read the directory
+	RakNet::RakString directory;
+	pBitStream->Read(directory);
+
+	// Read the style
+	RakNet::RakString style;
+	pBitStream->Read(style);
+
+	// Get the player instance
+	CNetworkPlayer * pPlayer = NULL;
+	if (playerId == pCore->GetPlayerManager()->GetLocalPlayer()->GetId())
+		pPlayer = pCore->GetPlayerManager()->GetLocalPlayer();
+	else
+		pPlayer = pCore->GetPlayerManager()->Get(playerId);
+
+	// Is the player instance valid?
+	if (pPlayer)
+	{
+		// Set the anim style
+		pPlayer->SetAnimStyle(directory, style);
+	}
+}
+
+void SetHandModel(RakNet::BitStream * pBitStream, RakNet::Packet * pPacket)
+{
+	// Read the player id
+	EntityId playerId;
+	pBitStream->ReadCompressed(playerId);
+
+	// Read the hand
+	int iHand;
+	pBitStream->Read(iHand);
+
+	// Read the model
+	int iModel;
+	pBitStream->Read(iModel);
+
+	// Get the player instance
+	CNetworkPlayer * pPlayer = NULL;
+	if (playerId == pCore->GetPlayerManager()->GetLocalPlayer()->GetId())
+		pPlayer = pCore->GetPlayerManager()->GetLocalPlayer();
+	else
+		pPlayer = pCore->GetPlayerManager()->Get(playerId);
+
+	// Is the player instance valid?
+	if (pPlayer)
+	{
+		// Set the anim style
+		pPlayer->SetHandModel(iHand, iModel);
 	}
 }
 
@@ -355,6 +413,8 @@ void CPlayerRPC::Register( RakNet::RPC4 * pRPC )
 	pRPC->RegisterFunction( RPC_PLAYERPING, PlayerPing );
 	pRPC->RegisterFunction( RPC_PUTINVEHICLE, PutPlayerInVehicle );
 	pRPC->RegisterFunction( RPC_REMOVEFROMVEHICLE, RemovePlayerFromVehicle );
+	pRPC->RegisterFunction( RPC_SETANIMSTYLE, SetAnimStyle);
+	pRPC->RegisterFunction( RPC_SETHANDMODEL, SetHandModel);
 }
 
 void CPlayerRPC::Unregister( RakNet::RPC4 * pRPC )
