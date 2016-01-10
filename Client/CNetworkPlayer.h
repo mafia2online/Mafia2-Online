@@ -165,6 +165,9 @@ public:
 	void							GetLookAt( CVector3 * vecLookAt ) { memcpy( vecLookAt, &m_vecLookAt, sizeof(CVector3) ); }
 	CVector3						GetLookAt( void ) { return m_vecLookAt; }
 
+	void							SetAnimStyle(const char *directory, const char *style);
+	void							SetHandModel(int iHand, int iModel);
+
 	void							TerminateSyncObjects( void );
 
 	void							SetState( ePlayerState playerState ) { m_playerState = playerState; }

@@ -1077,3 +1077,23 @@ void CNetworkPlayer::DetachBlip ( void )
 		m_bBlipAttached = false;
 	}
 }
+
+void CNetworkPlayer::SetAnimStyle(const char *directory, const char *style)
+{
+	// Is the instance valid ?
+	if (m_pPlayerPed){
+
+		// Set the anim style
+		m_pPlayerPed->SetAnimStyle(directory, style);
+	}
+}
+
+void CNetworkPlayer::SetHandModel(int iHand, int iModel)
+{
+	// Is the instance valid?
+	if (m_pPlayerPed){
+		
+		// Set the hand model
+		m_pPlayerPed->ModelToHand(iHand, iModel);
+	}
+}
