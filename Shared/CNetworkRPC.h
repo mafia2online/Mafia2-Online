@@ -69,6 +69,8 @@
 #define		RPC_SETPLAYERMODEL			"RPC_Script_SetPlayerModel"
 #define		RPC_PUTINVEHICLE			"RPC_Script_PutPlayerInVehicle"
 #define		RPC_REMOVEFROMVEHICLE		"RPC_Script_RemovePlayerFromVehicle"
+#define		RPC_SETHANDMODEL			"RPC_Script_SetHandModel"
+#define		RPC_SETANIMSTYLE			"RPC_Script_SetAnimStyle"
 
 // Vehicle scripting RPC's
 #define		RPC_SETVEHICLEPOS			"RPC_Script_SetVehiclePosition"

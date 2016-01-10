@@ -591,18 +591,27 @@ C_SyncObject * CM2Ped::LookAt ( CVector3 vecPosition )
 	return NULL;
 }
 
+int _declspec(naked) M2EntityData::PlayAnim(C_SyncObject **syncObject, const char *const animName, const bool unknown, int, int, float, float, float)
+{
+	_asm {
+		mov eax, 0x00982CC0
+		jmp eax
+	}
+}
+
 void CM2Ped::PlayAnimation(char *strAnimation)
 {
 	if (m_pPed && m_pPed->m_pEntityData)
 	{
 		M2EntityData * pEntityData = m_pPed->m_pEntityData;
 
-		int iAnimation = (int)strAnimation;// trololol
-		DWORD dwAddress = 0xD7FC50;//0xD80250 // hacky, todo fix
-
-		_asm push iAnimation;
-		_asm mov ecx, pEntityData;
-		_asm call dwAddress;
+		C_SyncObject *pSyncObject = NULL;
+		pEntityData->PlayAnim(&pSyncObject, strAnimation, false, 0, 0, 0.0f, 0.30000001f, 0.3000000f);
+		CM2SyncObject *_pSyncObject = new CM2SyncObject(pSyncObject);
+		CLogFile::Printf("%p", pSyncObject);
+		CLogFile::Printf("IsDone = %s", _pSyncObject->IsDone() ? "true" : "false");
+		CLogFile::Printf("IsFailed = %s", _pSyncObject->IsFail() ? "true" : "false");
+		++pSyncObject->m_dwState; // increase ref count..
 	}
 }
 
@@ -642,23 +651,39 @@ bool CM2Ped::IsAnimFinished(char *strAnimation)
 	return bReturn;
 }
 
-void CM2Ped::ModelToHands(int iHand, int iModel)
+void CM2Ped::ModelToHand(int iHand, int iModel)
 {
 	if (iHand == 1 || iHand == 2) // 1 : right hand & 2 : left hand
 	{
-		if (iModel >= 2 && iModel <= 120)
+		if (iModel >= 0 && iModel <= 120)
 		{
 			if (m_pPed){
 				M2EntityData* pEntityData = m_pPed->m_pEntityData;
 
 				DWORD func = 0x90C860;
 
-				_asm push 0; // Hand or unk
+				_asm push 1; // Hand or unk
 				_asm push iModel; // Model
 				_asm push iHand; // Unk or hand
 				_asm mov ecx, pEntityData;
 				_asm call func;
 			}
+		}
+	}
+}
+
+void CM2Ped::SetAnimStyle(const char *dir, const char *set)
+{
+	if (strlen(dir) > 0 && strlen(set) > 0){
+		if (m_pPed){
+			M2EntityData *pEntityData = pCore->GetPlayerManager()->GetLocalPlayer()->GetPlayerPed()->GetPed()->m_pEntityData;
+
+			DWORD func = 0x956720;
+
+			_asm push set;
+			_asm push dir;
+			_asm mov ecx, pEntityData;
+			_asm call func;
 		}
 	}
 }

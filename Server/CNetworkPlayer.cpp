@@ -942,3 +942,28 @@ int CNetworkPlayer::GetMoney ( void )
 	// todo
 	return 0;
 }
+
+void CNetworkPlayer::SetAnimStyle(const char *directory, const char *style)
+{
+	// Construct bitstream
+	RakNet::BitStream pBitStream;
+
+	pBitStream.Write(RakNet::RakString(directory));
+
+	pBitStream.Write(RakNet::RakString(style));
+
+	// Send bitstream
+	pCore->GetNetworkModule()->Call(RPC_SETANIMSTYLE, &pBitStream, HIGH_PRIORITY, RELIABLE, m_playerId, false);
+}
+
+void CNetworkPlayer::SetHandModel(int iHand, int iModel)
+{
+	// Construct bitstream
+	RakNet::BitStream pBitStream;
+
+	pBitStream.Write(iHand);
+	pBitStream.Write(iModel);
+
+	// Send bitstream
+	pCore->GetNetworkModule()->Call(RPC_SETHANDMODEL, &pBitStream, HIGH_PRIORITY, RELIABLE, m_playerId, false);
+}

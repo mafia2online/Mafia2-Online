@@ -53,6 +53,8 @@ public:
 	DWORD m_dwType;											// 001C - 0020
 	PAD(M2EntityData, pad1, 0x88);							// 0020 - 00A8
 	M2PedUnk001 * m_pUnknown;								// 00A8 - 00AC
+
+	int PlayAnim(C_SyncObject **syncObject, const char *const animName, const bool unknown, int, int, float, float, float);
 };
 
 enum ePlayerMovementState : BYTE
@@ -177,6 +179,7 @@ public:
 	void					StopAnimation					(char *strAnimation);
 	bool					IsAnimFinished					(char *strAnimation);
 
-	void					ModelToHands					(int iHand, int iModel);
+	void					ModelToHand						(int iHand, int iModel);
+	void					SetAnimStyle					(const char *dir, const char *set);
 
 };

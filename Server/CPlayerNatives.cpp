@@ -51,6 +51,11 @@ void CPlayerNatives::Register( CScriptingManager * pScriptingManager )
 	pScriptingManager->RegisterFunction( "putPlayerInVehicle", PutInVehicle, 3, "iii" );
 	pScriptingManager->RegisterFunction( "removePlayerFromVehicle", RemoveFromVehicle, 1, "i" );
 	pScriptingManager->RegisterFunction( "respawnPlayer", RespawnPlayer, 1, "i" );
+	pScriptingManager->RegisterFunction( "setPlayerAnimStyle", SetAnimStyle, 3, "iss");
+	pScriptingManager->RegisterFunction( "setPlayerHandModel", SetHandModel, 3, "iii");
+
+	pScriptingManager->RegisterConstant( "HAND_LEFT", 1);
+	pScriptingManager->RegisterConstant( "HAND_RIGHT", 2);
 }
 
 // isPlayerConnected( playerid );
@@ -1110,4 +1115,52 @@ SQInteger CPlayerNatives::RespawnPlayer ( SQVM * pVM )
 
 	sq_pushbool( pVM, false );
 	return 1;
+}
+
+// setPlayerAnimStyle(playerId, directory, style);
+SQInteger	CPlayerNatives::SetAnimStyle(SQVM * pVM)
+{
+	SQInteger playerId;
+	sq_getinteger(pVM, -3, &playerId);
+
+	const SQChar * directory;
+	sq_getstring(pVM, -2, &directory);
+
+	const SQChar * style;
+	sq_getstring(pVM, -1, &style);
+
+	// Is the player active ?
+	if (pCore->GetPlayerManager()->IsActive(playerId))
+	{
+		// Send anim style
+		pCore->GetPlayerManager()->Get(playerId)->SetAnimStyle(directory, style);
+		sq_pushbool(pVM, true);
+		return (1);
+	}
+	sq_pushbool(pVM, false);
+	return (1);
+}
+
+// setPlayerHandModel(playerid, hand, model);
+SQInteger	CPlayerNatives::SetHandModel(SQVM * pVM)
+{
+	SQInteger playerId;
+	sq_getinteger(pVM, -3, &playerId);
+
+	SQInteger iHand;
+	sq_getinteger(pVM, -2, &iHand);
+
+	SQInteger iModel;
+	sq_getinteger(pVM, -1, &iModel);
+
+	// Is the player active?
+	if (pCore->GetPlayerManager()->IsActive(playerId))
+	{
+		// Send hand model
+		pCore->GetPlayerManager()->Get(playerId)->SetHandModel(iHand, iModel);
+		sq_pushbool(pVM, true);
+		return (1);
+	}
+	sq_pushbool(pVM, false);
+	return (1);
 }

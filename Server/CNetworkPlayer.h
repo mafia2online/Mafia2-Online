@@ -131,4 +131,7 @@ public:
 	void							TakeMoney					( int iMoney );
 	int								GetMoney					( void );
 
+	void							SetAnimStyle				(const char *directory, const char *style);
+	void							SetHandModel				(int iHand, int iModel);
+
 };

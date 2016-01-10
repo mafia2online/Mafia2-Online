@@ -59,6 +59,9 @@ private:
 	static	SQInteger		RemoveFromVehicle		( SQVM * pVM );
 	static	SQInteger		RespawnPlayer			( SQVM * pVM );
 
+	static	SQInteger		SetAnimStyle			( SQVM * pVM );
+	static	SQInteger		SetHandModel			( SQVM * pVM );
+
 public:
 
 	static	void			Register				( CScriptingManager * pScriptingManager );
