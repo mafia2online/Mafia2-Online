@@ -41,6 +41,8 @@ CNetworkPlayer::CNetworkPlayer( bool bLocalPlayer )
 	m_uiModelIndex = -1;
 	m_pAttachedBlip = NULL;
 	m_bBlipAttached = false;
+	m_iHandModel = 0;
+	m_iHand = 0;
 	
 	// Reset enter vehicle stuff
 	m_VehicleEnter.m_pEnterAICommand = NULL;
@@ -1085,6 +1087,10 @@ void CNetworkPlayer::SetAnimStyle(const char *directory, const char *style)
 
 		// Set the anim style
 		m_pPlayerPed->SetAnimStyle(directory, style);
+
+		// Save values
+		m_styleDirectory.Set(directory);
+		m_styleName.Set(style);
 	}
 }
 
@@ -1095,5 +1101,9 @@ void CNetworkPlayer::SetHandModel(int iHand, int iModel)
 		
 		// Set the hand model
 		m_pPlayerPed->ModelToHand(iHand, iModel);
+
+		// Save values
+		m_iHand = iHand;
+		m_iHandModel = iModel;
 	}
 }
