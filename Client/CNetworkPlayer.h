@@ -61,6 +61,12 @@ private:
 	CBlip							* m_pAttachedBlip;
 	bool							m_bBlipAttached;
 
+	int								m_iHand;
+	int								m_iHandModel;
+
+	String							m_styleDirectory;
+	String							m_styleName;
+
 	struct
 	{
 		CNetworkVehicle				* m_pTargetVehicle;
