@@ -360,30 +360,19 @@ void SetAnimStyle(RakNet::BitStream * pBitStream, RakNet::Packet * pPacket)
 
 void SetHandModel(RakNet::BitStream * pBitStream, RakNet::Packet * pPacket)
 {
-	// Read the player id
-	EntityId playerId;
-	pBitStream->ReadCompressed(playerId);
-
 	// Read the hand
 	int iHand;
-	pBitStream->Read(iHand);
+	pBitStream->ReadCompressed(iHand);
 
 	// Read the model
 	int iModel;
-	pBitStream->Read(iModel);
-
-	// Get the player instance
-	CNetworkPlayer * pPlayer = NULL;
-	if (playerId == pCore->GetPlayerManager()->GetLocalPlayer()->GetId())
-		pPlayer = pCore->GetPlayerManager()->GetLocalPlayer();
-	else
-		pPlayer = pCore->GetPlayerManager()->Get(playerId);
+	pBitStream->ReadCompressed(iModel);
 
 	// Is the player instance valid?
-	if (pPlayer)
+	if (pCore->GetPlayerManager()->GetLocalPlayer())
 	{
 		// Set the anim style
-		pPlayer->SetHandModel(iHand, iModel);
+		pCore->GetPlayerManager()->GetLocalPlayer()->SetHandModel(iHand, iModel);
 	}
 }
 

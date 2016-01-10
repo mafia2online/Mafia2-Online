@@ -150,6 +150,12 @@ void CRemotePlayer::StoreOnFootSync( OnFootSync * onFootSync )
 		// Has the player model changed?
 		if( GetModel() != onFootSync->m_uiModelIndex )
 			SetModel( onFootSync->m_uiModelIndex );
+
+		// Update the animStyle
+		pCore->GetPlayerManager()->Get(m_playerId)->SetAnimStyle(onFootSync->m_styleDirectory, onFootSync->m_styleName);
+		
+		// Update the handModel
+		pCore->GetPlayerManager()->Get(m_playerId)->SetHandModel(onFootSync->m_iHand, onFootSync->m_iHandModel);
 	}
 	else
 	{
