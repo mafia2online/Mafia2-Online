@@ -20,6 +20,15 @@ typedef lua_State *		( __cdecl * lua_newthread_t )		( lua_State * L );
 typedef void			( __cdecl * lua_setfield_t )		( lua_State * L, int idx, const char * k );
 typedef void			( __cdecl * lua_settop_t )			( lua_State * L, int idx );
 
+typedef void(__cdecl * lua_getfield_t)		(lua_State * L, int idx, const char * k);
+typedef int(__cdecl * lua_type_t)			(lua_State * L, int idx);
+typedef const char *	(__cdecl * lua_typename_t)		(lua_State * L, int t);
+typedef void(__cdecl * lua_pushnil_t)			(lua_State * L);
+typedef int(__cdecl * lua_next_t)			(lua_State * L, int idx);
+typedef void(__cdecl * lua_pushvalue_t)		(lua_State * L, int idx);
+typedef bool(__cdecl * lua_isuserdata_t)		(lua_State * L, int idx);
+typedef void *			(__cdecl * lua_touserdata_t)		(lua_State * L, int idx);
+
 class CLua
 {
 
@@ -36,6 +45,15 @@ private:
 	static lua_newthread_t			plua_newthread;
 	static lua_setfield_t			plua_setfield;
 	static lua_settop_t				plua_settop;
+
+	static lua_getfield_t			plua_getfield;
+	static lua_type_t				plua_type;
+	static lua_typename_t			plua_typename;
+	static lua_pushnil_t			plua_pushnil;
+	static lua_next_t				plua_next;
+	static lua_pushvalue_t			plua_pushvalue;
+	static lua_isuserdata_t			plua_isuserdata;
+	static lua_touserdata_t			plua_touserdata;
 
 	static void						HOOK_CLua__loadbuffer( void );
 

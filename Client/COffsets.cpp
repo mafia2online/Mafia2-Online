@@ -72,6 +72,14 @@ unsigned int COffsets::FUNC_CLua__tolstring = 0;
 unsigned int COffsets::FUNC_CLua__pushcclosure = 0;
 unsigned int COffsets::FUNC_CLua__tointeger = 0;
 unsigned int COffsets::FUNC_CLua__newthread = 0;
+unsigned int COffsets::FUNC_CLua__getfield = 0;
+unsigned int COffsets::FUNC_CLua__type_t = 0;
+unsigned int COffsets::FUNC_CLua__typename_t;
+unsigned int COffsets::FUNC_CLua__pushnil = 0;
+unsigned int COffsets::FUNC_CLua__next = 0;
+unsigned int COffsets::FUNC_CLua__pushvalue = 0;
+unsigned int COffsets::FUNC_CLua__isuserdata = 0;
+unsigned int COffsets::FUNC_CLua__touserdata = 0;
 
 unsigned int COffsets::FUNC_CHumanInventory__ProcessShot = 0;
 unsigned int COffsets::FUNC_CHuman__InventorySelect = 0;
@@ -116,6 +124,7 @@ unsigned int COffsets::FUNC_CVehicle__SetSpeedFloat = 0;
 unsigned int COffsets::FUNC_CVehicle__SetBeaconLightOn = 0;
 unsigned int COffsets::FUNC_CVehicle__SetHandbrake = 0;
 unsigned int COffsets::FUNC_CVehicle__OpenSeatWindow = 0;
+unsigned int COffsets::FUNC_CVehicle__IsWindowOpen = 0;
 unsigned int COffsets::FUNC_CVehicle__Repair = 0;
 unsigned int COffsets::FUNC_CVehicle__GetEngineDamage = 0;
 unsigned int COffsets::FUNC_CVehicle__SetEngineDamage = 0;
@@ -256,6 +265,14 @@ void COffsets::CommonInitialise( unsigned int uiBase )
 	FUNC_CLua__loadbuffer					= (uiBase + 0x5C54C0); // Steam: 0x5D5BD0
 	FUNC_CLua__settop						= (uiBase + 0x5C2110); // Steam: 0x5D2820
 	FUNC_CLua__gettop						= (uiBase + 0x5C20F0); // Steam: 0x5D2800
+	FUNC_CLua__getfield						= (uiBase + 0x005C3070);
+	FUNC_CLua__type_t						= (uiBase + 0x005C2530);
+	FUNC_CLua__typename_t					= (uiBase + 0x005C2570);
+	FUNC_CLua__pushnil						= (uiBase + 0x005C2C10);
+	FUNC_CLua__next							= (uiBase + 0x005C3C60);
+	FUNC_CLua__pushvalue					= (uiBase + 0x005C24E0);
+	FUNC_CLua__isuserdata					= (uiBase + 0x005C2690);
+	FUNC_CLua__touserdata					= (uiBase + 0x005C2AF0);
 	
 	// Don't need these?
 	FUNC_CLua__setfield						= (uiBase + CPatcher::FindPattern( (BYTE *)"\x55\x8B\xEC\x83\xEC\x20\x8B\x45\x0C\x50\x8B\x4D\x08\x51\xE8\xCD", "xxxxxxxxxxxxxxxx" ));
@@ -308,6 +325,7 @@ void COffsets::CommonInitialise( unsigned int uiBase )
 	FUNC_CVehicle__SetBeaconLightOn			= (uiBase + 0x1203DD0);
 	FUNC_CVehicle__SetHandbrake				= (uiBase + 0x11FB6D0);
 	FUNC_CVehicle__OpenSeatWindow			= (uiBase + 0x990AA0);
+	FUNC_CVehicle__IsWindowOpen				= (uiBase + 0x990AF0);
 	FUNC_CVehicle__Explode					= (uiBase + 0xA032A0);
 	FUNC_CVehicle__Repair					= (uiBase + 0x4DA7B0); // Steam: 0x04E9890
 	FUNC_CVehicle__SetEngineDamage			= (uiBase + 0x9A9E50);
