@@ -59,6 +59,14 @@ CGUI_Impl::CGUI_Impl( IDirect3DDevice9 * pDevice )
 	// Create the gui root
 	m_pDefaultWindow = (CEGUI::DefaultWindow *)m_pWindowManager->createWindow( "DefaultWindow", "guiroot" );
 
+	// Set the available chars (english and cyrillic support)
+	CEGUI::String tmp;
+	for (CEGUI::utf32 cp = 0x20; cp <= 0x7E; ++cp)
+		tmp += cp;
+	for (CEGUI::utf32 cp = 0x400; cp <= 0x4FF; ++cp)
+		tmp += cp;
+	m_pDefaultFont->GetFont()->defineFontGlyphs(tmp);
+
 	// Set the default gui sheet
 	m_pSystem->setGUISheet( m_pDefaultWindow );
 
