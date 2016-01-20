@@ -29,6 +29,18 @@ void CSystemNatives::Register( CScriptingManager * pScriptingManager )
 	pScriptingManager->RegisterFunction( "getServerName", ServerName, 0, NULL );
 	pScriptingManager->RegisterFunction( "str_rand", StrRand, 1, "i" );
 	pScriptingManager->RegisterFunction( "int_concat", IntConcat, 2, "ii" );
+	pScriptingManager->RegisterFunction( "getDateTime", GetDateTime, 0, NULL);
+}
+
+SQInteger CSystemNatives::GetDateTime(SQVM * pVM)
+{
+	time_t rawtime;
+	struct tm *timeinfo;
+
+	time(&rawtime);
+	timeinfo = localtime(&rawtime);
+	sq_pushstring(pVM, asctime(timeinfo), strlen(asctime(timeinfo)));
+	return (1);
 }
 
 SQInteger CSystemNatives::Log( SQVM * pVM )

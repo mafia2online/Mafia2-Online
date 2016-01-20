@@ -25,6 +25,7 @@ private:
 	static	SQInteger		ServerName( SQVM * pVM );
 	static	SQInteger		StrRand( SQVM * pVM );
 	static	SQInteger		IntConcat( SQVM * pVM );
+	static	SQInteger		GetDateTime(SQVM * pVM);
 
 public:
 

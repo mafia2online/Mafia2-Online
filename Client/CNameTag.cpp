@@ -170,8 +170,10 @@ void CNameTag::Player(void)
 					CColor color2(0, 110, 0, 160);
 					CColor color3(0, 255, 0, 160);
 
+					DWORD color = pCore->GetPlayerManager()->Get(i)->GetColour();
+
 					// We draw texts
-					pCore->GetGraphics()->DrawTextA((m_playerVectors[i].fX - dimensionWidth / 2) + 1, m_playerVectors[i].fY + 1, (DWORD)0xFFFFFFFF, fScale, "tahoma-bold", false, text.Get());
+					pCore->GetGraphics()->DrawTextA((m_playerVectors[i].fX - dimensionWidth / 2) + 1, m_playerVectors[i].fY + 1, color, fScale, "tahoma-bold", false, text.Get());
 
 					// We draw boxes
 					pCore->GetGraphics()->DrawBox((m_playerVectors[i].fX - (BOX_WIDTH / 2)), (m_playerVectors[i].fY + 16.0), BOX_WIDTH, BOX_HEIGHT, color1.dwHexColor);
