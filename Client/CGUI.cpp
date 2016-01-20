@@ -320,8 +320,12 @@ bool CGUI::ProcessInput( UINT uMsg, WPARAM wParam, LPARAM lParam )
 
 	case WM_CHAR:
 		{
+			char buf = wParam;
+			wchar_t wbuf;
+			MultiByteToWideChar(CP_ACP, 0, &buf, sizeof(char), &wbuf, 1);
+
 			// Inject the character input into cegui
-			if ( CEGUI::System::getSingleton().injectChar ( (CEGUI::utf32)wParam ) )
+			if ( CEGUI::System::getSingleton().injectChar ( static_cast<CEGUI::utf32>(wbuf) ) )
 				return true;
 
 			break;
