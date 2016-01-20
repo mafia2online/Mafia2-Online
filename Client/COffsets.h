@@ -91,6 +91,14 @@ public:
 	static	unsigned int		FUNC_CLua__pushcclosure;
 	static	unsigned int		FUNC_CLua__tointeger;
 	static	unsigned int		FUNC_CLua__newthread;
+	static	unsigned int		FUNC_CLua__getfield;
+	static	unsigned int		FUNC_CLua__type_t;
+	static	unsigned int		FUNC_CLua__typename_t;
+	static	unsigned int		FUNC_CLua__pushnil;
+	static	unsigned int		FUNC_CLua__next;
+	static	unsigned int		FUNC_CLua__pushvalue;
+	static	unsigned int		FUNC_CLua__isuserdata;
+	static	unsigned int		FUNC_CLua__touserdata;
 
 	// Human
 	static	unsigned int		FUNC_CHumanInventory__ProcessShot;
@@ -137,6 +145,7 @@ public:
 	static	unsigned int		FUNC_CVehicle__SetBeaconLightOn;
 	static	unsigned int		FUNC_CVehicle__SetHandbrake;
 	static	unsigned int		FUNC_CVehicle__OpenSeatWindow;
+	static	unsigned int		FUNC_CVehicle__IsWindowOpen;
 	static  unsigned int		FUNC_CVehicle__Repair;
 	static  unsigned int		FUNC_CVehicle__GetEngineDamage;
 	static  unsigned int		FUNC_CVehicle__SetEngineDamage;
