@@ -322,9 +322,21 @@ void CM2Hud::SpeedoShow ( bool bShow )
 	}
 }
 
+
+int _declspec(naked) sub_8CC740(int messageType, const wchar_t *string, int showMode, float delay, int a5, int a6)
+{
+	_asm {
+		mov eax, 0x8CC740
+			jmp eax
+	}
+}
+
 void CM2Hud::ShowMessage(const char * text, int delay)
 {
-	CLua::Executef( "game.hud:MessageShowQuick( \"%s\", \"%d\")", text, delay); // Idk if we can show custom message, gonna try
+	if (m_pHud)
+	{
+		sub_8CC740(0, L"Hello World", 2, 1.0f, 0, 0);
+	}
 }
 
 
@@ -345,10 +357,16 @@ void CM2Hud::SetDrunkLevel(int level)
 
 void CM2Hud::SetWantedLevel(int level)
 {
-	if (m_pHud){
-		if (level == 1 || level == 2){
-			CLua::Executef("game.hud:PoliceWantedSet(\"%d\")", level);//Set wanted level
-			m_wantedLevel = level;
-		}
+	if (m_pHud)
+	{
+		DWORD function = 0x883860;
+		void * wanted = m_pHud->m_pWantedLevel;
+		float value = 1.0;
+
+		_asm push value;
+		_asm push value;
+		_asm push level;
+		_asm mov ecx, wanted;
+		_asm call function;
 	}
 }

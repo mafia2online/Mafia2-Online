@@ -47,6 +47,10 @@ public:
 	M2VehicleDataVFTable * m_pVFTable;			// 0000 - 0004
 	PAD(M2VehicleData, pad0, 0x1C);				// 0004 - 0020
 	void * m_pVehicleParts;						// 0020 - 0024
+
+	int sub_120DBB0(int, int);
+
+	int sub_120E340(int, int);
 };
 
 class M2FuelTank
@@ -104,11 +108,48 @@ public:
 	char m_szWheelTexture[11];					// 0010 - 001B
 };
 
+class M2Door // definitely not C_Door :-)
+{
+public:
+	unsigned vtable;
+};
+
+template <typename TYPE>
+class T_Array
+{
+public:
+	TYPE *m_pStart;
+	TYPE *m_pEnd;
+
+	T_Array(TYPE *const pStart, const unsigned uSize)
+	{
+		m_pStart = pStart;
+		m_pEnd = pStart + uSize;
+	}
+
+	unsigned GetSize(void) const
+	{
+		return (unsigned)(m_pEnd - m_pStart) / unsigned(sizeof(TYPE));
+	}
+
+	TYPE &operator[] (const unsigned uIndex)
+	{
+		return m_pStart[uIndex];
+	}
+
+	const TYPE &operator[] (const unsigned uIndex) const
+	{
+		return m_pStart[uIndex];
+	}
+};
+
 class M2Vehicle : public M2Entity
 {
 public:
 												// 0000 - 0064
-	PAD(M2Vehicle, pad0, 0x14);					// 0064 - 0078
+	PAD(M2Vehicle, pad0, 0x8);					// 0064 - 006C
+	T_Array<M2Door*> m_Doors;					// 006C - 0074
+	PAD(M2Vehicle, pad0_1, 0x4);				// 0074 - 0078
 	int m_nSlotSDS;								// 0078 - 007C
 	PAD(M2Vehicle, pad1, 0xC);					// 007C - 0088
 	M2VehicleSeats * m_pSeats;					// 0088 - 008C
@@ -164,6 +205,10 @@ public:
 	// 0x49C = float m_fSteerAngle
 	// 0x4A0 = float m_fMaxTurnAngle
 	// 0x4A4 = float m_fTurnAngle
+
+	void UnlockPlayerEntryPoints(void);
+
+	void sub_468EB0(void);
 };
 
 class CM2Vehicle : public CM2Entity
@@ -269,5 +314,8 @@ public:
 
 	void					SetWindowOpen					(int iSeat, bool bState);
 	bool					IsWindowOpen					(int iSeat);
+
+	void					MarkForSale						(bool bSale);
+	bool					IsMarkedForSale					();
 
 };
