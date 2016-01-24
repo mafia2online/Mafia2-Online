@@ -11,6 +11,38 @@
 
 extern	CCore		* pCore;
 
+void _declspec(naked) M2Vehicle::UnlockPlayerEntryPoints(void)
+{
+	_asm {
+		mov eax, 0xD63DD0
+		jmp eax
+	}
+}
+
+int _declspec(naked) M2VehicleData::sub_120DBB0(int, int)
+{
+	_asm {
+		mov eax, 0x120DBB0
+		jmp eax
+	}
+}
+
+int _declspec(naked) M2VehicleData::sub_120E340(int, int)
+{
+	_asm {
+		mov eax, 0x120E340
+		jmp eax
+	}
+}
+
+void _declspec(naked) M2Vehicle::sub_468EB0(void)
+{
+	_asm {
+		mov eax, 0x468EB0
+		jmp eax
+	}
+}
+
 CM2Vehicle::CM2Vehicle( M2Vehicle * pVehicle ) : CM2Entity( pVehicle )
 {
 	DEBUG_TRACE("CM2Vehicle::CM2Vehicle");
@@ -33,15 +65,22 @@ CM2Vehicle::CM2Vehicle( M2Vehicle * pVehicle ) : CM2Entity( pVehicle )
 	pVehicle->m_byteFlags1 &= 0xFFFFFDFF;
 	pVehicle->m_byteFlags5 = byteFlags;
 
-	// Unlock player entry points (Doesn't work!)
+	/* Unlock player entry points (Doesn't work!)
 	DWORD dwFunc = 0x9BC150; // FUNC_CVehicle__UnlockPlayerEntryPoints
 	_asm mov ecx, pVehicle;
-	_asm call dwFunc;
+	_asm call dwFunc;*/
+	//pVehicle->UnlockPlayerEntryPoints();
 
 	// Unlock
-	dwFunc = 0x120DBB0;
-	DWORD dwVehicleData = (DWORD)(m_pVehicle) + 0xA8;
-	_asm push -1;
+	/*DWORD dwFunc = 0x120DBB0;
+	// (DWORD)(pVehicle + 8) + 0xA8
+	M2VehicleData *const pVehicleData = &m_pVehicle->m_vehicleData;
+
+	pVehicleData->sub_120DBB0(1, -1);
+	pVehicleData->sub_120E340(0x80000000, 0);
+	m_pVehicle->sub_468EB0();*/
+
+	/*_asm push -1;
 	_asm push 1;
 	_asm mov ecx, dwVehicleData;
 	_asm call dwFunc;
@@ -50,7 +89,12 @@ CM2Vehicle::CM2Vehicle( M2Vehicle * pVehicle ) : CM2Entity( pVehicle )
 	_asm push 0;
 	_asm push 80000000h;
 	_asm mov ecx, dwVehicleData;
-	_asm call dwFunc;
+	_asm call dwFunc;*/
+
+	/*M2Vehicle * pVehicle = m_pVehicle;
+	DWORD dwFunc = 0x9905B0;
+	_asm mov ecx, pvehicle;
+	_asm call dwFunc;*/
 }
 
 CM2Vehicle::~CM2Vehicle( void )
@@ -890,11 +934,19 @@ bool CM2Vehicle::IsWindowOpen(int iSeat)
 	// Is the vehicle valid?
 	if (m_pVehicle)
 	{
-		//Todo - Maybe 0x0D646B0
-		return (0);
+		DWORD func = COffsets::FUNC_CVehicle__IsWindowOpen;
+		M2Vehicle * pVehicle = m_pVehicle;
+
+		bool retn;
+
+		_asm push iSeat
+		_asm mov ecx, pVehicle
+		_asm call func;
+		_asm mov retn, al
+		return (retn);
 	}
 
-	return 0;
+	return (false);
 }
 
 void CM2Vehicle::SetWheelTexture ( int iWheelIndex, const char * szTexture )
@@ -983,4 +1035,28 @@ bool CM2Vehicle::GetLightState ( void )
 	}
 
 	return false;
+}
+
+void CM2Vehicle::MarkForSale(bool bSale)
+{
+	if (m_pVehicle)
+	{
+		DWORD func = 0x0D649E0;
+		M2Vehicle * pVehicle = m_pVehicle;
+		DWORD dwVehicleData = (DWORD)(pVehicle)+0xA8;
+
+		_asm push bSale;
+		_asm mov ecx, dwVehicleData;
+		_asm call func;
+	}
+}
+
+bool CM2Vehicle::IsMarkedForSale()
+{
+	if (m_pVehicle)
+	{
+		DWORD dwVehicleData = (DWORD)(m_pVehicle)+0xA8;
+		return (*(DWORD *)(dwVehicleData + 0xCAC) & 20);
+	}
+	return (false);
 }
