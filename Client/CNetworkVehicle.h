@@ -157,6 +157,9 @@ public:
 	void							SetSirenState						( bool bState );
 	bool							GetSirenState						( void );
 
+	void							SetBeaconLightState					(bool bState);
+	bool							GetBeaconLightState					(void);
+
 	void							SetHornState						( bool bState );
 	bool							GetHornState						( void );
 

@@ -37,6 +37,8 @@ void CSharedVehicleNatives::Register( CScriptingManager * pScriptingManager )
 	pScriptingManager->RegisterFunction( "isVehiclePartOpen", IsPartOpen, 2, "ii" );
 	pScriptingManager->RegisterFunction( "setVehicleSirenState", SetSirenState, 2, "ib" );
 	pScriptingManager->RegisterFunction( "getVehicleSirenState", GetSirenState, 1, "i" );
+	pScriptingManager->RegisterFunction( "setVehicleBeaconLightState", SetBeaconLightState, 2, "ib");
+	pScriptingManager->RegisterFunction( "getVehicleBeaconLightState", GetBeaconLightState, 1, "i");
 	pScriptingManager->RegisterFunction( "setVehicleHornState", SetHornState, 2, "ib" );
 	pScriptingManager->RegisterFunction( "getVehicleHornState", GetHornState, 1, "i" );
 	pScriptingManager->RegisterFunction( "setVehicleWindowOpen", SetWindowOpen, 3, "iib" );
@@ -511,6 +513,47 @@ SQInteger CSharedVehicleNatives::GetSirenState( SQVM * pVM )
 	}
 
 	sq_pushbool( pVM, false );
+	return 1;
+}
+
+SQInteger CSharedVehicleNatives::SetBeaconLightState(SQVM * pVM)
+{
+	// Get the vehicle id
+	SQInteger vehicleId;
+	sq_getinteger(pVM, -2, &vehicleId);
+
+	// Get the state
+	SQBool bState;
+	sq_getbool(pVM, -1, &bState);
+
+	// Is the vehicle active?
+	if (pCore->GetVehicleManager()->IsActive(vehicleId))
+	{
+		// Set the beacon light state
+		pCore->GetVehicleManager()->Get(vehicleId)->SetBeaconLightState(bState);
+
+		sq_pushbool(pVM, true);
+		return 1;
+	}
+
+	sq_pushbool(pVM, false);
+	return 1;
+}
+
+SQInteger CSharedVehicleNatives::GetBeaconLightState(SQVM * pVM)
+{
+	// Get the vehicle id
+	SQInteger vehicleId;
+	sq_getinteger(pVM, -1, &vehicleId);
+
+	// Is the vehicle active?
+	if (pCore->GetVehicleManager()->IsActive(vehicleId))
+	{
+		sq_pushbool(pVM, pCore->GetVehicleManager()->Get(vehicleId)->GetBeaconLightState());
+		return 1;
+	}
+
+	sq_pushbool(pVM, false);
 	return 1;
 }
 

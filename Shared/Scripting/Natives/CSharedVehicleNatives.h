@@ -34,6 +34,8 @@ private:
 	static	SQInteger		IsPartOpen( SQVM * pVM );
 	static	SQInteger		SetSirenState( SQVM * pVM );
 	static	SQInteger		GetSirenState( SQVM * pVM );
+	static	SQInteger		SetBeaconLightState(SQVM * pVM);
+	static	SQInteger		GetBeaconLightState(SQVM * pVM);
 	static	SQInteger		SetHornState( SQVM * pVM );
 	static	SQInteger		GetHornState( SQVM * pVM );
 	static	SQInteger		SetWindowOpen( SQVM * pVM );
