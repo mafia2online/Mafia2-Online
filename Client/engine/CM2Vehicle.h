@@ -270,6 +270,9 @@ public:
 	void					SetSirenOn						( bool bSirenOn );
 	bool					IsSirenOn						( void );
 
+	void					SetBeaconLightOn				( bool bOn );
+	bool					IsBeaconLightOn					( void );
+
 	void					SetPlateText					( const char * szText );
 	const char				* GetPlateText					( void );
 

@@ -518,21 +518,27 @@ void CM2Vehicle::SetSirenOn( bool bSirenOn )
 {
 	DEBUG_TRACE("CM2Vehicle::SetSirenOn");
 
-	// Is the vehicle valid?
 	if( m_pVehicle )
 	{
-		//
 		DWORD dwVehicleData = (DWORD)(m_pVehicle) + 0xA8;
 
-		// Switch the siren state
 		if( bSirenOn )
 			*(DWORD *)(dwVehicleData + 0x85C) |= 2u;
 		else
 			*(DWORD *)(dwVehicleData + 0x85C) &= 0xFFFFFFFDu;
+	}
+}
 
-		// Toggle the vehicle beacon light
+void CM2Vehicle::SetBeaconLightOn(bool bOn)
+{
+	DEBUG_TRACE("CM2Vehicle::SetBeaconLightOn");
+
+	if (m_pVehicle)
+	{
+		DWORD dwVehicleData = (DWORD)(m_pVehicle)+0xA8;
+
 		DWORD C_Vehicle__SetBeaconLightOn = 0x1203DD0;
-		_asm push bSirenOn;
+		_asm push bOn;
 		_asm mov ecx, dwVehicleData;
 		_asm call C_Vehicle__SetBeaconLightOn;
 	}
@@ -551,6 +557,20 @@ bool CM2Vehicle::IsSirenOn( void )
 	}
 
 	return false;
+}
+
+bool CM2Vehicle::IsBeaconLightOn(void)
+{
+	if (m_pVehicle)
+	{
+		DWORD dwVehicleData = (DWORD)(m_pVehicle)  + 0xA8;
+		DWORD retn = (*(DWORD *)(dwVehicleData + 0x6F0 - 1) & 0x40);
+		pCore->GetChat()->AddDebugMessage("LightOn : %02X", retn);
+
+		return (retn);
+	}
+
+	return (false);
 }
 
 void CM2Vehicle::SetPlateText( const char * szText )
