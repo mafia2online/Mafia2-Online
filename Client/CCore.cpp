@@ -375,11 +375,6 @@ void CCore::OnDevicePreRender( void )
 	// Call the script event
 	if( m_pClientScriptingManager && !m_pGUI->GetMainMenu()->IsVisible () )
 		m_pClientScriptingManager->GetEvents()->Call( "onClientFramePreRender" );
-
-	// Call the nameTag preRender
-	if (m_pNameTag){
-		m_pNameTag->PreAll();
-	}
 }
 
 void CCore::OnDeviceRender( void )
@@ -499,7 +494,7 @@ void CCore::OnDeviceRender( void )
 
 	// Render the nameTags
 	if (m_pNameTag)
-		m_pNameTag->All();
+		m_pNameTag->Draw();
 
 	// Render the 3DTextLabels
 	if (m_p3DTextLabelManager && pCore->GetPlayerManager()->GetLocalPlayer()->IsSpawned() == true){

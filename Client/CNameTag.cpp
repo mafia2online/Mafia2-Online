@@ -9,177 +9,130 @@
 
 #include	"StdInc.h"
 
-#define RENDER_DISTANCE_PLAYER	35.0
-#define RENDER_DISTANCE_PED		10.0
-#define BOX_WIDTH				68.0
-#define BOX_HEIGHT				10.0
 
 extern	CCore			* pCore;
 
+const float PLAYER_NAMETAG_Z_OFFSET = 2.0f;
+const float PED_NAMETAG_Z_OFFSET	= 2.0f;
+
+const float NAMETAG_SCALE			= 1.0f;
+
+const float RENDER_DISTANCE_PLAYER	= 35.0f;
+const float RENDER_DISTANCE_PED		= 10.0f;
+const float BOX_WIDTH				= 68.0f;
+const float BOX_HEIGHT				= 10.0f;
+
+/// Constructor.
 CNameTag::CNameTag(void)
 {
-	// Reset values
-	for (EntityId id = 0; id < MAX_PLAYERS; id++)
-	{
-		m_playerVectors[id] = { 0.0, 0.0, 0.0 };
-	}
-	// Reset values
-	for (EntityId id = 0; id < MAX_PEDS; id++)
-	{
-		m_pedVectors[id] = { 0.0, 0.0, 0.0 };
-	}
 }
 
+/// Destructor.
 CNameTag::~CNameTag(void)
 {
 }
 
-void CNameTag::PreAll(void)
+/// Draw nametags for players and peds.
+void CNameTag::Draw(void)
 {
-	if (pCore->GetGUI()->GetMainMenu()->IsVisible() == false && pCore->GetGUI()->GetServerBrowser()->IsVisible() == false){
-		PrePlayer();
-		PrePed();
-	}
+	CGUI *pGUI = pCore->GetGUI();
+	if ( pGUI->GetMainMenu()->IsVisible() || pGUI->GetServerBrowser()->IsVisible() )
+		return;
+
+	DrawPlayer();
+	DrawPed();
 }
 
-void CNameTag::All(void)
-{
-	if (pCore->GetGUI()->GetMainMenu()->IsVisible() == false && pCore->GetGUI()->GetServerBrowser()->IsVisible() == false){
-		Player();
-		Ped();
-	}
-}
-
-void CNameTag::PrePed(void)
-{
-	for (EntityId id = 0; id < MAX_PEDS; id++)
-	{
-		// Is ped connected ?
-		if (pCore->GetPedManager()->IsActive(id))
-		{
-			// Current player position
-			CVector3 pos;
-			pCore->GetPedManager()->Get(id)->GetPed()->GetPosition(&pos);
-			pos.fZ += 2.0;
-
-			// Convert coordinates
-			CVector3 vecScreen;
-			pCore->GetGraphics()->WorldToScreen(pos, &vecScreen);
-
-			// Store values
-			m_pedVectors[id] = vecScreen;
-		}
-	}
-}
-
-void CNameTag::Ped(void)
+/// Draw ped nametags.
+void CNameTag::DrawPed(void)
 {
 	CVector3 localPos;
-	CVector3 pedPos;
-	float fDistance;
-	float fScale = 1.0;
-	float dimensionHeight;
-	float dimensionWidth;
-	String text;
+	pCore->GetPlayerManager()->GetLocalPlayer()->GetPosition(&localPos);
 
-	for (EntityId i = 0; i < MAX_PEDS; i++)
+	for ( EntityId i = 0; i < MAX_PEDS; ++i )
 	{
-		if (pCore->GetPedManager()->IsActive(i) && pCore->GetPedManager()->Get(i)->GetPed() && pCore->GetPedManager()->Get(i)->GetPed()->IsOnScreen())
-		{
-			pCore->GetPlayerManager()->GetLocalPlayer()->GetPosition(&localPos);
-			pCore->GetPedManager()->Get(i)->GetPed()->GetPosition(&pedPos);
-			fDistance = Math::GetDistanceBetweenPoints(localPos, pedPos);
+		CPed *pPed = pCore->GetPedManager()->Get ( i );
 
-			if (fDistance <= RENDER_DISTANCE_PED)
-			{
-				// Thing to draw
-				text = String("%s", pCore->GetPedManager()->Get(i)->GetNick().Get());
+		if ( !pPed )
+			continue;
 
-				// Dimensions
-				dimensionWidth = pCore->GetGraphics()->GetTextWidth(text, fScale, "tahoma-bold");
-				dimensionHeight = pCore->GetGraphics()->GetFontHeight(fScale, "tahoma-bold");
+		CM2Ped *pGamePed = pPed->GetPed();
 
-				// We draw texts
-				pCore->GetGraphics()->DrawTextA((m_pedVectors[i].fX - dimensionWidth / 2) + 1, m_pedVectors[i].fY + 1, (DWORD)0xFFFFFFFF, fScale, "tahoma-bold", false, text.Get());
-			}
-		}
+		if ( !pGamePed->IsOnScreen() )
+			continue;
+
+		CVector3 pedPos;
+		pGamePed->GetPosition ( &pedPos );
+		float fDistance = Math::GetDistanceBetweenPoints ( localPos, pedPos );
+
+		if ( fDistance > RENDER_DISTANCE_PED )
+			continue;
+
+		String text ( "%s", pPed->GetNick().Get() );
+
+		float dimensionWidth = pCore->GetGraphics()->GetTextWidth ( text, NAMETAG_SCALE, "tahoma-bold" );
+
+		pedPos.fZ += PED_NAMETAG_Z_OFFSET;
+
+		CVector3 vecScreen;
+		pCore->GetGraphics()->WorldToScreen(pedPos, &vecScreen);
+
+		pCore->GetGraphics()->DrawText ( (vecScreen.fX - dimensionWidth / 2) + 1, vecScreen.fY + 1, (DWORD)0xFFFFFFFF, NAMETAG_SCALE, "tahoma-bold", false, text.Get() );
 	}
 }
 
-void CNameTag::PrePlayer(void)
+/// Draw players nametags.
+void CNameTag::DrawPlayer(void)
 {
-	for (EntityId id = 0; id < MAX_PLAYERS; id++)
-	{
-		// We don't want localPlayer
-		if (id != pCore->GetPlayerManager()->GetLocalPlayer()->GetId())
-		{
-			// Is player connected ?
-			if (pCore->GetPlayerManager()->IsActive(id))
-			{
-				// Current player position
-				CVector3 pos;
-				pCore->GetPlayerManager()->Get(id)->GetPosition(&pos);
-				pos.fZ += 2.0;
-				
-				// Convert coordinates
-				CVector3 vecScreen;
-				pCore->GetGraphics()->WorldToScreen(pos, &vecScreen);
+	static const CColor colBackground		( 0, 0, 0, 160 );
+	static const CColor colInnerBackground	( 0, 110, 0, 160 );
+	static const CColor colContent			( 0, 255, 0, 160 );
 
-				// Store values
-				m_playerVectors[id] = vecScreen;
-			}
-		}
-	}
-}
+	CPlayerManager *pPlayerManager = pCore->GetPlayerManager();
 
-void CNameTag::Player(void)
-{
 	CVector3 localPos;
-	CVector3 playerPos;
-	float fDistance;
-	float fScale = 1.0;
-	float dimensionHeight;
-	float dimensionWidth;
-	String text;
-	int	healthWidth;
+	pPlayerManager->GetLocalPlayer()->GetPosition ( &localPos );
 
-	for (EntityId i = 0; i < MAX_PLAYERS; i++)
+	CGraphics *pGraphics = pCore->GetGraphics();
+
+	EntityId localPlayerId = pPlayerManager->GetLocalPlayer()->GetId();
+	for ( EntityId i = 0; i < MAX_PLAYERS; ++i )
 	{
-		if (pCore->GetGUI()->GetMainMenu()->IsVisible() == false){
-			if (i != pCore->GetPlayerManager()->GetLocalPlayer()->GetId() && pCore->GetPlayerManager()->IsActive(i) && pCore->GetPlayerManager()->Get(i)->GetPlayerPed() && pCore->GetPlayerManager()->Get(i)->GetPlayerPed()->IsOnScreen())
-			{
-				pCore->GetPlayerManager()->Get(i)->GetPosition(&playerPos);
-				pCore->GetPlayerManager()->GetLocalPlayer()->GetPosition(&localPos);
-				fDistance = Math::GetDistanceBetweenPoints(localPos, playerPos);
+		if ( i == localPlayerId )
+			continue;
 
-				if (fDistance <= RENDER_DISTANCE_PLAYER)
-				{
-					// Thing to draw
-					text = String("%s (%d)", pCore->GetPlayerManager()->Get(i)->GetNick().Get(), i);
+		CRemotePlayer *pRemotePlayer = pPlayerManager->Get ( i );
+		if ( !pRemotePlayer )
+			continue;
 
-					// Dimensions
-					dimensionWidth = pCore->GetGraphics()->GetTextWidth(text, fScale, "tahoma-bold");
-					dimensionHeight = pCore->GetGraphics()->GetFontHeight(fScale, "tahoma-bold");
+		CM2Ped *pPed = pRemotePlayer->GetPlayerPed();
+		if ( !pPed || !pPed->IsOnScreen() )
+			continue;
 
-					// Health bar
-					healthWidth = (((Math::Clamp< float >(0.0, pCore->GetPlayerManager()->Get(i)->GetHealth(), 720.0) * 100.0) / 720.0) / 100 * (BOX_WIDTH - 4.0));
+		CVector3 playerPos;
+		pRemotePlayer->GetPosition ( &playerPos );
+		float fDistance = Math::GetDistanceBetweenPoints ( localPos, playerPos );
 
-					// Colors
-					CColor color1(0, 0, 0, 160);
-					CColor color2(0, 110, 0, 160);
-					CColor color3(0, 255, 0, 160);
+		if ( fDistance > RENDER_DISTANCE_PLAYER )
+			continue;
 
-					DWORD color = pCore->GetPlayerManager()->Get(i)->GetColour();
+		String text ( "%s (%d)", pRemotePlayer->GetNick().Get(), i );
 
-					// We draw texts
-					pCore->GetGraphics()->DrawTextA((m_playerVectors[i].fX - dimensionWidth / 2) + 1, m_playerVectors[i].fY + 1, color, fScale, "tahoma-bold", false, text.Get());
+		float dimensionWidth = pGraphics->GetTextWidth ( text, NAMETAG_SCALE, "tahoma-bold" );
 
-					// We draw boxes
-					pCore->GetGraphics()->DrawBox((m_playerVectors[i].fX - (BOX_WIDTH / 2)), (m_playerVectors[i].fY + 16.0), BOX_WIDTH, BOX_HEIGHT, color1.dwHexColor);
-					pCore->GetGraphics()->DrawBox((m_playerVectors[i].fX - (BOX_WIDTH / 2) + 2.0), (m_playerVectors[i].fY + 18.0), (BOX_WIDTH - 4.0), (BOX_HEIGHT - 4.0), color2.dwHexColor);
-					pCore->GetGraphics()->DrawBox((m_playerVectors[i].fX - (BOX_WIDTH / 2) + 2.0), (m_playerVectors[i].fY + 18.0), healthWidth, (BOX_HEIGHT - 4.0), color3.dwHexColor);
-				}
-			}
-		}
+		int healthWidth = (int)( ( ( Math::Clamp< float > ( 0.0, pRemotePlayer->GetHealth(), 720 ) * 100 ) / 720 ) / 100 * ( BOX_WIDTH - 4 ) );
+
+		DWORD color = pRemotePlayer->GetColour();
+
+		playerPos.fZ += PLAYER_NAMETAG_Z_OFFSET;
+
+		CVector3 vecScreen;
+		pCore->GetGraphics()->WorldToScreen ( playerPos, &vecScreen );
+
+		pGraphics->DrawText ( (vecScreen.fX - dimensionWidth / 2) + 1, vecScreen.fY + 1, color, NAMETAG_SCALE, "tahoma-bold", false, text.Get() );
+
+		pGraphics->DrawBox ( (vecScreen.fX - (BOX_WIDTH / 2)), (vecScreen.fY + 16.0), BOX_WIDTH, BOX_HEIGHT, colBackground.dwHexColor );
+		pGraphics->DrawBox ( (vecScreen.fX - (BOX_WIDTH / 2) + 2.0), (vecScreen.fY + 18.0), (BOX_WIDTH - 4.0), (BOX_HEIGHT - 4.0), colInnerBackground.dwHexColor );
+		pGraphics->DrawBox ( (vecScreen.fX - (BOX_WIDTH / 2) + 2.0), (vecScreen.fY + 18.0), healthWidth, (BOX_HEIGHT - 4.0), colContent.dwHexColor );
 	}
 }
