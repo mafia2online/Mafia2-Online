@@ -808,6 +808,7 @@ void CChat::ProcessInput(void)
 				// Call the client event
 				CSquirrelArguments pArguments;
 				pArguments.push(strInput.C_String());
+				pArguments.push(bIsCommand);
 
 				// Should we send this message?
 				if (pCore->GetClientScriptingManager()->GetEvents()->Call("onClientChat", &pArguments).GetInteger() == 1)
