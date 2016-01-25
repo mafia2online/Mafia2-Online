@@ -705,6 +705,22 @@ bool CNetworkVehicle::GetSirenState( void )
 	return false;
 }
 
+void CNetworkVehicle::SetBeaconLightState(bool bState)
+{
+	// Is the vehicle instance valid?
+	if (m_pVehicle)
+		m_pVehicle->SetBeaconLightOn(bState);
+}
+
+bool CNetworkVehicle::GetBeaconLightState(void)
+{
+	// Is the vehicle instance valid?
+	if (m_pVehicle)
+		return m_pVehicle->IsBeaconLightOn();
+
+	return false;
+}
+
 void CNetworkVehicle::SetHornState( bool bState )
 {
 	// Is the vehicle instance valid?
