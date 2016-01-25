@@ -525,8 +525,10 @@ void CNetworkPlayer::RemoveWeapon( DWORD dwWeapon, DWORD dwAmmo )
 bool CNetworkPlayer::IsMoving(void)
 {
 	// Is the player ped valid?
-	if (m_pPlayerPed)
+	if ( m_pPlayerPed )
 		return m_pPlayerPed->IsMoving();
+
+	return false;
 }
 
 void CNetworkPlayer::UpdateAim( bool bAiming )
