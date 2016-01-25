@@ -333,8 +333,8 @@ void CNetworkVehicle::StoreVehicleSync( InVehicleSync vehicleSync, bool bInterpo
 			m_pVehicle->SetBeaconLightOn(vehicleSync.m_bBeaconLightState);
 
 		// Has the fuel changed?
-		//if ( m_pVehicle->GetFuel () != vehicleSync.m_fFuel )
-		//	m_pVehicle->SetFuel ( vehicleSync.m_fFuel );
+		if ( m_pVehicle->GetFuel () != vehicleSync.m_fFuel )
+			m_pVehicle->SetFuel ( vehicleSync.m_fFuel );
 
 		// Has the speed changed?
 		CVector3 vecVelocity;
@@ -347,8 +347,8 @@ void CNetworkVehicle::StoreVehicleSync( InVehicleSync vehicleSync, bool bInterpo
 			SetTargetSteer ( vehicleSync.m_fTurnSpeed );
 
 		// Has the engine damage changed?
-		//if( m_pVehicle->GetEngineDamage() != vehicleSync.m_fEngineDamage )
-		//	m_pVehicle->SetEngineDamage( vehicleSync.m_fEngineDamage );
+		if( m_pVehicle->GetEngineDamage() != vehicleSync.m_fEngineDamage )
+			m_pVehicle->SetEngineDamage( vehicleSync.m_fEngineDamage );
 
 		// Has the plate text changed?
 		if( strcmp( vehicleSync.m_szPlateText, GetPlateText() ) )
