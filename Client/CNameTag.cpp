@@ -81,7 +81,6 @@ void CNameTag::Ped(void)
 	float dimensionHeight;
 	float dimensionWidth;
 	String text;
-	int	healthWidth;
 
 	for (EntityId i = 0; i < MAX_PEDS; i++)
 	{
