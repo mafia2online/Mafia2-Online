@@ -1,3 +1,13 @@
+/*
+ *  Copyright (c) 2014, Oculus VR, Inc.
+ *  All rights reserved.
+ *
+ *  This source code is licensed under the BSD-style license found in the
+ *  LICENSE file in the root directory of this source tree. An additional grant 
+ *  of patent rights can be found in the PATENTS file in the same directory.
+ *
+ */
+
 #include "RakString.h"
 #include "RakAssert.h"
 #include "RakMemoryOverride.h"
@@ -8,6 +18,7 @@
 #include "StringCompressor.h"
 #include "SimpleMutex.h"
 #include <stdlib.h>
+#include "Itoa.h"
 
 using namespace RakNet;
 
@@ -519,8 +530,13 @@ void RakString::FromWideChar(const wchar_t *source)
 
 
 }
+RakNet::RakString RakString::FromWideChar_S(const wchar_t *source)
+{
+	RakNet::RakString rs;
+	rs.FromWideChar(source);
+	return rs;
+}
 #endif
-
 size_t RakString::Find(const char *stringToFind,size_t pos)
 {
 	size_t len=GetLength();
@@ -636,6 +652,22 @@ void RakString::TerminateAtLastCharacter(char c)
 		}
 	}
 }
+void RakString::StartAfterLastCharacter(char c)
+{
+	int i, len=(int) GetLength();
+	for (i=len-1; i >= 0; i--)
+	{
+		if (sharedString->c_str[i]==c)
+		{
+			++i;
+			if (i < len)
+			{
+				*this = SubStr(i,GetLength()-i);
+			}
+			return;
+		}
+	}
+}
 void RakString::TerminateAtFirstCharacter(char c)
 {
 	unsigned int i, len=(unsigned int) GetLength();
@@ -643,8 +675,26 @@ void RakString::TerminateAtFirstCharacter(char c)
 	{
 		if (sharedString->c_str[i]==c)
 		{
-			Clone();
-			sharedString->c_str[i]=0;
+			if (i > 0)
+			{
+				Clone();
+				sharedString->c_str[i]=0;
+			}
+		}
+	}
+}
+void RakString::StartAfterFirstCharacter(char c)
+{
+	unsigned int i, len=(unsigned int) GetLength();
+	for (i=0; i < len; i++)
+	{
+		if (sharedString->c_str[i]==c)
+		{
+			++i;
+			if (i < len)
+			{
+				*this = SubStr(i,GetLength()-i);
+			}
 			return;
 		}
 	}
@@ -809,7 +859,7 @@ RakNet::RakString& RakString::URLEncode(void)
 	char *output=result.sharedString->c_str;
 	unsigned int outputIndex=0;
 	unsigned i;
-	char c;
+	unsigned char c;
 	for (i=0; i < strLen; i++)
 	{
 		c=sharedString->c_str[i];
@@ -820,10 +870,11 @@ RakNet::RakString& RakString::URLEncode(void)
 			(c>=123)
 			)
 		{
-			RakNet::RakString tmp("%2X", c);
+			char buff[3];
+			Itoa(c, buff, 16);
 			output[outputIndex++]='%';
-			output[outputIndex++]=tmp.sharedString->c_str[0];
-			output[outputIndex++]=tmp.sharedString->c_str[1];
+			output[outputIndex++]=buff[0];
+			output[outputIndex++]=buff[1];
 		}
 		else
 		{
@@ -854,16 +905,24 @@ RakNet::RakString& RakString::URLDecode(void)
 		{
 			hexDigits[0]=sharedString->c_str[++i];
 			hexDigits[1]=sharedString->c_str[++i];
+			
 			if (hexDigits[0]==' ')
 				hexValues[0]=0;
-			else if (hexDigits[0]>='A')
+			
+			if (hexDigits[0]>='A' && hexDigits[0]<='F')
 				hexValues[0]=hexDigits[0]-'A'+10;
+			if (hexDigits[0]>='a' && hexDigits[0]<='f')
+				hexValues[0]=hexDigits[0]-'a'+10;
 			else
 				hexValues[0]=hexDigits[0]-'0';
-			if (hexDigits[1]>='A')
+
+			if (hexDigits[1]>='A' && hexDigits[1]<='F')
 				hexValues[1]=hexDigits[1]-'A'+10;
+			if (hexDigits[1]>='a' && hexDigits[1]<='f')
+				hexValues[1]=hexDigits[1]-'a'+10;
 			else
 				hexValues[1]=hexDigits[1]-'0';
+
 			output[outputIndex++]=hexValues[0]*16+hexValues[1];
 		}
 		else
@@ -979,6 +1038,9 @@ RakNet::RakString RakString::FormatForPUTOrPost(const char* type, const char* ur
 	if (host.IsEmpty() || remotePath.IsEmpty())
 		return out;
 
+//	RakString bodyEncoded = body;
+//	bodyEncoded.URLEncode();
+
 	if (extraHeaders!=0 && extraHeaders[0])
 	{
 		out.Set("%s %s HTTP/1.1\r\n"
@@ -993,6 +1055,8 @@ RakNet::RakString RakString::FormatForPUTOrPost(const char* type, const char* ur
 			extraHeaders,
 			host.C_String(),
 			contentType,
+			//bodyEncoded.GetLength(),
+			//bodyEncoded.C_String());
 			strlen(body),
 			body);
 	}
@@ -1008,6 +1072,8 @@ RakNet::RakString RakString::FormatForPUTOrPost(const char* type, const char* ur
 			remotePath.C_String(),
 			host.C_String(),
 			contentType,
+			//bodyEncoded.GetLength(),
+			//bodyEncoded.C_String());
 			strlen(body),
 			body);
 	}
@@ -1079,8 +1145,8 @@ RakString RakString::FormatForDELETE(const char* uri, const char* extraHeaders)
 			"Host: %s\r\n"
 			"Connection: close\r\n"
 			"\r\n",
-			extraHeaders,
 			remotePath.C_String(),
+			extraHeaders,
 			host.C_String());
 	}
 	else
@@ -1408,13 +1474,14 @@ void RakString::AppendBytes(const char *bytes, unsigned int count)
 	if (IsEmpty())
 	{
 		Allocate(count);
-		memcpy(sharedString->c_str, bytes, count);
+		memcpy(sharedString->c_str, bytes, count+1);
+		sharedString->c_str[count]=0;
 	}
 	else
 	{
 		Clone();
-		Realloc(sharedString, count);
 		unsigned int length=(unsigned int) GetLength();
+		Realloc(sharedString, count+length+1);
 		memcpy(sharedString->c_str+length, bytes, count);
 		sharedString->c_str[length+count]=0;
 	}

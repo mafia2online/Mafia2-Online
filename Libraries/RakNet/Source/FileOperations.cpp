@@ -1,3 +1,13 @@
+/*
+ *  Copyright (c) 2014, Oculus VR, Inc.
+ *  All rights reserved.
+ *
+ *  This source code is licensed under the BSD-style license found in the
+ *  LICENSE file in the root directory of this source tree. An additional grant 
+ *  of patent rights can be found in the PATENTS file in the same directory.
+ *
+ */
+
 #include "FileOperations.h"
 #if _RAKNET_SUPPORT_FileOperations==1
 #include "RakMemoryOverride.h"
@@ -15,6 +25,10 @@
 #endif
 #include "errno.h"
 
+#ifndef MAX_PATH
+#define MAX_PATH 260
+#endif
+
 #ifdef _MSC_VER
 #pragma warning( push )
 #endif
@@ -26,13 +40,11 @@ bool WriteFileWithDirectories( const char *path, char *data, unsigned dataLength
 {
 	int index;
 	FILE *fp;
-	char *pathCopy;
+	char pathCopy[MAX_PATH];
 	int res;
 
 	if ( path == 0 || path[ 0 ] == 0 )
 		return false;
-
-	pathCopy = (char*) rakMalloc_Ex( strlen( path ) + 1, _FILE_AND_LINE_ );
 
 	strcpy( pathCopy, path );
 
@@ -54,7 +66,6 @@ bool WriteFileWithDirectories( const char *path, char *data, unsigned dataLength
 	#endif
 				if (res<0 && errno!=EEXIST && errno!=EACCES)
 				{
-					rakFree_Ex(pathCopy, _FILE_AND_LINE_ );
 					return false;
 				}
 	
@@ -71,7 +82,6 @@ bool WriteFileWithDirectories( const char *path, char *data, unsigned dataLength
 
 		if ( fp == 0 )
 		{
-			rakFree_Ex(pathCopy, _FILE_AND_LINE_ );
 			return false;
 		}
 
@@ -90,12 +100,9 @@ bool WriteFileWithDirectories( const char *path, char *data, unsigned dataLength
 
 		if (res<0 && errno!=EEXIST)
 		{
-			rakFree_Ex(pathCopy, _FILE_AND_LINE_ );
 			return false;
 		}
 	}
-
-	rakFree_Ex(pathCopy, _FILE_AND_LINE_ );
 
 	return true;
 }

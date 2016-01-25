@@ -1,3 +1,13 @@
+/*
+ *  Copyright (c) 2014, Oculus VR, Inc.
+ *  All rights reserved.
+ *
+ *  This source code is licensed under the BSD-style license found in the
+ *  LICENSE file in the root directory of this source tree. An additional grant 
+ *  of patent rights can be found in the PATENTS file in the same directory.
+ *
+ */
+
 #ifndef __RAKNET_DEFINES_H
 #define __RAKNET_DEFINES_H
 
@@ -143,11 +153,11 @@
 #endif
 
 #ifndef RPC4_GLOBAL_REGISTRATION_MAX_FUNCTIONS
-#define RPC4_GLOBAL_REGISTRATION_MAX_FUNCTIONS 32
+#define RPC4_GLOBAL_REGISTRATION_MAX_FUNCTIONS 48
 #endif
 
 #ifndef RPC4_GLOBAL_REGISTRATION_MAX_FUNCTION_NAME_LENGTH
-#define RPC4_GLOBAL_REGISTRATION_MAX_FUNCTION_NAME_LENGTH 32
+#define RPC4_GLOBAL_REGISTRATION_MAX_FUNCTION_NAME_LENGTH 48
 #endif
 
 #ifndef XBOX_BYPASS_SECURITY

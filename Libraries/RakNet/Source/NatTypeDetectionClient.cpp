@@ -1,3 +1,13 @@
+/*
+ *  Copyright (c) 2014, Oculus VR, Inc.
+ *  All rights reserved.
+ *
+ *  This source code is licensed under the BSD-style license found in the
+ *  LICENSE file in the root directory of this source tree. An additional grant 
+ *  of patent rights can be found in the PATENTS file in the same directory.
+ *
+ */
+
 #include "NativeFeatureIncludes.h"
 #if _RAKNET_SUPPORT_NatTypeDetectionClient==1
 
@@ -157,6 +167,14 @@ void NatTypeDetectionClient::OnClosedConnection(const SystemAddress &systemAddre
 
 	if (IsInProgress() && systemAddress==serverAddress)
 		Shutdown();
+}
+void NatTypeDetectionClient::OnRakPeerShutdown(void)
+{
+	Shutdown();
+}
+void NatTypeDetectionClient::OnDetach(void)
+{
+	Shutdown();
 }
 void NatTypeDetectionClient::OnTestPortRestricted(Packet *packet)
 {

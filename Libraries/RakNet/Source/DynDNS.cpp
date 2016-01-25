@@ -1,3 +1,13 @@
+/*
+ *  Copyright (c) 2014, Oculus VR, Inc.
+ *  All rights reserved.
+ *
+ *  This source code is licensed under the BSD-style license found in the
+ *  LICENSE file in the root directory of this source tree. An additional grant 
+ *  of patent rights can be found in the PATENTS file in the same directory.
+ *
+ */
+
 #include "NativeFeatureIncludes.h"
 #if _RAKNET_SUPPORT_DynDNS==1 && _RAKNET_SUPPORT_TCPInterface==1
 
@@ -83,7 +93,7 @@ void DynDNS::UpdateHostIPAsynch(const char *dnsHost, const char *newIPAddress, c
 	getString+="Host: members.dyndns.org\n";
 	getString+="Authorization: Basic ";
 	char outputData[512];
-	Base64Encoding(usernameAndPassword, (int) strlen(usernameAndPassword), outputData);
+	Base64Encoding((const unsigned char*) usernameAndPassword, (int) strlen(usernameAndPassword), outputData);
 	getString+=outputData;
 	getString+="User-Agent: Jenkins Software LLC - PC - 1.0\n\n";
 }

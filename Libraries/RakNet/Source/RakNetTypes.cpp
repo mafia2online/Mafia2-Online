@@ -1,8 +1,15 @@
+/*
+ *  Copyright (c) 2014, Oculus VR, Inc.
+ *  All rights reserved.
+ *
+ *  This source code is licensed under the BSD-style license found in the
+ *  LICENSE file in the root directory of this source tree. An additional grant 
+ *  of patent rights can be found in the PATENTS file in the same directory.
+ *
+ */
+
 /// \file
 ///
-/// This file is part of RakNet Copyright 2003 Jenkins Software LLC
-///
-/// Usage of RakNet is subject to the appropriate license agreement.
 
 
 #include "RakNetTypes.h"
@@ -186,7 +193,7 @@ int SystemAddress::size(void)
 #if RAKNET_SUPPORT_IPV6==1
 	return sizeof(sockaddr_in6) + sizeof(char);
 #else
-	return sizeof(unsigned long) + sizeof(unsigned short) + sizeof(char);
+	return sizeof(uint32_t) + sizeof(unsigned short) + sizeof(char);
 #endif
 }
 unsigned long SystemAddress::ToInteger( const SystemAddress &sa )
@@ -239,6 +246,8 @@ bool SystemAddress::IsLoopback(void) const
 		// unsigned long l = htonl(address.addr4.sin_addr.s_addr);
 		if (htonl(address.addr4.sin_addr.s_addr)==2130706433)
 			return true;
+		if (address.addr4.sin_addr.s_addr==0)
+			return true;
 	}
 #if RAKNET_SUPPORT_IPV6==1
 	else
@@ -261,6 +270,14 @@ void SystemAddress::ToString_Old(bool writePort, char *dest, char portDelineator
 	char portStr[2];
 	portStr[0]=portDelineator;
 	portStr[1]=0;
+
+
+
+
+
+
+
+
 
 
 
@@ -401,6 +418,22 @@ SystemAddress::SystemAddress(const char *str, unsigned short port)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #ifdef _MSC_VER
 #pragma warning( disable : 4996 )  // The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name: _strnicmp. See online help for details.
 #endif
@@ -432,6 +465,15 @@ void SystemAddress::FixForIPVersion(const SystemAddress &boundAddressToSocket)
 // 		}
 	}
 }
+bool SystemAddress::IsLANAddress(void)
+{
+//	return address.addr4.sin_addr.S_un.S_un_b.s_b1==10 || address.addr4.sin_addr.S_un.s_b1==192;
+#if defined(__WIN32__)
+	return address.addr4.sin_addr.S_un.S_un_b.s_b1==10 || address.addr4.sin_addr.S_un.S_un_b.s_b1==192;
+#else
+	return (address.addr4.sin_addr.s_addr >> 24) == 10 || (address.addr4.sin_addr.s_addr >> 24) == 192;
+#endif
+}
 bool SystemAddress::SetBinaryAddress(const char *str, char portDelineator)
 {
 	if ( NonNumericHostString( str ) )
@@ -443,6 +485,8 @@ bool SystemAddress::SetBinaryAddress(const char *str, char portDelineator)
 		if (strncasecmp(str,"localhost", 9)==0)
 #endif
 		{
+
+
 
 
 
@@ -461,6 +505,8 @@ bool SystemAddress::SetBinaryAddress(const char *str, char portDelineator)
 		RakNetSocket2::DomainNameToIP(str, ip);
 		if (ip[0])
 		{
+
+
 
 
 
@@ -520,6 +566,8 @@ bool SystemAddress::SetBinaryAddress(const char *str, char portDelineator)
 
 		if (IPPart[0])
 		{
+
+
 
 
 
@@ -624,7 +672,18 @@ bool SystemAddress::FromString(const char *str, char portDelineator, int ipVersi
 		hints.ai_family = AF_UNSPEC;
 	getaddrinfo(ipPart, "", &hints, &servinfo);
 	if (servinfo==0)
-		return false;
+	{
+		if (ipVersion==6)
+		{
+			ipVersion=4;
+			hints.ai_family = AF_UNSPEC;
+			getaddrinfo(ipPart, "", &hints, &servinfo);
+			if (servinfo==0)
+				return false;
+		}
+		else
+			return false;
+	}
 	RakAssert(servinfo);
 	
 	unsigned short oldPort = address.addr4.sin_port;
@@ -633,7 +692,7 @@ bool SystemAddress::FromString(const char *str, char portDelineator, int ipVersi
 	{
 // 		if (ipVersion==6)
 // 		{
-			address.addr4.sin_family=AF_INET6;
+//			address.addr4.sin_family=AF_INET6;
 // 			memset(&address.addr6,0,sizeof(address.addr6));
 // 			memcpy(address.addr6.sin6_addr.s6_addr+12,&((struct sockaddr_in *)servinfo->ai_addr)->sin_addr.s_addr,sizeof(unsigned long));
 // 		}

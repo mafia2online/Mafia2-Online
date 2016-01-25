@@ -1,4 +1,14 @@
 /*
+ *  Copyright (c) 2014, Oculus VR, Inc.
+ *  All rights reserved.
+ *
+ *  This source code is licensed under the BSD-style license found in the
+ *  LICENSE file in the root directory of this source tree. An additional grant 
+ *  of patent rights can be found in the PATENTS file in the same directory.
+ *
+ */
+
+/*
 #include "RakNetSocket.h"
 #include "RakMemoryOverride.h"
 
@@ -85,7 +95,7 @@ RakNetSocket* RakNetSocket::Create
 		sock = sceNetSocket( "RakNetSocket::Create", SCE_NET_AF_INET, SCE_NET_SOCK_DGRAM_P2P, 0 );
 	#elif defined(WINDOWS_STORE_RT)
 		sock = WinRTCreateDatagramSocket(af,type,protocol);
-	#elif defined(_PS3) || defined(__PS3__) || defined(SN_TARGET_PS3)
+	#elif defined(_PS3) || defined(__PS3__) || defined(SN_TARGET_PS3) || defined(_PS4)
 		sock = socket__( AF_INET, SOCK_DGRAM_P2P, 0 );
 	#else
 		sock = socket__(af, type, protocol);

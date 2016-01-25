@@ -1,3 +1,13 @@
+/*
+ *  Copyright (c) 2014, Oculus VR, Inc.
+ *  All rights reserved.
+ *
+ *  This source code is licensed under the BSD-style license found in the
+ *  LICENSE file in the root directory of this source tree. An additional grant 
+ *  of patent rights can be found in the PATENTS file in the same directory.
+ *
+ */
+
 #include "RakNetSocket2.h"
 #include "RakMemoryOverride.h"
 #include "RakAssert.h"
@@ -30,6 +40,7 @@ using namespace RakNet;
 #define RAKNET_SOCKET_2_INLINE_FUNCTIONS
 #include "RakNetSocket2_360_720.cpp"
 #include "RakNetSocket2_PS3_PS4.cpp"
+#include "RakNetSocket2_PS4.cpp"
 #include "RakNetSocket2_Windows_Linux.cpp"
 #include "RakNetSocket2_Windows_Linux_360.cpp"
 #include "RakNetSocket2_Vita.cpp"
@@ -270,10 +281,11 @@ void RNS2_NativeClient::Update(void)
 #else // defined(__native_client__)
 bool IRNS2_Berkley::IsPortInUse(unsigned short port, const char *hostAddress, unsigned short addressFamily, int type ) {
 	RNS2_BerkleyBindParameters bbp;
-	bbp.remotePortRakNetWasStartedOn_PS3_PSP2=0;
+	bbp.remotePortRakNetWasStartedOn_PS3_PS4_PSP2=0;
 	bbp.port=port; bbp.hostAddress=(char*) hostAddress;	bbp.addressFamily=addressFamily;
 	bbp.type=type; bbp.protocol=0; bbp.nonBlockingSocket=false;
 	bbp.setBroadcast=false;	bbp.doNotFragment=false; bbp.protocol=0;
+	bbp.setIPHdrIncl=false;
 	SystemAddress boundAddress;
 	RNS2_Berkley *rns2 = (RNS2_Berkley*) RakNetSocket2Allocator::AllocRNS2();
 	RNS2BindResult bindResult = rns2->Bind(&bbp, _FILE_AND_LINE_);
@@ -295,6 +307,7 @@ RNS2BindResult RNS2_Berkley::BindShared( RNS2_BerkleyBindParameters *bindParamet
 #else
 	br=BindSharedIPV4(bindParameters, file, line);
 #endif
+
 	if (br!=BR_SUCCESS)
 		return br;
 
@@ -310,19 +323,12 @@ RNS2BindResult RNS2_Berkley::BindShared( RNS2_BerkleyBindParameters *bindParamet
 
 	memcpy(&binding, bindParameters, sizeof(RNS2_BerkleyBindParameters));
 
+	/*
 #if defined(__APPLE__)
 	const CFSocketContext   context = { 0, this, NULL, NULL, NULL };
 	_cfSocket = CFSocketCreateWithNative(NULL, rns2Socket, kCFSocketReadCallBack, SocketReadCallback, &context);
-
-	/*
-	rls = CFSocketCreateRunLoopSource(NULL, self->_cfSocket, 0);
-	assert(rls != NULL);
-
-	CFRunLoopAddSource(CFRunLoopGetCurrent(), rls, kCFRunLoopDefaultMode);
-
-	CFRelease(rls);
-	*/
 #endif
+	*/
 
 	return br;
 }
@@ -357,6 +363,7 @@ unsigned RNS2_Berkley::RecvFromLoopInt(void)
 			}
 			else
 			{
+				RakSleep(0);
 				binding.eventHandler->DeallocRNS2RecvStruct(recvFromStruct, _FILE_AND_LINE_);
 			}
 		}
@@ -375,12 +382,14 @@ RNS2_Berkley::RNS2_Berkley()
 }
 RNS2_Berkley::~RNS2_Berkley()
 {
-#if defined(__APPLE__)
-	CFSocketInvalidate(_cfSocket);
-#endif
-
 	if (rns2Socket!=INVALID_SOCKET)
 	{
+		/*
+#if defined(__APPLE__)
+		CFSocketInvalidate(_cfSocket);
+#endif
+		*/
+
 		closesocket__(rns2Socket);
 	}
 

@@ -1,3 +1,13 @@
+/*
+ *  Copyright (c) 2014, Oculus VR, Inc.
+ *  All rights reserved.
+ *
+ *  This source code is licensed under the BSD-style license found in the
+ *  LICENSE file in the root directory of this source tree. An additional grant 
+ *  of patent rights can be found in the PATENTS file in the same directory.
+ *
+ */
+
 #include "EmptyHeader.h"
 
 #ifdef RAKNET_SOCKET_2_INLINE_FUNCTIONS
@@ -57,6 +67,7 @@ void DomainNameToIP_Berkley_IPV4And6( const char *domainName, char ip[65] )
 #endif // #if RAKNET_SUPPORT_IPV6==1
 }
 
+
 void DomainNameToIP_Berkley_IPV4( const char *domainName, char ip[65] )
 {
 	static struct in_addr addr;
@@ -82,6 +93,8 @@ void DomainNameToIP_Berkley_IPV4( const char *domainName, char ip[65] )
 	strcpy(ip, inet_ntoa( addr ));
 }
 
+
+
 void DomainNameToIP_Berkley( const char *domainName, char ip[65] )
 {
 #if RAKNET_SUPPORT_IPV6==1
@@ -90,6 +103,7 @@ void DomainNameToIP_Berkley( const char *domainName, char ip[65] )
 	return DomainNameToIP_Berkley_IPV4(domainName, ip);
 #endif
 }
+
 
 
 

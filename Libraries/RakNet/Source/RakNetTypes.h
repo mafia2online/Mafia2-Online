@@ -1,13 +1,24 @@
+/*
+ *  Copyright (c) 2014, Oculus VR, Inc.
+ *  All rights reserved.
+ *
+ *  This source code is licensed under the BSD-style license found in the
+ *  LICENSE file in the root directory of this source tree. An additional grant 
+ *  of patent rights can be found in the PATENTS file in the same directory.
+ *
+ */
+
 /// \file
 /// \brief Types used by RakNet, most of which involve user code.
 ///
-/// This file is part of RakNet Copyright 2003 Jenkins Software LLC
-///
-/// Usage of RakNet is subject to the appropriate license agreement.
 
 
 #ifndef __NETWORK_TYPES_H
 #define __NETWORK_TYPES_H
+
+
+
+
 
 #include "RakNetDefines.h"
 #include "NativeTypes.h"
@@ -39,6 +50,7 @@ enum StartupResult
 	SOCKET_FAILED_TEST_SEND,
 	PORT_CANNOT_BE_ZERO,
 	FAILED_TO_CREATE_NETWORK_THREAD,
+	COULD_NOT_GENERATE_GUID,
 	STARTUP_OTHER_FAILURE
 };
 
@@ -192,14 +204,18 @@ struct RAK_DLL_EXPORT SystemAddress
 
 
 
+
+
+
 	/// SystemAddress, with RAKNET_SUPPORT_IPV6 defined, holds both an sockaddr_in6 and a sockaddr_in
 	union// In6OrIn4
 	{
 #if RAKNET_SUPPORT_IPV6==1
-		struct sockaddr_in6 addr6;
+		struct sockaddr_storage sa_stor;
+		sockaddr_in6 addr6;
 #endif
 
-		struct sockaddr_in addr4;
+		sockaddr_in addr4;
 	} address;
 
 	/// This is not used internally, but holds a copy of the port held in the address union, so for debugging it's easier to check what port is being held
@@ -279,6 +295,8 @@ struct RAK_DLL_EXPORT SystemAddress
 
 	/// \internal sockaddr_in6 requires extra data beyond just the IP and port. Copy that extra data from an existing SystemAddress that already has it
 	void FixForIPVersion(const SystemAddress &boundAddressToSocket);
+
+	bool IsLANAddress(void);
 
 	SystemAddress& operator = ( const SystemAddress& input );
 	bool operator==( const SystemAddress& right ) const;

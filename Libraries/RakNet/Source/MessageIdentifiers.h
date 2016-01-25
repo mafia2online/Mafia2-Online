@@ -1,9 +1,16 @@
+/*
+ *  Copyright (c) 2014, Oculus VR, Inc.
+ *  All rights reserved.
+ *
+ *  This source code is licensed under the BSD-style license found in the
+ *  LICENSE file in the root directory of this source tree. An additional grant 
+ *  of patent rights can be found in the PATENTS file in the same directory.
+ *
+ */
+
 /// \file
 /// \brief All the message identifiers used by RakNet.  Message identifiers comprise the first byte of any message.
 ///
-/// This file is part of RakNet Copyright 2003 Jenkins Software LLC
-///
-/// Usage of RakNet is subject to the appropriate license agreement.
 
 
 #ifndef __MESSAGE_IDENTIFIERS_H
@@ -24,7 +31,9 @@ enum OutOfBandIdentifiers
 	ID_ROUTER_2_MINI_PUNCH_REPLY_BOUNCE,
 	ID_XBOX_360_VOICE,
 	ID_XBOX_360_GET_NETWORK_ROOM,
-	ID_XBOX_360_RETURN_NETWORK_ROOM
+	ID_XBOX_360_RETURN_NETWORK_ROOM,
+	ID_NAT_PING,
+	ID_NAT_PONG,
 };
 
 /// You should not edit the file MessageIdentifiers.h as it is a part of RakNet static library
@@ -405,12 +414,10 @@ enum DefaultMessageIDTypes
 	// LibVoice
 	ID_LIB_VOICE,
 
-	ID_RELAY_PLUGIN_TO_RELAY,
-	ID_RELAY_PLUGIN_FROM_RELAY,
-
-	// So I can add more without changing ID_USER_PACKET_ENUM
-	ID_RELAY_PLUGIN_ADD_CLIENT,
-	ID_RESERVED_2,
+	ID_RELAY_PLUGIN,
+	ID_NAT_REQUEST_BOUND_ADDRESSES,
+	ID_NAT_RESPOND_BOUND_ADDRESSES,
+	ID_FCM2_UPDATE_USER_CONTEXT,
 	ID_RESERVED_3,
 	ID_RESERVED_4,
 	ID_RESERVED_5,

@@ -1,3 +1,13 @@
+/*
+ *  Copyright (c) 2014, Oculus VR, Inc.
+ *  All rights reserved.
+ *
+ *  This source code is licensed under the BSD-style license found in the
+ *  LICENSE file in the root directory of this source tree. An additional grant 
+ *  of patent rights can be found in the PATENTS file in the same directory.
+ *
+ */
+
 #include "NativeFeatureIncludes.h"
 #if _RAKNET_SUPPORT_TeamManager==1
 
@@ -2725,7 +2735,7 @@ void TeamManager::OnLeaveTeam(Packet *packet, TM_World *world)
 		teamMember->RemoveFromSpecificTeamInternal(team);
 		if (teamMember->GetCurrentTeamCount()==0)
 		{
-			noTeamId=noTeamId;
+			teamMember->noTeamSubcategory=noTeamId;
 			teamMember->joinTeamType=JOIN_NO_TEAM;
 		}
 		PushTeamAssigned(teamMember);

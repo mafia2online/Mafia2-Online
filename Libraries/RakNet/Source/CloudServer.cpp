@@ -1,3 +1,13 @@
+/*
+ *  Copyright (c) 2014, Oculus VR, Inc.
+ *  All rights reserved.
+ *
+ *  This source code is licensed under the BSD-style license found in the
+ *  LICENSE file in the root directory of this source tree. An additional grant 
+ *  of patent rights can be found in the PATENTS file in the same directory.
+ *
+ */
+
 #include "NativeFeatureIncludes.h"
 #if _RAKNET_SUPPORT_CloudServer==1
 
@@ -332,6 +342,8 @@ void CloudServer::OnPostRequest(Packet *packet)
 		else
 		{
 			cloudData->serverSystemAddress=rakPeerInterface->GetExternalID(packet->systemAddress);
+			if (cloudData->serverSystemAddress.IsLoopback())
+				cloudData->serverSystemAddress.FromString(rakPeerInterface->GetLocalIP(0));
 		}
 		if (cloudData->serverSystemAddress.GetPort()==0)
 		{
