@@ -233,6 +233,9 @@ void CNetworkVehicle::HandleRespawn( void )
 		// Reset the siren
 		m_pVehicle->SetSirenOn( false );
 
+		// Reset the beacon light
+		m_pVehicle->SetBeaconLightOn( false );
+
 		// Reset the dirt level
 		m_pVehicle->SetDirtLevel( 0.0f );
 
@@ -324,6 +327,10 @@ void CNetworkVehicle::StoreVehicleSync( InVehicleSync vehicleSync, bool bInterpo
 		// Has the siren state changed?
 		if( m_pVehicle->IsSirenOn() != vehicleSync.m_bSirenState )
 			m_pVehicle->SetSirenOn( vehicleSync.m_bSirenState );
+
+		// Has the beacon light state changed?
+		if (m_pVehicle->IsBeaconLightOn() != vehicleSync.m_bBeaconLightState)
+			m_pVehicle->SetBeaconLightOn(vehicleSync.m_bBeaconLightState);
 
 		// Has the fuel changed?
 		//if ( m_pVehicle->GetFuel () != vehicleSync.m_fFuel )

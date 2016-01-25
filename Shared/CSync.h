@@ -42,6 +42,7 @@ struct InVehicleSync
 	int				m_iTuningTable;
 	bool			m_bHornState;
 	bool			m_bSirenState;
+	bool			m_bBeaconLightState;
 	bool			m_bEngineState;
 	float			m_fFuel;
 	float			m_fTurnSpeed;
