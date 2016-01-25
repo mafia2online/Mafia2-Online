@@ -185,19 +185,27 @@ static SQInteger get_slice_params(HSQUIRRELVM v,SQInteger &sidx,SQInteger &eidx,
 static SQInteger base_print(HSQUIRRELVM v)
 {
 	const SQChar *str;
-	sq_tostring(v,2);
-	sq_getstring(v,-1,&str);
-	if(_ss(v)->_printfunc) _ss(v)->_printfunc(v,_SC("%s"),str);
-	return 0;
+	if(SQ_SUCCEEDED(sq_tostring(v,2)))
+	{
+ 		if(SQ_SUCCEEDED(sq_getstring(v,-1,&str))) {
+			if(_ss(v)->_printfunc) _ss(v)->_printfunc(v,_SC("%s"),str);
+			return 0;
+		}
+	}
+	return SQ_ERROR;
 }
 
 static SQInteger base_error(HSQUIRRELVM v)
 {
 	const SQChar *str;
-	sq_tostring(v,2);
-	sq_getstring(v,-1,&str);
-	if(_ss(v)->_errorfunc) _ss(v)->_errorfunc(v,_SC("%s"),str);
-	return 0;
+	if(SQ_SUCCEEDED(sq_tostring(v,2)))
+	{
+ 		if(SQ_SUCCEEDED(sq_getstring(v,-1,&str))) {
+			if(_ss(v)->_errorfunc) _ss(v)->_errorfunc(v,_SC("%s"),str);
+			return 0;
+		}
+	}
+	return SQ_ERROR;
 }
 
 static SQInteger base_compilestring(HSQUIRRELVM v)
@@ -378,7 +386,8 @@ static SQInteger default_delegate_tointeger(HSQUIRRELVM v)
 
 static SQInteger default_delegate_tostring(HSQUIRRELVM v)
 {
-	sq_tostring(v,1);
+	if(SQ_FAILED(sq_tostring(v,1))) 
+		return SQ_ERROR;
 	return 1;
 }
 
@@ -975,7 +984,7 @@ static SQInteger thread_call(HSQUIRRELVM v)
 		_thread(o)->Push(_thread(o)->_roottable);
 		for(SQInteger i = 2; i<(nparams+1); i++)
 			sq_move(_thread(o),v,i);
-		if(SQ_SUCCEEDED(sq_call(_thread(o),nparams,SQTrue,SQFalse))) {
+		if(SQ_SUCCEEDED(sq_call(_thread(o),nparams,SQTrue,SQTrue))) {
 			sq_move(v,_thread(o),-1);
 			sq_pop(_thread(o),1);
 			return 1;
