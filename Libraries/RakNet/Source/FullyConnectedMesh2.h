@@ -1,10 +1,18 @@
+/*
+ *  Copyright (c) 2014, Oculus VR, Inc.
+ *  All rights reserved.
+ *
+ *  This source code is licensed under the BSD-style license found in the
+ *  LICENSE file in the root directory of this source tree. An additional grant 
+ *  of patent rights can be found in the PATENTS file in the same directory.
+ *
+ */
+
 /// \file FullyConnectedMesh2.h
 /// \brief Fully connected mesh plugin, revision 2.  
 /// \details This will connect RakPeer to all connecting peers, and all peers the connecting peer knows about.
 ///
-/// This file is part of RakNet Copyright 2003 Jenkins Software LLC
-///
-/// Usage of RakNet is subject to the appropriate license agreement.
+
 
 #include "NativeFeatureIncludes.h"
 #if _RAKNET_SUPPORT_FullyConnectedMesh2==1
@@ -17,6 +25,7 @@
 #include "NativeTypes.h"
 #include "DS_List.h"
 #include "RakString.h"
+#include "BitStream.h"
 
 typedef int64_t FCM2Guid;
 
@@ -83,6 +92,7 @@ public:
 	/// FullyConnectedMesh2 will track who is the who host among a fully connected mesh of participants
 	/// Each remote system that you want to check should be added as a participant, either through SetAutoparticipateConnections() or by calling this function
 	/// \param[in] participant The new participant
+	/// \param[in] userContext Static data to be passed around with each participant, which can be queried with GetParticipantData().
 	/// \sa StartVerifiedJoin()
 	void AddParticipant(RakNetGUID rakNetGuid);
 
@@ -94,6 +104,16 @@ public:
 	/// \param[in] RakNetGUID of the participant to query
 	/// \return True if in the list
 	bool HasParticipant(RakNetGUID participantGuid);
+
+	/// \brief Reads userData written with SetMyContext()
+	/// \param[in] RakNetGUID of the participant to query
+	/// \param[out] userContext Pointer to BitStream to be written to
+	/// \return True if data was written
+	// bool GetParticipantContext(RakNetGUID participantGuid, BitStream *userContext);
+
+	/// Set data for other systems to read with GetParticipantContext
+	/// \param[in] userContext Pointer to BitStream to be read from
+	// void SetMyContext(BitStream *userContext);
 
 	/// Connect to all systems from ID_REMOTE_NEW_INCOMING_CONNECTION
 	/// You can call this if SetConnectOnNewRemoteConnection is false
@@ -141,6 +161,7 @@ public:
 	/// \param[in] packet The system that sent ID_FCM2_VERIFIED_JOIN_CAPABLE. Based on \accept, ID_FCM2_VERIFIED_JOIN_ACCEPTED or ID_FCM2_VERIFIED_JOIN_REJECTED will be sent in reply
 	/// \param[in] accept True to accept, and thereby automatically call AddParticipant() on all systems on the mesh. False to reject, and call CloseConnection() to all mesh systems on the target
 	/// \param[in] additionalData Any additional data you want to add to the ID_FCM2_VERIFIED_JOIN_ACCEPTED or ID_FCM2_VERIFIED_JOIN_REJECTED messages
+	/// \sa WriteVJCUserData()
 	virtual void RespondOnVerifiedJoinCapable(Packet *packet, bool accept, BitStream *additionalData);
 
 	/// \brief On ID_FCM2_VERIFIED_JOIN_START, read the SystemAddress and RakNetGUID values of each system to connect to
@@ -154,7 +175,11 @@ public:
 	/// \param[in] host Which system sent ID_FCM2_VERIFIED_JOIN_START
 	/// \param[out] addresses SystemAddress values of systems to connect to. List has the same number and order as \a guids
 	/// \param[out] guids RakNetGUID values of systems to connect to. List has the same number and order as \a guids
-	virtual void GetVerifiedJoinRequiredProcessingList(RakNetGUID host, DataStructures::List<SystemAddress> &addresses, DataStructures::List<RakNetGUID> &guids);
+	/// \param[out] userData What was written with WriteVJSUserData
+	virtual void GetVerifiedJoinRequiredProcessingList(RakNetGUID host,
+		DataStructures::List<SystemAddress> &addresses,
+		DataStructures::List<RakNetGUID> &guids,
+		DataStructures::List<BitStream*> &userData);
 
 	/// \brief On ID_FCM2_VERIFIED_JOIN_ACCEPTED, read additional data passed to RespondOnVerifiedJoinCapable()
 	/// \code
@@ -177,6 +202,23 @@ public:
 	/// \param[in] packet Packet containing the ID_FCM2_VERIFIED_JOIN_REJECTED message
 	/// \param[out] additionalData \a additionalData parameter passed to RespondOnVerifiedJoinCapable().
 	virtual void GetVerifiedJoinRejectedAdditionalData(Packet *packet, BitStream *additionalData);
+
+	/// Override to write data when ID_FCM2_VERIFIED_JOIN_CAPABLE is sent
+	virtual void WriteVJCUserData(RakNet::BitStream *bsOut) {(void) bsOut;}
+
+	/// Use to read data written from WriteVJCUserData()
+	/// \code
+	/// RakNet::BitStream bsIn(packet->data,packet->length,false);
+	/// FullyConnectedMesh2::SkipToVJCUserData(&bsIn);
+	/// // Your code here
+	static void SkipToVJCUserData(RakNet::BitStream *bsIn);
+
+	/// Write custom user data to be sent with ID_FCM2_VERIFIED_JOIN_START, per user
+	/// \param[out] bsOut Write your data here, if any. Has to match what is read by ReadVJSUserData
+	/// \param[in] userGuid The RakNetGuid of the user you are writing for
+	/// \param[in] userContext The data set with SetMyContext() for that system. May be empty. To properly write userContext, you will need to first write userContext->GetNumberOfBitsUsed(), followed by bsOut->Write(userContext);
+	//virtual void WriteVJSUserData(RakNet::BitStream *bsOut, RakNetGUID userGuid, BitStream *userContext) {(void) bsOut; (void) userGuid; (void) userContext;}
+	virtual void WriteVJSUserData(RakNet::BitStream *bsOut, RakNetGUID userGuid) {(void) bsOut; (void) userGuid;}
 
 	/// \internal
 	RakNet::TimeUS GetElapsedRuntime(void);
@@ -206,6 +248,7 @@ public:
 		// High half is the order we connected in (totalConnectionCount)
 		FCM2Guid fcm2Guid;
 		RakNetGUID rakNetGuid;
+		// BitStream userContext;
 	};
 
 	enum JoinInProgressState
@@ -221,6 +264,7 @@ public:
 		SystemAddress systemAddress;
 		RakNetGUID guid;
 		JoinInProgressState joinInProgressState;
+		BitStream *userData;
 
 		bool workingFlag;
 	};
@@ -229,7 +273,7 @@ public:
 	struct VerifiedJoinInProgress
 	{
 		RakNetGUID requester;
-		DataStructures::List<VerifiedJoinInProgressMember> members;
+		DataStructures::List<VerifiedJoinInProgressMember> vjipMembers;
 		//bool sentResults;
 	};
 
@@ -242,18 +286,20 @@ protected:
 	void SendFCMGuidRequest(RakNetGUID rakNetGuid);
 	void SendConnectionCountResponse(SystemAddress addr, unsigned int responseTotalConnectionCount);
 	void OnRequestFCMGuid(Packet *packet);
+	//void OnUpdateUserContext(Packet *packet);
 	void OnRespondConnectionCount(Packet *packet);
 	void OnInformFCMGuid(Packet *packet);
 	void OnUpdateMinTotalConnectionCount(Packet *packet);
 	void AssignOurFCMGuid(void);
 	void CalculateHost(RakNetGUID *rakNetGuid, FCM2Guid *fcm2Guid);
+	// bool AddParticipantInternal( RakNetGUID rakNetGuid, FCM2Guid theirFCMGuid, BitStream *userContext );
 	bool AddParticipantInternal( RakNetGUID rakNetGuid, FCM2Guid theirFCMGuid );
 	void CalculateAndPushHost(void);
 	bool ParticipantListComplete(void);
 	void IncrementTotalConnectionCount(unsigned int i);
 	PluginReceiveResult OnVerifiedJoinStart(Packet *packet);
 	PluginReceiveResult OnVerifiedJoinCapable(Packet *packet);
-	virtual void OnVerifiedJoinFailed(RakNetGUID hostGuid);
+	virtual void OnVerifiedJoinFailed(RakNetGUID hostGuid, bool callCloseConnection);
 	virtual void OnVerifiedJoinAccepted(Packet *packet);
 	virtual void OnVerifiedJoinRejected(Packet *packet);
 	unsigned int GetJoinsInProgressIndex(RakNetGUID requester) const;
@@ -262,6 +308,7 @@ protected:
 	void ReadVerifiedJoinInProgressMember(RakNet::BitStream *bsIn, VerifiedJoinInProgressMember *vjipm);
 	unsigned int GetVerifiedJoinInProgressMemberIndex(const AddressOrGUID systemIdentifier, VerifiedJoinInProgress *vjip);
 	void DecomposeJoinCapable(Packet *packet, VerifiedJoinInProgress *vjip);
+	void WriteVerifiedJoinCapable(RakNet::BitStream *bsOut, VerifiedJoinInProgress *vjip);
 	void CategorizeVJIP(VerifiedJoinInProgress *vjip,
 		DataStructures::List<RakNetGUID> &participatingMembersOnClientSucceeded,
 		DataStructures::List<RakNetGUID> &participatingMembersOnClientFailed,
@@ -284,7 +331,7 @@ protected:
 	FCM2Guid ourFCMGuid;
 
 	/// List of systems we know the FCM2Guid for
-	DataStructures::List<FCM2Participant> fcm2ParticipantList;
+	DataStructures::List<FCM2Participant*> fcm2ParticipantList;
 
 	RakNetGUID lastPushedHost;
 
@@ -296,6 +343,7 @@ protected:
 	bool connectOnNewRemoteConnections;
 
 	DataStructures::List<VerifiedJoinInProgress*> joinsInProgress;
+	BitStream myContext;
 };
 
 } // namespace RakNet

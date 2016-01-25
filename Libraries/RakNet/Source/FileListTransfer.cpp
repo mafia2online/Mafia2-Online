@@ -1,3 +1,13 @@
+/*
+ *  Copyright (c) 2014, Oculus VR, Inc.
+ *  All rights reserved.
+ *
+ *  This source code is licensed under the BSD-style license found in the
+ *  LICENSE file in the root directory of this source tree. An additional grant 
+ *  of patent rights can be found in the PATENTS file in the same directory.
+ *
+ */
+
 #include "NativeFeatureIncludes.h"
 #if _RAKNET_SUPPORT_FileListTransfer==1 && _RAKNET_SUPPORT_FileOperations==1
 
@@ -890,7 +900,8 @@ void FileListTransfer::OnReferencePush(Packet *packet, bool isTheFullFile)
 			fps.partCount=currentNotificationIndex;
 			fps.partTotal=totalNotifications;
 
-			if (rakPeerInterface)
+// 2/19/2013 Why was this check here? It prevent smaller progress notifications
+//			if (rakPeerInterface)
 			{
 				// Thus chunk is incomplete
 				fps.iriDataChunk=0;

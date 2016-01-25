@@ -1,9 +1,17 @@
+/*
+ *  Copyright (c) 2014, Oculus VR, Inc.
+ *  All rights reserved.
+ *
+ *  This source code is licensed under the BSD-style license found in the
+ *  LICENSE file in the root directory of this source tree. An additional grant 
+ *  of patent rights can be found in the PATENTS file in the same directory.
+ *
+ */
+
 /// \file
 /// \brief A simple TCP based server allowing sends and receives.  Can be connected by any TCP client, including telnet.
 ///
-/// This file is part of RakNet Copyright 2003 Jenkins Software LLC
-///
-/// Usage of RakNet is subject to the appropriate license agreement.
+
 
 #include "NativeFeatureIncludes.h"
 #if _RAKNET_SUPPORT_TCPInterface==1
@@ -56,13 +64,13 @@ public:
 	/// \param[in] maxConnections Max total connections, which should be >= maxIncomingConnections
 	/// \param[in] threadPriority Passed to the thread creation routine. Use THREAD_PRIORITY_NORMAL for Windows. For Linux based systems, you MUST pass something reasonable based on the thread priorities for your application.
 	/// \param[in] socketFamily IP version: For IPV4, use AF_INET (default). For IPV6, use AF_INET6. To autoselect, use AF_UNSPEC.
-	bool Start(unsigned short port, unsigned short maxIncomingConnections, unsigned short maxConnections=0, int _threadPriority=-99999, unsigned short socketFamily=AF_INET);
+	bool Start(unsigned short port, unsigned short maxIncomingConnections, unsigned short maxConnections=0, int _threadPriority=-99999, unsigned short socketFamily=AF_INET, const char *bindAddress=0);
 
 	/// Stops the TCP server
 	void Stop(void);
 
 	/// Connect to the specified host on the specified port
-	SystemAddress Connect(const char* host, unsigned short remotePort, bool block=true, unsigned short socketFamily=AF_INET);
+	SystemAddress Connect(const char* host, unsigned short remotePort, bool block=true, unsigned short socketFamily=AF_INET, const char *bindAddress=0);
 
 #if OPEN_SSL_CLIENT_SUPPORT==1
 	/// Start SSL on an existing connection, notified with HasCompletedConnectionAttempt
@@ -132,9 +140,9 @@ protected:
 	Packet* ReceiveInt( void );
 
 #if defined(WINDOWS_STORE_RT)
-	bool CreateListenSocket_WinStore8(unsigned short port, unsigned short maxIncomingConnections, unsigned short socketFamily);
+	bool CreateListenSocket_WinStore8(unsigned short port, unsigned short maxIncomingConnections, unsigned short socketFamily, const char *hostAddress);
 #else
-	bool CreateListenSocket(unsigned short port, unsigned short maxIncomingConnections, unsigned short socketFamily);
+	bool CreateListenSocket(unsigned short port, unsigned short maxIncomingConnections, unsigned short socketFamily, const char *hostAddress);
 #endif
 
 	// Plugins
@@ -187,13 +195,14 @@ protected:
 
 //	void DeleteRemoteClient(RemoteClient *remoteClient, fd_set *exceptionFD);
 //	void InsertRemoteClient(RemoteClient* remoteClient);
-	__TCPSOCKET__ SocketConnect(const char* host, unsigned short remotePort, unsigned short socketFamily);
+	__TCPSOCKET__ SocketConnect(const char* host, unsigned short remotePort, unsigned short socketFamily, const char *bindAddress);
 
 	struct ThisPtrPlusSysAddr
 	{
 		TCPInterface *tcpInterface;
 		SystemAddress systemAddress;
 		bool useSSL;
+		char bindAddress[64];
 		unsigned short socketFamily;
 	};
 
@@ -227,7 +236,7 @@ struct RemoteClient
 
 #if OPEN_SSL_CLIENT_SUPPORT==1
 	SSL*     ssl;
-	void InitSSL(SSL_CTX* ctx, SSL_METHOD *meth);
+	bool InitSSL(SSL_CTX* ctx, SSL_METHOD *meth);
 	void DisconnectSSL(void);
 	void FreeSSL(void);
 	int Send(const char *data, unsigned int length);

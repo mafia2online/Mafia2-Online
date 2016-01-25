@@ -1,3 +1,13 @@
+/*
+ *  Copyright (c) 2014, Oculus VR, Inc.
+ *  All rights reserved.
+ *
+ *  This source code is licensed under the BSD-style license found in the
+ *  LICENSE file in the root directory of this source tree. An additional grant 
+ *  of patent rights can be found in the PATENTS file in the same directory.
+ *
+ */
+
 #include "SignaledEvent.h"
 #include "RakAssert.h"
 #include "RakSleep.h"
@@ -172,7 +182,8 @@ void SignaledEvent::WaitOnEvent(int timeoutMs)
 	isSignaledMutex.Unlock();
 
 	
-	struct timespec   ts;
+
+	//struct timespec   ts;
 
 	// Else wait for SetEvent to be called
 
@@ -189,12 +200,17 @@ void SignaledEvent::WaitOnEvent(int timeoutMs)
 
 
 
+
+
+
+		struct timespec   ts;
+
 		int rc;
 		struct timeval    tp;
 		rc =  gettimeofday(&tp, NULL);
 		ts.tv_sec  = tp.tv_sec;
 		ts.tv_nsec = tp.tv_usec * 1000;
-
+// #endif
 
 		while (timeoutMs > 30)
 		{
@@ -243,5 +259,6 @@ void SignaledEvent::WaitOnEvent(int timeoutMs)
 		isSignaledMutex.Lock();
 		isSignaled=false;
 		isSignaledMutex.Unlock();
+
 #endif
 }

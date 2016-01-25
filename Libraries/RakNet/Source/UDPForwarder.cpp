@@ -1,3 +1,13 @@
+/*
+ *  Copyright (c) 2014, Oculus VR, Inc.
+ *  All rights reserved.
+ *
+ *  This source code is licensed under the BSD-style license found in the
+ *  LICENSE file in the root directory of this source tree. An additional grant 
+ *  of patent rights can be found in the PATENTS file in the same directory.
+ *
+ */
+
 #include "UDPForwarder.h"
 
 #if _RAKNET_SUPPORT_UDPForwarder==1
@@ -131,6 +141,9 @@ UDPForwarderResult UDPForwarder::StartForwarding(SystemAddress source, SystemAdd
 	sfis->inputId=inputId;
 	startForwardingInput.Push(sfis);
 
+#ifdef _MSC_VER
+#pragma warning( disable : 4127 ) // warning C4127: conditional expression is constant
+#endif
 	while (1)
 	{
 		RakSleep(0);
@@ -311,6 +324,9 @@ void UDPForwarder::RecvFrom(RakNet::TimeMS curTime, ForwardEntry *forwardEntry)
 // 	saOut.sin_family = AF_INET;
 	do
 	{
+
+
+
 #if RAKNET_SUPPORT_IPV6==1
 		if (forwardTarget.address.addr4.sin_family==AF_INET)
 		{
@@ -336,6 +352,35 @@ void UDPForwarder::RecvFrom(RakNet::TimeMS curTime, ForwardEntry *forwardEntry)
 		while ( len == 0 );
 #endif
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	}
 	while ( len == 0 );
 
@@ -360,6 +405,10 @@ void UDPForwarder::UpdateUDPForwarder(void)
 	sfos.forwardingPort=0;
 	sfos.inputId=0;
 	sfos.result=UDPFORWARDER_RESULT_COUNT;
+
+#ifdef _MSC_VER
+#pragma warning( disable : 4127 ) // warning C4127: conditional expression is constant
+#endif
 	while (1)
 	{
 		sfis = startForwardingInput.Pop();
@@ -407,6 +456,8 @@ void UDPForwarder::UpdateUDPForwarder(void)
 				listenerSocketAddress.sin_family = AF_INET;
 				if (sfis->forceHostAddress.IsEmpty()==false)
 				{
+
+
 
 
 
@@ -501,6 +552,10 @@ void UDPForwarder::UpdateUDPForwarder(void)
 	}
 
 	StopForwardingStruct *sfs;
+
+#ifdef _MSC_VER
+#pragma warning( disable : 4127 ) // warning C4127: conditional expression is constant
+#endif
 	while (1)
 	{
 		sfs = stopForwardingCommands.Pop();

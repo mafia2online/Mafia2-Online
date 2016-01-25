@@ -1,3 +1,13 @@
+/*
+ *  Copyright (c) 2014, Oculus VR, Inc.
+ *  All rights reserved.
+ *
+ *  This source code is licensed under the BSD-style license found in the
+ *  LICENSE file in the root directory of this source tree. An additional grant 
+ *  of patent rights can be found in the PATENTS file in the same directory.
+ *
+ */
+
 #include "NativeFeatureIncludes.h"
 #if _RAKNET_SUPPORT_PacketLogger==1
 
@@ -257,7 +267,7 @@ const char* PacketLogger::BaseIDTOString(unsigned char Id)
 
 	const char *IDTable[((int)ID_USER_PACKET_ENUM)+1]=
 	{
-		"ID_CONNECTED_PING",  
+		"ID_CONNECTED_PING",
 		"ID_UNCONNECTED_PING",
 		"ID_UNCONNECTED_PING_OPEN_CONNECTIONS",
 		"ID_CONNECTED_PONG",
@@ -311,6 +321,7 @@ const char* PacketLogger::BaseIDTOString(unsigned char Id)
 		"ID_AUTOPATCHER_GET_PATCH",
 		"ID_AUTOPATCHER_PATCH_LIST",
 		"ID_AUTOPATCHER_REPOSITORY_FATAL_ERROR",
+		"ID_AUTOPATCHER_CANNOT_DOWNLOAD_ORIGINAL_UNMODIFIED_FILES",
 		"ID_AUTOPATCHER_FINISHED_INTERNAL",
 		"ID_AUTOPATCHER_FINISHED",
 		"ID_AUTOPATCHER_RESTART_APPLICATION",
@@ -378,8 +389,11 @@ const char* PacketLogger::BaseIDTOString(unsigned char Id)
 		"ID_CLOUD_UNSUBSCRIBE_REQUEST",
 		"ID_CLOUD_SERVER_TO_SERVER_COMMAND",
 		"ID_CLOUD_SUBSCRIPTION_NOTIFICATION",
-		"ID_RESERVED_1",
-		"ID_RESERVED_2",
+		"ID_LIB_VOICE",
+		"ID_RELAY_PLUGIN",
+		"ID_NAT_REQUEST_BOUND_ADDRESSES",
+		"ID_NAT_RESPOND_BOUND_ADDRESSES",
+		"ID_FCM2_UPDATE_USER_CONTEXT",
 		"ID_RESERVED_3",
 		"ID_RESERVED_4",
 		"ID_RESERVED_5",
@@ -387,7 +401,7 @@ const char* PacketLogger::BaseIDTOString(unsigned char Id)
 		"ID_RESERVED_7",
 		"ID_RESERVED_8",
 		"ID_RESERVED_9",
-		"ID_USER_PACKET_ENUM",
+		"ID_USER_PACKET_ENUM"
 	};
 
 	return (char*)IDTable[Id];
