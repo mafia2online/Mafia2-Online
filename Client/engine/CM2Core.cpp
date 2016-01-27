@@ -7,7 +7,13 @@
 *
 ***************************************************************/
 
-#include "../StdInc.h"
+#include "BaseInc.h"
+
+#include "CM2Core.h"
+
+#include "engine/CM2Entity.h"
+
+#include "COffsets.h"
 
 M2Model * CM2Core::AllocateModel( void )
 {

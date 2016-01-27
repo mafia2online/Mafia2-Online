@@ -7,6 +7,8 @@
 *
 ***************************************************************/
 
+#include "BaseInc.h"
+
 #include "CCore.h"
 
 #include "CLua.h"

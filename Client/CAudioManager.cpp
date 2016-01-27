@@ -7,6 +7,8 @@
 *
 ***************************************************************/
 
+#include "BaseInc.h"
+
 #include "CCommon.h"
 
 #include "CAudio.h"
