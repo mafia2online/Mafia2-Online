@@ -169,6 +169,7 @@
     <ClInclude Include="..\Shared\CXML.h" />
     <ClInclude Include="..\Shared\CZlib.h" />
     <ClInclude Include="..\Shared\DbgView.h" />
+    <ClInclude Include="..\Shared\ExplicitSingleton.h" />
     <ClInclude Include="..\Shared\Game\CGame.h" />
     <ClInclude Include="..\Shared\Math\CMaths.h" />
     <ClInclude Include="..\Shared\Math\CMatrix.h" />
@@ -249,7 +250,6 @@
     <ClInclude Include="CMainMenu.h" />
     <ClInclude Include="CMasterList.h" />
     <ClInclude Include="CModelManager.h" />
-    <ClInclude Include="CMouseHandler.h" />
     <ClInclude Include="CNameTag.h" />
     <ClInclude Include="CNetworkModelManager.h" />
     <ClInclude Include="CNetworkModule.h" />

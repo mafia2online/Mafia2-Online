@@ -7,9 +7,14 @@
 *
 ***************************************************************/
 
-#include "StdInc.h"
+#include "Scripting/CSquirrel.h"
+#include "CClientScriptingManager.h"
 
-extern CCore			* pCore;
+#include "CString.h"
+
+#include "CKeyBinds.h"
+
+#include "CCore.h"
 
 CKeyBind::CKeyBind( const char * szKey, const char * szState, SQVM * pVM, SQObjectPtr pFunction )
 {
@@ -24,7 +29,7 @@ CKeyBind::CKeyBind( const char * szKey, const char * szState, SQVM * pVM, SQObje
 void CKeyBind::Trigger( void )
 {
 	// Get the script from the VM
-	CSquirrel * pScript = pCore->GetClientScriptingManager()->GetScriptingManager()->Get( m_pVM );
+	CSquirrel* pScript = CCore::Instance()->GetClientScriptingManager()->GetScriptingManager()->Get( m_pVM );
 
 	// Did we fail to find the script?
 	if( !pScript )

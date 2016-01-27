@@ -58,7 +58,6 @@
 #include <Network/CNetworkStats.h>
 #include <Game/CGame.h>
 #include <CrashRpt.h>
-#include "../bass/bass.h"
 
 // RakNet includes
 #include <RakPeerInterface.h>

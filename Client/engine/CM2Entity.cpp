@@ -9,8 +9,6 @@
 
 #include "../StdInc.h"
 
-extern CCore		* pCore;
-
 CM2Entity::CM2Entity( M2Entity * pEntity )
 {
 	// Set the entity

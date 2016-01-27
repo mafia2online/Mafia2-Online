@@ -9,6 +9,11 @@
 
 #pragma once
 
+#include <list>
+
+#include "d3d9.h"
+#include "d3dx9.h"
+
 #define		NUM_FONTS				4
 
 // Font indexes
@@ -16,6 +21,9 @@
 #define		FONT_INDEX_TAHOMA_BD	1
 #define		FONT_INDEX_VERDANA		2
 #define		FONT_INDEX_ARIAL		3
+
+class CFont;
+class CVector3;
 
 class CGraphics
 {

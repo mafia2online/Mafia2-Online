@@ -9,7 +9,7 @@
 
 #include	"StdInc.h"
 
-CCore		* pCore = NULL;
+CCore*		pCore = NULL;
 HMODULE		g_hModule = NULL;
 
 BOOL WINAPI DllMain( HMODULE hModule, DWORD dwReason, void * pReserved )

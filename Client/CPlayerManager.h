@@ -9,6 +9,11 @@
 
 #pragma once
 
+#include "CCommon.h"
+
+class CLocalPlayer;
+class CRemotePlayer;
+
 class CPlayerManager
 {
 
@@ -33,8 +38,6 @@ public:
 
 	CRemotePlayer				* GetFromGameGUID( DWORD dwGUID );
 	EntityId					GetIdFromGameGUID( DWORD dwGUID );
-
-	int							GetLocalPing( bool bAverage = false );
 
 	void						RespawnAll( void );
 	void						HandleLocalDeath( void );
