@@ -937,13 +937,13 @@ bool CM2Vehicle::IsWindowOpen(int iSeat)
 		DWORD func = COffsets::FUNC_CVehicle__IsWindowOpen;
 		M2Vehicle * pVehicle = m_pVehicle;
 
-		bool retn;
+		bool bRetn = false;
 
 		_asm push iSeat
 		_asm mov ecx, pVehicle
 		_asm call func;
-		_asm mov retn, al
-		return (retn);
+		_asm mov bRetn, al
+		return (bRetn);
 	}
 
 	return (false);

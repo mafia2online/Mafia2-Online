@@ -129,9 +129,6 @@
     <Filter Include="Source Files\Client\Game\Hooks\Mouse">
       <UniqueIdentifier>{b22ba6d4-00e9-47a3-b702-25f4d0f865c9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Client\Game\Hooks\Mouse">
-      <UniqueIdentifier>{d6dadaa8-e618-47bf-b422-ae1b58e67451}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Client\Network\Vehicles">
       <UniqueIdentifier>{ab6d1dfe-cabd-403d-adca-7d3579c21b3f}</UniqueIdentifier>
     </Filter>
@@ -427,9 +424,6 @@
     </ClInclude>
     <ClInclude Include="..\Shared\CExceptionHandler.h">
       <Filter>Header Files\Client\Shared</Filter>
-    </ClInclude>
-    <ClInclude Include="CMouseHandler.h">
-      <Filter>Header Files\Client\Game\Hooks\Mouse</Filter>
     </ClInclude>
     <ClInclude Include="..\Shared\CCommands.h">
       <Filter>Header Files\Client\Shared</Filter>
@@ -799,6 +793,9 @@
     </ClInclude>
     <ClInclude Include="C3DTextLabelNatives.h">
       <Filter>Header Files\Client\Scripting\Natives</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\ExplicitSingleton.h">
+      <Filter>Header Files\Client\Shared</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

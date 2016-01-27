@@ -7,16 +7,30 @@
 *
 ***************************************************************/
 
+#include "CCore.h"
+#include "CString.h"
+
+#include "Math/CVector3.h"
+#include "Math/CMaths.h"
+
 #include "CAudio.h"
 
-extern CCore * pCore;
+#include "CPlayerManager.h"
+#include "CNetworkPlayer.h"
+#include "CLocalPlayer.h"
 
-CAudio::CAudio(String strStreamName, bool bReplay, bool bIsOnlineStream) :
-m_strStreamName(strStreamName), m_bReplay(bReplay), m_bIsOnlineStream(bIsOnlineStream),
-m_bUsePosition(false), m_fRange(0.0f), m_fVolume(100.0f),
-m_bIsMuted(false), m_dwChannel(0)
+#include "../bass/bass.h" // TODO: Remove this ugly ...
+
+CAudio::CAudio(const String &strStreamName, bool bReplay, bool bIsOnlineStream)
+	: m_strStreamName(strStreamName)
+	, m_bReplay(bReplay)
+	, m_bIsOnlineStream(bIsOnlineStream)
+	, m_bUsePosition(false)
+	, m_fRange(0.0f)
+	, m_fVolume(100.0f)
+	, m_bIsMuted(false)
+	, m_dwChannel(0)
 {
-
 }
 
 CAudio::~CAudio()
@@ -112,7 +126,7 @@ void CAudio::SetUsePosition(bool bUsePosition)
 	m_bUsePosition = bUsePosition;
 }
 
-void CAudio::SetPosition(CVector3 vecPosition, float fRange)
+void CAudio::SetPosition(const CVector3& vecPosition, float fRange)
 {
 	m_vecPosition = vecPosition;
 	m_fRange = fRange;
@@ -186,7 +200,7 @@ void CAudio::Process()
 	if (m_bUsePosition)
 	{
 		CVector3 vecLocalPlayer;
-		pCore->GetPlayerManager()->GetLocalPlayer()->GetPosition(&vecLocalPlayer);
+		CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetPosition(&vecLocalPlayer);
 
 		float fDistance = Math::GetDistanceBetweenPoints(vecLocalPlayer.fX, vecLocalPlayer.fY, vecLocalPlayer.fZ, m_vecPosition.fX, m_vecPosition.fY, m_vecPosition.fZ);
 

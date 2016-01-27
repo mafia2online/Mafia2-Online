@@ -10,7 +10,10 @@
 #ifndef CAUDIOMANAGER_H
 #define CAUDIOMANAGER_H
 
-#include "CAudio.h"
+#include <list>
+
+class CAudio;
+class String;
 
 class CAudioManager
 {
@@ -22,15 +25,15 @@ public:
 	CAudioManager();
 	~CAudioManager();
 
-	bool				Initialize();
+	bool				Initialize(void);
 	void				Add(CAudio * pAudio);
 	void				Remove(CAudio * pAudio);
-	void				RemoveAll();
-	void				MuteAll();
-	inline bool			IsMuted() { return m_bMuted; }
-	void				UnmuteAll();
-	void				Process();
-	String				GetYoutubeStreamURL(String link);
+	void				RemoveAll(void);
+	void				MuteAll(void);
+	inline bool			IsMuted(void)  const { return m_bMuted; }
+	void				UnmuteAll(void);
+	void				Process(void);
+	String				GetYoutubeStreamURL(const String& link);
 };
 
 #endif // CAUDIOMANAGER_H

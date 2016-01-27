@@ -7,8 +7,6 @@
 *
 ***************************************************************/
 
-#include "StdInc.h"
-
 extern	CCore				* pCore;
 
 CStreamableEntity::CStreamableEntity( eStreamEntityType type, CM2Entity * pEntity, float fStreamDistance )
