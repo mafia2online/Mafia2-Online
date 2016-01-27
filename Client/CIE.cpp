@@ -8,6 +8,8 @@
 *
 ***************************************************************/
 
+#include "BaseInc.h"
+
 #include "CCore.h"
 
 #include "CModelManager.h"

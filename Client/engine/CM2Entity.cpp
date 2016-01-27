@@ -7,7 +7,14 @@
 *
 ***************************************************************/
 
-#include "../StdInc.h"
+#include "BaseInc.h"
+
+#include "Math/CVector3.h"
+#include "Math/CQuaternion.h"
+
+#include "engine/CM2Ped.h"
+
+#include "CM2Entity.h"
 
 CM2Entity::CM2Entity( M2Entity * pEntity )
 {
@@ -63,7 +70,7 @@ DWORD CM2Entity::GetGUID( void )
 	return 0;
 }
 
-void CM2Entity::SetPosition( CVector3 vecPosition )
+void CM2Entity::SetPosition( const CVector3& vecPosition )
 {
 	// Is the entity valid?
 	if( m_pEntity )
@@ -78,7 +85,7 @@ void CM2Entity::SetPosition( CVector3 vecPosition )
 	}
 }
 
-void CM2Entity::GetPosition( CVector3 * vecPosition, bool bCheckVehicle )
+void CM2Entity::GetPosition( CVector3& vecPosition, bool bCheckVehicle )
 {
 	// Is the entity valid?
 	if( m_pEntity )
@@ -92,11 +99,11 @@ void CM2Entity::GetPosition( CVector3 * vecPosition, bool bCheckVehicle )
 
 		// If the ped is in a vehicle, adjust the Z axis
 		if( bCheckVehicle && ((M2Ped *)m_pEntity)->m_pCurrentVehicle )
-			vecPosition->fZ -= 1.0f;
+			vecPosition.fZ -= 1.0f;
 	}
 }
 
-void CM2Entity::SetDirection( CVector3 vecDirection )
+void CM2Entity::SetDirection( const CVector3& vecDirection )
 {
 	// Is the entity valid?
 	if( m_pEntity )
@@ -111,7 +118,7 @@ void CM2Entity::SetDirection( CVector3 vecDirection )
 	}
 }
 
-void CM2Entity::GetDirection( CVector3 * vecDirection )
+void CM2Entity::GetDirection( CVector3& vecDirection )
 {
 	// Is the entity valid?
 	if ( m_pEntity )
@@ -125,7 +132,7 @@ void CM2Entity::GetDirection( CVector3 * vecDirection )
 	}
 }
 
-void CM2Entity::SetRotation( Quaternion quatRotation )
+void CM2Entity::SetRotation( const Quaternion& quatRotation )
 {
 	// Is the entity valid?
 	if( m_pEntity )
@@ -140,7 +147,7 @@ void CM2Entity::SetRotation( Quaternion quatRotation )
 	}
 }
 
-void CM2Entity::GetRotation( Quaternion * quatRotation )
+void CM2Entity::GetRotation( Quaternion& quatRotation )
 {
 	// Is the entity valid?
 	if( m_pEntity )
@@ -148,9 +155,13 @@ void CM2Entity::GetRotation( Quaternion * quatRotation )
 		DWORD dwFunc = m_pEntity->m_pVFTable->GetRotation;
 		M2Entity * pEntity = m_pEntity;
 
-		_asm push quatRotation;
-		_asm mov ecx, pEntity;
-		_asm call dwFunc;
+		_asm
+		{
+			lea eax, quatRotation
+			push eax;
+			mov ecx, pEntity;
+			call dwFunc;
+		}
 	}
 }
 

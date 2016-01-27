@@ -8,11 +8,19 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
+#include "BaseInc.h"
 
-#define VectorMA( v, s, b, o ) ( (o).fX = (v).fX + (b).fX * (s), (o).fY = (v).fY + (b).fY * (s), (o).fZ = (v).fZ + (b).fZ * (s) )
+#include "CLua.h"
 
-extern		CCore				* pCore;
+#include "Math/CVector3.h"
+#include "Math/CMatrix.h"
+
+#include "CM2Camera.h"
+
+#include "CGraphics.h"
+
+#include "CChat.h"
+#include "CCore.h"
 
 CM2Camera::CM2Camera( void )
 {
@@ -38,14 +46,13 @@ CM2Camera::CM2Camera( M2Camera * pCamera )
 		mov			pGameCamera, eax
 	}
 
-	// Set the game camera
 	SetGameCamera( pGameCamera );
 
 	// Build the projection matrix
 	D3DXMatrixPerspectiveFovLH( &m_projectionMatrix, m_pGameCamera->m_fFovAngle, m_pGameCamera->pCameraData->m_fAspect, m_pGameCamera->pCameraData->m_fNear, m_pGameCamera->pCameraData->m_fFar );
 
 #ifdef _DEBUG
-	pCore->GetChat()->AddDebugMessage( "CM2Camera::CM2Camera( pCamera: 0x%p, pGameCamera: 0x%p, pCameraData: 0x%p )", pCamera, m_pGameCamera, m_pGameCamera->pCameraData );
+	CCore::Instance()->GetChat()->AddDebugMessage( "CM2Camera::CM2Camera( pCamera: 0x%p, pGameCamera: 0x%p, pCameraData: 0x%p )", pCamera, m_pGameCamera, m_pGameCamera->pCameraData );
 #endif
 }
 
@@ -59,6 +66,7 @@ void CM2Camera::LockControl( bool bLock )
 	//if( bLock )
 	//	m_fLastSensitivityMultiplier = pCore->GetGame()->GetMouseSensitivityMultiplier();
 
+	// TODO: Move to COffsets
 	// Set the camera state
 	if ( bLock )
 		*(BYTE *)0x1BAF07C = 2;
@@ -74,12 +82,12 @@ void CM2Camera::LockControl( bool bLock )
 
 bool CM2Camera::IsLocked( void )
 {
+	// TODO: Move to COffsets and make the method const.
 	return (*(int *)0x1BAF07C != 0);
 }
 
 float CM2Camera::GetNearClip( void )
 {
-	// Is the camera active?
 	if( m_pGameCamera && m_pGameCamera->pCameraData )
 		return m_pGameCamera->pCameraData->m_fNear;
 
@@ -88,7 +96,6 @@ float CM2Camera::GetNearClip( void )
 
 float CM2Camera::GetFarClip( void )
 {
-	// Is the camera active?
 	if( m_pGameCamera && m_pGameCamera->pCameraData )
 		return m_pGameCamera->pCameraData->m_fFar;
 
@@ -97,7 +104,6 @@ float CM2Camera::GetFarClip( void )
 
 float CM2Camera::GetAspectRatio( void )
 {
-	// Is the camera active?
 	if( m_pGameCamera && m_pGameCamera->pCameraData )
 		return m_pGameCamera->pCameraData->m_fAspect;
 
@@ -106,7 +112,6 @@ float CM2Camera::GetAspectRatio( void )
 
 float CM2Camera::GetFovAngle( void )
 {
-	// Is the camera active?
 	if( m_pGameCamera )
 		return m_pGameCamera->m_fFovAngle;
 
@@ -115,7 +120,6 @@ float CM2Camera::GetFovAngle( void )
 
 int CM2Camera::GetWindowWidth( void )
 {
-	// Is the camera active?
 	if( m_pGameCamera )
 		return m_pGameCamera->m_iWindowWidth;
 
@@ -124,7 +128,6 @@ int CM2Camera::GetWindowWidth( void )
 
 int CM2Camera::GetWindowHeight( void )
 {
-	// Is the camera active?
 	if( m_pGameCamera )
 		return m_pGameCamera->m_iWindowHeight;
 
@@ -133,28 +136,22 @@ int CM2Camera::GetWindowHeight( void )
 
 void CM2Camera::GetPosition( CVector3 * vecPosition )
 {
-	// Is the camera active?
 	if( m_pGameCamera )
 	{
-		// Get the camera world matrix
 		Matrix43 worldMatrix;
 		GetWorldMatrix( &worldMatrix );
 
-		// Copy the camera position vector
 		memcpy( vecPosition, &CVector3( worldMatrix._21, worldMatrix._32, worldMatrix._43 ), sizeof(CVector3) );
 	}
 }
 
 void CM2Camera::GetRight( CVector3 * vecRight )
 {
-	// Is the camera active?
 	if( m_pGameCamera )
 	{
-		// Get the camera world matrix
 		Matrix43 worldMatrix;
 		GetWorldMatrix( &worldMatrix );
 
-		// Copy the camera right vector
 		memcpy( vecRight, &CVector3( worldMatrix._33, worldMatrix._41, worldMatrix._42 ), sizeof(CVector3) );
 	}
 }
@@ -165,47 +162,35 @@ void CM2Camera::GetUp( CVector3 * vecUp )
 
 void CM2Camera::GetForward( CVector3 * vecForward )
 {
-	// Is the camera active?
 	if( m_pGameCamera )
 	{
-		// Get the camera world matrix
 		Matrix43 worldMatrix;
 		GetWorldMatrix( &worldMatrix );
-
-		// Copy the matrix forward vector
 		memcpy( vecForward, &CVector3( worldMatrix._22, worldMatrix._23, worldMatrix._31 ), sizeof(CVector3) );
 	}
 }
 
 void CM2Camera::GetWorldViewProjection( D3DXMATRIX * mat )
 {
-	// Is the camera active?
 	if( m_pGameCamera && m_pGameCamera->pCameraData )
 	{
-		// Copy the matrix
 		memcpy( mat, &m_pGameCamera->pCameraData->m_worldViewProjection, sizeof(D3DXMATRIX) );
-
-		// Transpose the matrix
 		D3DXMatrixTranspose( mat, mat );
 	}
 }
 
 void CM2Camera::GetWorldMatrix( Matrix43 * mat )
 {
-	// Is the camera active?
 	if( m_pGameCamera && m_pGameCamera->pCameraData )
 	{
-		// Copy the matrix
 		memcpy( mat, &m_pGameCamera->pCameraData->m_worldMatrix, sizeof(Matrix43) );
 	}
 }
 
 bool CM2Camera::IsOnScreen(const CVector3 & vecPosition)
 {
-#define CVEC_TO_D3DVEC(vec) &D3DXVECTOR3(vec.fX, vec.fY, vec.fZ)
-#define D3DVEC_TO_CVEC(vec) &CVector3(vec.x, vec.y, vec.z)
+	CCore *pCore = CCore::Instance();
 
-	// If camera not init
 	if (pCore->GetCamera() == NULL)
 		return (false);
 
@@ -216,7 +201,9 @@ bool CM2Camera::IsOnScreen(const CVector3 & vecPosition)
 	pCore->GetCamera()->GetLookAt(&vecCamLookAt);
 
 	D3DXMATRIX matView;
-	D3DXMatrixLookAtLH(&matView, CVEC_TO_D3DVEC(vecCamPos), CVEC_TO_D3DVEC(vecCamLookAt), &D3DXVECTOR3(0, 0, 1));
+	D3DXVECTOR3 _vecCamPos(vecCamPos.fX, vecCamPos.fY, vecCamPos.fZ);
+	D3DXVECTOR3 _vecCamLookAt(vecCamLookAt.fX, vecCamLookAt.fY, vecCamLookAt.fZ);
+	D3DXMatrixLookAtLH(&matView, &_vecCamPos, &_vecCamLookAt, &D3DXVECTOR3(0, 0, 1));
 
 	D3DVIEWPORT9 viewport;
 	pCore->GetGraphics()->GetDevice()->GetViewport(&viewport);
@@ -232,20 +219,17 @@ bool CM2Camera::IsOnScreen(const CVector3 & vecPosition)
 	D3DXMatrixIdentity(&matWorld);
 
 	D3DXVECTOR3 vecSPos;
-	D3DXVec3Project(&vecSPos, CVEC_TO_D3DVEC(vecPosition), &viewport, &matProj, &matView, &matWorld);
+	D3DXVECTOR3 _vecPosition(vecPosition.fX, vecPosition.fY, vecPosition.fZ);
+	D3DXVec3Project(&vecSPos, &_vecPosition, &viewport, &matProj, &matView, &matWorld);
 
 	return (vecSPos.z < 1.f);
 }
 
 void CM2Camera::GetViewMatrix( D3DXMATRIX * mat )
 {
-	// Is the camera active?
 	if( m_pGameCamera && m_pGameCamera->pCameraData )
 	{
-		// Copy the matrix
 		memcpy( mat, &m_pGameCamera->pCameraData->m_viewMatrix, sizeof(D3DXMATRIX) );
-
-		// Transpose the matrix
 		D3DXMatrixTranspose( mat, mat );
 	}
 }
@@ -258,23 +242,22 @@ void CM2Camera::GetProjectionMatrix( D3DXMATRIX * mat )
 
 void CM2Camera::GetLookAt( CVector3 * vecLookAt )
 {
-	// Is the camera active?
 	if( m_pGameCamera )
 	{
 		CVector3 vCamPos = m_pGameCamera->m_vecCamPos;
 		CVector3 vCamUp = m_pGameCamera->m_vecCamUp;
 		CVector3 vDir = ( vCamUp - vCamPos );
 
-		CVector3 vecLook;
-		VectorMA( vCamPos, 8192.0f, vDir, vecLook );
-		
-		// Copy
-		memcpy( vecLookAt, &vecLook, sizeof(CVector3) );
+		// TODO: Find out what is the "8192.0f" if it's some random value big
+		//       enough to fit this case or some value from the game.
+		static const float DIRECTION_MULTIPLIER = 8192.0f;
+
+		*vecLookAt = (vCamPos + vDir * DIRECTION_MULTIPLIER);
 	}
 }
 
 void CM2Camera::SimpleShake(float speed, float strength, float duration)
 {
-	// Execute the camera shake
+	// TODO: Reverse.
 	CLua::Executef("game.cameramanager:GetPlayerMainCamera(0):SimpleShake(%f,%f,%f)", speed, strength, duration);
 }

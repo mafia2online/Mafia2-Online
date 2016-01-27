@@ -8,6 +8,8 @@
 ***************************************************************/
 
 #ifdef _CLIENT
+#include "BaseInc.h"
+
 #include <Windows.h>
 
 #include "../Client/CCore.h"

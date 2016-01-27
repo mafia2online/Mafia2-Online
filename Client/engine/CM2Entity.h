@@ -9,6 +9,9 @@
 
 #pragma once
 
+#include "d3d9.h"
+#include "Math/CMatrix.h"
+
 #define	FUNC_CEntity__Activate				0x1189E20
 #define	FUNC_CEntity__Deactivate			0x1189E70
 
@@ -95,14 +98,14 @@ public:
 	
 	DWORD					GetGUID							( void );
 	
-	void					SetPosition						( CVector3 vecPosition );
-	void					GetPosition						( CVector3 * vecPosition, bool bCheckVehicle = false );
+	void					SetPosition						( const CVector3& vecPosition );
+	void					GetPosition						( CVector3& vecPosition, bool bCheckVehicle = false );
 
-	void					SetDirection					( CVector3 vecDirection );
-	void					GetDirection					( CVector3 * vecDirection );
+	void					SetDirection					( const CVector3& vecDirection );
+	void					GetDirection					( CVector3& vecDirection );
 
-	void					SetRotation						( Quaternion quatRotation );
-	void					GetRotation						( Quaternion * quatRotation );
+	void					SetRotation						( const Quaternion& quatRotation );
+	void					GetRotation						( Quaternion& quatRotation );
 
 	bool					IsOnScreen						( void );
 
