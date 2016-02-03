@@ -7,6 +7,8 @@
 *
 ***************************************************************/
 
+#include "BaseInc.h"
+
 #include "dinput.h"
 
 #include "CDirectInput8Hook.h"

@@ -7,7 +7,13 @@
 *
 ***************************************************************/
 
-#include "StdInc.h"
+#include "BaseInc.h"
+
+#include "engine/CM2SlotManager.h"
+
+#include "CModelManager.h"
+
+#include "CIE.h"
 
 void M2ModelMgr::ChangeModel( const char * pszDir, const char * pszModel, int iHumanColour )
 {

@@ -7,7 +7,9 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
+#include "BaseInc.h"
+
+#include "CM2PhysFSFile.h"
 
 CM2PhysFSFile::CM2PhysFSFile( M2PhysFSFile * pFile )
 {

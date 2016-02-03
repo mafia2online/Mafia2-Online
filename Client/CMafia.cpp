@@ -7,9 +7,36 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
+#include "BaseInc.h"
 
-extern	CCore				* pCore;
+#include "CMainMenu.h"
+#include "CGUI.h"
+
+#include "CM2PhysFS.h"
+#include "engine/CM2Navigation.h"
+
+#include "CMafia.h"
+
+#include "CM2Hud.h"
+
+#include "CString.h"
+#include "CLua.h"
+
+#include "CCore.h"
+
+#include "COffsets.h"
+
+#include "Math/CVector3.h"
+
+#include "CNetworkPlayer.h"
+#include "CLocalPlayer.h"
+
+#include "CM2Camera.h"
+
+#include "CChat.h"
+
+#include "CEvents.h"
+
 bool						bOldChatWindowState;
 
 CMafia::CMafia( void )
@@ -49,7 +76,7 @@ void CMafia::FadeSound( bool bFadeOut, float fTimeInSeconds )
 
 void CMafia::InfoAreaShow( bool bToggle )
 {
-	pCore->GetHud()->InfoAreaShow( bToggle );
+	CCore::Instance()->GetHud()->InfoAreaShow( bToggle );
 }
 
 void CMafia::MoneyShow( bool bToggle )
@@ -59,7 +86,7 @@ void CMafia::MoneyShow( bool bToggle )
 
 void CMafia::ScoreShow( bool bToggle )
 {
-	pCore->GetHud()->ScoreShow( bToggle );
+	CCore::Instance()->GetHud()->ScoreShow( bToggle );
 }
 
 void CMafia::SpeedoMeterShow( bool bToggle )
@@ -69,7 +96,7 @@ void CMafia::SpeedoMeterShow( bool bToggle )
 
 void CMafia::ActionButtonsShow( bool bToggle )
 {
-	pCore->GetHud()->ActionButtonsShow( bToggle );
+	CCore::Instance()->GetHud()->ActionButtonsShow( bToggle );
 }
 
 void CMafia::PlayMusic( const char * szMusic )
@@ -98,7 +125,7 @@ void CMafia::ChangeSeason ( bool bSummer )
 {
 	// Get the current player position
 	CVector3 vecPosition;
-	pCore->GetPlayerManager()->GetLocalPlayer()->GetPosition ( &vecPosition );
+	CLocalPlayer::Instance()->GetPosition ( &vecPosition );
 
 	// Are we changing to summer?
 	if ( bSummer && !m_bSummer )
@@ -128,13 +155,15 @@ void CMafia::ChangeSeason ( bool bSummer )
 void CMafia::Spawn( bool bFade )
 {
 	// Hide the main menu
-	if (pCore->GetGUI()->GetMainMenu()) {
-		pCore->GetGUI()->GetMainMenu()->SetVisible(false);
-		pCore->GetGUI()->SetCursorVisible(false);
+	if (CGUI::Instance()->GetMainMenu()) {
+		CGUI::Instance()->GetMainMenu()->SetVisible(false);
+		CGUI::Instance()->SetCursorVisible(false);
 		// We reload the weather to prevent black ground with winter
 		m_bSummer = !m_bSummer;
 		ChangeSeason(!m_bSummer);
 	}
+
+	CM2Hud *pHud = CCore::Instance()->GetHud();
 
 	// Set the default sensitity multiplier
 	SetMouseSensitivityMultiplier( 1.0f );
@@ -143,14 +172,14 @@ void CMafia::Spawn( bool bFade )
 	if( bFade )
 	{
 		// Re-fade the screen
-		pCore->GetHud()->FadeIn( 1000 );
+		pHud->FadeIn( 1000 );
 
 		// Fade in the sound
 		FadeSound( false, 1 );
 	}
 
 	// Handle the spawn with the localplayer
-	pCore->GetPlayerManager()->GetLocalPlayer()->HandleSpawn( false );
+	CLocalPlayer::Instance()->HandleSpawn( false );
 
 	// Disable npc generators and far ambients
 	SwitchGenerators( false, false );
@@ -164,7 +193,7 @@ void CMafia::Spawn( bool bFade )
 	CLua::Execute( "game.shop:SetAllShopExplored()" );
 
 	// Enable the hud
-	pCore->GetHud()->Show( true );
+	pHud->Show( true );
 
 	// Disable low-health FX
 	//pCore->GetHud()->ShowLowHealthFX( false );
@@ -172,17 +201,19 @@ void CMafia::Spawn( bool bFade )
 	// Disable action buttons
 	//ActionButtonsShow( false );
 
+	bool bIsSummer = CCore::Instance()->IsSummer();
+
 	// Load season
-	pCore->GetGame()->ChangeSeason ( pCore->IsSummer () );
+	CCore::Instance()->GetGame()->ChangeSeason ( bIsSummer );
 
 	// Set the radio to the summer setting
-	SetSummerRadio ( pCore->IsSummer () );
+	SetSummerRadio ( bIsSummer );
 
 	// Unlock player controls
-	pCore->GetPlayerManager()->GetLocalPlayer()->LockControls( false );
+	CLocalPlayer::Instance()->LockControls( false );
 
 	// Unlock camera control
-	pCore->GetCamera()->LockControl( false );
+	CCore::Instance()->GetCamera()->LockControl( false );
 
 	// Don't reload game after death
 	*(BYTE *)0x1BB057D = 1;
@@ -203,23 +234,27 @@ void CMafia::SwitchGenerators( bool bPeds, bool bFarAmbients )
 
 void CMafia::CreateTimer( float fTime )
 {
-	// Toggle the timer
-	pCore->GetHud()->GetHudTimer()->Toggle( true );
+	CM2HudTimer *pTimer = CCore::Instance()->GetHud()->GetHudTimer();
+	assert ( pTimer );
 
-	// Set the timer time
-	pCore->GetHud()->GetHudTimer()->SetTime( fTime );
+	pTimer->Toggle ( true );
+	pTimer->SetTime ( fTime );
 }
 
 void CMafia::StartTimer( void )
 {
-	// Start the timer
-	pCore->GetHud()->GetHudTimer()->Start();
+	CM2HudTimer *pTimer = CCore::Instance()->GetHud()->GetHudTimer();
+	assert ( pTimer );
+
+	pTimer->Start();
 }
 
 void CMafia::StopTimer( void )
 {
-	// Start the timer
-	pCore->GetHud()->GetHudTimer()->Stop();
+	CM2HudTimer *pTimer = CCore::Instance()->GetHud()->GetHudTimer();
+	assert ( pTimer );
+
+	pTimer->Stop();
 }
 
 void CMafia::SetMouseSensitivityMultiplier( float fSensitivity )
@@ -292,17 +327,22 @@ void * CMafia::allocateBuffer( int iLen )
 
 bool CMafia::OpenMap ( bool bOpen )
 {
-	// Should we open the map?
+	CCore *pCore = CCore::Instance();
+
+
 	if ( bOpen )
 	{
+
 		// Trigger the script event
-		if ( pCore->GetClientScriptingManager()->GetEvents()->Call( "onClientOpenMap" ).GetInteger () == 1 )
+		if ( CEvents::Instance()->Call( "onClientOpenMap" ).GetInteger () == 1 )
 		{
+			CChat *pChat = pCore->GetChat();
+
 			// Open the map
 			CLua::Execute ( "game.gui:OpenMap(1)" );
 
 			// Get the chat window visibility
-			bOldChatWindowState = pCore->GetChat()->IsVisible ();
+			bOldChatWindowState = pChat->IsVisible ();
 
 			// Hide the chat window
 			pCore->GetChat()->SetVisible ( false );
@@ -315,12 +355,13 @@ bool CMafia::OpenMap ( bool bOpen )
 	}
 	else
 	{
+		CChat *pChat = pCore->GetChat();
+
 		// Restore the chat window visibility
-		pCore->GetChat()->SetVisible ( bOldChatWindowState );
+		pChat->SetVisible ( bOldChatWindowState );
 
 		// Call the script event
-		if( pCore->GetClientScriptingManager() )
-			pCore->GetClientScriptingManager()->GetEvents()->Call( "onClientCloseMap" );
+		CEvents::Instance()->Call( "onClientCloseMap" );
 
 		// Mark as not opened
 		m_bMapOpen = false;
@@ -334,10 +375,10 @@ bool CMafia::OpenMap ( bool bOpen )
 void CMafia::OnGameStart( void )
 {
 	// Lock player controls
-	pCore->GetPlayerManager()->GetLocalPlayer()->LockControls( true );
+	CLocalPlayer::Instance()->LockControls( true );
 
 	// Lock camera control
-	pCore->GetCamera()->LockControl( true );
+	CCore::Instance()->GetCamera()->LockControl( true );
 
 	// Mute the sound
 	FadeSound( true, 0 );

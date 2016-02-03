@@ -7,7 +7,12 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
+#include "BaseInc.h"
+
+#include "CCore.h"
+#include "CExceptionHandler.h"
+
+#include "CNetworkModule.h"
 
 CCore*		pCore = NULL;
 HMODULE		g_hModule = NULL;

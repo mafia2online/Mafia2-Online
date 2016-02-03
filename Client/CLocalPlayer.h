@@ -9,7 +9,17 @@
 
 #pragma once
 
-class CLocalPlayer : public CNetworkPlayer
+#include <list>
+
+#include "ExplicitSingleton.h"
+
+// As we have to include it theoretically in all the places
+// we are using local player include it here.
+#include "CNetworkPlayer.h"
+
+class CNetworkVehicle;
+
+class CLocalPlayer : public CNetworkPlayer, public ExplicitSingleton<CLocalPlayer>
 {
 
 private:

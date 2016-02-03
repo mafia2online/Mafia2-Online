@@ -7,9 +7,15 @@
 *
 ***************************************************************/
 
-#include "../StdInc.h"
+#include "BaseInc.h"
 
-extern	CCore		* pCore;
+#include "CM2Entity.h"
+#include "CM2Vehicle.h"
+#include "engine/CM2Ped.h"
+
+#include "CColor.h"
+
+#include "COffsets.h"
 
 void _declspec(naked) M2Vehicle::UnlockPlayerEntryPoints(void)
 {

@@ -7,7 +7,7 @@
 *
 ***************************************************************/
 
-#include "StdInc.h"
+
 
 extern	CCore		* pCore;
 std::list< CNetworkModel* > CNetworkModelManager::m_loadedModels;

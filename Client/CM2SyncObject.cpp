@@ -7,9 +7,11 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
+#include "BaseInc.h"
 
-extern	CCore			* pCore;
+#include "Math/CVector3.h"
+
+#include "CM2SyncObject.h"
 
 CM2SyncObject::CM2SyncObject( C_SyncObject * pSyncObject )
 {

@@ -7,7 +7,11 @@
 *
 ***************************************************************/
 
-#include "../StdInc.h"
+#include "BaseInc.h"
+
+#include "Math/CVector3.h"
+
+#include "CM2Navigation.h"
 
 CM2Navigation::CM2Navigation( M2Navigation * pNavigation )
 {
@@ -21,7 +25,7 @@ CM2Navigation::~CM2Navigation( void )
 {
 }
 
-int CM2Navigation::RegisterIconPos( Vector2 vecPosition, int iLibrary, int iIcon )
+int CM2Navigation::RegisterIconPos( const Vector2& vecPosition, int iLibrary, int iIcon )
 {
 	int iIconId = 0;
 

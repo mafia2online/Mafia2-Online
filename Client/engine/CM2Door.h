@@ -9,6 +9,8 @@
 
 #pragma once
 
+class M2Model;
+
 class CM2Door
 {
 public:

@@ -7,9 +7,19 @@
 *
 ***************************************************************/
 
-#include "../StdInc.h"
+#include "BaseInc.h"
 
-extern	CCore			* pCore;
+#include "CNetworkPlayer.h"
+#include "CLocalPlayer.h"
+#include "CPlayerManager.h"
+#include "CCore.h"
+
+#include "CM2Entity.h"
+#include "CM2Ped.h"
+
+#include "CM2SyncObject.h"
+
+#include "SharedUtility.h"
 
 CM2Ped::CM2Ped( M2Ped * pPed ) : CM2Entity( pPed )
 {
@@ -510,8 +520,9 @@ C_SyncObject * CM2Ped::AimAt( CVector3 vecPosition )
 		M2Entity * pEnt = NULL;
 
 		// Get the localplayer entity
-		if( pCore->GetPlayerManager()->GetLocalPlayer() && pCore->GetPlayerManager()->GetLocalPlayer()->IsSpawned() )
-			pEnt = pCore->GetPlayerManager()->GetLocalPlayer()->GetPlayerPed()->GetPed();
+		CLocalPlayer *pLocalPlayer = CLocalPlayer::Instance();
+		if( pLocalPlayer && pLocalPlayer->IsSpawned() )
+			pEnt = pLocalPlayer->GetPlayerPed()->GetPed();
 
 		_asm push 1;
 		_asm lea ecx, vecPosition;
@@ -573,8 +584,9 @@ C_SyncObject * CM2Ped::LookAt ( CVector3 vecPosition )
 		M2Entity * pEnt = NULL;
 
 		// Get the localplayer entity
-		if( pCore->GetPlayerManager()->GetLocalPlayer() && pCore->GetPlayerManager()->GetLocalPlayer()->IsSpawned() )
-			pEnt = pCore->GetPlayerManager()->GetLocalPlayer()->GetPlayerPed()->GetPed();
+		CLocalPlayer *pLocalPlayer = CLocalPlayer::Instance();
+		if( pLocalPlayer && pLocalPlayer->IsSpawned() )
+			pEnt = pLocalPlayer->GetPlayerPed()->GetPed();
 
 		_asm push 1;
 		_asm lea ecx, vecPosition;
@@ -676,7 +688,7 @@ void CM2Ped::SetAnimStyle(const char *dir, const char *set)
 {
 	if (strlen(dir) > 0 && strlen(set) > 0){
 		if (m_pPed){
-			M2EntityData *pEntityData = pCore->GetPlayerManager()->GetLocalPlayer()->GetPlayerPed()->GetPed()->m_pEntityData;
+			M2EntityData *pEntityData = CLocalPlayer::Instance()->GetPlayerPed()->GetPed()->m_pEntityData;
 
 			DWORD func = 0x956720;
 

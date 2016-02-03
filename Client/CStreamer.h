@@ -9,11 +9,15 @@
 
 #pragma once
 
+#include <list>
+
+#include "ExplicitSingleton.h"
+
 class CStreamableEntity;
 
 static const unsigned STREAMER_TICKRATE = 3000;
 
-class CStreamer : public std::list< CStreamableEntity* >
+class CStreamer : public std::list< CStreamableEntity* >, public ExplicitSingleton<CStreamer>
 {
 
 private:

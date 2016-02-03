@@ -7,7 +7,7 @@
 *
 ***************************************************************/
 
-#include "d3d9.h"
+#include "BaseInc.h"
 
 #include "CDirect3D9Hook.h"
 #include "CDirect3D9Proxy.h"
