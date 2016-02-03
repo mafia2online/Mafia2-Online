@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include "d3d9.h"
+
 class CDirect3D9Hook
 {
 

@@ -80,6 +80,8 @@ public:
 	C_SyncObjectUserData* m_pUserData;				// 0014 - 0018
 };
 
+class CVector3;
+
 class CM2SyncObject
 {
 
@@ -110,5 +112,4 @@ public:
 	void						SetMoveTargetData					( CVector3 vecEndDirection, BYTE bMoveType );
 
 	void						SetDoneOnDelete						( bool b ) { m_bDoneOnDelete = b; }
-
 };

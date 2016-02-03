@@ -7,9 +7,10 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
+#include "BaseInc.h"
 
-extern	CCore				* pCore;
+#include "CM2VideoSettings.h"
+
 bool						CM2VideoSettings::m_bChangeResolution = false;
 bool						CM2VideoSettings::m_bChangeFullScreen = false;
 bool						CM2VideoSettings::m_bChangeVerticalSync = false;

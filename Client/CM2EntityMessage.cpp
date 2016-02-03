@@ -7,16 +7,29 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
-#include	"CM2Enums.h"
+#include "BaseInc.h"
 
-extern	CCore		* pCore;
+#include "CChat.h"
+#include "CCore.h"
+
+#include "CM2EntityMessage.h"
+#include "CM2Enums.h"
+
+#include "engine/CM2Entity.h"
+#include "engine/CM2Ped.h"
+
+#include "CNetworkPlayer.h"
+#include "CRemotePlayer.h"
+#include "CLocalPlayer.h"
+#include "CPlayerManager.h"
 
 bool CM2EntityMessage::HandleEntityEvent( M2EntityMessage * pMessage )
 {
 	// Is the event invalid?
 	if( !pMessage )
 		return false;
+
+	CCore *pCore = CCore::Instance();
 
 	// Is the localplayer instance invalid?
 	if( !pCore->GetPlayerManager() || !pCore->GetPlayerManager()->GetLocalPlayer() )
@@ -86,16 +99,10 @@ bool CM2EntityMessage::HandleEntityEvent( M2EntityMessage * pMessage )
 			}
 
 		case M2Enums::ON_ACTION:
-		{
-			pCore->GetChat()->AddDebugMessage("ON_ACTION (0x%p, %d, %d)", pMessage, pMessage->m_dwSenderGUID, pMessage->m_dwReceiveGUID);
-			break;
-		}
-
-		default:
-		{
-			pCore->GetChat()->AddDebugMessage("Unhandled entity message %d", pMessage->m_dwMessage);
-			break;
-		}
+			{
+				pCore->GetChat()->AddDebugMessage("ON_ACTION (0x%p, %d, %d)", pMessage, pMessage->m_dwSenderGUID, pMessage->m_dwReceiveGUID);
+				break;
+			}
 
 		case M2Enums::ON_VEHICLE_START_ENTER:
 			{
@@ -125,6 +132,12 @@ bool CM2EntityMessage::HandleEntityEvent( M2EntityMessage * pMessage )
 
 				// Call our event
 				pLocalPlayer->OnDeath( pKiller );
+				break;
+			}
+
+		default:
+			{
+				pCore->GetChat()->AddDebugMessage("Unhandled entity message %d", pMessage->m_dwMessage);
 				break;
 			}
 		}

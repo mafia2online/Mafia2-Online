@@ -36,7 +36,9 @@ class CMainMenu;
 class CServerBrowser;
 class CMenuSettings;
 
-class CGUI
+#include "ExplicitSingleton.h"
+
+class CGUI : public ExplicitSingleton<CGUI>
 {
 
 private:

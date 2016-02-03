@@ -8,9 +8,32 @@
 *
 ***************************************************************/
 
-#include		"StdInc.h"
+#include "BaseInc.h"
 
-extern	CCore			* pCore;
+#include "CPatches.h"
+
+#include "CMafia.h"
+
+#include "engine/CM2Entity.h"
+#include "engine/CM2Ped.h"
+
+#include "CChat.h"
+
+#include "engine/CM2Door.h"
+
+#include "CLocalPlayer.h"
+
+#include "CCore.h"
+
+#include "CIE.h"
+
+#include "CPatcher.h"
+
+#include "COffsets.h"
+
+#include "CM2EntityMessage.h"
+#include "CrashRpt.h"
+
 sub_410440				CPatches::onGameInit = NULL;
 onGameEvent_t			CPatches::onGameEvent = NULL;
 ProcessEntities_t		CPatches::processEntities = NULL;
@@ -30,36 +53,42 @@ DWORD sub_98B630_edx = 0x0;
 //  0x98BF90 = Passenger exit
 void __declspec( naked ) sub_98B630( void )
 {
-	_asm mov eax, [ecx+0A0h];
-	_asm mov pPed, eax;
-	_asm push ebp;
-	_asm mov ebp, esp;
-	_asm mov eax, [ebp+4];
-	_asm mov sub_98B630_edx, eax;
-	_asm pop ebp;
-	_asm pushad;
+	_asm 
+	{
+		mov eax, [ecx+0A0h]
+		mov pPed, eax
+		push ebp
+		mov ebp, esp
+		mov eax, [ebp+4]
+		mov sub_98B630_edx, eax
+		pop ebp
+		pushad
+	}
 
 	// Is the playermanager and localplayer active?
-	if( pCore->GetPlayerManager () && pCore->GetPlayerManager()->GetLocalPlayer () )
+	if( CLocalPlayer::Instance() )
 	{
 		// hacky
-		if( sub_98B630_edx == 0x4348F7 && pCore->GetPlayerManager()->GetLocalPlayer()->IsSpawned() && pPed == pCore->GetPlayerManager()->GetLocalPlayer()->GetPlayerPed()->GetPed() )
+		if( sub_98B630_edx == 0x4348F7 && CLocalPlayer::Instance()->IsSpawned() && pPed == CLocalPlayer::Instance()->GetPlayerPed()->GetPed() )
 		{
 			// Flag the localplayer for fast exit vehicle
-			pCore->GetPlayerManager()->GetLocalPlayer()->FlagForFastExitVehicle( true );
+			CLocalPlayer::Instance()->FlagForFastExitVehicle( true );
 
 			// Handle the water enter with the localplayer
-			pCore->GetPlayerManager()->GetLocalPlayer()->OnEnterWater();
-			pCore->GetChat()->AddDebugMessage("Entered water !");
+			CLocalPlayer::Instance()->OnEnterWater();
+			CChat::Instance()->AddDebugMessage("Entered water !");
 		}
 	}
 
-	_asm popad;
-	_asm sub esp, 18h;
-	_asm push esi;
-	_asm mov esi, ecx;
-	_asm mov ecx, [esi+88h];
-	_asm jmp sub_98B630_jmp;
+	_asm
+	{
+		popad
+		sub esp, 18h
+		push esi
+		mov esi, ecx
+		mov ecx, [esi+88h]
+		jmp sub_98B630_jmp
+	}
 }
 
 // crashy!
@@ -71,17 +100,17 @@ void __declspec ( naked ) HOOK_CDoor__OnUse ( void )
 	_asm pushad;
 
 	// Is the playermanager and localplayer active?
-	if( pCore->GetPlayerManager () && pCore->GetPlayerManager()->GetLocalPlayer () && pCore->GetPlayerManager()->GetLocalPlayer()->IsSpawned () )
+	if( CLocalPlayer::Instance() && CLocalPlayer::Instance()->IsSpawned() )
 	{
 
 		CLogFile::Printf ( "HOOK_CDoor__OnUse ( 0x%p )", HOOK_CDoor__OnUse__ECX );
-		pCore->GetChat()->AddDebugMessage ( "HOOK_CDoor__OnUse ( 0x%p )", HOOK_CDoor__OnUse__ECX );
+		CChat::Instance()->AddDebugMessage ( "HOOK_CDoor__OnUse ( 0x%p )", HOOK_CDoor__OnUse__ECX );
 		CM2Door * pDoor = *(CM2Door **) HOOK_CDoor__OnUse__ECX;
 
 		if ( pDoor )
 		{
 			CLogFile::Printf ( "Is door closed? %s", (pDoor->IsClosed () ? "Yes" : "No") );
-			pCore->GetChat()->AddDebugMessage ( "Is door closed? %s", (pDoor->IsClosed () ? "Yes" : "No") );
+			CChat::Instance()->AddDebugMessage ( "Is door closed? %s", (pDoor->IsClosed () ? "Yes" : "No") );
 			//pDoor->GetHash ();
 		}
 
@@ -137,7 +166,7 @@ void __declspec ( naked ) HOOK_C_SDSManager__ActivateStreamMapLine ( void )
 
 void C_Vehicle__OnFuelTankShot ( void )
 {
-	pCore->GetChat()->AddDebugMessage ( "BRO U SHOT THE FUEL TANK!" );
+	CChat::Instance()->AddDebugMessage ( "BRO U SHOT THE FUEL TANK!" );
 }
 
 int iiTargetSeat;
@@ -172,7 +201,7 @@ void __declspec(naked) C_Human__TakeDamage ( void )
 	_asm pushad;
 
 	// Get the localplayer ped
-	ppLocalPlayer = pCore->GetPlayerManager()->GetLocalPlayer();
+	ppLocalPlayer = CLocalPlayer::Instance();
 	pLocalPedddddd = ppLocalPlayer->GetPlayerPed()->GetPed();
 
 	if ( pVehicleCrashPlayer == pLocalPedddddd )
@@ -220,7 +249,7 @@ void __declspec ( naked ) HOOK_C_Game__OnGameLoad ( void )
 	_asm pushad;
 
 	// Call the game load handler
-	pCore->OnGameLoad ();
+	CCore::Instance()->OnGameLoad ();
 
 	_asm popad;
 	_asm push ebx;
@@ -241,7 +270,7 @@ void CPatches::Initialise( void )
 	CLogFile::Printf( "Installing patches..." );
 
 	// Unprotect the .text segment
-	CPatcher::Unprotect( (pCore->GetBaseAddress() + 0x400000 + 0x1000), 0x94C000 );
+	CPatcher::Unprotect( (CCore::Instance()->GetBaseAddress() + 0x400000 + 0x1000), 0x94C000 );
 
 	// Hook C_Game__OnGameInit
 	onGameInit = (sub_410440) CPatcher::InstallJmpPatch( COffsets::FUNC_CGame__OnGameInit, (DWORD)HOOK_CGame__OnGameInit );
@@ -378,6 +407,8 @@ int CPatches::HOOK_CGame__OnGameInit( lua_State * a1, signed int a2, const PCHAR
 	// Was this the game start?
 	if( !strcmp( a3, "onGameInit" ) )
 	{
+		CCore *pCore = CCore::Instance();
+
 		// Is the game not yet loaded?
 		if( !pCore->IsGameLoaded() )
 		{
@@ -394,7 +425,7 @@ int CPatches::HOOK_CGame__OnGameInit( lua_State * a1, signed int a2, const PCHAR
 		if( !bFirstLoad )
 		{
 			// Get the localplayer
-			CLocalPlayer * pLocalPlayer = pCore->GetPlayerManager()->GetLocalPlayer();
+			CLocalPlayer * pLocalPlayer = CLocalPlayer::Instance();
 
 			// Is the localplayer instance valid?
 			if( pLocalPlayer )
@@ -425,6 +456,8 @@ int CPatches::HOOK_CGame__OnGameEvent( lua_State * a1, void * a2, const char * s
 
 int __fastcall CPatches::HOOK_CEntMgr__ProcessEntities( void * This, void * _EDX, void * pUnk1 )
 {
+	CCore *pCore = CCore::Instance();
+
 	// Call the game process
 	pCore->OnGameProcess ();
 
@@ -454,6 +487,29 @@ int CPatches::HOOK_OnGameProcessStart( HINSTANCE hInstance, int a2, int a3, int 
 	return onGameProcessStart( hInstance, a2, a3, a4 );
 }
 
+/**
+ * Checks if the weapon is local player weapon.
+ *
+ * @param[in] pWeaponData The weapon data to be checked.
+ * @return @c true in case weapon data is local player current weapon data
+ *         @c false otherwise.
+ */
+static bool IsLocalPlayerWeapon ( M2WeaponData * pWeaponData )
+{
+	CLocalPlayer *pLocalPlayer = CLocalPlayer::Instance();
+	if ( !pLocalPlayer )
+		return false;
+	
+	CM2Ped *pPed = pLocalPlayer->GetPlayerPed();
+	if ( !pPed )
+		return false;
+
+	M2Ped *pGamePed = pPed->GetPed();
+	assert ( pGamePed );
+
+	return pGamePed->m_pWeaponData == pWeaponData;
+}
+
 M2WeaponData * pDoShotHumanInventory = NULL;
 DWORD FUNC_CHumanInventory__ProcessShot_END = 0x978016; // Steam: 0x09898E6
 void __declspec( naked ) CPatches::HOOK_CHumanInventory__DoShot( void )
@@ -462,7 +518,7 @@ void __declspec( naked ) CPatches::HOOK_CHumanInventory__DoShot( void )
 	_asm pushad;
 
 	// Was this the localplayer?
-	if( pCore->GetPlayerManager() && pCore->GetPlayerManager()->GetLocalPlayer() && pCore->GetPlayerManager()->GetLocalPlayer()->GetPlayerPed() && pCore->GetPlayerManager()->GetLocalPlayer()->GetPlayerPed()->GetPed()->m_pWeaponData == pDoShotHumanInventory )
+	if( IsLocalPlayerWeapon(pDoShotHumanInventory) )
 	{
 		_asm popad;
 		_asm sub		esp, 8;
@@ -489,13 +545,13 @@ void __declspec( naked ) CPatches::HOOK_CHumanInventory__DoReload( void )
 	_asm pushad;
 
 	// Was this the localplayer?
-	if( pCore->GetPlayerManager() && pCore->GetPlayerManager()->GetLocalPlayer() && pCore->GetPlayerManager()->GetLocalPlayer()->GetPlayerPed() && pCore->GetPlayerManager()->GetLocalPlayer()->GetPlayerPed()->GetPed()->m_pWeaponData == pDoReloadHumanInventory )
+	if( IsLocalPlayerWeapon(pDoReloadHumanInventory) )
 	{
 		// Handle the reload
-		pCore->GetPlayerManager()->GetLocalPlayer()->OnReloadWeapon();
+		CLocalPlayer::Instance()->OnReloadWeapon();
 
 #ifdef _DEBUG
-		pCore->GetChat()->AddDebugMessage( "HOOK_CHumanInventory__DoReload( LocalPlayer )" );
+		CChat::Instance()->AddDebugMessage( "HOOK_CHumanInventory__DoReload( LocalPlayer )" );
 #endif
 	}
 

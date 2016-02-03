@@ -7,12 +7,17 @@
 *
 ***************************************************************/
 
+#include "BaseInc.h"
+
 #include "Scripting/CSquirrel.h"
+#include "Scripting/CScriptingManager.h"
 #include "CClientScriptingManager.h"
 
 #include "CString.h"
 
 #include "CKeyBinds.h"
+
+#include "CChat.h"
 
 #include "CCore.h"
 
@@ -222,7 +227,7 @@ String GetKeyNameByCode( DWORD dwCode )
 void CKeyBinds::ProcessInput( UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
 	// Is the chat window input active?
-	if( pCore->GetChat() && pCore->GetChat()->IsInputVisible() )
+	if( CChat::Instance()->IsInputVisible() )
 		return;
 
 	// Do we not have any keybinds?

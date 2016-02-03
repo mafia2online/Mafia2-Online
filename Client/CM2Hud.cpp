@@ -7,7 +7,13 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
+#include "BaseInc.h"
+
+#include "CM2Hud.h"
+
+#include "COffsets.h"
+
+#include "CLua.h"
 
 CM2HudTimer::CM2HudTimer( M2HudTimer * pHudTimer )
 {

@@ -7,12 +7,32 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
+#include "BaseInc.h"
+
+#include "CMafia.h"
+#include "Scripting/CSquirrel.h"
+#include "CClientScriptingManager.h"
+#include "CEvents.h"
+
+#include "CAudioManager.h"
+
+#include "CMainMenu.h"
+#include "CChat.h"
+#include "gui_impl/CGUI_Impl.h"
+#include "CGUI.h"
+
+#include "CNetworkModule.h"
+
+#include "CLocalPlayer.h"
+
+#include "CKeyBinds.h"
+
+#include "CCore.h"
+
+#include "CWindowSubclass.h"
 
 bool	CWindowSubclass::m_bSubclassed = false;
 WNDPROC CWindowSubclass::m_wWndProc;
-
-extern	CCore			* pCore;
 
 // Original wndproc at 0xAB5FD0
 LRESULT APIENTRY CWindowSubclass::WndProc_Hook( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
@@ -22,9 +42,13 @@ LRESULT APIENTRY CWindowSubclass::WndProc_Hook( HWND hWnd, UINT uMsg, WPARAM wPa
 	if( uMsg == WM_KILLFOCUS || (uMsg == WM_ACTIVATE && LOWORD(wParam) == WA_INACTIVE) )
 		return true;
 
+	CCore *pCore = CCore::Instance();
 	if( uMsg == WM_QUIT )
 	{
+		// TODO: Investigation why we are removing the core here..
 		delete pCore;
+
+		return CallWindowProc( m_wWndProc, hWnd, uMsg, wParam, lParam );
 	}
 
 	if( bFocus && !pCore->GetGame()->Focused() )
@@ -74,7 +98,7 @@ LRESULT APIENTRY CWindowSubclass::WndProc_Hook( HWND hWnd, UINT uMsg, WPARAM wPa
 					return true;
 				}
 
-				if( pCore->GetPlayerManager()->GetLocalPlayer()->ProcessControls( uMsg, wParam ) )
+				if( CLocalPlayer::Instance()->ProcessControls( uMsg, wParam ) )
 					return true;
 
 				pCore->GetKeyBinds()->ProcessInput( uMsg, wParam, lParam );
@@ -90,6 +114,6 @@ void CWindowSubclass::Subclass( HWND hWnd )
 	{
 		m_wWndProc = SubclassWindow( hWnd, WndProc_Hook );
 		m_bSubclassed = true;
-		pCore->SetGameHwnd( hWnd );
+		CCore::Instance()->SetGameHwnd( hWnd );
 	}
 }

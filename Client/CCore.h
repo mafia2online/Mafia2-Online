@@ -16,6 +16,7 @@
 
 #include "ExplicitSingleton.h"
 
+class CUpdater;
 class CMafia;
 class CNetworkModule;
 class CGraphics;

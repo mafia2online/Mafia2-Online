@@ -7,9 +7,11 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
+#include "BaseInc.h"
 
-extern	CCore			* pCore;
+#include "CCore.h"
+#include "CDirect3D9Hook.h"
+#include "CDirect3DDevice9Proxy.h"
 
 CDirect3DDevice9Proxy::CDirect3DDevice9Proxy(IDirect3D9 * pD3D, IDirect3DDevice9 * pDevice)
 {
@@ -111,6 +113,8 @@ UINT STDMETHODCALLTYPE CDirect3DDevice9Proxy::GetNumberOfSwapChains()
 
 HRESULT STDMETHODCALLTYPE CDirect3DDevice9Proxy::Reset(D3DPRESENT_PARAMETERS * pPresentationParameters)
 {
+	CCore *pCore = CCore::Instance();
+
 	// Call the lost device core event
 	pCore->OnDeviceLost( m_pD3DDevice );
 
@@ -129,7 +133,7 @@ HRESULT STDMETHODCALLTYPE CDirect3DDevice9Proxy::Reset(D3DPRESENT_PARAMETERS * p
 HRESULT STDMETHODCALLTYPE CDirect3DDevice9Proxy::Present(const RECT * pSourceRect, const RECT * pDestRect, HWND hDestWindowOverride, const RGNDATA * pDirtyRegion)
 {
 	// Call the core device render event
-	pCore->OnDeviceRender();
+	CCore::Instance()->OnDeviceRender();
 
 	return m_pD3DDevice->Present(pSourceRect, pDestRect, hDestWindowOverride, pDirtyRegion);
 }
@@ -252,7 +256,7 @@ HRESULT STDMETHODCALLTYPE CDirect3DDevice9Proxy::GetDepthStencilSurface(IDirect3
 HRESULT STDMETHODCALLTYPE CDirect3DDevice9Proxy::BeginScene( )
 {
 	// Call the core pre render function
-	pCore->OnDevicePreRender( );
+	CCore::Instance()->OnDevicePreRender( );
 
 	return m_pD3DDevice->BeginScene();
 }

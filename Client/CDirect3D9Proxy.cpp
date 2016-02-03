@@ -7,9 +7,10 @@
 *
 ***************************************************************/
 
-#include "StdInc.h"
+#include "BaseInc.h"
 
-extern	CCore			* pCore;
+#include "CDirect3D9Hook.h"
+#include "CDirect3D9Proxy.h"
 
 CDirect3D9Proxy::CDirect3D9Proxy(IDirect3D9 * pD3D)
 {

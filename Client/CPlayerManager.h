@@ -10,11 +10,12 @@
 #pragma once
 
 #include "CCommon.h"
+#include "ExplicitSingleton.h"
 
 class CLocalPlayer;
 class CRemotePlayer;
 
-class CPlayerManager
+class CPlayerManager : public ExplicitSingleton<CPlayerManager>
 {
 
 private:

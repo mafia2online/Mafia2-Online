@@ -73,7 +73,9 @@ public:
 #endif
 */
 
-class CEvents : public std::map< std::string, std::list< CEventHandler *> >
+#include "ExplicitSingleton.h"
+
+class CEvents : public std::map< std::string, std::list< CEventHandler *> >, public ExplicitSingleton<CEvents>
 /*#ifndef _CLIENT
 	, public CEventsInterface
 #endif*/
