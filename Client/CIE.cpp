@@ -19,6 +19,7 @@
 #include "engine/CM2Core.h"
 #include "engine/CM2Ped.h"
 #include "engine/CM2Vehicle.h"
+#include "engine/CM2SlotManager.h"
 
 #include "CM2ScriptMachine.h"
 
@@ -34,8 +35,6 @@
 #include "Math/CVector3.h"
 
 #include "lua.hpp"
-
-extern	CCore		* pCore;
 
 typedef void * ( __cdecl * CreateObjectByType_t )( int );
 CreateObjectByType_t CreateObjectByType = ( CreateObjectByType_t )( 0x0115F840 );

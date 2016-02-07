@@ -48,7 +48,6 @@ void CM2VideoSettings::Save( void )
 
 void CM2VideoSettings::Pulse ( void )
 {
-	// Should we change resolution?
 	if ( m_bChangeResolution )
 	{
 		m_bChangeResolution = false;
@@ -56,13 +55,16 @@ void CM2VideoSettings::Pulse ( void )
 		CLogFile::Printf ( "Changing res to %d...", m_iResolutionIndex );
 
 		int iResolutionIndex = m_iResolutionIndex;
-		_asm push iResolutionIndex;
-		_asm call FUNC_SetScreenResolution;
+
+		_asm
+		{
+			push iResolutionIndex;
+			call FUNC_SetScreenResolution;
+		}
 
 		CLogFile::Printf ( "Done!" );
 	}
 
-	// Should we change fullscreen?
 	if ( m_bChangeFullScreen )
 	{
 		m_bChangeFullScreen = false;
@@ -71,23 +73,28 @@ void CM2VideoSettings::Pulse ( void )
 
 		DWORD FUNC_C_SystemRenderingModule__Singleton = 0xB2CBA0;
 		bool bFullScreenEnabled = m_bFullScreenEnabled;
-		_asm push bFullScreenEnabled;
-		_asm call FUNC_C_SystemRenderingModule__Singleton;
-		_asm mov ecx, eax;
-		_asm call FUNC_C_SystemRenderingModule__SetFullScreenEnabled;
+		_asm
+		{
+			push bFullScreenEnabled;
+			call FUNC_C_SystemRenderingModule__Singleton;
+			mov ecx, eax;
+			call FUNC_C_SystemRenderingModule__SetFullScreenEnabled;
+		}
 
 		CLogFile::Print ( "Done!" );
 	}
 	
-	// Should we change vertical sync?
 	if ( m_bChangeVerticalSync )
 	{
 		DWORD FUNC_C_SystemRenderingModule__Singleton = 0xB2CBA0;
 		bool bVerticalSyncEnabled = m_bVerticalSyncEnabled;
-		_asm push bVerticalSyncEnabled;
-		_asm call FUNC_C_SystemRenderingModule__Singleton;
-		_asm mov ecx, eax;
-		_asm call FUNC_C_SystemRenderingModule__SetVerticalSyncEnabled;
+		_asm
+		{
+			push bVerticalSyncEnabled;
+			call FUNC_C_SystemRenderingModule__Singleton;
+			mov ecx, eax;
+			call FUNC_C_SystemRenderingModule__SetVerticalSyncEnabled;
+		}
 
 		m_bChangeVerticalSync = false;
 	}
@@ -95,47 +102,41 @@ void CM2VideoSettings::Pulse ( void )
 
 void CM2VideoSettings::SetResolutionIndex ( int iIndex, bool bRefresh )
 {
-	// Has the resolution index changed?
 	if ( iIndex != m_iResolutionIndex )
 	{
-		// Update the current resolution index
 		m_iResolutionIndex = iIndex;
 
-		// Mark as refresh resolution
 		m_bChangeResolution = bRefresh;
 	}
 }
 
 void CM2VideoSettings::SetFullScreenEnabled ( bool bEnabled, bool bRefresh )
 {
-	// Has the fullscreen flag changed?
 	if ( bEnabled != m_bFullScreenEnabled )
 	{
-		// Update the current fullscreen flag
 		m_bFullScreenEnabled = bEnabled;
 
-		// Mark as refresh fullscreen
 		m_bChangeFullScreen = bRefresh;
 	}
 }
 
 void CM2VideoSettings::SetVerticalSyncEnabled ( bool bEnabled, bool bRefresh )
 {
-	// Has the vertical sync flag changed?
 	if ( bEnabled != m_bVerticalSyncEnabled )
 	{
-		// Update the current vertical sync flag
 		m_bVerticalSyncEnabled = bEnabled;
 
-		// Mark as refresh vertical sync
 		m_bChangeVerticalSync = bRefresh;
 	}
 }
 
 void CM2VideoSettings::SetMultisampleAntiAliasing ( int iMultisampleAntiAliasing )
 {
-	_asm push iMultisampleAntiAliasing;
-	_asm call FUNC_SetMultisampleAntiAliasing;
+	_asm
+	{
+		push iMultisampleAntiAliasing;
+		call FUNC_SetMultisampleAntiAliasing;
+	}
 
 	// Store the value
 	m_iMultisampleAntiAliasing = iMultisampleAntiAliasing;
@@ -143,8 +144,11 @@ void CM2VideoSettings::SetMultisampleAntiAliasing ( int iMultisampleAntiAliasing
 
 void CM2VideoSettings::SetAnisotropicFiltering ( int iAnisotropicFiltering )
 {
-	_asm push iAnisotropicFiltering;
-	_asm call FUNC_SetAnisotropicFiltering;
+	_asm
+	{
+		push iAnisotropicFiltering;
+		call FUNC_SetAnisotropicFiltering;
+	}
 
 	// Store the value
 	m_iAnisotropicFiltering = iAnisotropicFiltering;
@@ -152,8 +156,11 @@ void CM2VideoSettings::SetAnisotropicFiltering ( int iAnisotropicFiltering )
 
 void CM2VideoSettings::SetAmbientOcculsionEnabled ( bool bEnabled )
 {
-	_asm push bEnabled;
-	_asm call FUNC_EnableAmbientOcclusion;
+	_asm
+	{
+		push bEnabled;
+		call FUNC_EnableAmbientOcclusion;
+	}
 
 	// Store the value
 	m_bAmbientOcculsionEnabled = bEnabled;
@@ -161,38 +168,53 @@ void CM2VideoSettings::SetAmbientOcculsionEnabled ( bool bEnabled )
 
 void CM2VideoSettings::SetAudioQuality ( bool bHighQuality )
 {
-	_asm push bHighQuality;
-	_asm call FUNC_SetAudioQuality;
+	_asm
+	{
+		push bHighQuality;
+		call FUNC_SetAudioQuality;
+	}
 }
 
 void CM2VideoSettings::SetSFXVolume ( int iVolume )
 {
 	float fVolume = ((float)iVolume / 100.0f);
 
-	_asm push fVolume;
-	_asm call FUNC_SetSFXVolume;
+	_asm
+	{
+		push fVolume;
+		call FUNC_SetSFXVolume;
+	}
 }
 
 void CM2VideoSettings::SetVoiceVolume ( int iVolume )
 {
 	float fVolume = ((float)iVolume / 100.0f);
 
-	_asm push fVolume;
-	_asm call FUNC_SetVoicesVolume;
+	_asm
+	{
+		push fVolume;
+		call FUNC_SetVoicesVolume;
+	}
 }
 
 void CM2VideoSettings::SetMusicVolume ( int iVolume )
 {
 	float fVolume = ((float)iVolume / 100.0f);
 
-	_asm push fVolume;
-	_asm call FUNC_SetMusicVolume;
+	_asm
+	{
+		push fVolume;
+		call FUNC_SetMusicVolume;
+	}
 }
 
 void CM2VideoSettings::SetRadioVolume ( int iVolume )
 {
 	float fVolume = ((float)iVolume / 100.0f);
 
-	_asm push fVolume;
-	_asm call FUNC_SetRadioVolume;
+	_asm
+	{
+		push fVolume;
+		call FUNC_SetRadioVolume;
+	}
 }
