@@ -7,9 +7,39 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
+#include	"BaseInc.h"
 
-extern	CCore				* pCore;
+#include	"CCore.h"
+
+#include	"Math\CVector3.h"
+#include	"Math\CQuaternion.h"
+#include	"Math\CMaths.h"
+
+#include	"CM2Enums.h"
+#include	"engine\CM2Entity.h"
+#include	"engine\CM2Ped.h"
+#include	"engine\CM2Vehicle.h"
+#include	"engine\CM2Navigation.h"
+#include	"CM2SyncObject.h"
+
+#include	"CMafia.h"
+#include	"Game\CGame.h"
+
+#include	"CBlip.h"
+
+#include	"CIE.h"
+
+#include	"CModelManager.h"
+#include	"CNetworkModelManager.h"
+
+#include	"CNetworkVehicle.h"
+
+#include	"CPlayerManager.h"
+#include	"CLocalPlayer.h"
+
+#include	"SharedUtility.h"
+
+#include	"CNetworkPlayer.h"
 
 CNetworkPlayer::CNetworkPlayer( bool bLocalPlayer )
 {
@@ -126,7 +156,7 @@ void CNetworkPlayer::Create( void )
 	// todo
 
 	// Create the player map icon
-	m_iBlipId = pCore->GetGame()->GetNavigation()->RegisterIconEntity( m_pPlayerPed->GetEntity(), 0, 1 );
+	m_iBlipId = CCore::Instance()->GetGame()->GetNavigation()->RegisterIconEntity( m_pPlayerPed->GetEntity(), 0, 1 );
 
 	// Mark as not dead
 	SetDead( false );
@@ -162,7 +192,7 @@ void CNetworkPlayer::Destroy( void )
 		return;
 
 	// Destroy the player icon
-	pCore->GetGame()->GetNavigation()->UnregisterIconEntity( m_pPlayerPed->GetEntity() );
+	CCore::Instance()->GetGame()->GetNavigation()->UnregisterIconEntity(m_pPlayerPed->GetEntity());
 
 	// Remove the player from the vehicle
 	if( m_pVehicle )
@@ -195,7 +225,7 @@ void CNetworkPlayer::Respawn( void )
 	DEBUG_TRACE("CNetworkPlayer::Respawn");
 
 	// Is the localplayer not spawned?
-	if( !pCore->GetPlayerManager()->GetLocalPlayer()->IsSpawned() )
+	if (!CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->IsSpawned())
 		return;
 
 	// Is the player inactive?
@@ -290,7 +320,7 @@ void CNetworkPlayer::HandlePlayerDeath( void )
 	DEBUG_TRACE("CNetworkPlayer::HandlePlayerDeath");
 
 	// Is the localplayer not spawned?
-	if( !pCore->GetPlayerManager()->GetLocalPlayer()->IsSpawned() )
+	if( !CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->IsSpawned() )
 		return;
 
 	// Is the player invalid?
@@ -388,7 +418,7 @@ void CNetworkPlayer::GetPosition( CVector3 * vecPosition )
 
 	// Is the player ped valid?
 	if( m_pPlayerPed && IsSpawned() )
-		m_pPlayerPed->GetPosition( vecPosition, true );
+		m_pPlayerPed->GetPosition( (*vecPosition), true );
 }
 
 void CNetworkPlayer::SetRotation( CVector3 vecRotation )
@@ -415,7 +445,7 @@ void CNetworkPlayer::GetRotation( CVector3 * vecRotation )
 	{
 		// Get the player rotation
 		Quaternion quatRotation;
-		m_pPlayerPed->GetRotation( &quatRotation );
+		m_pPlayerPed->GetRotation( quatRotation );
 
 		// Copy the rotation eular angles
 		memcpy( vecRotation, &quatRotation.toEularAngles(), sizeof(CVector3) );

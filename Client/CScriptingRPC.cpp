@@ -7,13 +7,18 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
+#include	"BaseInc.h"
+
+#include	"CCore.h"
 
 #include	"CPlayerRPC.h"
 #include	"CVehicleRPC.h"
 #include	"CBlipRPC.h"
 
-extern	CCore			* pCore;
+#include	"CScriptingRPC.h"
+
+#include	<RPC4Plugin.h>
+
 bool	CScriptingRPC::m_bRegistered = false;
 
 void CScriptingRPC::Register( RakNet::RPC4 * pRPC )

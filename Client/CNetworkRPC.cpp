@@ -7,9 +7,50 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
+#include	"BaseInc.h"
 
-extern	CCore			* pCore;
+#include	"CCore.h"
+
+#include	"Math\CVector3.h"
+#include	"CString.h"
+
+#include	"BitStream.h"
+
+#include	"CPlayerManager.h"
+#include	"CVehicleManager.h"
+#include	"CNetworkVehicle.h"
+#include	"CLocalPlayer.h"
+#include	"CRemotePlayer.h"
+#include	"engine\CM2Ped.h"
+
+#include	"CBlipManager.h"
+
+#include	"CFileTransferManager.h"
+
+#include	"CMafia.h"
+
+#include	"CGUI.h"
+#include	"CServerBrowser.h"
+
+#include	"CChat.h"
+
+#include	"CSync.h"
+
+#include	"SharedUtility.h"
+
+#include	"CClientScriptingManager.h"
+
+#include	"CRC.h"
+
+#include	"CEvents.h"
+#include	"Scripting\CSquirrelArguments.h"
+
+#include	<RPC4Plugin.h>
+
+#include	"../Shared/CNetworkRPC.h"
+
+#include	"CNetworkRPC.h"
+
 bool	CNetworkRPC::m_bRegistered = false;
 
 void InitialData( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
@@ -39,34 +80,34 @@ void InitialData( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 	pBitStream->Read( iPort );
 
 	// Set the season
-	pCore->SetSummer ( pBitStream->ReadBit() );
+	CCore::Instance()->SetSummer ( pBitStream->ReadBit() );
 
-	CLogFile::Printf ( "Season: %s", (pCore->IsSummer () ? "Summer" : "Winter") );
+	CLogFile::Printf ( "Season: %s", (CCore::Instance()->IsSummer () ? "Summer" : "Winter") );
 
 	// Read the weather
 	RakNet::RakString strWeather;
 	pBitStream->Read ( strWeather );
 
 	// Set the localplayer id
-	pCore->GetPlayerManager()->GetLocalPlayer()->SetId( playerId );
+	CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->SetId( playerId );
 
 	// Set the localplayer colour
-	pCore->GetPlayerManager()->GetLocalPlayer()->SetColour( uiColour );
+	CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->SetColour( uiColour );
 
 	// Set the server name string
-	pCore->SetServerName( String( strServerName ) );
+	CCore::Instance()->SetServerName( String( strServerName ) );
 
 	// Set the server max player count
-	pCore->SetServerMaxPlayers( iMaxPlayers );
+	CCore::Instance()->SetServerMaxPlayers( iMaxPlayers );
 
 	// Set the file transfer information
-	pCore->GetFileTransferManager()->SetServerInformation( strHttpServer.IsEmpty() ? pCore->GetHost() : strHttpServer.C_String(), iPort );
+	CCore::Instance()->GetFileTransferManager()->SetServerInformation( strHttpServer.IsEmpty() ? CCore::Instance()->GetHost() : strHttpServer.C_String(), iPort );
 
 	// Print success message
-	pCore->GetChat()->AddInfoMessage( "Successfully connected to %s.", strServerName.C_String() );
+	CCore::Instance()->GetChat()->AddInfoMessage( "Successfully connected to %s.", strServerName.C_String() );
 
 	// Get the server folder string
-	String strServerFolder = SharedUtility::GetAbsolutePath( SharedUtility::GetClientScriptFolder( pCore->GetHost(), pCore->GetPort() ) );
+	String strServerFolder = SharedUtility::GetAbsolutePath( SharedUtility::GetClientScriptFolder( CCore::Instance()->GetHost(), CCore::Instance()->GetPort() ) );
 
 	// Does the folder not exist?
 	if( !SharedUtility::Exists( strServerFolder.Get() ) )
@@ -76,7 +117,7 @@ void InitialData( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 	}
 
 	// Set the weather
-	pCore->GetGame()->ChangeWeather ( strWeather.C_String (), 1000 );
+	CCore::Instance()->GetGame()->ChangeWeather ( strWeather.C_String (), 1000 );
 }
 
 void ConnectionRejected( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
@@ -102,7 +143,7 @@ void ConnectionRejected( RakNet::BitStream * pBitStream, RakNet::Packet * pPacke
 
 	// Disconnected due to reject ?
 	CLogFile::Printf("Disconnect due to reason : %s", strReason.Get());
-	pCore->GetGUI()->GetServerBrowser()->SetDisconnectReason( true, strReason.Get() );
+	CCore::Instance()->GetGUI()->GetServerBrowser()->SetDisconnectReason(true, strReason.Get());
 }
 
 void NewPlayer( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
@@ -124,10 +165,10 @@ void NewPlayer( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 	pBitStream->ReadCompressed( uiModelIndex );
 
 	// Add the player to the manager
-	if( pCore->GetPlayerManager()->Add( playerId, String( strNick ), uiColour ) )
+	if( CCore::Instance()->GetPlayerManager()->Add( playerId, String( strNick ), uiColour ) )
 	{
 		// Set the player model
-		pCore->GetPlayerManager()->Get( playerId )->SetModel( uiModelIndex, false );
+		CCore::Instance()->GetPlayerManager()->Get( playerId )->SetModel( uiModelIndex, false );
 	}
 }
 
@@ -138,7 +179,7 @@ void RemovePlayer( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 	pBitStream->ReadCompressed( playerId );
 
 	// Remove the player from the manager
-	pCore->GetPlayerManager()->Remove( playerId );
+	CCore::Instance()->GetPlayerManager()->Remove( playerId );
 }
 
 void PlayerChat( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
@@ -152,16 +193,16 @@ void PlayerChat( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 	pBitStream->Read( strInput );
 
 	// Is the player active?
-	if( pCore->GetPlayerManager()->IsActive( playerId ) )
+	if( CCore::Instance()->GetPlayerManager()->IsActive( playerId ) )
 	{
 		// Get the player pointer
-		CRemotePlayer * pNetworkPlayer = pCore->GetPlayerManager()->Get(playerId);
+		CRemotePlayer * pNetworkPlayer = CCore::Instance()->GetPlayerManager()->Get(playerId);
 
 		// Is the player pointer valid?
 		if( pNetworkPlayer )
 		{
 			// Output the message
-			pCore->GetChat()->AddChatMessage( pNetworkPlayer, strInput.C_String() );
+			CCore::Instance()->GetChat()->AddChatMessage(pNetworkPlayer, strInput.C_String());
 		}
 	}
 }
@@ -181,7 +222,7 @@ void PlayerSync( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 	pBitStream->Read( (char *)&onFootSync, sizeof(OnFootSync) );
 
 	// Get a pointer to the player
-	CRemotePlayer * pRemotePlayer = pCore->GetPlayerManager()->Get( playerId );
+	CRemotePlayer * pRemotePlayer = CCore::Instance()->GetPlayerManager()->Get(playerId);
 
 	// Is the player pointer valid?
 	if( pRemotePlayer )
@@ -190,10 +231,10 @@ void PlayerSync( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 		pRemotePlayer->SetPing( usPing );
 
 		// Is the localplayer spawned?
-		if( pCore->GetPlayerManager()->GetLocalPlayer()->IsSpawned() )
+		if (CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->IsSpawned())
 		{
 			// Fail safe
-			if( playerId == pCore->GetPlayerManager()->GetLocalPlayer()->GetId() )
+			if (playerId == CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetId())
 				return;
 
 			// Deserialse the player with the bitstream
@@ -209,7 +250,7 @@ void PlayerDeath( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 	pBitStream->ReadCompressed( playerId );
 
 	// Get a pointer to the player
-	CRemotePlayer * pRemotePlayer = pCore->GetPlayerManager()->Get(playerId);
+	CRemotePlayer * pRemotePlayer = CCore::Instance()->GetPlayerManager()->Get(playerId);
 
 	// Is the player pointer valid?
 	if( pRemotePlayer )
@@ -226,7 +267,7 @@ void PlayerSpawn( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 	pBitStream->ReadCompressed( playerId );
 
 	// Get a pointer to the player
-	CRemotePlayer * pRemotePlayer = pCore->GetPlayerManager()->Get(playerId);
+	CRemotePlayer * pRemotePlayer = CCore::Instance()->GetPlayerManager()->Get(playerId);
 
 	// Is the player pointer valid?
 	if( pRemotePlayer )
@@ -252,7 +293,7 @@ void KickPlayer( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 #endif
 
 	// Handle this with the serverbrowser
-	pCore->GetGUI()->GetServerBrowser()->SetDisconnectReason( true, "YOU'VE BEEN KICKED FROM THE SERVER" );
+	CCore::Instance()->GetGUI()->GetServerBrowser()->SetDisconnectReason(true, "YOU'VE BEEN KICKED FROM THE SERVER");
 
 #ifdef DEBUG
 	CLogFile::Printf ( "KickPlayer done!" );
@@ -266,13 +307,13 @@ void PlayerSyncVehicle( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket
 	pBitStream->ReadCompressed( vehicleId );
 
 	// Get the vehicle pointer
-	CNetworkVehicle * pNetworkVehicle = pCore->GetVehicleManager()->Get( vehicleId );
+	CNetworkVehicle * pNetworkVehicle = CCore::Instance()->GetVehicleManager()->Get(vehicleId);
 
 	// Is the vehicle pointer valid?
 	if( pNetworkVehicle )
 	{
 		// Let the localplayer know they're syncing this vehicle
-		pCore->GetPlayerManager()->GetLocalPlayer()->StartSyncVehicle( pNetworkVehicle );
+		CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->StartSyncVehicle(pNetworkVehicle);
 	}
 }
 
@@ -283,13 +324,13 @@ void PlayerStopSyncVehicle( RakNet::BitStream * pBitStream, RakNet::Packet * pPa
 	pBitStream->ReadCompressed( vehicleId );
 
 	// Get the vehicle pointer
-	CNetworkVehicle * pNetworkVehicle = pCore->GetVehicleManager()->Get( vehicleId );
+	CNetworkVehicle * pNetworkVehicle = CCore::Instance()->GetVehicleManager()->Get(vehicleId);
 
 	// Is the vehicle pointer valid?
 	if( pNetworkVehicle )
 	{
 		// Let the localplayer know they're no longer syncing this vehicle
-		pCore->GetPlayerManager()->GetLocalPlayer()->StopSyncVehicle( pNetworkVehicle );
+		CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->StopSyncVehicle(pNetworkVehicle);
 	}
 }
 
@@ -329,7 +370,7 @@ void NewBlip( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 #endif
 
 	// Add the blip into the blip manager
-	pCore->GetBlipManager()->AddServerBlip( blipId, fX, fY, iLibrary, iIcon, (eBlipType)blipType, entityId );
+	CCore::Instance()->GetBlipManager()->AddServerBlip(blipId, fX, fY, iLibrary, iIcon, (eBlipType)blipType, entityId);
 }
 
 void RemoveBlip( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
@@ -339,7 +380,7 @@ void RemoveBlip( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 	pBitStream->ReadCompressed( blipId );
 
 	// Remove the blip from the blip manager
-	pCore->GetBlipManager()->RemoveServerBlip( blipId );
+	CCore::Instance()->GetBlipManager()->RemoveServerBlip(blipId);
 }
 
 // Vehicles
@@ -358,13 +399,13 @@ void NewVehicle( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 	pBitStream->Read( (char *)&vehicleSync, sizeof(InVehicleSync) );
 
 	// Add the vehicle to the manager
-	if( pCore->GetVehicleManager()->Add( vehicleId, iModel, CVector3(), CVector3() ) )
+	if( CCore::Instance()->GetVehicleManager()->Add( vehicleId, iModel, CVector3(), CVector3() ) )
 	{
 		// Set the last sync data
-		pCore->GetVehicleManager()->Get( vehicleId )->SetSyncData( vehicleSync );
+		CCore::Instance()->GetVehicleManager()->Get(vehicleId)->SetSyncData(vehicleSync);
 
 		// Mark process sync on spawn
-		pCore->GetVehicleManager()->Get( vehicleId )->ProcessSyncOnSpawn( true );
+		CCore::Instance()->GetVehicleManager()->Get(vehicleId)->ProcessSyncOnSpawn(true);
 	}
 }
 
@@ -375,7 +416,7 @@ void RemoveVehicle( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 	pBitStream->ReadCompressed( vehicleId );
 
 	// Remove the vehicle from the manager
-	pCore->GetVehicleManager()->Remove( vehicleId );
+	CCore::Instance()->GetVehicleManager()->Remove(vehicleId);
 }
 
 void EnterVehicle( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
@@ -396,9 +437,9 @@ void EnterVehicle( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 	pBitStream->ReadCompressed( seat );
 
 	// Get the network vehicle instance
-	CNetworkVehicle * pVehicle = pCore->GetVehicleManager()->Get( vehicleId );
+	CNetworkVehicle * pVehicle = CCore::Instance()->GetVehicleManager()->Get(vehicleId);
 
-	pCore->GetChat()->AddDebugMessage ( "CServerPacket::EnterVehicle ( %s, %d, %d, %d )", (bSuccess ? "true" : "false"), playerId, vehicleId, seat );
+	CCore::Instance()->GetChat()->AddDebugMessage("CServerPacket::EnterVehicle ( %s, %d, %d, %d )", (bSuccess ? "true" : "false"), playerId, vehicleId, seat);
 
 	// Is the network vehicle instance valid?
 	if( pVehicle )
@@ -407,13 +448,13 @@ void EnterVehicle( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 		if ( bSuccess )
 		{
 			// Get the network player instance
-			CNetworkPlayer * pPlayer = pCore->GetPlayerManager()->Get( playerId );
+			CNetworkPlayer * pPlayer = CCore::Instance()->GetPlayerManager()->Get(playerId);
 
 			// Is the network player instance valid?
 			if( pPlayer )
 			{
 				// Is the localplayer spawned?
-				if( pCore->GetPlayerManager()->GetLocalPlayer()->IsSpawned() )
+				if (CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->IsSpawned())
 				{
 					// Handle this with the player
 					pPlayer->EnterVehicle( pVehicle, (M2Enums::eVehicleSeat)(seat + 1) );
@@ -432,19 +473,19 @@ void EnterVehicle( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 		else
 		{
 			// Get the localplayer instance
-			CLocalPlayer * pLocalPlayer = pCore->GetPlayerManager()->GetLocalPlayer ();
+			CLocalPlayer * pLocalPlayer = CCore::Instance()->GetPlayerManager()->GetLocalPlayer();
 
 			// Ensure we're in a vehicle internally
 			if ( pLocalPlayer->InternalIsInVehicle () )
 			{
 				// Get the current vehicle we're in from internal id
-				CNetworkVehicle * pCurrentVehicle = pCore->GetVehicleManager()->GetFromGameGUID ( pLocalPlayer->GetPlayerPed()->GetCurrentVehicle()->m_dwGUID );
+				CNetworkVehicle * pCurrentVehicle = CCore::Instance()->GetVehicleManager()->GetFromGameGUID(pLocalPlayer->GetPlayerPed()->GetCurrentVehicle()->m_dwGUID);
 
 				// Remove the player from the vehicle
 				pLocalPlayer->RemoveFromVehicle ( pCurrentVehicle );
 
 				// Get the network player instance of the real driver (player = driver id)
-				CNetworkPlayer * pRealDriver = pCore->GetPlayerManager()->Get( playerId );
+				CNetworkPlayer * pRealDriver = CCore::Instance()->GetPlayerManager()->Get(playerId);
 
 				// Is the real driver valid?
 				if ( pRealDriver )
@@ -456,10 +497,10 @@ void EnterVehicle( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 						pRealDriver->PutInVehicle ( pCurrentVehicle, 0 );
 					}
 
-					pCore->GetChat()->AddDebugMessage ( "Real Driver: %d (0x%p), Vehicle: 0x%p, InternalVehicle: 0x%p", pRealDriver->GetId (), pRealDriver, pRealDriver->GetVehicle(), pRealDriver->GetPlayerPed()->GetCurrentVehicle() );
+					CCore::Instance()->GetChat()->AddDebugMessage("Real Driver: %d (0x%p), Vehicle: 0x%p, InternalVehicle: 0x%p", pRealDriver->GetId(), pRealDriver, pRealDriver->GetVehicle(), pRealDriver->GetPlayerPed()->GetCurrentVehicle());
 				}
 
-				pCore->GetChat()->AddDebugMessage ( "HandleVehicleEnter failed. There's already a driver! Restored driver context for player %d", pRealDriver->GetId () );
+				CCore::Instance()->GetChat()->AddDebugMessage("HandleVehicleEnter failed. There's already a driver! Restored driver context for player %d", pRealDriver->GetId());
 			}
 		}
 	}
@@ -475,13 +516,13 @@ void ExitVehicle( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 	bool bQuickly = pBitStream->ReadBit();
 
 	// Get the network player instance
-	CNetworkPlayer * pPlayer = pCore->GetPlayerManager()->Get( playerId );
+	CNetworkPlayer * pPlayer = CCore::Instance()->GetPlayerManager()->Get(playerId);
 
 	// Is the network player instance valid?
 	if( pPlayer )
 	{
 		// Is the localplayer spawned?
-		if( pCore->GetPlayerManager()->GetLocalPlayer()->IsSpawned() )
+		if( CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->IsSpawned() )
 		{
 			// Handle this with the player
 			pPlayer->ExitVehicle( true, bQuickly );
@@ -516,7 +557,7 @@ void VehicleSync( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 	pBitStream->Read( (char *)&inVehicleSync, sizeof(InVehicleSync) );
 
 	// Get the network player instance
-	CRemotePlayer * pRemotePlayer = pCore->GetPlayerManager()->Get( playerId );
+	CRemotePlayer * pRemotePlayer = CCore::Instance()->GetPlayerManager()->Get(playerId);
 
 	// Is the network player instance valid?
 	if( pRemotePlayer )
@@ -536,7 +577,7 @@ void EnterVehicleDone( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket 
 	pBitStream->ReadCompressed( playerId );
 
 	// Get the network player instance
-	CRemotePlayer * pRemotePlayer = pCore->GetPlayerManager()->Get( playerId );
+	CRemotePlayer * pRemotePlayer = CCore::Instance()->GetPlayerManager()->Get(playerId);
 
 	// Is the network player instance valid?
 	if( pRemotePlayer )
@@ -561,7 +602,7 @@ void PassengerSync( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 	pBitStream->Read( (char *)&passengerSync, sizeof(InPassengerSync) );
 
 	// Get the network player instance
-	CRemotePlayer * pRemotePlayer = pCore->GetPlayerManager()->Get( playerId );
+	CRemotePlayer * pRemotePlayer = CCore::Instance()->GetPlayerManager()->Get(playerId);
 
 	// Is the network player instance valid?
 	if( pRemotePlayer )
@@ -581,7 +622,7 @@ void UnoccupiedVehicleSync( RakNet::BitStream * pBitStream, RakNet::Packet * pPa
 	pBitStream->ReadCompressed( vehicleId );
 
 	// Get a pointer to the network vehicle
-	CNetworkVehicle * pNetworkVehicle = pCore->GetVehicleManager()->Get( vehicleId );
+	CNetworkVehicle * pNetworkVehicle = CCore::Instance()->GetVehicleManager()->Get(vehicleId);
 
 	// Is the vehicle pointer valid?
 	if( pNetworkVehicle )
@@ -614,7 +655,7 @@ void SpawnVehicle( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 	pBitStream->Read( vecRotation );
 
 	// Get a pointer to the network vehicle
-	CNetworkVehicle * pNetworkVehicle = pCore->GetVehicleManager()->Get( vehicleId );
+	CNetworkVehicle * pNetworkVehicle = CCore::Instance()->GetVehicleManager()->Get(vehicleId);
 
 	// Is the vehicle pointer valid?
 	if( pNetworkVehicle )
@@ -659,7 +700,7 @@ void SpawnVehicle( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 				if( occupantId != INVALID_ENTITY_ID )
 				{
 					// Get a pointer to the current occupant
-					pOccupant = pCore->GetPlayerManager()->Get( occupantId );
+					pOccupant = CCore::Instance()->GetPlayerManager()->Get(occupantId);
 
 					// Is the pointer valid?
 					if( pOccupant )
@@ -702,7 +743,7 @@ void RespawnVehicle( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 	pBitStream->Read( vecRotation );
 
 	// Get a pointer to the network vehicle
-	CNetworkVehicle * pNetworkVehicle = pCore->GetVehicleManager()->Get( vehicleId );
+	CNetworkVehicle * pNetworkVehicle = CCore::Instance()->GetVehicleManager()->Get(vehicleId);
 
 	// Is the vehicle pointer valid?
 	if( pNetworkVehicle )
@@ -729,13 +770,13 @@ void MoveToDriver( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 	pBitStream->ReadCompressed ( occupantId );
 
 	CLogFile::Printf ( "CNetworkRPC::MoveToDriver ( Vehicle: %d, Occupant: %d )", vehicleId, occupantId );
-	pCore->GetChat()->AddDebugMessage ( "CNetworkRPC::MoveToDriver ( Vehicle: %d, Occupant: %d )", vehicleId, occupantId );
+	CCore::Instance()->GetChat()->AddDebugMessage("CNetworkRPC::MoveToDriver ( Vehicle: %d, Occupant: %d )", vehicleId, occupantId);
 
 	// Is the vehicle and player valid?
-	if ( pCore->GetVehicleManager()->IsActive ( vehicleId ) && pCore->GetPlayerManager()->IsActive ( occupantId ) )
+	if (CCore::Instance()->GetVehicleManager()->IsActive(vehicleId) && CCore::Instance()->GetPlayerManager()->IsActive(occupantId))
 	{
 		// Get the occupant
-		CNetworkPlayer * pOccupant = pCore->GetPlayerManager()->Get( occupantId );
+		CNetworkPlayer * pOccupant = CCore::Instance()->GetPlayerManager()->Get(occupantId);
 
 		// Is the player inside a vehicle?
 		if ( pOccupant->IsInVehicle () )
@@ -745,7 +786,7 @@ void MoveToDriver( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 		}
 
 		// Put the player in the driver seat
-		pCore->GetPlayerManager()->Get( occupantId )->PutInVehicle ( pCore->GetVehicleManager()->Get( vehicleId ), 0 );
+		CCore::Instance()->GetPlayerManager()->Get(occupantId)->PutInVehicle(CCore::Instance()->GetVehicleManager()->Get(vehicleId), 0);
 	}
 }
 
@@ -769,7 +810,7 @@ void NewFile( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 	pBitStream->Read( (char *)&fileChecksum, sizeof(CFileChecksum) );
 
 	// Add the file to the transfer manager
-	pCore->GetFileTransferManager()->Add ( strFileName.C_String (), strFilePath.C_String (), fileChecksum, bIsScript );
+	CCore::Instance()->GetFileTransferManager()->Add(strFileName.C_String(), strFilePath.C_String(), fileChecksum, bIsScript);
 }
 
 void DeleteFile( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
@@ -785,13 +826,13 @@ void DeleteFile( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 	String strFileName( _strFileName );
 
 	// Is this a script and in the client script manager?
-	if( bIsScript && pCore->GetClientScriptingManager()->Exists( strFileName ) )
+	if (bIsScript && CCore::Instance()->GetClientScriptingManager()->Exists(strFileName))
 	{
 		// Unload the script
-		pCore->GetClientScriptingManager()->RemoveScript( strFileName );
+		CCore::Instance()->GetClientScriptingManager()->RemoveScript(strFileName);
 
 		// Remove the script
-		pCore->GetClientScriptingManager()->Unload( strFileName );
+		CCore::Instance()->GetClientScriptingManager()->Unload(strFileName);
 	}
 }
 
@@ -800,13 +841,12 @@ void TriggerEvent( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 	CSquirrelArguments * pArgs = new CSquirrelArguments( pBitStream );
 	CSquirrelArgument * pEventName = (pArgs->size() > 0 ? pArgs->front() : 0);
 
-	//
 	if( pEventName && pEventName->GetType() == OT_STRING )
 	{
 		String strEventName = *pEventName->data.str;
 		pArgs->pop_front();
 
-		pCore->GetClientScriptingManager()->GetEvents()->Call( strEventName, pArgs );
+		CCore::Instance()->GetClientScriptingManager()->GetEvents()->Call(strEventName, pArgs);
 		SAFE_DELETE( pEventName );
 	}
 
