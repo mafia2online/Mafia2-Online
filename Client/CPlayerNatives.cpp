@@ -7,9 +7,30 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
+#include	"BaseInc.h"
 
-extern	CCore			* pCore;
+#include	"CCore.h"
+
+#include	"Scripting\CScriptingManager.h"
+#include	"Scripting\CSquirrelCommon.h"
+
+#include	"Math\CVector3.h"
+#include	"CString.h"
+
+#include	"CClientScriptingManager.h"
+
+#include	"engine\CM2Entity.h"
+#include	"engine\CM2Ped.h"
+#include	"CM2Hud.h"
+
+#include	"CPlayerManager.h"
+#include	"CLocalPlayer.h"
+#include	"CNetworkPlayer.h"
+#include	"CRemotePlayer.h"
+
+#include	"SharedUtility.h"
+
+#include	"CPlayerNatives.h"
 
 void CPlayerNatives::Register( CScriptingManager * pScriptingManager )
 {
@@ -53,12 +74,12 @@ SQInteger CPlayerNatives::GetMoveState(SQVM *pVM)
 	C_PlayerControls controls;
 
 	// Is this not the localPlayer ?
-	if (playerId != pCore->GetPlayerManager()->GetLocalPlayer()->GetId())
+	if (playerId != CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetId())
 	{
-		if (pCore->GetPlayerManager()->Get(playerId))
+		if (CCore::Instance()->GetPlayerManager()->Get(playerId))
 		{
 			// Get the controls
-			controls = pCore->GetPlayerManager()->Get(playerId)->GetPlayerPed()->GetPed()->m_playerControls;
+			controls = CCore::Instance()->GetPlayerManager()->Get(playerId)->GetPlayerPed()->GetPed()->m_playerControls;
 
 			// Return it
 			sq_pushinteger(pVM, controls.m_ePlayerMovementState);
@@ -67,7 +88,7 @@ SQInteger CPlayerNatives::GetMoveState(SQVM *pVM)
 	}
 	else {
 		// Get the controls
-		controls = pCore->GetPlayerManager()->GetLocalPlayer()->GetPlayerPed()->GetPed()->m_playerControls;
+		controls = CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetPlayerPed()->GetPed()->m_playerControls;
 
 		// Return it
 		sq_pushinteger(pVM, controls.m_ePlayerMovementState);
@@ -81,7 +102,7 @@ SQInteger CPlayerNatives::GetMoveState(SQVM *pVM)
 // getLocalPlayer();
 SQInteger CPlayerNatives::GetLocalPlayer( SQVM * pVM )
 {
-	sq_pushinteger( pVM, pCore->GetPlayerManager()->GetLocalPlayer()->GetId() );
+	sq_pushinteger( pVM, CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetId() );
 	return 1;
 }
 
@@ -92,13 +113,13 @@ SQInteger CPlayerNatives::GetName( SQVM * pVM )
 	sq_getinteger( pVM, -1, &playerId );
 
 	// Is this not the localplayer?
-	if( playerId != pCore->GetPlayerManager()->GetLocalPlayer()->GetId() )
+	if( playerId != CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetId() )
 	{
 		// Is the player active?
-		if( pCore->GetPlayerManager()->Get(playerId) )
+		if( CCore::Instance()->GetPlayerManager()->Get(playerId) )
 		{
 			// Get the player name
-			String strNick = pCore->GetPlayerManager()->Get(playerId)->GetNick();
+			String strNick = CCore::Instance()->GetPlayerManager()->Get(playerId)->GetNick();
 
 			sq_pushstring( pVM, strNick.Get(), strNick.GetLength() );
 			return 1;
@@ -107,7 +128,7 @@ SQInteger CPlayerNatives::GetName( SQVM * pVM )
 	else
 	{
 		// Get the localplayer nick
-		String strNick = pCore->GetPlayerManager()->GetLocalPlayer()->GetNick();
+		String strNick = CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetNick();
 
 		sq_pushstring( pVM, strNick.Get(), strNick.GetLength() );
 		return 1;
@@ -124,18 +145,18 @@ SQInteger CPlayerNatives::GetPing( SQVM * pVM )
 	sq_getinteger( pVM, -1, &playerId );
 
 	// Is this not the localplayer?
-	if( playerId != pCore->GetPlayerManager()->GetLocalPlayer()->GetId() )
+	if( playerId != CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetId() )
 	{
 		// Is the player active?
-		if( pCore->GetPlayerManager()->Get(playerId) )
+		if( CCore::Instance()->GetPlayerManager()->Get(playerId) )
 		{
-			sq_pushinteger( pVM, pCore->GetPlayerManager()->Get(playerId)->GetPing() );
+			sq_pushinteger( pVM, CCore::Instance()->GetPlayerManager()->Get(playerId)->GetPing() );
 			return 1;
 		}
 	}
 	else
 	{
-		sq_pushinteger( pVM, pCore->GetPlayerManager()->GetLocalPlayer()->GetPing() );
+		sq_pushinteger( pVM, CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetPing() );
 		return 1;
 	}
 
@@ -150,18 +171,18 @@ SQInteger CPlayerNatives::GetColour( SQVM * pVM )
 	sq_getinteger( pVM, -1, &playerId );
 
 	// Is this not the localplayer?
-	if( playerId != pCore->GetPlayerManager()->GetLocalPlayer()->GetId() )
+	if( playerId != CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetId() )
 	{
 		// Is the player active?
-		if( pCore->GetPlayerManager()->Get(playerId) )
+		if( CCore::Instance()->GetPlayerManager()->Get(playerId) )
 		{
-			sq_pushinteger( pVM, ((pCore->GetPlayerManager()->Get(playerId)->GetColour() >> 8) | 0xFF000000) );
+			sq_pushinteger( pVM, ((CCore::Instance()->GetPlayerManager()->Get(playerId)->GetColour() >> 8) | 0xFF000000) );
 			return 1;
 		}
 	}
 	else
 	{
-		sq_pushinteger( pVM, ((pCore->GetPlayerManager()->GetLocalPlayer()->GetColour() >> 8) | 0xFF000000) );
+		sq_pushinteger( pVM, ((CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetColour() >> 8) | 0xFF000000) );
 		return 1;
 	}
 
@@ -176,13 +197,13 @@ SQInteger CPlayerNatives::IsPlayerConnected( SQVM * pVM )
 	sq_getinteger( pVM, -1, &playerId );
 
 	// Is this the localplayer?
-	if( playerId == pCore->GetPlayerManager()->GetLocalPlayer()->GetId() )
+	if( playerId == CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetId() )
 	{
 		sq_pushbool( pVM, true );
 		return 1;
 	}
 
-	sq_pushbool( pVM, pCore->GetPlayerManager()->IsActive(playerId) );
+	sq_pushbool( pVM, CCore::Instance()->GetPlayerManager()->IsActive(playerId) );
 	return 1;
 }
 
@@ -193,16 +214,16 @@ SQInteger CPlayerNatives::IsOnScreen( SQVM * pVM )
 	sq_getinteger( pVM, -1, &playerId );
 
 	// Is this the localplayer?
-	if( playerId == pCore->GetPlayerManager()->GetLocalPlayer()->GetId() )
+	if( playerId == CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetId() )
 	{
 		sq_pushbool( pVM, true );
 		return 1;
 	}
 
 	// Is the player connected?
-	if( pCore->GetPlayerManager()->IsActive( playerId ) && pCore->GetPlayerManager()->Get(playerId)->GetPlayerPed() )
+	if( CCore::Instance()->GetPlayerManager()->IsActive( playerId ) && CCore::Instance()->GetPlayerManager()->Get(playerId)->GetPlayerPed() )
 	{
-		sq_pushbool( pVM, pCore->GetPlayerManager()->Get(playerId)->GetPlayerPed()->IsOnScreen() );
+		sq_pushbool( pVM, CCore::Instance()->GetPlayerManager()->Get(playerId)->GetPlayerPed()->IsOnScreen() );
 		return 1;
 	}
 
@@ -217,16 +238,16 @@ SQInteger CPlayerNatives::IsSpawned( SQVM * pVM )
 	sq_getinteger( pVM, -1, &playerId );
 
 	// Is this the localplayer?
-	if( playerId == pCore->GetPlayerManager()->GetLocalPlayer()->GetId() )
+	if( playerId == CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetId() )
 	{
-		sq_pushbool( pVM, pCore->GetPlayerManager()->GetLocalPlayer()->IsSpawned() );
+		sq_pushbool( pVM, CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->IsSpawned() );
 		return 1;
 	}
 	else
 	{
-		if ( pCore->GetPlayerManager()->IsActive(playerId) )
+		if ( CCore::Instance()->GetPlayerManager()->IsActive(playerId) )
 		{
-			sq_pushbool( pVM, pCore->GetPlayerManager()->Get(playerId)->IsSpawned() );
+			sq_pushbool( pVM, CCore::Instance()->GetPlayerManager()->Get(playerId)->IsSpawned() );
 			return 1;
 		}
 	}
@@ -244,12 +265,12 @@ SQInteger CPlayerNatives::GetPosition( SQVM * pVM )
 	CVector3 vecPos;
 
 	// Is this the localplayer?
-	if( playerId == pCore->GetPlayerManager()->GetLocalPlayer()->GetId() )
-		pCore->GetPlayerManager()->GetLocalPlayer()->GetPosition( &vecPos );
+	if( playerId == CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetId() )
+		CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetPosition( &vecPos );
 	else
 	{
-		if( pCore->GetPlayerManager()->IsActive(playerId) )
-			pCore->GetPlayerManager()->Get(playerId)->GetPosition( &vecPos );
+		if( CCore::Instance()->GetPlayerManager()->IsActive(playerId) )
+			CCore::Instance()->GetPlayerManager()->Get(playerId)->GetPosition( &vecPos );
 	}
 
 	sq_newarray( pVM, 0 );
@@ -276,12 +297,12 @@ SQInteger CPlayerNatives::GetRotation( SQVM * pVM )
 	CVector3 vecRot;
 
 	// Is this the localplayer?
-	if( playerId == pCore->GetPlayerManager()->GetLocalPlayer()->GetId() )
-		pCore->GetPlayerManager()->GetLocalPlayer()->GetRotation( &vecRot );
+	if( playerId == CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetId() )
+		CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetRotation( &vecRot );
 	else
 	{
-		if( pCore->GetPlayerManager()->IsActive(playerId) )
-			pCore->GetPlayerManager()->Get(playerId)->GetRotation( &vecRot );
+		if( CCore::Instance()->GetPlayerManager()->IsActive(playerId) )
+			CCore::Instance()->GetPlayerManager()->Get(playerId)->GetRotation( &vecRot );
 	}
 
 	sq_newarray( pVM, 0 );
@@ -308,12 +329,12 @@ SQInteger CPlayerNatives::GetHealth( SQVM * pVM )
 	float fHealth = 0.0f;
 
 	// Is this the localplayer?
-	if( playerId == pCore->GetPlayerManager()->GetLocalPlayer()->GetId() )
-		fHealth = pCore->GetPlayerManager()->GetLocalPlayer()->GetHealth();
+	if( playerId == CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetId() )
+		fHealth = CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetHealth();
 	else
 	{
-		if( pCore->GetPlayerManager()->IsActive(playerId) )
-			fHealth = pCore->GetPlayerManager()->Get(playerId)->GetHealth();
+		if( CCore::Instance()->GetPlayerManager()->IsActive(playerId) )
+			fHealth = CCore::Instance()->GetPlayerManager()->Get(playerId)->GetHealth();
 	}
 
 	sq_pushfloat( pVM, fHealth );
@@ -327,7 +348,7 @@ SQInteger CPlayerNatives::ToggleControls( SQVM * pVM )
 	sq_getbool( pVM, -1, &bToggle );
 	
 	// Is this the localplayer?
-	pCore->GetPlayerManager()->GetLocalPlayer()->LockControls( bToggle );
+	CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->LockControls( bToggle );
 
 	sq_pushbool( pVM, true );
 	return 1;
@@ -342,12 +363,12 @@ SQInteger CPlayerNatives::IsInVehicle( SQVM * pVM )
 	bool bInVehicle = false;
 
 	// Is this the localplayer?
-	if( playerId == pCore->GetPlayerManager()->GetLocalPlayer()->GetId() )
-		bInVehicle = pCore->GetPlayerManager()->GetLocalPlayer()->IsInVehicle();
+	if( playerId == CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetId() )
+		bInVehicle = CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->IsInVehicle();
 	else
 	{
-		if( pCore->GetPlayerManager()->IsActive(playerId) )
-			bInVehicle = pCore->GetPlayerManager()->Get(playerId)->IsInVehicle();
+		if( CCore::Instance()->GetPlayerManager()->IsActive(playerId) )
+			bInVehicle = CCore::Instance()->GetPlayerManager()->Get(playerId)->IsInVehicle();
 	}
 
 	sq_pushbool( pVM, bInVehicle );
@@ -363,12 +384,12 @@ SQInteger CPlayerNatives::GetVehicle( SQVM * pVM )
 	EntityId vehicleId = INVALID_ENTITY_ID;
 
 	// Is this the localplayer?
-	if( playerId == pCore->GetPlayerManager()->GetLocalPlayer()->GetId() && pCore->GetPlayerManager()->GetLocalPlayer()->IsInVehicle() )
-		vehicleId = pCore->GetPlayerManager()->GetLocalPlayer()->GetVehicle()->GetId();
+	if( playerId == CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetId() && CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->IsInVehicle() )
+		vehicleId = CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetVehicle()->GetId();
 	else
 	{
-		if( pCore->GetPlayerManager()->IsActive(playerId) && pCore->GetPlayerManager()->Get(playerId)->IsInVehicle() )
-			vehicleId = pCore->GetPlayerManager()->Get(playerId)->GetVehicle()->GetId();
+		if( CCore::Instance()->GetPlayerManager()->IsActive(playerId) && CCore::Instance()->GetPlayerManager()->Get(playerId)->IsInVehicle() )
+			vehicleId = CCore::Instance()->GetPlayerManager()->Get(playerId)->GetVehicle()->GetId();
 	}
 
 	sq_pushinteger( pVM, vehicleId );
@@ -382,10 +403,10 @@ SQInteger CPlayerNatives::SetDrunkLevel( SQVM *pVM )
 	// Get the drunk level
 	sq_getinteger(pVM, -1, &drunkLevel);
 
-	if (pCore->GetHud() != NULL){
+	if (CCore::Instance()->GetHud() != NULL){
 
 		// Set the drunk level
-		pCore->GetHud()->SetDrunkLevel(drunkLevel);
+		CCore::Instance()->GetHud()->SetDrunkLevel(drunkLevel);
 
 		sq_pushbool(pVM, true);
 		return (1);
@@ -398,14 +419,14 @@ SQInteger CPlayerNatives::SetDrunkLevel( SQVM *pVM )
 SQInteger CPlayerNatives::GetDrunkLevel(SQVM *pVM)
 {
 	// Return the value
-	sq_pushinteger(pVM, pCore->GetHud()->GetDrunkLevel());
+	sq_pushinteger(pVM, CCore::Instance()->GetHud()->GetDrunkLevel());
 	return (1);
 }
 
 SQInteger CPlayerNatives::ResetDrunkLevel(SQVM *pVM)
 {
 	// Reset drunk level
-	pCore->GetHud()->SetDrunkLevel(0);
+	CCore::Instance()->GetHud()->SetDrunkLevel(0);
 
 	// Return the value
 	sq_pushbool(pVM, true);
@@ -419,10 +440,10 @@ SQInteger CPlayerNatives::SetWantedLevel(SQVM *pVM)
 	// Get the drunk level
 	sq_getinteger(pVM, -1, &wantedLevel);
 
-	if (pCore->GetHud() != NULL){
+	if (CCore::Instance()->GetHud() != NULL){
 
 		// Set the drunk level
-		pCore->GetHud()->SetWantedLevel(wantedLevel);
+		CCore::Instance()->GetHud()->SetWantedLevel(wantedLevel);
 
 		sq_pushbool(pVM, true);
 		return (1);
@@ -435,6 +456,6 @@ SQInteger CPlayerNatives::SetWantedLevel(SQVM *pVM)
 SQInteger CPlayerNatives::GetWantedLevel(SQVM *pVM)
 {
 	// Return the value
-	sq_pushinteger(pVM, pCore->GetHud()->GetWantedLevel());
+	sq_pushinteger(pVM, CCore::Instance()->GetHud()->GetWantedLevel());
 	return (1);
 }

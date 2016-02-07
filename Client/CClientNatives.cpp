@@ -7,9 +7,22 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
+#include	"BaseInc.h"
 
-extern	CCore			* pCore;
+#include	"CCore.h"
+
+#include	"Scripting\CScriptingManager.h"
+#include	"Scripting\CSquirrelCommon.h"
+
+#include	"../Shared/CNetworkRPC.h"
+
+#include	"../Libraries/RakNet/Source/PacketPriority.h"
+
+#include	"CKeyBinds.h"
+
+#include	"CNetworkModule.h"
+
+#include	"CClientNatives.h"
 
 void CClientNatives::Register( CScriptingManager * pScriptingManager )
 {
@@ -31,7 +44,7 @@ SQInteger CClientNatives::TriggerServerEvent( SQVM * pVM )
 
 	RakNet::BitStream bsSend;
 	args.Serialise( &bsSend );
-	pCore->GetNetworkModule()->Call( RPC_TRIGGEREVENT, &bsSend, HIGH_PRIORITY, RELIABLE_ORDERED, true );
+	CCore::Instance()->GetNetworkModule()->Call( RPC_TRIGGEREVENT, &bsSend, HIGH_PRIORITY, RELIABLE_ORDERED, true );
 
 	sq_pushbool( pVM, true );
 	return 1;
@@ -49,10 +62,10 @@ SQInteger CClientNatives::BindKey( SQVM * pVM )
 	SQObjectPtr pFunction = stack_get( pVM, -1 );
 
 	// Is the key not already bound?
-	if( !pCore->GetKeyBinds()->IsKeyBound( szKey, szState ) )
+	if( !CCore::Instance()->GetKeyBinds()->IsKeyBound( szKey, szState ) )
 	{
 		// Bind the key
-		sq_pushbool( pVM, pCore->GetKeyBinds()->BindKey( szKey, szState, pVM, pFunction ) );
+		sq_pushbool( pVM, CCore::Instance()->GetKeyBinds()->BindKey( szKey, szState, pVM, pFunction ) );
 		return 1;
 	}
 	else {
@@ -72,10 +85,10 @@ SQInteger CClientNatives::UnbindKey( SQVM * pVM )
 	sq_getstring( pVM, -1, &szState );
 
 	// Is the key bound?
-	if( pCore->GetKeyBinds()->IsKeyBound( szKey, szState ) )
+	if( CCore::Instance()->GetKeyBinds()->IsKeyBound( szKey, szState ) )
 	{
 		// Unbind the key
-		sq_pushbool( pVM, pCore->GetKeyBinds()->UnbindKey( szState, szState ) );
+		sq_pushbool( pVM, CCore::Instance()->GetKeyBinds()->UnbindKey( szState, szState ) );
 		return 1;
 	}
 	else {
@@ -95,6 +108,6 @@ SQInteger CClientNatives::IsKeyBound( SQVM * pVM )
 	sq_getstring( pVM, -1, &szState );
 
 	// Is the key bound?
-	sq_pushbool( pVM, pCore->GetKeyBinds()->IsKeyBound( szKey, szState ) );
+	sq_pushbool( pVM, CCore::Instance()->GetKeyBinds()->IsKeyBound( szKey, szState ) );
 	return 1;
 }

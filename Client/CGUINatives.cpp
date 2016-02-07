@@ -7,9 +7,43 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
+#include	"BaseInc.h"
 
-extern	CCore			* pCore;
+#include	"CCore.h"
+
+#include	"Scripting\CScriptingManager.h"
+#include	"Scripting\CSquirrelCommon.h"
+
+#include	"Math\CVector3.h"
+#include	"CString.h"
+
+#include	"CGUITypes.h"
+
+#include	"CGraphics.h"
+#include	"CGUI.h"
+#include	"CDownloadProgress.h"
+#include	"CMainMenu.h"
+
+#include	"gui_impl\CGUI_Impl.h"
+#include	"gui_impl\CGUIElement_Impl.h"
+#include	"gui_impl\CGUIButton_Impl.h"
+#include	"gui_impl\CGUICheckBox_Impl.h"
+#include	"gui_impl\CGUIComboBox_Impl.h"
+#include	"gui_impl\CGUIEdit_Impl.h"
+#include	"gui_impl\CGUILabel_Impl.h"
+#include	"gui_impl\CGUIGridList_Impl.h"
+#include	"gui_impl\CGUIProgressBar_Impl.h"
+#include	"gui_impl\CGUIRadioButton_Impl.h"
+#include	"gui_impl\CGUITabPanel_Impl.h"
+#include	"gui_impl\CGUIStaticImage_Impl.h"
+#include	"gui_impl\CGUIWindow_Impl.h"
+
+#include	"CClientScriptingManager.h"
+#include	"CClientScriptGUIManager.h"
+
+#include	"SharedUtility.h"
+
+#include	"CGUINatives.h"
 
 
 void CGUINatives::Register( CScriptingManager * pScriptingManager )
@@ -71,7 +105,7 @@ SQInteger CGUINatives::NewFont( SQVM * pVM )
 	sq_getinteger( pVM, -2, &iSize );
 	sq_getbool( pVM, -1, &bBold );
 
-	sq_pushbool( pVM, pCore->GetGraphics()->LoadFont( szFont, iSize, bBold ) );
+	sq_pushbool( pVM, CCore::Instance()->GetGraphics()->LoadFont( szFont, iSize, bBold ) );
 	return 1;
 }
 
@@ -128,7 +162,7 @@ SQInteger CGUINatives::DrawText( SQVM * pVM )
 	}
 
 	// Draw the text
-	pCore->GetGraphics()->DrawText( fX, fY, (DWORD)iColour, fScale, szFont, (bool)bShadow, szText );
+	CCore::Instance()->GetGraphics()->DrawText( fX, fY, (DWORD)iColour, fScale, szFont, (bool)bShadow, szText );
 
 	sq_pushbool( pVM, true );
 	return 1;
@@ -147,7 +181,7 @@ SQInteger CGUINatives::DrawRectangle( SQVM * pVM )
 	sq_getinteger( pVM, -1, &iColour );
 
 	// Draw the text
-	pCore->GetGraphics()->DrawBox( fX, fY, fWidth, fHeight, (DWORD)iColour );
+	CCore::Instance()->GetGraphics()->DrawBox( fX, fY, fWidth, fHeight, (DWORD)iColour );
 
 	sq_pushbool( pVM, true );
 	return 1;
@@ -167,7 +201,7 @@ SQInteger CGUINatives::DrawLine( SQVM * pVM )
 	sq_getinteger( pVM, -1, &iColour );
 
 	// Draw the line
-	pCore->GetGraphics()->DrawLine( fX, fY, fEndX, fEndY, fWidth, (DWORD)iColour );
+	CCore::Instance()->GetGraphics()->DrawLine( fX, fY, fEndX, fEndY, fWidth, (DWORD)iColour );
 
 	sq_pushbool( pVM, true );
 	return 1;
@@ -184,8 +218,8 @@ SQInteger CGUINatives::GetTextDimensions( SQVM * pVM )
 	sq_getstring( pVM, -1, &szFont );
 
 	CSquirrelArguments args;
-	args.push( pCore->GetGraphics()->GetTextWidth( szText, fScale, szFont ) );
-	args.push( pCore->GetGraphics()->GetFontHeight( fScale, szFont ) );
+	args.push( CCore::Instance()->GetGraphics()->GetTextWidth( szText, fScale, szFont ) );
+	args.push( CCore::Instance()->GetGraphics()->GetFontHeight( fScale, szFont ) );
 
 	CSquirrelArgument * pArgument = new CSquirrelArgument( args, true );
 	pArgument->push( pVM );
@@ -197,7 +231,7 @@ SQInteger CGUINatives::GetTextDimensions( SQVM * pVM )
 // isTransferBoxShowing( );
 SQInteger CGUINatives::IsTransferBoxShowing( SQVM * pVM )
 {
-	sq_pushbool( pVM, pCore->GetGUI()->GetDownloadProgress()->IsVisible() );
+	sq_pushbool( pVM, CCore::Instance()->GetGUI()->GetDownloadProgress()->IsVisible() );
 	return 1;
 }
 
@@ -208,7 +242,7 @@ SQInteger CGUINatives::ShowCursor( SQVM * pVM )
 	sq_getbool( pVM, -1, &bToggle );
 
 	// Toggle the gui cursor
-	pCore->GetGUI()->SetCursorVisible( bToggle );
+	CCore::Instance()->GetGUI()->SetCursorVisible( bToggle );
 
 	sq_pushbool( pVM, true );
 	return 1;
@@ -217,14 +251,14 @@ SQInteger CGUINatives::ShowCursor( SQVM * pVM )
 // isCursorShowing();
 SQInteger CGUINatives::IsCursorShowing( SQVM * pVM )
 {
-	sq_pushbool( pVM, pCore->GetGUI()->IsCursorVisible() );
+	sq_pushbool( pVM, CCore::Instance()->GetGUI()->IsCursorVisible() );
 	return 1;
 }
 
 // isMainMenuShowing();
 SQInteger CGUINatives::IsMainMenuShowing( SQVM * pVM )
 {
-	sq_pushbool( pVM, pCore->GetGUI()->GetMainMenu()->IsVisible() );
+	sq_pushbool( pVM, CCore::Instance()->GetGUI()->GetMainMenu()->IsVisible() );
 	return 1;
 }
 
@@ -303,7 +337,7 @@ SQInteger CGUINatives::CreateElement( SQVM * pVM )
 	}
 
 	// Get the gui pointer
-	CGUI_Impl * pGUI = pCore->GetGUI()->GetCEGUI();
+	CGUI_Impl * pGUI = CCore::Instance()->GetGUI()->GetCEGUI();
 
 	// Create the gui element
 	switch( type )
@@ -341,14 +375,14 @@ SQInteger CGUINatives::CreateElement( SQVM * pVM )
 		if ( type == GUI_IMAGE )
 		{
 			// Load the image file
-			((CGUIStaticImage_Impl *)pElement)->LoadFromFile ( szCaption, SharedUtility::GetFileNameForScriptFile ( "", "", pCore->GetHost (), pCore->GetPort () ) );
+			((CGUIStaticImage_Impl *)pElement)->LoadFromFile ( szCaption, SharedUtility::GetFileNameForScriptFile ( "", "", CCore::Instance()->GetHost (), CCore::Instance()->GetPort () ) );
 		}
 
 		// Get the script pointer from the script vm
-		CSquirrel * pScript = pCore->GetClientScriptingManager()->GetScriptingManager()->Get( pVM );
+		CSquirrel * pScript = CCore::Instance()->GetClientScriptingManager()->GetScriptingManager()->Get( pVM );
 
 		// Add the element to the client script gui manager
-		pCore->GetClientScriptingManager()->GetScriptGUIManager()->Add( pElement, pScript );
+		CCore::Instance()->GetClientScriptingManager()->GetScriptGUIManager()->Add( pElement, pScript );
 
 		sq_pushpointer< CGUIElement_Impl* >( pVM, pElement );
 		return 1;
@@ -368,7 +402,7 @@ SQInteger CGUINatives::DestroyElement ( SQVM * pVM )
 	if ( pElement )
 	{
 		// Remove the element from the client script gui manager
-		pCore->GetClientScriptingManager()->GetScriptGUIManager()->Delete ( pElement );
+		CCore::Instance()->GetClientScriptingManager()->GetScriptGUIManager()->Delete ( pElement );
 
 		// Delete the element
 		SAFE_DELETE ( pElement );
