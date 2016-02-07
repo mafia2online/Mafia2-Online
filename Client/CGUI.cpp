@@ -7,9 +7,24 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
+#include	"BaseInc.h"
 
-extern	CCore			* pCore;
+#include	"CCore.h"
+
+#include	"CMafia.h"
+
+#include	"CGUI.h"
+
+#include	"gui_impl\CGUI_Impl.h"
+#include	"CDirectInput8Hook.h"
+
+#include	"CServerBrowser.h"
+#include	"CMainMenu.h"
+#include	"CDownloadProgress.h"
+#include	"CMenuSettings.h"
+
+#include	"CM2Camera.h"
+#include	"CChat.h"
 
 CGUI::CGUI( IDirect3DDevice9 * pDevice )
 {
@@ -76,7 +91,7 @@ void CGUI::SetupInputDevice( void )
 	m_pInputDevice->SetDataFormat( &c_dfDIMouse2 );
 
 	// Set the input device to non exclusive
-	m_pInputDevice->SetCooperativeLevel( pCore->GetGameHwnd(), DISCL_BACKGROUND | DISCL_NONEXCLUSIVE );
+	m_pInputDevice->SetCooperativeLevel(CCore::Instance()->GetGameHwnd(), DISCL_BACKGROUND | DISCL_NONEXCLUSIVE);
 
 	// Acquire the input device
 	m_pInputDevice->Acquire();
@@ -106,25 +121,25 @@ void CGUI::SetCursorVisible( bool bVisible )
 	m_pGUI->SetCursorEnabled( bVisible );
 
 	// Is the camera instance valid?
-	if( pCore->GetCamera() )
+	if( CCore::Instance()->GetCamera() )
 	{
 		// Are we enabling the mouse?
 		if( bVisible )
 		{
 			// Store the previous camera state
-			m_bPreviousCameraState = pCore->GetCamera()->IsLocked();
+			m_bPreviousCameraState = CCore::Instance()->GetCamera()->IsLocked();
 
 			// Lock the camera control
-			pCore->GetCamera()->LockControl( true );
+			CCore::Instance()->GetCamera()->LockControl(true);
 
 			// Hide the map if it's visible
-			if ( pCore->GetGame()->IsMapOpen () )
-				pCore->GetGame()->OpenMap ( false );
+			if (CCore::Instance()->GetGame()->IsMapOpen())
+				CCore::Instance()->GetGame()->OpenMap(false);
 		}
 		else
 		{
 			// Restore the old camera state before we locked it
-			pCore->GetCamera()->LockControl( m_bPreviousCameraState );
+			CCore::Instance()->GetCamera()->LockControl(m_bPreviousCameraState);
 
 			// Reset the old camera state
 			m_bPreviousCameraState = false;
@@ -156,7 +171,7 @@ void CGUI::Render( void )
 void CGUI::ProcessMouse( void )
 {
 	// Process the mouse
-	if( pCore->GetGame()->Focused() && m_pGUI->IsCursorEnabled() )
+	if( CCore::Instance()->GetGame()->Focused() && m_pGUI->IsCursorEnabled() )
 	{
 		// Make sure the input device is valid
 		if( !m_pInputDevice )
@@ -259,7 +274,7 @@ bool CGUI::InputGoesToGUI( void )
 		return false;
 
 	// Check if input should be going to gui
-	return (pCore->GetGame()->Focused() || !pCore->GetChat()->IsInputVisible());
+	return (CCore::Instance()->GetGame()->Focused() || !CCore::Instance()->GetChat()->IsInputVisible());
 }
 
 unsigned long CGUI::TranslateFromScanCode( DWORD dwCharacter )

@@ -8,10 +8,14 @@
 ***************************************************************/
 
 #ifdef _CLIENT
-#include	"../Client/StdInc.h"
+#include	"../Client/BaseInc.h"
 #else
-#include	"../Server/StdInc.h"
+#include	"../Client/BaseInc.h"
 #endif
+
+#include "SharedUtility.h"
+
+#include "CExceptionHandler.h"
 
 ExceptionHandlerCallback_t CExceptionHandler::m_pfnCallback = NULL;
 
@@ -32,7 +36,6 @@ void CExceptionHandler::ExceptionHandler( int iSignal )
 	// Terminate mafia2
 	SharedUtility::_TerminateProcess( "Mafia2.exe" );
 
-	//
 	return EXCEPTION_EXECUTE_HANDLER;
 }
 

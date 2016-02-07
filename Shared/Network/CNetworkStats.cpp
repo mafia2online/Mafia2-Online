@@ -11,14 +11,17 @@
 #include	"CNetworkStats.h"
 #include	"../../Libraries/RakNet/Source/RakNetStatistics.h"
 #include	"../../Libraries/RakNet/Source/GetTime.h"
+#include	"../../Libraries/RakNet/Source/RakPeerInterface.h"
 
 #ifdef _CLIENT
-#include	"../../Client/StdInc.h"
+#include	"../../Client/BaseInc.h"
+#include	"../../Client/CCore.h"
+#include	"../../Client/CNetworkModule.h"
 #else
-#include	"../../Server/StdInc.h"
+#include	"../../Client/BaseInc.h"
+#include	"../../Server/CCore.h"
+#include	"../../Server/CNetworkModule.h"
 #endif
-
-extern	CCore				* pCore;
 
 #ifdef _CLIENT
 void CNetworkStats::GetStats( CNetStats * netStats )
@@ -31,7 +34,7 @@ void CNetworkStats::GetStats( CNetStats * netStats, EntityId playerId )
 
 	// Get the statistics
 #ifdef _CLIENT
-	pNetworkStats = pCore->GetNetworkModule()->GetRakPeer()->GetStatistics( RakNet::UNASSIGNED_SYSTEM_ADDRESS );
+	pNetworkStats = CCore::Instance()->GetNetworkModule()->GetRakPeer()->GetStatistics( RakNet::UNASSIGNED_SYSTEM_ADDRESS );
 #else
 	if( playerId == INVALID_ENTITY_ID )
 		pNetworkStats = pCore->GetNetworkModule()->GetRakPeer()->GetStatistics( pCore->GetNetworkModule()->GetRakPeer()->GetMyBoundAddress () );
