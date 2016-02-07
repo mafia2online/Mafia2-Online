@@ -7,9 +7,23 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
+#include	"BaseInc.h"
 
-extern		CCore				* pCore;
+#include	"CCore.h"
+
+#include	"Math\CVector3.h"
+#include	"CString.h"
+
+#include	"CGUI.h"
+#include	"CGUICallback.h"
+#include	"gui_impl\CGUI_Impl.h"
+#include	"gui_impl\CGUIElement_Impl.h"
+#include	"gui_impl\CGUILabel_Impl.h"
+#include	"gui_impl\CGUIEdit_Impl.h"
+#include	"gui_impl\CGUIWindow_Impl.h"
+#include	"gui_impl\CGUIButton_Impl.h"
+
+#include	"CServerPassword.h"
 
 bool CServerPassword::Event_OnSubmitClick ( CGUIElement_Impl * pElement )
 {

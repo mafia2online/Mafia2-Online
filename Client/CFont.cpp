@@ -7,7 +7,14 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
+#include	"BaseInc.h"
+
+#include "CFont.h"
+#include "CCore.h"
+
+#include "CString.h"
+
+#include "CGraphics.h"
 
 extern CCore		* pCore;
 

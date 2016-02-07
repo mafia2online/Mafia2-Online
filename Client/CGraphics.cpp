@@ -7,11 +7,31 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
+#include	"BaseInc.h"
 #include	<iostream>
 #include	<algorithm>
 
-extern	CCore			* pCore;
+#include <map>
+
+#include "CString.h"
+#include "Math\CVector3.h"
+
+#include "CCore.h"
+#include "CGraphics.h"
+
+#include "CFont.h"
+
+#include "CDirect3D9Hook.h"
+#include "CDirectInput8Hook.h"
+
+#include "CPlayerManager.h"
+#include "CLocalPlayer.h"
+
+#include "CM2Camera.h"
+
+#include "CIE.h"
+
+#include "SharedUtility.h"
 
 const unsigned char g_szPixel [] = { 0x42, 0x4D, 0x3A, 0, 0, 0, 0, 0, 0, 0, 0x36, 0, 0, 0, 0x28, 0, 0,
                                     0, 0x1, 0, 0, 0, 0x1, 0, 0, 0, 0x1, 0, 0x18, 0, 0, 0, 0, 0,
@@ -280,7 +300,7 @@ void CGraphics::DrawText( CVector3 vecPosition, float fDistance, unsigned long u
 
 	// Get the current player position
 	CVector3 vecCurrentPosition;
-	pCore->GetPlayerManager()->GetLocalPlayer()->GetPosition( &vecCurrentPosition );
+	CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetPosition( &vecCurrentPosition );
 
 	// Are we too far away?
 	if( (vecCurrentPosition - vecPosition).Length() > fDistance )
@@ -305,7 +325,7 @@ void CGraphics::DrawBox( CVector3 vecPosition, float fWidth, float fHeight, floa
 
 	// Get the current player position
 	CVector3 vecCurrentPosition;
-	pCore->GetPlayerManager()->GetLocalPlayer()->GetPosition( &vecCurrentPosition );
+	CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetPosition(&vecCurrentPosition);
 
 	// Are we too far away?
 	if( (vecCurrentPosition - vecPosition).Length() > fDistance )
@@ -463,7 +483,7 @@ void CGraphics::WorldToScreen( CVector3 vecWorld, CVector3 * vecScreen )
 {
 	// Get the world view projection matrix
 	D3DXMATRIX worldViewProjection;
-	pCore->GetCamera()->GetWorldViewProjection( &worldViewProjection );
+	CCore::Instance()->GetCamera()->GetWorldViewProjection(&worldViewProjection);
 
 	// Get the viewport
 	D3DVIEWPORT9 viewport;
@@ -482,7 +502,7 @@ void CGraphics::ScreenToWorld( CVector3 vecScreen, CVector3 * vecWorld )
 {
 	// Get the world view projection matrix
 	D3DXMATRIX worldViewProjection;
-	pCore->GetCamera()->GetWorldViewProjection( &worldViewProjection );
+	CCore::Instance()->GetCamera()->GetWorldViewProjection(&worldViewProjection);
 
 	// Get the viewport
 	D3DVIEWPORT9 viewport;
@@ -711,8 +731,7 @@ unsigned int CGraphics::GetFontIndex( const char * szFont )
 
 bool CGraphics::GetFrontBufferPixels( unsigned char ** ucData )
 {
-	//
-	if( !pCore->GetCamera() )
+	if (!CCore::Instance()->GetCamera())
 		return false;
 
 	// Don't we have a valid data pointer?
@@ -741,8 +760,8 @@ bool CGraphics::GetFrontBufferPixels( unsigned char ** ucData )
 	}
 
 	//
-	unsigned int uiWindowWidth = pCore->GetCamera()->GetWindowWidth();
-	unsigned int uiWindowHeight = pCore->GetCamera()->GetWindowHeight();
+	unsigned int uiWindowWidth = CCore::Instance()->GetCamera()->GetWindowWidth();
+	unsigned int uiWindowHeight = CCore::Instance()->GetCamera()->GetWindowHeight();
 
 	// Build the client rect
 	RECT clientRect;

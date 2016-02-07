@@ -7,9 +7,47 @@
 *
 ***************************************************************/
 
+#include "BaseInc.h"
 
+#include "CCore.h"
 
-extern CCore				* pCore;
+#include "CString.h"
+#include "Math\CVector3.h"
+#include "Math\CMaths.h"
+
+#include "CSettings.h"
+
+#include "CGUI.h"
+#include "CGUICallback.h"
+
+#include "gui_impl\CGUI_Impl.h"
+#include "gui_impl\CGUIElement_Impl.h"
+#include "gui_impl\CGUIComboBox_Impl.h"
+#include "gui_impl\CGUIWindow_Impl.h"
+#include "gui_impl\CGUITab_Impl.h"
+#include "gui_impl\CGUITabPanel_Impl.h"
+#include "gui_impl\CGUIButton_Impl.h"
+#include "gui_impl\CGUILabel_Impl.h"
+#include "gui_impl\CGUIEdit_Impl.h"
+#include "gui_impl\CGUICheckBox_Impl.h"
+#include "gui_impl\CGUIScrollBar_Impl.h"
+
+#include "CM2VideoSettings.h"
+
+#include "CClientScriptingManager.h"
+#include "CEvents.h"
+#include "CNetworkModule.h"
+#include "CPlayerManager.h"
+#include "CLocalPlayer.h"
+
+#include "Scripting\CScriptingManager.h"
+#include "Scripting\CSquirrelArguments.h"
+
+#include "../Libraries/RakNet/Source/PacketPriority.h"
+#include "CPlayerRPC.h"
+#include "CNetworkRPC.h"
+
+#include "CMenuSettings.h"
 
 struct GameResolution
 {
@@ -323,7 +361,7 @@ CMenuSettings::~CMenuSettings( void )
 bool CMenuSettings::Event_OnSaveClick( CGUIElement_Impl * pElement )
 {
 	// Save the settings
-	pCore->GetGUI()->GetSettings()->SaveSettings();
+	CCore::Instance()->GetGUI()->GetSettings()->SaveSettings();
 
 	// Hide the settings window
 	SetVisible( false );
@@ -352,7 +390,7 @@ void CMenuSettings::LoadSettings( void )
 	CVAR_GET( "nick", &szNickname );
 
 	// Set the player nickname
-	pCore->SetNick( szNickname );
+	CCore::Instance()->SetNick( szNickname );
 
 	// Update the nickname edit
 	m_pNickname->SetText( szNickname );
@@ -486,14 +524,14 @@ void CMenuSettings::SaveSettings( void )
 		CVAR_SET( "nick", strNewNick.Get() );
 
 		// Change the player nickname
-		pCore->SetNick( strNewNick );
+		CCore::Instance()->SetNick(strNewNick);
 
 		// Set the localplayer nick
-		if ( pCore->GetPlayerManager() && pCore->GetPlayerManager()->GetLocalPlayer() )
-			pCore->GetPlayerManager()->GetLocalPlayer()->SetNick( strNewNick );
+		if (CCore::Instance()->GetPlayerManager() && CCore::Instance()->GetPlayerManager()->GetLocalPlayer())
+			CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->SetNick(strNewNick);
 
 		// Are we connected to a server?
-		if( pCore->GetNetworkModule()->IsConnected() )
+		if (CCore::Instance()->GetNetworkModule()->IsConnected())
 		{
 			// Construct a new bitstream
 			RakNet::BitStream bsSend;
@@ -502,16 +540,16 @@ void CMenuSettings::SaveSettings( void )
 			bsSend.Write( RakNet::RakString( strNewNick.Get() ) );
 			
 			// Send it to the server
-			pCore->GetNetworkModule()->Call( RPC_PLAYERCHANGENICK, &bsSend, HIGH_PRIORITY, RELIABLE_ORDERED, true );
+			CCore::Instance()->GetNetworkModule()->Call(RPC_PLAYERCHANGENICK, &bsSend, HIGH_PRIORITY, RELIABLE_ORDERED, true);
 
 			// Is the client scripting manager active?
-			if( pCore->GetClientScriptingManager() )
+			if( CCore::Instance()->GetClientScriptingManager() )
 			{
 				// Call the client event
 				CSquirrelArguments args;
 				args.push( strNewNick.Get() );
 				args.push( szNickname );
-				pCore->GetClientScriptingManager()->GetEvents()->Call( "onClientChangeNick", &args );
+				CCore::Instance()->GetClientScriptingManager()->GetEvents()->Call( "onClientChangeNick", &args );
 			}
 		}
 	}

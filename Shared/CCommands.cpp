@@ -8,23 +8,31 @@
 ***************************************************************/
 
 #ifdef _CLIENT
-#include	"../Client/StdInc.h"
-#else
-#include	"../Server/StdInc.h"
+#include "../Client/BaseInc.h"
+#include "../Client/CCore.h"
+ #else
+#include "../Client/BaseInc.h"
+#include "../Server/CCore.h"
 #endif
 
-extern	CCore			* pCore;
+#include "sqvm.h"
+
+#include "Scripting/CSquirrel.h"
+#include "Scripting/CScriptingManager.h"
+#include "CClientScriptingManager.h"
+
+#include "CCommands.h"
+
 
 void CSquirrelCommandHandler::Call( CSquirrelArguments * pArguments )
 {
 	// Find the script
 #ifndef _CLIENT
-	CSquirrel * pScript = pCore->GetScriptingManager()->Get( m_pVM );
+	CSquirrel * pScript = CCore::Instance()->GetScriptingManager()->Get( m_pVM );
 #else
-	CSquirrel * pScript = pCore->GetClientScriptingManager()->GetScriptingManager()->Get( m_pVM );
+	CSquirrel * pScript = CCore::Instance()->GetClientScriptingManager()->GetScriptingManager()->Get(m_pVM);
 #endif
 
-	// Is the script valid?
 	if( pScript )
 	{
 		// Call the function

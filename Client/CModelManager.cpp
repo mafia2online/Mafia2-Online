@@ -20,10 +20,13 @@ void M2ModelMgr::ChangeModel( const char * pszDir, const char * pszModel, int iH
 	CModelManager::SetDir( pszDir );
 
 	// Change model
-	_asm push iHumanColour;
-	_asm push pszModel;
-	_asm mov ecx, this;
-	_asm call COffsets::FUNC_CModelMgr__ChangeModel;
+	_asm
+	{
+		push iHumanColour;
+		push pszModel;
+		mov ecx, this;
+		call COffsets::FUNC_CModelMgr__ChangeModel;
+	}
 
 	CModelManager::SetDir( SDS_LOAD_DIR_PLAYER );
 }
