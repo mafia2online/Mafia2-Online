@@ -7,9 +7,19 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
+#include	"BaseInc.h"
 
-extern	CCore				* pCore;
+#include	"CCore.h"
+
+#include	"CGUI.h"
+#include	"CDownloadProgress.h"
+
+#include	"CMainMenu.h"
+#include	"CServerBrowser.h"
+
+#include	"CRC.h"
+
+#include	"CFileTransfer.h"
 
 void CFileTransfer::FileWriteHandler ( unsigned int uiBytesWritten, void * pUserData )
 {
@@ -23,7 +33,7 @@ void CFileTransfer::FileWriteHandler ( unsigned int uiBytesWritten, void * pUser
 		pFileTransfer->m_uiTotalDownloaded += uiBytesWritten;
 
 		// Update the transfer progress
-		pCore->GetGUI()->GetDownloadProgress()->SetProgress ( ((float)pFileTransfer->m_uiTotalDownloaded / (float)pFileTransfer->m_uiFileSize) );
+		CCore::Instance()->GetGUI()->GetDownloadProgress()->SetProgress(((float)pFileTransfer->m_uiTotalDownloaded / (float)pFileTransfer->m_uiFileSize));
 	}
 }
 
@@ -52,7 +62,7 @@ CFileTransfer::CFileTransfer ( String strFileName, CFileChecksum fileChecksum, b
 	m_uiTotalDownloaded ( 0 )
 {
 	// Build the target directory string
-	String strTargetFolder = SharedUtility::GetClientScriptFolder ( pCore->GetHost (), pCore->GetPort () );
+	String strTargetFolder = SharedUtility::GetClientScriptFolder(CCore::Instance()->GetHost(), CCore::Instance()->GetPort());
 
 	// Does the target directory not exists?
 	if ( !SharedUtility::Exists ( strTargetFolder.Get () ) )
@@ -74,8 +84,8 @@ CFileTransfer::CFileTransfer ( String strFileName, CFileChecksum fileChecksum, b
 	m_httpClient.SetHeaderHandler ( HeaderHandler, this );
 
 	// Hide the main menu and show only the download progress
-	pCore->GetGUI()->GetMainMenu()->SetVisible(false);
-	pCore->GetGUI()->GetServerBrowser()->SetVisible(false);
+	CCore::Instance()->GetGUI()->GetMainMenu()->SetVisible(false);
+	CCore::Instance()->GetGUI()->GetServerBrowser()->SetVisible(false);
 }
 
 CFileTransfer::~CFileTransfer ( void )
@@ -111,11 +121,11 @@ void CFileTransfer::Pulse ( String strHost, unsigned short usHttpPort )
 		CLogFile::Printf ( "Failed to start http download! (%s)", m_httpClient.GetLastErrorString ().Get () );
 
 	// Show the download progress bar
-	pCore->GetGUI()->GetDownloadProgress()->SetVisible( true );
-	pCore->GetGUI()->GetDownloadProgress()->SetProgress( 0.0f );
+	CCore::Instance()->GetGUI()->GetDownloadProgress()->SetVisible(true);
+	CCore::Instance()->GetGUI()->GetDownloadProgress()->SetProgress(0.0f);
 
 	// Set the download window title
-	pCore->GetGUI()->GetDownloadProgress()->SetFileName( m_strFileName );
+	CCore::Instance()->GetGUI()->GetDownloadProgress()->SetFileName(m_strFileName);
 
 	// Open the target file
 	FILE * pFile = fopen ( m_strTargetFile.Get (), "wb" );

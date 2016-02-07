@@ -7,9 +7,20 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
+#include	"BaseInc.h"
 
-extern	CCore				* pCore;
+#include	"CCore.h"
+
+#include	"Math\CVector3.h"
+
+#include	"CNetworkVehicle.h"
+#include	"CNetworkPlayer.h"
+
+#include	"CGraphics.h"
+
+#include	"CSync.h"
+
+#include	"CVehicleManager.h"
 
 CVehicleManager::CVehicleManager( void )
 {
@@ -104,7 +115,7 @@ void CVehicleManager::PreProcess( void )
 			m_pNetworkVehicle[i]->GetPosition ( &vecPosition );
 
 			// Get the vehicle screen position
-			pCore->GetGraphics()->WorldToScreen ( vecPosition, &m_vecScreenPosition[i] );
+			CCore::Instance()->GetGraphics()->WorldToScreen ( vecPosition, &m_vecScreenPosition[i] );
 		}
 	}
 }

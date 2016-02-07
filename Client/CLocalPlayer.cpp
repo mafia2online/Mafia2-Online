@@ -7,9 +7,45 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
+#include	"BaseInc.h"
 
-extern	CCore				* pCore;
+#include	"CCore.h"
+
+#include	"Math\CVector3.h"
+#include	"Math\CMaths.h"
+#include	"CString.h"
+
+#include	"CM2Hud.h"
+#include	"engine\CM2Entity.h"
+#include	"engine\CM2Ped.h"
+#include	"engine\CM2Vehicle.h"
+#include	"CM2Camera.h"
+
+#include	"CMafia.h"
+#include	"Game\CGame.h"
+#include	"CChat.h"
+
+#include	"CPlayerManager.h"
+#include	"CVehicleManager.h"
+
+#include	"CNetworkPlayer.h"
+#include	"CNetworkVehicle.h"
+
+#include	"CEvents.h"
+#include	"Scripting\CSquirrelArguments.h"
+#include	"Scripting\CScriptingManager.h"
+#include	"CClientScriptingManager.h"
+
+#include	"CNetworkModule.h"
+
+#include	"../Shared/CSync.h"
+#include	"../Shared/CNetworkRPC.h"
+#include	"SharedUtility.h"
+
+#include	"../Libraries/RakNet/Source/PacketPriority.h"
+
+#include	"CLocalPlayer.h"
+
 bool bOldControlState = false;
 bool bRespawnVehicle = false;
 bool bOldCameraState = false;
@@ -37,7 +73,7 @@ void CLocalPlayer::Pulse( void )
 {
 	// Are we experiencing connection trouble?
 	if ( IsSpawned() && (SharedUtility::GetTime() - m_ulLastPingTime) > 6000 )
-		pCore->SetConnectionProblem ( true );
+		CCore::Instance()->SetConnectionProblem(true);
 
 	// Get our current position and rotation
 	CVector3 vecCurrentPosition, vecCurrentRotation;
@@ -57,8 +93,8 @@ void CLocalPlayer::Pulse( void )
 		if ( !Math::IsValidVector ( m_vecLastGoodPosition ) || !Math::IsValidVector ( m_vecLastGoodRotation ) )
 		{
 			// Fade hud and sound quickly
-			pCore->GetHud()->FadeOut ( 0 );
-			pCore->GetGame()->FadeSound ( true, 0 );
+			CCore::Instance()->GetHud()->FadeOut(0);
+			CCore::Instance()->GetGame()->FadeSound(true, 0);
 
 			// Reset position
 			Teleport ( CVector3() );
@@ -79,17 +115,17 @@ void CLocalPlayer::Pulse( void )
 	int newState = playerControls.m_ePlayerMovementState;
 
 	// State changed and not locked ?
-	if (m_oldMoveState != newState && pCore->GetPlayerManager()->GetLocalPlayer()->AreControlsLocked() == false)
+	if (m_oldMoveState != newState && CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->AreControlsLocked() == false)
 	{
 		// Call the event
 		if (m_oldMoveState != -1){
 			CSquirrelArguments pArguments;
 
-			pArguments.push(pCore->GetPlayerManager()->GetLocalPlayer()->GetId());
+			pArguments.push(CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetId());
 			pArguments.push(m_oldMoveState);
 			pArguments.push(newState);
 
-			pCore->GetClientScriptingManager()->GetEvents()->Call("onClientPlayerMoveStateChange", &pArguments);
+			CCore::Instance()->GetClientScriptingManager()->GetEvents()->Call("onClientPlayerMoveStateChange", &pArguments);
 		}
 		// Update stored state
 		m_oldMoveState = newState;
@@ -100,11 +136,11 @@ void CLocalPlayer::Pulse( void )
 	memcpy ( &m_vecLastGoodRotation, &vecCurrentRotation, sizeof ( CVector3 ) );
 
 	// Is player flagged as shooting ?
-	if (pCore->GetPlayerManager()->GetLocalPlayer()->IsShooting())
+	if (CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->IsShooting())
 	{
 		// Store mouse controls
-		if (pCore->GetPlayerManager()->GetLocalPlayer()->GetPlayerPed()->GetSelectedWeapon() == 0 || playerControls.m_byteUnknown1 != 3){
-			pCore->GetPlayerManager()->GetLocalPlayer()->SetShooting(false);
+		if (CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetPlayerPed()->GetSelectedWeapon() == 0 || playerControls.m_byteUnknown1 != 3){
+			CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->SetShooting(false);
 		}
 	}
 
@@ -152,17 +188,17 @@ void CLocalPlayer::Pulse( void )
 		HandleSpawn ( true );
 
 		// Fade the hud back in
-		pCore->GetHud()->FadeIn ( 1000 );
+		CCore::Instance()->GetHud()->FadeIn(1000);
 
 		// Fade the sound back in
-		pCore->GetGame()->FadeSound ( false, 1 );
+		CCore::Instance()->GetGame()->FadeSound(false, 1);
 
 		// Activate the player ped
 		m_pPlayerPed->Activate ();
 	}
 
 	// Are we spawned, in a vehicle and typing?
-	if( IsSpawned() && IsInVehicle() && pCore->GetChat()->IsInputVisible() )
+	if (IsSpawned() && IsInVehicle() && CCore::Instance()->GetChat()->IsInputVisible())
 	{
 		// Reset the vehicle steering (prevent car turning to sides)
 		if( m_pVehicle->GetVehicle() )
@@ -180,7 +216,7 @@ void CLocalPlayer::Pulse( void )
 void CLocalPlayer::SendOnFootSync( void )
 {
 	// Are we not connected to the network?
-	if( !pCore->GetNetworkModule()->IsConnected() )
+	if( !CCore::Instance()->GetNetworkModule()->IsConnected() )
 		return;
 
 	// Are we dead?
@@ -200,7 +236,7 @@ void CLocalPlayer::SendOnFootSync( void )
 	GetRotation ( &onFootSync.m_vecRotation );
 
 	// Get the player direction
-	m_pPlayerPed->GetDirection ( &onFootSync.m_vecDirection );
+	m_pPlayerPed->GetDirection ( onFootSync.m_vecDirection );
 
 	// Get the player health
 	onFootSync.m_fHealth = GetHealth ();
@@ -212,13 +248,13 @@ void CLocalPlayer::SendOnFootSync( void )
     onFootSync.m_bControlState = m_pPlayerPed->GetControlState ();
 
 	// Get the look at position
-	pCore->GetCamera()->GetLookAt ( &onFootSync.m_vecLookAt );
+	CCore::Instance()->GetCamera()->GetLookAt(&onFootSync.m_vecLookAt);
 
 	// Get the aiming state
 	onFootSync.m_bAiming = m_pPlayerPed->IsAiming ();
 
 	// Get the shooting state
-	onFootSync.m_bShooting = pCore->GetPlayerManager()->GetLocalPlayer()->IsShooting();
+	onFootSync.m_bShooting = CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->IsShooting();
 
 	// Get the crouching state
 	onFootSync.m_bCrouching = m_pPlayerPed->IsCrouching();
@@ -227,28 +263,28 @@ void CLocalPlayer::SendOnFootSync( void )
 	onFootSync.m_uiModelIndex = Game::GetIdFromPlayerModel ( m_pPlayerModelManager->GetModelName() );
 
 	// Write the hand
-	onFootSync.m_iHand = pCore->GetPlayerManager()->GetLocalPlayer()->GetHandModelHand();
+	onFootSync.m_iHand = CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetHandModelHand();
 
 	// Write the handModel
-	onFootSync.m_iHandModel = pCore->GetPlayerManager()->GetLocalPlayer()->GetHandModelHand();
+	onFootSync.m_iHandModel = CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetHandModelHand();
 
 	// Write the animStyle name
-	onFootSync.m_styleName = pCore->GetPlayerManager()->GetLocalPlayer()->GetAnimStyleName().Get();
+	onFootSync.m_styleName = CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetAnimStyleName().Get();
 
 	// Write the animStyle directory
-	onFootSync.m_styleDirectory = pCore->GetPlayerManager()->GetLocalPlayer()->GetAnimStyleDirectory().Get();
+	onFootSync.m_styleDirectory = CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetAnimStyleDirectory().Get();
 
 	// Write the sync structure into the bitstream
 	pBitStream.Write( (char *)&onFootSync, sizeof(OnFootSync) );
 
 	// Send the bitstream to the server
-	pCore->GetNetworkModule()->Call( RPC_PLAYER_SYNC, &pBitStream, IMMEDIATE_PRIORITY, UNRELIABLE_SEQUENCED, true );
+	CCore::Instance()->GetNetworkModule()->Call(RPC_PLAYER_SYNC, &pBitStream, IMMEDIATE_PRIORITY, UNRELIABLE_SEQUENCED, true);
 }
 
 void CLocalPlayer::SendInVehicleSync( void )
 {
 	// Are we not connected to the network?
-	if( !pCore->GetNetworkModule()->IsConnected() )
+	if (!CCore::Instance()->GetNetworkModule()->IsConnected())
 		return;
 
 	// Are we dead?
@@ -256,7 +292,7 @@ void CLocalPlayer::SendInVehicleSync( void )
 		return;
 
 	// Get the vehicle instance
-	CNetworkVehicle * pVehicle = pCore->GetVehicleManager()->GetFromGameGUID( GetPlayerPed()->GetCurrentVehicle()->m_dwGUID );
+	CNetworkVehicle * pVehicle = CCore::Instance()->GetVehicleManager()->GetFromGameGUID(GetPlayerPed()->GetCurrentVehicle()->m_dwGUID);
 
 	// Did we fail to find the vehicle?
 	if( !pVehicle )
@@ -328,13 +364,13 @@ void CLocalPlayer::SendInVehicleSync( void )
 	pBitStream.Write( (char *)&inVehicleSync, sizeof(InVehicleSync) );
 
 	// Send the bitstream to the server
-	pCore->GetNetworkModule()->Call(RPC_VEHICLE_SYNC, &pBitStream, IMMEDIATE_PRIORITY, UNRELIABLE_SEQUENCED, true);
+	CCore::Instance()->GetNetworkModule()->Call(RPC_VEHICLE_SYNC, &pBitStream, IMMEDIATE_PRIORITY, UNRELIABLE_SEQUENCED, true);
 }
 
 void CLocalPlayer::SendPassengerSync( void )
 {
 	// Are we not connected to the network?
-	if( !pCore->GetNetworkModule()->IsConnected() )
+	if (!CCore::Instance()->GetNetworkModule()->IsConnected())
 		return;
 
 	// Are we dead?
@@ -342,7 +378,7 @@ void CLocalPlayer::SendPassengerSync( void )
 		return;
 
 	// Get the vehicle instance
-	CNetworkVehicle * pVehicle = pCore->GetVehicleManager()->GetFromGameGUID( GetPlayerPed()->GetCurrentVehicle()->m_dwGUID );
+	CNetworkVehicle * pVehicle = CCore::Instance()->GetVehicleManager()->GetFromGameGUID( GetPlayerPed()->GetCurrentVehicle()->m_dwGUID );
 
 	// Did we fail to find the vehicle?
 	if( !pVehicle )
@@ -364,7 +400,7 @@ void CLocalPlayer::SendPassengerSync( void )
 	pBitStream.Write( (char *)&passengerSync, sizeof(InPassengerSync) );
 
 	// Send the bitstream to the server
-	pCore->GetNetworkModule()->Call(RPC_PASSENGER_SYNC, &pBitStream, IMMEDIATE_PRIORITY, UNRELIABLE_SEQUENCED, true);
+	CCore::Instance()->GetNetworkModule()->Call(RPC_PASSENGER_SYNC, &pBitStream, IMMEDIATE_PRIORITY, UNRELIABLE_SEQUENCED, true);
 }
 
 void CLocalPlayer::SendUnoccupiedVehicleSync( CNetworkVehicle * pNetworkVehicle )
@@ -392,13 +428,13 @@ void CLocalPlayer::SendUnoccupiedVehicleSync( CNetworkVehicle * pNetworkVehicle 
 	pBitStream.Write( (char *)&unoccupiedVehicleSync, sizeof(UnoccupiedVehicleSync) );
 	
 	// Send the bitstream to the server
-	pCore->GetNetworkModule()->Call(RPC_UNOCCUPIED_SYNC, &pBitStream, IMMEDIATE_PRIORITY, UNRELIABLE_SEQUENCED, true);
+	CCore::Instance()->GetNetworkModule()->Call(RPC_UNOCCUPIED_SYNC, &pBitStream, IMMEDIATE_PRIORITY, UNRELIABLE_SEQUENCED, true);
 }
 
 void CLocalPlayer::Ping ( void )
 {
 	// Send a packet to the server
-	pCore->GetNetworkModule()->Call ( RPC_PLAYERPING, NULL, MEDIUM_PRIORITY, RELIABLE_ORDERED, true );
+	CCore::Instance()->GetNetworkModule()->Call ( RPC_PLAYERPING, NULL, MEDIUM_PRIORITY, RELIABLE_ORDERED, true );
 }
 
 void CLocalPlayer::PingReturn ( RakNet::BitStream * pBitStream )
@@ -414,13 +450,13 @@ void CLocalPlayer::PingReturn ( RakNet::BitStream * pBitStream )
 	SetPing ( usPing );
 
 	// Mark as no connection problem
-	pCore->SetConnectionProblem ( false );
+	CCore::Instance()->SetConnectionProblem ( false );
 }
 
 void CLocalPlayer::OnEnterVehicle( void )
 {
 	// Get the vehicle instance from the vehicle guid
-	CNetworkVehicle * pNetworkVehicle = pCore->GetVehicleManager()->GetFromGameGUID( GetPlayerPed()->GetCurrentVehicle()->m_dwGUID );
+	CNetworkVehicle * pNetworkVehicle = CCore::Instance()->GetVehicleManager()->GetFromGameGUID( GetPlayerPed()->GetCurrentVehicle()->m_dwGUID );
 
 	// Is the vehicle instance valid?
 	if( pNetworkVehicle )
@@ -429,7 +465,7 @@ void CLocalPlayer::OnEnterVehicle( void )
 		M2Vehicle * pVehicle = pNetworkVehicle->GetVehicle()->GetVehicle();
 		DWORD dwVehicleData = (DWORD)(pVehicle) + 0xA8;
 
-		pCore->GetChat()->AddDebugMessage ( "Vehicle: 0x%p, VehicleData: 0x%p", pVehicle, dwVehicleData );
+		CCore::Instance()->GetChat()->AddDebugMessage ( "Vehicle: 0x%p, VehicleData: 0x%p", pVehicle, dwVehicleData );
 #endif
 
 		// Set the initial seat as the driver
@@ -450,7 +486,7 @@ void CLocalPlayer::OnEnterVehicle( void )
 			SetState( PLAYERSTATE_PASSENGER );
 
 #ifdef _DEBUG
-		pCore->GetChat()->AddDebugMessage( "Seat: %d, Driver: 0x%p, State: %d", seat, pNetworkVehicle->GetDriver (), GetState () );
+		CCore::Instance()->GetChat()->AddDebugMessage( "Seat: %d, Driver: 0x%p, State: %d", seat, pNetworkVehicle->GetDriver (), GetState () );
 #endif
 
 		// Construct a new bitstream
@@ -463,10 +499,10 @@ void CLocalPlayer::OnEnterVehicle( void )
 		pBitStream.WriteCompressed( seat );
 
 		// Send to the server
-		pCore->GetNetworkModule()->Call( RPC_ENTER_VEHICLE, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, true );
+		CCore::Instance()->GetNetworkModule()->Call( RPC_ENTER_VEHICLE, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, true );
 
 #ifdef _DEBUG
-		pCore->GetChat()->AddDebugMessage( "CLocalPlayer::OnEnterVehicle( %d, %d )", pNetworkVehicle->GetId(), seat );
+		CCore::Instance()->GetChat()->AddDebugMessage( "CLocalPlayer::OnEnterVehicle( %d, %d )", pNetworkVehicle->GetId(), seat );
 #endif
 
 		// Handle this enter with the network vehicle
@@ -489,13 +525,13 @@ void CLocalPlayer::OnEnterVehicleDone( void )
 	if( IsEnteringVehicle() )
 	{
 		// Send RPC to the server
-		pCore->GetNetworkModule()->Call( RPC_ENTER_VEHICLE_DONE, NULL, HIGH_PRIORITY, RELIABLE_ORDERED, true );
+		CCore::Instance()->GetNetworkModule()->Call( RPC_ENTER_VEHICLE_DONE, NULL, HIGH_PRIORITY, RELIABLE_ORDERED, true );
 
 		// Mark as not entering vehicle
 		SetEnteringVehicle( NULL, INVALID_ENTITY_ID );
 
 #ifdef _DEBUG
-		//pCore->GetChat()->AddDebugMessage( "CLocalPlayer::OnEnterVehicleDone( %d, %d )", GetVehicle()->GetId(), GetSeat() );
+		//CCore::Instance()->GetChat()->AddDebugMessage( "CLocalPlayer::OnEnterVehicleDone( %d, %d )", GetVehicle()->GetId(), GetSeat() );
 #endif
 	}
 }
@@ -524,10 +560,10 @@ void CLocalPlayer::OnLeaveVehicle( void )
 		m_bFastExitVehicle ? pBitStream.Write1() : pBitStream.Write0();
 
 		// Send to the server
-		pCore->GetNetworkModule()->Call( RPC_EXIT_VEHICLE, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, true );
+		CCore::Instance()->GetNetworkModule()->Call( RPC_EXIT_VEHICLE, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, true );
 
 #ifdef DEBUG
-		pCore->GetChat()->AddDebugMessage( "CLocalPlayer::OnExitVehicle( %d, %d ) - Forcefully: %s", m_pVehicle->GetId(), seat, (IsBeingRemovedForcefully () ? "Yes" : "No") );
+		CCore::Instance()->GetChat()->AddDebugMessage( "CLocalPlayer::OnExitVehicle( %d, %d ) - Forcefully: %s", m_pVehicle->GetId(), seat, (IsBeingRemovedForcefully () ? "Yes" : "No") );
 #endif
 
 		// Are we not being removed forcefully?
@@ -553,7 +589,7 @@ void CLocalPlayer::OnLeaveVehicle( void )
 				LockControls( bOldControlState );
 
 				// Restore the camera lock state
-				pCore->GetCamera()->LockControl( bOldCameraState );
+				CCore::Instance()->GetCamera()->LockControl( bOldCameraState );
 
 				//
 				*(DWORD *)(m_pPlayerPed->GetPed() + 0x310) = 6;
@@ -584,9 +620,9 @@ bool CLocalPlayer::OnTakeDamage ( void )
 		return false;
 
 	// Send RPC to server
-	pCore->GetNetworkModule()->Call( RPC_PLAYERDAMAGE, NULL, HIGH_PRIORITY, RELIABLE, true );
+	CCore::Instance()->GetNetworkModule()->Call( RPC_PLAYERDAMAGE, NULL, HIGH_PRIORITY, RELIABLE, true );
 
-	return (pCore->GetClientScriptingManager()->GetEvents()->Call( "onTakeDamage" ).GetInteger() == 1);
+	return (CCore::Instance()->GetClientScriptingManager()->GetEvents()->Call( "onTakeDamage" ).GetInteger() == 1);
 }
 
 void CLocalPlayer::HandleSpawn( bool bRespawn )
@@ -632,14 +668,14 @@ void CLocalPlayer::HandleSpawn( bool bRespawn )
 	SetRotation ( CVector3() );
 
 	// Send RPC to server
-	pCore->GetNetworkModule()->Call( RPC_PLAYER_SPAWN, NULL, HIGH_PRIORITY, RELIABLE, true );
+	CCore::Instance()->GetNetworkModule()->Call( RPC_PLAYER_SPAWN, NULL, HIGH_PRIORITY, RELIABLE, true );
 
 	// Restore the camera (TODO: Use real game function to reset camera behind player!)
-	pCore->GetCamera()->LockControl ( false );
+	CCore::Instance()->GetCamera()->LockControl ( false );
 	LockControls ( false );
 
 	// Restore the camera control
-	pCore->GetCamera()->LockControl ( bOldCameraState );
+	CCore::Instance()->GetCamera()->LockControl ( bOldCameraState );
 
 	// Restore the control state
 	LockControls ( bOldCTRLState );
@@ -651,7 +687,7 @@ void CLocalPlayer::OnDeath( CNetworkPlayer * pKiller )
 	if( !IsDead() )
 	{
 		// Get the old camera lock state
-		bOldCameraState = pCore->GetCamera()->IsLocked ();
+		bOldCameraState = CCore::Instance()->GetCamera()->IsLocked ();
 
 		// Get the old control state
 		bOldCTRLState = AreControlsLocked ();
@@ -684,16 +720,16 @@ void CLocalPlayer::OnDeath( CNetworkPlayer * pKiller )
 		pBitStream.WriteCompressed( (pKiller ? pKiller->GetId() : INVALID_ENTITY_ID) );
 
 		// Send RPC to server
-		pCore->GetNetworkModule()->Call( RPC_PLAYER_DEATH, &pBitStream, HIGH_PRIORITY, RELIABLE, true );
+		CCore::Instance()->GetNetworkModule()->Call( RPC_PLAYER_DEATH, &pBitStream, HIGH_PRIORITY, RELIABLE, true );
 
 		// Fade out the screen
-		pCore->GetHud()->FadeOut ( 3000 );
+		CCore::Instance()->GetHud()->FadeOut ( 3000 );
 
 		// Fade out the sound
-		pCore->GetGame()->FadeSound ( true, 3 );
+		CCore::Instance()->GetGame()->FadeSound ( true, 3 );
 
 		// Lock the camera control
-		pCore->GetCamera()->LockControl ( true );
+		CCore::Instance()->GetCamera()->LockControl ( true );
 
 		// Lock the player controls
 		LockControls ( true );
@@ -706,10 +742,10 @@ void CLocalPlayer::OnReloadWeapon( void )
 	if( !IsDead() )
 	{
 		// Send RPC to server
-		//pCore->GetNetworkModule()->Call( RPC_PLAYER_RELOAD_WEAPON, NULL, HIGH_PRIORITY, RELIABLE, true );
+		//CCore::Instance()->GetNetworkModule()->Call( RPC_PLAYER_RELOAD_WEAPON, NULL, HIGH_PRIORITY, RELIABLE, true );
 
 #ifdef DEBUG
-		pCore->GetChat()->AddDebugMessage( "CLocalPlayer::OnReloadWeapon()" );
+		CCore::Instance()->GetChat()->AddDebugMessage( "CLocalPlayer::OnReloadWeapon()" );
 #endif
 	}
 }
@@ -733,7 +769,7 @@ bool CLocalPlayer::ProcessControls( unsigned int uMsg, WPARAM wParam )
 		if ( uMsg == WM_KEYDOWN && (DWORD)wParam == 0x4D )
 		{
 			// Open the map
-			pCore->GetGame()->OpenMap ( !pCore->GetGame()->IsMapOpen () );
+			CCore::Instance()->GetGame()->OpenMap ( !CCore::Instance()->GetGame()->IsMapOpen () );
 			return true;
 		}
 	}
@@ -786,7 +822,7 @@ bool CLocalPlayer::ProcessControls( unsigned int uMsg, WPARAM wParam )
 				CLogFile::Printf( "CLocalPlayer::ProcessControls() - Old control state restored! (%s)", (bOldControlState ? "true" : "false") );
 
 				// Restore the camera lock state
-				pCore->GetCamera()->LockControl( bOldCameraState );
+				CCore::Instance()->GetCamera()->LockControl( bOldCameraState );
 
 				CLogFile::Printf( "CLocalPlayer::ProcessControls() - Old camera state resoted! (%s)", (bOldCameraState ? "true" : "false") );
 
@@ -842,7 +878,7 @@ void CLocalPlayer::HandlePassengerKey( void )
 			bOldControlState = AreControlsLocked();
 
 			// Get the old camera lock state
-			bOldCameraState = pCore->GetCamera()->IsLocked();
+			bOldCameraState = CCore::Instance()->GetCamera()->IsLocked();
 
 			CLogFile::Printf( "CLocalPlayer::HandlePassengerKey() - bOldControlState: %s, bOldCameraState: %s", (bOldControlState ? "true" : "false"), (bOldCameraState ? "true" : "false") );
 
@@ -861,7 +897,7 @@ void CLocalPlayer::HandlePassengerKey( void )
 
 			// Unlock camera control
 			if( !bOldCameraState ) // checking this because after we put in vehicle, it locks control :(
-				pCore->GetCamera()->LockControl( false );
+				CCore::Instance()->GetCamera()->LockControl( false );
 
 			// Reset the controls
 			//*(DWORD *)(m_pPlayerPed->GetPed() + 0x310) = 6;
@@ -888,10 +924,10 @@ void CLocalPlayer::GetClosestVehicle( CNetworkVehicle ** pNetworkVehicle, Entity
 		for( int i = 0; i < MAX_VEHICLES; i++ )
 		{
 			// Is the current vehicle active?
-			if( pCore->GetVehicleManager()->IsActive( i ) )
+			if( CCore::Instance()->GetVehicleManager()->IsActive( i ) )
 			{
 				// Get a pointer to the current vehicle
-				CNetworkVehicle * pCurrentVehicle = pCore->GetVehicleManager()->Get( i );
+				CNetworkVehicle * pCurrentVehicle = CCore::Instance()->GetVehicleManager()->Get( i );
 
 				// Get the vehicle position
 				pCurrentVehicle->GetPosition( &vecVehiclePos );
@@ -987,7 +1023,7 @@ void CLocalPlayer::StartSyncVehicle( CNetworkVehicle * pNetworkVehicle )
 	pNetworkVehicle->SetLastSyncer( this );
 
 #ifdef _DEBUG
-	pCore->GetChat()->AddDebugMessage( "CLocalPlayer::StartSyncVehicle - Server commanded us to start syncing vehicle %d", pNetworkVehicle->GetId() );
+	CCore::Instance()->GetChat()->AddDebugMessage( "CLocalPlayer::StartSyncVehicle - Server commanded us to start syncing vehicle %d", pNetworkVehicle->GetId() );
 #endif
 }
 
@@ -1005,7 +1041,7 @@ void CLocalPlayer::StopSyncVehicle( CNetworkVehicle * pNetworkVehicle )
 	m_syncingVehicles.remove( pNetworkVehicle );
 
 #ifdef _DEBUG
-	pCore->GetChat()->AddDebugMessage( "CLocalPlayer::StopSyncVehicle - Server commanded us to stop syncing vehicle %d", pNetworkVehicle->GetId() );
+	CCore::Instance()->GetChat()->AddDebugMessage( "CLocalPlayer::StopSyncVehicle - Server commanded us to stop syncing vehicle %d", pNetworkVehicle->GetId() );
 #endif
 }
 

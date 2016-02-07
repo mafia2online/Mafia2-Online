@@ -7,9 +7,25 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
+#include	"BaseInc.h"
 
-extern	CCore				* pCore;
+#include	"CCore.h"
+
+#include	"CString.h"
+#include	<Threading/CThread.h>
+
+#include	"CGUI.h"
+#include	"CMafia.h"
+#include	"CDownloadProgress.h"
+
+#include	"SharedUtility.h"
+
+#include	"CClientScriptingManager.h"
+
+#include	"CRC.h"
+
+#include	"CFileTransfer.h"
+#include	"CFileTransferManager.h"
 
 void CFileTransferManager::WorkerThread ( CThread * pCreator )
 {
@@ -125,10 +141,10 @@ void CFileTransferManager::Pulse ( void )
 				if ( (*iter)->IsScript () )
 				{
 					// Add the client script to the client scripting manager
-					pCore->GetClientScriptingManager()->AddScript ( (*iter)->m_strFileName, SharedUtility::GetAbsolutePath ( "%s%s", SharedUtility::GetClientScriptFolder ( pCore->GetHost (), pCore->GetPort () ).Get (), (*iter)->m_strFileName.Get () ) );
+					CCore::Instance()->GetClientScriptingManager()->AddScript((*iter)->m_strFileName, SharedUtility::GetAbsolutePath("%s%s", SharedUtility::GetClientScriptFolder(CCore::Instance()->GetHost(), CCore::Instance()->GetPort()).Get(), (*iter)->m_strFileName.Get()));
 
 					// Load the client script
-					pCore->GetClientScriptingManager()->Load((*iter)->m_strFileName.Get());
+					CCore::Instance()->GetClientScriptingManager()->Load((*iter)->m_strFileName.Get());
 				}
 			}
 
@@ -156,10 +172,10 @@ void CFileTransferManager::Complete ( void )
 	Reset ( true );
 
 	// Hide the download progress bar
-	pCore->GetGUI()->GetDownloadProgress()->SetVisible ( false );
+	CCore::Instance()->GetGUI()->GetDownloadProgress()->SetVisible(false);
 
 	// Start the game
-	pCore->GetGame()->Spawn ();
+	CCore::Instance()->GetGame()->Spawn();
 }
 
 void CFileTransferManager::SetServerInformation ( const char * szHost, unsigned short usHttpPort )
