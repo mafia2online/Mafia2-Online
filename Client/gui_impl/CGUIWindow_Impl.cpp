@@ -7,7 +7,19 @@
 *
 ***************************************************************/
 
-#include	"../StdInc.h"
+#include	"../BaseInc.h"
+#include	"../CCore.h"
+
+#include	"../../Shared/CString.h"
+#include	"../../Shared/Math/CVector3.h"
+
+#include	"../CGUI.h"
+
+#include	"../CClientScriptGUIManager.h"
+#include	"../CClientScriptingManager.h"
+
+#include	"CGUI_Impl.h"
+#include	"CGUIWindow_Impl.h"
 
 CGUIWindow_Impl::CGUIWindow_Impl( CGUI_Impl * pGUI, String strCaption, CGUIElement_Impl * pParent )
 {

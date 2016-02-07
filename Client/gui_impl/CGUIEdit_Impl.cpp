@@ -7,9 +7,20 @@
 *
 ***************************************************************/
 
-#include	"../StdInc.h"
+#include	"../BaseInc.h"
+#include	"../CCore.h"
 
-extern	CCore			* pCore;
+#include	"../../Shared/CString.h"
+#include	"../../Shared/Math/CVector3.h"
+
+#include	"../CGUI.h"
+
+#include	"../CClientScriptingManager.h"
+#include	"../CClientScriptGUIManager.h"
+
+#include	"CGUI_Impl.h"
+#include	"CGUIElement_Impl.h"
+#include	"CGUIEdit_Impl.h"
 
 CGUIEdit_Impl::CGUIEdit_Impl( CGUI_Impl * pGUI, String strText, CGUIElement_Impl * pParent )
 {
@@ -131,8 +142,8 @@ bool CGUIEdit_Impl::Event_OnTextChanged( const CEGUI::EventArgs &e )
 		m_pfnOnTextChanged( this );
 
 	// Pass the event to the client gui manager
-	if( pCore->GetClientScriptingManager() && pCore->GetClientScriptingManager()->GetScriptGUIManager() )
-		pCore->GetClientScriptingManager()->GetScriptGUIManager()->HandleEvent( "onGuiElementTextChange", this );
+	if( CCore::Instance()->GetClientScriptingManager() && CCore::Instance()->GetClientScriptingManager()->GetScriptGUIManager() )
+		CCore::Instance()->GetClientScriptingManager()->GetScriptGUIManager()->HandleEvent( "onGuiElementTextChange", this );
 
 	return true;
 }
@@ -155,8 +166,8 @@ bool CGUIEdit_Impl::Event_OnKeyDown( const CEGUI::EventArgs &e )
 			m_pfnOnTextAccepted( this );
 
 		// Pass the event to the client gui manager
-		if( pCore->GetClientScriptingManager() && pCore->GetClientScriptingManager()->GetScriptGUIManager() )
-			pCore->GetClientScriptingManager()->GetScriptGUIManager()->HandleEvent( "onGuiElementTextAccept", this );
+		if( CCore::Instance()->GetClientScriptingManager() && CCore::Instance()->GetClientScriptingManager()->GetScriptGUIManager() )
+			CCore::Instance()->GetClientScriptingManager()->GetScriptGUIManager()->HandleEvent( "onGuiElementTextAccept", this );
 	}
 
 	return true;

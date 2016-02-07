@@ -7,7 +7,19 @@
 *
 ***************************************************************/
 
-#include	"../StdInc.h"
+#include	"../BaseInc.h"
+#include	"../CCore.h"
+
+#include	"../../Shared/CString.h"
+#include	"../../Shared/Math/CVector3.h"
+
+#include	"../CGUI.h"
+
+#include	"../CClientScriptGUIManager.h"
+#include	"../CClientScriptingManager.h"
+
+#include	"CGUI_Impl.h"
+#include	"CGUIFont_Impl.h"
 
 CGUIFont_Impl::CGUIFont_Impl( CGUI_Impl * pManager, String strFontName, String strFile, unsigned int uiSize, unsigned int uFlags, bool bAutoScale )
 {

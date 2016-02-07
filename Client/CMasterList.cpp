@@ -7,9 +7,24 @@
 *
 ***************************************************************/
 
-#include "StdInc.h"
+#include	"BaseInc.h"
+#include	"CCore.h"
 
-extern CCore *pCore;
+#include	"CString.h"
+
+#include	"CGUI.h"
+#include	"gui_impl\CGUI_Impl.h"
+#include	"gui_impl\CGUIMessageBox_Impl.h"
+#include	"gui_impl\CGUIWindow_Impl.h"
+
+#include	<atomic>
+#include	<thread>
+
+#include	"SharedUtility.h"
+
+#include	"Network\CHttpClient.h"
+
+#include	"CMasterList.h"
 
 /*static*/ bool DummyReceiveHandler( const char *, unsigned int, void * )
 {
@@ -136,7 +151,7 @@ CMasterList::CMasterList( QueryHandler_t handler )
 	m_lastRefreshTime = SharedUtility::GetTime();
 	
 	// Create the messagebox
-	m_pMessageBox = pCore->GetGUI()->GetCEGUI()->CreateMessageBox( "", "" );
+	m_pMessageBox = CCore::Instance()->GetGUI()->GetCEGUI()->CreateMessageBox( "", "" );
 	m_pMessageBox->SetVisible( false );
 }
 
