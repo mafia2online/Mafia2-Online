@@ -7,7 +7,20 @@
 *
 ***************************************************************/
 
-#include	"../StdInc.h"
+#include	"../BaseInc.h"
+#include	"../CCore.h"
+
+#include	"../../Shared/CString.h"
+#include	"../../Shared/Math/CVector3.h"
+
+#include	"../CGUI.h"
+
+#include	"../CClientScriptGUIManager.h"
+#include	"../CClientScriptingManager.h"
+
+#include	"CGUI_Impl.h"
+#include	"CGUIWindow_Impl.h"
+#include	"CGUIScrollPane_Impl.h"
 
 CGUIScrollPane_Impl::CGUIScrollPane_Impl( CGUI_Impl * pGUI, CGUIElement_Impl * pParent )
 {

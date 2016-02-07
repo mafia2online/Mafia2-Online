@@ -7,7 +7,15 @@
 *
 ***************************************************************/
 
-#include	"../StdInc.h"
+#include	"../BaseInc.h"
+
+#include	"../../Shared/CString.h"
+
+#include	"../CGUI.h"
+
+#include	"CGUI_Impl.h"
+#include	"CGUIElement_Impl.h"
+#include	"CGUIButton_Impl.h"
 
 CGUIButton_Impl::CGUIButton_Impl( CGUI_Impl * pGUI, String strCaption, CGUIElement_Impl * pParent )
 {

@@ -7,9 +7,22 @@
 *
 ***************************************************************/
 
-#include	"../StdInc.h"
+#include	"../BaseInc.h"
+#include	"../CCore.h"
 
-extern	CCore				* pCore;
+#include	"../../Shared/CString.h"
+#include	"../../Shared/Math/CVector3.h"
+
+#include	"../CGUI.h"
+#include	"../CGUICallback.h"
+
+#include	"../CClientScriptGUIManager.h"
+#include	"../CClientScriptingManager.h"
+
+#include	"CGUI_Impl.h"
+#include	"CGUIWindow_Impl.h"
+#include	"CGUIListItem_Impl.h"
+#include	"CGUIGridList_Impl.h"
 
 CGUIGridList_Impl::CGUIGridList_Impl( CGUI_Impl * pGUI, CGUIElement_Impl * pParent )
 {

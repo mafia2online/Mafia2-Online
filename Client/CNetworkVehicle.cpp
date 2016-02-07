@@ -7,9 +7,52 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
+#include	"BaseInc.h"
 
-extern CCore		* pCore;
+#include	"CCore.h"
+
+#include	"CString.h"
+#include	"Math\CMaths.h"
+#include	"CColor.h"
+#include	"Math\CQuaternion.h"
+#include	"Math\CVector3.h"
+
+#include	"Game\CGame.h"
+#include	"CMafia.h"
+
+#include	"CBlip.h"
+
+#include	"engine\CM2Entity.h"
+#include	"engine\CM2Ped.h"
+#include	"engine\CM2Vehicle.h"
+
+#include	"CModelManager.h"
+#include	"CNetworkModelManager.h"
+#include	"CIE.h"
+
+#include	"CNetworkModule.h"
+
+#include	"../Shared/CNetworkRPC.h"
+
+#include	"PacketPriority.h"
+
+#include	"SharedUtility.h"
+
+#include	"CPlayerManager.h"
+#include	"CLocalPlayer.h"
+#include	"CNetworkPlayer.h"
+#include	"CRemotePlayer.h"
+
+#include	"CClientScriptGUIManager.h"
+#include	"CClientScriptingManager.h"
+
+#include	"Scripting\CScriptingManager.h"
+#include	"Scripting\CSquirrelArguments.h"
+#include	"CEvents.h"
+
+#include	"CSync.h"
+
+#include	"CNetworkVehicle.h"
 
 CNetworkVehicle::CNetworkVehicle( void )
 {
@@ -44,7 +87,7 @@ CNetworkVehicle::~CNetworkVehicle( void )
 	DEBUG_TRACE("CNetworkVehicle::~CNetworkVehicle");
 
 	// Handle this destroy with the localplayer
-	//pCore->GetPlayerManager()->GetLocalPlayer()->StopSyncVehicle( this );
+	//CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->StopSyncVehicle( this );
 
 	// Destroy the vehicle
 	Destroy ();
@@ -147,7 +190,7 @@ void CNetworkVehicle::Destroy( void )
 		if( pSeatPed )
 		{
 			// Get the network player
-			pPlayer = (pSeatPed == IE::GetGame()->m_pLocalPed ? (CNetworkPlayer *)pCore->GetPlayerManager()->GetLocalPlayer() : (CNetworkPlayer *)pCore->GetPlayerManager()->GetFromGameGUID ( pSeatPed->m_dwGUID ));
+			pPlayer = (pSeatPed == IE::GetGame()->m_pLocalPed ? (CNetworkPlayer *)CCore::Instance()->GetPlayerManager()->GetLocalPlayer() : (CNetworkPlayer *)CCore::Instance()->GetPlayerManager()->GetFromGameGUID ( pSeatPed->m_dwGUID ));
 
 			// Is the player instance valid?
 			if( pPlayer )
@@ -198,7 +241,7 @@ void CNetworkVehicle::Respawn( void )
 		bitStream.WriteCompressed( m_vehicleId );
 
 		// Send it to the server
-		pCore->GetNetworkModule()->Call( RPC_RESPAWNVEHICLE, &bitStream, MEDIUM_PRIORITY, RELIABLE_ORDERED, true );
+		CCore::Instance()->GetNetworkModule()->Call( RPC_RESPAWNVEHICLE, &bitStream, MEDIUM_PRIORITY, RELIABLE_ORDERED, true );
 	}
 }
 
@@ -258,12 +301,12 @@ void CNetworkVehicle::HandleRespawn( void )
 		m_pVehicle->SetLightState ( false );
 
 		// Is the client script manager active?
-		if( pCore->GetClientScriptingManager() && pCore->GetClientScriptingManager()->GetEvents() )
+		if( CCore::Instance()->GetClientScriptingManager() && CCore::Instance()->GetClientScriptingManager()->GetEvents() )
 		{
 			// Call the script event
 			CSquirrelArguments args;
 			args.push( m_vehicleId );
-			pCore->GetClientScriptingManager()->GetEvents()->Call( "onClientVehicleRespawn", &args );
+			CCore::Instance()->GetClientScriptingManager()->GetEvents()->Call( "onClientVehicleRespawn", &args );
 		}
 	}
 }
@@ -274,7 +317,7 @@ void CNetworkVehicle::StoreVehicleSync( InVehicleSync vehicleSync, bool bInterpo
 
 	// Get the localplayer position
 	CVector3 vecLocalPos;
-	pCore->GetPlayerManager()->GetLocalPlayer()->GetPosition( &vecLocalPos );
+	CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetPosition( &vecLocalPos );
 
 	// Is the last sync data invalid?
 	if ( !Math::IsValidVector ( vehicleSync.m_vecPosition ) || !Math::IsValidVector ( vehicleSync.m_vecRotation ) )
@@ -409,7 +452,7 @@ void CNetworkVehicle::Pulse( void )
 	DEBUG_TRACE("CNetworkVehicle::Pulse");
 
 	// Is the localplayer not spawned?
-	if( !pCore->GetPlayerManager()->GetLocalPlayer()->IsSpawned() )
+	if( !CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->IsSpawned() )
 		return;
 
 	// Is the vehicle spawned?
@@ -481,7 +524,7 @@ void CNetworkVehicle::Pulse( void )
 		unsigned long ulCurrentTime = SharedUtility::GetTime ();
 
 		// Should we activate the vehicle?
-		if( m_bSpawnProcessed && ((ulCurrentTime - m_ulSpawnTime) >= 4000 || ((ulCurrentTime - pCore->GetPlayerManager()->GetLocalPlayer()->GetSpawnTime()) >= 4000)) )
+		if( m_bSpawnProcessed && ((ulCurrentTime - m_ulSpawnTime) >= 4000 || ((ulCurrentTime - CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetSpawnTime()) >= 4000)) )
 		{
 			// Set the spawn not processed
 			m_ulSpawnTime = ulCurrentTime;
@@ -544,7 +587,7 @@ void CNetworkVehicle::GetPosition( CVector3 * vecPosition )
 
 	// Is the vehicle instance valid?
 	if( m_pVehicle )
-		m_pVehicle->GetPosition( vecPosition );
+		m_pVehicle->GetPosition( *vecPosition );
 }
 
 void CNetworkVehicle::SetRotation( CVector3 vecRotation )
@@ -571,7 +614,7 @@ void CNetworkVehicle::GetRotation( CVector3 * vecRotation )
 	{
 		// Get the vehicle rotation
 		Quaternion quatRotation;
-		m_pVehicle->GetRotation( &quatRotation );
+		m_pVehicle->GetRotation( quatRotation );
 
 		// Copy the rotation quaternion to the eular angles vector
 		memcpy( vecRotation, &quatRotation.toEularAngles(), sizeof(CVector3) );
@@ -883,7 +926,7 @@ void CNetworkVehicle::HandlePlayerExit( CNetworkPlayer * pNetworkPlayer, EntityI
 		m_pVehicle->SetHandbrake ( true );
 
 		// If this wasn't the localplayer, reset the interpolation
-		if( pNetworkPlayer != pCore->GetPlayerManager()->GetLocalPlayer() && bResetInterpolation )
+		if( pNetworkPlayer != CCore::Instance()->GetPlayerManager()->GetLocalPlayer() && bResetInterpolation )
 			ResetInterpolation ();
 	}
 	else
@@ -951,7 +994,7 @@ void CNetworkVehicle::Interpolate( void )
 	DEBUG_TRACE("CNetworkVehicle::Interpolate");
 
 	// Do we have a driver and he is not the localplayer?
-	if( m_pDriver && m_pDriver != pCore->GetPlayerManager()->GetLocalPlayer () )
+	if( m_pDriver && m_pDriver != CCore::Instance()->GetPlayerManager()->GetLocalPlayer () )
 	{
 		// Update the target position
 		UpdateTargetPosition ();
@@ -1240,16 +1283,16 @@ bool CNetworkVehicle::GetClosestPlayer( CNetworkPlayer ** pNetworkPlayer )
 		for( EntityId i = 0; i < MAX_PLAYERS; i++ )
 		{
 			// Is the player connected?
-			if( pCore->GetPlayerManager()->IsActive( i ) || i == pCore->GetPlayerManager()->GetLocalPlayer()->GetId() )
+			if( CCore::Instance()->GetPlayerManager()->IsActive( i ) || i == CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetId() )
 			{
-				bool bLocalPlayer = (i == pCore->GetPlayerManager()->GetLocalPlayer()->GetId());
+				bool bLocalPlayer = (i == CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetId());
 
 				// Get the current player position
 				CVector3 vecCurrentPosition;
 				if( bLocalPlayer )
-					pCore->GetPlayerManager()->GetLocalPlayer()->GetPosition( &vecCurrentPosition );
+					CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetPosition( &vecCurrentPosition );
 				else
-					pCore->GetPlayerManager()->Get( i )->GetPosition( &vecCurrentPosition );
+					CCore::Instance()->GetPlayerManager()->Get( i )->GetPosition( &vecCurrentPosition );
 
 				// Get the distance between the current player and the vehicle
 				float fDistance = Math::GetDistanceBetweenPoints( vecCurrentPosition, vecPosition );
@@ -1262,9 +1305,9 @@ bool CNetworkVehicle::GetClosestPlayer( CNetworkPlayer ** pNetworkPlayer )
 
 					// Set the closest player
 					if( bLocalPlayer )
-						pClosestPlayer = pCore->GetPlayerManager()->GetLocalPlayer();
+						pClosestPlayer = CCore::Instance()->GetPlayerManager()->GetLocalPlayer();
 					else
-						pClosestPlayer = pCore->GetPlayerManager()->Get( i );
+						pClosestPlayer = CCore::Instance()->GetPlayerManager()->Get( i );
 				}
 			}
 		}
@@ -1293,7 +1336,7 @@ void CNetworkVehicle::ProcessUnoccupiedSync( RakNet::BitStream * pBitStream )
 		return;
 
 	// Is the localplayer not spawned?
-	if( !pCore->GetPlayerManager()->GetLocalPlayer()->IsSpawned() )
+	if( !CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->IsSpawned() )
 		return;
 
 	// Set the target position
