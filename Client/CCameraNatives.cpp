@@ -7,9 +7,17 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
+#include	"BaseInc.h"
 
-extern	CCore			* pCore;
+#include	"CCore.h"
+
+#include	"Math\CVector3.h"
+
+#include	"CM2Camera.h"
+
+#include	"Scripting\CScriptingManager.h"
+
+#include	"CCameraNatives.h"
 
 void CCameraNatives::Register( CScriptingManager * pScriptingManager )
 {
@@ -32,7 +40,7 @@ SQInteger CCameraNatives::SimpleShake(SQVM * pVM)
 	sq_getfloat(pVM, -1, &duration);
 
 	// Apply and return
-	pCore->GetCamera()->SimpleShake(speed, strength, duration);
+	CCore::Instance()->GetCamera()->SimpleShake(speed, strength, duration);
 	sq_pushbool(pVM, true);
 	return (true);
 }
@@ -41,7 +49,7 @@ SQInteger CCameraNatives::SimpleShake(SQVM * pVM)
 SQInteger CCameraNatives::GetPosition( SQVM * pVM )
 {
 	CVector3 vecPosition;
-	pCore->GetCamera()->GetPosition( &vecPosition );
+	CCore::Instance()->GetCamera()->GetPosition(&vecPosition);
 
 	sq_newarray( pVM, 0 );
 
@@ -62,7 +70,7 @@ SQInteger CCameraNatives::GetPosition( SQVM * pVM )
 SQInteger CCameraNatives::GetRotation( SQVM * pVM )
 {
 	CVector3 vecRight;
-	pCore->GetCamera()->GetRight( &vecRight );
+	CCore::Instance()->GetCamera()->GetRight(&vecRight);
 
 	sq_newarray( pVM, 0 );
 

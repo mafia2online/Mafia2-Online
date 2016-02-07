@@ -7,9 +7,18 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
+#include	"BaseInc.h"
 
-extern	CCore			* pCore;
+#include	"CCore.h"
+
+#include	"Math\CVector3.h"
+
+#include	"C3DTextLabel.h"
+#include	"C3DTextLabelManager.h"
+
+#include	"Scripting\CScriptingManager.h"
+
+#include	"C3DTextLabelNatives.h"
 
 void C3DTextLabelNatives::Register(CScriptingManager * pScriptingManager)
 {
@@ -51,7 +60,7 @@ SQInteger C3DTextLabelNatives::Create3DTextLabel(SQVM * pVM)
 	str.Set(text);
 
 	// Create and return
-	sq_pushbool(pVM, pCore->Get3DTextLabelManager()->Add(fX, fY, fZ, str, color, distance));
+	sq_pushbool(pVM, CCore::Instance()->Get3DTextLabelManager()->Add(fX, fY, fZ, str, color, distance));
 	return (true);
 }
 
@@ -64,14 +73,14 @@ SQInteger C3DTextLabelNatives::Remove3DTextLabel(SQVM * pVM)
 	sq_getinteger(pVM, -1, &textId);
 
 	// Remove and return
-	sq_pushbool(pVM, pCore->Get3DTextLabelManager()->Remove(textId));
+	sq_pushbool(pVM, CCore::Instance()->Get3DTextLabelManager()->Remove(textId));
 	return (true);
 }
 
 SQInteger C3DTextLabelNatives::GetCount(SQVM * pVM)
 {
 	// Return value
-	sq_pushinteger(pVM, pCore->Get3DTextLabelManager()->GetCount());
+	sq_pushinteger(pVM, CCore::Instance()->Get3DTextLabelManager()->GetCount());
 	return (true);
 }
 
@@ -89,7 +98,7 @@ SQInteger C3DTextLabelNatives::SetText(SQVM * pVM)
 	str.Set(text);
 
 	// Declare label
-	C3DTextLabel * label = pCore->Get3DTextLabelManager()->Get(textID);
+	C3DTextLabel * label = CCore::Instance()->Get3DTextLabelManager()->Get(textID);
 
 	// If exist
 	if (label != NULL){
@@ -115,7 +124,7 @@ SQInteger C3DTextLabelNatives::SetDrawDistance(SQVM * pVM)
 	sq_getfloat(pVM, -1, &drawDistance);
 
 	// Declare label
-	C3DTextLabel * label = pCore->Get3DTextLabelManager()->Get(textID);
+	C3DTextLabel * label = CCore::Instance()->Get3DTextLabelManager()->Get(textID);
 
 	// If exist
 	if (label != NULL){
@@ -141,7 +150,7 @@ SQInteger C3DTextLabelNatives::SetColor(SQVM * pVM)
 	sq_getinteger(pVM, -1, &color);
 
 	// Declare label
-	C3DTextLabel * label = pCore->Get3DTextLabelManager()->Get(textID);
+	C3DTextLabel * label = CCore::Instance()->Get3DTextLabelManager()->Get(textID);
 
 	// If exist
 	if (label != NULL){
@@ -176,7 +185,7 @@ SQInteger C3DTextLabelNatives::SetPosition(SQVM * pVM)
 	pos.fZ = fZ;
 
 	// Declare label
-	C3DTextLabel * label = pCore->Get3DTextLabelManager()->Get(textID);
+	C3DTextLabel * label = CCore::Instance()->Get3DTextLabelManager()->Get(textID);
 
 	// If exist
 	if (label != NULL){
@@ -202,7 +211,7 @@ SQInteger C3DTextLabelNatives::SetActive(SQVM * pVM)
 	sq_getbool(pVM, -1, &active);
 
 	// Declare label
-	C3DTextLabel * label = pCore->Get3DTextLabelManager()->Get(textID);
+	C3DTextLabel * label = CCore::Instance()->Get3DTextLabelManager()->Get(textID);
 
 	// If exist
 	if (label != NULL){
