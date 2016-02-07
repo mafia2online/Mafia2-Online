@@ -8,12 +8,44 @@
 ***************************************************************/
 
 #ifdef _CLIENT
-#include	"../../Client/StdInc.h"
+#include	"../../Client/BaseInc.h"
+#include	"../../Client/CCore.h"
+#include	"../../../Client/CClientScriptingManager.h"
+#include	"../../../Client/CClientScriptGUIManager.h"
 #else
-#include	"../../Server/StdInc.h"
+#include	"../../Server/BaseInc.h"
 #endif
 
-extern	CCore			* pCore;
+#include	"../../../Shared/CString.h"
+#include	"../../../Shared/CEvents.h"
+
+#include	"Natives\CAreaNatives.h"
+#include	"Natives\CBlipNatives.h"
+#include	"Natives\CEventNatives.h"
+#include	"Natives\CHashNatives.h"
+#include	"Natives\CPedNatives.h"
+#include	"Natives\CSharedPlayerNatives.h"
+#include	"Natives\CSharedVehicleNatives.h"
+#include	"Natives\CSQLiteNatives.h"
+#include	"Natives\CSystemNatives.h"
+#include	"Natives\CTimerNatives.h"
+#include	"Natives\CUtilNatives.h"
+#include	"Natives\CXMLNatives.h"
+
+#ifdef _CLIENT
+#include	"../../Client/CClientNatives.h"	
+#include	"../../Client/CGUINatives.h"
+#include	"../../Client/CGraphicsNatives.h"
+#include	"../../Client/CGameNatives.h"
+#include	"../../Client/CCameraNatives.h"
+#include	"../../Client/CAudioNatives.h"
+#include	"../../Client/C3DTextLabelNatives.h"
+#include	"../../Client/CPlayerNatives.h"
+#endif
+
+#include	"../Timers/CTimerManager.h"
+
+#include	"CScriptingManager.h"
 
 CScriptingManager::CScriptingManager( void )
 {
@@ -162,13 +194,13 @@ CSquirrel * CScriptingManager::Load( String strName, String strPath )
 
 #ifndef _CLIENT
 	// Call the module event
-	pCore->GetModuleManager()->ScriptLoad( pScript->GetVM() );
+	CCore::Instance()->GetModuleManager()->ScriptLoad( pScript->GetVM() );
 
 	// Call onScriptInit event
-	pCore->GetEvents()->Call( "onScriptInit", pScript );
+	CCore::Instance()->GetEvents()->Call( "onScriptInit", pScript );
 #else
 	// Call onClientScriptInit event
-	pCore->GetClientScriptingManager()->GetEvents()->Call( "onClientScriptInit", pScript );
+	CCore::Instance()->GetClientScriptingManager()->GetEvents()->Call( "onClientScriptInit", pScript );
 #endif
 
 	return pScript;
@@ -198,7 +230,7 @@ void CScriptingManager::LoadAll( std::list< String > scripts )
 		}
 	}
 
-	pCore->UpdateResourceTotals( iLoaded, iFailed );
+	CCore::Instance()->UpdateResourceTotals( iLoaded, iFailed );
 #endif
 }
 
@@ -226,23 +258,23 @@ bool CScriptingManager::Unload( String strName )
 	{
 #ifndef _CLIENT
 		// Call the module event
-		pCore->GetModuleManager()->ScriptUnload( pScript->GetVM() );
+		CCore::Instance()->GetModuleManager()->ScriptUnload( pScript->GetVM() );
 
 		// Call onScriptExit event
-		pCore->GetEvents()->Call( "onScriptExit", pScript );
+		CCore::Instance()->GetEvents()->Call( "onScriptExit", pScript );
 
 		// Remove the script events
-		pCore->GetEvents()->HandleScriptUnload( pScript->GetVM() );
+		CCore::Instance()->GetEvents()->HandleScriptUnload( pScript->GetVM() );
 #else
 		// Call onClientScriptExit event
-		pCore->GetClientScriptingManager()->GetEvents()->Call( "onClientScriptExit", pScript );
+		CCore::Instance()->GetClientScriptingManager()->GetEvents()->Call( "onClientScriptExit", pScript );
 
 		// Remove the script events
-		pCore->GetClientScriptingManager()->GetEvents()->HandleScriptUnload( pScript->GetVM() );
+		CCore::Instance()->GetClientScriptingManager()->GetEvents()->HandleScriptUnload( pScript->GetVM() );
 #endif
 		
 		// Handle the script unload with the timer manager
-		pCore->GetTimerManager()->HandleScriptUnload( pScript );
+		CCore::Instance()->GetTimerManager()->HandleScriptUnload( pScript );
 
 		// Unload the script
 		pScript->Unload();

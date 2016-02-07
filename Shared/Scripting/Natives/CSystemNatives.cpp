@@ -11,12 +11,27 @@
 #include	<time.h>
 
 #ifdef _CLIENT
-#include	"../../../Client/StdInc.h"
+#include	"../../../Client/BaseInc.h"
+#include	"../../../Client/CCore.h"
+#include	"../../../Client/CClientScriptingManager.h"
+#include	"../../../Client/CClientScriptGUIManager.h"
+#include	"../../../Client/CVehicleManager.h"
+#include	"../../../Client/CNetworkVehicle.h"
+#include	"../../../Client/CPlayerManager.h"
+#include	"../../../Client/CNetworkPlayer.h"
 #else
 #include	"../../../Server/StdInc.h"
 #endif
 
-extern		CCore			* pCore;
+#include	"../../../Shared/CString.h"
+#include	"../../../Shared/CEvents.h"
+#include	"../../../Shared/CCommands.h"
+#include	"../../../Shared/Scripting/CSquirrelCommon.h"
+#include	"../../../Shared/SharedUtility.h"
+
+#include	"../../../Shared/Math/CMaths.h"
+#include	"../../../Shared/Math/CVector3.h"
+#include	"../../../Shared/CColor.h"
 
 void CSystemNatives::Register( CScriptingManager * pScriptingManager )
 {
@@ -101,14 +116,14 @@ SQInteger CSystemNatives::Date( SQVM * pVM )
 
 SQInteger CSystemNatives::PlayerCount( SQVM * pVM )
 {
-	sq_pushinteger( pVM, pCore->GetPlayerManager()->GetCount() );
+	sq_pushinteger( pVM, CCore::Instance()->GetPlayerManager()->GetCount() );
 	return 1;
 }
 
 SQInteger CSystemNatives::MaxPlayers( SQVM * pVM )
 {
 #ifdef _CLIENT
-	sq_pushinteger( pVM, pCore->GetServerMaxPlayers() );
+	sq_pushinteger( pVM, CCore::Instance()->GetServerMaxPlayers() );
 #else
 	sq_pushinteger( pVM, CVAR_GET_INTEGER( "maxplayers" ) );
 #endif
@@ -118,7 +133,7 @@ SQInteger CSystemNatives::MaxPlayers( SQVM * pVM )
 SQInteger CSystemNatives::ServerName( SQVM * pVM )
 {
 #ifdef _CLIENT
-	sq_pushstring( pVM, pCore->GetServerName().Get(), pCore->GetServerName().GetLength() );
+	sq_pushstring( pVM, CCore::Instance()->GetServerName().Get(), CCore::Instance()->GetServerName().GetLength() );
 #else
 	sq_pushstring( pVM, CVAR_GET_STRING( "hostname" ), strlen(CVAR_GET_STRING( "hostname" )) );
 #endif

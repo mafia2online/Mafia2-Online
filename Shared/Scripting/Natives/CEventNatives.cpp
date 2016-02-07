@@ -10,13 +10,17 @@
 #include	"CEventNatives.h"
 
 #ifdef _CLIENT
-#include	"../../../Client/StdInc.h"
+#include	"../../../Client/BaseInc.h"
+#include	"../../../Client/CCore.h"
+#include	"../../../Client/CClientScriptingManager.h"
+#include	"../../../Client/CClientScriptGUIManager.h"
 #else
 #include	"../../../Server/StdInc.h"
 #endif
 
-
-extern	CCore			* pCore;
+#include	"../../../Shared/CEvents.h"
+#include	"../../../Shared/CCommands.h"
+#include	"../../../Shared/Scripting/CSquirrelCommon.h"
 
 void CEventNatives::Register( CScriptingManager * pScriptingManager )
 {
@@ -39,9 +43,9 @@ SQInteger CEventNatives::AddEvent( SQVM * pVM )
 
 	// Add the event
 #ifndef _CLIENT
-	sq_pushbool( pVM, pCore->GetEvents()->Add( szEventName, new CSquirrelEventHandler( pVM, pFunction ) ) );
+	sq_pushbool( pVM, CCore::Instance()->GetEvents()->Add( szEventName, new CSquirrelEventHandler( pVM, pFunction ) ) );
 #else
-	sq_pushbool( pVM, pCore->GetClientScriptingManager()->GetEvents()->Add( szEventName, new CSquirrelEventHandler( pVM, pFunction ) ) );
+	sq_pushbool( pVM, CCore::Instance()->GetClientScriptingManager()->GetEvents()->Add( szEventName, new CSquirrelEventHandler( pVM, pFunction ) ) );
 #endif
 	return 1;
 }
@@ -76,9 +80,9 @@ SQInteger CEventNatives::CallEvent( SQVM * pVM )
 
 	// Call the event
 #ifdef _CLIENT
-	CSquirrelArgument retArgs = pCore->GetClientScriptingManager()->GetEvents()->Call( szEventName, &pArguments );
+	CSquirrelArgument retArgs = CCore::Instance()->GetClientScriptingManager()->GetEvents()->Call( szEventName, &pArguments );
 #else
-	CSquirrelArgument retArgs = pCore->GetEvents()->Call( szEventName, &pArguments );
+	CSquirrelArgument retArgs = CCore::Instance()->GetEvents()->Call( szEventName, &pArguments );
 #endif
 
 	retArgs.push( pVM );
@@ -98,10 +102,10 @@ SQInteger CEventNatives::RemoveEvent( SQVM * pVM )
 
 	// Remove the event
 #ifdef _CLIENT
-	sq_pushbool( pVM, pCore->GetClientScriptingManager()->GetEvents()->Remove( szEventName, &CSquirrelEventHandler( pVM, pFunction ) ) );
+	sq_pushbool( pVM, CCore::Instance()->GetClientScriptingManager()->GetEvents()->Remove( szEventName, &CSquirrelEventHandler( pVM, pFunction ) ) );
 #else
 	CSquirrelEventHandler pEventHandler ( pVM, pFunction );
-	sq_pushbool( pVM, pCore->GetEvents()->Remove( szEventName, &pEventHandler ) );
+	sq_pushbool( pVM, CCore::Instance()->GetEvents()->Remove( szEventName, &pEventHandler ) );
 #endif
 	return 1;
 }
@@ -119,9 +123,9 @@ SQInteger CEventNatives::AddCommand( SQVM * pVM )
 
 	// Add the event
 #ifndef _CLIENT
-	sq_pushbool( pVM, pCore->GetCommands()->Add( szCommandName, new CSquirrelCommandHandler( pVM, pFunction ) ) );
+	sq_pushbool( pVM, CCore::Instance()->GetCommands()->Add( szCommandName, new CSquirrelCommandHandler( pVM, pFunction ) ) );
 #else
-	sq_pushbool( pVM, pCore->GetClientScriptingManager()->GetCommands()->Add( szCommandName, new CSquirrelCommandHandler( pVM, pFunction ) ) );
+	sq_pushbool( pVM, CCore::Instance()->GetClientScriptingManager()->GetCommands()->Add( szCommandName, new CSquirrelCommandHandler( pVM, pFunction ) ) );
 #endif
 	return 1;
 }

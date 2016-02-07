@@ -14,12 +14,14 @@
 #include	"../../Shared/Math/CVector3.h"
 
 #include	"../CGUI.h"
+#include	"../CGUICallback.h"
 
 #include	"../CClientScriptingManager.h"
 #include	"../CClientScriptGUIManager.h"
 
 #include	"CGUI_Impl.h"
 #include	"CGUIElement_Impl.h"
+
 #include	"CGUIEdit_Impl.h"
 
 CGUIEdit_Impl::CGUIEdit_Impl( CGUI_Impl * pGUI, String strText, CGUIElement_Impl * pParent )

@@ -15,6 +15,8 @@
 #include	"../../Shared/Math/CVector3.h"
 
 #include	"../CGUI.h"
+#include	"../CGUICallback.h"
+#include	"../CGUITypes.h"
 
 #include	"../CClientScriptGUIManager.h"
 #include	"../CClientScriptingManager.h"

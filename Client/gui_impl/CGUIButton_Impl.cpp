@@ -12,6 +12,7 @@
 #include	"../../Shared/CString.h"
 
 #include	"../CGUI.h"
+#include	"../CGUICallback.h"
 
 #include	"CGUI_Impl.h"
 #include	"CGUIElement_Impl.h"

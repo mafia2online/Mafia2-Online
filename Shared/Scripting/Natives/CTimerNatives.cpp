@@ -12,12 +12,27 @@
 #include	"../../Timers/CTimer.h"
 
 #ifdef _CLIENT
-#include	"../../../Client/StdInc.h"
+#include	"../../../Client/BaseInc.h"
+#include	"../../../Client/CCore.h"
+#include	"../../../Client/CClientScriptingManager.h"
+#include	"../../../Client/CClientScriptGUIManager.h"
+#include	"../../../Client/CVehicleManager.h"
+#include	"../../../Client/CNetworkVehicle.h"
+#include	"../../../Client/CPlayerManager.h"
+#include	"../../../Client/CNetworkPlayer.h"
 #else
 #include	"../../../Server/StdInc.h"
 #endif
 
-extern	CCore			* pCore;
+#include	"../../../Shared/CString.h"
+#include	"../../../Shared/CEvents.h"
+#include	"../../../Shared/CCommands.h"
+#include	"../../../Shared/Scripting/CSquirrelCommon.h"
+#include	"../../../Shared/SharedUtility.h"
+
+#include	"../../../Shared/Math/CMaths.h"
+#include	"../../../Shared/Math/CVector3.h"
+#include	"../../../Shared/CColor.h"
 
 _MEMBER_FUNCTION_IMPL(timer, constructor);
 _MEMBER_FUNCTION_IMPL(timer, IsActive);
@@ -40,7 +55,7 @@ _MEMBER_FUNCTION_RELEASE_HOOK(timer)
 	CTimer * pTimer = (CTimer *)pInst;
 
 	// Is the timer not null and inside the timer manager?
-	if( pTimer != NULL && pCore->GetTimerManager()->Contains( pTimer ) )
+	if( pTimer != NULL && CCore::Instance()->GetTimerManager()->Contains( pTimer ) )
 	{
 		// Kill the timer
 		pTimer->Kill( );
@@ -84,9 +99,9 @@ _MEMBER_FUNCTION_IMPL(timer, constructor)
 
 	// Get the current script instance
 #ifdef _CLIENT
-	CSquirrel * pScript = pCore->GetClientScriptingManager()->GetScriptingManager()->Get( pVM );
+	CSquirrel * pScript = CCore::Instance()->GetClientScriptingManager()->GetScriptingManager()->Get( pVM );
 #else
-	CSquirrel * pScript = pCore->GetScriptingManager()->Get( pVM );
+	CSquirrel * pScript = CCore::Instance()->GetScriptingManager()->Get( pVM );
 #endif
 
 	// Create the timer instance
@@ -103,7 +118,7 @@ _MEMBER_FUNCTION_IMPL(timer, constructor)
 	}
 
 	// Add the timer into the manager
-	pCore->GetTimerManager()->push_back( pTimer );
+	CCore::Instance()->GetTimerManager()->push_back( pTimer );
 
 	sq_pushbool( pVM, true );
 	return 1;
@@ -122,7 +137,7 @@ _MEMBER_FUNCTION_IMPL(timer, IsActive)
 	}
 
 	// Is the timer inside the timer manager?
-	if( pCore->GetTimerManager()->Contains( pTimer ) )
+	if( CCore::Instance()->GetTimerManager()->Contains( pTimer ) )
 	{
 		// Is the timer not active?
 		if( !pTimer->IsActive() )
@@ -154,7 +169,7 @@ _MEMBER_FUNCTION_IMPL(timer, Kill)
 	}
 
 	// Is the timer inside the timer manager and active?
-	if( pCore->GetTimerManager()->Contains( pTimer ) && pTimer->IsActive() )
+	if( CCore::Instance()->GetTimerManager()->Contains( pTimer ) && pTimer->IsActive() )
 	{
 		// Kill the timer
 		pTimer->Kill( );
