@@ -34,16 +34,19 @@ int CM2Navigation::RegisterIconPos( const Vector2& vecPosition, int iLibrary, in
 	{
 		M2Navigation * pNavigation = m_pNavigation;
 
-		_asm push 0;
-		_asm push 0;
-		_asm push 0;
-		_asm push iIcon;
-		_asm push iLibrary;
-		_asm lea ecx, vecPosition;
-		_asm push ecx;
-		_asm mov ecx, pNavigation;
-		_asm call COffsets::FUNC_CNavigation__RegisterIconPos;
-		_asm mov iIconId, eax;
+		_asm
+		{
+			push 0;
+			push 0;
+			push 0;
+			push iIcon;
+			push iLibrary;
+			lea ecx, vecPosition;
+			push ecx;
+			mov ecx, pNavigation;
+			call COffsets::FUNC_CNavigation__RegisterIconPos;
+			mov iIconId, eax;
+		}
 	}
 
 	void* pIcon = NULL;
@@ -51,13 +54,16 @@ int CM2Navigation::RegisterIconPos( const Vector2& vecPosition, int iLibrary, in
 	DWORD C_Navigation__GetIconFromId = 0x4963E0;
 	M2Navigation * pNavigation = m_pNavigation;
 
-	_asm lea ecx, pIcon;
-	_asm push ecx;
-	_asm push iIconId;
-	_asm mov ecx, pNavigation;
-	_asm call C_Navigation__GetIconFromId;
-	_asm mov bResult, al;
-	_asm add esp, 4h;
+	_asm
+	{
+		lea ecx, pIcon;
+		push ecx;
+		push iIconId;
+		mov ecx, pNavigation;
+		call C_Navigation__GetIconFromId;
+		mov bResult, al;
+		add esp, 4h;
+	}
 
 	if ( bResult )
 		CLogFile::Printf ( "Icon: 0x%p", pIcon );
@@ -74,24 +80,30 @@ int CM2Navigation::RegisterIconEntity( M2Entity * pEntity, int iLibrary, int iIc
 	{
 		M2Navigation * pNavigation = m_pNavigation;
 
-		_asm push 0;
-		_asm push 0;
-		_asm push 0;
-		_asm push iIcon;
-		_asm push iLibrary;
-		_asm push pEntity;
-		_asm mov ecx, pNavigation;
-		_asm call COffsets::FUNC_CNavigation__RegisterIconEntity;
-		_asm mov iIconId, eax;
+		_asm
+		{
+			push 0;
+			push 0;
+			push 0;
+			push iIcon;
+			push iLibrary;
+			push pEntity;
+			mov ecx, pNavigation;
+			call COffsets::FUNC_CNavigation__RegisterIconEntity;
+			mov iIconId, eax;
+		}
 
 
 		DWORD dwFunc = 0x4965C0; // C_Navigation::GetIconFromEntity
 		void * pIcon = NULL;
 
-		_asm push pEntity;
-		_asm mov ecx, pNavigation;
-		_asm call dwFunc;
-		_asm mov pIcon, eax;
+		_asm
+		{
+			push pEntity;
+			mov ecx, pNavigation;
+			call dwFunc;
+			mov pIcon, eax;
+		}
 
 		CLogFile::Printf ( "Entity icon: 0x%p", pIcon );
 	}
@@ -106,10 +118,13 @@ void CM2Navigation::UnregisterIconPos( int iIconId )
 	{
 		M2Navigation * pNavigation = m_pNavigation;
 
-		_asm push 1;
-		_asm push iIconId;
-		_asm mov ecx, pNavigation;
-		_asm call COffsets::FUNC_CNavigation__UnregisterIconPos;
+		_asm
+		{
+			push 1;
+			push iIconId;
+			mov ecx, pNavigation;
+			call COffsets::FUNC_CNavigation__UnregisterIconPos;
+		}
 	}
 }
 
@@ -120,9 +135,12 @@ void CM2Navigation::UnregisterIconEntity( M2Entity * pEntity )
 	{
 		M2Navigation * pNavigation = m_pNavigation;
 
-		_asm push 1;
-		_asm push pEntity;
-		_asm mov ecx, pNavigation;
-		_asm call COffsets::FUNC_CNavigation__UnregisterIconEntity;
+		_asm
+		{
+			push 1;
+			push pEntity;
+			mov ecx, pNavigation;
+			call COffsets::FUNC_CNavigation__UnregisterIconEntity;
+		}
 	}
 }

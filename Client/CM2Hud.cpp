@@ -35,9 +35,12 @@ void CM2HudTimer::Toggle( bool bToggle )
 	// Get the hud component
 	void * pHudComponent = m_pHudTimer->m_pHudComponent;
 
-	_asm push bToggle;
-	_asm mov ecx, pHudComponent;
-	_asm call COffsets::FUNC_CHudComponent__Show;
+	_asm
+	{
+		push bToggle;
+		mov ecx, pHudComponent;
+		call COffsets::FUNC_CHudComponent__Show;
+	}
 }
 
 void CM2HudTimer::SetTime( float fTime )
@@ -229,9 +232,12 @@ void CM2Hud::RadarShow( bool bShow )
 		// Toggle the radar
 		void* pRadar = m_pHud->m_pRadar;
 
-		_asm push bShow;
-		_asm mov ecx, pRadar;
-		_asm call COffsets::FUNC_CHud__RadarShow;
+		_asm
+		{
+			push bShow;
+			mov ecx, pRadar;
+			call COffsets::FUNC_CHud__RadarShow;
+		}
 	}
 }
 
@@ -242,9 +248,12 @@ void CM2Hud::ScoreShow( bool bShow )
 	{
 		void* pScore = m_pHud->m_pScore;
 
-		_asm push bShow;
-		_asm mov ecx, pScore;
-		_asm call COffsets::FUNC_CHud__ScoreShow;
+		_asm
+		{
+			push bShow;
+			mov ecx, pScore;
+			call COffsets::FUNC_CHud__ScoreShow;
+		}
 	}
 }
 
@@ -256,9 +265,12 @@ void CM2Hud::SubtitlesShow( bool bShow )
 		void* pSubtitles = m_pHud->m_pSubtitles;
 		bool bFix = !bShow;
 
-		_asm push bFix;
-		_asm mov ecx, pSubtitles;
-		_asm call COffsets::FUNC_CHud__SubtitlesShow;
+		_asm
+		{
+			push bFix;
+			mov ecx, pSubtitles;
+			call COffsets::FUNC_CHud__SubtitlesShow;
+		}
 	}
 }
 
@@ -269,9 +281,12 @@ void CM2Hud::ActionButtonsShow( bool bShow )
 	{
 		void* pActionButtons = m_pHud->m_pMessageArea->m_pActionButtons;
 
-		_asm push bShow;
-		_asm mov ecx, pActionButtons;
-		_asm call COffsets::FUNC_CHudComponent__Show;
+		_asm
+		{
+			push bShow;
+			mov ecx, pActionButtons;
+			call COffsets::FUNC_CHudComponent__Show;
+		}
 	}
 }
 
@@ -283,13 +298,19 @@ void CM2Hud::MessageAreaShow( bool bShow )
 		void* pMessageArea = m_pHud->m_pMessageArea->m_pMessageArea;
 		void* pMessageArea2 = m_pHud->m_pMessageArea->m_pMessageArea2;
 
-		_asm push bShow;
-		_asm mov ecx, pMessageArea;
-		_asm call COffsets::FUNC_CHudComponent__Show;
+		_asm
+		{
+			push bShow;
+			mov ecx, pMessageArea;
+			call COffsets::FUNC_CHudComponent__Show;
+		}
 
-		_asm push bShow;
-		_asm mov ecx, pMessageArea2;
-		_asm call COffsets::FUNC_CHudComponent__Show;
+		_asm
+		{
+			push bShow;
+			mov ecx, pMessageArea2;
+			call COffsets::FUNC_CHudComponent__Show;
+		}
 	}
 }
 
@@ -300,9 +321,12 @@ void CM2Hud::InfoAreaShow( bool bShow )
 	{
 		void* pInfoArea = m_pHud->m_pMessageArea->m_pInfoArea;
 
-		_asm push bShow;
-		_asm mov ecx, pInfoArea;
-		_asm call COffsets::FUNC_CHudComponent__Show;
+		_asm
+		{
+			push bShow;
+			mov ecx, pInfoArea;
+			call COffsets::FUNC_CHudComponent__Show;
+		}
 	}
 }
 
@@ -322,9 +346,12 @@ void CM2Hud::SpeedoShow ( bool bShow )
 		DWORD C_HudSpeedo__Show = 0x8818D0;
 		M2HudSpeedo * pSpeedo = m_pHud->m_pSpeedo;
 
-		_asm push bShow;
-		_asm mov ecx, pSpeedo;
-		_asm call C_HudSpeedo__Show;
+		_asm
+		{
+			push bShow;
+			mov ecx, pSpeedo;
+			call C_HudSpeedo__Show;
+		}
 	}
 }
 
@@ -369,10 +396,13 @@ void CM2Hud::SetWantedLevel(int level)
 		void * wanted = m_pHud->m_pWantedLevel;
 		float value = 1.0;
 
-		_asm push value;
-		_asm push value;
-		_asm push level;
-		_asm mov ecx, wanted;
-		_asm call function;
+		_asm
+		{
+			push value;
+			push value;
+			push level;
+			mov ecx, wanted;
+			call function;
+		}
 	}
 }

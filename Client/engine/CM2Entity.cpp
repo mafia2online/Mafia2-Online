@@ -30,8 +30,11 @@ CM2Entity::~CM2Entity( void )
 		DWORD C_Entity__Delete = 0x1195580;
 		M2Entity * pEntity = m_pEntity;
 
-		_asm mov ecx, pEntity;
-		_asm call C_Entity__Delete;
+		_asm
+		{
+			mov ecx, pEntity
+			call C_Entity__Delete
+		}
 	}
 }
 
@@ -43,8 +46,11 @@ void CM2Entity::Activate( void )
 		DWORD dwFunc = FUNC_CEntity__Activate;
 		M2Entity * pEntity = m_pEntity;
 
-		_asm mov ecx, pEntity;
-		_asm call dwFunc;
+		_asm
+		{
+			mov ecx, pEntity
+			call dwFunc
+		}
 	}
 }
 
@@ -56,8 +62,11 @@ void CM2Entity::Deactivate( void )
 		DWORD dwFunc = FUNC_CEntity__Deactivate;
 		M2Entity * pEntity = m_pEntity;
 
-		_asm mov ecx, pEntity;
-		_asm call dwFunc;
+		_asm
+		{
+			mov ecx, pEntity
+			call dwFunc
+		}
 	}
 }
 
@@ -78,10 +87,13 @@ void CM2Entity::SetPosition( const CVector3& vecPosition )
 		DWORD dwFunc = m_pEntity->m_pVFTable->SetPosition;
 		M2Entity * pEntity = m_pEntity;
 
-		_asm lea ecx, vecPosition;
-		_asm push ecx;
-		_asm mov ecx, pEntity;
-		_asm call dwFunc;
+		_asm
+		{
+			lea ecx, vecPosition;
+			push ecx;
+			mov ecx, pEntity;
+			call dwFunc;
+		}
 	}
 }
 
@@ -93,9 +105,12 @@ void CM2Entity::GetPosition( CVector3& vecPosition, bool bCheckVehicle )
 		DWORD dwFunc = m_pEntity->m_pVFTable->GetPosition;
 		M2Entity * pEntity = m_pEntity;
 
-		_asm push vecPosition;
-		_asm mov ecx, pEntity;
-		_asm call dwFunc;
+		_asm
+		{
+			push vecPosition;
+			mov ecx, pEntity;
+			call dwFunc;
+		}
 
 		// If the ped is in a vehicle, adjust the Z axis
 		if( bCheckVehicle && ((M2Ped *)m_pEntity)->m_pCurrentVehicle )
@@ -111,10 +126,13 @@ void CM2Entity::SetDirection( const CVector3& vecDirection )
 		DWORD dwFunc = m_pEntity->m_pVFTable->SetDirection;
 		M2Entity * pEntity = m_pEntity;
 
-		_asm lea ecx, vecDirection;
-		_asm push ecx;
-		_asm mov ecx, pEntity;
-		_asm call dwFunc;
+		_asm
+		{
+			lea ecx, vecDirection;
+			push ecx;
+			mov ecx, pEntity;
+			call dwFunc;
+		}
 	}
 }
 
@@ -126,9 +144,12 @@ void CM2Entity::GetDirection( CVector3& vecDirection )
 		DWORD dwFunc = m_pEntity->m_pVFTable->GetDirection;
 		M2Entity * pEntity = m_pEntity;
 
-		_asm push vecDirection;
-		_asm mov ecx, pEntity;
-		_asm call dwFunc;
+		_asm
+		{
+			push vecDirection;
+			mov ecx, pEntity;
+			call dwFunc;
+		}
 	}
 }
 
@@ -140,10 +161,13 @@ void CM2Entity::SetRotation( const Quaternion& quatRotation )
 		DWORD dwFunc = m_pEntity->m_pVFTable->SetRotation;
 		M2Entity * pEntity = m_pEntity;
 
-		_asm lea ecx, quatRotation;
-		_asm push ecx;
-		_asm mov ecx, pEntity;
-		_asm call dwFunc;
+		_asm
+		{
+			lea ecx, quatRotation
+			push ecx
+			mov ecx, pEntity
+			call dwFunc
+		}
 	}
 }
 
@@ -202,9 +226,12 @@ void CM2Entity::ShowModel( bool bShow )
 
 		// Refresh model?
 		DWORD dwFunc = 0x14AEAC0;
-		_asm push 6;
-		_asm mov ecx, pModel;
-		_asm call dwFunc;
+		_asm
+		{
+			push 6;
+			mov ecx, pModel;
+			call dwFunc;
+		}
 	}
 }
 
