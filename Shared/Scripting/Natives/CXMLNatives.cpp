@@ -11,12 +11,28 @@
 #include "../../CXML.h"
 
 #ifdef _CLIENT
-#include	"../../../Client/StdInc.h"
+#include	"../../../Client/BaseInc.h"
+#include	"../../../Client/CCore.h"
+#include	"../../../Client/CClientScriptingManager.h"
+#include	"../../../Client/CClientScriptGUIManager.h"
+#include	"../../../Client/CVehicleManager.h"
+#include	"../../../Client/CNetworkVehicle.h"
+#include	"../../../Client/CPlayerManager.h"
+#include	"../../../Client/CNetworkPlayer.h"
+#include	"../../../Client/CRemotePlayer.h"
 #else
 #include	"../../../Server/StdInc.h"
 #endif
 
-extern	CCore			* pCore;
+#include	"../../../Shared/CString.h"
+#include	"../../../Shared/CEvents.h"
+#include	"../../../Shared/CCommands.h"
+#include	"../../../Shared/Scripting/CSquirrelCommon.h"
+#include	"../../../Shared/SharedUtility.h"
+
+#include	"../../../Shared/Math/CVector3.h"
+#include	"../../../Shared/CColor.h"
+#include	"../../../Shared/Game/CGame.h"
 
 _MEMBER_FUNCTION_IMPL(xml, constructor);
 _MEMBER_FUNCTION_IMPL(xml, save);
@@ -75,10 +91,10 @@ _MEMBER_FUNCTION_IMPL(xml, constructor)
 		// Generate the path string
 		String strPath;
 #ifdef _CLIENT
-		strPath = pCore->GetClientScriptingManager()->GetScriptingManager()->Get( pVM )->GetPath();
-		strPath = SharedUtility::GetFileNameForScriptFile( szFileName, strPath.Get(), pCore->GetHost().Get(), pCore->GetPort() );
+		strPath = CCore::Instance()->GetClientScriptingManager()->GetScriptingManager()->Get( pVM )->GetPath();
+		strPath = SharedUtility::GetFileNameForScriptFile( szFileName, strPath.Get(), CCore::Instance()->GetHost().Get(), CCore::Instance()->GetPort() );
 #else
-		strPath = pCore->GetScriptingManager()->Get( pVM )->GetPath();
+		strPath = CCore::Instance()->GetScriptingManager()->Get( pVM )->GetPath();
 		strPath = SharedUtility::GetFileNameForScriptFile( szFileName, strPath.Get() );
 #endif
 

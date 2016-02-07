@@ -11,12 +11,28 @@
 #include	"../../Math/CMaths.h"
 
 #ifdef _CLIENT
-#include	"../../../Client/StdInc.h"
+#include	"../../../Client/BaseInc.h"
+#include	"../../../Client/CCore.h"
+#include	"../../../Client/CClientScriptingManager.h"
+#include	"../../../Client/CClientScriptGUIManager.h"
+#include	"../../../Client/CVehicleManager.h"
+#include	"../../../Client/CNetworkVehicle.h"
+#include	"../../../Client/CPlayerManager.h"
+#include	"../../../Client/CNetworkPlayer.h"
+#include	"../../../Client/CRemotePlayer.h"
 #else
 #include	"../../../Server/StdInc.h"
 #endif
 
-extern	CCore			* pCore;
+#include	"../../../Shared/CString.h"
+#include	"../../../Shared/CEvents.h"
+#include	"../../../Shared/CCommands.h"
+#include	"../../../Shared/Scripting/CSquirrelCommon.h"
+#include	"../../../Shared/SharedUtility.h"
+
+#include	"../../../Shared/Math/CVector3.h"
+#include	"../../../Shared/CColor.h"
+#include	"../../../Shared/Game/CGame.h"
 
 void CUtilNatives::Register( CScriptingManager * pScriptingManager )
 {
@@ -69,11 +85,11 @@ SQInteger CUtilNatives::PlayerIdFromName( SQVM * pVM )
 
 	for ( EntityId i = 0; i < MAX_PLAYERS; i ++ )
 	{
-		if ( pCore->GetPlayerManager()->IsActive ( i ) )
+		if ( CCore::Instance()->GetPlayerManager()->IsActive ( i ) )
 		{
-			if ( !strcmp ( szName, pCore->GetPlayerManager()->Get( i )->GetNick() ) )
+			if ( !strcmp ( szName, CCore::Instance()->GetPlayerManager()->Get( i )->GetNick() ) )
 			{
-				sq_pushinteger( pVM, pCore->GetPlayerManager()->Get( i )->GetId () );
+				sq_pushinteger( pVM, CCore::Instance()->GetPlayerManager()->Get( i )->GetId () );
 				return 1;
 			}
 		}

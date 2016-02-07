@@ -10,12 +10,21 @@
 #include	"CSharedPlayerNatives.h"
 
 #ifdef _CLIENT
-#include	"../../../Client/StdInc.h"
+#include	"../../../Client/BaseInc.h"
+#include	"../../../Client/CCore.h"
+#include	"../../../Client/CClientScriptingManager.h"
+#include	"../../../Client/CClientScriptGUIManager.h"
+#include	"../../../Client/CPlayerManager.h"
+#include	"../../../Client/CRemotePlayer.h"
+#include	"../../../Client/CNetworkPlayer.h"
 #else
 #include	"../../../Server/StdInc.h"
 #endif
 
-extern		CCore			* pCore;
+#include	"../../../Shared/CString.h"
+#include	"../../../Shared/CEvents.h"
+#include	"../../../Shared/CCommands.h"
+#include	"../../../Shared/Scripting/CSquirrelCommon.h"
 
 void CSharedPlayerNatives::Register( CScriptingManager * pScriptingManager )
 {
@@ -36,14 +45,14 @@ SQInteger CSharedPlayerNatives::GetPlayers(SQVM * pVM)
 	for (EntityId id = 0; id < MAX_PLAYERS; id++)
 	{
 		// Entity active ?
-		if (pCore->GetPlayerManager()->IsActive(id)){
+		if (CCore::Instance()->GetPlayerManager()->IsActive(id)){
 
 			// Valid pointer ?
-			if (pCore->GetPlayerManager()->Get(id)){
+			if (CCore::Instance()->GetPlayerManager()->Get(id)){
 
 				// Push id and name
 				sq_pushinteger(pVM, id);
-				sq_pushstring(pVM, pCore->GetPlayerManager()->Get(id)->GetNick(), -1);
+				sq_pushstring(pVM, CCore::Instance()->GetPlayerManager()->Get(id)->GetNick(), -1);
 
 				// Create new table slot
 				sq_createslot(pVM, -3);
@@ -61,9 +70,9 @@ SQInteger CSharedPlayerNatives::GetMoney( SQVM * pVM )
 	sq_getinteger( pVM, -1, &playerId );
 
 	// Is the player active?
-	if( pCore->GetPlayerManager()->IsActive( playerId ) )
+	if( CCore::Instance()->GetPlayerManager()->IsActive( playerId ) )
 	{
-		sq_pushinteger ( pVM, pCore->GetPlayerManager()->Get ( playerId )->GetMoney () );
+		sq_pushinteger ( pVM, CCore::Instance()->GetPlayerManager()->Get ( playerId )->GetMoney () );
 		return 1;
 	}
 

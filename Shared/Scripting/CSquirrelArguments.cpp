@@ -8,7 +8,7 @@
 ***************************************************************/
 
 #ifdef _CLIENT
-#include	"../../Client/StdInc.h"
+#include	"../../Client/BaseInc.h"
 #else
 #include	"../../Server/StdInc.h"
 #endif
@@ -16,6 +16,8 @@
 #include	"../../Libraries/squirrel/sqstate.h"
 #include	"../../Libraries/squirrel/sqvm.h"
 #include	"../../Libraries/squirrel/sqstring.h"
+
+#include	"CSquirrelArguments.h"
 
 CSquirrelArgument::CSquirrelArgument( CSquirrelArguments array, bool isArray )
 {

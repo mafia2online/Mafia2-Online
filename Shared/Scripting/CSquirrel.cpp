@@ -8,13 +8,19 @@
 ***************************************************************/
 
 #ifdef _CLIENT
-#include	"../../Client/StdInc.h"
+#include	"../../Client/Baseinc.h"
+#include	"../../Client/CCore.h"
+#include	"../../Client/CClientScriptingManager.h"
+#include	"../../Shared/Scripting/CScriptingManager.h"
+#include	"../../Client/CNetworkModelManager.h"
 #else
 #include	"../../Server/StdInc.h"
 #endif
 
-extern	CCore				* pCore;
+#include	"../../Shared/CEvents.h"
+#include	"../../Shared/SharedUtility.h"
 
+#include	"CSquirrel.h"
 void CSquirrel::PrintFunction( SQVM * pVM, const SQChar * szFormat, ... )
 {
 	va_list args;
@@ -76,9 +82,9 @@ void CSquirrel::ErrorFunction( SQVM * pVM, const SQChar * szFormat, ... )
 
 	// Find the script
 #ifndef _CLIENT
-	CSquirrel * pScript = pCore->GetScriptingManager()->Get( pVM );
+	CSquirrel * pScript = CCore::Instance()->GetScriptingManager()->Get( pVM );
 #else
-	CSquirrel * pScript = pCore->GetClientScriptingManager()->GetScriptingManager()->Get( pVM );
+	CSquirrel * pScript = CCore::Instance()->GetClientScriptingManager()->GetScriptingManager()->Get( pVM );
 #endif
 
 	CLogFile::Printf( "Script Error: %s", tmp );
@@ -90,9 +96,9 @@ void CSquirrel::ErrorFunction( SQVM * pVM, const SQChar * szFormat, ... )
 
 		// Call scriptError event
 #ifndef _CLIENT
-		pCore->GetEvents()->Call( "onScriptError", &pArguments, pScript );
+		CCore::Instance()->GetEvents()->Call( "onScriptError", &pArguments, pScript );
 #else
-		pCore->GetClientScriptingManager()->GetEvents()->Call( "onScriptError", &pArguments, pScript );
+		CCore::Instance()->GetClientScriptingManager()->GetEvents()->Call( "onScriptError", &pArguments, pScript );
 #endif
 	}
 }
@@ -101,9 +107,9 @@ void CSquirrel::CompileErrorFunction( SQVM * pVM, const SQChar * szError, const 
 {
 	// Find the script
 #ifndef _CLIENT
-	CSquirrel * pScript = pCore->GetScriptingManager()->Get( pVM );
+	CSquirrel * pScript = CCore::Instance()->GetScriptingManager()->Get( pVM );
 #else
-	CSquirrel * pScript = pCore->GetClientScriptingManager()->GetScriptingManager()->Get( pVM );
+	CSquirrel * pScript = CCore::Instance()->GetClientScriptingManager()->GetScriptingManager()->Get( pVM );
 #endif
 
 	if( pScript )
@@ -116,9 +122,9 @@ void CSquirrel::CompileErrorFunction( SQVM * pVM, const SQChar * szError, const 
 
 		// Call scriptError event
 #ifndef _CLIENT
-		pCore->GetEvents()->Call( "onScriptCompileError", &pArguments, pScript );
+		CCore::Instance()->GetEvents()->Call( "onScriptCompileError", &pArguments, pScript );
 #else
-		pCore->GetClientScriptingManager()->GetEvents()->Call( "onScriptCompileError", &pArguments, pScript );
+		CCore::Instance()->GetClientScriptingManager()->GetEvents()->Call( "onScriptCompileError", &pArguments, pScript );
 #endif
 
 		CLogFile::Printf( "CompileError: %s on file %s (line %d, column %d)", (const char *)szError, (const char *)szSource, iLine, iColumn );
