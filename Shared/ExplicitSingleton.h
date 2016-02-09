@@ -20,7 +20,7 @@ public:
 
 	ExplicitSingleton ( void )
 	{
-		ms_pInstance = this;
+		ms_pInstance = static_cast<CLASS_TYPE*>(this);
 	}
 
 	virtual ~ExplicitSingleton ( void )
