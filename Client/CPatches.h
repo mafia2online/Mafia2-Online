@@ -10,6 +10,8 @@
 
 #pragma once
 
+#include	<lua.h>
+
 class M2EntityMessage;
 
 // Typedefs

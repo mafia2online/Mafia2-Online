@@ -9,7 +9,11 @@
 
 #pragma once
 
-#include "CServerList.h"
+#include	<thread>
+#include	<atomic>
+
+#include	"CServerList.h"
+#include	"Network\CHttpClient.h"
 
 enum eRefreshType
 {

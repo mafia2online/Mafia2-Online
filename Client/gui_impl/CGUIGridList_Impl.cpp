@@ -388,8 +388,8 @@ bool CGUIGridList_Impl::Event_OnSortColumn( const CEGUI::EventArgs &e )
 		m_pfnOnSortColumn( this );
 
 	// Pass the event to the client gui manager
-	if( pCore->GetClientScriptingManager() && pCore->GetClientScriptingManager()->GetScriptGUIManager() )
-		pCore->GetClientScriptingManager()->GetScriptGUIManager()->HandleEvent( "onGuiElementSortColumn", this );
+	if (CCore::Instance()->GetClientScriptingManager() && CCore::Instance()->GetClientScriptingManager()->GetScriptGUIManager())
+		CCore::Instance()->GetClientScriptingManager()->GetScriptGUIManager()->HandleEvent("onGuiElementSortColumn", this);
 
 	return true;
 }
@@ -401,8 +401,8 @@ bool CGUIGridList_Impl::Event_OnSelectionChanged( const CEGUI::EventArgs &e )
 		m_pfnOnSelectionChanged( this );
 
 	// Pass the event to the client gui manager
-	if( pCore->GetClientScriptingManager() && pCore->GetClientScriptingManager()->GetScriptGUIManager() )
-		pCore->GetClientScriptingManager()->GetScriptGUIManager()->HandleEvent( "onGuiElementSelectionChange", this );
+	if (CCore::Instance()->GetClientScriptingManager() && CCore::Instance()->GetClientScriptingManager()->GetScriptGUIManager())
+		CCore::Instance()->GetClientScriptingManager()->GetScriptGUIManager()->HandleEvent("onGuiElementSelectionChange", this);
 
 	return true;
 }

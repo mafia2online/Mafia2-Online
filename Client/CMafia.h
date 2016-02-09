@@ -10,6 +10,8 @@
 
 #pragma once
 
+#include	"CString.h"
+
 class CM2PhysFS;
 class CM2Navigation;
 class CMafia

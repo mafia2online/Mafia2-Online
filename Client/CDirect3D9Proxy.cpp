@@ -7,10 +7,15 @@
 *
 ***************************************************************/
 
-#include "BaseInc.h"
+#include	"BaseInc.h"
 
-#include "CDirect3D9Hook.h"
-#include "CDirect3D9Proxy.h"
+#include	"CCore.h"
+
+#include	"CDirect3D9Hook.h"
+#include	"CDirect3D9Proxy.h"
+#include	"CDirect3DDevice9Proxy.h"
+
+#include	"CWindowSubclass.h"
 
 CDirect3D9Proxy::CDirect3D9Proxy(IDirect3D9 * pD3D)
 {
@@ -117,7 +122,7 @@ HRESULT STDMETHODCALLTYPE CDirect3D9Proxy::CreateDevice(UINT Adapter, D3DDEVTYPE
 	// If creation of the d3d device succeeded call the create device client event and create the proxy device
 	if(SUCCEEDED(hr))
 	{
-		pCore->OnDeviceCreate( *ppReturnedDeviceInterface, pPresentationParameters );
+		CCore::Instance()->OnDeviceCreate( *ppReturnedDeviceInterface, pPresentationParameters );
 		*ppReturnedDeviceInterface = new CDirect3DDevice9Proxy( this, *ppReturnedDeviceInterface );
 	}
 

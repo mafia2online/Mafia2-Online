@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include	"CColor.h"
 #include	"Math/CVector3.h"
 #include	"../Libraries/RakNet/Source/RakString.h"
 

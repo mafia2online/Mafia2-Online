@@ -23,7 +23,6 @@
 #include	"CPedManager.h"
 #include	"CRemotePlayer.h"
 
-#include	"CM2Entity.h"
 #include	"engine\CM2Navigation.h"
 #include	"engine\CM2Ped.h"
 

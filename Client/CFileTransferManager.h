@@ -9,6 +9,10 @@
 
 #pragma once
 
+#include	"CFileTransfer.h"
+#include	"Threading\CThread.h"
+#include	"Threading\CMutex.h"
+
 class CFileTransferManager
 {
 

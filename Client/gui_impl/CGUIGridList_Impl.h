@@ -9,6 +9,9 @@
 
 #pragma once
 
+#include	"CGUIElement_Impl.h"
+#include	"CGUIListItem_Impl.h"
+
 class CGUIGridList_Impl : public CGUIElement_Impl
 {
 

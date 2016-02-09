@@ -9,6 +9,9 @@
 
 #pragma once
 
+#include	"CString.h"
+#include	"CModelManager.h"
+
 class CNetworkModelManager;
 class CNetworkModel
 {

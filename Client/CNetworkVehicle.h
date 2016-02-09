@@ -9,6 +9,11 @@
 
 #pragma once
 
+#include	"engine\CM2Entity.h"
+#include	"engine\CM2Vehicle.h"
+#include	"CModelManager.h"
+#include	"CSync.h"
+
 class CNetworkPlayer;
 class CBlip;
 class CNetworkVehicle

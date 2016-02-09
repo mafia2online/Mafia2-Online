@@ -126,9 +126,6 @@
     <Filter Include="Source Files\Client\Network\Blips">
       <UniqueIdentifier>{3163dd92-41d9-469f-b4bc-25006a22000d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Client\Game\Hooks\Mouse">
-      <UniqueIdentifier>{b22ba6d4-00e9-47a3-b702-25f4d0f865c9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Client\Network\Vehicles">
       <UniqueIdentifier>{ab6d1dfe-cabd-403d-adca-7d3579c21b3f}</UniqueIdentifier>
     </Filter>
@@ -973,9 +970,6 @@
     <ClCompile Include="..\Shared\CExceptionHandler.cpp">
       <Filter>Source Files\Client\Shared</Filter>
     </ClCompile>
-    <ClCompile Include="CMouseHandler.cpp">
-      <Filter>Source Files\Client\Game\Hooks\Mouse</Filter>
-    </ClCompile>
     <ClCompile Include="..\Shared\CCommands.cpp">
       <Filter>Source Files\Client\Shared</Filter>
     </ClCompile>
@@ -1229,9 +1223,6 @@
       <Filter>Source Files\Client\Network</Filter>
     </ClCompile>
     <ClCompile Include="engine\CM2Door.cpp">
-      <Filter>Source Files\Client\Game\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\CM2Object.cpp">
       <Filter>Source Files\Client\Game\Engine</Filter>
     </ClCompile>
     <ClCompile Include="engine\CM2ObjectTable.cpp">

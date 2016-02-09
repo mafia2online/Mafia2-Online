@@ -9,6 +9,11 @@
 
 #pragma once
 
+#include	"CGUI.h"
+#include	"gui_impl\CGUI_Impl.h"
+#include	"gui_impl\CGUIElement_Impl.h"
+#include	"gui_impl\CGUIWindow_Impl.h"
+
 typedef void	( * SubmitHandler_t )( String strPassword, void * pUserData );
 
 class CServerPassword

@@ -11,6 +11,10 @@
 
 #include <vector>
 
+#include	"COffsets.h"
+
+#include	"engine\CM2Entity.h"
+
 #define MODELMGR_MAX			1000
 #define SDS_LOAD_DIR_ADDR		0x18F6FDC
 #define SDS_LOAD_DIR_CARS		"/sds/cars/"

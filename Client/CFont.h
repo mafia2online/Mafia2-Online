@@ -7,6 +7,11 @@
 *
 ***************************************************************/
 
+#include	"CString.h"
+
+#include	<d3dx9core.h>
+#include	"CDirect3D9Proxy.h"
+
 class CFont
 {
 

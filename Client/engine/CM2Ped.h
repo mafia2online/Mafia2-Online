@@ -9,7 +9,8 @@
 
 #pragma once
 
-#include "CM2Enums.h"
+#include	"CM2Enums.h"
+#include	"CM2Entity.h"
 
 class M2WeaponData
 {

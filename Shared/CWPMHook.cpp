@@ -12,11 +12,13 @@
 
 #include <Windows.h>
 
+#include	"CString.h"
+
 #include "../Client/CCore.h"
 
-#include "CWPMHook.h"
-
 #include "CPatcher.h"
+
+#include "CWPMHook.h"
 #else
 // todo
 #endif

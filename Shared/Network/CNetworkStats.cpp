@@ -9,6 +9,8 @@
 
 #include	"../SharedUtility.h"
 #include	"CNetworkStats.h"
+
+#include	"../../Libraries/RakNet/Source/RPC4Plugin.h"
 #include	"../../Libraries/RakNet/Source/RakNetStatistics.h"
 #include	"../../Libraries/RakNet/Source/GetTime.h"
 #include	"../../Libraries/RakNet/Source/RakPeerInterface.h"

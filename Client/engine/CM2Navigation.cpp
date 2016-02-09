@@ -9,8 +9,6 @@
 
 #include "BaseInc.h"
 
-#include "Math/CVector3.h"
-
 #include "CM2Navigation.h"
 
 CM2Navigation::CM2Navigation( M2Navigation * pNavigation )

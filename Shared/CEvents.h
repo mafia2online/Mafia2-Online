@@ -12,6 +12,14 @@
 #include	<map>
 #include	<list>
 
+#include	<squirrel.h>
+#include	<sqvm.h>
+
+#include	"Scripting\CSquirrel.h"
+#include	"Scripting\CSquirrelArguments.h"
+#include	"Scripting\CScriptingManager.h"
+#include	"Scripting\CSquirrelCommon.h"
+
 class CEventHandler
 {
 public:

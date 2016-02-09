@@ -7,21 +7,24 @@
 *
 ***************************************************************/
 
+#include	"CString.h"
+
 #ifdef _CLIENT
-#include "../Client/BaseInc.h"
-#include "../Client/CCore.h"
+#include	"../Client/BaseInc.h"
+#include	"../Client/CCore.h"
  #else
-#include "../Client/BaseInc.h"
-#include "../Server/CCore.h"
+#include	"../Client/BaseInc.h"
+#include	"../Server/CCore.h"
 #endif
 
-#include "sqvm.h"
+#include	<squirrel.h>
+#include	<sqvm.h>
 
-#include "Scripting/CSquirrel.h"
-#include "Scripting/CScriptingManager.h"
-#include "CClientScriptingManager.h"
+#include	"Scripting/CSquirrel.h"
+#include	"Scripting/CScriptingManager.h"
+#include	"CClientScriptingManager.h"
 
-#include "CCommands.h"
+#include	"CCommands.h"
 
 
 void CSquirrelCommandHandler::Call( CSquirrelArguments * pArguments )

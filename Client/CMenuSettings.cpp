@@ -20,17 +20,18 @@
 #include "CGUI.h"
 #include "CGUICallback.h"
 
-#include "gui_impl\CGUI_Impl.h"
-#include "gui_impl\CGUIElement_Impl.h"
-#include "gui_impl\CGUIComboBox_Impl.h"
-#include "gui_impl\CGUIWindow_Impl.h"
-#include "gui_impl\CGUITab_Impl.h"
-#include "gui_impl\CGUITabPanel_Impl.h"
-#include "gui_impl\CGUIButton_Impl.h"
-#include "gui_impl\CGUILabel_Impl.h"
-#include "gui_impl\CGUIEdit_Impl.h"
-#include "gui_impl\CGUICheckBox_Impl.h"
-#include "gui_impl\CGUIScrollBar_Impl.h"
+#include	"gui_impl\CGUI_Impl.h"
+#include	"gui_impl\CGUIElement_Impl.h"
+#include	"gui_impl\CGUIComboBox_Impl.h"
+#include	"gui_impl\CGUIWindow_Impl.h"
+#include	"gui_impl\CGUITab_Impl.h"
+#include	"gui_impl\CGUITabPanel_Impl.h"
+#include	"gui_impl\CGUIButton_Impl.h"
+#include	"gui_impl\CGUILabel_Impl.h"
+#include	"gui_impl\CGUIEdit_Impl.h"
+#include	"gui_impl\CGUICheckBox_Impl.h"
+#include	"gui_impl\CGUIScrollBar_Impl.h"
+#include	"gui_impl\CGUIListItem_Impl.h"
 
 #include "CM2VideoSettings.h"
 
@@ -46,6 +47,8 @@
 #include "../Libraries/RakNet/Source/PacketPriority.h"
 #include "CPlayerRPC.h"
 #include "CNetworkRPC.h"
+
+#include	"../Shared/CNetworkRPC.h"
 
 #include "CMenuSettings.h"
 

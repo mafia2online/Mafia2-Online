@@ -12,6 +12,8 @@
 
 #include	"Scripting\CSquirrelArguments.h"
 
+#include	"CString.h"
+
 #include	"SharedUtility.h"
 
 #include	"CWPMHook.h"

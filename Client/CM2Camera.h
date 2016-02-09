@@ -9,6 +9,10 @@
 
 #pragma once
 
+#include	<d3dx9math.h>
+
+#include	"Math\CMatrix.h"
+
 class C_RenderCamera // size: 0x1E8
 {
 public:

@@ -11,6 +11,8 @@
 
 #include	"../Shared/Network/CHttpClient.h"
 
+#include	"CRC.h"
+
 class CFileTransfer
 {
 

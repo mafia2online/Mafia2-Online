@@ -64,7 +64,7 @@
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <DisableSpecificWarnings>4996;4409;4482;4800;4305;4018;4390;4099;4244;%(DisableSpecificWarnings)</DisableSpecificWarnings>
@@ -103,7 +103,7 @@
       <DisableSpecificWarnings>4996;4409;4482;4800;4305;4018;4390;4099;4244;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalIncludeDirectories>./;../Libraries/CrashRpt;../Libraries/cegui-0.4.0-custom/include;../Libraries/DXSDK/include;../Libraries/squirrel;../Libraries/lua;../Libraries/RakNet/Source;../Shared;../Libraries/Detours;../Libraries/zlib-1.2.5;../Libraries/lpng142;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>BaseInc.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
@@ -422,7 +422,6 @@
     <ClCompile Include="CMasterList.cpp" />
     <ClCompile Include="CMenuSettings.cpp" />
     <ClCompile Include="CModelManager.cpp" />
-    <ClCompile Include="CMouseHandler.cpp" />
     <ClCompile Include="CNameTag.cpp" />
     <ClCompile Include="CNetworkModelManager.cpp" />
     <ClCompile Include="CNetworkModule.cpp" />
@@ -454,7 +453,6 @@
     <ClCompile Include="engine\CM2Entity.cpp" />
     <ClCompile Include="engine\CM2Misc.cpp" />
     <ClCompile Include="engine\CM2Navigation.cpp" />
-    <ClCompile Include="engine\CM2Object.cpp" />
     <ClCompile Include="engine\CM2ObjectTable.cpp" />
     <ClCompile Include="engine\CM2Ped.cpp" />
     <ClCompile Include="engine\CM2Vehicle.cpp" />

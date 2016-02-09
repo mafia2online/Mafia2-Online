@@ -8,19 +8,21 @@
 *
 ***************************************************************/
 
-#include "BaseInc.h"
+#include	"BaseInc.h"
 
-#include "CLua.h"
+#include	"CLua.h"
 
-#include "Math/CVector3.h"
-#include "Math/CMatrix.h"
+#include	"Math/CVector3.h"
+#include	"Math/CMatrix.h"
 
-#include "CM2Camera.h"
+#include	"CM2Camera.h"
 
-#include "CGraphics.h"
+#include	"CGraphics.h"
 
-#include "CChat.h"
-#include "CCore.h"
+#include	"CChat.h"
+#include	"CCore.h"
+
+#include	"COffsets.h"
 
 CM2Camera::CM2Camera( void )
 {

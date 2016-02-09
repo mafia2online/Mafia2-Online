@@ -24,6 +24,7 @@
 #include	"CGUI_Impl.h"
 #include	"CGUIFont_Impl.h"
 #include	"CGUIWindow_Impl.h"
+
 #include	"CGUILabel_Impl.h"
 
 CGUILabel_Impl::CGUILabel_Impl( CGUI_Impl * pGUI, String strText, CGUIFont_Impl * pFont, CGUIElement_Impl * pParent )

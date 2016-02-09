@@ -7,11 +7,16 @@
 *
 ***************************************************************/
 
+#include	"../CString.h"
+#include	"../../Shared/Scripting/CScriptingManager.h"
+
+
 #ifdef _CLIENT
 #include	"../../Client/Baseinc.h"
 #include	"../../Client/CCore.h"
 #include	"../../Client/CClientScriptingManager.h"
-#include	"../../Shared/Scripting/CScriptingManager.h"
+#include	"../../Client/engine/CM2Entity.h"
+#include	"../../Client/CModelManager.h"
 #include	"../../Client/CNetworkModelManager.h"
 #else
 #include	"../../Server/StdInc.h"

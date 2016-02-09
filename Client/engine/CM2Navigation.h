@@ -9,6 +9,9 @@
 
 #pragma once
 
+#include	"Math/CVector3.h"
+#include	"../COffsets.h"
+
 class M2Entity;
 class Vector2;
 
