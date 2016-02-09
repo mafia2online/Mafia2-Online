@@ -9,8 +9,6 @@
 
 #include "BaseInc.h"
 
-#include "Math/CVector3.h"
-
 #include "CM2Door.h"
 
 void CM2Door::Open( CVector3 * pvPosition )

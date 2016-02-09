@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include	<RPC4Plugin.h>
+
 class CBlipRPC
 {
 

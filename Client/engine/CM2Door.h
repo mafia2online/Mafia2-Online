@@ -9,6 +9,9 @@
 
 #pragma once
 
+#include	"../COffsets.h"
+#include	"Math/CVector3.h"
+
 class M2Model;
 
 class CM2Door

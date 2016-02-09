@@ -13,6 +13,9 @@
 #include	"../../Server/StdInc.h"
 #endif
 
+#include	<assert.h>
+
+#include	"../../Libraries/squirrel/squirrel.h"
 #include	"../../Libraries/squirrel/sqstate.h"
 #include	"../../Libraries/squirrel/sqvm.h"
 #include	"../../Libraries/squirrel/sqstring.h"

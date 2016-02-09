@@ -9,8 +9,11 @@
 
 #pragma once
 
-#include "d3d9.h"
-#include "Math/CMatrix.h"
+#include	"d3d9.h"
+#include	"../../Shared/Math/CMaths.h"
+#include	"../../Shared/Math/CMatrix.h"
+#include	"../../Shared/Math/CQuaternion.h"
+#include	"../../Shared/Math/CVector3.h"
 
 #define	FUNC_CEntity__Activate				0x1189E20
 #define	FUNC_CEntity__Deactivate			0x1189E70

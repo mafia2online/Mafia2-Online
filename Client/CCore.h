@@ -16,6 +16,8 @@
 
 #include "ExplicitSingleton.h"
 
+#include	"CString.h"
+
 class CUpdater;
 class CMafia;
 class CNetworkModule;

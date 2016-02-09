@@ -11,6 +11,8 @@
 
 #include "ExplicitSingleton.h"
 
+#include	<RPC4Plugin.h>
+
 enum eNetworkResponse
 {
 	NETWORK_RESPONSE_SUCCESS = 0,

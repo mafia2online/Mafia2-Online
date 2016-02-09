@@ -20,8 +20,6 @@
 #include "CStreamableEntity.h"
 #include "CStreamer.h"
 
-#include "CM2Entity.h"
-
 CStreamer::CStreamer( void )
 {
 	// Reset
@@ -66,7 +64,7 @@ void CStreamer::Process( void )
 
 			// Get the current entity position
 			CVector3 vecPos;
-			(*iter)->GetEntity()->GetPosition( &vecPos );
+			(*iter)->GetEntity()->GetPosition( vecPos );
 
 			// Is the current entity in range?
 			bIsInRange = ((vecLocalPos - vecPos).Length() <= (*iter)->GetStreamDistance());

@@ -9,6 +9,9 @@
 
 #pragma once
 
+#include	"CServerPassword.h"
+#include	<MessageIdentifiers.h>
+
 #define MAX_SERVER_LISTS							3
 
 class CGUI_Impl;

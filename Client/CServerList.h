@@ -15,7 +15,8 @@
 #define SERVER_LIST_QUERIES_PER_PULSE       2
 #define SERVER_LIST_BROADCAST_REFRESH       2000
 
-#include <map>
+#include	<map>
+#include	"CServerBrowser.h"
 
 class CServerList;
 class CServerListItem

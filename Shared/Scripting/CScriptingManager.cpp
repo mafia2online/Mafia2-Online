@@ -7,16 +7,20 @@
 *
 ***************************************************************/
 
+#include	"../../../Shared/CString.h"
+
 #ifdef _CLIENT
 #include	"../../Client/BaseInc.h"
 #include	"../../Client/CCore.h"
-#include	"../../../Client/CClientScriptingManager.h"
-#include	"../../../Client/CClientScriptGUIManager.h"
+#include	"../../Client/CGUI.h"
+#include	"../../Client/gui_impl/CGUI_Impl.h"
+#include	"../../Client/gui_impl/CGUIElement_Impl.h"
+#include	"../../Client/CClientScriptingManager.h"
+#include	"../../Client/CClientScriptGUIManager.h"
 #else
 #include	"../../Server/BaseInc.h"
 #endif
 
-#include	"../../../Shared/CString.h"
 #include	"../../../Shared/CEvents.h"
 
 #include	"Natives\CAreaNatives.h"

@@ -7,7 +7,7 @@
 *
 ***************************************************************/
 
-#include	"CSharedPlayerNatives.h"
+#include	"../../../Shared/CString.h"
 
 #ifdef _CLIENT
 #include	"../../../Client/BaseInc.h"
@@ -21,10 +21,11 @@
 #include	"../../../Server/StdInc.h"
 #endif
 
-#include	"../../../Shared/CString.h"
 #include	"../../../Shared/CEvents.h"
 #include	"../../../Shared/CCommands.h"
 #include	"../../../Shared/Scripting/CSquirrelCommon.h"
+
+#include	"CSharedPlayerNatives.h"
 
 void CSharedPlayerNatives::Register( CScriptingManager * pScriptingManager )
 {

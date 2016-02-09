@@ -20,6 +20,8 @@
 #include	"Game\CGame.h"
 #include	"CMafia.h"
 
+#include	"CSync.h"
+
 #include	"CBlip.h"
 
 #include	"engine\CM2Entity.h"

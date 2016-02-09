@@ -13,13 +13,15 @@
 #include	"../Client/BaseInc.h"
 #endif
 
-#include "CEvents.h"
+#include	"CString.h"
 
-#include "Scripting/CSquirrel.h"
-#include "Scripting/CScriptingManager.h"
-#include "CClientScriptingManager.h"
+#include	"CCore.h"
 
-#include "CCore.h"
+#include	"Scripting/CSquirrel.h"
+#include	"Scripting/CScriptingManager.h"
+#include	"CClientScriptingManager.h"
+
+#include	"CEvents.h"
 
 void CSquirrelEventHandler::Call( CSquirrelArguments * pArguments, CSquirrelArgument * pReturn )
 {

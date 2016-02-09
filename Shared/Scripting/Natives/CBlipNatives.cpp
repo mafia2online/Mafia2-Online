@@ -13,15 +13,22 @@
 #include	"../../../Client/BaseInc.h"
 #include	"../../../Client/CCore.h"
 #include	"../../../Client/CBlipManager.h"
+#include	"../../../Client/CNetworkPlayer.h"
+#include	"../../../Client/CRemotePlayer.h"
+#include	"../../../Client/CNetworkVehicle.h"
 #include	"../../../Client/CPlayerManager.h"
 #include	"../../../Client/CVehicleManager.h"
+#include	"../../../Client/CPed.h"
 #include	"../../../Client/CPedManager.h"
 #else
 #include	"../../../Client/BaseInc.h"
 #include	"../../../Server/CCore.h"
 #include	"../../../Server/CBlipManager.h"
+#include	"../../../Server/CNetworkPlayer.h"
+#include	"../../../Server/CNetworkVehicle.h"
 #include	"../../../Server/CPlayerManager.h"
 #include	"../../../Server/CVehicleManager.h"
+#include	"../../../Server/CPed.h"
 #include	"../../../Server/CPedManager.h"
 #endif
 
