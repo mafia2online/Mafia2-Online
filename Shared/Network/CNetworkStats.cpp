@@ -39,9 +39,9 @@ void CNetworkStats::GetStats( CNetStats * netStats, EntityId playerId )
 	pNetworkStats = CCore::Instance()->GetNetworkModule()->GetRakPeer()->GetStatistics( RakNet::UNASSIGNED_SYSTEM_ADDRESS );
 #else
 	if( playerId == INVALID_ENTITY_ID )
-		pNetworkStats = pCore->GetNetworkModule()->GetRakPeer()->GetStatistics( pCore->GetNetworkModule()->GetRakPeer()->GetMyBoundAddress () );
+		pNetworkStats = CCore::Instance()->GetNetworkModule()->GetRakPeer()->GetStatistics( CCore::Instance()->GetNetworkModule()->GetRakPeer()->GetMyBoundAddress () );
 	else
-		pNetworkStats = pCore->GetNetworkModule()->GetRakPeer()->GetStatistics( pCore->GetNetworkModule()->GetRakPeer()->GetSystemAddressFromIndex( playerId ) );
+		pNetworkStats = CCore::Instance()->GetNetworkModule()->GetRakPeer()->GetStatistics( CCore::Instance()->GetNetworkModule()->GetRakPeer()->GetSystemAddressFromIndex( playerId ) );
 #endif
 
 	// Copy the stats

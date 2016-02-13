@@ -8,8 +8,7 @@
 ***************************************************************/
 
 #include	"StdInc.h"
-
-extern		CCore			* pCore;
+#include	"CCore.h"
 
 void CWebRequest::WorkerThread ( CThread * pCreator )
 {
@@ -17,7 +16,7 @@ void CWebRequest::WorkerThread ( CThread * pCreator )
 	while ( pCreator->GetUserData < bool > () )
 	{
 		// Get the web request instance
-		CWebRequest* pWebRequest = pCore->GetWebRequest ();
+		CWebRequest* pWebRequest = CCore::Instance()->GetWebRequest ();
 
 		// Is the web request valid?
 		if ( pWebRequest )
@@ -86,7 +85,7 @@ void CWebRequest::WorkerThread ( CThread * pCreator )
 						args.push( pWebRequest->m_activeRequest->iType );
 						args.push( pWebRequest->GetHttpClient()->GetData()->Get() );
 						args.push( (int)(SharedUtility::GetTime() - pWebRequest->m_activeRequest->ulTime) );
-						pCore->GetScriptingManager()->Call( pWebRequest->m_activeRequest->pFunction, &args, pWebRequest->m_activeRequest->pVM );
+						CCore::Instance()->GetScriptingManager()->Call( pWebRequest->m_activeRequest->pFunction, &args, pWebRequest->m_activeRequest->pVM );
 
 						// Reset
 						pWebRequest->Reset ();

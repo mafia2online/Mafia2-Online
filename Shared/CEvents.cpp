@@ -9,17 +9,17 @@
 
 #ifdef _CLIENT
 #include	"../Client/BaseInc.h"
+#include	"../Client/CCore.h"
+#include	"CClientScriptingManager.h"
 #else
 #include	"../Client/BaseInc.h"
+#include	"../Server/CCore.h"
 #endif
 
 #include	"CString.h"
 
-#include	"CCore.h"
-
 #include	"Scripting/CSquirrel.h"
 #include	"Scripting/CScriptingManager.h"
-#include	"CClientScriptingManager.h"
 
 #include	"CEvents.h"
 

@@ -9,8 +9,10 @@
 
 #pragma once
 
-#include	"../Libraries/RakNet/Source/TCPInterface.h"
-#include	"../Libraries/RakNet/Source/RakSleep.h"
+#include	<TCPInterface.h>
+#include	<RakSleep.h>
+
+#include	"Threading\CThread.h"
 
 enum eThreadState
 {

@@ -8,8 +8,7 @@
 ***************************************************************/
 
 #include	"CVehicleNatives.h"
-
-extern		CCore			* pCore;
+#include	"CCore.h"
 
 void CVehicleNatives::Register( CScriptingManager * pScriptingManager )
 {
@@ -39,7 +38,7 @@ SQInteger CVehicleNatives::Create( SQVM * pVM )
 	sq_getfloat( pVM, -2, &vecDirection.fY );
 	sq_getfloat( pVM, -1, &vecDirection.fZ );
 
-	sq_pushinteger( pVM, pCore->GetVehicleManager()->Add( iModel, vecPosition, vecDirection ) );
+	sq_pushinteger( pVM, CCore::Instance()->GetVehicleManager()->Add( iModel, vecPosition, vecDirection ) );
 	return 1;
 }
 
@@ -49,7 +48,7 @@ SQInteger CVehicleNatives::Destroy( SQVM * pVM )
 	SQInteger vehicleId;
 	sq_getinteger( pVM, -1, &vehicleId );
 
-	sq_pushbool( pVM, pCore->GetVehicleManager()->Remove( vehicleId ) );
+	sq_pushbool( pVM, CCore::Instance()->GetVehicleManager()->Remove( vehicleId ) );
 	return 1;
 }
 
@@ -61,10 +60,10 @@ SQInteger CVehicleNatives::SetRespawnTime ( SQVM * pVM )
 	sq_getinteger ( pVM, -1, &iTime );
 
 	// Is the vehicle active?
-	if ( pCore->GetVehicleManager()->IsActive ( vehicleId ) )
+	if ( CCore::Instance()->GetVehicleManager()->IsActive ( vehicleId ) )
 	{
 		// Set the vehicle respawn time
-		pCore->GetVehicleManager()->Get( vehicleId )->SetRespawnTime ( iTime );
+		CCore::Instance()->GetVehicleManager()->Get( vehicleId )->SetRespawnTime ( iTime );
 
 		sq_pushbool ( pVM, true );
 		return 1;
@@ -81,10 +80,10 @@ SQInteger CVehicleNatives::GetRespawnTime ( SQVM * pVM )
 	sq_getinteger ( pVM, -1, &vehicleId );
 
 	// Is the vehicle active?
-	if ( pCore->GetVehicleManager()->IsActive ( vehicleId ) )
+	if ( CCore::Instance()->GetVehicleManager()->IsActive ( vehicleId ) )
 	{
 		// Set the vehicle respawn time
-		sq_pushinteger ( pVM, pCore->GetVehicleManager()->Get( vehicleId )->GetRespawnTime () );
+		sq_pushinteger ( pVM, CCore::Instance()->GetVehicleManager()->Get( vehicleId )->GetRespawnTime () );
 		return 1;
 	}
 
@@ -99,10 +98,10 @@ SQInteger CVehicleNatives::RespawnVehicle ( SQVM * pVM )
 	sq_getinteger ( pVM, -1, &vehicleId );
 
 	// Is the vehicle active?
-	if ( pCore->GetVehicleManager()->IsActive ( vehicleId ) )
+	if ( CCore::Instance()->GetVehicleManager()->IsActive ( vehicleId ) )
 	{
 		// Respawn the vehicle
-		pCore->GetVehicleManager()->Get( vehicleId )->RespawnForWorld ();
+		CCore::Instance()->GetVehicleManager()->Get( vehicleId )->RespawnForWorld ();
 
 		sq_pushbool ( pVM, true );
 		return 1;

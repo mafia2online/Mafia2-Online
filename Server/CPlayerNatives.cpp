@@ -8,8 +8,7 @@
 ***************************************************************/
 
 #include	"CPlayerNatives.h"
-
-extern		CCore			* pCore;
+#include	"CCore.h"
 
 void CPlayerNatives::Register( CScriptingManager * pScriptingManager )
 {
@@ -64,7 +63,7 @@ SQInteger CPlayerNatives::IsConnected( SQVM * pVM )
 	SQInteger playerId;
 	sq_getinteger( pVM, -1, &playerId );
 
-	sq_pushbool( pVM, pCore->GetPlayerManager()->IsActive(playerId) );
+	sq_pushbool( pVM, CCore::Instance()->GetPlayerManager()->IsActive(playerId) );
 	return 1;
 }
 
@@ -75,9 +74,9 @@ SQInteger CPlayerNatives::IsSpawned( SQVM * pVM )
 	sq_getinteger( pVM, -1, &playerId );
 
 	// Is the player active?
-	if( pCore->GetPlayerManager()->IsActive( playerId ) )
+	if( CCore::Instance()->GetPlayerManager()->IsActive( playerId ) )
 	{
-		sq_pushbool( pVM, !pCore->GetPlayerManager()->Get(playerId)->IsDead() );
+		sq_pushbool( pVM, !CCore::Instance()->GetPlayerManager()->Get(playerId)->IsDead() );
 		return 1;
 	}
 
@@ -92,10 +91,10 @@ SQInteger CPlayerNatives::GetName( SQVM * pVM )
 	sq_getinteger( pVM, -1, &playerId );
 
 	// Is the player active?
-	if( pCore->GetPlayerManager()->IsActive( playerId ) )
+	if( CCore::Instance()->GetPlayerManager()->IsActive( playerId ) )
 	{
 		// Get the player nick
-		const char * szNick = pCore->GetPlayerManager()->Get( playerId )->GetNick();
+		const char * szNick = CCore::Instance()->GetPlayerManager()->Get( playerId )->GetNick();
 
 		sq_pushstring( pVM, szNick, strlen( szNick ) );
 		return 1;
@@ -112,10 +111,10 @@ SQInteger CPlayerNatives::GetSerial( SQVM * pVM )
 	sq_getinteger( pVM, -1, &playerId );
 
 	// Is the player active?
-	if( pCore->GetPlayerManager()->IsActive( playerId ) )
+	if( CCore::Instance()->GetPlayerManager()->IsActive( playerId ) )
 	{
 		// Get the player serial
-		const char * szSerial = pCore->GetPlayerManager()->Get( playerId )->GetSerial();
+		const char * szSerial = CCore::Instance()->GetPlayerManager()->Get( playerId )->GetSerial();
 
 		sq_pushstring( pVM, szSerial, strlen( szSerial ) );
 		return 1;
@@ -137,10 +136,10 @@ SQInteger CPlayerNatives::SetPosition( SQVM * pVM )
 	sq_getfloat( pVM, -3, &vecPosition.fX );
 
 	// Is the player active?
-	if( pCore->GetPlayerManager()->IsActive( playerId ) )
+	if( CCore::Instance()->GetPlayerManager()->IsActive( playerId ) )
 	{
 		// Set the player position
-		pCore->GetPlayerManager()->Get( playerId )->SetPosition ( vecPosition );
+		CCore::Instance()->GetPlayerManager()->Get( playerId )->SetPosition ( vecPosition );
 
 		sq_pushbool( pVM, true );
 		return 1;
@@ -157,11 +156,11 @@ SQInteger CPlayerNatives::GetPosition( SQVM * pVM )
 	sq_getinteger( pVM, -1, &playerId );
 
 	// Is the player active?
-	if( pCore->GetPlayerManager()->IsActive( playerId ) )
+	if( CCore::Instance()->GetPlayerManager()->IsActive( playerId ) )
 	{
 		// Get the players position
 		CVector3 vecPosition;
-		pCore->GetPlayerManager()->Get( playerId )->GetPosition ( &vecPosition );
+		CCore::Instance()->GetPlayerManager()->Get( playerId )->GetPosition ( &vecPosition );
 
 		sq_newarray( pVM, 0 );
 
@@ -240,7 +239,7 @@ SQInteger CPlayerNatives::OutputMessage( SQVM * pVM )
 	}
 
 	// Is the player valid?
-	if( pCore->GetPlayerManager()->IsActive( playerId ) )
+	if( CCore::Instance()->GetPlayerManager()->IsActive( playerId ) )
 	{
 		// Construct a new bitstream
 		RakNet::BitStream bitStream;
@@ -258,7 +257,7 @@ SQInteger CPlayerNatives::OutputMessage( SQVM * pVM )
 		bitStream.WriteCompressed( b );
 
 		// Send it to the player
-		pCore->GetNetworkModule()->Call( RPC_SENDPLAYERMESSAGE, &bitStream, IMMEDIATE_PRIORITY, RELIABLE, playerId, false );
+		CCore::Instance()->GetNetworkModule()->Call( RPC_SENDPLAYERMESSAGE, &bitStream, IMMEDIATE_PRIORITY, RELIABLE, playerId, false );
 
 		sq_pushbool( pVM, true );
 		return 1;
@@ -317,7 +316,7 @@ SQInteger CPlayerNatives::OutputMessageToAll( SQVM * pVM )
 	}
 
 	// Is the player active?
-	if( pCore->GetPlayerManager()->GetCount() > 0 )
+	if( CCore::Instance()->GetPlayerManager()->GetCount() > 0 )
 	{
 		// Construct a new bitstream
 		RakNet::BitStream bitStream;
@@ -335,7 +334,7 @@ SQInteger CPlayerNatives::OutputMessageToAll( SQVM * pVM )
 		bitStream.WriteCompressed( b );
 
 		// Send it to the player
-		pCore->GetNetworkModule()->Call( RPC_SENDPLAYERMESSAGE, &bitStream, IMMEDIATE_PRIORITY, RELIABLE, INVALID_ENTITY_ID, true );
+		CCore::Instance()->GetNetworkModule()->Call( RPC_SENDPLAYERMESSAGE, &bitStream, IMMEDIATE_PRIORITY, RELIABLE, INVALID_ENTITY_ID, true );
 
 		sq_pushbool( pVM, true );
 		return 1;
@@ -357,10 +356,10 @@ SQInteger CPlayerNatives::SetRotation( SQVM * pVM )
 	sq_getfloat( pVM, -1, &vecRotation.fX );
 
 	// Is the player active?
-	if( pCore->GetPlayerManager()->IsActive( playerId ) )
+	if( CCore::Instance()->GetPlayerManager()->IsActive( playerId ) )
 	{
 		// Set the player rotation
-		pCore->GetPlayerManager()->Get( playerId )->SetRotation ( vecRotation );
+		CCore::Instance()->GetPlayerManager()->Get( playerId )->SetRotation ( vecRotation );
 
 		sq_pushbool( pVM, true );
 		return 1;
@@ -377,11 +376,11 @@ SQInteger CPlayerNatives::GetRotation( SQVM * pVM )
 	sq_getinteger( pVM, -1, &playerId );
 
 	// Is the player active?
-	if( pCore->GetPlayerManager()->IsActive( playerId ) )
+	if( CCore::Instance()->GetPlayerManager()->IsActive( playerId ) )
 	{
 		// Get the players position
 		CVector3 vecRotation;
-		pCore->GetPlayerManager()->Get( playerId )->GetRotation ( &vecRotation );
+		CCore::Instance()->GetPlayerManager()->Get( playerId )->GetRotation ( &vecRotation );
 
 		sq_newarray( pVM, 0 );
 
@@ -412,10 +411,10 @@ SQInteger CPlayerNatives::SetHealth( SQVM * pVM )
 	sq_getfloat( pVM, -1, &fHealth );
 
 	// Is the player active?
-	if( pCore->GetPlayerManager()->IsActive( playerId ) )
+	if( CCore::Instance()->GetPlayerManager()->IsActive( playerId ) )
 	{
 		// Set the player health
-		pCore->GetPlayerManager()->Get( playerId )->SetHealth ( fHealth );
+		CCore::Instance()->GetPlayerManager()->Get( playerId )->SetHealth ( fHealth );
 
 		sq_pushbool( pVM, true );
 		return 1;
@@ -432,10 +431,10 @@ SQInteger CPlayerNatives::GetHealth( SQVM * pVM )
 	sq_getinteger( pVM, -1, &playerId );
 
 	// Is the player active?
-	if( pCore->GetPlayerManager()->IsActive( playerId ) )
+	if( CCore::Instance()->GetPlayerManager()->IsActive( playerId ) )
 	{
 		// Get the player health
-		sq_pushfloat( pVM, pCore->GetPlayerManager()->Get( playerId )->GetHealth() );
+		sq_pushfloat( pVM, CCore::Instance()->GetPlayerManager()->Get( playerId )->GetHealth() );
 		return 1;
 	}
 
@@ -456,10 +455,10 @@ SQInteger CPlayerNatives::GiveWeapon( SQVM * pVM )
 	sq_getinteger( pVM, -1, &dwAmmo );
 
 	// Is the player active?
-	if( pCore->GetPlayerManager()->IsActive( playerId ) )
+	if( CCore::Instance()->GetPlayerManager()->IsActive( playerId ) )
 	{
 		// Give the player the weapon
-		pCore->GetPlayerManager()->Get( playerId )->GiveWeapon ( dwWeapon, dwAmmo );
+		CCore::Instance()->GetPlayerManager()->Get( playerId )->GiveWeapon ( dwWeapon, dwAmmo );
 
 		sq_pushbool( pVM, true );
 		return 1;
@@ -476,10 +475,10 @@ SQInteger CPlayerNatives::GetWeapon( SQVM * pVM )
 	sq_getinteger( pVM, -1, &playerId );
 
 	// Is the player active?
-	if( pCore->GetPlayerManager()->IsActive( playerId ) )
+	if( CCore::Instance()->GetPlayerManager()->IsActive( playerId ) )
 	{
 		// Get the player weapon
-		sq_pushinteger( pVM, pCore->GetPlayerManager()->Get( playerId )->GetWeapon() );
+		sq_pushinteger( pVM, CCore::Instance()->GetPlayerManager()->Get( playerId )->GetWeapon() );
 		return 1;
 	}
 
@@ -521,10 +520,10 @@ SQInteger CPlayerNatives::RemoveWeapon( SQVM * pVM )
 	}
 
 	// Is the player active?
-	if( pCore->GetPlayerManager()->IsActive( playerId ) )
+	if( CCore::Instance()->GetPlayerManager()->IsActive( playerId ) )
 	{
 		// Remvoe the weapon
-		pCore->GetPlayerManager()->Get( playerId )->RemoveWeapon ( iWeapon, iAmmo );
+		CCore::Instance()->GetPlayerManager()->Get( playerId )->RemoveWeapon ( iWeapon, iAmmo );
 
 		sq_pushbool( pVM, true );
 		return 1;
@@ -544,10 +543,10 @@ SQInteger CPlayerNatives::SetColour( SQVM * pVM )
 	sq_getinteger( pVM, -1, &colour );
 
 	// Is the player active?
-	if( pCore->GetPlayerManager()->IsActive( playerId ) )
+	if( CCore::Instance()->GetPlayerManager()->IsActive( playerId ) )
 	{
 		// Set the player colour
-		pCore->GetPlayerManager()->Get(playerId)->SetColour( colour );
+		CCore::Instance()->GetPlayerManager()->Get(playerId)->SetColour( colour );
 
 		sq_pushbool( pVM, true );
 		return 1;
@@ -564,10 +563,10 @@ SQInteger CPlayerNatives::GetColour( SQVM * pVM )
 	sq_getinteger( pVM, -1, &playerId );
 
 	// Is the player active?
-	if( pCore->GetPlayerManager()->IsActive( playerId ) )
+	if( CCore::Instance()->GetPlayerManager()->IsActive( playerId ) )
 	{
 		// Get the player colour
-		sq_pushinteger( pVM, pCore->GetPlayerManager()->Get(playerId)->GetColour() );
+		sq_pushinteger( pVM, CCore::Instance()->GetPlayerManager()->Get(playerId)->GetColour() );
 		return 1;
 	}
 
@@ -585,7 +584,7 @@ SQInteger CPlayerNatives::ToggleHud( SQVM * pVM )
 	sq_getbool( pVM, -1, &bToggle );
 
 	// Is the player active?
-	if( pCore->GetPlayerManager()->IsActive( playerId ) )
+	if( CCore::Instance()->GetPlayerManager()->IsActive( playerId ) )
 	{
 		// Construct a new bitstream
 		RakNet::BitStream pBitStream;
@@ -594,7 +593,7 @@ SQInteger CPlayerNatives::ToggleHud( SQVM * pVM )
 		pBitStream.Write( bToggle );
 
 		// Send to the player
-		pCore->GetNetworkModule()->Call( RPC_TOGGLEPLAYERHUD, &pBitStream, HIGH_PRIORITY, RELIABLE, playerId, false );
+		CCore::Instance()->GetNetworkModule()->Call( RPC_TOGGLEPLAYERHUD, &pBitStream, HIGH_PRIORITY, RELIABLE, playerId, false );
 
 		sq_pushbool( pVM, true );
 		return 1;
@@ -614,7 +613,7 @@ SQInteger CPlayerNatives::SetMoney( SQVM * pVM )
 	sq_getinteger( pVM, -1, &iMoney );
 
 	// Is the player active?
-	if( pCore->GetPlayerManager()->IsActive( playerId ) )
+	if( CCore::Instance()->GetPlayerManager()->IsActive( playerId ) )
 	{
 		// Construct a new bitstream
 		RakNet::BitStream pBitStream;
@@ -623,7 +622,7 @@ SQInteger CPlayerNatives::SetMoney( SQVM * pVM )
 		pBitStream.Write( iMoney );
 
 		// Send to the player
-		pCore->GetNetworkModule()->Call( RPC_SETPLAYERMONEY, &pBitStream, HIGH_PRIORITY, RELIABLE, playerId, false );
+		CCore::Instance()->GetNetworkModule()->Call( RPC_SETPLAYERMONEY, &pBitStream, HIGH_PRIORITY, RELIABLE, playerId, false );
 
 		sq_pushbool( pVM, true );
 		return 1;
@@ -643,9 +642,9 @@ SQInteger CPlayerNatives::GiveMoney( SQVM * pVM )
 	sq_getinteger( pVM, -1, &iMoney );
 
 	// Is the player active?
-	if( pCore->GetPlayerManager()->IsActive( playerId ) )
+	if( CCore::Instance()->GetPlayerManager()->IsActive( playerId ) )
 	{
-		pCore->GetPlayerManager()->Get ( playerId )->GiveMoney ( iMoney );
+		CCore::Instance()->GetPlayerManager()->Get ( playerId )->GiveMoney ( iMoney );
 
 		sq_pushbool( pVM, true );
 		return 1;
@@ -665,9 +664,9 @@ SQInteger CPlayerNatives::TakeMoney( SQVM * pVM )
 	sq_getinteger( pVM, -1, &iMoney );
 
 	// Is the player active?
-	if( pCore->GetPlayerManager()->IsActive( playerId ) )
+	if( CCore::Instance()->GetPlayerManager()->IsActive( playerId ) )
 	{
-		pCore->GetPlayerManager()->Get ( playerId )->TakeMoney ( iMoney );
+		CCore::Instance()->GetPlayerManager()->Get ( playerId )->TakeMoney ( iMoney );
 
 		sq_pushbool( pVM, true );
 		return 1;
@@ -687,7 +686,7 @@ SQInteger CPlayerNatives::ToggleControls( SQVM * pVM )
 	sq_getbool( pVM, -1, &bToggle );
 
 	// Is the player active?
-	if( pCore->GetPlayerManager()->IsActive( playerId ) )
+	if( CCore::Instance()->GetPlayerManager()->IsActive( playerId ) )
 	{
 		// Construct a new bitstream
 		RakNet::BitStream pBitStream;
@@ -696,7 +695,7 @@ SQInteger CPlayerNatives::ToggleControls( SQVM * pVM )
 		pBitStream.Write( (bool)bToggle );
 
 		// Send to the player
-		pCore->GetNetworkModule()->Call( RPC_TOGGLEPLAYERCONTROLS, &pBitStream, HIGH_PRIORITY, RELIABLE, playerId, false );
+		CCore::Instance()->GetNetworkModule()->Call( RPC_TOGGLEPLAYERCONTROLS, &pBitStream, HIGH_PRIORITY, RELIABLE, playerId, false );
 
 		sq_pushbool( pVM, true );
 		return 1;
@@ -747,7 +746,7 @@ SQInteger CPlayerNatives::Redirect( SQVM * pVM )
 	}
 
 	// Is the player active?
-	if( pCore->GetPlayerManager()->IsActive( playerId ) )
+	if( CCore::Instance()->GetPlayerManager()->IsActive( playerId ) )
 	{
 		// Construct a new bitstream
 		RakNet::BitStream pBitStream;
@@ -762,7 +761,7 @@ SQInteger CPlayerNatives::Redirect( SQVM * pVM )
 		pBitStream.Write( RakNet::RakString( strPassword.Get() ) );
 
 		// Send to the player
-		pCore->GetNetworkModule()->Call( RPC_REDIRECTPLAYER, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, playerId, false );
+		CCore::Instance()->GetNetworkModule()->Call( RPC_REDIRECTPLAYER, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, playerId, false );
 
 		sq_pushbool( pVM, true );
 		return 1;
@@ -780,10 +779,10 @@ SQInteger CPlayerNatives::Kick( SQVM * pVM )
 	sq_getinteger( pVM, -1, &playerId );
 
 	// Is the player active?
-	if( pCore->GetPlayerManager()->IsActive( playerId ) )
+	if( CCore::Instance()->GetPlayerManager()->IsActive( playerId ) )
 	{
 		// Kick the player
-		pCore->GetPlayerManager()->Get(playerId)->Kick( );
+		CCore::Instance()->GetPlayerManager()->Get(playerId)->Kick( );
 
 		sq_pushbool( pVM, true );
 		return 1;
@@ -803,7 +802,7 @@ SQInteger CPlayerNatives::PlaySound( SQVM * pVM )
 	sq_getstring( pVM, -1, &szSound );
 
 	// Is the player active?
-	if( pCore->GetPlayerManager()->IsActive( playerId ) )
+	if( CCore::Instance()->GetPlayerManager()->IsActive( playerId ) )
 	{
 		// Construct a new bitstream
 		RakNet::BitStream pBitStream;
@@ -812,7 +811,7 @@ SQInteger CPlayerNatives::PlaySound( SQVM * pVM )
 		pBitStream.Write( RakNet::RakString( szSound ) );
 
 		// Send to the player
-		pCore->GetNetworkModule()->Call( RPC_PLAYSOUND, &pBitStream, HIGH_PRIORITY, RELIABLE, playerId, false );
+		CCore::Instance()->GetNetworkModule()->Call( RPC_PLAYSOUND, &pBitStream, HIGH_PRIORITY, RELIABLE, playerId, false );
 
 		sq_pushbool( pVM, true );
 		return 1;
@@ -829,10 +828,10 @@ SQInteger CPlayerNatives::StopSound( SQVM * pVM )
 	sq_getinteger( pVM, -1, &playerId );
 
 	// Is the player active?
-	if( pCore->GetPlayerManager()->IsActive( playerId ) )
+	if( CCore::Instance()->GetPlayerManager()->IsActive( playerId ) )
 	{
 		// Send to the player
-		pCore->GetNetworkModule()->Call( RPC_STOPSOUND, NULL, HIGH_PRIORITY, RELIABLE, playerId, false );
+		CCore::Instance()->GetNetworkModule()->Call( RPC_STOPSOUND, NULL, HIGH_PRIORITY, RELIABLE, playerId, false );
 
 		sq_pushbool( pVM, true );
 		return 1;
@@ -849,7 +848,7 @@ SQInteger CPlayerNatives::PlaySoundToAll( SQVM * pVM )
 	sq_getstring( pVM, -1, &szSound );
 
 	// Is the player active?
-	if( pCore->GetPlayerManager()->GetCount() > 0 )
+	if( CCore::Instance()->GetPlayerManager()->GetCount() > 0 )
 	{
 		// Construct a new bitstream
 		RakNet::BitStream pBitStream;
@@ -858,7 +857,7 @@ SQInteger CPlayerNatives::PlaySoundToAll( SQVM * pVM )
 		pBitStream.Write( RakNet::RakString( szSound ) );
 
 		// Send to the player
-		pCore->GetNetworkModule()->Call( RPC_PLAYSOUND, &pBitStream, HIGH_PRIORITY, RELIABLE, INVALID_ENTITY_ID, false );
+		CCore::Instance()->GetNetworkModule()->Call( RPC_PLAYSOUND, &pBitStream, HIGH_PRIORITY, RELIABLE, INVALID_ENTITY_ID, false );
 
 		sq_pushbool( pVM, true );
 		return 1;
@@ -872,10 +871,10 @@ SQInteger CPlayerNatives::PlaySoundToAll( SQVM * pVM )
 SQInteger CPlayerNatives::StopSoundToAll( SQVM * pVM )
 {
 	// Is the player active?
-	if( pCore->GetPlayerManager()->GetCount() > 0 )
+	if( CCore::Instance()->GetPlayerManager()->GetCount() > 0 )
 	{
 		// Send to the player
-		pCore->GetNetworkModule()->Call( RPC_STOPSOUND, NULL, HIGH_PRIORITY, RELIABLE, INVALID_ENTITY_ID, false );
+		CCore::Instance()->GetNetworkModule()->Call( RPC_STOPSOUND, NULL, HIGH_PRIORITY, RELIABLE, INVALID_ENTITY_ID, false );
 
 		sq_pushbool( pVM, true );
 		return 1;
@@ -892,7 +891,7 @@ SQInteger CPlayerNatives::GetNetworkStats( SQVM * pVM )
 	sq_getinteger( pVM, -1, &playerId );
 
 	// Is the player active?
-	if( pCore->GetPlayerManager()->IsActive( playerId ) )
+	if( CCore::Instance()->GetPlayerManager()->IsActive( playerId ) )
 	{
 		// Get the player network stats
 		CNetStats netStats;
@@ -949,7 +948,7 @@ SQInteger CPlayerNatives::TriggerClientEvent( SQVM * pVM )
 
 	RakNet::BitStream bsSend;
 	args.Serialise( &bsSend );
-	pCore->GetNetworkModule()->Call( RPC_TRIGGEREVENT, &bsSend, HIGH_PRIORITY, RELIABLE_ORDERED, playerId, false );
+	CCore::Instance()->GetNetworkModule()->Call( RPC_TRIGGEREVENT, &bsSend, HIGH_PRIORITY, RELIABLE_ORDERED, playerId, false );
 
 	sq_pushbool( pVM, true );
 	return 1;
@@ -965,10 +964,10 @@ SQInteger CPlayerNatives::SetModel( SQVM * pVM )
 	sq_getinteger( pVM, -1, &iModel );
 
 	// Is the player valid?
-	if( pCore->GetPlayerManager()->Get( playerId ) )
+	if( CCore::Instance()->GetPlayerManager()->Get( playerId ) )
 	{
 		// Set the model
-		pCore->GetPlayerManager()->Get( playerId )->SetModel( iModel );
+		CCore::Instance()->GetPlayerManager()->Get( playerId )->SetModel( iModel );
 
 		sq_pushbool( pVM, true );
 		return 1;
@@ -985,9 +984,9 @@ SQInteger CPlayerNatives::GetModel( SQVM * pVM )
 	sq_getinteger( pVM, -1, &playerId );
 
 	// Is the player valid?
-	if( pCore->GetPlayerManager()->Get( playerId ) )
+	if( CCore::Instance()->GetPlayerManager()->Get( playerId ) )
 	{
-		sq_pushinteger( pVM, pCore->GetPlayerManager()->Get( playerId )->GetModel() );
+		sq_pushinteger( pVM, CCore::Instance()->GetPlayerManager()->Get( playerId )->GetModel() );
 		return 1;
 	}
 
@@ -1001,9 +1000,9 @@ SQInteger CPlayerNatives::IsInVehicle( SQVM * pVM )
 	SQInteger playerId;
 	sq_getinteger( pVM, -1, &playerId );
 
-	if( pCore->GetPlayerManager()->Get( playerId ) )
+	if( CCore::Instance()->GetPlayerManager()->Get( playerId ) )
 	{
-		sq_pushbool( pVM, pCore->GetPlayerManager()->Get( playerId )->IsInVehicle() );
+		sq_pushbool( pVM, CCore::Instance()->GetPlayerManager()->Get( playerId )->IsInVehicle() );
 		return 1;
 	}
 
@@ -1017,9 +1016,9 @@ SQInteger CPlayerNatives::GetVehicle( SQVM * pVM )
 	SQInteger playerId;
 	sq_getinteger( pVM, -1, &playerId );
 
-	if( pCore->GetPlayerManager()->Get( playerId ) && pCore->GetPlayerManager()->Get( playerId )->IsInVehicle() )
+	if( CCore::Instance()->GetPlayerManager()->Get( playerId ) && CCore::Instance()->GetPlayerManager()->Get( playerId )->IsInVehicle() )
 	{
-		sq_pushinteger( pVM, pCore->GetPlayerManager()->Get( playerId )->GetVehicle()->GetId() );
+		sq_pushinteger( pVM, CCore::Instance()->GetPlayerManager()->Get( playerId )->GetVehicle()->GetId() );
 		return 1;
 	}
 
@@ -1033,9 +1032,9 @@ SQInteger CPlayerNatives::GetPing( SQVM * pVM )
 	SQInteger playerId;
 	sq_getinteger( pVM, -1, &playerId );
 
-	if( pCore->GetPlayerManager()->Get( playerId ) )
+	if( CCore::Instance()->GetPlayerManager()->Get( playerId ) )
 	{
-		sq_pushinteger( pVM, pCore->GetPlayerManager()->Get( playerId )->GetPing() );
+		sq_pushinteger( pVM, CCore::Instance()->GetPlayerManager()->Get( playerId )->GetPing() );
 		return 1;
 	}
 
@@ -1049,9 +1048,9 @@ SQInteger CPlayerNatives::GetIP( SQVM * pVM )
 	SQInteger playerId;
 	sq_getinteger( pVM, -1, &playerId );
 
-	if( pCore->GetPlayerManager()->IsActive( playerId ) )
+	if( CCore::Instance()->GetPlayerManager()->IsActive( playerId ) )
 	{
-		sq_pushstring( pVM, pCore->GetPlayerManager()->Get( playerId )->GetIP(), strlen(pCore->GetPlayerManager()->Get( playerId )->GetIP()) );
+		sq_pushstring( pVM, CCore::Instance()->GetPlayerManager()->Get( playerId )->GetIP(), strlen(CCore::Instance()->GetPlayerManager()->Get( playerId )->GetIP()) );
 		return 1;
 	}
 
@@ -1068,10 +1067,10 @@ SQInteger CPlayerNatives::PutInVehicle( SQVM * pVM )
 	sq_getinteger( pVM, -1, &seatId );
 
 	// Is the player and vehicle active?
-	if( pCore->GetPlayerManager()->IsActive( playerId ) && pCore->GetVehicleManager()->IsActive( vehicleId ) )
+	if( CCore::Instance()->GetPlayerManager()->IsActive( playerId ) && CCore::Instance()->GetVehicleManager()->IsActive( vehicleId ) )
 	{
-		CNetworkPlayer * pPlayer = pCore->GetPlayerManager()->Get( playerId );
-		CNetworkVehicle * pVehicle = pCore->GetVehicleManager()->Get( vehicleId );
+		CNetworkPlayer * pPlayer = CCore::Instance()->GetPlayerManager()->Get( playerId );
+		CNetworkVehicle * pVehicle = CCore::Instance()->GetVehicleManager()->Get( vehicleId );
 
 		sq_pushbool ( pVM, pPlayer->PutInVehicle ( pVehicle, seatId ) );
 		return 1;
@@ -1088,9 +1087,9 @@ SQInteger CPlayerNatives::RemoveFromVehicle( SQVM * pVM )
 	sq_getinteger( pVM, -1, &playerId );
 
 	// Is the player active?
-	if( pCore->GetPlayerManager()->IsActive( playerId ) )
+	if( CCore::Instance()->GetPlayerManager()->IsActive( playerId ) )
 	{
-		pCore->GetPlayerManager()->Get( playerId )->RemoveFromVehicle ();
+		CCore::Instance()->GetPlayerManager()->Get( playerId )->RemoveFromVehicle ();
 		sq_pushbool ( pVM, true );
 		return 1;
 	}
@@ -1106,9 +1105,9 @@ SQInteger CPlayerNatives::RespawnPlayer ( SQVM * pVM )
 	sq_getinteger( pVM, -1, &playerId );
 
 	// Is the player active?
-	if( pCore->GetPlayerManager()->IsActive( playerId ) )
+	if( CCore::Instance()->GetPlayerManager()->IsActive( playerId ) )
 	{
-		pCore->GetPlayerManager()->Get( playerId )->SpawnForWorld (); // test
+		CCore::Instance()->GetPlayerManager()->Get( playerId )->SpawnForWorld (); // test
 		sq_pushbool ( pVM, true );
 		return 1;
 	}
@@ -1130,10 +1129,10 @@ SQInteger	CPlayerNatives::SetAnimStyle(SQVM * pVM)
 	sq_getstring(pVM, -1, &style);
 
 	// Is the player active ?
-	if (pCore->GetPlayerManager()->IsActive(playerId))
+	if (CCore::Instance()->GetPlayerManager()->IsActive(playerId))
 	{
 		// Send anim style
-		pCore->GetPlayerManager()->Get(playerId)->SetAnimStyle(directory, style);
+		CCore::Instance()->GetPlayerManager()->Get(playerId)->SetAnimStyle(directory, style);
 		sq_pushbool(pVM, true);
 		return (1);
 	}
@@ -1154,10 +1153,10 @@ SQInteger	CPlayerNatives::SetHandModel(SQVM * pVM)
 	sq_getinteger(pVM, -1, &iModel);
 
 	// Is the player active?
-	if (pCore->GetPlayerManager()->IsActive(playerId))
+	if (CCore::Instance()->GetPlayerManager()->IsActive(playerId))
 	{
 		// Send hand model
-		pCore->GetPlayerManager()->Get(playerId)->SetHandModel(iHand, iModel);
+		CCore::Instance()->GetPlayerManager()->Get(playerId)->SetHandModel(iHand, iModel);
 		sq_pushbool(pVM, true);
 		return (1);
 	}

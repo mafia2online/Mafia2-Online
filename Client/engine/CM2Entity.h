@@ -101,7 +101,7 @@ public:
 	
 	DWORD					GetGUID							( void );
 	
-	void					SetPosition						( const CVector3& vecPosition );
+	void					SetPosition						( const CVector3 vecPosition );
 	void					GetPosition						( CVector3& vecPosition, bool bCheckVehicle = false );
 
 	void					SetDirection					( const CVector3& vecDirection );

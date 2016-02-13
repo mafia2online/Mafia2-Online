@@ -8,7 +8,6 @@
 
 #pragma once
 
-class CMultiplayerPlayer;
 class CMultiplayerVehicle
 {
 

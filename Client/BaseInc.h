@@ -9,10 +9,12 @@
 
 #pragma once
 
-#include <Windows.h>
-#include <windowsx.h>
+#include	<Windows.h>
+#include	<windowsx.h>
 
-#include <list>
+#include	<list>
+
+#include	<assert.h>
 
 #include "CCommon.h"
 

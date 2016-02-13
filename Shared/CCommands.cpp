@@ -12,17 +12,17 @@
 #ifdef _CLIENT
 #include	"../Client/BaseInc.h"
 #include	"../Client/CCore.h"
+#include	"CClientScriptingManager.h"
  #else
 #include	"../Client/BaseInc.h"
 #include	"../Server/CCore.h"
 #endif
 
-#include	<squirrel.h>
-#include	<sqvm.h>
+#include	"../../Libraries/squirrel/squirrel.h"
+#include	"../../Libraries/squirrel/sqvm.h"
 
 #include	"Scripting/CSquirrel.h"
 #include	"Scripting/CScriptingManager.h"
-#include	"CClientScriptingManager.h"
 
 #include	"CCommands.h"
 

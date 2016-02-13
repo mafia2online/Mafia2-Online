@@ -8,8 +8,7 @@
 ***************************************************************/
 
 #include	"StdInc.h"
-
-extern	CCore				* pCore;
+#include	"CCore.h"
 
 // Taken from /tables/car_colors.tbl
 static CColor predefinedColours[] =
@@ -120,7 +119,7 @@ void CNetworkVehicle::AddForPlayer( EntityId playerId )
 	pBitStream.Write( (char *)&vehicleSync, sizeof(InVehicleSync) );
 
 	// Send it to the player
-	pCore->GetNetworkModule()->Call( RPC_NEW_VEHICLE, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, playerId, false );
+	CCore::Instance()->GetNetworkModule()->Call( RPC_NEW_VEHICLE, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, playerId, false );
 }
 
 void CNetworkVehicle::AddForWorld( void )
@@ -129,7 +128,7 @@ void CNetworkVehicle::AddForWorld( void )
 	for( EntityId i = 0; i < MAX_PLAYERS; i++ )
 	{
 		// Is this player active?
-		if( pCore->GetPlayerManager()->IsActive( i ) )
+		if( CCore::Instance()->GetPlayerManager()->IsActive( i ) )
 		{
 			// Add this vehicle for this player
 			AddForPlayer( i );
@@ -146,7 +145,7 @@ void CNetworkVehicle::RemoveForPlayer( EntityId playerId )
 	pBitStream.WriteCompressed( m_vehicleId );
 
 	// Send it to the player
-	pCore->GetNetworkModule()->Call( RPC_REMOVE_VEHICLE, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, playerId, false );
+	CCore::Instance()->GetNetworkModule()->Call( RPC_REMOVE_VEHICLE, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, playerId, false );
 }
 
 void CNetworkVehicle::RemoveForWorld( void )
@@ -155,7 +154,7 @@ void CNetworkVehicle::RemoveForWorld( void )
 	for( EntityId i = 0; i < MAX_PLAYERS; i++ )
 	{
 		// Is this player active?
-		if( pCore->GetPlayerManager()->IsActive( i ) )
+		if( CCore::Instance()->GetPlayerManager()->IsActive( i ) )
 		{
 			// Remove this vehicle for this player
 			RemoveForPlayer( i );
@@ -195,7 +194,7 @@ void CNetworkVehicle::SpawnForPlayer( EntityId playerId )
 	}
 
 	// Send it to the player
-	pCore->GetNetworkModule()->Call( RPC_SPAWNVEHICLE, &pBitStream, MEDIUM_PRIORITY, RELIABLE_ORDERED, playerId, false );
+	CCore::Instance()->GetNetworkModule()->Call( RPC_SPAWNVEHICLE, &pBitStream, MEDIUM_PRIORITY, RELIABLE_ORDERED, playerId, false );
 }
 
 void CNetworkVehicle::SpawnForWorld( void )
@@ -204,7 +203,7 @@ void CNetworkVehicle::SpawnForWorld( void )
 	for( EntityId i = 0; i < MAX_PLAYERS; i++ )
 	{
 		// Is this player active?
-		if( pCore->GetPlayerManager()->IsActive( i ) )
+		if( CCore::Instance()->GetPlayerManager()->IsActive( i ) )
 		{
 			// Spawn this vehicle for this player
 			SpawnForPlayer( i );
@@ -214,7 +213,7 @@ void CNetworkVehicle::SpawnForWorld( void )
 	// Call the scripting event
 	CSquirrelArguments arguments;
 	arguments.push( m_vehicleId );
-	pCore->GetEvents()->Call ( "onVehicleSpawn", &arguments );
+	CCore::Instance()->GetEvents()->Call ( "onVehicleSpawn", &arguments );
 }
 
 void CNetworkVehicle::RespawnForPlayer( EntityId playerId )
@@ -232,7 +231,7 @@ void CNetworkVehicle::RespawnForPlayer( EntityId playerId )
 	pBitStream.Write( m_vecSpawnRotation );
 
 	// Send it to the player
-	pCore->GetNetworkModule()->Call( RPC_RESPAWNVEHICLE, &pBitStream, MEDIUM_PRIORITY, RELIABLE_ORDERED, playerId, false );
+	CCore::Instance()->GetNetworkModule()->Call( RPC_RESPAWNVEHICLE, &pBitStream, MEDIUM_PRIORITY, RELIABLE_ORDERED, playerId, false );
 }
 
 void CNetworkVehicle::RespawnForWorld( void )
@@ -241,7 +240,7 @@ void CNetworkVehicle::RespawnForWorld( void )
 	for( EntityId i = 0; i < MAX_PLAYERS; i++ )
 	{
 		// Is this player active?
-		if( pCore->GetPlayerManager()->IsActive( i ) )
+		if( CCore::Instance()->GetPlayerManager()->IsActive( i ) )
 		{
 			// Respawn this vehicle for this player
 			RespawnForPlayer( i );
@@ -293,7 +292,7 @@ void CNetworkVehicle::SetPosition( CVector3 vecPosition, bool bBroadcast )
 		pBitStream.Write( vecPosition );
 
 		// Send it to all clients
-		pCore->GetNetworkModule()->Call( RPC_SETVEHICLEPOS, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, INVALID_ENTITY_ID, true );
+		CCore::Instance()->GetNetworkModule()->Call( RPC_SETVEHICLEPOS, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, INVALID_ENTITY_ID, true );
 	}
 
 	// Store the position
@@ -321,7 +320,7 @@ void CNetworkVehicle::SetRotation( CVector3 vecRotation, bool bBroadcast )
 		pBitStream.Write( vecRotation );
 
 		// Send it to all clients
-		pCore->GetNetworkModule()->Call( RPC_SETVEHICLEDIR, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, INVALID_ENTITY_ID, true );
+		CCore::Instance()->GetNetworkModule()->Call( RPC_SETVEHICLEDIR, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, INVALID_ENTITY_ID, true );
 	}
 
 	// Store the direction
@@ -353,7 +352,7 @@ void CNetworkVehicle::SetColour( CColor primary, CColor secondary )
 	pBitStream.WriteCompressed( secondary.B );
 
 	// Send it to all clients
-	pCore->GetNetworkModule()->Call( RPC_SETVEHICLECOLOUR, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, INVALID_ENTITY_ID, true );
+	CCore::Instance()->GetNetworkModule()->Call( RPC_SETVEHICLECOLOUR, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, INVALID_ENTITY_ID, true );
 
 	// Copy the colours into the last sync data
 	memcpy ( &m_lastSyncData.m_primaryColour, &primary, sizeof(CColor) );
@@ -381,7 +380,7 @@ void CNetworkVehicle::SetPlateText( const char * szText )
 	pBitStream.Write( RakNet::RakString( szText ) );
 
 	// Send it to all clients
-	pCore->GetNetworkModule()->Call( RPC_SETVEHICLEPLATETEXT, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, INVALID_ENTITY_ID, true );
+	CCore::Instance()->GetNetworkModule()->Call( RPC_SETVEHICLEPLATETEXT, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, INVALID_ENTITY_ID, true );
 
 	// Store the plate text in the last sync data
 	strcpy ( m_lastSyncData.m_szPlateText, szText );
@@ -401,7 +400,7 @@ void CNetworkVehicle::Repair( void )
 	pBitStream.WriteCompressed( m_vehicleId );
 
 	// Send it to all clients
-	pCore->GetNetworkModule()->Call( RPC_REPAIRVEHICLE, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, INVALID_ENTITY_ID, true );
+	CCore::Instance()->GetNetworkModule()->Call( RPC_REPAIRVEHICLE, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, INVALID_ENTITY_ID, true );
 }
 
 void CNetworkVehicle::Explode( void )
@@ -413,7 +412,7 @@ void CNetworkVehicle::Explode( void )
 	pBitStream.WriteCompressed( m_vehicleId );
 
 	// Send it to all clients
-	pCore->GetNetworkModule()->Call( RPC_EXPLODEVEHICLE, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, INVALID_ENTITY_ID, true );
+	CCore::Instance()->GetNetworkModule()->Call( RPC_EXPLODEVEHICLE, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, INVALID_ENTITY_ID, true );
 }
 
 void CNetworkVehicle::SetDirtLevel( float fDirtLevel )
@@ -428,7 +427,7 @@ void CNetworkVehicle::SetDirtLevel( float fDirtLevel )
 	pBitStream.Write( fDirtLevel );
 
 	// Send it to all clients
-	pCore->GetNetworkModule()->Call( RPC_SETVEHICLEDIRTLEVEL, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, INVALID_ENTITY_ID, true );
+	CCore::Instance()->GetNetworkModule()->Call( RPC_SETVEHICLEDIRTLEVEL, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, INVALID_ENTITY_ID, true );
 
 	// Store the last dirt level
 	m_lastSyncData.m_fDirtLevel = fDirtLevel;
@@ -451,7 +450,7 @@ void CNetworkVehicle::SetEngineState( bool bState )
 	bState ? pBitStream.Write1() : pBitStream.Write0();
 
 	// Send it to all clients
-	pCore->GetNetworkModule()->Call( RPC_SETVEHICLEENGINESTATE, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, INVALID_ENTITY_ID, true );
+	CCore::Instance()->GetNetworkModule()->Call( RPC_SETVEHICLEENGINESTATE, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, INVALID_ENTITY_ID, true );
 
 	// Store the last engine state
 	m_lastSyncData.m_bEngineState = bState;
@@ -478,7 +477,7 @@ void CNetworkVehicle::SetPartOpen( int iPart, bool bOpen )
 	bOpen ? pBitStream.Write1() : pBitStream.Write0();
 
 	// Send it to all clients
-	pCore->GetNetworkModule()->Call( RPC_SETVEHICLEPARTOPEN, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, INVALID_ENTITY_ID, true );
+	CCore::Instance()->GetNetworkModule()->Call( RPC_SETVEHICLEPARTOPEN, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, INVALID_ENTITY_ID, true );
 
 	// Set the part state
 	switch (iPart)
@@ -526,7 +525,7 @@ void CNetworkVehicle::SetSirenState( bool bState )
 	bState ? pBitStream.Write1() : pBitStream.Write0();
 
 	// Send it to all clients
-	pCore->GetNetworkModule()->Call( RPC_SETVEHICLESIRENSTATE, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, INVALID_ENTITY_ID, true );
+	CCore::Instance()->GetNetworkModule()->Call( RPC_SETVEHICLESIRENSTATE, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, INVALID_ENTITY_ID, true );
 
 	// Store the last siren state
 	m_lastSyncData.m_bSirenState = bState;
@@ -549,7 +548,7 @@ void CNetworkVehicle::SetHornState( bool bState )
 	bState ? pBitStream.Write1() : pBitStream.Write0();
 
 	// Send it to all clients
-	pCore->GetNetworkModule()->Call( RPC_SETVEHICLEHORNSTATE, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, INVALID_ENTITY_ID, true );
+	CCore::Instance()->GetNetworkModule()->Call( RPC_SETVEHICLEHORNSTATE, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, INVALID_ENTITY_ID, true );
 
 	// Store the last horn state
 	m_lastSyncData.m_bHornState = bState;
@@ -575,7 +574,7 @@ void CNetworkVehicle::SetWindowOpen( int iSeat, bool bOpen )
 	bOpen ? pBitStream.Write1() : pBitStream.Write0();
 
 	// Send it to all clients
-	pCore->GetNetworkModule()->Call( RPC_SETVEHICLEWINDOWOPEN, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, INVALID_ENTITY_ID, true );
+	CCore::Instance()->GetNetworkModule()->Call( RPC_SETVEHICLEWINDOWOPEN, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, INVALID_ENTITY_ID, true );
 }
 
 bool CNetworkVehicle::IsWindowOpen( int iSeat )
@@ -600,7 +599,7 @@ void CNetworkVehicle::SetTuningTable( int iTable )
 	pBitStream.WriteCompressed( iTable );
 
 	// Send it to all clients
-	pCore->GetNetworkModule()->Call( RPC_SETVEHICLETUNINGTABLE, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, INVALID_ENTITY_ID, true );
+	CCore::Instance()->GetNetworkModule()->Call( RPC_SETVEHICLETUNINGTABLE, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, INVALID_ENTITY_ID, true );
 
 	// Store the last tuning table
 	m_lastSyncData.m_iTuningTable = iTable;
@@ -626,7 +625,7 @@ void CNetworkVehicle::SetWheelTexture( int iWheelIndex, int iTexture )
 	pBitStream.WriteCompressed( iTexture );
 
 	// Send it to all clients
-	pCore->GetNetworkModule()->Call( RPC_SETVEHICLEWHEELTEXTURE, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, INVALID_ENTITY_ID, true );
+	CCore::Instance()->GetNetworkModule()->Call( RPC_SETVEHICLEWHEELTEXTURE, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, INVALID_ENTITY_ID, true );
 }
 
 int CNetworkVehicle::GetWheelTexture( int iWheelIndex )
@@ -646,7 +645,7 @@ void CNetworkVehicle::SetSpeedVec ( CVector3 vecSpeed )
 	pBitStream.Write ( vecSpeed );
 
 	// Send it to all clients
-	pCore->GetNetworkModule()->Call ( RPC_SETVEHICLESPEED, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, INVALID_ENTITY_ID, true );
+	CCore::Instance()->GetNetworkModule()->Call ( RPC_SETVEHICLESPEED, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, INVALID_ENTITY_ID, true );
 }
 
 void CNetworkVehicle::GetSpeedVec ( CVector3 * vecSpeed )
@@ -667,7 +666,7 @@ void CNetworkVehicle::SetFuel ( float fFuel )
 	pBitStream.Write ( fFuel );
 
 	// Send it to all clients
-	pCore->GetNetworkModule()->Call ( RPC_SETVEHICLEFUEL, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, INVALID_ENTITY_ID, true );
+	CCore::Instance()->GetNetworkModule()->Call ( RPC_SETVEHICLEFUEL, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, INVALID_ENTITY_ID, true );
 }
 
 float CNetworkVehicle::GetFuel ( void )
@@ -687,7 +686,7 @@ void CNetworkVehicle::SetLightState ( bool bLightState )
 	bLightState ? pBitStream.Write1() : pBitStream.Write0();
 
 	// Send it to all clients
-	pCore->GetNetworkModule()->Call ( RPC_SETVEHICLELIGHTSTATE, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, INVALID_ENTITY_ID, true );
+	CCore::Instance()->GetNetworkModule()->Call ( RPC_SETVEHICLELIGHTSTATE, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, INVALID_ENTITY_ID, true );
 }
 
 bool CNetworkVehicle::GetLightState ()
@@ -710,7 +709,7 @@ void CNetworkVehicle::SetModel(int iModel)
 	pBitStream.Write(m_iModel);
 
 	// Send it to all clients
-	pCore->GetNetworkModule()->Call(RPC_SETVEHICLEMODEL, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, INVALID_ENTITY_ID, true);
+	CCore::Instance()->GetNetworkModule()->Call(RPC_SETVEHICLEMODEL, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, INVALID_ENTITY_ID, true);
 
 	// Save model
 	m_lastSyncData.m_model = m_iModel;
@@ -736,7 +735,7 @@ void CNetworkVehicle::HandlePlayerEnter( CNetworkPlayer * pNetworkPlayer, int iS
 	pArguments.push( iSeat );
 
 	// Call the event
-	pCore->GetEvents()->Call( "onPlayerVehicleEnter", &pArguments );
+	CCore::Instance()->GetEvents()->Call( "onPlayerVehicleEnter", &pArguments );
 
 	// Set the seat occupant
 	SetOccupant( iSeat, pNetworkPlayer );
@@ -766,7 +765,7 @@ void CNetworkVehicle::HandlePlayerExit( CNetworkPlayer * pNetworkPlayer, int iSe
 	pArguments.push( iSeat );
 
 	// Call the event
-	pCore->GetEvents()->Call( "onPlayerVehicleExit", &pArguments );
+	CCore::Instance()->GetEvents()->Call( "onPlayerVehicleExit", &pArguments );
 
 	// Is the player the saved driver?
 	if( m_pOccupants[ iSeat ] && pNetworkPlayer->GetId() == m_pOccupants[ iSeat ]->GetId() )
@@ -796,7 +795,7 @@ void CNetworkVehicle::HandlePlayerExit( CNetworkPlayer * pNetworkPlayer, int iSe
 				bitStream.WriteCompressed ( m_pOccupants[ 1 ]->GetId () );
 
 				// Send the packet to all other clients
-				pCore->GetNetworkModule()->Call ( RPC_MOVETODRIVER, &bitStream, HIGH_PRIORITY, RELIABLE, m_pOccupants[ 1 ]->GetId (), true );
+				CCore::Instance()->GetNetworkModule()->Call ( RPC_MOVETODRIVER, &bitStream, HIGH_PRIORITY, RELIABLE, m_pOccupants[ 1 ]->GetId (), true );
 
 #ifdef DEBUG
 				CLogFile::Printf ( "RPC_MOVETODRIVER sent!" );
@@ -877,11 +876,11 @@ bool CNetworkVehicle::GetClosestPlayer( CNetworkPlayer ** pNetworkPlayer )
 	for( EntityId i = 0; i < MAX_PLAYERS; i++ )
 	{
 		// Is the player connected?
-		if( pCore->GetPlayerManager()->IsActive( i ) )
+		if( CCore::Instance()->GetPlayerManager()->IsActive( i ) )
 		{
 			// Get the current player position
 			CVector3 vecCurrentPosition;
-			pCore->GetPlayerManager()->Get( i )->GetPosition( &vecCurrentPosition );
+			CCore::Instance()->GetPlayerManager()->Get( i )->GetPosition( &vecCurrentPosition );
 
 			// Get the distance between the current player and the vehicle
 			float fDistance = Math::GetDistanceBetweenPoints( vecCurrentPosition, vecPosition );
@@ -893,7 +892,7 @@ bool CNetworkVehicle::GetClosestPlayer( CNetworkPlayer ** pNetworkPlayer )
 				fCurrentDistance = fDistance;
 
 				// Set the closest player
-				pClosestPlayer = pCore->GetPlayerManager()->Get( i );
+				pClosestPlayer = CCore::Instance()->GetPlayerManager()->Get( i );
 			}
 		}
 	}
@@ -933,6 +932,6 @@ void CNetworkVehicle::ProcessUnoccupiedSync( RakNet::BitStream * pBitStream )
 		pBitStream->Write( (char *)&unoccupiedVehicleSync, sizeof(UnoccupiedVehicleSync) );
 
 		// Send it back to all clients
-		pCore->GetNetworkModule()->Call( RPC_UNOCCUPIED_SYNC, pBitStream, LOW_PRIORITY, UNRELIABLE_SEQUENCED, m_pLastSyncer->GetId(), true );
+		CCore::Instance()->GetNetworkModule()->Call( RPC_UNOCCUPIED_SYNC, pBitStream, LOW_PRIORITY, UNRELIABLE_SEQUENCED, m_pLastSyncer->GetId(), true );
 	}
 }
