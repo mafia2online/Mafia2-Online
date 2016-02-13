@@ -8,8 +8,8 @@
 ***************************************************************/
 
 #include	"StdInc.h"
+#include	"CCore.h"
 
-extern	CCore			* pCore;
 int iLoaded = 0, iFailed = 0;
 
 CResourceManager::CResourceManager( void )
@@ -30,7 +30,7 @@ void CResourceManager::LoadAll( std::list< const char * > resources )
 	}
 
 	// Update resource loaded totals
-	pCore->UpdateResourceTotals( iLoaded, iFailed );
+	CCore::Instance()->UpdateResourceTotals( iLoaded, iFailed );
 }
 
 bool CResourceManager::StartResource( const char * szResource )
@@ -124,7 +124,7 @@ bool CResourceManager::StartResource( const char * szResource )
 				if( !strcmp( szScriptType, "client" ) )
 				{
 					// Load the clientscript
-					if( !pCore->GetClientScriptingManager()->Start( szNodeData, strPath ) )
+					if( !CCore::Instance()->GetClientScriptingManager()->Start( szNodeData, strPath ) )
 						continue;
 
 					// Set the script type
@@ -136,7 +136,7 @@ bool CResourceManager::StartResource( const char * szResource )
 				else if( !strcmp( szScriptType, "server" ) )
 				{
 					// Load the script
-					CSquirrel * pScript = pCore->GetScriptingManager()->Load( szNodeData, String( "%s/%s", strPath.Get(), szNodeData ) );
+					CSquirrel * pScript = CCore::Instance()->GetScriptingManager()->Load( szNodeData, String( "%s/%s", strPath.Get(), szNodeData ) );
 
 					// Did the script fail to load?
 					if( !pScript )
@@ -164,7 +164,7 @@ bool CResourceManager::StartResource( const char * szResource )
 				strPath.Format( "resources/%s/files", szResource );
 
 				// Load the file with the client scripting manager
-				if( !pCore->GetClientScriptingManager()->Start( szNodeData, strPath ) )
+				if( !CCore::Instance()->GetClientScriptingManager()->Start( szNodeData, strPath ) )
 					continue;
 
 				// Increase the resource file count
@@ -200,12 +200,12 @@ bool CResourceManager::StopResource( const char * szResource )
 				if( (*iter2).eType == E_SCRIPT_CLIENT )
 				{
 					// Stop the client script
-					pCore->GetClientScriptingManager()->Stop( (*iter2).strName );
+					CCore::Instance()->GetClientScriptingManager()->Stop( (*iter2).strName );
 				}
 				else
 				{
 					// Stop the server script
-					pCore->GetScriptingManager()->Unload( (*iter2).strName );
+					CCore::Instance()->GetScriptingManager()->Unload( (*iter2).strName );
 				}
 			}
 

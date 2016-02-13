@@ -18,7 +18,7 @@
 #include	"../../Client/CClientScriptingManager.h"
 #include	"../../Client/CClientScriptGUIManager.h"
 #else
-#include	"../../Server/BaseInc.h"
+#include	"../../Client/BaseInc.h"
 #endif
 
 #include	"../../../Shared/CEvents.h"
@@ -45,6 +45,8 @@
 #include	"../../Client/CAudioNatives.h"
 #include	"../../Client/C3DTextLabelNatives.h"
 #include	"../../Client/CPlayerNatives.h"
+#else
+#include	"../../Server/CServerNatives.h"
 #endif
 
 #include	"../Timers/CTimerManager.h"

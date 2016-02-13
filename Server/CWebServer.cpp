@@ -8,8 +8,8 @@
 ***************************************************************/
 
 #include	"StdInc.h"
+#include	"CCore.h"
 
-extern	CCore		* pCore;
 CMutex				webMutex;
 
 void * CWebServer::MongooseEventHandler( mg_event event, mg_connection * connection, const mg_request_info * request_info )
@@ -31,7 +31,7 @@ void * CWebServer::MongooseEventHandler( mg_event event, mg_connection * connect
 		pArguments.push( request_info->remote_port );
 		pArguments.push( request_info->uri );
 		pArguments.push( request_info->request_method );
-		pCore->GetEvents()->Call( "onWebRequest", &pArguments );
+		CCore::Instance()->GetEvents()->Call( "onWebRequest", &pArguments );
 
 		// Unlock the web mutex
 		webMutex.Unlock ();

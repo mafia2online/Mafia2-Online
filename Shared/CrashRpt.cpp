@@ -7,6 +7,8 @@
 *
 ***************************************************************/
 
+#include	<time.h>
+
 #ifdef _CLIENT
 #include	"../Client/BaseInc.h"
 #else

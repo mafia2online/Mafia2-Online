@@ -79,7 +79,7 @@ DWORD CM2Entity::GetGUID( void )
 	return 0;
 }
 
-void CM2Entity::SetPosition( const CVector3& vecPosition )
+void CM2Entity::SetPosition( const CVector3 vecPosition )
 {
 	// Is the entity valid?
 	if( m_pEntity )

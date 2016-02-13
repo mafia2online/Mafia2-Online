@@ -8,8 +8,7 @@
 ***************************************************************/
 
 #include	"StdInc.h"
-
-extern	CCore			* pCore;
+#include	"CCore.h"
 
 CBanManager::CBanManager( void )
 {
@@ -169,7 +168,7 @@ bool CBanManager::Add( const char * szSerial, const char * szBanner, unsigned lo
 	m_banList.push_back( pServerBan );
 
 	// Get the player from the serial
-	CNetworkPlayer * pPlayer = pCore->GetPlayerManager()->GetPlayerFromSerial( szSerial );
+	CNetworkPlayer * pPlayer = CCore::Instance()->GetPlayerManager()->GetPlayerFromSerial( szSerial );
 
 	// Ensure the player is valid
 	if( pPlayer )
