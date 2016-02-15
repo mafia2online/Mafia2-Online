@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include	"../BaseInc.h"
+
 class M2Entity;
 
 class M2BaseEntityVFTable

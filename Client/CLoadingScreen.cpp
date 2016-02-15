@@ -30,6 +30,9 @@ CGUIStaticImage_Impl	* CLoadingScreen::m_pLogoRakNet = NULL;
 
 void CLoadingScreen::Start( void )
 {
+	float fX = CCore::Instance()->GetGUI()->GetCEGUI()->GetResolution().fX;
+	float fY = CCore::Instance()->GetGUI()->GetCEGUI()->GetResolution().fY;
+
 	// Create the gui image
 	m_pLogo = CCore::Instance()->GetGUI()->GetCEGUI()->CreateStaticImage();
 	m_pLogoM2MP = CCore::Instance()->GetGUI()->GetCEGUI()->CreateStaticImage();
@@ -37,19 +40,19 @@ void CLoadingScreen::Start( void )
 
 	// Logo Mafia2-Online
 	m_pLogo->LoadFromFile("loadingscreen.png", SharedUtility::GetAbsolutePath("data\\gui\\images"));
-	m_pLogo->SetPosition(Vector2(((CCore::Instance()->GetGUI()->GetCEGUI()->GetResolution().fX / 2) - 512), ((CCore::Instance()->GetGUI()->GetCEGUI()->GetResolution().fY / 2) - 256)));
+	m_pLogo->SetPosition(Vector2((fX - 512), (fY - 256)));
 	m_pLogo->SetSize(Vector2(1024, 512));
 	m_pLogo->SetAlwaysOnTop(true);
 
 	// Logo RakNet
 	m_pLogoRakNet->LoadFromFile("logo_raknet.jpg", SharedUtility::GetAbsolutePath("data\\gui\\images"));
-	m_pLogoRakNet->SetPosition(Vector2(((CCore::Instance()->GetGUI()->GetCEGUI()->GetResolution().fX / 2) + 700), ((CCore::Instance()->GetGUI()->GetCEGUI()->GetResolution().fY / 2) + 320)));
+	m_pLogoRakNet->SetPosition(Vector2((fX + 700), (fY + 320)));
 	m_pLogoRakNet->SetSize(Vector2(152, 152));
 	m_pLogoRakNet->SetAlwaysOnTop(true);
 
 	// Logo M2MP
 	m_pLogoM2MP->LoadFromFile("logo_m2mp.png", SharedUtility::GetAbsolutePath("data\\gui\\images"));
-	m_pLogoM2MP->SetPosition(Vector2(((CCore::Instance()->GetGUI()->GetCEGUI()->GetResolution().fX / 2) - 950), ((CCore::Instance()->GetGUI()->GetCEGUI()->GetResolution().fY / 2) + 270)));
+	m_pLogoM2MP->SetPosition(Vector2((fX - 950), (fY + 270)));
 	m_pLogoM2MP->SetSize(Vector2(500, 250));
 	m_pLogoM2MP->SetAlwaysOnTop(true);
 }

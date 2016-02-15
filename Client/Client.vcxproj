@@ -49,6 +49,7 @@
     </LinkIncremental>
     <IncludePath>$(ProjectDir)..\Libraries\DXSDK\Include;$(ProjectDir)..\Libraries\Detours;$(ProjectDir)..\Libraries\lua\Source;$(ProjectDir)..\Libraries\zlib-1.2.5;$(ProjectDir)..\Libraries\squirrel;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)..\Libraries\DXSDK\Lib;$(ProjectDir)..\Libraries\Detours;$(ProjectDir)..\Libraries\RakNet\Lib;$(ProjectDir)..\Libraries\lua\Lib;$(ProjectDir)..\Libraries\zlib-1.2.5\projects\Debug;$(ProjectDir)..\Libraries\squirrel\Lib;$(ProjectDir)..\Libraries\libpng\projects\Debug;$(LibraryPath)</LibraryPath>
+    <IntDir>$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)Binary\Release</OutDir>
@@ -228,6 +229,7 @@
     <ClInclude Include="CFileTransferManager.h" />
     <ClInclude Include="CFont.h" />
     <ClInclude Include="CFPSCounter.h" />
+    <ClInclude Include="CIcon.h" />
     <ClInclude Include="CMafia.h" />
     <ClInclude Include="CGameFiles.h" />
     <ClInclude Include="CGameNatives.h" />
@@ -400,6 +402,7 @@
     <ClCompile Include="CFileTransferManager.cpp" />
     <ClCompile Include="CFont.cpp" />
     <ClCompile Include="CFPSCounter.cpp" />
+    <ClCompile Include="CIcon.cpp" />
     <ClCompile Include="CMafia.cpp" />
     <ClCompile Include="CGameFiles.cpp" />
     <ClCompile Include="CGameNatives.cpp" />

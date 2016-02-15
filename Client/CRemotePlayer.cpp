@@ -10,6 +10,7 @@
 #include	"BaseInc.h"
 
 #include	"CCore.h"
+#include	"CChat.h"
 
 #include	"Math\CQuaternion.h"
 #include	"Math\CVector3.h"
@@ -72,7 +73,7 @@ void CRemotePlayer::Pulse( void )
 						CLogFile::Print ( "Done!" );
 
 #ifdef _DEBUG
-						pCore->GetChat()->AddDebugMessage( "CRemotePlayer::Pulse - The enter vehicle AI command took too long. Warped the player into the vehicle." );
+						CCore::Instance()->GetChat()->AddDebugMessage( "CRemotePlayer::Pulse - The enter vehicle AI command took too long. Warped the player into the vehicle." );
 #endif
 					}
 				}

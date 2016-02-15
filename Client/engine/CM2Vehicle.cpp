@@ -7,15 +7,18 @@
 *
 ***************************************************************/
 
-#include "BaseInc.h"
+#include	"BaseInc.h"
 
-#include "CM2Entity.h"
-#include "CM2Vehicle.h"
-#include "engine/CM2Ped.h"
+#include	"../CCore.h"
+#include	"../CChat.h"
 
-#include "CColor.h"
+#include	"CM2Entity.h"
+#include	"CM2Vehicle.h"
+#include	"engine/CM2Ped.h"
 
-#include "COffsets.h"
+#include	"CColor.h"
+
+#include	"COffsets.h"
 
 void _declspec(naked) M2Vehicle::UnlockPlayerEntryPoints(void)
 {
@@ -571,7 +574,7 @@ bool CM2Vehicle::IsBeaconLightOn(void)
 	{
 		DWORD dwVehicleData = (DWORD)(m_pVehicle)  + 0xA8;
 		DWORD retn = (*(DWORD *)(dwVehicleData + 0x6F0 - 1) & 0x40);
-		pCore->GetChat()->AddDebugMessage("LightOn : %02X", retn);
+		CCore::Instance()->GetChat()->AddDebugMessage("LightOn : %02X", retn);
 
 		return (retn);
 	}
