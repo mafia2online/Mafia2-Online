@@ -136,6 +136,7 @@ private:
 	M2HudFader			* m_pHudFader;
 
 	bool				m_bShowing;
+	bool				m_bTargetGPS;
 
 public:
 

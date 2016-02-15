@@ -137,6 +137,7 @@ CM2Hud::CM2Hud( M2Hud * pHud )
 	m_bShowing = true;
 	m_drunkLevel = 0;
 	m_wantedLevel = 0;
+	m_bTargetGPS = false;
 }
 
 CM2Hud::~CM2Hud( void )
@@ -413,9 +414,14 @@ void CM2Hud::StartGPS(float fX, float fY)
 	if (!m_pHud)
 		return;
 
+	if (m_bTargetGPS)
+		return;
+
 	CLua::Execute("l_8_1 = game.quests:NewQuest(5, 12, true, \"0056000005\", \"0056000005\")");
 	CLua::Executef("pos = game.navigation:RegisterObjectivePos(%f, %f, l_8_1:AddObjective(\"0551010006\"))", fX, fY);
 	CLua::Executef("game.navigation:SetFakeTargetForGPS(pos, %f, %f)", fX, fY);
+
+	m_bTargetGPS = true;
 }
 
 void CM2Hud::StopGPS()
@@ -423,5 +429,9 @@ void CM2Hud::StopGPS()
 	if (!m_pHud)
 		return;
 
+	if (!m_bTargetGPS)
+		return;
+
 	CLua::Execute("game.navigation:UnregisterObjectivePos(pos)");
+	m_bTargetGPS = false;
 }
