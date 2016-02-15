@@ -42,7 +42,7 @@ public:
 	// Maybe it's just marking as minimized?
 	void SetMinimized( bool bMinimized )
 	{
-		DWORD dwFunc = 0x57BDE0;
+		DWORD dwFunc = 0x57BDE0; //Todo: Move to COffsets
 
 		_asm push bMinimized;
 		_asm mov ecx, this;
