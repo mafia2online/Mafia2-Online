@@ -7,9 +7,31 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
+#include	"BaseInc.h"
 
-extern	CCore			* pCore;
+#include	"CCore.h"
+
+#include	<RPC4Plugin.h>
+#include	"RakPeerInterface.h"
+#include	"CNetworkRPC.h"
+#include	"CScriptingRPC.h"
+
+#include	"SharedUtility.h"
+
+#include	"CChat.h"
+
+#include	"CPlayerManager.h"
+#include	"CVehicleManager.h"
+
+#include	"CGUI.h"
+#include	"CServerBrowser.h"
+
+#include	"../Shared/CNetworkRPC.h"
+
+#include	"../Libraries/RakNet/Source/MessageIdentifiers.h"
+
+#include	"CNetworkModule.h"
+
 RakNet::RPC4			* CNetworkModule::m_pRPC = NULL;
 
 CNetworkModule::CNetworkModule( void )
@@ -129,12 +151,12 @@ void CNetworkModule::Disconnect( bool bRestart )
 		Startup();
 
 		// Reset default server info
-		pCore->SetServerName( "M2Online Server" );
-		pCore->SetServerMaxPlayers( 0 );
+		CCore::Instance()->SetServerName( "M2Online Server" );
+		CCore::Instance()->SetServerMaxPlayers( 0 );
 
 		// Clear the chat
-		pCore->GetChat()->Clear ();
-		pCore->GetChat()->ClearHistory ();
+		CCore::Instance()->GetChat()->Clear ();
+		CCore::Instance()->GetChat()->ClearHistory ();
 
 		// Reset player model
 		//pCore->GetPlayerManager()->GetLocalPlayer()->SetModel ( 10 );
@@ -144,7 +166,7 @@ void CNetworkModule::Disconnect( bool bRestart )
 void CNetworkModule::Pulse( void )
 {
 	// Is the game not loaded?
-	if( !pCore->IsGameLoaded() )
+	if( !CCore::Instance()->IsGameLoaded() )
 		return;
 
 	// Are we disconnected from the network?
@@ -158,10 +180,10 @@ void CNetworkModule::Pulse( void )
 	if( IsConnected() )
 	{
 		// Pulse the player manager
-		pCore->GetPlayerManager()->Pulse ();
+		CCore::Instance()->GetPlayerManager()->Pulse ();
 
 		// Pulse the vehicle manager
-		pCore->GetVehicleManager()->Pulse ();
+		CCore::Instance()->GetVehicleManager()->Pulse ();
 	}
 }
 
@@ -197,7 +219,7 @@ void CNetworkModule::UpdateNetwork( void )
 			ConnectionAccepted( pPacket );
 
 			// Process this packet with the server browser
-			pCore->GetGUI()->GetServerBrowser()->ProcessNetworkPacket( (DefaultMessageIDTypes)pPacket->data[0] );
+			CCore::Instance()->GetGUI()->GetServerBrowser()->ProcessNetworkPacket( (DefaultMessageIDTypes)pPacket->data[0] );
 		}
 		else if( pPacket->data[0] == ID_DISCONNECTION_NOTIFICATION || pPacket->data[0] == ID_CONNECTION_LOST ||
 			 pPacket->data[0] == ID_NO_FREE_INCOMING_CONNECTIONS || pPacket->data[0] == ID_INVALID_PASSWORD ||
@@ -207,17 +229,17 @@ void CNetworkModule::UpdateNetwork( void )
 			if( pPacket->data[0] == ID_DISCONNECTION_NOTIFICATION || pPacket->data[0] == ID_CONNECTION_LOST )
 			{
 				// Stop multiplayer
-				pCore->StopMultiplayer ();
+				CCore::Instance()->StopMultiplayer ();
 
 				// Start multiplayer
-				pCore->StartMultiplayer ();
+				CCore::Instance()->StartMultiplayer ();
 			}
 
 			// Set the network state
 			SetNetworkState( NETSTATE_NONE );
 
 			// Process this packet with the server browser
-			pCore->GetGUI()->GetServerBrowser()->ProcessNetworkPacket( (DefaultMessageIDTypes)pPacket->data[0] );
+			CCore::Instance()->GetGUI()->GetServerBrowser()->ProcessNetworkPacket( (DefaultMessageIDTypes)pPacket->data[0] );
 		}
 
 		// Deallocate the memory used by the packet
@@ -247,7 +269,7 @@ void CNetworkModule::ConnectionAccepted( RakNet::Packet * pPacket )
 	pBitStream.Write( NETWORK_VERSION );
 
 	// Write the player nickname
-	pBitStream.Write( RakNet::RakString( pCore->GetNick().Get() ) );
+	pBitStream.Write( RakNet::RakString( CCore::Instance()->GetNick().Get() ) );
 
 	// Write the player serial
 	pBitStream.Write( RakNet::RakString( SharedUtility::GetSerialHash().Get() ) );

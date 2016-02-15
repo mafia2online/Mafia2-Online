@@ -8,8 +8,7 @@
 ***************************************************************/
 
 #include	"StdInc.h"
-
-extern CCore			* pCore;
+#include	"CCore.h"
 
 void CMasterList::WorkerThread ( CThread * pCreator )
 {
@@ -17,7 +16,7 @@ void CMasterList::WorkerThread ( CThread * pCreator )
 	while( pCreator->GetUserData < bool > () )
 	{
 		// Get the masterlist pointer
-		CMasterList * pMasterList = pCore->GetMasterList ();
+		CMasterList * pMasterList = CCore::Instance()->GetMasterList ();
 
 		// Is the masterlist pointer valid and time for an update?
 		if( pMasterList && pMasterList->IsAdded() && ((SharedUtility::GetTime() - pMasterList->GetLastUpdateTime()) > 5000) )

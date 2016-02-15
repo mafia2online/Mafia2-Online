@@ -2,18 +2,20 @@
 *
 * Solution   : Mafia 2 Multiplayer
 * Project    : Client
-* File       : CMouseHandler.h
-* Developers : AaronLad <aaron@m2-multiplayer.com>
+* File       : BaseInc.h
+* Brief      : M2-Online client precompiled header.
 *
 ***************************************************************/
 
 #pragma once
 
-class CMouseHandler
-{
+#include	<Windows.h>
+#include	<windowsx.h>
 
-public:
+#include	<list>
 
-	//static	void			HandleMouseEvent( eMouseType mouseEvent, BYTE bKey );
+#include	<assert.h>
 
-};
+#include "CCommon.h"
+
+// EOF

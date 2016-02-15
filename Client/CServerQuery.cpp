@@ -7,11 +7,23 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
+#include	"BaseInc.h"
 #include	<Threading/CThread.h>
+#include	<RakPeerInterface.h>
+#include	<BitStream.h>
+#include	<MessageIdentifiers.h>
+#include	<RPC4Plugin.h>
 
-extern	CCore			* pCore;
+#include	"CCore.h"
 
+#include	"CGUI.h"
+#include	"CServerBrowser.h"
+#include	"CServerList.h"
+#include	"CServerQuery.h"
+
+#include	"SharedUtility.h"
+
+#include	"CServerQuery.h"
 const char * GetIPFromSocketAddress(int af, const void * src, char * dst, int cnt) // TODO: Move this function to the shared library! It's used in Server/CQuery.cpp also!
 {
 	if(af == AF_INET || af == PF_INET)
@@ -42,7 +54,7 @@ void CServerQuery::WorkerThread ( CThread * pCreator )
 	while ( pCreator->GetUserData < bool > () )
 	{
 		// Get the server query pointer
-		CServerQuery * pServerQuery = pCore->GetGUI()->GetServerBrowser()->GetServerQuery ();
+		CServerQuery * pServerQuery = CCore::Instance()->GetGUI()->GetServerBrowser()->GetServerQuery ();
 
 		// Is the server query pointer valid?
 		if ( pServerQuery )

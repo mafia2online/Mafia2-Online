@@ -7,9 +7,44 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
+#include	"BaseInc.h"
 
-extern	CCore				* pCore;
+#include	"CCore.h"
+#include	"CString.h"
+#include	"Math\CVector3.h"
+
+#include	"gui_impl\CGUI_Impl.h"
+#include	"gui_impl\CGUIElement_Impl.h"
+#include	"gui_impl\CGUIEdit_Impl.h"
+#include	"gui_impl\CGUIWindow_Impl.h"
+#include	"gui_impl\CGUIMessageBox_Impl.h"
+#include	"gui_impl\CGUITabPanel_Impl.h"
+#include	"gui_impl\CGUILabel_Impl.h"
+#include	"gui_impl\CGUIGridList_Impl.h"
+#include	"gui_impl\CGUIStaticImage_Impl.h"
+#include	"gui_impl\CGUIButton_Impl.h"
+
+#include	"../Shared/CSettings.h"
+
+#include	"CGUI.h"
+#include	"CGUIEvent.h"
+#include	"CGUICallback.h"
+#include	"CMainMenu.h"
+
+#include	"CServerList.h"
+#include	"CMasterList.h"
+#include	"CServerQuery.h"
+#include	"CServerPassword.h"
+
+#include	"CNetworkModule.h"
+
+#include	"CChat.h"
+
+#include	"../Libraries/RakNet/Source/MessageIdentifiers.h"
+
+#include	"SharedUtility.h"
+
+#include	"CServerBrowser.h"
 
 bool CServerBrowser::Event_QuickConnectSubmitClick ( CGUIElement_Impl * pElement )
 {
@@ -161,7 +196,7 @@ void CServerBrowser::Pulse( void )
 	if( m_connectionState == CONNECTION_STATE_WAITING_FOR_GAME )
 	{
 		// Is the game loaded now?
-		if( pCore->IsGameLoaded() )
+		if( CCore::Instance()->IsGameLoaded() )
 		{
 			// Move to the next step
 			m_connectionState = CONNECTION_STATE_CONNECTING;
@@ -179,7 +214,7 @@ void CServerBrowser::Pulse( void )
 			m_pMessageBox->SetVisible ( false );
 
 			// Show the main menu
-			pCore->GetGUI()->GetMainMenu()->SetVisible( true );
+			CCore::Instance()->GetGUI()->GetMainMenu()->SetVisible(true);
 
 			// Reset the connection state
 			SetConnectionState( CONNECTION_STATE_NONE );
@@ -416,26 +451,26 @@ void CServerBrowser::ConnectToSelectedServer( void )
 void CServerBrowser::StartConnection ( void )
 {
 	// Are we already connected to a server?
-	if( pCore->GetNetworkModule() && pCore->GetNetworkModule()->IsConnected() )
+	if( CCore::Instance()->GetNetworkModule() && CCore::Instance()->GetNetworkModule()->IsConnected() )
 	{
 		// Disconnect from the server
-		pCore->GetNetworkModule()->Disconnect();
+		CCore::Instance()->GetNetworkModule()->Disconnect();
 
 		// Stop multiplayer
-		pCore->StopMultiplayer ();
+		CCore::Instance()->StopMultiplayer();
 
 		// Set the connection state
 		SetConnectionState( CONNECTION_STATE_CONNECTING );
 
 		// Start multiplayer
-		pCore->StartMultiplayer ();
+		CCore::Instance()->StartMultiplayer();
 
 		// Connect!
 		ProcessConnection ();
 	}
 
 	// Is the game not yet loaded?
-	if( !pCore->IsGameLoaded() )
+	if( !CCore::Instance()->IsGameLoaded() )
 	{
 		// Set the connection state
 		SetConnectionState( CONNECTION_STATE_WAITING_FOR_GAME );
@@ -446,8 +481,8 @@ void CServerBrowser::StartConnection ( void )
 	else
 	{
 		//If multiplayer not started, we execute 
-		if (!pCore->IsMultiplayerStarted()) {
-			pCore->StartMultiplayer();
+		if (!CCore::Instance()->IsMultiplayerStarted()) {
+			CCore::Instance()->StartMultiplayer();
 		}
 
 		// Move to the next step
@@ -461,7 +496,7 @@ void CServerBrowser::StartConnection ( void )
 void CServerBrowser::ProcessConnection( void )
 {
 	// Attempt to connect to the server
-	eNetworkResponse response = pCore->GetNetworkModule()->Connect( m_strServerIP, m_iServerPort, m_strServerPassword );
+	eNetworkResponse response = CCore::Instance()->GetNetworkModule()->Connect(m_strServerIP, m_iServerPort, m_strServerPassword);
 
 	// Get the response string
 	String strMessage( "An unknown error occurred." );
@@ -493,7 +528,7 @@ void CServerBrowser::ProcessConnection( void )
 bool CServerBrowser::Event_OnMouseClick( CGUIElement_Impl * pElement )
 {
 	// Get the serverbrowser instance
-	CServerBrowser * pInst = pCore->GetGUI()->GetServerBrowser();
+	CServerBrowser * pInst = CCore::Instance()->GetGUI()->GetServerBrowser();
 
 	// Was the clicked element the server grid list?
 	if( pElement == pInst->GetServerGridList( ServerBrowserType::INTERNET ) || pElement == pInst->GetServerGridList( ServerBrowserType::HOSTED ) ||
@@ -511,7 +546,7 @@ bool CServerBrowser::Event_OnMouseClick( CGUIElement_Impl * pElement )
 bool CServerBrowser::Event_OnMouseDoubleClick( CGUIMouseEventArgs args )
 {
 	// Get the serverbrowser instance
-	CServerBrowser * pInst = pCore->GetGUI()->GetServerBrowser();
+	CServerBrowser * pInst = CCore::Instance()->GetGUI()->GetServerBrowser();
 
 	// Was the clicked element the server grid list?
 	if( args.pWindow == pInst->GetServerGridList( ServerBrowserType::INTERNET ) || args.pWindow == pInst->GetServerGridList( ServerBrowserType::HOSTED ) ||
@@ -529,7 +564,7 @@ bool CServerBrowser::Event_OnMouseDoubleClick( CGUIMouseEventArgs args )
 void CServerBrowser::Event_MasterListQueryHandler( const std::vector<String>& servers )
 {
 	// Get the current server list
-	CServerList * pList = pCore->GetGUI()->GetServerBrowser()->GetServerList( pCore->GetGUI()->GetServerBrowser()->GetCurrentServerBrowserType() );
+	CServerList * pList = CCore::Instance()->GetGUI()->GetServerBrowser()->GetServerList(CCore::Instance()->GetGUI()->GetServerBrowser()->GetCurrentServerBrowserType());
 
 	// Loop over all servers in the vector
 	for ( auto server : servers )
@@ -558,7 +593,7 @@ void CServerBrowser::Refresh( void )
 	m_pPlayersGridList->Clear ();
 
 	// Hide the connect button
-	pCore->GetGUI()->GetMainMenu()->SetConnectButtonVisible( false );
+	CCore::Instance()->GetGUI()->GetMainMenu()->SetConnectButtonVisible(false);
 
 	// Reset totals
 	m_iTotalServers = m_iTotalPlayers = m_iAvailableSlots = 0;
@@ -600,7 +635,7 @@ void CServerBrowser::OnClick( CGUIElement_Impl * pElement )
 	if( m_pServerGridList[ type ]->GetSelectedCount() > 0 )
 	{
 		// Enable the connection button in the main menu
-		pCore->GetGUI()->GetMainMenu()->SetConnectButtonVisible( true );
+		CCore::Instance()->GetGUI()->GetMainMenu()->SetConnectButtonVisible(true);
 
 		// Get the selected row index
 		int iSelectedIndex = m_pServerGridList[ type ]->GetSelectedItemRow();
@@ -635,7 +670,7 @@ void CServerBrowser::OnClick( CGUIElement_Impl * pElement )
 	else
 	{
 		// Disable the connection button
-		pCore->GetGUI()->GetMainMenu()->SetConnectButtonVisible( false );
+		CCore::Instance()->GetGUI()->GetMainMenu()->SetConnectButtonVisible(false);
 	}
 }
 
@@ -749,14 +784,14 @@ void CServerBrowser::ProcessNetworkPacket( DefaultMessageIDTypes packet )
 	if( packet == ID_CONNECTION_REQUEST_ACCEPTED )
 	{
 		// Set the server information
-		pCore->SetHost( m_strServerIP );
-		pCore->SetPort( m_iServerPort );
+		CCore::Instance()->SetHost(m_strServerIP);
+		CCore::Instance()->SetPort(m_iServerPort);
 
 		// Hide the mouse cursor
-		pCore->GetGUI()->SetCursorVisible( false );
+		CCore::Instance()->GetGUI()->SetCursorVisible(false);
 
 		// Show the chat
-		pCore->GetChat()->SetVisible( true );
+		CCore::Instance()->GetChat()->SetVisible(true);
 
 		// Hide the message box
 		m_pMessageBox->SetVisible ( false );
@@ -783,7 +818,7 @@ void CServerBrowser::ProcessNetworkPacket( DefaultMessageIDTypes packet )
 	CServerBrowser::SetDisconnectReason(true, strMessage);
 
 	// We show back the main menu 
-	pCore->GetGUI()->GetMainMenu()->SetVisible(true);
+	CCore::Instance()->GetGUI()->GetMainMenu()->SetVisible(true);
 }
 
 void CServerBrowser::SetDisconnectReason( bool bDisconnect, const char * szReason, ... )
@@ -792,10 +827,10 @@ void CServerBrowser::SetDisconnectReason( bool bDisconnect, const char * szReaso
 	if( bDisconnect )
 	{
 		// Stop multiplayer
-		pCore->StopMultiplayer();
+		CCore::Instance()->StopMultiplayer();
 
 		// Start multiplayer
-		pCore->StartMultiplayer();
+		CCore::Instance()->StartMultiplayer();
 	}
 
 	// Get the arguments
@@ -816,7 +851,7 @@ void CServerBrowser::SetDisconnectReason( bool bDisconnect, const char * szReaso
 
 	// Disconnect from the network
 	if( bDisconnect )
-		pCore->GetNetworkModule()->Disconnect(false);
+		CCore::Instance()->GetNetworkModule()->Disconnect(false);
 }
 
 void CServerBrowser::SetMessageBox ( const char * szTitle, const char * szCaption )

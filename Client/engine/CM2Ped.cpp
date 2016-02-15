@@ -7,15 +7,24 @@
 *
 ***************************************************************/
 
-#include "../StdInc.h"
+#include "BaseInc.h"
 
-extern	CCore			* pCore;
+#include "CNetworkPlayer.h"
+#include "CLocalPlayer.h"
+#include "CPlayerManager.h"
+#include "CCore.h"
+
+#include "CM2Entity.h"
+#include "CM2Ped.h"
+
+#include "CM2SyncObject.h"
+
+#include "SharedUtility.h"
 
 CM2Ped::CM2Ped( M2Ped * pPed ) : CM2Entity( pPed )
 {
 	DEBUG_TRACE("CM2Ped::CM2Ped");
 
-	// Set the ped
 	SetPed( pPed );
 }
 
@@ -28,7 +37,6 @@ BYTE CM2Ped::GetControlState( void )
 {
 	DEBUG_TRACE("CM2Ped::GetControlStyle");
 
-	// Is the ped valid?
 	if( m_pPed )
 		return (BYTE)m_pPed->m_playerControls.m_ePlayerMovementState;
 
@@ -39,7 +47,6 @@ DWORD CM2Ped::GetState( void )
 {
 	DEBUG_TRACE("CM2Ped::GetState");
 
-	// Is the ped valid?
 	if( m_pPed )
 		return 0; //return m_pPed->m_dwState;
 
@@ -50,7 +57,6 @@ void CM2Ped::SetInfiniteAmmo( bool bInfiniteAmmo )
 {
 	DEBUG_TRACE("CM2Ped::SetInifiniteAmmo");
 
-	// Is the ped valid?
 	if( m_pPed && m_pPed->m_pWeaponData )
 		m_pPed->m_pWeaponData->m_bInifiniteAmmo = bInfiniteAmmo;
 }
@@ -59,7 +65,6 @@ bool CM2Ped::HasInfiniteAmmo( void )
 {
 	DEBUG_TRACE("CM2Ped::HasInifiniteAmmo");
 
-	// Is the ped valid?
 	if( m_pPed && m_pPed->m_pWeaponData )
 		return m_pPed->m_pWeaponData->m_bInifiniteAmmo;
 
@@ -70,20 +75,21 @@ void CM2Ped::SetSelectedWeapon( DWORD dwWeapon, bool bUseAnimation )
 {
 	DEBUG_TRACE("CM2Ped::SetSelectedWeapon");
 
-	// Is the ped valid?
 	if( m_pPed && m_pPed->m_pEntityData )
 	{
-		// Is the weapon invalid?
 		if( dwWeapon < 0 || dwWeapon > 21 )
 			return;
 
 		void* pEntityData = m_pPed->m_pEntityData;
 		
-		_asm push 0;
-		_asm push bUseAnimation;
-		_asm push dwWeapon;
-		_asm mov ecx, pEntityData;
-		_asm call COffsets::FUNC_CHuman__InventorySelect;
+		_asm
+		{
+			push 0;
+			push bUseAnimation;
+			push dwWeapon;
+			mov ecx, pEntityData;
+			call COffsets::FUNC_CHuman__InventorySelect;
+		}
 	}
 }
 
@@ -91,7 +97,6 @@ DWORD CM2Ped::GetSelectedWeapon( void )
 {
 	DEBUG_TRACE("CM2Ped::GetSelectedWeapon");
 
-	// Is the ped valid?
 	if( m_pPed && m_pPed->m_pInventory )
 		return m_pPed->m_pInventory->m_dwSelectedWeapon;
 
@@ -102,7 +107,6 @@ bool CM2Ped::IsAiming( void )
 {
 	DEBUG_TRACE("CM2Ped::IsAiming");
 
-	// Is the ped valid?
 	if( m_pPed )
 		return (m_pPed->m_playerControls.m_bIsAiming);
 
@@ -113,7 +117,6 @@ bool CM2Ped::IsShooting( void )
 {
 	DEBUG_TRACE("CM2Ped::IsShooting");
 
-	// Is the ped valid?
 	if( m_pPed )
 		return false; // todo fix
 
@@ -124,7 +127,6 @@ bool CM2Ped::IsCrouching(void)
 {
 	DEBUG_TRACE("CM2Ped::IsCrouching");
 
-	// Is the ped valid
 	if (m_pPed)
 		return (m_pPed->m_playerControls.m_bIsCrouching);
 
@@ -135,7 +137,6 @@ void CM2Ped::SetCrouching(bool bCrouching)
 {
 	DEBUG_TRACE("CM2Ped::IsCrouching");
 
-	// Is the ped valid
 	if (m_pPed)
 		m_pPed->m_playerControls.m_bIsCrouching = bCrouching;
 }
@@ -144,7 +145,6 @@ bool CM2Ped::IsMoving(void)
 {
 	DEBUG_TRACE("CM2Ped::IsMoving");
 
-	// Is the ped valid
 	if (m_pPed)
 		return (m_pPed->m_playerControls.m_bIsMoving);
 
@@ -155,14 +155,16 @@ void CM2Ped::SetHealth( float fHealth )
 {
 	DEBUG_TRACE("CM2Ped::SetHealth");
 
-	// Is the ped valid?
 	if( m_pPed && m_pPed->m_pEntityData )
 	{
 		void* pEntityData = m_pPed->m_pEntityData;
 
-		_asm push fHealth;
-		_asm mov ecx, pEntityData;
-		_asm call COffsets::FUNC_CHuman__SetHealth;
+		_asm
+		{
+			push fHealth;
+			mov ecx, pEntityData;
+			call COffsets::FUNC_CHuman__SetHealth;
+		}
 	}
 }
 
@@ -170,7 +172,6 @@ float CM2Ped::GetHealth( void )
 {
 	DEBUG_TRACE("CM2Ped::GetHealth");
 
-	// Is the ped valid?
 	if( m_pPed )
 		return m_pPed->m_fHealth;
 
@@ -181,7 +182,6 @@ float CM2Ped::GetHealthMax( void )
 {
 	DEBUG_TRACE("CM2Ped::GetHealthMax");
 
-	// Is the ped valid?
 	if( m_pPed )
 		return m_pPed->m_fHealthMax;
 
@@ -194,14 +194,16 @@ float CM2Ped::GetRealHealth( void )
 
 	float fRealHealth = 0.0f;
 
-	// Is the ped valid?
 	if( m_pPed && m_pPed->m_pEntityData )
 	{
 		void* pEntityData = m_pPed->m_pEntityData;
 
-		_asm mov ecx, pEntityData;
-		_asm call COffsets::FUNC_CHuman__GetRealHealth;
-		_asm mov fRealHealth, eax;
+		_asm
+		{
+			mov ecx, pEntityData;
+			call COffsets::FUNC_CHuman__GetRealHealth;
+			mov fRealHealth, eax;
+		}
 	}
 
 	return fRealHealth;
@@ -211,7 +213,6 @@ void CM2Ped::SetInvulnerable( bool bInvulnerable )
 {
 	DEBUG_TRACE("CM2Ped::SetInvulnerable");
 
-	// Is the ped valid?
 	if( m_pPed )
 		m_pPed->m_bInvulnerable = bInvulnerable;
 }
@@ -220,7 +221,6 @@ bool CM2Ped::IsInvulnerable( void )
 {
 	DEBUG_TRACE("CM2Ped::IsInvulnerable");
 
-	// Is the ped valid?
 	if( m_pPed )
 		return m_pPed->m_bInvulnerable;
 
@@ -231,19 +231,20 @@ void CM2Ped::GiveWeapon( DWORD dwWeapon, DWORD dwAmmo )
 {
 	DEBUG_TRACE("CM2Ped::GiveWeapon");
 
-	// Is the ped valid?
 	if( m_pPed && m_pPed->m_pWeaponData )
 	{
-		// Is the weapon invalid?
 		if( dwWeapon <= 0 || dwWeapon > 21 )
 			return;
 
 		M2WeaponData * pWeaponData = m_pPed->m_pWeaponData;
 
-		_asm push dwAmmo;
-		_asm push dwWeapon;
-		_asm mov ecx, pWeaponData;
-		_asm call COffsets::FUNC_CHuman__InventoryAddWeapon;
+		_asm
+		{
+			push dwAmmo;
+			push dwWeapon;
+			mov ecx, pWeaponData;
+			call COffsets::FUNC_CHuman__InventoryAddWeapon;
+		}
 	}
 }
 
@@ -251,7 +252,6 @@ void CM2Ped::RemoveWeapon( DWORD dwWeapon, DWORD dwAmmo )
 {
 	DEBUG_TRACE("CM2Ped::RemoveWeapon");
 
-	// Is the ped valid?
 	if( m_pPed && m_pPed->m_pWeaponData )
 	{
 		M2WeaponData * pWeaponData = m_pPed->m_pWeaponData;
@@ -259,9 +259,12 @@ void CM2Ped::RemoveWeapon( DWORD dwWeapon, DWORD dwAmmo )
 		// Are we completely removing the weapon?
 		if( dwAmmo == 0 )
 		{
-			_asm push dwWeapon;
-			_asm mov ecx, pWeaponData;
-			_asm call COffsets::FUNC_CHuman__InventoryRemoveWeapon;
+			_asm
+			{
+				push dwWeapon;
+				mov ecx, pWeaponData;
+				call COffsets::FUNC_CHuman__InventoryRemoveWeapon;
+			}
 		}
 		else
 		{
@@ -272,13 +275,10 @@ void CM2Ped::RemoveWeapon( DWORD dwWeapon, DWORD dwAmmo )
 
 void CM2Ped::RemoveAllWeapons ( void )
 {
-	// Is the ped valid?
 	if ( m_pPed )
 	{
-		// Loop over each weapon
 		for ( int i = 2; i < 22; i++ )
 		{
-			// Remove the current weapon
 			RemoveWeapon ( i );
 		}
 	}
@@ -288,15 +288,17 @@ void CM2Ped::ReloadWeapon( void )
 {
 	DEBUG_TRACE("CM2Ped::ReloadWeapon");
 
-	// Is the ped valid?
 	if( m_pPed && m_pPed->m_pWeaponData )
 	{
 		M2WeaponData * pWeaponData = m_pPed->m_pWeaponData;
 
-		_asm push -1;						// unknown (something with model reload?)
-		_asm push 0;						// weapon inventory index
-		_asm mov ecx, pWeaponData;
-		_asm call COffsets::FUNC_CHuman__InventoryDoReload;
+		_asm
+		{
+			push -1;						// unknown (something with model reload?)
+			push 0;						// weapon inventory index
+			mov ecx, pWeaponData;
+			call COffsets::FUNC_CHuman__InventoryDoReload;
+		}
 	}
 }
 
@@ -306,19 +308,20 @@ bool CM2Ped::HaveThrowingWeaponInHand( void )
 
 	bool bHaveThrowingWeaponInHand = false;
 
-	// Is the ped valid?
 	if( m_pPed && m_pPed->m_pProjectileInventory )
 	{
 		void* pProjectileInventory = m_pPed->m_pProjectileInventory;
 
-		_asm mov ecx, pProjectileInventory;
-		_asm call COffsets::FUNC_CHuman__HaveThrowingWeaponInHand;
-		_asm mov bHaveThrowingWeaponInHand, al;
+		_asm
+		{
+			mov ecx, pProjectileInventory;
+			call COffsets::FUNC_CHuman__HaveThrowingWeaponInHand;
+			mov bHaveThrowingWeaponInHand, al;
+		}
 	}
 
 	return bHaveThrowingWeaponInHand;
 
-	// Is the ped valid?
 	//if( m_pPed )
 	//	return (((*(DWORD *)m_pPed->m_pProjectileInventory->m_pUnknown + 0x24) >> 21) & 1);
 
@@ -329,16 +332,17 @@ bool CM2Ped::HasItem ( DWORD dwItem )
 {
 	bool bHasItem = false;
 
-	// Is the ped valid?
 	if( m_pPed && m_pPed->m_pWeaponData )
 	{
-		//
 		M2WeaponData * pWeaponData = m_pPed->m_pWeaponData;
 
-		_asm push dwItem;
-		_asm mov ecx, pWeaponData;
-		_asm call COffsets::FUNC_CHuman__InventoryHaveItem;
-		_asm mov bHasItem, al;
+		_asm
+		{
+			push dwItem;
+			mov ecx, pWeaponData;
+			call COffsets::FUNC_CHuman__InventoryHaveItem;
+			mov bHasItem, al;
+		}
 	}
 
 	return bHasItem;
@@ -350,7 +354,6 @@ C_SyncObject * CM2Ped::GetInOutVehicle( M2Vehicle * pVehicle, int iSeat, bool bE
 
 	C_SyncObject * pReturnObj = NULL;
 
-	// Is the ped valid?
 	if( m_pPed && m_pPed->m_pEntityData )
 	{
 		M2EntityData * pEntityData = m_pPed->m_pEntityData;
@@ -362,7 +365,6 @@ C_SyncObject * CM2Ped::GetInOutVehicle( M2Vehicle * pVehicle, int iSeat, bool bE
 		else
 			iSeat -= 1;
 
-		// Is the seat invalid?
 		if( iSeat < 0 )
 			iSeat = 0;
 
@@ -372,16 +374,19 @@ C_SyncObject * CM2Ped::GetInOutVehicle( M2Vehicle * pVehicle, int iSeat, bool bE
 
 		CLogFile::Printf( "pVehicle: 0x%p, iSeat: %d, Forced: %s", pVehicle, iSeat, (bForced ? "yes" : "no") );
 
-		_asm push 2;
-		_asm push 0;
-		_asm push bForced;
-		_asm push iSeat;
-		_asm push iEnter;
-		_asm push pVehicle;
-		_asm lea ecx, pReturnObj;
-		_asm push ecx;
-		_asm mov ecx, pEntityData;
-		_asm call COffsets::FUNC_CHuman__GetInOutCar;
+		_asm
+		{
+			push 2;
+			push 0;
+			push bForced;
+			push iSeat;
+			push iEnter;
+			push pVehicle;
+			lea ecx, pReturnObj;
+			push ecx;
+			mov ecx, pEntityData;
+			call COffsets::FUNC_CHuman__GetInOutCar;
+		}
 
 		CLogFile::Printf( "call done!" );
 	}
@@ -393,7 +398,6 @@ M2Vehicle * CM2Ped::GetCurrentVehicle( void )
 {
 	DEBUG_TRACE("CM2Ped::GetCurrentVehicle");
 
-	// Is the ped valid?
 	if( m_pPed )
 		return m_pPed->m_pCurrentVehicle;
 
@@ -404,7 +408,6 @@ void CM2Ped::AddMoney( int iDollars, int iCents )
 {
 	DEBUG_TRACE("CM2Ped::AddMoney");
 
-	// Is the ped valid?
 	if( m_pPed )
 	{
 		// If we want to disable hud OR sound
@@ -416,10 +419,13 @@ void CM2Ped::AddMoney( int iDollars, int iCents )
 		int iMoney = SharedUtility::int_concat( iDollars, iCents );
 		void * pHumanInventory = m_pPed->m_pWeaponData;
 
-		_asm push 0;
-		_asm push iMoney;
-		_asm mov ecx, pHumanInventory;
-		_asm call C_Human__InventoryAddMoney;
+		_asm
+		{
+			push 0;
+			push iMoney;
+			mov ecx, pHumanInventory;
+			call C_Human__InventoryAddMoney;
+		}
 	}
 }
 
@@ -427,18 +433,19 @@ void CM2Ped::RemoveMoney( int iDollars, int iCents )
 {
 	DEBUG_TRACE("CM2Ped::RemoveMoney");
 
-	// Is the ped valid?
 	if( m_pPed )
 	{
-		//
 		DWORD C_Human__InventoryRemoveMoney = 0x93BE60;
 		int iMoney = SharedUtility::int_concat( iDollars, iCents );
 		void * pHumanInventory = m_pPed->m_pWeaponData;
 
-		_asm push 0;
-		_asm push iMoney;
-		_asm mov ecx, pHumanInventory;
-		_asm call C_Human__InventoryRemoveMoney;
+		_asm
+		{
+			push 0;
+			push iMoney;
+			mov ecx, pHumanInventory;
+			call C_Human__InventoryRemoveMoney;
+		}
 	}
 }
 
@@ -448,7 +455,6 @@ float CM2Ped::GetMoney( void )
 
 	float fMoney = 0.0f;
 
-	// Is the ped valid?
 	if( m_pPed )
 	{
 		DWORD C_Human__InventoryGetMoney = 0x931B80;
@@ -456,9 +462,12 @@ float CM2Ped::GetMoney( void )
 
 		int money;
 
-		_asm mov ecx, pInventoryData;
-		_asm call C_Human__InventoryGetMoney;
-		_asm mov money, eax;
+		_asm
+		{
+			mov ecx, pInventoryData;
+			call C_Human__InventoryGetMoney;
+			mov money, eax;
+		}
 
 		CLogFile::Printf ( "CASH: %d (%f)", money, (double)money );
 	}
@@ -466,29 +475,30 @@ float CM2Ped::GetMoney( void )
 	return fMoney;
 }
 
-//
+
 C_SyncObject * CM2Ped::MoveVec( CVector3 vecPosition, M2Enums::eMoveType moveType, CVector3 vecEndDir )
 {
 	DEBUG_TRACE("CM2Ped::MoveVec");
 
-	// Is the entity valid?
 	if( m_pPed && m_pPed->m_pEntityData )
 	{
-		//
 		C_SyncObject * pSyncObject;
 		void * pEntityData = m_pPed->m_pEntityData;
 		int iMoveType = (int)moveType;
 
-		_asm push 1;
-		_asm lea ecx, vecEndDir;
-		_asm push ecx;
-		_asm push iMoveType;
-		_asm lea ecx, vecPosition;
-		_asm push ecx;
-		_asm lea ecx, pSyncObject;
-		_asm push ecx;
-		_asm mov ecx, pEntityData;
-		_asm call COffsets::FUNC_CHuman__MoveVec;
+		_asm
+		{
+			push 1;
+			lea ecx, vecEndDir;
+			push ecx;
+			push iMoveType;
+			lea ecx, vecPosition;
+			push ecx;
+			lea ecx, pSyncObject;
+			push ecx;
+			mov ecx, pEntityData;
+			call COffsets::FUNC_CHuman__MoveVec;
+		}
 
 		return pSyncObject;
 	}
@@ -500,27 +510,29 @@ C_SyncObject * CM2Ped::AimAt( CVector3 vecPosition )
 {
 	DEBUG_TRACE("CM2Ped::AimAt");
 
-	// Is the entity valid?
 	if( m_pPed && m_pPed->m_pEntityData )
 	{
-		//
 		C_SyncObject * pSyncObject;
 		void* pEntityData = m_pPed->m_pEntityData;
 
 		M2Entity * pEnt = NULL;
 
 		// Get the localplayer entity
-		if( pCore->GetPlayerManager()->GetLocalPlayer() && pCore->GetPlayerManager()->GetLocalPlayer()->IsSpawned() )
-			pEnt = pCore->GetPlayerManager()->GetLocalPlayer()->GetPlayerPed()->GetPed();
+		CLocalPlayer *pLocalPlayer = CLocalPlayer::Instance();
+		if( pLocalPlayer && pLocalPlayer->IsSpawned() )
+			pEnt = pLocalPlayer->GetPlayerPed()->GetPed();
 
-		_asm push 1;
-		_asm lea ecx, vecPosition;
-		_asm push ecx;
-		_asm push pEnt;
-		_asm lea ecx, pSyncObject;
-		_asm push ecx;
-		_asm mov ecx, pEntityData;
-		_asm call COffsets::FUNC_CHuman__AimAt;
+		_asm
+		{
+			push 1;
+			lea ecx, vecPosition;
+			push ecx;
+			push pEnt;
+			lea ecx, pSyncObject;
+			push ecx;
+			mov ecx, pEntityData;
+			call COffsets::FUNC_CHuman__AimAt;
+		}
 
 		return pSyncObject;
 	}
@@ -532,26 +544,27 @@ C_SyncObject * CM2Ped::ShootAt( CVector3 vecPosition )
 {
 	DEBUG_TRACE("CM2Ped::ShootAt");
 
-	// Is the entity valid?
 	if( m_pPed && m_pPed->m_pEntityData )
 	{
-		//
 		C_SyncObject * pSyncObject;
 		void* pEntityData = m_pPed->m_pEntityData;
 		CVector3 vecUnknown( 0.0f, 0.0f, 0.0f );
 
-		_asm push 1;
-		_asm push 50;
-		_asm lea ecx, vecUnknown;
-		_asm push ecx;
-		_asm lea ecx, vecUnknown;
-		_asm push ecx;
-		_asm lea ecx, vecPosition;
-		_asm push ecx;
-		_asm lea ecx, pSyncObject;
-		_asm push ecx;
-		_asm mov ecx, pEntityData;
-		_asm call COffsets::FUNC_CHuman__ShootAt;
+		_asm
+		{
+			push 1;
+			push 50;
+			lea ecx, vecUnknown;
+			push ecx;
+			lea ecx, vecUnknown;
+			push ecx;
+			lea ecx, vecPosition;
+			push ecx;
+			lea ecx, pSyncObject;
+			push ecx;
+			mov ecx, pEntityData;
+			call COffsets::FUNC_CHuman__ShootAt;
+		}
 
 		return pSyncObject;
 	}
@@ -563,27 +576,28 @@ C_SyncObject * CM2Ped::LookAt ( CVector3 vecPosition )
 {
 	DEBUG_TRACE("CM2Ped::LookAt");
 
-	// Is the entity valid?
 	if ( m_pPed && m_pPed->m_pEntityData )
 	{
-		//
 		C_SyncObject * pSyncObject;
 		void* pEntityData = m_pPed->m_pEntityData;
 
 		M2Entity * pEnt = NULL;
 
-		// Get the localplayer entity
-		if( pCore->GetPlayerManager()->GetLocalPlayer() && pCore->GetPlayerManager()->GetLocalPlayer()->IsSpawned() )
-			pEnt = pCore->GetPlayerManager()->GetLocalPlayer()->GetPlayerPed()->GetPed();
+		CLocalPlayer *pLocalPlayer = CLocalPlayer::Instance();
+		if( pLocalPlayer && pLocalPlayer->IsSpawned() )
+			pEnt = pLocalPlayer->GetPlayerPed()->GetPed();
 
-		_asm push 1;
-		_asm lea ecx, vecPosition;
-		_asm push ecx;
-		_asm push pEnt;
-		_asm lea ecx, pSyncObject;
-		_asm push ecx;
-		_asm mov ecx, pEntityData;
-		_asm call COffsets::FUNC_CHuman__LookAt;
+		_asm
+		{
+			push 1;
+			lea ecx, vecPosition;
+			push ecx;
+			push pEnt;
+			lea ecx, pSyncObject;
+			push ecx;
+			mov ecx, pEntityData;
+			call COffsets::FUNC_CHuman__LookAt;
+		}
 
 		return pSyncObject;
 	}
@@ -624,9 +638,12 @@ void CM2Ped::StopAnimation(char *strAnimation)
 		int iAnimation = (int)strAnimation;// trololol
 		DWORD dwAddress = 0xD6FD70; // hacky, todo fix
 
-		_asm push iAnimation;
-		_asm mov ecx, pEntityData;
-		_asm call dwAddress;
+		_asm
+		{
+			push iAnimation;
+			mov ecx, pEntityData;
+			call dwAddress;
+		}
 	}
 }
 
@@ -641,10 +658,13 @@ bool CM2Ped::IsAnimFinished(char *strAnimation)
 		int iAnimation = (int)strAnimation;// trololol
 		DWORD dwAddress = 0xD6FD40; // hacky, todo fix
 
-		_asm push iAnimation;
-		_asm mov ecx, pEntityData;
-		_asm call dwAddress;
-		_asm mov bReturn, al;
+		_asm
+		{
+			push iAnimation;
+			mov ecx, pEntityData;
+			call dwAddress;
+			mov bReturn, al;
+		}
 
 		return bReturn;
 	}
@@ -653,37 +673,46 @@ bool CM2Ped::IsAnimFinished(char *strAnimation)
 
 void CM2Ped::ModelToHand(int iHand, int iModel)
 {
-	if (iHand == 1 || iHand == 2) // 1 : right hand & 2 : left hand
+	if (iHand != 1 && iHand != 2) // 1 : right hand & 2 : left hand
+		return;
+
+	if (iModel < 0 || iModel > 120)
+		return;
+
+	if (!m_pPed)
+		return;
+
+	M2EntityData* pEntityData = m_pPed->m_pEntityData;
+
+	DWORD func = 0x90C860;
+
+	_asm
 	{
-		if (iModel >= 0 && iModel <= 120)
-		{
-			if (m_pPed){
-				M2EntityData* pEntityData = m_pPed->m_pEntityData;
-
-				DWORD func = 0x90C860;
-
-				_asm push 1; // Hand or unk
-				_asm push iModel; // Model
-				_asm push iHand; // Unk or hand
-				_asm mov ecx, pEntityData;
-				_asm call func;
-			}
-		}
+		push 1; // Hand or unk
+		push iModel; // Model
+		push iHand; // Unk or hand
+		mov ecx, pEntityData;
+		call func;
 	}
 }
 
 void CM2Ped::SetAnimStyle(const char *dir, const char *set)
 {
-	if (strlen(dir) > 0 && strlen(set) > 0){
-		if (m_pPed){
-			M2EntityData *pEntityData = pCore->GetPlayerManager()->GetLocalPlayer()->GetPlayerPed()->GetPed()->m_pEntityData;
+	if (strlen(dir) <= 0 || strlen(set) <= 0)
+		return;
 
-			DWORD func = 0x956720;
+	if (!m_pPed)
+		return;
 
-			_asm push set;
-			_asm push dir;
-			_asm mov ecx, pEntityData;
-			_asm call func;
-		}
+	M2EntityData *pEntityData = CLocalPlayer::Instance()->GetPlayerPed()->GetPed()->m_pEntityData;
+
+	DWORD func = 0x956720;
+
+	_asm
+	{
+		push set;
+		push dir;
+		mov ecx, pEntityData;
+		call func;
 	}
 }

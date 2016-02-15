@@ -7,36 +7,44 @@
 *
 ***************************************************************/
 
-#include "StdInc.h"
+#include "BaseInc.h"
 
-extern CCore * pCore;
+#include "CCommon.h"
 
-CAudioManager::CAudioManager() : m_bMuted(false)
+#include "CAudio.h"
+#include "CAudioManager.h"
+
+#include "CLogFile.h"
+#include "CString.h"
+#include "SharedUtility.h"
+
+#include "../bass/bass.h" // todo: remove ../
+
+CAudioManager::CAudioManager()
+	: m_bMuted(false)
 {
-
 }
 
 CAudioManager::~CAudioManager()
 {
-	// Remove all audio
 	RemoveAll();
-
-	// Free BASS audio library
 	BASS_Free();
 }
 
 bool CAudioManager::Initialize()
 {
-	// BASS version check
-	if (HIWORD(BASS_GetVersion()) != BASSVERSION) {
+	if (HIWORD(BASS_GetVersion()) != BASSVERSION)
+	{
 		CLogFile::Printf("Invalid BASS version");
 		return false;
 	}
 
-	// Initialize BASS audio library
-	if(BASS_Init(-1, 44100, 0, 0, NULL) == TRUE)
+	if (BASS_Init(-1, 44100, 0, 0, NULL) == TRUE)
+	{
 		return true;
-	else {
+	}
+	else
+	{
 		CLogFile::Printf("Init error : %d", BASS_ErrorGetCode());
 		return false;
 	}
@@ -93,7 +101,7 @@ void CAudioManager::Process()
 		pAudio->Process();
 }
 
-String CAudioManager::GetYoutubeStreamURL(String link)
+String CAudioManager::GetYoutubeStreamURL(const String& link)
 {
 	String idBuffer;
 	if (SharedUtility::GetHTTPHeaderAndData("kingofmetin.com", String("/yt.php?url=%s", link.Get()).Get(), "", NULL, &idBuffer))

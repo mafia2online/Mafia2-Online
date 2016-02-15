@@ -7,14 +7,45 @@
 *
 ***************************************************************/
 
-#include	"../StdInc.h"
+#include	"../BaseInc.h"
 
-extern	CCore			* pCore;
+#include	"../CCore.h"
+
+#include	"../CGUI.h"
+#include	"../../Shared/CString.h"
+#include	"../../Shared/Math/CVector3.h"
+
+#include	"../CGUICallback.h"
+#include	"../CGUIEvent.h"
+
+#include	"CGUIElement_Impl.h"
+#include	"CGUIFont_Impl.h"
+#include	"CGUIButton_Impl.h"
+#include	"CGUICheckBox_Impl.h"
+#include	"CGUIComboBox_Impl.h"
+#include	"CGUIEdit_Impl.h"
+#include	"CGUIGridList_Impl.h"
+#include	"CGUILabel_Impl.h"
+#include	"CGUIListItem_Impl.h"
+#include	"CGUIMessageBox_Impl.h"
+#include	"CGUIProgressBar_Impl.h"
+#include	"CGUIRadioButton_Impl.h"
+#include	"CGUIScrollBar_Impl.h"
+#include	"CGUIScrollPane_Impl.h"
+#include	"CGUIStaticImage_Impl.h"
+#include	"CGUITab_Impl.h"
+#include	"CGUITabPanel_Impl.h"
+#include	"CGUITexture_Impl.h"
+#include	"CGUIWindow_Impl.h"
+
+#include	"../../Shared/SharedUtility.h"
+
+#include	"CGUI_Impl.h"
 
 CGUI_Impl::CGUI_Impl( IDirect3DDevice9 * pDevice )
 {
 	// Set the current directory to the mod folder
-	SetCurrentDirectory( pCore->GetModDirectory().Get() );
+	SetCurrentDirectory( CCore::Instance()->GetModDirectory().Get() );
 
 	// Store the d3d9 device
 	m_pDevice = pDevice;
@@ -38,7 +69,7 @@ CGUI_Impl::CGUI_Impl( IDirect3DDevice9 * pDevice )
 	CEGUI::Logger::getSingleton().setLogFilename( "logs\\gui.log" );
 
 	// Set the current directory to the gui folder
-	SetCurrentDirectory( String( "%s\\data\\gui\\", pCore->GetModDirectory().Get() ).Get() );
+	SetCurrentDirectory( String( "%s\\data\\gui\\", CCore::Instance()->GetModDirectory().Get() ).Get() );
 
 	try
 	{
@@ -106,7 +137,7 @@ CGUI_Impl::CGUI_Impl( IDirect3DDevice9 * pDevice )
 	pEvents->subscribeEvent( "Window/" + CEGUI::Window::EventMouseLeaves, CEGUI::Event::Subscriber( &CGUI_Impl::Event_MouseLeave, this ) );
 
 	// Reset the current directory
-	SetCurrentDirectory( pCore->GetModDirectory().Get() );
+	SetCurrentDirectory( CCore::Instance()->GetModDirectory().Get() );
 }
 
 CGUI_Impl::~CGUI_Impl( void )
@@ -168,7 +199,7 @@ void CGUI_Impl::OnDeviceLost( void )
 void CGUI_Impl::OnDeviceRestore( void )
 {
 	// Set the current directory to the gui folder
-	SetCurrentDirectory( String( "%s\\data\\gui\\", pCore->GetModDirectory().Get() ).Get() );
+	SetCurrentDirectory( String( "%s\\data\\gui\\", CCore::Instance()->GetModDirectory().Get() ).Get() );
 
 	CLogFile::Printf( "[Graphics] Restoring CEGUI render device..." );
 
@@ -186,7 +217,7 @@ void CGUI_Impl::OnDeviceRestore( void )
 	CLogFile::Printf( "[Graphics] Done!" );
 
 	// Reset the current directory
-	SetCurrentDirectory( pCore->GetModDirectory().Get() );
+	SetCurrentDirectory( CCore::Instance()->GetModDirectory().Get() );
 }
 
 void CGUI_Impl::ProcessMouseInput( eMouseType type, float fX, float fY, int iButton )

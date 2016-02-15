@@ -7,7 +7,11 @@
 *
 ***************************************************************/
 
-#include "../StdInc.h"
+#include "BaseInc.h"
+
+#include "CM2SlotManager.h"
+
+#include "COffsets.h"
 
 const char * CM2SlotManager::GetSlotsNames( void )
 {

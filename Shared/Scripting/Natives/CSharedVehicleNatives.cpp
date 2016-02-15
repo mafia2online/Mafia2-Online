@@ -10,12 +10,24 @@
 #include	"CSharedVehicleNatives.h"
 
 #ifdef _CLIENT
-#include	"../../../Client/StdInc.h"
+#include	"../../../Client/BaseInc.h"
+#include	"../../../Client/CCore.h"
+#include	"../../../Client/CClientScriptingManager.h"
+#include	"../../../Client/CClientScriptGUIManager.h"
+#include	"../../../Client/CVehicleManager.h"
+#include	"../../../Client/CNetworkVehicle.h"
 #else
 #include	"../../../Server/StdInc.h"
 #endif
 
-extern		CCore			* pCore;
+#include	"../../../Shared/CString.h"
+#include	"../../../Shared/CEvents.h"
+#include	"../../../Shared/CCommands.h"
+#include	"../../../Shared/Scripting/CSquirrelCommon.h"
+
+#include	"../../../Shared/Math/CMaths.h"
+#include	"../../../Shared/Math/CVector3.h"
+#include	"../../../Shared/CColor.h"
 
 void CSharedVehicleNatives::Register( CScriptingManager * pScriptingManager )
 {
@@ -71,13 +83,13 @@ SQInteger CSharedVehicleNatives::SetPosition( SQVM * pVM )
 	sq_getfloat( pVM, -3, &vecPosition.fX );
 
 	// Is the vehicle active?
-	if( pCore->GetVehicleManager()->IsActive( vehicleId ) )
+	if( CCore::Instance()->GetVehicleManager()->IsActive( vehicleId ) )
 	{
 		// Set the vehicle position
 #ifdef _CLIENT
-		pCore->GetVehicleManager()->Get( vehicleId )->SetPosition( vecPosition );
+		CCore::Instance()->GetVehicleManager()->Get( vehicleId )->SetPosition( vecPosition );
 #else
-		pCore->GetVehicleManager()->Get( vehicleId )->SetPosition( vecPosition, true );
+		CCore::Instance()->GetVehicleManager()->Get( vehicleId )->SetPosition( vecPosition, true );
 #endif
 
 		sq_pushbool( pVM, true );
@@ -95,11 +107,11 @@ SQInteger CSharedVehicleNatives::GetPosition( SQVM * pVM )
 	sq_getinteger( pVM, -1, &vehicleId );
 
 	// Is the vehicle active?
-	if( pCore->GetVehicleManager()->IsActive( vehicleId ) )
+	if( CCore::Instance()->GetVehicleManager()->IsActive( vehicleId ) )
 	{
 		// Get the vehicle position
 		CVector3 vecPosition;
-		pCore->GetVehicleManager()->Get( vehicleId )->GetPosition( &vecPosition );
+		CCore::Instance()->GetVehicleManager()->Get( vehicleId )->GetPosition( &vecPosition );
 
 		sq_newarray( pVM, 0 );
 
@@ -134,13 +146,13 @@ SQInteger CSharedVehicleNatives::SetRotation( SQVM * pVM )
 	sq_getfloat( pVM, -3, &vecRotation.fX );
 
 	// Is the vehicle active?
-	if( pCore->GetVehicleManager()->IsActive( vehicleId ) )
+	if( CCore::Instance()->GetVehicleManager()->IsActive( vehicleId ) )
 	{
 		// Set the vehicle position
 #ifdef _CLIENT
-		pCore->GetVehicleManager()->Get( vehicleId )->SetPosition( vecRotation );
+		CCore::Instance()->GetVehicleManager()->Get( vehicleId )->SetPosition( vecRotation );
 #else
-		pCore->GetVehicleManager()->Get( vehicleId )->SetRotation( vecRotation, true );
+		CCore::Instance()->GetVehicleManager()->Get( vehicleId )->SetRotation( vecRotation, true );
 #endif
 
 		sq_pushbool( pVM, true );
@@ -159,11 +171,11 @@ SQInteger CSharedVehicleNatives::GetRotation( SQVM * pVM )
 	sq_getinteger( pVM, -1, &vehicleId );
 
 	// Is the vehicle active?
-	if( pCore->GetVehicleManager()->IsActive( vehicleId ) )
+	if( CCore::Instance()->GetVehicleManager()->IsActive( vehicleId ) )
 	{
 		// Get the vehicle position
 		CVector3 vecRotation;
-		pCore->GetVehicleManager()->Get( vehicleId )->GetRotation( &vecRotation );
+		CCore::Instance()->GetVehicleManager()->Get( vehicleId )->GetRotation( &vecRotation );
 
 		sq_newarray( pVM, 0 );
 
@@ -204,10 +216,10 @@ SQInteger CSharedVehicleNatives::SetColour( SQVM * pVM )
 	sq_getinteger( pVM, -1, &b_2 );
 
 	// Is the vehicle active?
-	if( pCore->GetVehicleManager()->IsActive( vehicleId ) )
+	if( CCore::Instance()->GetVehicleManager()->IsActive( vehicleId ) )
 	{
 		// Set the vehicle colour
-		pCore->GetVehicleManager()->Get( vehicleId )->SetColour( CColor ( r_1, g_1, b_1, 255 ), CColor ( r_2, g_2, b_2, 255 ) );
+		CCore::Instance()->GetVehicleManager()->Get( vehicleId )->SetColour( CColor ( r_1, g_1, b_1, 255 ), CColor ( r_2, g_2, b_2, 255 ) );
 
 		sq_pushbool( pVM, true );
 		return 1;
@@ -224,11 +236,11 @@ SQInteger CSharedVehicleNatives::GetColour( SQVM * pVM )
 	sq_getinteger( pVM, -1, &vehicleId );
 
 	// Is the vehicle active?
-	if( pCore->GetVehicleManager()->IsActive( vehicleId ) )
+	if( CCore::Instance()->GetVehicleManager()->IsActive( vehicleId ) )
 	{
 		// Get the vehicle colour
 		CColor primary, secondary;
-		pCore->GetVehicleManager()->Get( vehicleId )->GetColour( &primary, &secondary );
+		CCore::Instance()->GetVehicleManager()->Get( vehicleId )->GetColour( &primary, &secondary );
 
 		sq_newarray( pVM, 0 );
 
@@ -269,10 +281,10 @@ SQInteger CSharedVehicleNatives::SetPlateText( SQVM * pVM )
 	sq_getstring( pVM, -1, &szPlateText );
 
 	// Is the vehicle active?
-	if( pCore->GetVehicleManager()->IsActive( vehicleId ) )
+	if( CCore::Instance()->GetVehicleManager()->IsActive( vehicleId ) )
 	{
 		// Set the vehicle plate text
-		pCore->GetVehicleManager()->Get( vehicleId )->SetPlateText( szPlateText );
+		CCore::Instance()->GetVehicleManager()->Get( vehicleId )->SetPlateText( szPlateText );
 
 		sq_pushbool( pVM, true );
 		return 1;
@@ -289,10 +301,10 @@ SQInteger CSharedVehicleNatives::GetPlateText( SQVM * pVM )
 	sq_getinteger( pVM, -1, &vehicleId );
 
 	// Is the vehicle active?
-	if( pCore->GetVehicleManager()->IsActive( vehicleId ) )
+	if( CCore::Instance()->GetVehicleManager()->IsActive( vehicleId ) )
 	{
 		// Get the vehicle plate text
-		const char * szText = pCore->GetVehicleManager()->Get( vehicleId )->GetPlateText();
+		const char * szText = CCore::Instance()->GetVehicleManager()->Get( vehicleId )->GetPlateText();
 
 		sq_pushstring( pVM, szText, strlen(szText) );
 		return 1;
@@ -309,10 +321,10 @@ SQInteger CSharedVehicleNatives::Repair( SQVM * pVM )
 	sq_getinteger( pVM, -1, &vehicleId );
 
 	// Is the vehicle active?
-	if( pCore->GetVehicleManager()->IsActive( vehicleId ) )
+	if( CCore::Instance()->GetVehicleManager()->IsActive( vehicleId ) )
 	{
 		// Repair the vehicle
-		pCore->GetVehicleManager()->Get( vehicleId )->Repair();
+		CCore::Instance()->GetVehicleManager()->Get( vehicleId )->Repair();
 
 		sq_pushbool( pVM, true );
 		return 1;
@@ -333,10 +345,10 @@ SQInteger CSharedVehicleNatives::SetDirtLevel( SQVM * pVM )
 	sq_getfloat( pVM, -1, &fDirtLevel );
 
 	// Is the vehicle active?
-	if( pCore->GetVehicleManager()->IsActive( vehicleId ) )
+	if( CCore::Instance()->GetVehicleManager()->IsActive( vehicleId ) )
 	{
 		// Set the vehicle dirt level
-		pCore->GetVehicleManager()->Get( vehicleId )->SetDirtLevel( fDirtLevel );
+		CCore::Instance()->GetVehicleManager()->Get( vehicleId )->SetDirtLevel( fDirtLevel );
 
 		sq_pushbool( pVM, true );
 		return 1;
@@ -353,10 +365,10 @@ SQInteger CSharedVehicleNatives::GetDirtLevel( SQVM * pVM )
 	sq_getinteger( pVM, -1, &vehicleId );
 
 	// Is the vehicle active?
-	if( pCore->GetVehicleManager()->IsActive( vehicleId ) )
+	if( CCore::Instance()->GetVehicleManager()->IsActive( vehicleId ) )
 	{
 		// Get the vehicle dirt level
-		sq_pushfloat( pVM,  pCore->GetVehicleManager()->Get( vehicleId )->GetDirtLevel() );
+		sq_pushfloat( pVM,  CCore::Instance()->GetVehicleManager()->Get( vehicleId )->GetDirtLevel() );
 		return 1;
 	}
 
@@ -375,10 +387,10 @@ SQInteger CSharedVehicleNatives::SetEngineState( SQVM * pVM )
 	sq_getbool( pVM, -1, &bState );
 
 	// Is the vehicle active?
-	if( pCore->GetVehicleManager()->IsActive( vehicleId ) )
+	if( CCore::Instance()->GetVehicleManager()->IsActive( vehicleId ) )
 	{
 		// Set the engine state
-		pCore->GetVehicleManager()->Get( vehicleId )->SetEngineState( bState );
+		CCore::Instance()->GetVehicleManager()->Get( vehicleId )->SetEngineState( bState );
 
 		sq_pushbool( pVM, true );
 		return 1;
@@ -395,10 +407,10 @@ SQInteger CSharedVehicleNatives::GetEngineState( SQVM * pVM )
 	sq_getinteger( pVM, -1, &vehicleId );
 
 	// Is the vehicle active?
-	if( pCore->GetVehicleManager()->IsActive( vehicleId ) )
+	if( CCore::Instance()->GetVehicleManager()->IsActive( vehicleId ) )
 	{
 		// Get the engine state
-		sq_pushbool( pVM, pCore->GetVehicleManager()->Get( vehicleId )->GetEngineState() );
+		sq_pushbool( pVM, CCore::Instance()->GetVehicleManager()->Get( vehicleId )->GetEngineState() );
 		return 1;
 	}
 
@@ -413,10 +425,10 @@ SQInteger CSharedVehicleNatives::Explode( SQVM * pVM )
 	sq_getinteger( pVM, -1, &vehicleId );
 
 	// Is the vehicle active?
-	if( pCore->GetVehicleManager()->IsActive( vehicleId ) )
+	if( CCore::Instance()->GetVehicleManager()->IsActive( vehicleId ) )
 	{
 		// Explode the vehicle
-		pCore->GetVehicleManager()->Get( vehicleId )->Explode();
+		CCore::Instance()->GetVehicleManager()->Get( vehicleId )->Explode();
 
 		sq_pushbool( pVM, true );
 		return 1;
@@ -441,10 +453,10 @@ SQInteger CSharedVehicleNatives::SetPartOpen( SQVM * pVM )
 	sq_getbool( pVM, -1, &bState );
 
 	// Is the vehicle active?
-	if( pCore->GetVehicleManager()->IsActive( vehicleId ) )
+	if( CCore::Instance()->GetVehicleManager()->IsActive( vehicleId ) )
 	{
 		// Toggle the vehicle part
-		pCore->GetVehicleManager()->Get( vehicleId )->SetPartOpen( iPart, bState );
+		CCore::Instance()->GetVehicleManager()->Get( vehicleId )->SetPartOpen( iPart, bState );
 
 		sq_pushbool( pVM, true );
 		return 1;
@@ -465,9 +477,9 @@ SQInteger CSharedVehicleNatives::IsPartOpen( SQVM * pVM )
 	sq_getinteger( pVM, -1, &iPart );
 
 	// Is the vehicle active?
-	if( pCore->GetVehicleManager()->IsActive( vehicleId ) )
+	if( CCore::Instance()->GetVehicleManager()->IsActive( vehicleId ) )
 	{
-		sq_pushbool( pVM, pCore->GetVehicleManager()->Get( vehicleId )->IsPartOpen( iPart ) );
+		sq_pushbool( pVM, CCore::Instance()->GetVehicleManager()->Get( vehicleId )->IsPartOpen( iPart ) );
 		return 1;
 	}
 
@@ -486,10 +498,10 @@ SQInteger CSharedVehicleNatives::SetSirenState( SQVM * pVM )
 	sq_getbool( pVM, -1, &bState );
 
 	// Is the vehicle active?
-	if( pCore->GetVehicleManager()->IsActive( vehicleId ) )
+	if( CCore::Instance()->GetVehicleManager()->IsActive( vehicleId ) )
 	{
 		// Set the siren state
-		pCore->GetVehicleManager()->Get( vehicleId )->SetSirenState( bState );
+		CCore::Instance()->GetVehicleManager()->Get( vehicleId )->SetSirenState( bState );
 
 		sq_pushbool( pVM, true );
 		return 1;
@@ -506,9 +518,9 @@ SQInteger CSharedVehicleNatives::GetSirenState( SQVM * pVM )
 	sq_getinteger( pVM, -1, &vehicleId );
 
 	// Is the vehicle active?
-	if( pCore->GetVehicleManager()->IsActive( vehicleId ) )
+	if( CCore::Instance()->GetVehicleManager()->IsActive( vehicleId ) )
 	{
-		sq_pushbool( pVM, pCore->GetVehicleManager()->Get( vehicleId )->GetSirenState() );
+		sq_pushbool( pVM, CCore::Instance()->GetVehicleManager()->Get( vehicleId )->GetSirenState() );
 		return 1;
 	}
 
@@ -568,10 +580,10 @@ SQInteger CSharedVehicleNatives::SetHornState( SQVM * pVM )
 	sq_getbool( pVM, -1, &bState );
 
 	// Is the vehicle active?
-	if( pCore->GetVehicleManager()->IsActive( vehicleId ) )
+	if( CCore::Instance()->GetVehicleManager()->IsActive( vehicleId ) )
 	{
 		// Set the horn state
-		pCore->GetVehicleManager()->Get( vehicleId )->SetHornState( bState );
+		CCore::Instance()->GetVehicleManager()->Get( vehicleId )->SetHornState( bState );
 
 		sq_pushbool( pVM, true );
 		return 1;
@@ -588,9 +600,9 @@ SQInteger CSharedVehicleNatives::GetHornState( SQVM * pVM )
 	sq_getinteger( pVM, -1, &vehicleId );
 
 	// Is the vehicle active?
-	if( pCore->GetVehicleManager()->IsActive( vehicleId ) )
+	if( CCore::Instance()->GetVehicleManager()->IsActive( vehicleId ) )
 	{
-		sq_pushbool( pVM, pCore->GetVehicleManager()->Get( vehicleId )->GetHornState() );
+		sq_pushbool( pVM, CCore::Instance()->GetVehicleManager()->Get( vehicleId )->GetHornState() );
 		return 1;
 	}
 
@@ -613,10 +625,10 @@ SQInteger CSharedVehicleNatives::SetWindowOpen( SQVM * pVM )
 	sq_getbool( pVM, -1, &bState );
 
 	// Is the vehicle active?
-	if( pCore->GetVehicleManager()->IsActive( vehicleId ) )
+	if( CCore::Instance()->GetVehicleManager()->IsActive( vehicleId ) )
 	{
 		// Set the window state
-		pCore->GetVehicleManager()->Get( vehicleId )->SetWindowOpen( iSeat, bState );
+		CCore::Instance()->GetVehicleManager()->Get( vehicleId )->SetWindowOpen( iSeat, bState );
 
 		sq_pushbool( pVM, true );
 		return 1;
@@ -637,9 +649,9 @@ SQInteger CSharedVehicleNatives::IsWindowOpen( SQVM * pVM )
 	sq_getinteger( pVM, -1, &iSeat );
 
 	// Is the vehicle active?
-	if( pCore->GetVehicleManager()->IsActive( vehicleId ) )
+	if( CCore::Instance()->GetVehicleManager()->IsActive( vehicleId ) )
 	{
-		sq_pushbool( pVM, pCore->GetVehicleManager()->Get( vehicleId )->IsWindowOpen( iSeat ) );
+		sq_pushbool( pVM, CCore::Instance()->GetVehicleManager()->Get( vehicleId )->IsWindowOpen( iSeat ) );
 		return 1;
 	}
 
@@ -658,9 +670,9 @@ SQInteger CSharedVehicleNatives::SetTuningTable( SQVM * pVM )
 	sq_getinteger( pVM, -1, &iTable );
 
 	// Is the vehicle active?
-	if( pCore->GetVehicleManager()->IsActive( vehicleId ) )
+	if( CCore::Instance()->GetVehicleManager()->IsActive( vehicleId ) )
 	{
-		pCore->GetVehicleManager()->Get( vehicleId )->SetTuningTable( Math::Clamp< SQInteger >( 0, iTable, 3 ) );
+		CCore::Instance()->GetVehicleManager()->Get( vehicleId )->SetTuningTable( Math::Clamp< SQInteger >( 0, iTable, 3 ) );
 		sq_pushbool( pVM, true );
 		return 1;
 	}
@@ -676,9 +688,9 @@ SQInteger CSharedVehicleNatives::GetTuningTable( SQVM * pVM )
 	sq_getinteger( pVM, -1, &vehicleId );
 
 	// Is the vehicle active?
-	if( pCore->GetVehicleManager()->IsActive( vehicleId ) )
+	if( CCore::Instance()->GetVehicleManager()->IsActive( vehicleId ) )
 	{
-		sq_pushinteger( pVM, pCore->GetVehicleManager()->Get( vehicleId )->GetTuningTable() );
+		sq_pushinteger( pVM, CCore::Instance()->GetVehicleManager()->Get( vehicleId )->GetTuningTable() );
 		return 1;
 	}
 
@@ -702,9 +714,9 @@ SQInteger CSharedVehicleNatives::SetWheelTexture( SQVM * pVM )
 	sq_getinteger( pVM, -1, &iTexture );
 
 	// Is the vehicle active?
-	if( pCore->GetVehicleManager()->IsActive( vehicleId ) )
+	if( CCore::Instance()->GetVehicleManager()->IsActive( vehicleId ) )
 	{
-		pCore->GetVehicleManager()->Get( vehicleId )->SetWheelTexture( iWheelIndex, iTexture );
+		CCore::Instance()->GetVehicleManager()->Get( vehicleId )->SetWheelTexture( iWheelIndex, iTexture );
 		sq_pushbool( pVM, true );
 		return 1;
 	}
@@ -724,9 +736,9 @@ SQInteger CSharedVehicleNatives::GetWheelTexture( SQVM * pVM )
 	sq_getinteger( pVM, -1, &iWheelIndex );
 
 	// Is the vehicle active?
-	if( pCore->GetVehicleManager()->IsActive( vehicleId ) )
+	if( CCore::Instance()->GetVehicleManager()->IsActive( vehicleId ) )
 	{
-		sq_pushinteger( pVM, pCore->GetVehicleManager()->Get( vehicleId )->GetWheelTexture( iWheelIndex ) );
+		sq_pushinteger( pVM, CCore::Instance()->GetVehicleManager()->Get( vehicleId )->GetWheelTexture( iWheelIndex ) );
 		return 1;
 	}
 
@@ -741,9 +753,9 @@ SQInteger CSharedVehicleNatives::GetModel( SQVM * pVM )
 	sq_getinteger( pVM, -1, &vehicleId );
 
 	// Is the vehicle active?
-	if( pCore->GetVehicleManager()->IsActive( vehicleId ) )
+	if( CCore::Instance()->GetVehicleManager()->IsActive( vehicleId ) )
 	{
-		sq_pushinteger( pVM, pCore->GetVehicleManager()->Get( vehicleId )->GetModel () );
+		sq_pushinteger( pVM, CCore::Instance()->GetVehicleManager()->Get( vehicleId )->GetModel () );
 		return 1;
 	}
 
@@ -760,7 +772,7 @@ SQInteger CSharedVehicleNatives::GetVehicles( SQVM * pVM )
 	for ( int vehicleId = 0; vehicleId < MAX_VEHICLES; vehicleId++ )
 	{
 		// Is the current vehicle active?
-		if ( pCore->GetVehicleManager()->Get( vehicleId ) )
+		if ( CCore::Instance()->GetVehicleManager()->Get( vehicleId ) )
 		{
 			// Push the vehicle id into the array
 			sq_pushinteger( pVM, vehicleId );
@@ -786,10 +798,10 @@ SQInteger CSharedVehicleNatives::SetSpeed( SQVM * pVM )
 	sq_getfloat( pVM, -3, &vecVelocity.fX );
 
 	// Is the vehicle active?
-	if( pCore->GetVehicleManager()->IsActive( vehicleId ) )
+	if( CCore::Instance()->GetVehicleManager()->IsActive( vehicleId ) )
 	{
 		// Set the vehicle speed
-		pCore->GetVehicleManager()->Get( vehicleId )->SetSpeedVec ( vecVelocity );
+		CCore::Instance()->GetVehicleManager()->Get( vehicleId )->SetSpeedVec ( vecVelocity );
 
 		sq_pushbool ( pVM, true );
 		return 1;
@@ -807,11 +819,11 @@ SQInteger CSharedVehicleNatives::GetSpeed( SQVM * pVM )
 	sq_getinteger( pVM, -1, &vehicleId );
 
 	// Is the vehicle active?
-	if( pCore->GetVehicleManager()->IsActive( vehicleId ) )
+	if( CCore::Instance()->GetVehicleManager()->IsActive( vehicleId ) )
 	{
 		// Get the vehicle speed
 		CVector3 vecVelocity;
-		pCore->GetVehicleManager()->Get( vehicleId )->GetSpeedVec ( &vecVelocity );
+		CCore::Instance()->GetVehicleManager()->Get( vehicleId )->GetSpeedVec ( &vecVelocity );
 
 		sq_newarray( pVM, 0 );
 
@@ -844,10 +856,10 @@ SQInteger CSharedVehicleNatives::SetFuel( SQVM * pVM )
 	sq_getfloat( pVM, -1, &fFuel );
 
 	// Is the vehicle active?
-	if( pCore->GetVehicleManager()->IsActive( vehicleId ) )
+	if( CCore::Instance()->GetVehicleManager()->IsActive( vehicleId ) )
 	{
 		// Set the vehicle fuel
-		pCore->GetVehicleManager()->Get( vehicleId )->SetFuel ( fFuel );
+		CCore::Instance()->GetVehicleManager()->Get( vehicleId )->SetFuel ( fFuel );
 
 		sq_pushbool ( pVM, true );
 		return 1;
@@ -865,10 +877,10 @@ SQInteger CSharedVehicleNatives::GetFuel( SQVM * pVM )
 	sq_getinteger( pVM, -1, &vehicleId );
 
 	// Is the vehicle active?
-	if( pCore->GetVehicleManager()->IsActive( vehicleId ) )
+	if( CCore::Instance()->GetVehicleManager()->IsActive( vehicleId ) )
 	{
 		// Get the vehicle fuel
-		sq_pushfloat ( pVM, pCore->GetVehicleManager()->Get( vehicleId )->GetFuel () );
+		sq_pushfloat ( pVM, CCore::Instance()->GetVehicleManager()->Get( vehicleId )->GetFuel () );
 		return 1;
 	}
 
@@ -888,10 +900,10 @@ SQInteger CSharedVehicleNatives::SetLightState( SQVM * pVM )
 	sq_getbool( pVM, -1, &bLightState );
 
 	// Is the vehicle active?
-	if( pCore->GetVehicleManager()->IsActive( vehicleId ) )
+	if( CCore::Instance()->GetVehicleManager()->IsActive( vehicleId ) )
 	{
 		// Set the vehicle light state
-		pCore->GetVehicleManager()->Get( vehicleId )->SetLightState ( bLightState );
+		CCore::Instance()->GetVehicleManager()->Get( vehicleId )->SetLightState ( bLightState );
 
 		sq_pushbool ( pVM, true );
 		return 1;
@@ -909,10 +921,10 @@ SQInteger CSharedVehicleNatives::GetLightState( SQVM * pVM )
 	sq_getinteger( pVM, -1, &vehicleId );
 
 	// Is the vehicle active?
-	if( pCore->GetVehicleManager()->IsActive( vehicleId ) )
+	if( CCore::Instance()->GetVehicleManager()->IsActive( vehicleId ) )
 	{
 		// Get the vehicle light state
-		sq_pushbool ( pVM, pCore->GetVehicleManager()->Get( vehicleId )->GetLightState () );
+		sq_pushbool ( pVM, CCore::Instance()->GetVehicleManager()->Get( vehicleId )->GetLightState () );
 		return 1;
 	}
 

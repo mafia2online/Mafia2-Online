@@ -13,11 +13,11 @@
 
 #ifdef _CLIENT
 #include	"../../../Client/StdInc.h"
+#include	"../../../Client/CCore.h"
 #else
 #include	"../../../Server/StdInc.h"
+#include	"../../../Server/CCore.h"
 #endif
-
-extern	CCore			* pCore;
 
 _MEMBER_FUNCTION_IMPL(sqlite, constructor);
 _MEMBER_FUNCTION_IMPL(sqlite, query);
@@ -68,10 +68,10 @@ _MEMBER_FUNCTION_IMPL(sqlite, constructor)
 		// Generate the path string
 		String strPath;
 #ifdef _CLIENT
-		strPath = pCore->GetClientScriptingManager()->GetScriptingManager()->Get( pVM )->GetPath();
-		strPath = SharedUtility::GetFileNameForScriptFile( szFileName, strPath.Get(), pCore->GetHost().Get(), pCore->GetPort() );
+		strPath = CCore::Instance()->GetClientScriptingManager()->GetScriptingManager()->Get( pVM )->GetPath();
+		strPath = SharedUtility::GetFileNameForScriptFile( szFileName, strPath.Get(), CCore::Instance()->GetHost().Get(), CCore::Instance()->GetPort() );
 #else
-		strPath = pCore->GetScriptingManager()->Get( pVM )->GetPath();
+		strPath = CCore::Instance()->GetScriptingManager()->Get( pVM )->GetPath();
 		strPath = SharedUtility::GetFileNameForScriptFile( szFileName, strPath.Get() );
 #endif
 

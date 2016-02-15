@@ -8,8 +8,8 @@
 ***************************************************************/
 
 #include	"StdInc.h"
+#include	"CCore.h"
 
-extern	CCore			* pCore;
 RakNet::RPC4			* CNetworkModule::m_pRPC = NULL;
 
 CNetworkModule::CNetworkModule( void )
@@ -115,16 +115,16 @@ void CNetworkModule::UpdateNetwork( void )
 		case ID_DISCONNECTION_NOTIFICATION:
 			{
 				// Is the player active in the player manager?
-				if( pCore->GetPlayerManager()->IsActive( (EntityId)pPacket->systemAddress.systemIndex ) )
+				if( CCore::Instance()->GetPlayerManager()->IsActive( (EntityId)pPacket->systemAddress.systemIndex ) )
 				{
 					// Get the network player instance
-					CNetworkPlayer * pNetworkPlayer = pCore->GetPlayerManager()->Get( (EntityId)pPacket->systemAddress.systemIndex );
+					CNetworkPlayer * pNetworkPlayer = CCore::Instance()->GetPlayerManager()->Get( (EntityId)pPacket->systemAddress.systemIndex );
 
 					// Add the player to the who was manager
 					CWhoWas::Add( pNetworkPlayer->GetNick(), pNetworkPlayer->GetSerial(), pPacket->systemAddress.ToString( true, ':' ) );
 
 					// Delete the player from the manager
-					pCore->GetPlayerManager()->Remove( (EntityId)pPacket->systemAddress.systemIndex, DISCONNECT_QUIT );
+					CCore::Instance()->GetPlayerManager()->Remove( (EntityId)pPacket->systemAddress.systemIndex, DISCONNECT_QUIT );
 				}
 				break;
 			}
@@ -132,10 +132,10 @@ void CNetworkModule::UpdateNetwork( void )
 		case ID_CONNECTION_LOST:
 			{
 				// Is the player active in the player manager?
-				if( pCore->GetPlayerManager()->IsActive( (EntityId)pPacket->systemAddress.systemIndex ) )
+				if( CCore::Instance()->GetPlayerManager()->IsActive( (EntityId)pPacket->systemAddress.systemIndex ) )
 				{
 					// Delete the player from the manager
-					pCore->GetPlayerManager()->Remove( (EntityId)pPacket->systemAddress.systemIndex, DISCONNECT_TIMEOUT );
+					CCore::Instance()->GetPlayerManager()->Remove( (EntityId)pPacket->systemAddress.systemIndex, DISCONNECT_TIMEOUT );
 				}
 				break;
 			}

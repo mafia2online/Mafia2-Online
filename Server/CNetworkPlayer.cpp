@@ -9,7 +9,7 @@
 
 #include	"StdInc.h"
 
-extern	CCore				* pCore;
+#include	"CCore.h"
 
 // temp lol
 unsigned int playerColors[] = 
@@ -195,7 +195,7 @@ void CNetworkPlayer::ChangeNick( const char * szNick )
 	pArguments.push( m_playerId );
 	pArguments.push( szNick );
 	pArguments.push( GetNick() );
-	pCore->GetEvents()->Call( "onPlayerChangeNick", &pArguments );
+	CCore::Instance()->GetEvents()->Call( "onPlayerChangeNick", &pArguments );
 
 	// Set the new nick
 	SetNick( szNick );
@@ -219,13 +219,13 @@ void CNetworkPlayer::SetColour( unsigned int uiColour )
 		pBitStream.Write( uiColour );
 
 		// Send it to all clients
-		pCore->GetNetworkModule()->Call( RPC_SETPLAYERCOLOUR, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, INVALID_ENTITY_ID, true );
+		CCore::Instance()->GetNetworkModule()->Call( RPC_SETPLAYERCOLOUR, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, INVALID_ENTITY_ID, true );
 	}
 }
 
 unsigned short CNetworkPlayer::GetPing( void )
 {
-	return (unsigned short)pCore->GetNetworkModule()->GetPlayerPing( m_playerId );
+	return (unsigned short)CCore::Instance()->GetNetworkModule()->GetPlayerPing( m_playerId );
 }
 
 void CNetworkPlayer::SetModel( unsigned int uiModel )
@@ -240,7 +240,7 @@ void CNetworkPlayer::SetModel( unsigned int uiModel )
 		pBitStream.WriteCompressed( uiModel );
 
 		// Send it to the player
-		pCore->GetNetworkModule()->Call( RPC_SETPLAYERMODEL, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, m_playerId, false );
+		CCore::Instance()->GetNetworkModule()->Call( RPC_SETPLAYERMODEL, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, m_playerId, false );
 	}
 }
 
@@ -261,7 +261,7 @@ void CNetworkPlayer::SetHealth( float fHealth )
 		pBitStream.Write( fHealth );
 
 		// Send it to the player
-		pCore->GetNetworkModule()->Call( RPC_SETPLAYERHEALTH, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, m_playerId, false );
+		CCore::Instance()->GetNetworkModule()->Call( RPC_SETPLAYERHEALTH, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, m_playerId, false );
 	}
 }
 
@@ -282,7 +282,7 @@ void CNetworkPlayer::GiveWeapon( int iWeapon, int iAmmo )
 	pBitStream.WriteCompressed( iAmmo );
 
 	// Send it to the player
-	pCore->GetNetworkModule()->Call( RPC_GIVEPLAYERWEAPON, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, m_playerId, false );
+	CCore::Instance()->GetNetworkModule()->Call( RPC_GIVEPLAYERWEAPON, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, m_playerId, false );
 }
 
 void CNetworkPlayer::RemoveWeapon( int iWeapon, int iAmmo )
@@ -297,7 +297,7 @@ void CNetworkPlayer::RemoveWeapon( int iWeapon, int iAmmo )
 	pBitStream.WriteCompressed( iAmmo );
 
 	// Send it to the player
-	pCore->GetNetworkModule()->Call( RPC_REMOVEPLAYERWEAPON, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, m_playerId, false );
+	CCore::Instance()->GetNetworkModule()->Call( RPC_REMOVEPLAYERWEAPON, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, m_playerId, false );
 }
 
 int CNetworkPlayer::GetWeapon( void )
@@ -314,7 +314,7 @@ void CNetworkPlayer::SetPosition ( CVector3 vecPosition )
 	bitStream.Write ( vecPosition );
 
 	// Send it to the player
-	pCore->GetNetworkModule()->Call( RPC_SETPLAYERPOS, &bitStream, HIGH_PRIORITY, RELIABLE_ORDERED, m_playerId, false );
+	CCore::Instance()->GetNetworkModule()->Call( RPC_SETPLAYERPOS, &bitStream, HIGH_PRIORITY, RELIABLE_ORDERED, m_playerId, false );
 }
 
 void CNetworkPlayer::GetPosition ( CVector3 * vecPosition )
@@ -341,7 +341,7 @@ void CNetworkPlayer::SetRotation ( CVector3 vecRotation )
 	bitStream.Write ( vecRotation );
 
 	// Send it to the player
-	pCore->GetNetworkModule()->Call( RPC_SETPLAYERROT, &bitStream, HIGH_PRIORITY, RELIABLE_ORDERED, m_playerId, false );
+	CCore::Instance()->GetNetworkModule()->Call( RPC_SETPLAYERROT, &bitStream, HIGH_PRIORITY, RELIABLE_ORDERED, m_playerId, false );
 }
 
 void CNetworkPlayer::GetRotation ( CVector3 * vecRotation )
@@ -377,7 +377,7 @@ void CNetworkPlayer::AddForPlayer( EntityId playerId )
 	bitStream.WriteCompressed( m_onFootSync.m_uiModelIndex );
 
 	// Send it to the player
-	pCore->GetNetworkModule()->Call( RPC_NEW_PLAYER, &bitStream, HIGH_PRIORITY, RELIABLE_ORDERED, playerId, false );
+	CCore::Instance()->GetNetworkModule()->Call( RPC_NEW_PLAYER, &bitStream, HIGH_PRIORITY, RELIABLE_ORDERED, playerId, false );
 }
 
 void CNetworkPlayer::AddForWorld( void )
@@ -386,7 +386,7 @@ void CNetworkPlayer::AddForWorld( void )
 	for (EntityId i = 0; i < MAX_PLAYERS; i++)
 	{
 		// Is this not this player and is active?
-		if( i != m_playerId && pCore->GetPlayerManager()->IsActive( i ) )
+		if( i != m_playerId && CCore::Instance()->GetPlayerManager()->IsActive( i ) )
 		{
 			// Add this player for this player
 			AddForPlayer( i );
@@ -403,7 +403,7 @@ void CNetworkPlayer::RemoveForPlayer( EntityId playerId )
 	bitStream.WriteCompressed( m_playerId );
 
 	// Send it to the client
-	pCore->GetNetworkModule()->Call( RPC_REMOVE_PLAYER, &bitStream, HIGH_PRIORITY, RELIABLE_ORDERED, playerId, false );
+	CCore::Instance()->GetNetworkModule()->Call( RPC_REMOVE_PLAYER, &bitStream, HIGH_PRIORITY, RELIABLE_ORDERED, playerId, false );
 }
 
 void CNetworkPlayer::RemoveForWorld( void )
@@ -412,7 +412,7 @@ void CNetworkPlayer::RemoveForWorld( void )
 	for (EntityId i = 0; i < MAX_PLAYERS; i++)
 	{
 		// Is this not this player and is active?
-		if( i != m_playerId && pCore->GetPlayerManager()->IsActive( i ) )
+		if( i != m_playerId && CCore::Instance()->GetPlayerManager()->IsActive( i ) )
 		{
 			// Remove this player for this player
 			RemoveForPlayer( i );
@@ -429,7 +429,7 @@ void CNetworkPlayer::KillForPlayer( EntityId playerId )
 	bitStream.WriteCompressed( m_playerId );
 
 	// Send it to the client
-	pCore->GetNetworkModule()->Call( RPC_PLAYER_DEATH, &bitStream, HIGH_PRIORITY, RELIABLE_ORDERED, playerId, false );
+	CCore::Instance()->GetNetworkModule()->Call( RPC_PLAYER_DEATH, &bitStream, HIGH_PRIORITY, RELIABLE_ORDERED, playerId, false );
 }
 
 void CNetworkPlayer::KillForWorld( void )
@@ -441,7 +441,7 @@ void CNetworkPlayer::KillForWorld( void )
 	for (EntityId i = 0; i < MAX_PLAYERS; i++)
 	{
 		// Is this not this player and is active?
-		if( i != m_playerId && pCore->GetPlayerManager()->IsActive( i ) )
+		if( i != m_playerId && CCore::Instance()->GetPlayerManager()->IsActive( i ) )
 		{
 			// Kill this player for this player
 			KillForPlayer( i );
@@ -458,7 +458,7 @@ void CNetworkPlayer::SpawnForPlayer( EntityId playerId )
 	bitStream.WriteCompressed( m_playerId );
 
 	// Send it to the client
-	pCore->GetNetworkModule()->Call( RPC_PLAYER_SPAWN, &bitStream, HIGH_PRIORITY, RELIABLE_ORDERED, playerId, false );
+	CCore::Instance()->GetNetworkModule()->Call( RPC_PLAYER_SPAWN, &bitStream, HIGH_PRIORITY, RELIABLE_ORDERED, playerId, false );
 }
 
 void CNetworkPlayer::SpawnForWorld( void )
@@ -486,7 +486,7 @@ void CNetworkPlayer::SpawnForWorld( void )
 	for (EntityId i = 0; i < MAX_PLAYERS; i++)
 	{
 		// Is this not this player and is active?
-		if( i != m_playerId && pCore->GetPlayerManager()->IsActive( i ) )
+		if( i != m_playerId && CCore::Instance()->GetPlayerManager()->IsActive( i ) )
 		{
 			// Spawn this player for this player
 			SpawnForPlayer( i );
@@ -504,7 +504,7 @@ void CNetworkPlayer::StoreOnFootSync( OnFootSync * onFootSync )
 		pArguments.push( m_playerId );
 		pArguments.push( (int)onFootSync->m_dwSelectedWeapon );
 		pArguments.push( (int)m_onFootSync.m_dwSelectedWeapon );
-		pCore->GetEvents()->Call( "onPlayerChangeWeapon", &pArguments );
+		CCore::Instance()->GetEvents()->Call( "onPlayerChangeWeapon", &pArguments );
 	}
 
 	// Has the player changed health?
@@ -515,7 +515,7 @@ void CNetworkPlayer::StoreOnFootSync( OnFootSync * onFootSync )
 		pArguments.push( m_playerId );
 		pArguments.push( onFootSync->m_fHealth );
 		pArguments.push( m_onFootSync.m_fHealth );
-		pCore->GetEvents()->Call( "onPlayerChangeHealth", &pArguments );
+		CCore::Instance()->GetEvents()->Call( "onPlayerChangeHealth", &pArguments );
 	}
 
 	// Copy the sync data
@@ -550,7 +550,7 @@ void CNetworkPlayer::StorePassengerSync( InPassengerSync * passengerSync )
 		pArguments.push( m_playerId );
 		pArguments.push( passengerSync->m_fHealth );
 		pArguments.push( m_onFootSync.m_fHealth );
-		pCore->GetEvents()->Call( "onPlayerChangeHealth", &pArguments );
+		CCore::Instance()->GetEvents()->Call( "onPlayerChangeHealth", &pArguments );
 
 		// Store the new health
 		m_onFootSync.m_fHealth = passengerSync->m_fHealth;
@@ -585,7 +585,7 @@ void CNetworkPlayer::SendOnFootSync( void )
 	bitStream.Write( (char *)&m_onFootSync, sizeof(OnFootSync) );
 
 	// Send it to other clients
-	pCore->GetNetworkModule()->Call( RPC_PLAYER_SYNC, &bitStream, LOW_PRIORITY, UNRELIABLE_SEQUENCED, m_playerId, true );
+	CCore::Instance()->GetNetworkModule()->Call( RPC_PLAYER_SYNC, &bitStream, LOW_PRIORITY, UNRELIABLE_SEQUENCED, m_playerId, true );
 }
 
 void CNetworkPlayer::SendInVehicleSync( void )
@@ -610,7 +610,7 @@ void CNetworkPlayer::SendInVehicleSync( void )
 	bitStream.Write( (char *)&m_inVehicleSync, sizeof(InVehicleSync) );
 
 	// Send it to other clients
-	pCore->GetNetworkModule()->Call( RPC_VEHICLE_SYNC, &bitStream, LOW_PRIORITY, UNRELIABLE_SEQUENCED, m_playerId, true );
+	CCore::Instance()->GetNetworkModule()->Call( RPC_VEHICLE_SYNC, &bitStream, LOW_PRIORITY, UNRELIABLE_SEQUENCED, m_playerId, true );
 }
 
 void CNetworkPlayer::SendPassengerSync( void )
@@ -628,7 +628,7 @@ void CNetworkPlayer::SendPassengerSync( void )
 	bitStream.Write( (char *)&m_passengerSync, sizeof(InPassengerSync) );
 
 	// Send it to other clients
-	pCore->GetNetworkModule()->Call( RPC_PASSENGER_SYNC, &bitStream, LOW_PRIORITY, UNRELIABLE_SEQUENCED, m_playerId, true );
+	CCore::Instance()->GetNetworkModule()->Call( RPC_PASSENGER_SYNC, &bitStream, LOW_PRIORITY, UNRELIABLE_SEQUENCED, m_playerId, true );
 }
 
 void CNetworkPlayer::Pulse( void )
@@ -637,7 +637,7 @@ void CNetworkPlayer::Pulse( void )
 	if ( (SharedUtility::GetTime() - m_ulLastPingTime) > 1000 )
 	{
 		// Ping the player
-		pCore->GetNetworkModule()->GetRakPeer()->Ping ( pCore->GetNetworkModule()->GetRakPeer()->GetSystemAddressFromIndex ( m_playerId ) );
+		CCore::Instance()->GetNetworkModule()->GetRakPeer()->Ping ( CCore::Instance()->GetNetworkModule()->GetRakPeer()->GetSystemAddressFromIndex ( m_playerId ) );
 
 		// Set the last ping time
 		m_ulLastPingTime = SharedUtility::GetTime ();
@@ -689,7 +689,7 @@ void CNetworkPlayer::Pulse( void )
 void CNetworkPlayer::Kick( void )
 {
 	// Kick the player from the server
-	pCore->GetNetworkModule()->Call( RPC_KICKPLAYER, NULL, IMMEDIATE_PRIORITY, RELIABLE_ORDERED, m_playerId, false );
+	CCore::Instance()->GetNetworkModule()->Call( RPC_KICKPLAYER, NULL, IMMEDIATE_PRIORITY, RELIABLE_ORDERED, m_playerId, false );
 }
 
 void CNetworkPlayer::Ping ( void )
@@ -704,13 +704,13 @@ void CNetworkPlayer::Ping ( void )
 	bitStream.WriteCompressed ( usPing );
 
 	// Send the bitstream to this client
-	pCore->GetNetworkModule()->Call ( RPC_PLAYERPING, &bitStream, MEDIUM_PRIORITY, RELIABLE_ORDERED, m_playerId, false );
+	CCore::Instance()->GetNetworkModule()->Call ( RPC_PLAYERPING, &bitStream, MEDIUM_PRIORITY, RELIABLE_ORDERED, m_playerId, false );
 }
 
 void CNetworkPlayer::HandleVehicleEnter( EntityId vehicleId, EntityId seat )
 {
 	// Get a pointer to the vehicle
-	CNetworkVehicle * pNetworkVehicle = pCore->GetVehicleManager()->Get( vehicleId );
+	CNetworkVehicle * pNetworkVehicle = CCore::Instance()->GetVehicleManager()->Get( vehicleId );
 
 	// Is the vehicle invalid?
 	if( !pNetworkVehicle )
@@ -738,7 +738,7 @@ void CNetworkPlayer::HandleVehicleEnter( EntityId vehicleId, EntityId seat )
 		bitStream.WriteCompressed ( seat );
 
 		// Send this packet back to the client
-		pCore->GetNetworkModule()->Call ( RPC_ENTER_VEHICLE, &bitStream, IMMEDIATE_PRIORITY, RELIABLE_SEQUENCED, m_playerId, false );
+		CCore::Instance()->GetNetworkModule()->Call ( RPC_ENTER_VEHICLE, &bitStream, IMMEDIATE_PRIORITY, RELIABLE_SEQUENCED, m_playerId, false );
 
 		return;
 	}
@@ -765,13 +765,13 @@ void CNetworkPlayer::HandleVehicleEnter( EntityId vehicleId, EntityId seat )
 	bitStream.WriteCompressed( seat );
 
 	// Send it to other clients
-	pCore->GetNetworkModule()->Call( RPC_ENTER_VEHICLE, &bitStream, HIGH_PRIORITY, RELIABLE_SEQUENCED, m_playerId, true );
+	CCore::Instance()->GetNetworkModule()->Call( RPC_ENTER_VEHICLE, &bitStream, HIGH_PRIORITY, RELIABLE_SEQUENCED, m_playerId, true );
 }
 
 void CNetworkPlayer::HandleVehicleExit( EntityId vehicleId, EntityId seat, bool bQuickly )
 {
 	// Get a pointer to the vehicle
-	CNetworkVehicle * pNetworkVehicle = pCore->GetVehicleManager()->Get( vehicleId );
+	CNetworkVehicle * pNetworkVehicle = CCore::Instance()->GetVehicleManager()->Get( vehicleId );
 
 	// Is the vehicle invalid?
 	if( !pNetworkVehicle )
@@ -796,7 +796,7 @@ void CNetworkPlayer::HandleVehicleExit( EntityId vehicleId, EntityId seat, bool 
 	bQuickly ? bitStream.Write1() : bitStream.Write0();
 
 	// Send it to other clients
-	pCore->GetNetworkModule()->Call( RPC_EXIT_VEHICLE, &bitStream, HIGH_PRIORITY, RELIABLE_SEQUENCED, m_playerId, true );
+	CCore::Instance()->GetNetworkModule()->Call( RPC_EXIT_VEHICLE, &bitStream, HIGH_PRIORITY, RELIABLE_SEQUENCED, m_playerId, true );
 }
 
 void CNetworkPlayer::HandleVehicleEnterDone( void )
@@ -812,7 +812,7 @@ void CNetworkPlayer::HandleVehicleEnterDone( void )
 	bitStream.WriteCompressed( m_playerId );
 
 	// Send it to other clients
-	pCore->GetNetworkModule()->Call( RPC_ENTER_VEHICLE_DONE, &bitStream, HIGH_PRIORITY, RELIABLE_SEQUENCED, m_playerId, true );
+	CCore::Instance()->GetNetworkModule()->Call( RPC_ENTER_VEHICLE_DONE, &bitStream, HIGH_PRIORITY, RELIABLE_SEQUENCED, m_playerId, true );
 }
 
 void CNetworkPlayer::StartSyncVehicle( CNetworkVehicle * pNetworkVehicle )
@@ -835,7 +835,7 @@ void CNetworkPlayer::StartSyncVehicle( CNetworkVehicle * pNetworkVehicle )
 	bitStream.WriteCompressed( pNetworkVehicle->GetId() );
 
 	// Send it the the client
-	pCore->GetNetworkModule()->Call( RPC_PLAYERSYNCVEHICLE, &bitStream, MEDIUM_PRIORITY, RELIABLE, m_playerId, false );*/
+	CCore::Instance()->GetNetworkModule()->Call( RPC_PLAYERSYNCVEHICLE, &bitStream, MEDIUM_PRIORITY, RELIABLE, m_playerId, false );*/
 }
 
 void CNetworkPlayer::StopSyncVehicle( CNetworkVehicle * pNetworkVehicle )
@@ -858,7 +858,7 @@ void CNetworkPlayer::StopSyncVehicle( CNetworkVehicle * pNetworkVehicle )
 	bitStream.WriteCompressed( pNetworkVehicle->GetId() );
 
 	// Send it the the client
-	pCore->GetNetworkModule()->Call( RPC_PLAYERSTOPSYNCVEHICLE, &bitStream, MEDIUM_PRIORITY, RELIABLE, m_playerId, false );*/
+	CCore::Instance()->GetNetworkModule()->Call( RPC_PLAYERSTOPSYNCVEHICLE, &bitStream, MEDIUM_PRIORITY, RELIABLE, m_playerId, false );*/
 }
 
 bool CNetworkPlayer::IsSyncingVehicle( CNetworkVehicle * pNetworkVehicle )
@@ -909,7 +909,7 @@ bool CNetworkPlayer::PutInVehicle ( CNetworkVehicle * pVehicle, EntityId seatId 
 	bitStream.WriteCompressed ( m_playerId );
 	bitStream.WriteCompressed ( pVehicle->GetId () );
 	bitStream.WriteCompressed ( seatId );
-	pCore->GetNetworkModule()->Call ( RPC_PUTINVEHICLE, &bitStream, HIGH_PRIORITY, RELIABLE_ORDERED, INVALID_ENTITY_ID, true );
+	CCore::Instance()->GetNetworkModule()->Call ( RPC_PUTINVEHICLE, &bitStream, HIGH_PRIORITY, RELIABLE_ORDERED, INVALID_ENTITY_ID, true );
 	return true;
 }
 
@@ -918,7 +918,7 @@ void CNetworkPlayer::RemoveFromVehicle ( void )
 	// Send bitstream to all players
 	RakNet::BitStream bitStream;
 	bitStream.WriteCompressed ( m_playerId );
-	pCore->GetNetworkModule()->Call ( RPC_REMOVEFROMVEHICLE, &bitStream, HIGH_PRIORITY, RELIABLE_ORDERED, INVALID_ENTITY_ID, true );
+	CCore::Instance()->GetNetworkModule()->Call ( RPC_REMOVEFROMVEHICLE, &bitStream, HIGH_PRIORITY, RELIABLE_ORDERED, INVALID_ENTITY_ID, true );
 }
 
 void CNetworkPlayer::GiveMoney ( int iMoney )
@@ -926,7 +926,7 @@ void CNetworkPlayer::GiveMoney ( int iMoney )
 	// Send bitstream to player
 	RakNet::BitStream pBitStream;
 	pBitStream.Write( iMoney );
-	pCore->GetNetworkModule()->Call( RPC_GIVEPLAYERMONEY, &pBitStream, HIGH_PRIORITY, RELIABLE, m_playerId, false );
+	CCore::Instance()->GetNetworkModule()->Call( RPC_GIVEPLAYERMONEY, &pBitStream, HIGH_PRIORITY, RELIABLE, m_playerId, false );
 }
 
 void CNetworkPlayer::TakeMoney ( int iMoney )
@@ -934,7 +934,7 @@ void CNetworkPlayer::TakeMoney ( int iMoney )
 	// Send bitstream to player
 	RakNet::BitStream pBitStream;
 	pBitStream.Write( iMoney );
-	pCore->GetNetworkModule()->Call( RPC_TAKEPLAYERMONEY, &pBitStream, HIGH_PRIORITY, RELIABLE, m_playerId, false );
+	CCore::Instance()->GetNetworkModule()->Call( RPC_TAKEPLAYERMONEY, &pBitStream, HIGH_PRIORITY, RELIABLE, m_playerId, false );
 }
 
 int CNetworkPlayer::GetMoney ( void )
@@ -953,7 +953,7 @@ void CNetworkPlayer::SetAnimStyle(const char *directory, const char *style)
 	pBitStream.Write(RakNet::RakString(style));
 
 	// Send bitstream
-	pCore->GetNetworkModule()->Call(RPC_SETANIMSTYLE, &pBitStream, HIGH_PRIORITY, RELIABLE, m_playerId, false);
+	CCore::Instance()->GetNetworkModule()->Call(RPC_SETANIMSTYLE, &pBitStream, HIGH_PRIORITY, RELIABLE, m_playerId, false);
 }
 
 void CNetworkPlayer::SetHandModel(int iHand, int iModel)
@@ -968,5 +968,5 @@ void CNetworkPlayer::SetHandModel(int iHand, int iModel)
 	pBitStream.WriteCompressed(iModel);
 
 	// Send bitstream
-	pCore->GetNetworkModule()->Call(RPC_SETHANDMODEL, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, m_playerId, false);
+	CCore::Instance()->GetNetworkModule()->Call(RPC_SETHANDMODEL, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, m_playerId, false);
 }

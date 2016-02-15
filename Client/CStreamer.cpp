@@ -7,9 +7,18 @@
 *
 ***************************************************************/
 
-#include "StdInc.h"
+#include "BaseInc.h"
 
-extern	CCore				* pCore;
+#include "CNetworkPlayer.h"
+#include "CLocalPlayer.h"
+#include "CNetworkModule.h"
+
+#include "SharedUtility.h"
+
+#include "Math/CVector3.h"
+
+#include "CStreamableEntity.h"
+#include "CStreamer.h"
 
 CStreamer::CStreamer( void )
 {
@@ -26,7 +35,7 @@ CStreamer::~CStreamer( void )
 void CStreamer::Process( void )
 {
 	// Are we not connected to a network?
-	if( pCore->GetNetworkModule() && !pCore->GetNetworkModule()->IsConnected() )
+	if( !CNetworkModule::Instance()->IsConnected() )
 		return;
 
 	// Get the current time
@@ -40,7 +49,7 @@ void CStreamer::Process( void )
 
 		// Get the localplayer position
 		CVector3 vecLocalPos;
-		pCore->GetPlayerManager()->GetLocalPlayer()->GetPosition( &vecLocalPos );
+		CLocalPlayer::Instance()->GetPosition( &vecLocalPos );
 
 		// Loop through all streamable entities
 		for( iterator iter = begin(); iter != end(); iter++ )
@@ -55,7 +64,7 @@ void CStreamer::Process( void )
 
 			// Get the current entity position
 			CVector3 vecPos;
-			(*iter)->GetEntity()->GetPosition( &vecPos );
+			(*iter)->GetEntity()->GetPosition( vecPos );
 
 			// Is the current entity in range?
 			bIsInRange = ((vecLocalPos - vecPos).Length() <= (*iter)->GetStreamDistance());

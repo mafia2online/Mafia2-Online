@@ -8,8 +8,7 @@
 ***************************************************************/
 
 #include	"CBanNatives.h"
-
-extern		CCore			* pCore;
+#include	"CCore.h"
 
 void CBanNatives::Register( CScriptingManager * pScriptingManager )
 {
@@ -33,23 +32,23 @@ SQInteger CBanNatives::BanPlayer( SQVM * pVM )
 	String strBanner( "Console" );
 
 	// Is the player active?
-	if( pCore->GetPlayerManager()->Get( playerId ) )
+	if( CCore::Instance()->GetPlayerManager()->Get( playerId ) )
 	{
 		// Get the player serial
-		String strSerial = pCore->GetPlayerManager()->Get( playerId )->GetSerial();
+		String strSerial = CCore::Instance()->GetPlayerManager()->Get( playerId )->GetSerial();
 
 		// Is the banner not the console?
 		if( bannerId != ENTITY_ID_CONSOLE )
 		{
 			// Is the banner active?
-			if( pCore->GetPlayerManager()->Get( bannerId ) )
+			if( CCore::Instance()->GetPlayerManager()->Get( bannerId ) )
 			{
-				strBanner = pCore->GetPlayerManager()->Get( bannerId )->GetNick();
+				strBanner = CCore::Instance()->GetPlayerManager()->Get( bannerId )->GetNick();
 			}
 		}
 
 		// Add the ban to the ban manager
-		sq_pushbool( pVM, pCore->GetBanManager()->Add( strSerial, strBanner, SharedUtility::GetTime(), (unsigned long)iSeconds, szReason ) );
+		sq_pushbool( pVM, CCore::Instance()->GetBanManager()->Add( strSerial, strBanner, SharedUtility::GetTime(), (unsigned long)iSeconds, szReason ) );
 		return 1;
 	}
 
@@ -75,14 +74,14 @@ SQInteger CBanNatives::BanSerial( SQVM * pVM )
 	if( bannerId != ENTITY_ID_CONSOLE )
 	{
 		// Is the banner active?
-		if( pCore->GetPlayerManager()->Get( bannerId ) )
+		if( CCore::Instance()->GetPlayerManager()->Get( bannerId ) )
 		{
-			strBanner = pCore->GetPlayerManager()->Get( bannerId )->GetNick();
+			strBanner = CCore::Instance()->GetPlayerManager()->Get( bannerId )->GetNick();
 		}
 	}
 
 	// Add the ban to the ban manager
-	sq_pushbool( pVM, pCore->GetBanManager()->Add( szSerial, strBanner, SharedUtility::GetTime(), (unsigned long)iSeconds, szReason ) );
+	sq_pushbool( pVM, CCore::Instance()->GetBanManager()->Add( szSerial, strBanner, SharedUtility::GetTime(), (unsigned long)iSeconds, szReason ) );
 	return 1;
 }
 
@@ -92,10 +91,10 @@ SQInteger CBanNatives::UnbanSerial( SQVM * pVM )
 	sq_getstring( pVM, -1, &szSerial );
 
 	// Is the serial banned?
-	if( pCore->GetBanManager()->IsSerialBanned( szSerial ) )
+	if( CCore::Instance()->GetBanManager()->IsSerialBanned( szSerial ) )
 	{
 		// Unban the server
-		pCore->GetBanManager()->Remove( szSerial );
+		CCore::Instance()->GetBanManager()->Remove( szSerial );
 
 		sq_pushbool( pVM, true );
 		return 1;
@@ -110,6 +109,6 @@ SQInteger CBanNatives::IsSerialBanned( SQVM * pVM )
 	const SQChar * szSerial;
 	sq_getstring( pVM, -1, &szSerial );
 
-	sq_pushbool( pVM, pCore->GetBanManager()->IsSerialBanned( szSerial ) );
+	sq_pushbool( pVM, CCore::Instance()->GetBanManager()->IsSerialBanned( szSerial ) );
 	return 1;
 }

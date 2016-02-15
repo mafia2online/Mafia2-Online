@@ -7,10 +7,21 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
+#include	"BaseInc.h"
 
-extern	CCore			* pCore;
+#include	"CCore.h"
 
+#include	"CString.h"
+#include	"Math\CVector3.h"
+#include	"Math\CMaths.h"
+
+#include	"CGraphics.h"
+#include	"CM2Camera.h"
+
+#include	"CPlayerManager.h"
+#include	"CLocalPlayer.h"
+
+#include	"C3DTextLabelManager.h"
 C3DTextLabelManager::C3DTextLabelManager(void)
 {
 	DEBUG_TRACE("C3DTextLabelManager::C3DTextLabelManager");
@@ -107,9 +118,9 @@ bool	C3DTextLabelManager::IsOnScreen(EntityId textID)
 
 	// Convert coordinates
 	CVector3 vecScreen;
-	pCore->GetGraphics()->WorldToScreen(textPos, &vecScreen);
+	CCore::Instance()->GetGraphics()->WorldToScreen(textPos, &vecScreen);
 
-	return (pCore->GetCamera()->IsOnScreen(textPos));
+	return (CCore::Instance()->GetCamera()->IsOnScreen(textPos));
 }
 
 int		C3DTextLabelManager::GetCount(void)
@@ -155,7 +166,7 @@ void	C3DTextLabelManager::Render(void)
 		if (IsActive(i) == true){
 			// We get the player pos
 			CVector3 localPos;
-			pCore->GetPlayerManager()->GetLocalPlayer()->GetPosition(&localPos);
+			CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetPosition(&localPos);
 
 			// We get the textLabel pos
 			CVector3 textPos;
@@ -174,15 +185,15 @@ void	C3DTextLabelManager::Render(void)
 					float fScale = 1.0f;
 
 					//Font
-					float dimensionWidth = pCore->GetGraphics()->GetTextWidth(m_p3DTextLabels[i]->GetText().Get(), fScale, "tahoma-bold");
-					float dimensionHeight = pCore->GetGraphics()->GetFontHeight(fScale, "tahoma-bold");
+					float dimensionWidth = CCore::Instance()->GetGraphics()->GetTextWidth(m_p3DTextLabels[i]->GetText().Get(), fScale, "tahoma-bold");
+					float dimensionHeight = CCore::Instance()->GetGraphics()->GetFontHeight(fScale, "tahoma-bold");
 
 					// Convert position to screen position
 					CVector3 vecScreen;
-					pCore->GetGraphics()->WorldToScreen(textPos, &vecScreen);
+					CCore::Instance()->GetGraphics()->WorldToScreen(textPos, &vecScreen);
 
 					//Draw
-					pCore->GetGraphics()->DrawTextA(vecScreen.fX - (dimensionWidth / 2), vecScreen.fY, 0xFFFFFFFF, fScale, "tahoma-bold", true, m_p3DTextLabels[i]->GetText().Get());
+					CCore::Instance()->GetGraphics()->DrawTextA(vecScreen.fX - (dimensionWidth / 2), vecScreen.fY, 0xFFFFFFFF, fScale, "tahoma-bold", true, m_p3DTextLabels[i]->GetText().Get());
 				}
 			}
 		}

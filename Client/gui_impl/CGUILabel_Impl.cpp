@@ -7,7 +7,25 @@
 *
 ***************************************************************/
 
-#include	"../StdInc.h"
+#include	"../BaseInc.h"
+#include	"../CCore.h"
+
+#include	"../../Shared/CColor.h"
+#include	"../../Shared/CString.h"
+#include	"../../Shared/Math/CVector3.h"
+
+#include	"../CGUI.h"
+#include	"../CGUICallback.h"
+#include	"../CGUITypes.h"
+
+#include	"../CClientScriptGUIManager.h"
+#include	"../CClientScriptingManager.h"
+
+#include	"CGUI_Impl.h"
+#include	"CGUIFont_Impl.h"
+#include	"CGUIWindow_Impl.h"
+
+#include	"CGUILabel_Impl.h"
 
 CGUILabel_Impl::CGUILabel_Impl( CGUI_Impl * pGUI, String strText, CGUIFont_Impl * pFont, CGUIElement_Impl * pParent )
 {

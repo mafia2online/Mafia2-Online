@@ -7,7 +7,16 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
+#include "BaseInc.h"
+
+#include "CCore.h"
+
+#include "../Libraries/lua/lua.h"
+#include "CLua.h"
+
+#include "COffsets.h"
+#include "CPatcher.h"
+#include "CIE.h"
 
 extern	CCore							* pCore;
 char	* szExecuteName					= "12d42b0b65861af09561f91dcecf582e"; // md5("~/Mafia2Multiplayer#");

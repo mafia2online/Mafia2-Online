@@ -9,6 +9,9 @@
 
 #pragma once
 
+#include	"CDirectInput8Hook.h"
+#include	"CDirectInput8Proxy.h"
+
 #define DIRECTINPUT_VERSION		0x0800
 
 enum eDIDeviceType
@@ -68,5 +71,4 @@ public:
 	HRESULT STDMETHODCALLTYPE BuildActionMap(LPDIACTIONFORMATA p0, LPCSTR p1, DWORD p2);
 	HRESULT STDMETHODCALLTYPE SetActionMap(LPDIACTIONFORMATA p0, LPCSTR p1, DWORD p2);
 	HRESULT STDMETHODCALLTYPE GetImageInfo(LPDIDEVICEIMAGEINFOHEADERA p0);
-
 };

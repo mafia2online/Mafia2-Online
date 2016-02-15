@@ -7,9 +7,20 @@
 *
 ***************************************************************/
 
-#include	"../StdInc.h"
+#include	"../BaseInc.h"
+#include	"../CCore.h"
 
-extern	CCore				* pCore;
+#include	"../../Shared/CString.h"
+#include	"../../Shared/Math/CVector3.h"
+
+#include	"../CGUI.h"
+
+#include	"../CClientScriptGUIManager.h"
+#include	"../CClientScriptingManager.h"
+
+#include	"CGUI_Impl.h"
+#include	"CGUIWindow_Impl.h"
+#include	"CGUITabPanel_Impl.h"
 
 CGUITabPanel_Impl::CGUITabPanel_Impl( CGUI_Impl * pGUI, CGUIElement_Impl * pParent )
 {
@@ -106,8 +117,8 @@ bool CGUITabPanel_Impl::Event_OnSelectionChange( const CEGUI::EventArgs &e )
 		m_pfnHandler( (CGUIElement_Impl *)GetSelectedTab() );
 
 	// Pass the event to the client gui manager
-	if( pCore->GetClientScriptingManager() && pCore->GetClientScriptingManager()->GetScriptGUIManager() )
-		pCore->GetClientScriptingManager()->GetScriptGUIManager()->HandleEvent( "onGuiElementTabChange", GetSelectedTab() );
+	if( CCore::Instance()->GetClientScriptingManager() && CCore::Instance()->GetClientScriptingManager()->GetScriptGUIManager() )
+		CCore::Instance()->GetClientScriptingManager()->GetScriptGUIManager()->HandleEvent( "onGuiElementTabChange", GetSelectedTab() );
 
 	return true;
 }

@@ -7,9 +7,14 @@
 *
 ***************************************************************/
 
-#include "StdInc.h"
+#include	"BaseInc.h"
 
-extern	CCore		* pCore;
+#include	"CCore.h"
+
+#include	"CModelManager.h"
+
+#include	"CNetworkModelManager.h"
+
 std::list< CNetworkModel* > CNetworkModelManager::m_loadedModels;
 
 CNetworkModel::CNetworkModel( M2ModelMgr * pModelMgr, const char * szModel )
@@ -43,16 +48,16 @@ M2ModelMgr * CNetworkModelManager::Load( const char * szDir, const char * szMode
 	if( !pNetModel )
 	{
 		// Try get the model from the SDS model manager
-		M2ModelMgr * pModelMgr = pCore->GetModelManager()->GetModelMgrByName( szModel );
+		M2ModelMgr * pModelMgr = CCore::Instance()->GetModelManager()->GetModelMgrByName( szModel );
 
 		// Is the model not loaded?
-		if( pCore->GetModelManager() && !pModelMgr )
+		if( CCore::Instance()->GetModelManager() && !pModelMgr )
 		{
 #ifdef DEBUG
 			CLogFile::Printf( "CNetworkModelManager::Load() - Loading model '%s' (%s)", szModel, szDir );
 #endif
 			// Load the model
-			pModelMgr = pCore->GetModelManager()->LoadModel( szDir, szModel );
+			pModelMgr = CCore::Instance()->GetModelManager()->LoadModel( szDir, szModel );
 		}
 
 #ifdef DEBUG
@@ -149,5 +154,5 @@ void CNetworkModelManager::Cleanup ( void )
 	m_loadedModels.clear ();
 
 	// Clear the model manager list
-	pCore->GetModelManager()->Clear ();
+	CCore::Instance()->GetModelManager()->Clear ();
 }

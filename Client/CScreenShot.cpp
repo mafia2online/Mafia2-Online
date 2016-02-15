@@ -7,9 +7,26 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
+#include	"BaseInc.h"
 
-extern	CCore			* pCore;
+#include	"CCore.h"
+
+#include	"CScreenShot.h"
+
+#include	"SharedUtility.h"
+
+#include	"CChat.h"
+#include	"CM2Camera.h"
+
+#include	"CString.h"
+#include	"CColor.h"
+
+#include	"../Libraries/lpng142/png.h"
+
+#include	"Scripting\CSquirrelArguments.h"
+
+#include	"CClientScriptingManager.h"
+#include	"CEvents.h"
 
 bool CScreenShot::m_bSaving = false;
 
@@ -26,8 +43,8 @@ DWORD CScreenShot::WorkerThread( LPVOID lpParam )
 	unsigned long ulStartTime = SharedUtility::GetTime();
 
 	// Get the screen dimensions
-	unsigned long ulScreenWidth = pCore->GetCamera()->GetWindowWidth();
-	unsigned long ulScreenHeight = pCore->GetCamera()->GetWindowHeight();
+	unsigned long ulScreenWidth = CCore::Instance()->GetCamera()->GetWindowWidth();
+	unsigned long ulScreenHeight = CCore::Instance()->GetCamera()->GetWindowHeight();
 	unsigned int uiRequestDataSize = (ulScreenHeight * ulScreenWidth * 4);
 	unsigned int uiLinePitch = (ulScreenWidth * 4);
 
@@ -51,7 +68,7 @@ DWORD CScreenShot::WorkerThread( LPVOID lpParam )
 	// Did the file fail to open?
 	if( !fFile )
 	{
-		pCore->GetChat()->AddInfoMessage( CColor( 255, 0, 0, 255 ), "Failed to save screenshot. (Can't open target file)" );
+		CCore::Instance()->GetChat()->AddInfoMessage(CColor(255, 0, 0, 255), "Failed to save screenshot. (Can't open target file)");
 		CLogFile::Printf( "Failed to save screenshot. (Can't open target file)" );
 
 		// Cleanup the screen data buffer
@@ -100,8 +117,8 @@ DWORD CScreenShot::WorkerThread( LPVOID lpParam )
     pArguments.push( (int)ulElapsed );
 
 	// Should we output a message?
-	if( pCore->GetClientScriptingManager() && pCore->GetClientScriptingManager()->GetEvents() && pCore->GetClientScriptingManager()->GetEvents()->Call( "onClientScreenshot", &pArguments ).GetInteger() == 1 )
-		pCore->GetChat()->AddInfoMessage( "Screenshot taken: %s (Took %d seconds)", strFileName.Get(), ulElapsed );
+	if (CCore::Instance()->GetClientScriptingManager() && CCore::Instance()->GetClientScriptingManager()->GetEvents() && CCore::Instance()->GetClientScriptingManager()->GetEvents()->Call("onClientScreenshot", &pArguments).GetInteger() == 1)
+		CCore::Instance()->GetChat()->AddInfoMessage("Screenshot taken: %s (Took %d seconds)", strFileName.Get(), ulElapsed);
 
 	// Delete the data
 	delete[] m_ucData;
@@ -142,7 +159,7 @@ bool CScreenShot::BeginWrite( unsigned char * ucData )
 	// Did the thread fail to create?
 	if( !hThread )
 	{
-		pCore->GetChat()->AddInfoMessage( CColor( 255, 0, 0, 255 ), "Failed to save screenshot. (Can't create worker thread)" );
+		CCore::Instance()->GetChat()->AddInfoMessage(CColor(255, 0, 0, 255), "Failed to save screenshot. (Can't create worker thread)");
 		CLogFile::Printf( "Failed to save screenshot. (Can't create worker thread)" );
 		return false;
 	}

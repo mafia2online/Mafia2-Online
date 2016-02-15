@@ -7,9 +7,11 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
+#include	"BaseInc.h"
 
-extern	CCore			* pCore;
+#include "CFPSCounter.h"
+#include "CCore.h"
+#include "SharedUtility.h"
 
 CFPSCounter::CFPSCounter( void )
 {

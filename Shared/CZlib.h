@@ -12,6 +12,8 @@
 #include <stdio.h>
 #include "CString.h"
 
+#include "zlib.h"
+
 class CZlib
 {
 

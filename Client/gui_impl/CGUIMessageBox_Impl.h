@@ -9,6 +9,9 @@
 
 #pragma once
 
+#include	"CGUILabel_Impl.h"
+#include	"CGUIWindow_Impl.h"
+
 typedef void	( * ButtonClickHandler_t )( void * pUserData );
 
 class CGUIMessageBox_Impl

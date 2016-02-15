@@ -7,7 +7,31 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
+#include	"BaseInc.h"
+
+#include	"CCore.h"
+
+#include	"BitStream.h"
+
+#include	"Math\CVector3.h"
+#include	"CColor.h"
+#include	"CString.h"
+
+#include	"CPlayerManager.h"
+#include	"CLocalPlayer.h"
+#include	"CRemotePlayer.h"
+
+#include	"CVehicleManager.h"
+
+#include	<RPC4Plugin.h>
+#include	"../Shared/CNetworkRPC.h"
+
+#include	"CM2Hud.h"
+
+#include	"CMafia.h"
+
+#include	"CChat.h"
+
 #include	"CPlayerRPC.h"
 
 extern	CCore			* pCore;
@@ -20,10 +44,10 @@ void SetPlayerPosition( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket
 	pBitStream->Read( vecPosition );
 
 	// Is the localplayer valid?
-	if( pCore->GetPlayerManager()->GetLocalPlayer() )
+	if( CCore::Instance()->GetPlayerManager()->GetLocalPlayer() )
 	{
 		// Set the player position
-		pCore->GetPlayerManager()->GetLocalPlayer()->Teleport( vecPosition );
+		CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->Teleport(vecPosition);
 	}
 }
 
@@ -60,7 +84,7 @@ void SendPlayerMessage( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket
 	pBitStream->ReadCompressed( blue );
 
 	// Output the message
-	pCore->GetChat()->AddInfoMessage( CColor( red, green, blue, 255 ), strMessage.C_String() );
+	CCore::Instance()->GetChat()->AddInfoMessage(CColor(red, green, blue, 255), strMessage.C_String());
 }
 
 void SetPlayerHealth( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
@@ -150,7 +174,7 @@ void SetPlayerWeather( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket 
 	pBitStream->Read( strWeather );
 
 	// Change the weather
-	pCore->GetGame()->ChangeWeather( strWeather.C_String() );
+	CCore::Instance()->GetGame()->ChangeWeather( strWeather.C_String() );
 }
 
 void TogglePlayerHud( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
@@ -160,8 +184,8 @@ void TogglePlayerHud( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 	pBitStream->Read( bToggle );
 
 	// Toggle the hud
-	if( pCore->GetHud() )
-		pCore->GetHud()->Show( bToggle );
+	if (CCore::Instance()->GetHud())
+		CCore::Instance()->GetHud()->Show(bToggle);
 }
 
 void SetPlayerMoney( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
@@ -300,7 +324,7 @@ void PutPlayerInVehicle( RakNet::BitStream * pBitStream, RakNet::Packet * pPacke
 	// Is the player instance valid?
 	if ( pPlayer )
 	{
-		pPlayer->PutInVehicle ( pCore->GetVehicleManager()->Get( vehicleId ), seatId );
+		pPlayer->PutInVehicle ( CCore::Instance()->GetVehicleManager()->Get( vehicleId ), seatId );
 	}
 }
 

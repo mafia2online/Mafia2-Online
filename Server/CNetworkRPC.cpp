@@ -8,8 +8,8 @@
 ***************************************************************/
 
 #include	"StdInc.h"
+#include	"CCore.h"
 
-extern	CCore			* pCore;
 bool	CNetworkRPC::m_bRegistered = false;
 RakNet::BitStream		bsReject;
 
@@ -38,7 +38,7 @@ void InitialData( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 		pArguments.push( playerId );
 		pArguments.push( REJECT_REASON_VERSION );
 
-		bool bOutputDefaultMessage = (pCore->GetEvents()->Call( "onPlayerConnectionRejected", &pArguments ).GetInteger() == 1);
+		bool bOutputDefaultMessage = (CCore::Instance()->GetEvents()->Call( "onPlayerConnectionRejected", &pArguments ).GetInteger() == 1);
 
 		// Reset the bitstream
 		bsReject.Reset();
@@ -50,21 +50,21 @@ void InitialData( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 		bOutputDefaultMessage ? bsReject.Write1() : bsReject.Write0();
 
 		// Send it back to the client
-		pCore->GetNetworkModule()->Call( RPC_CONNECTION_REJECTED, &bsReject, HIGH_PRIORITY, RELIABLE_ORDERED, playerId, false );
+		CCore::Instance()->GetNetworkModule()->Call( RPC_CONNECTION_REJECTED, &bsReject, HIGH_PRIORITY, RELIABLE_ORDERED, playerId, false );
 
 		CLogFile::Printf( "[rejected] %s was rejected connection to the server. (Invalid network version - %d, %d)", strName.C_String(), iVersion, NETWORK_VERSION );
 		return;
 	}
 
 	// Is the nickname already in use?
-	if( pCore->GetPlayerManager()->IsNickInUse( strName ) )
+	if( CCore::Instance()->GetPlayerManager()->IsNickInUse( strName ) )
 	{
 		// Call the event
 		CSquirrelArguments pArguments;
 		pArguments.push( playerId );
 		pArguments.push( REJECT_REASON_NICKNAME );
 
-		bool bOutputDefaultMessage = (pCore->GetEvents()->Call( "onPlayerConnectionRejected", &pArguments ).GetInteger() == 1);
+		bool bOutputDefaultMessage = (CCore::Instance()->GetEvents()->Call( "onPlayerConnectionRejected", &pArguments ).GetInteger() == 1);
 
 		// Reset the bitstream
 		bsReject.Reset( );
@@ -76,21 +76,21 @@ void InitialData( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 		bOutputDefaultMessage ? bsReject.Write1() : bsReject.Write0();
 
 		// Send it back to the client
-		pCore->GetNetworkModule()->Call( RPC_CONNECTION_REJECTED, &bsReject, HIGH_PRIORITY, RELIABLE_ORDERED, playerId, false );
+		CCore::Instance()->GetNetworkModule()->Call( RPC_CONNECTION_REJECTED, &bsReject, HIGH_PRIORITY, RELIABLE_ORDERED, playerId, false );
 
 		CLogFile::Printf( "[rejected] %s was rejected connection to the server. (Nickname already in use)", strName.C_String() );
 		return;
 	}
 
 	// Is the player banned?
-	if( pCore->GetBanManager()->IsSerialBanned( strSerial ) )
+	if( CCore::Instance()->GetBanManager()->IsSerialBanned( strSerial ) )
 	{
 		// Call the event
 		CSquirrelArguments pArguments;
 		pArguments.push( playerId );
 		pArguments.push( REJECT_REASON_BANNED );
 
-		bool bOutputDefaultMessage = (pCore->GetEvents()->Call( "onPlayerConnectionRejected", &pArguments ).GetInteger() == 1);
+		bool bOutputDefaultMessage = (CCore::Instance()->GetEvents()->Call( "onPlayerConnectionRejected", &pArguments ).GetInteger() == 1);
 
 		// Reset the bitstream
 		bsReject.Reset( );
@@ -102,30 +102,30 @@ void InitialData( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 		bOutputDefaultMessage ? bsReject.Write1() : bsReject.Write0();
 
 		// Send it back to the client
-		pCore->GetNetworkModule()->Call( RPC_CONNECTION_REJECTED, &bsReject, HIGH_PRIORITY, RELIABLE_ORDERED, playerId, false );
+		CCore::Instance()->GetNetworkModule()->Call( RPC_CONNECTION_REJECTED, &bsReject, HIGH_PRIORITY, RELIABLE_ORDERED, playerId, false );
 
 		CLogFile::Printf( "[rejected] %s was rejected connection to the server. (Banned)", strName.C_String() );
 		return;
 	}
 
 	// Add the player to the manager
-	if( !pCore->GetPlayerManager()->Add( playerId, strName.C_String(), pPacket->systemAddress.ToString ( false ), strSerial.C_String() ) )
+	if( !CCore::Instance()->GetPlayerManager()->Add( playerId, strName.C_String(), pPacket->systemAddress.ToString ( false ), strSerial.C_String() ) )
 	{
 		CLogFile::Printf ( "WARNING - FAILED TO ADD PLAYER '%s' TO PLAYER MANAGER.", strName.C_String() );
 		return;
 	}
 
 	// Add everyone else connected for this player
-	pCore->GetPlayerManager()->HandlePlayerJoin( playerId );
+	CCore::Instance()->GetPlayerManager()->HandlePlayerJoin( playerId );
 
 	// Handle this player with the vehicle manager
-	pCore->GetVehicleManager()->HandlePlayerJoin( playerId );
+	CCore::Instance()->GetVehicleManager()->HandlePlayerJoin( playerId );
 
 	// Handle this with the blip manager
-	pCore->GetBlipManager()->HandlePlayerJoin ( playerId );
+	CCore::Instance()->GetBlipManager()->HandlePlayerJoin ( playerId );
 
 	// Handle this player with the client scripting manager
-	pCore->GetClientScriptingManager()->HandlePlayerJoin( playerId );
+	CCore::Instance()->GetClientScriptingManager()->HandlePlayerJoin( playerId );
 
 	// Construct a new bitstream
 	RakNet::BitStream bitStream;
@@ -134,7 +134,7 @@ void InitialData( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 	bitStream.WriteCompressed( playerId );
 
 	// Write the player colour
-	bitStream.Write( pCore->GetPlayerManager()->Get( playerId )->GetColour() );
+	bitStream.Write( CCore::Instance()->GetPlayerManager()->Get( playerId )->GetColour() );
 
 	// Write the server name
 	bitStream.Write( RakNet::RakString( CVAR_GET_STRING( "hostname" ) ) );
@@ -149,13 +149,13 @@ void InitialData( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 	bitStream.Write( (CVAR_GET_INTEGER( "port" ) + 1) ); // todo: REMOVE
 
 	// Write a bit to represent the server season
-	pCore->IsSummer() ? bitStream.Write1() : bitStream.Write0();
+	CCore::Instance()->IsSummer() ? bitStream.Write1() : bitStream.Write0();
 
 	// Write the weather name
-	bitStream.Write( RakNet::RakString ( pCore->GetWeather () ) );
+	bitStream.Write( RakNet::RakString ( CCore::Instance()->GetWeather () ) );
 
 	// Send it back to the player
-	pCore->GetNetworkModule()->Call( RPC_INITIAL_DATA, &bitStream, HIGH_PRIORITY, RELIABLE, playerId, false );
+	CCore::Instance()->GetNetworkModule()->Call( RPC_INITIAL_DATA, &bitStream, HIGH_PRIORITY, RELIABLE, playerId, false );
 }
 
 void PlayerChat( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
@@ -171,10 +171,10 @@ void PlayerChat( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 	pBitStream->Read( strInput );
 
 	// Is the player active?
-	if( pCore->GetPlayerManager()->IsActive( playerId ) )
+	if( CCore::Instance()->GetPlayerManager()->IsActive( playerId ) )
 	{
 		// Get a pointer to the player
-		CNetworkPlayer * pNetworkPlayer = pCore->GetPlayerManager()->Get( playerId );
+		CNetworkPlayer * pNetworkPlayer = CCore::Instance()->GetPlayerManager()->Get( playerId );
 
 		// Is the pointer valid?
 		if( pNetworkPlayer )
@@ -188,7 +188,7 @@ void PlayerChat( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 				pArguments.push( strInput );
 
 				//
-				bool bSend = (pCore->GetEvents()->Call( "onPlayerChat", &pArguments ).GetInteger() == 1);
+				bool bSend = (CCore::Instance()->GetEvents()->Call( "onPlayerChat", &pArguments ).GetInteger() == 1);
 
 				// Should we send this bitstream to players?
 				if ( bSend )
@@ -199,13 +199,13 @@ void PlayerChat( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 					RakNet::BitStream bitStream;
 					bitStream.WriteCompressed( playerId );
 					bitStream.Write( strInput );
-					pCore->GetNetworkModule()->Call( RPC_PLAYER_CHAT, &bitStream, HIGH_PRIORITY, RELIABLE_ORDERED, playerId, true );
+					CCore::Instance()->GetNetworkModule()->Call( RPC_PLAYER_CHAT, &bitStream, HIGH_PRIORITY, RELIABLE_ORDERED, playerId, true );
 				}
 			}
 			else
 			{
 				// Call the command handler
-				pCore->GetCommands()->HandleCommand( playerId, strInput.C_String() );
+				CCore::Instance()->GetCommands()->HandleCommand( playerId, strInput.C_String() );
 			}
 		}
 	}
@@ -221,7 +221,7 @@ void PlayerSync( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 	pBitStream->Read( (char *)&onFootSync, sizeof(OnFootSync) );
 
 	// Get a pointer to the player
-	CNetworkPlayer * pNetworkPlayer = pCore->GetPlayerManager()->Get( playerId );
+	CNetworkPlayer * pNetworkPlayer = CCore::Instance()->GetPlayerManager()->Get( playerId );
 
 	// Is the player pointer valid?
 	if( pNetworkPlayer )
@@ -241,7 +241,7 @@ void PlayerDeath( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 	pBitStream->ReadCompressed( killerId );
 
 	// Get a pointer to the player
-	CNetworkPlayer * pPlayer = pCore->GetPlayerManager()->Get(playerId);
+	CNetworkPlayer * pPlayer = CCore::Instance()->GetPlayerManager()->Get(playerId);
 
 	// Is the player pointer valid?
 	if( pPlayer )
@@ -253,7 +253,7 @@ void PlayerDeath( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 		if( killerId != INVALID_ENTITY_ID )
 		{
 			// Find the killer
-			CNetworkPlayer * pKiller = pCore->GetPlayerManager()->Get(killerId);
+			CNetworkPlayer * pKiller = CCore::Instance()->GetPlayerManager()->Get(killerId);
 
 			// Is the killer valid?
 			if( pKiller )
@@ -270,7 +270,7 @@ void PlayerDeath( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 		CSquirrelArguments pArguments;
 		pArguments.push( playerId );
 		pArguments.push( killerId );
-		pCore->GetEvents()->Call( "onPlayerDeath", &pArguments );
+		CCore::Instance()->GetEvents()->Call( "onPlayerDeath", &pArguments );
 	}
 }
 
@@ -280,7 +280,7 @@ void PlayerSpawn( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 	EntityId playerId = (EntityId)pPacket->guid.systemIndex;
 
 	// Get a pointer to the player
-	CNetworkPlayer * pNetworkPlayer = pCore->GetPlayerManager()->Get( playerId );
+	CNetworkPlayer * pNetworkPlayer = CCore::Instance()->GetPlayerManager()->Get( playerId );
 
 	// Is the player pointer valid?
 	if( pNetworkPlayer )
@@ -289,17 +289,17 @@ void PlayerSpawn( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 		pNetworkPlayer->SpawnForWorld();
 
 		// Spawn everyone else connected for this player
-		pCore->GetPlayerManager()->HandlePlayerSpawn( playerId );
+		CCore::Instance()->GetPlayerManager()->HandlePlayerSpawn( playerId );
 
 		// Spawn all vehicles for this player
-		pCore->GetVehicleManager()->HandlePlayerSpawn( playerId );
+		CCore::Instance()->GetVehicleManager()->HandlePlayerSpawn( playerId );
 
 		CLogFile::Printf( "[spawn] %s has spawned.", pNetworkPlayer->GetNick() ); 
 
 		// Call the event
 		CSquirrelArguments pArguments;
 		pArguments.push( playerId );
-		pCore->GetEvents()->Call( "onPlayerSpawn", &pArguments );
+		CCore::Instance()->GetEvents()->Call( "onPlayerSpawn", &pArguments );
 	}
 }
 
@@ -309,7 +309,7 @@ void PlayerRespawn( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 	EntityId playerId = (EntityId)pPacket->guid.systemIndex;
 
 	// Get a pointer to the player
-	CNetworkPlayer * pNetworkPlayer = pCore->GetPlayerManager()->Get(playerId);
+	CNetworkPlayer * pNetworkPlayer = CCore::Instance()->GetPlayerManager()->Get(playerId);
 
 	// Is the player pointer valid?
 	if( pNetworkPlayer )
@@ -327,13 +327,13 @@ void PlayerChangeNick( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket 
 	pBitStream->Read( sNewNick );
 
 	// Get a pointer to the player
-	CNetworkPlayer * pNetworkPlayer = pCore->GetPlayerManager()->Get(playerId);
+	CNetworkPlayer * pNetworkPlayer = CCore::Instance()->GetPlayerManager()->Get(playerId);
 
 	// Is the player pointer valid?
 	if( pNetworkPlayer )
 	{
 		// If new kick is not already took
-		if( !pCore->GetPlayerManager()->IsNickInUse( sNewNick.C_String() ) ){
+		if( !CCore::Instance()->GetPlayerManager()->IsNickInUse( sNewNick.C_String() ) ){
 			// Change the player nick
 			pNetworkPlayer->ChangeNick( sNewNick.C_String() );
 		}
@@ -354,10 +354,10 @@ void VehicleSync( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 	pBitStream->Read( (char *)&vehicleSync, sizeof(InVehicleSync) );
 
 	// Get a pointer to the player
-	CNetworkPlayer * pNetworkPlayer = pCore->GetPlayerManager()->Get( playerId );
+	CNetworkPlayer * pNetworkPlayer = CCore::Instance()->GetPlayerManager()->Get( playerId );
 
 	// Get a pointer to the vehicle
-	CNetworkVehicle * pNetworkVehicle = pCore->GetVehicleManager()->Get( vehicleId );
+	CNetworkVehicle * pNetworkVehicle = CCore::Instance()->GetVehicleManager()->Get( vehicleId );
 
 	// Is the vehicle pointer valid?
 	if( pNetworkPlayer && pNetworkVehicle )
@@ -380,7 +380,7 @@ void PassengerSync( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 	pBitStream->Read( (char *)&passengerSync, sizeof(InPassengerSync) );
 
 	// Get a pointer to the player
-	CNetworkPlayer * pNetworkPlayer = pCore->GetPlayerManager()->Get( playerId );
+	CNetworkPlayer * pNetworkPlayer = CCore::Instance()->GetPlayerManager()->Get( playerId );
 
 	// Is the player pointer valid?
 	if( pNetworkPlayer )
@@ -400,7 +400,7 @@ void UnoccupiedVehicleSync( RakNet::BitStream * pBitStream, RakNet::Packet * pPa
 	pBitStream->ReadCompressed( vehicleId );
 
 	// Get a pointer to the vehicle
-	CNetworkVehicle * pNetworkVehicle = pCore->GetVehicleManager()->Get( vehicleId );
+	CNetworkVehicle * pNetworkVehicle = CCore::Instance()->GetVehicleManager()->Get( vehicleId );
 
 	// Is the vehicle pointer valid?
 	if( pNetworkVehicle )
@@ -424,7 +424,7 @@ void VehicleEnter( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 	pBitStream->ReadCompressed( seatId );
 
 	// Get the player instance
-	CNetworkPlayer * pNetworkPlayer = pCore->GetPlayerManager()->Get( playerId );
+	CNetworkPlayer * pNetworkPlayer = CCore::Instance()->GetPlayerManager()->Get( playerId );
 
 	// Is the player instance valid?
 	if( pNetworkPlayer )
@@ -451,7 +451,7 @@ void VehicleExit( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 	bool bExitFast = pBitStream->ReadBit();
 
 	// Get the player instance
-	CNetworkPlayer * pNetworkPlayer = pCore->GetPlayerManager()->Get( playerId );
+	CNetworkPlayer * pNetworkPlayer = CCore::Instance()->GetPlayerManager()->Get( playerId );
 
 	// Is the player instance valid?
 	if( pNetworkPlayer )
@@ -468,7 +468,7 @@ void VehicleRespawn( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 	pBitStream->ReadCompressed( vehicleId );
 
 	// Get a pointer to the vehicle
-	CNetworkVehicle * pNetworkVehicle = pCore->GetVehicleManager()->Get( vehicleId );
+	CNetworkVehicle * pNetworkVehicle = CCore::Instance()->GetVehicleManager()->Get( vehicleId );
 
 	// Is the vehicle pointer valid?
 	if( pNetworkVehicle )
@@ -484,7 +484,7 @@ void VehicleEnterDone( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket 
 	EntityId playerId = (EntityId)pPacket->guid.systemIndex;
 
 	// Get a pointer to the player
-	CNetworkPlayer * pNetworkPlayer = pCore->GetPlayerManager()->Get( playerId );
+	CNetworkPlayer * pNetworkPlayer = CCore::Instance()->GetPlayerManager()->Get( playerId );
 
 	// Is the vehicle pointer valid?
 	if( pNetworkPlayer )
@@ -506,7 +506,7 @@ void TriggerEvent( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 		pArgs->pop_front();
 		pArgs->push_front( new CSquirrelArgument( (int)pPacket->systemAddress.systemIndex ) );
 
-		pCore->GetEvents()->Call( strEventName, pArgs );
+		CCore::Instance()->GetEvents()->Call( strEventName, pArgs );
 		SAFE_DELETE( pEventName );
 	}
 
@@ -519,7 +519,7 @@ void PlayerPing( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 	EntityId playerId = (EntityId)pPacket->guid.systemIndex;
 
 	// Get the network player instance
-	CNetworkPlayer * pPlayer = pCore->GetPlayerManager()->Get ( playerId );
+	CNetworkPlayer * pPlayer = CCore::Instance()->GetPlayerManager()->Get ( playerId );
 
 	// Is the player instance valid?
 	if ( pPlayer )

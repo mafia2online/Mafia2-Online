@@ -9,6 +9,12 @@
 
 #pragma once
 
+#include	"../CGUI.h"
+#include	"../CGUICallback.h"
+#include	"../CGUIEvent.h"
+
+#include	"../../Shared/CString.h"
+
 // Message box types
 enum eMessageBoxFlags
 {

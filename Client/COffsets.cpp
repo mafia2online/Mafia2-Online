@@ -7,7 +7,11 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
+#include "BaseInc.h"
+
+#include "CPatcher.h"
+
+#include "COffsets.h"
 
 unsigned int COffsets::VAR_CGame = 0;
 unsigned int COffsets::FUNC_CGame__OnGameInit = 0;

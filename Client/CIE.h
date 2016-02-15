@@ -10,6 +10,10 @@
 
 #pragma once
 
+#include "CCommon.h"
+
+class CVector3;
+
 enum E_ObjType : unsigned char
 {
 	OBJTYPE_Human			=	0xE,
@@ -38,7 +42,7 @@ public:
 	// Maybe it's just marking as minimized?
 	void SetMinimized( bool bMinimized )
 	{
-		DWORD dwFunc = 0x57BDE0;
+		DWORD dwFunc = 0x57BDE0; //Todo: Move to COffsets
 
 		_asm push bMinimized;
 		_asm mov ecx, this;
@@ -115,6 +119,8 @@ public:
 	}
 };
 
+class M2ScriptHandler;
+
 class M2ScriptEngine
 {
 public:
@@ -149,6 +155,8 @@ class M2Entity;
 class M2Vehicle;
 class M2ModelMgr;
 
+struct lua_State;
+
 namespace IE
 {
 	void				* Malloc( size_t uiSize );
@@ -165,7 +173,7 @@ namespace IE
 
 	M2BaseEntity		* GetEntityByName( const char * szEntityName );
 	M2Ped				* CreatePlayerPed ( void );
-	M2Entity			* CreateItem( CVector3 vecPosition );
-	M2Ped				* CreatePed( M2ModelMgr * pModelMgr, CVector3 vecPosition );
-	M2Vehicle			* CreateVehicle( M2ModelMgr * pModelMgr, CVector3 vecPosition );
+	M2Entity			* CreateItem( const CVector3& vecPosition );
+	M2Ped				* CreatePed( M2ModelMgr * pModelMgr, const CVector3& vecPosition );
+	M2Vehicle			* CreateVehicle( M2ModelMgr * pModelMgr, const CVector3& vecPosition );
 };

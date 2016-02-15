@@ -1,5 +1,7 @@
 #pragma once
 
+class CM2Object;
+
 class CM2ObjectTable
 {
 public:

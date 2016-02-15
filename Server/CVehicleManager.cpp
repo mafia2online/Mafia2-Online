@@ -8,8 +8,7 @@
 ***************************************************************/
 
 #include	"StdInc.h"
-
-extern		CCore				* pCore;
+#include	"CCore.h"
 
 CVehicleManager::CVehicleManager( void )
 {
@@ -147,7 +146,7 @@ void CVehicleManager::HandlePlayerJoin( EntityId playerId )
 void CVehicleManager::HandlePlayerQuit( EntityId playerId )
 {
 	// Get a pointer to the network player
-	CNetworkPlayer * pNetworkPlayer = pCore->GetPlayerManager()->Get( playerId );
+	CNetworkPlayer * pNetworkPlayer = CCore::Instance()->GetPlayerManager()->Get( playerId );
 
 	// Invalid player?
 	if( !pNetworkPlayer )

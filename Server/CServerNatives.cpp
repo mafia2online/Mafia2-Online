@@ -9,7 +9,7 @@
 
 #include	"CServerNatives.h"
 
-extern CCore		* pCore;
+#include	"CCore.h"
 
 void CServerNatives::Register( CScriptingManager * pScriptingManager )
 {
@@ -31,7 +31,7 @@ SQInteger CServerNatives::SetGameModeText( SQVM * pVM )
 	sq_getstring( pVM, -1, &szGamemode );
 
 	// Store the gamemode text
-	pCore->SetGameModeText( szGamemode );
+	CCore::Instance()->SetGameModeText( szGamemode );
 
 	sq_pushbool( pVM, true );
 	return 1;
@@ -44,7 +44,7 @@ SQInteger CServerNatives::SetMapName( SQVM * pVM )
 	sq_getstring( pVM, -1, &szMap );
 
 	// Store the map name
-	pCore->SetMapName( szMap );
+	CCore::Instance()->SetMapName( szMap );
 
 	sq_pushbool( pVM, true );
 	return 1;
@@ -57,7 +57,7 @@ SQInteger CServerNatives::SetWeather( SQVM * pVM )
 	sq_getstring( pVM, -1, &szWeather );
 
 	// Set the weather
-	pCore->SetWeather( szWeather );
+	CCore::Instance()->SetWeather( szWeather );
 
 	// Construct a new bitstream
 	RakNet::BitStream pBitStream;
@@ -66,7 +66,7 @@ SQInteger CServerNatives::SetWeather( SQVM * pVM )
 	pBitStream.Write( RakNet::RakString( szWeather ) );
 
 	// Send to all clients
-	pCore->GetNetworkModule()->Call( RPC_SETPLAYERWEATHER, &pBitStream, HIGH_PRIORITY, RELIABLE, INVALID_ENTITY_ID, true );
+	CCore::Instance()->GetNetworkModule()->Call( RPC_SETPLAYERWEATHER, &pBitStream, HIGH_PRIORITY, RELIABLE, INVALID_ENTITY_ID, true );
 
 	sq_pushbool( pVM, true );
 	return 1;
@@ -79,7 +79,7 @@ SQInteger CServerNatives::SetSummer( SQVM * pVM )
 	sq_getbool( pVM, -1, &bSummer );
 
 	// Set the server season
-	pCore->SetSummer( bSummer );
+	CCore::Instance()->SetSummer( bSummer );
 
 	sq_pushbool( pVM, true );
 	return 1;
@@ -192,6 +192,6 @@ SQInteger CServerNatives::Shutdown( SQVM * pVM )
 	sq_pushbool( pVM, true );
 
 	// Shutdown the server
-	pCore->SetActive ( false );
+	CCore::Instance()->SetActive ( false );
 	return 1;
 }

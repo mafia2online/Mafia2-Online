@@ -9,22 +9,26 @@
 
 #pragma once
 
-#include "CStreamableEntity.h"
+#include <list>
 
-#define	STREAMER_TICKRATE			3000
+#include "ExplicitSingleton.h"
 
-class CStreamer : public std::list< CStreamableEntity* >
+class CStreamableEntity;
+
+static const unsigned STREAMER_TICKRATE = 3000;
+
+class CStreamer : public std::list< CStreamableEntity* >, public ExplicitSingleton<CStreamer>
 {
 
 private:
 
-	unsigned long				m_ulLastStreamTime;
+	unsigned long		m_ulLastStreamTime;
 
 public:
 
-								CStreamer								( void );
-								~CStreamer								( void );
+						CStreamer				( void );
+						~CStreamer				( void );
 
-	void						Process									( void );				
+	void				Process					( void );
 
 };

@@ -7,10 +7,20 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
+#include	"BaseInc.h"
 
-extern	CCore			* pCore;
+#include	"CCore.h"
 
+#include	"CAudio.h"
+#include	"CAudioManager.h"
+
+#include	"Scripting\CSquirrel.h"
+#include	"Scripting\CSquirrelCommon.h"
+#include	"Scripting\CScriptingManager.h"
+
+#include	"SharedUtility.h"
+
+#include	"CAudioNatives.h"
 _MEMBER_FUNCTION_IMPL(Audio, constructor);
 _MEMBER_FUNCTION_IMPL(Audio, deleteSound);
 _MEMBER_FUNCTION_IMPL(Audio, play);
@@ -81,7 +91,7 @@ _MEMBER_FUNCTION_IMPL(Audio, constructor)
 	}
 
 	// Add and return
-	pCore->GetAudioManager()->Add(pAudio);
+	CCore::Instance()->GetAudioManager()->Add(pAudio);
 	sq_pushbool(pVM, true);
 	return 1;
 }
@@ -99,7 +109,7 @@ _MEMBER_FUNCTION_IMPL(Audio, deleteSound)
 	}
 
 	// Remove file
-	pCore->GetAudioManager()->Remove(pAudio);
+	CCore::Instance()->GetAudioManager()->Remove(pAudio);
 	sq_setinstance(pVM, NULL);
 	// Return
 	return (1);

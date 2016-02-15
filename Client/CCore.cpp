@@ -7,10 +7,87 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
+#include	"BaseInc.h"
 #include	<ShellAPI.h>
 
-extern	CCore			* pCore;
+#include	"Scripting\CSquirrelArguments.h"
+
+#include	"CString.h"
+
+#include	"SharedUtility.h"
+
+#include	"CWPMHook.h"
+
+#include	"CRC.h"
+
+#include	"CGameFiles.h"
+#include	"CSettings.h"
+
+#include	"CMafia.h"
+#include	"CCommands.h"
+#include	"CEvents.h"
+#include	"CGraphics.h"
+#include	"CStreamer.h"
+#include	"CFPSCounter.h"
+#include	"CLua.h"
+#include	"CModelManager.h"
+#include	"CM2Camera.h"
+
+#include	"CNetworkModule.h"
+#include	"CIE.h"
+#include	"CM2Hud.h"
+
+#include	"CLoadingScreen.h"
+#include	"CChat.h"
+
+#include	"CGUI.h"
+#include	"CEGUI.h"
+#include	"CDirect3D9Hook.h"
+#include	"CDirectInput8Hook.h"
+#include	"gui_impl\CGUI_Impl.h"
+
+#include	"CMainMenu.h"
+#include	"CServerBrowser.h"
+#include	"CMenuSettings.h"
+
+#include	"CAudioManager.h"
+
+#include	"CM2VideoSettings.h"
+
+#include	"CClientScriptingManager.h"
+
+#include	"CVehicleManager.h"
+
+#include	"CPedManager.h"
+
+#include	"COffsets.h"
+#include	"CPatcher.h"
+#include	"CPatches.h"
+
+#include	"CScreenShot.h"
+
+#include	"CNameTag.h"
+#include	"../Shared/Network/CNetworkStats.h"
+
+#include	"CPlayerManager.h"
+#include	"CVehicleManager.h"
+#include	"CLocalPlayer.h"
+
+#include	"engine\CM2Entity.h"
+#include	"engine\CM2Ped.h"
+
+#include	"Timers\CTimerManager.h"
+#include	"CFileTransferManager.h"
+
+#include	"C3DTextLabelManager.h"
+#include	"CKeyBinds.h"
+#include	"CModelManager.h"
+#include	"CBlipManager.h"
+
+#include	"CNetworkModelManager.h"
+
+#include	"CCore.h"
+
 IDirect3DStateBlock9	* pStateBlock = NULL;
 CSquirrelArguments		pArguments;
 bool					bDeviceLost = false;
@@ -192,10 +269,10 @@ bool CCore::Initialise( void )
 void CCore::Shutdown( void )
 {
 	// Are we connected to the network?
-	if( pCore->GetNetworkModule()->IsConnected() )
+	if( CCore::Instance()->GetNetworkModule()->IsConnected() )
 	{
 		// Disconnect and shutdown RakNet
-		pCore->GetNetworkModule()->Disconnect( false );
+		CCore::Instance()->GetNetworkModule()->Disconnect( false );
 	}
 
 	// Delete ourselfs
@@ -216,13 +293,13 @@ void CCore::OnGameLoad( void )
 	IE::LoadPointers ();
 
 	// Create and set the camera instance
-	pCore->SetCamera( new CM2Camera( *(M2Camera **)COffsets::VAR_CCamera ) );
+	CCore::Instance()->SetCamera( new CM2Camera( *(M2Camera **)COffsets::VAR_CCamera ) );
 
 	// Create and set the hud instance
-	pCore->SetHud( new CM2Hud( *(M2Hud **)COffsets::VAR_CHud ) );
+	CCore::Instance()->SetHud( new CM2Hud( *(M2Hud **)COffsets::VAR_CHud ) );
 
 	// Setup the game pointers
-	pCore->GetGame()->LoadPointers ();
+	CCore::Instance()->GetGame()->LoadPointers ();
 
 #ifdef DEBUG
 	CLogFile::Printf ( "LocalPed: 0x%p", IE::GetGame()->m_pLocalPed);
@@ -427,7 +504,7 @@ void CCore::OnDeviceRender( void )
 
 	// Is there a connection problem?
 	if ( IsConnectionProblem () )
-		pCore->GetGraphics()->DrawText ( (pCore->GetGUI()->GetCEGUI()->GetResolution().fX - pCore->GetGraphics()->GetTextWidth("Connection Problem", 1.0f, "tahoma-bold") - 5), 5, D3DCOLOR_ARGB(255, 255, 0, 0), 1.0f, "tahoma-bold", true, "Connection Problem" );
+		CCore::Instance()->GetGraphics()->DrawText ( (CCore::Instance()->GetGUI()->GetCEGUI()->GetResolution().fX - CCore::Instance()->GetGraphics()->GetTextWidth("Connection Problem", 1.0f, "tahoma-bold") - 5), 5, D3DCOLOR_ARGB(255, 255, 0, 0), 1.0f, "tahoma-bold", true, "Connection Problem" );
 
 	// Call the vehicle manager processor
 	if ( m_pVehicleManager )
@@ -497,7 +574,7 @@ void CCore::OnDeviceRender( void )
 		m_pNameTag->Draw();
 
 	// Render the 3DTextLabels
-	if (m_p3DTextLabelManager && pCore->GetPlayerManager()->GetLocalPlayer()->IsSpawned() == true){
+	if (m_p3DTextLabelManager && CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->IsSpawned() == true){
 		m_p3DTextLabelManager->Render();
 	}
 
@@ -565,14 +642,14 @@ void CCore::OnGameProcess( void )
 		pPlayerPed->SetPosition ( vecPos );
 		pPlayerPed->Activate ();
 
-		pCore->GetChat()->AddDebugMessage ( "Ped: 0x%p", pPlayerPed->GetPed() );
+		CCore::Instance()->GetChat()->AddDebugMessage ( "Ped: 0x%p", pPlayerPed->GetPed() );
 	}
 
 	if (GetAsyncKeyState(VK_F7) & 0x1)
 	{
-		/*pCore->GetChat()->AddDebugMessage("Etat : %d", pCore->GetVehicleManager()->Get(pCore->GetPlayerManager()->GetLocalPlayer()->GetVehicle()->GetId())->IsWindowOpen(0));
-		pCore->GetVehicleManager()->Get(pCore->GetPlayerManager()->GetLocalPlayer()->GetVehicle()->GetId())->SetWindowOpen(0, true);
-		pCore->GetChat()->AddDebugMessage("Etat : %d", pCore->GetVehicleManager()->Get(pCore->GetPlayerManager()->GetLocalPlayer()->GetVehicle()->GetId())->IsWindowOpen(0));*/
+		/*CCore::Instance()->GetChat()->AddDebugMessage("Etat : %d", CCore::Instance()->GetVehicleManager()->Get(CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetVehicle()->GetId())->IsWindowOpen(0));
+		CCore::Instance()->GetVehicleManager()->Get(CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetVehicle()->GetId())->SetWindowOpen(0, true);
+		CCore::Instance()->GetChat()->AddDebugMessage("Etat : %d", CCore::Instance()->GetVehicleManager()->Get(CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetVehicle()->GetId())->IsWindowOpen(0));*/
 	}
 
 	// Call the script event
@@ -612,7 +689,7 @@ void CCore::StartMultiplayer( void )
 	m_pPlayerManager->GetLocalPlayer()->SetNick( GetNick () );
 
 	// Lock player controls
-	pCore->GetPlayerManager()->GetLocalPlayer()->LockControls( true );
+	CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->LockControls( true );
 
 	// Create the key binds instance
 	m_pKeyBinds = new CKeyBinds;
@@ -674,7 +751,7 @@ void CCore::StopMultiplayer( void )
 	m_pChat->ClearHistory();
 
 	// Lock player controls
-	pCore->GetPlayerManager()->GetLocalPlayer()->LockControls( true );
+	CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->LockControls( true );
 
 	// Delete the keybinds
 	SAFE_DELETE( m_pKeyBinds );
@@ -715,7 +792,7 @@ void CCore::StopMultiplayer( void )
 void CCore::TakeScreenshot( void )
 {
 	// Is the camera instance not valid yet?
-	if( !pCore->GetCamera() )
+	if( !CCore::Instance()->GetCamera() )
 		return;
 
 	// Mark as taking screenshot

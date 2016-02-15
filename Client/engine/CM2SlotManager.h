@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include	"CM2Entity.h"
+
 class CM2Slot
 {
 public:

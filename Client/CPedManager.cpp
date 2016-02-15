@@ -7,9 +7,16 @@
 *
 ***************************************************************/
 
-#include "StdInc.h"
+#include "BaseInc.h"
 
-extern	CCore			* pCore;
+#include	"CCore.h"
+
+#include	"Math\CVector3.h"
+#include	"CString.h"
+
+#include	"CPed.h"
+
+#include	"CPedManager.h"
 
 CPedManager::CPedManager( void )
 {

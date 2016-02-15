@@ -8,8 +8,7 @@
 ***************************************************************/
 
 #include	"StdInc.h"
-
-extern		CCore				* pCore;
+#include	"CCore.h"
 
 CPlayerManager::CPlayerManager( void )
 {
@@ -62,7 +61,7 @@ bool CPlayerManager::Add( EntityId playerId, const char * szNick, const char * s
 	pArguments.push( szNick );
 	pArguments.push( szIP );
 	pArguments.push( szSerial );
-	pCore->GetEvents()->Call( "onPlayerConnect", &pArguments );
+	CCore::Instance()->GetEvents()->Call( "onPlayerConnect", &pArguments );
 
 	CLogFile::Printf( "[join] %s has connected to the server.", szNick );
 
@@ -79,13 +78,13 @@ void CPlayerManager::Remove( EntityId playerId, unsigned int uiReason )
 	m_pNetworkPlayer[ playerId ]->RemoveForWorld();
 
 	// Handle this quit with the vehicle manager
-	pCore->GetVehicleManager()->HandlePlayerQuit( playerId );
+	CCore::Instance()->GetVehicleManager()->HandlePlayerQuit( playerId );
 
 	// Call scripting event
 	CSquirrelArguments pArguments;
 	pArguments.push( playerId );
 	pArguments.push( SharedUtility::DiconnectReasonToString( uiReason ) );
-	pCore->GetEvents()->Call( "onPlayerDisconnect", &pArguments );
+	CCore::Instance()->GetEvents()->Call( "onPlayerDisconnect", &pArguments );
 
 	CLogFile::Printf( "[quit] %s has left the server (%s).", m_pNetworkPlayer[ playerId ]->GetNick(), SharedUtility::DiconnectReasonToString( uiReason ).Get() );
 

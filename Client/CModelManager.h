@@ -9,6 +9,12 @@
 
 #pragma once
 
+#include <vector>
+
+#include	"COffsets.h"
+
+#include	"engine\CM2Entity.h"
+
 #define MODELMGR_MAX			1000
 #define SDS_LOAD_DIR_ADDR		0x18F6FDC
 #define SDS_LOAD_DIR_CARS		"/sds/cars/"
@@ -16,7 +22,10 @@
 #define SDS_LOAD_DIR_PLAYER		"/sds/player/"
 #define SDS_LOAD_DIR_TRAFFIC	"/sds/traffic/"
 
+class M2Model;
 class CModelManager;
+class CM2Slot;
+
 class M2ModelMgr
 {
 public:

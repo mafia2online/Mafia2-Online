@@ -8,8 +8,7 @@
 ***************************************************************/
 
 #include	"StdInc.h"
-
-extern	CCore			* pCore;
+#include	"CCore.h"
 
 const char * GetIPFromSocketAddress(int af, const void * src, char * dst, int cnt)
 {
@@ -41,7 +40,7 @@ void CQuery::WorkerThread ( CThread * pCreator )
 	while ( pCreator->GetUserData< bool > () )
 	{
 		// Get the query instance
-		CQuery * pQuery = pCore->GetQuery ();
+		CQuery * pQuery = CCore::Instance()->GetQuery ();
 
 		// Is the query instance valid?
 		if ( pQuery )
@@ -150,7 +149,7 @@ std::string CQuery::QueryLight( void )
 	reply << CVAR_GET_STRING( "hostname" );
 
 	// players
-	String strPlayers( "%d", pCore->GetPlayerManager()->GetCount() );
+	String strPlayers( "%d", CCore::Instance()->GetPlayerManager()->GetCount() );
 	reply << ( unsigned char )( strPlayers.GetLength() + 1 );
 	reply << strPlayers.Get();
 
@@ -160,11 +159,11 @@ std::string CQuery::QueryLight( void )
 	reply << strMaxPlayers.Get();
 
 	// gamemode
-	reply << ( unsigned char )( strlen( pCore->GetGameModeText() ) + 1 );
-	reply << pCore->GetGameModeText();
+	reply << ( unsigned char )( strlen( CCore::Instance()->GetGameModeText() ) + 1 );
+	reply << CCore::Instance()->GetGameModeText();
 
 	// password
-	reply << ( unsigned char )( pCore->IsPasswordProtected() ? 1 : 0 );
+	reply << ( unsigned char )( CCore::Instance()->IsPasswordProtected() ? 1 : 0 );
 
 	// Players def
 	CNetworkPlayer * pPlayer = NULL;
@@ -175,10 +174,10 @@ std::string CQuery::QueryLight( void )
 	for( EntityId i = 0; i < MAX_PLAYERS; i++ )
 	{
 		// Is the current player active?
-		if( pCore->GetPlayerManager()->IsActive( i ) )
+		if( CCore::Instance()->GetPlayerManager()->IsActive( i ) )
 		{
 			// Get a pointer to the current player
-			pPlayer = pCore->GetPlayerManager()->Get( i );
+			pPlayer = CCore::Instance()->GetPlayerManager()->Get( i );
 
 			// (TODO: Fix this ugly ifdef)
 #ifdef _WIN32

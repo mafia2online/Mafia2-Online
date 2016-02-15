@@ -7,7 +7,13 @@
 *
 ***************************************************************/
 
-#include "../StdInc.h"
+#include "BaseInc.h"
+
+#include "CM2ObjectTable.h"
+
+#include "CM2Object.h"
+
+#include "COffsets.h"
 
 int CM2ObjectTable::GetSize( void )
 {

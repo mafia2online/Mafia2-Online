@@ -7,9 +7,24 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
+#include	"BaseInc.h"
 
-extern	CCore				* pCore;
+#include	"CCore.h"
+
+#include	"Math\CQuaternion.h"
+#include	"Math\CVector3.h"
+
+#include	"CPlayerManager.h"
+#include	"CVehicleManager.h"   
+#include	"CLocalPlayer.h"
+#include	"CNetworkPlayer.h"
+#include	"CNetworkVehicle.h"
+
+#include	"CSync.h"
+
+#include	"SharedUtility.h"
+
+#include	 "CRemotePlayer.h"
 
 CRemotePlayer::CRemotePlayer( void ) : CNetworkPlayer( false )
 {
@@ -95,7 +110,7 @@ void CRemotePlayer::StoreOnFootSync( OnFootSync * onFootSync )
 
 	// Get the localplayer position
 	CVector3 vecLocalPos;
-	pCore->GetPlayerManager()->GetLocalPlayer()->GetPosition( &vecLocalPos );
+	CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetPosition( &vecLocalPos );
 
 	// Is the player in range of the localplayer?
 	if( (vecLocalPos - onFootSync->m_vecPosition).Length() < 200.0f )
@@ -152,10 +167,10 @@ void CRemotePlayer::StoreOnFootSync( OnFootSync * onFootSync )
 			SetModel( onFootSync->m_uiModelIndex );
 
 		// Update the animStyle
-		pCore->GetPlayerManager()->Get(m_playerId)->SetAnimStyle(onFootSync->m_styleDirectory, onFootSync->m_styleName);
+		CCore::Instance()->GetPlayerManager()->Get(m_playerId)->SetAnimStyle(onFootSync->m_styleDirectory, onFootSync->m_styleName);
 		
 		// Update the handModel
-		pCore->GetPlayerManager()->Get(m_playerId)->SetHandModel(onFootSync->m_iHand, onFootSync->m_iHandModel);
+		CCore::Instance()->GetPlayerManager()->Get(m_playerId)->SetHandModel(onFootSync->m_iHand, onFootSync->m_iHandModel);
 	}
 	else
 	{
@@ -183,7 +198,7 @@ void CRemotePlayer::StoreInVehicleSync( EntityId vehicleId, InVehicleSync * inVe
 		return;
 
 	// Get the vehicle instance
-	CNetworkVehicle * pVehicle = pCore->GetVehicleManager()->Get( vehicleId );
+	CNetworkVehicle * pVehicle = CCore::Instance()->GetVehicleManager()->Get(vehicleId);
 
 	// Is the vehicle valid?
 	if( pVehicle && pVehicle->IsSpawned () )

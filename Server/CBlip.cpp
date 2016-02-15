@@ -8,8 +8,7 @@
 ***************************************************************/
 
 #include	"StdInc.h"
-
-extern	CCore			* pCore;
+#include	"CCore.h"
 
 CBlip::CBlip( EntityId blipId, Vector2 vecPosition, int iLibrary, int iIcon )
 {
@@ -65,7 +64,7 @@ void CBlip::AddForPlayer( EntityId playerId )
 		pBitStream.WriteCompressed ( INVALID_ENTITY_ID );
 
 	// Send it to the player
-	pCore->GetNetworkModule()->Call( RPC_NEWBLIP, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, playerId, false );
+	CCore::Instance()->GetNetworkModule()->Call( RPC_NEWBLIP, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, playerId, false );
 }
 
 void CBlip::AddForWorld( void )
@@ -74,7 +73,7 @@ void CBlip::AddForWorld( void )
 	for( EntityId i = 0; i < MAX_PLAYERS; i++ )
 	{
 		// Is the current player active?
-		if( pCore->GetPlayerManager()->IsActive( i ) )
+		if( CCore::Instance()->GetPlayerManager()->IsActive( i ) )
 		{
 			// Add the blip for this player
 			AddForPlayer( i );
@@ -91,7 +90,7 @@ void CBlip::RemoveForPlayer( EntityId playerId )
 	pBitStream.WriteCompressed( m_blipId );
 
 	// Send it to the player
-	pCore->GetNetworkModule()->Call( RPC_REMOVEBLIP, &pBitStream, HIGH_PRIORITY, RELIABLE, playerId, false );
+	CCore::Instance()->GetNetworkModule()->Call( RPC_REMOVEBLIP, &pBitStream, HIGH_PRIORITY, RELIABLE, playerId, false );
 }
 
 void CBlip::RemoveForWorld( void )
@@ -100,7 +99,7 @@ void CBlip::RemoveForWorld( void )
 	for( EntityId i = 0; i < MAX_PLAYERS; i++ )
 	{
 		// Is the current player active?
-		if( pCore->GetPlayerManager()->IsActive( i ) )
+		if( CCore::Instance()->GetPlayerManager()->IsActive( i ) )
 		{
 			// Remove the blip for this player
 			RemoveForPlayer( i );
@@ -117,7 +116,7 @@ void CBlip::AttachToPlayer ( CNetworkPlayer * pPlayer )
 	for( EntityId i = 0; i < MAX_PLAYERS; i++ )
 	{
 		// Is the current player active?
-		if( pCore->GetPlayerManager()->IsActive( i ) && i != pPlayer->GetId() )
+		if( CCore::Instance()->GetPlayerManager()->IsActive( i ) && i != pPlayer->GetId() )
 		{
 			// Reset the bitstream
 			bitStream.Reset();
@@ -129,7 +128,7 @@ void CBlip::AttachToPlayer ( CNetworkPlayer * pPlayer )
 			bitStream.WriteCompressed ( pPlayer->GetId () );
 
 			// Send the bitstream to the player
-			pCore->GetNetworkModule()->Call ( RPC_ATTACHBLIPTOPLAYER, &bitStream, MEDIUM_PRIORITY, RELIABLE_ORDERED, i, false );
+			CCore::Instance()->GetNetworkModule()->Call ( RPC_ATTACHBLIPTOPLAYER, &bitStream, MEDIUM_PRIORITY, RELIABLE_ORDERED, i, false );
 		}
 	}
 
@@ -151,7 +150,7 @@ void CBlip::AttachToVehicle ( CNetworkVehicle * pVehicle )
 	for( EntityId i = 0; i < MAX_PLAYERS; i++ )
 	{
 		// Is the current player active?
-		if( pCore->GetPlayerManager()->IsActive( i ) )
+		if( CCore::Instance()->GetPlayerManager()->IsActive( i ) )
 		{
 			// Reset the bitstream
 			bitStream.Reset();
@@ -163,7 +162,7 @@ void CBlip::AttachToVehicle ( CNetworkVehicle * pVehicle )
 			bitStream.WriteCompressed ( pVehicle->GetId () );
 
 			// Send the bitstream to the player
-			pCore->GetNetworkModule()->Call ( RPC_ATTACHBLIPTOVEHICLE, &bitStream, MEDIUM_PRIORITY, RELIABLE_ORDERED, i, false );
+			CCore::Instance()->GetNetworkModule()->Call ( RPC_ATTACHBLIPTOVEHICLE, &bitStream, MEDIUM_PRIORITY, RELIABLE_ORDERED, i, false );
 		}
 	}
 
@@ -185,7 +184,7 @@ void CBlip::AttachToPed ( CPed * pPed )
 	for( EntityId i = 0; i < MAX_PLAYERS; i++ )
 	{
 		// Is the current player active?
-		if( pCore->GetPlayerManager()->IsActive( i ) )
+		if( CCore::Instance()->GetPlayerManager()->IsActive( i ) )
 		{
 			// Reset the bitstream
 			bitStream.Reset();
@@ -197,7 +196,7 @@ void CBlip::AttachToPed ( CPed * pPed )
 			bitStream.WriteCompressed ( pPed->GetId () );
 
 			// Send the bitstream to the player
-			pCore->GetNetworkModule()->Call ( RPC_ATTACHBLIPTOPED, &bitStream, MEDIUM_PRIORITY, RELIABLE_ORDERED, i, false );
+			CCore::Instance()->GetNetworkModule()->Call ( RPC_ATTACHBLIPTOPED, &bitStream, MEDIUM_PRIORITY, RELIABLE_ORDERED, i, false );
 		}
 	}
 

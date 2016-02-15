@@ -7,9 +7,19 @@
 *
 ***************************************************************/
 
-#include	"../StdInc.h"
+#include	"../BaseInc.h"
+#include	"../CCore.h"
 
-extern	CCore			* pCore;
+#include	"../../Shared/CString.h"
+#include	"../../Shared/Math/CVector3.h"
+
+#include	"../CGUI.h"
+
+#include	"../CClientScriptGUIManager.h"
+#include	"../CClientScriptingManager.h"
+
+#include	"CGUI_Impl.h"
+#include	"CGUIElement_Impl.h"
 
 // Nodrawing zones
 #define CGUI_NODRAW_LEFT	9.0f
@@ -333,8 +343,8 @@ bool CGUIElement_Impl::Event_OnClick( const CEGUI::EventArgs &e )
 		m_pfnClickHandler( this );
 
 	// Pass the event to the client gui manager
-	if( pCore->GetClientScriptingManager() && pCore->GetClientScriptingManager()->GetScriptGUIManager() )
-		pCore->GetClientScriptingManager()->GetScriptGUIManager()->HandleEvent( "onGuiElementClick", this );
+	if( CCore::Instance()->GetClientScriptingManager() && CCore::Instance()->GetClientScriptingManager()->GetScriptGUIManager() )
+		CCore::Instance()->GetClientScriptingManager()->GetScriptGUIManager()->HandleEvent( "onGuiElementClick", this );
 
 	return true;
 }
@@ -346,8 +356,8 @@ bool CGUIElement_Impl::Event_OnMove( const CEGUI::EventArgs &e )
 		m_pfnMoveHandler( this );
 
 	// Pass the event to the client gui manager
-	if( pCore->GetClientScriptingManager() && pCore->GetClientScriptingManager()->GetScriptGUIManager() )
-		pCore->GetClientScriptingManager()->GetScriptGUIManager()->HandleEvent( "onGuiElementMove", this );
+	if( CCore::Instance()->GetClientScriptingManager() && CCore::Instance()->GetClientScriptingManager()->GetScriptGUIManager() )
+		CCore::Instance()->GetClientScriptingManager()->GetScriptGUIManager()->HandleEvent( "onGuiElementMove", this );
 
 	return true;
 }
@@ -359,8 +369,8 @@ bool CGUIElement_Impl::Event_OnResize( const CEGUI::EventArgs &e )
 		m_pfnResizeHandler( this );
 
 	// Pass the event to the client gui manager
-	if( pCore->GetClientScriptingManager() && pCore->GetClientScriptingManager()->GetScriptGUIManager() )
-		pCore->GetClientScriptingManager()->GetScriptGUIManager()->HandleEvent( "onGuiElementResize", this );
+	if( CCore::Instance()->GetClientScriptingManager() && CCore::Instance()->GetClientScriptingManager()->GetScriptGUIManager() )
+		CCore::Instance()->GetClientScriptingManager()->GetScriptGUIManager()->HandleEvent( "onGuiElementResize", this );
 
 	return true;
 }
@@ -372,8 +382,8 @@ bool CGUIElement_Impl::Event_OnMouseEnter( const CEGUI::EventArgs &e )
 		m_pfnMouseEnterHandler( this );
 
 	// Pass the event to the client gui manager
-	if( pCore->GetClientScriptingManager() && pCore->GetClientScriptingManager()->GetScriptGUIManager() )
-		pCore->GetClientScriptingManager()->GetScriptGUIManager()->HandleEvent( "onGuiElementMouseEnter", this );
+	if( CCore::Instance()->GetClientScriptingManager() && CCore::Instance()->GetClientScriptingManager()->GetScriptGUIManager() )
+		CCore::Instance()->GetClientScriptingManager()->GetScriptGUIManager()->HandleEvent( "onGuiElementMouseEnter", this );
 
 	return true;
 }
@@ -385,8 +395,8 @@ bool CGUIElement_Impl::Event_OnMouseLeave( const CEGUI::EventArgs &e )
 		m_pfnMouseLeaveHandler( this );
 
 	// Pass the event to the client gui manager
-	if( pCore->GetClientScriptingManager() && pCore->GetClientScriptingManager()->GetScriptGUIManager() )
-		pCore->GetClientScriptingManager()->GetScriptGUIManager()->HandleEvent( "onGuiElementMouseLeave", this );
+	if( CCore::Instance()->GetClientScriptingManager() && CCore::Instance()->GetClientScriptingManager()->GetScriptGUIManager() )
+		CCore::Instance()->GetClientScriptingManager()->GetScriptGUIManager()->HandleEvent( "onGuiElementMouseLeave", this );
 
 	return true;
 }

@@ -7,7 +7,11 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
+#include "BaseInc.h"
+
+#include "CDirectInput8Hook.h"
+#include "CDirectInputDevice8Proxy.h"
+#include "CDirectInput8Proxy.h"
 
 CDirectInput8Proxy::CDirectInput8Proxy(IDirectInput8 * dinput)
 {
@@ -42,13 +46,13 @@ HRESULT STDMETHODCALLTYPE CDirectInput8Proxy::CreateDevice(REFGUID rguid, LPDIRE
 	if ( hResult == DI_OK )
 	{
 		// Get the device type
-        eDIDeviceType type = DIDEVICE_TYPE_UNKNOWN;
+		eDIDeviceType type = DIDEVICE_TYPE_UNKNOWN;
 
-        if(rguid == GUID_SysMouse)
+		if(rguid == GUID_SysMouse)
 			type = DIDEVICE_TYPE_MOUSE;
-        else if(rguid == GUID_SysKeyboard)
-            type = DIDEVICE_TYPE_KEYBOARD;
-        else if(rguid == GUID_Joystick)
+		else if(rguid == GUID_SysKeyboard)
+			type = DIDEVICE_TYPE_KEYBOARD;
+		else if(rguid == GUID_Joystick)
 			type = DIDEVICE_TYPE_JOYSTICK;
 
 		// Device created; Feed the application our proxy interface

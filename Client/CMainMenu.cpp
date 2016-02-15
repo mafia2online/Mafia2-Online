@@ -7,9 +7,42 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
+#include	"BaseInc.h"
 
-extern CCore			* pCore;
+#include	"CCore.h"
+
+#include	"Math\CVector3.h"
+#include	"CString.h"
+
+#include	"gui_impl\CGUI_Impl.h"
+#include	"gui_impl\CGUIElement_Impl.h"
+#include	"gui_impl\CGUIStaticImage_Impl.h"
+#include	"gui_impl\CGUIWindow_Impl.h"
+#include	"gui_impl\CGUIGridList_Impl.h"
+
+#include	"CGUI.h"
+#include	"CEGUI.h"
+#include	"CGUICallback.h"
+
+#include	"CGraphics.h"
+#include	"CServerBrowser.h"
+
+#include	"CSettings.h"
+#include	"CMenuSettings.h"
+
+#include	"CDirect3D9Hook.h"
+#include	"CDirectInput8Hook.h"
+
+#include	"CNetworkModule.h"
+#include	"CPlayerManager.h"
+#include	"CLocalPlayer.h"
+
+#include	"CClientScriptingManager.h"
+#include	"CClientScriptGUIManager.h"
+
+#include	"CMainMenu.h"
+
+#include	"SharedUtility.h"
 
 #define	BG_SIZE_X		1920
 #define	BG_SIZE_y		1080
@@ -55,7 +88,7 @@ CMainMenu::CMainMenu( CGUI_Impl * pGUI )
 	m_pLogo->SetAlwaysOnTop( true );
 
 	// Create the sprite
-	D3DXCreateSprite ( pCore->GetGraphics()->GetDevice(), &pSprite );
+	D3DXCreateSprite(CCore::Instance()->GetGraphics()->GetDevice(), &pSprite);
 
 	// Load all background images
 	LoadBackgroundImages ( fX, fY );
@@ -87,7 +120,7 @@ CMainMenu::CMainMenu( CGUI_Impl * pGUI )
 	m_pQuickConnect = CreateItem ( "quick_connect.png", Vector2( (renderX - 26), 61.5f ), false, Vector2( 26, 22 ), GUI_CALLBACK( &CMainMenu::OnQuickConnectClick, this ) );
 
 	// Setup the serverbrowser UI
-	pCore->GetGUI()->GetServerBrowser()->SetupUI( 40, 160, (fX - 80), (fY - 240) );
+	CCore::Instance()->GetGUI()->GetServerBrowser()->SetupUI(40, 160, (fX - 80), (fY - 240));
 }
 
 CMainMenu::~CMainMenu( void )
@@ -155,23 +188,23 @@ CGUIStaticImage_Impl * CMainMenu::CreateItem( String strLocation, Vector2 vecPos
 bool CMainMenu::OnQuickConnectClick( CGUIElement_Impl * pElement )
 {
 	// Is their nickname not set?
-	if( pCore->GetNick().IsEmpty() || !pCore->GetNick().Compare( "Player" ) )
+	if( CCore::Instance()->GetNick().IsEmpty() || !CCore::Instance()->GetNick().Compare( "Player" ) )
 	{
 		// Bring the settings window to the foreground
-		pCore->GetGUI()->GetSettings()->SetVisible( true );
+		CCore::Instance()->GetGUI()->GetSettings()->SetVisible(true);
 		return true;
 	}
 
 	// Show the quick conncet window
-	pCore->GetGUI()->GetServerBrowser()->m_pQuickConnectWindow->SetVisible ( !pCore->GetGUI()->GetServerBrowser()->m_pQuickConnectWindow->IsVisible() );
-	pCore->GetGUI()->GetServerBrowser()->m_pQuickConnectWindow->BringToFront ();
+	CCore::Instance()->GetGUI()->GetServerBrowser()->m_pQuickConnectWindow->SetVisible(!CCore::Instance()->GetGUI()->GetServerBrowser()->m_pQuickConnectWindow->IsVisible());
+	CCore::Instance()->GetGUI()->GetServerBrowser()->m_pQuickConnectWindow->BringToFront();
 	return true;
 }
 
 bool CMainMenu::OnDisconnectClick( CGUIElement_Impl * pElement )
 {
 	// Are we not connected to a server?
-	if( !pCore->GetNetworkModule() || !pCore->GetNetworkModule()->IsConnected() )
+	if( !CCore::Instance()->GetNetworkModule() || !CCore::Instance()->GetNetworkModule()->IsConnected() )
 	{
 		// Hide the item
 		pElement->SetVisible( false );
@@ -179,16 +212,16 @@ bool CMainMenu::OnDisconnectClick( CGUIElement_Impl * pElement )
 	}
 
 	// Disconnect from the network
-	pCore->GetNetworkModule()->Disconnect();
+	CCore::Instance()->GetNetworkModule()->Disconnect();
 
 	// Put the player far away to stop any input lag
-	pCore->GetPlayerManager()->GetLocalPlayer()->Teleport( CVector3( 0, 0, -200 ) );
+	CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->Teleport(CVector3(0, 0, -200));
 
 	// Stop multiplayer activities
-	pCore->StopMultiplayer();
+	CCore::Instance()->StopMultiplayer();
 
 	// Start multiplayer activities
-	pCore->StartMultiplayer();
+	CCore::Instance()->StartMultiplayer();
 
 	// Show the main menu
 	SetVisible( true );
@@ -199,20 +232,20 @@ bool CMainMenu::OnDisconnectClick( CGUIElement_Impl * pElement )
 bool CMainMenu::OnConnectClick( CGUIElement_Impl * pElement )
 {
 	// Is their nickname not set?
-	if( pCore->GetNick().IsEmpty() || !pCore->GetNick().Compare( "Player" ) )
+	if( CCore::Instance()->GetNick().IsEmpty() || !CCore::Instance()->GetNick().Compare( "Player" ) )
 	{
 		// Bring the settings window to the foreground
-		pCore->GetGUI()->GetSettings()->SetVisible( true );
+		CCore::Instance()->GetGUI()->GetSettings()->SetVisible(true);
 		return true;
 	}
 
 	// Hide the settings
-	if( pCore->GetGUI()->GetSettings() && pCore->GetGUI()->GetSettings()->IsVisilbe() )
-		pCore->GetGUI()->GetSettings()->SetVisible( false );
+	if (CCore::Instance()->GetGUI()->GetSettings() && CCore::Instance()->GetGUI()->GetSettings()->IsVisilbe())
+		CCore::Instance()->GetGUI()->GetSettings()->SetVisible(false);
 
 	// Connect to the selected server
-	if( pCore->GetGUI()->GetServerBrowser() )
-		pCore->GetGUI()->GetServerBrowser()->ConnectToSelectedServer();
+	if (CCore::Instance()->GetGUI()->GetServerBrowser())
+		CCore::Instance()->GetGUI()->GetServerBrowser()->ConnectToSelectedServer();
 
 	return true;
 }
@@ -220,12 +253,12 @@ bool CMainMenu::OnConnectClick( CGUIElement_Impl * pElement )
 bool CMainMenu::OnRefreshClick( CGUIElement_Impl * pElement )
 {
 	// Hide the settings
-	if( pCore->GetGUI()->GetSettings() && pCore->GetGUI()->GetSettings()->IsVisilbe() )
-		pCore->GetGUI()->GetSettings()->SetVisible( false );
+	if( CCore::Instance()->GetGUI()->GetSettings() && CCore::Instance()->GetGUI()->GetSettings()->IsVisilbe() )
+		CCore::Instance()->GetGUI()->GetSettings()->SetVisible(false);
 
 	// Refresh the server browser
-	if( pCore->GetGUI()->GetServerBrowser() )
-		pCore->GetGUI()->GetServerBrowser()->Refresh();
+	if( CCore::Instance()->GetGUI()->GetServerBrowser() )
+		CCore::Instance()->GetGUI()->GetServerBrowser()->Refresh();
 
 	return true;
 }
@@ -233,8 +266,8 @@ bool CMainMenu::OnRefreshClick( CGUIElement_Impl * pElement )
 bool CMainMenu::OnSettingsClick( CGUIElement_Impl * pElement )
 {
 	// Show the settings screen
-	if( pCore->GetGUI()->GetSettings() )
-		pCore->GetGUI()->GetSettings()->SetVisible( !pCore->GetGUI()->GetSettings()->IsVisilbe() );
+	if( CCore::Instance()->GetGUI()->GetSettings() )
+		CCore::Instance()->GetGUI()->GetSettings()->SetVisible( !CCore::Instance()->GetGUI()->GetSettings()->IsVisilbe() );
 
 	return true;
 }
@@ -242,7 +275,7 @@ bool CMainMenu::OnSettingsClick( CGUIElement_Impl * pElement )
 bool CMainMenu::OnQuitClick( CGUIElement_Impl * pElement )
 {
 	// Shutdown
-	pCore->Shutdown();
+	CCore::Instance()->Shutdown();
 
 	return true;
 }
@@ -271,17 +304,17 @@ void CMainMenu::SetVisible( bool bVisible )
 	if( bVisible )
 	{
 		// Get the previous mouse state
-		m_bPreviousMouseState = pCore->GetGUI()->IsCursorVisible();
+		m_bPreviousMouseState = CCore::Instance()->GetGUI()->IsCursorVisible();
 
 		// Get the previous control state
-		if( pCore->GetPlayerManager() && pCore->GetPlayerManager()->GetLocalPlayer() )
-			m_bPreviousControlState = pCore->GetPlayerManager()->GetLocalPlayer()->AreControlsLocked();
+		if (CCore::Instance()->GetPlayerManager() && CCore::Instance()->GetPlayerManager()->GetLocalPlayer())
+			m_bPreviousControlState = CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->AreControlsLocked();
 		else
 			m_bPreviousControlState = true;
 
 		// Hide all the clientscript gui elements
-		if( pCore->GetClientScriptingManager() && pCore->GetClientScriptingManager()->GetScriptGUIManager() )
-			pCore->GetClientScriptingManager()->GetScriptGUIManager()->Hide();
+		if (CCore::Instance()->GetClientScriptingManager() && CCore::Instance()->GetClientScriptingManager()->GetScriptGUIManager())
+			CCore::Instance()->GetClientScriptingManager()->GetScriptGUIManager()->Hide();
 	}
 
 	// Update the variable
@@ -310,37 +343,37 @@ void CMainMenu::SetVisible( bool bVisible )
 	if( bVisible )
 	{
 		// Toggle the connect button
-		m_pConnect->SetVisible ( pCore->GetGUI()->GetServerBrowser()->GetServerGridList ( pCore->GetGUI()->GetServerBrowser()->GetCurrentServerBrowserType () )->GetSelectedCount() > 0 );
+		m_pConnect->SetVisible ( CCore::Instance()->GetGUI()->GetServerBrowser()->GetServerGridList ( CCore::Instance()->GetGUI()->GetServerBrowser()->GetCurrentServerBrowserType () )->GetSelectedCount() > 0 );
 
 		// Toggle the disconnect button
 		if( m_pDisconnect )
-			m_pDisconnect->SetVisible( pCore->GetNetworkModule()->IsConnected() );
+			m_pDisconnect->SetVisible( CCore::Instance()->GetNetworkModule()->IsConnected() );
 	}
 
 	// Toggle the serverbrowser
-	if( pCore->GetGUI()->GetServerBrowser() )
-		pCore->GetGUI()->GetServerBrowser()->SetVisible( bVisible );
+	if( CCore::Instance()->GetGUI()->GetServerBrowser() )
+		CCore::Instance()->GetGUI()->GetServerBrowser()->SetVisible( bVisible );
 
 	// Toggle the mouse cursor
-	pCore->GetGUI()->SetCursorVisible( bVisible );
+	CCore::Instance()->GetGUI()->SetCursorVisible(bVisible);
 
 	// Are we hiding the main menu?
 	if( !bVisible )
 	{
 		// Restore the previous mouse state
-		pCore->GetGUI()->SetCursorVisible( m_bPreviousMouseState );
+		CCore::Instance()->GetGUI()->SetCursorVisible(m_bPreviousMouseState);
 
 		// Hide the menu settings if they're showing
-		if( pCore->GetGUI()->GetSettings()->IsVisilbe() )
-			pCore->GetGUI()->GetSettings()->SetVisible( false );
+		if (CCore::Instance()->GetGUI()->GetSettings()->IsVisilbe())
+			CCore::Instance()->GetGUI()->GetSettings()->SetVisible(false);
 
 		// Restore the previous control state
-		if( pCore->GetPlayerManager() && pCore->GetPlayerManager()->GetLocalPlayer() )
-			pCore->GetPlayerManager()->GetLocalPlayer()->LockControls( m_bPreviousControlState );
+		if (CCore::Instance()->GetPlayerManager() && CCore::Instance()->GetPlayerManager()->GetLocalPlayer())
+			CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->LockControls(m_bPreviousControlState);
 
 		// Show all the clientscript gui elements that were hidden
-		if( pCore->GetClientScriptingManager() && pCore->GetClientScriptingManager()->GetScriptGUIManager() )
-			pCore->GetClientScriptingManager()->GetScriptGUIManager()->Show();
+		if (CCore::Instance()->GetClientScriptingManager() && CCore::Instance()->GetClientScriptingManager()->GetScriptGUIManager())
+			CCore::Instance()->GetClientScriptingManager()->GetScriptGUIManager()->Show();
 	}
 }
 
@@ -350,7 +383,7 @@ void CMainMenu::Render( void )
 	if ( m_bVisible )
 	{
 		// Cover the screen with a black box
-		pCore->GetGraphics()->DrawBox ( 0, 0, pCore->GetGUI()->GetCEGUI()->GetResolution().fX, pCore->GetGUI()->GetCEGUI()->GetResolution().fY, 0xFF000000 );
+		CCore::Instance()->GetGraphics()->DrawBox(0, 0, CCore::Instance()->GetGUI()->GetCEGUI()->GetResolution().fX, CCore::Instance()->GetGUI()->GetCEGUI()->GetResolution().fY, 0xFF000000);
 
 		// Is the sprite and background texture valid?
 		if ( pSprite && pBackgroundTexture )
@@ -438,7 +471,7 @@ void CMainMenu::OnScreenSizeChange ( float fX, float fY )
 	m_pQuickConnect->SetPosition ( Vector2 ( renderX - 26, 61.5f ) );
 	
 	// Adjust the server browser UI
-	pCore->GetGUI()->GetServerBrowser()->OnScreenSizeChange ( fX, fY );
+	CCore::Instance()->GetGUI()->GetServerBrowser()->OnScreenSizeChange(fX, fY);
 }
 
 void CMainMenu::OnDeviceLost ( void )
@@ -453,10 +486,10 @@ void CMainMenu::OnDeviceLost ( void )
 void CMainMenu::LoadBackgroundImages ( float fWidth, float fHeight )
 {
 	// Load all the background sprites
-	D3DXCreateTextureFromFileEx ( pCore->GetGraphics()->GetDevice(), "data\\gui\\images\\1.jpg", fWidth, fHeight, NULL, NULL, D3DFMT_A8R8G8B8, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, colourKey, &SrcInfo, NULL, &pBackgroundTexture[0] );
-	D3DXCreateTextureFromFileEx ( pCore->GetGraphics()->GetDevice(), "data\\gui\\images\\2.jpg", fWidth, fHeight, NULL, NULL, D3DFMT_A8R8G8B8, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, colourKey, &SrcInfo, NULL, &pBackgroundTexture[1] );
-	D3DXCreateTextureFromFileEx ( pCore->GetGraphics()->GetDevice(), "data\\gui\\images\\3.jpg", fWidth, fHeight, NULL, NULL, D3DFMT_A8R8G8B8, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, colourKey, &SrcInfo, NULL, &pBackgroundTexture[2] );
-	D3DXCreateTextureFromFileEx ( pCore->GetGraphics()->GetDevice(), "data\\gui\\images\\4.jpg", fWidth, fHeight, NULL, NULL, D3DFMT_A8R8G8B8, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, colourKey, &SrcInfo, NULL, &pBackgroundTexture[3] );
+	D3DXCreateTextureFromFileEx ( CCore::Instance()->GetGraphics()->GetDevice(), "data\\gui\\images\\1.jpg", fWidth, fHeight, NULL, NULL, D3DFMT_A8R8G8B8, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, colourKey, &SrcInfo, NULL, &pBackgroundTexture[0] );
+	D3DXCreateTextureFromFileEx ( CCore::Instance()->GetGraphics()->GetDevice(), "data\\gui\\images\\2.jpg", fWidth, fHeight, NULL, NULL, D3DFMT_A8R8G8B8, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, colourKey, &SrcInfo, NULL, &pBackgroundTexture[1] );
+	D3DXCreateTextureFromFileEx ( CCore::Instance()->GetGraphics()->GetDevice(), "data\\gui\\images\\3.jpg", fWidth, fHeight, NULL, NULL, D3DFMT_A8R8G8B8, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, colourKey, &SrcInfo, NULL, &pBackgroundTexture[2] );
+	D3DXCreateTextureFromFileEx ( CCore::Instance()->GetGraphics()->GetDevice(), "data\\gui\\images\\4.jpg", fWidth, fHeight, NULL, NULL, D3DFMT_A8R8G8B8, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, colourKey, &SrcInfo, NULL, &pBackgroundTexture[3] );
 }
 
 void CMainMenu::ReleaseBackgroundImages ( void )

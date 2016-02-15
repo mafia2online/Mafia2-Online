@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include	"CNetworkVehicle.h"
+
 class CVehicleManager
 {
 

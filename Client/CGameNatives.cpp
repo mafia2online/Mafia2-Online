@@ -7,9 +7,17 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
+#include	"BaseInc.h"
 
-extern	CCore			* pCore;
+#include	"CCore.h"
+
+#include	"Scripting\CScriptingManager.h"
+#include	"Scripting\CSquirrelCommon.h"
+
+#include	"CMafia.h"
+#include	"CM2Hud.h"
+
+#include	"CGameNatives.h"
 
 void CGameNatives::Register( CScriptingManager * pScriptingManager )
 {
@@ -36,7 +44,7 @@ SQInteger CGameNatives::SetWeather( SQVM * pVM )
 	sq_getstring( pVM, -1, &szWeather );
 
 	// Set the weather
-	pCore->GetGame()->ChangeWeather( szWeather );
+	CCore::Instance()->GetGame()->ChangeWeather( szWeather );
 
 	sq_pushbool( pVM, true );
 	return 1;
@@ -45,7 +53,7 @@ SQInteger CGameNatives::SetWeather( SQVM * pVM )
 // getWeather();
 SQInteger CGameNatives::GetWeather( SQVM * pVM )
 {
-	sq_pushstring( pVM, pCore->GetGame()->GetWeather().Get(), pCore->GetGame()->GetWeather().GetLength() );
+	sq_pushstring( pVM, CCore::Instance()->GetGame()->GetWeather().Get(), CCore::Instance()->GetGame()->GetWeather().GetLength() );
 	return 1;
 }
 
@@ -55,7 +63,7 @@ SQInteger CGameNatives::ToggleHud( SQVM * pVM )
 	SQBool bToggle;
 	sq_getbool( pVM, -1, &bToggle );
 
-	pCore->GetHud()->Show( (bool)bToggle );
+	CCore::Instance()->GetHud()->Show( (bool)bToggle );
 
 	sq_pushbool( pVM, true );
 	return 1;
@@ -65,7 +73,7 @@ SQInteger CGameNatives::ToggleHud( SQVM * pVM )
 SQInteger CGameNatives::TakeScreenshot( SQVM * pVM )
 {
 	// Flag as take screenshot for next frame
-	pCore->TakeScreenshot();
+	CCore::Instance()->TakeScreenshot();
 
 	sq_pushbool( pVM, true );
 	return 1;
@@ -100,9 +108,9 @@ SQInteger CGameNatives::FadeScreen( SQVM * pVM )
 
 	// Fade the screen
 	if( bFadeIn )
-		pCore->GetHud()->FadeIn( fTime );
+		CCore::Instance()->GetHud()->FadeIn( fTime );
 	else
-		pCore->GetHud()->FadeOut( fTime );
+		CCore::Instance()->GetHud()->FadeOut( fTime );
 
 	sq_pushbool( pVM, true );
 	return 1;
@@ -146,14 +154,14 @@ SQInteger CGameNatives::CreateHudTimer( SQVM * pVM )
 	}
 
 	// Show the hud timer if needed
-	pCore->GetHud()->GetHudTimer()->Toggle( bShow );
+	CCore::Instance()->GetHud()->GetHudTimer()->Toggle( bShow );
 
 	// Set the hud timer time remaining
-	pCore->GetHud()->GetHudTimer()->SetTime( fTime );
+	CCore::Instance()->GetHud()->GetHudTimer()->SetTime( fTime );
 
 	// Start the timer if needed
 	if( bStart )
-		pCore->GetHud()->GetHudTimer()->Start( );
+		CCore::Instance()->GetHud()->GetHudTimer()->Start( );
 
 	sq_pushbool( pVM, true );
 	return 1;
@@ -166,7 +174,7 @@ SQInteger CGameNatives::SetHudTimerRemainingTime( SQVM * pVM )
 	sq_getfloat( pVM, -1, &fTime );
 
 	// Set the hud timer time remaining
-	pCore->GetHud()->GetHudTimer()->SetTime( fTime );
+	CCore::Instance()->GetHud()->GetHudTimer()->SetTime( fTime );
 
 	sq_pushbool( pVM, true );
 	return 1;
@@ -175,7 +183,7 @@ SQInteger CGameNatives::SetHudTimerRemainingTime( SQVM * pVM )
 // getHudTimerRemainingTime( );
 SQInteger CGameNatives::GetHudTimerRemainingTime( SQVM * pVM )
 {
-	sq_pushfloat( pVM, pCore->GetHud()->GetHudTimer()->GetRemainingTime() );
+	sq_pushfloat( pVM, CCore::Instance()->GetHud()->GetHudTimer()->GetRemainingTime() );
 	return 1;
 }
 
@@ -183,7 +191,7 @@ SQInteger CGameNatives::GetHudTimerRemainingTime( SQVM * pVM )
 SQInteger CGameNatives::StartHudTimer( SQVM * pVM )
 {
 	// Start the hud timer
-	pCore->GetHud()->GetHudTimer()->Start();
+	CCore::Instance()->GetHud()->GetHudTimer()->Start();
 
 	sq_pushbool( pVM, true );
 	return 1;
@@ -193,7 +201,7 @@ SQInteger CGameNatives::StartHudTimer( SQVM * pVM )
 SQInteger CGameNatives::StopHudTimer( SQVM * pVM )
 {
 	// Stop the hud timer
-	pCore->GetHud()->GetHudTimer()->Stop( );
+	CCore::Instance()->GetHud()->GetHudTimer()->Stop( );
 
 	sq_pushbool( pVM, true );
 	return 1;
@@ -202,7 +210,7 @@ SQInteger CGameNatives::StopHudTimer( SQVM * pVM )
 // isHudTimerRunning( );
 SQInteger CGameNatives::IsHudTimerRunning( SQVM * pVM )
 {
-	sq_pushbool( pVM, pCore->GetHud()->GetHudTimer()->IsRunning() );
+	sq_pushbool( pVM, CCore::Instance()->GetHud()->GetHudTimer()->IsRunning() );
 	return 1;
 }
 
@@ -210,13 +218,13 @@ SQInteger CGameNatives::IsHudTimerRunning( SQVM * pVM )
 SQInteger CGameNatives::DestroyHudTimer( SQVM * pVM )
 {
 	// Hide the hud timer
-	pCore->GetHud()->GetHudTimer()->Toggle( false );
+	CCore::Instance()->GetHud()->GetHudTimer()->Toggle( false );
 
 	// Stop the hud timer
-	pCore->GetHud()->GetHudTimer()->Stop();
+	CCore::Instance()->GetHud()->GetHudTimer()->Stop();
 
 	// Reset the remaining time
-	pCore->GetHud()->GetHudTimer()->SetTime( 0.0 );
+	CCore::Instance()->GetHud()->GetHudTimer()->SetTime( 0.0 );
 
 	sq_pushbool( pVM, true );
 	return 1;
@@ -225,13 +233,13 @@ SQInteger CGameNatives::DestroyHudTimer( SQVM * pVM )
 // openMap( )
 SQInteger CGameNatives::OpenMap( SQVM * pVM )
 {
-	sq_pushbool( pVM, pCore->GetGame()->OpenMap ( true ) );
+	sq_pushbool( pVM, CCore::Instance()->GetGame()->OpenMap ( true ) );
 	return 1;
 }
 
 // isMapOpen( )
 SQInteger CGameNatives::IsMapOpen( SQVM * pVM )
 {
-	sq_pushbool( pVM, pCore->GetGame()->IsMapOpen () );
+	sq_pushbool( pVM, CCore::Instance()->GetGame()->IsMapOpen () );
 	return 1;
 }

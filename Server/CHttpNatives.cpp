@@ -8,8 +8,7 @@
 ***************************************************************/
 
 #include	"StdInc.h"
-
-extern		CCore			* pCore;
+#include	"CCore.h"
 
 void CHttpNatives::Register( CScriptingManager * pScriptingManager )
 {
@@ -65,7 +64,7 @@ SQInteger CHttpNatives::WebRequest( SQVM * pVM )
 	}
 
 	// Add to the web request queue
-	pCore->GetWebRequest()->AddToQueue( iType, szUrl, iPort, szPost, pFunction, pVM );
+	CCore::Instance()->GetWebRequest()->AddToQueue( iType, szUrl, iPort, szPost, pFunction, pVM );
 
 	sq_pushbool( pVM, true );
 	return 1;

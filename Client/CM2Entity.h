@@ -10,7 +10,8 @@
 
 #pragma once
 
-#include "CM2Enums.h"
+#include	"CString.h"
+#include	"CM2Enums.h"
 
 class M2ScriptEntity
 {

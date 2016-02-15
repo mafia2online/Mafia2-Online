@@ -8,8 +8,7 @@
 ***************************************************************/
 
 #include	"StdInc.h"
-
-extern		CCore			* pCore;
+#include	"CCore.h"
 
 CModule::CModule( String strName )
 {
@@ -73,7 +72,7 @@ CModule::CModule( String strName )
 	m_moduleFunctions.pfnSetupSquirrel( SquirrelInterfaceContainer );
 
 	// Setup the core interface with the module
-	m_moduleFunctions.pfnSetupCore( (void *)pCore );
+	m_moduleFunctions.pfnSetupCore( (void *)CCore::Instance() );
 
 	// Initialise the module
 	if( m_moduleFunctions.pfnInitialiseModule() )

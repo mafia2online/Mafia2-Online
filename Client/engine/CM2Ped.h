@@ -9,6 +9,9 @@
 
 #pragma once
 
+#include	"CM2Enums.h"
+#include	"CM2Entity.h"
+
 class M2WeaponData
 {
 public:
@@ -46,6 +49,7 @@ public:
 	void * m_pUnknown;										// 0044 - 004C
 };
 
+class C_SyncObject;
 class M2EntityData
 {
 public:
@@ -82,6 +86,9 @@ public:
 	bool m_bIsCrouching;									// 0340 - 0341
 };
 
+class M2Entity;
+class M2Vehicle;
+
 class M2Ped : public M2Entity
 {
 public:
@@ -112,6 +119,9 @@ public:
 
 	// 0x1CC, 0x1D0 = current surface walking on (in czech)
 };
+
+class CM2Entity;
+class CVector3;
 
 class CM2Ped : public CM2Entity
 {

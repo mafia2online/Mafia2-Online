@@ -7,9 +7,21 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
+#include	"BaseInc.h"
 
-extern	CCore			* pCore;
+#include	"CCore.h"
+
+#include	"Math\CVector3.h"
+#include	"CColor.h"
+
+#include	"Scripting\CScriptingManager.h"
+#include	"Scripting\CSquirrelCommon.h"
+
+#include	"CFPSCounter.h"
+#include	"CGraphics.h"
+#include	"CChat.h"
+
+#include	"CGraphicsNatives.h"
 
 void CGraphicsNatives::Register( CScriptingManager * pScriptingManager )
 {
@@ -26,7 +38,7 @@ void CGraphicsNatives::Register( CScriptingManager * pScriptingManager )
 // getFPS( );
 SQInteger CGraphicsNatives::GetFPS( SQVM * pVM )
 {
-	sq_pushinteger( pVM, pCore->GetFPSCounter()->GetFPS() );
+	sq_pushinteger( pVM, CCore::Instance()->GetFPSCounter()->GetFPS() );
 	return 1;
 }
 
@@ -35,7 +47,7 @@ SQInteger CGraphicsNatives::GetScreenSize( SQVM * pVM )
 {
 	// Get the current viewport
 	D3DVIEWPORT9 Viewport;
-	pCore->GetGraphics()->GetDevice()->GetViewport( &Viewport );
+	CCore::Instance()->GetGraphics()->GetDevice()->GetViewport( &Viewport );
 
 	CSquirrelArguments args;
 	args.push( (int)Viewport.Width );
@@ -59,7 +71,7 @@ SQInteger CGraphicsNatives::WorldToScreen( SQVM * pVM )
 
 	// Convert the world coordinates into screen coordinates
 	CVector3 vecScreen;
-	pCore->GetGraphics()->WorldToScreen( vecWorld, &vecScreen );
+	CCore::Instance()->GetGraphics()->WorldToScreen( vecWorld, &vecScreen );
 
 	// Return the screen coordinates
 	sq_newarray( pVM, 0 );
@@ -88,7 +100,7 @@ SQInteger CGraphicsNatives::ScreenToWorld( SQVM * pVM )
 
 	// Convert the screen coordinates into world coordinates
 	CVector3 vecWorld;
-	pCore->GetGraphics()->ScreenToWorld( vecScreen, &vecWorld );
+	CCore::Instance()->GetGraphics()->ScreenToWorld( vecScreen, &vecWorld );
 
 	// Return the world coordinates
 	sq_newarray( pVM, 0 );
@@ -112,7 +124,7 @@ SQInteger CGraphicsNatives::ShowChat( SQVM * pVM )
 	SQBool bToggle;
 	sq_getbool( pVM, -1, &bToggle );
 
-	pCore->GetChat()->SetVisible( (bool)bToggle );
+	CCore::Instance()->GetChat()->SetVisible( (bool)bToggle );
 
 	sq_pushbool( pVM, true );
 	return 1;
@@ -121,14 +133,14 @@ SQInteger CGraphicsNatives::ShowChat( SQVM * pVM )
 // isChatVisible( );
 SQInteger CGraphicsNatives::IsChatVisible( SQVM * pVM )
 {
-	sq_pushbool( pVM, (SQBool)pCore->GetChat()->IsVisible() );
+	sq_pushbool( pVM, (SQBool)CCore::Instance()->GetChat()->IsVisible() );
 	return 1;
 }
 
 // isInputVisible( );
 SQInteger CGraphicsNatives::IsInputVisible( SQVM * pVM )
 {
-	sq_pushbool( pVM, (SQBool)pCore->GetChat()->IsInputVisible() );
+	sq_pushbool( pVM, (SQBool)CCore::Instance()->GetChat()->IsInputVisible() );
 	return 1;
 }
 
@@ -180,10 +192,10 @@ SQInteger CGraphicsNatives::SendMessage( SQVM * pVM )
 		sq_getinteger( pVM, -1, &b );
 	}
 
-	if( pCore->GetChat() )
+	if( CCore::Instance()->GetChat() )
 	{
 		// Output message to the chat window
-		pCore->GetChat()->AddInfoMessage( CColor( r, g, b, 255 ), szMessage );
+		CCore::Instance()->GetChat()->AddInfoMessage( CColor( r, g, b, 255 ), szMessage );
 
 		sq_pushbool( pVM, true );
 		return 1;

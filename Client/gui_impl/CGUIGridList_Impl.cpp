@@ -7,9 +7,22 @@
 *
 ***************************************************************/
 
-#include	"../StdInc.h"
+#include	"../BaseInc.h"
+#include	"../CCore.h"
 
-extern	CCore				* pCore;
+#include	"../../Shared/CString.h"
+#include	"../../Shared/Math/CVector3.h"
+
+#include	"../CGUI.h"
+#include	"../CGUICallback.h"
+
+#include	"../CClientScriptGUIManager.h"
+#include	"../CClientScriptingManager.h"
+
+#include	"CGUI_Impl.h"
+#include	"CGUIWindow_Impl.h"
+#include	"CGUIListItem_Impl.h"
+#include	"CGUIGridList_Impl.h"
 
 CGUIGridList_Impl::CGUIGridList_Impl( CGUI_Impl * pGUI, CGUIElement_Impl * pParent )
 {
@@ -375,8 +388,8 @@ bool CGUIGridList_Impl::Event_OnSortColumn( const CEGUI::EventArgs &e )
 		m_pfnOnSortColumn( this );
 
 	// Pass the event to the client gui manager
-	if( pCore->GetClientScriptingManager() && pCore->GetClientScriptingManager()->GetScriptGUIManager() )
-		pCore->GetClientScriptingManager()->GetScriptGUIManager()->HandleEvent( "onGuiElementSortColumn", this );
+	if (CCore::Instance()->GetClientScriptingManager() && CCore::Instance()->GetClientScriptingManager()->GetScriptGUIManager())
+		CCore::Instance()->GetClientScriptingManager()->GetScriptGUIManager()->HandleEvent("onGuiElementSortColumn", this);
 
 	return true;
 }
@@ -388,8 +401,8 @@ bool CGUIGridList_Impl::Event_OnSelectionChanged( const CEGUI::EventArgs &e )
 		m_pfnOnSelectionChanged( this );
 
 	// Pass the event to the client gui manager
-	if( pCore->GetClientScriptingManager() && pCore->GetClientScriptingManager()->GetScriptGUIManager() )
-		pCore->GetClientScriptingManager()->GetScriptGUIManager()->HandleEvent( "onGuiElementSelectionChange", this );
+	if (CCore::Instance()->GetClientScriptingManager() && CCore::Instance()->GetClientScriptingManager()->GetScriptGUIManager())
+		CCore::Instance()->GetClientScriptingManager()->GetScriptGUIManager()->HandleEvent("onGuiElementSelectionChange", this);
 
 	return true;
 }

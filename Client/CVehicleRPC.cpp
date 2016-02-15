@@ -7,10 +7,23 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
+#include	"BaseInc.h"
+
+#include	"CCore.h"
+
+#include	"BitStream.h"
+
+#include	"Math\CVector3.h"
+#include	"CColor.h"
+
+#include	"CVehicleManager.h"
+#include	"CNetworkVehicle.h"
+
+#include	<RPC4Plugin.h>
+#include	"../Shared/CNetworkRPC.h"
+
 #include	"CVehicleRPC.h"
 
-extern	CCore			* pCore;
 bool	CVehicleRPC::m_bRegistered = false;
 
 void SetVehiclePosition( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
@@ -24,10 +37,10 @@ void SetVehiclePosition( RakNet::BitStream * pBitStream, RakNet::Packet * pPacke
 	pBitStream->Read( vecPosition );
 
 	// Does the vehicle exist?
-	if( pCore->GetVehicleManager()->IsActive( vehicleId ) )
+	if( CCore::Instance()->GetVehicleManager()->IsActive( vehicleId ) )
 	{
 		// Set the vehicle position
-		pCore->GetVehicleManager()->Get( vehicleId )->SetPosition( vecPosition );
+		CCore::Instance()->GetVehicleManager()->Get(vehicleId)->SetPosition(vecPosition);
 	}
 }
 
@@ -42,10 +55,10 @@ void SetVehicleDirection( RakNet::BitStream * pBitStream, RakNet::Packet * pPack
 	pBitStream->Read( vecRotation );
 
 	// Does the vehicle exist?
-	if( pCore->GetVehicleManager()->IsActive( vehicleId ) )
+	if( CCore::Instance()->GetVehicleManager()->IsActive( vehicleId ) )
 	{
 		// Set the vehicle direction
-		pCore->GetVehicleManager()->Get( vehicleId )->SetRotation( vecRotation );
+		CCore::Instance()->GetVehicleManager()->Get(vehicleId)->SetRotation(vecRotation);
 	}
 }
 
@@ -68,10 +81,10 @@ void SetVehicleColour( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket 
 	pBitStream->ReadCompressed( b2 );
 
 	// Does the vehicle exist?
-	if( pCore->GetVehicleManager()->IsActive( vehicleId ) )
+	if( CCore::Instance()->GetVehicleManager()->IsActive( vehicleId ) )
 	{
 		// Set the vehicle colour
-		pCore->GetVehicleManager()->Get( vehicleId )->SetColour( CColor ( r1, g1, b1, 255 ), CColor ( r2, g2, b2, 255 ) );
+		CCore::Instance()->GetVehicleManager()->Get(vehicleId)->SetColour(CColor(r1, g1, b1, 255), CColor(r2, g2, b2, 255));
 	}
 }
 
@@ -86,10 +99,10 @@ void SetVehiclePlateText( RakNet::BitStream * pBitStream, RakNet::Packet * pPack
 	pBitStream->Read( sPlateText );
 
 	// Does the vehicle exist?
-	if( pCore->GetVehicleManager()->IsActive( vehicleId ) )
+	if( CCore::Instance()->GetVehicleManager()->IsActive( vehicleId ) )
 	{
 		// Set the vehicle plate text
-		pCore->GetVehicleManager()->Get( vehicleId )->SetPlateText( sPlateText.C_String() );
+		CCore::Instance()->GetVehicleManager()->Get( vehicleId )->SetPlateText( sPlateText.C_String() );
 	}
 }
 
@@ -100,25 +113,25 @@ void RepairVehicle( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 	pBitStream->ReadCompressed( vehicleId );
 
 	// Does the vehicle exist?
-	if( pCore->GetVehicleManager()->IsActive( vehicleId ) )
+	if( CCore::Instance()->GetVehicleManager()->IsActive( vehicleId ) )
 	{
 		// We store the current lightState
-		int oldState = pCore->GetVehicleManager()->Get(vehicleId)->GetLightState();
+		int oldState = CCore::Instance()->GetVehicleManager()->Get(vehicleId)->GetLightState();
 
 		// We store the current moveSpeed
-		float speed = pCore->GetVehicleManager()->Get(vehicleId)->GetSpeed();
+		float speed = CCore::Instance()->GetVehicleManager()->Get(vehicleId)->GetSpeed();
 
 		// Repair the vehicle
-		pCore->GetVehicleManager()->Get( vehicleId )->Repair();
+		CCore::Instance()->GetVehicleManager()->Get( vehicleId )->Repair();
 
 		// We restore the light state
 		if (oldState){
-			pCore->GetVehicleManager()->Get(vehicleId)->SetLightState(true);
+			CCore::Instance()->GetVehicleManager()->Get(vehicleId)->SetLightState(true);
 		}
 
 		// We restore the speed
 		if (speed > 0.0){
-			pCore->GetVehicleManager()->Get(vehicleId)->SetSpeed(speed);
+			CCore::Instance()->GetVehicleManager()->Get(vehicleId)->SetSpeed(speed);
 		}
 	}
 }
@@ -130,10 +143,10 @@ void ExplodeVehicle( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 	pBitStream->ReadCompressed( vehicleId );
 
 	// Does the vehicle exist?
-	if( pCore->GetVehicleManager()->IsActive( vehicleId ) )
+	if( CCore::Instance()->GetVehicleManager()->IsActive( vehicleId ) )
 	{
 		// Explode the vehicle
-		pCore->GetVehicleManager()->Get( vehicleId )->Explode();
+		CCore::Instance()->GetVehicleManager()->Get( vehicleId )->Explode();
 	}
 }
 
@@ -148,10 +161,10 @@ void SetVehicleDirtLevel( RakNet::BitStream * pBitStream, RakNet::Packet * pPack
 	pBitStream->Read( fDirtLevel );
 
 	// Does the vehicle exist?
-	if( pCore->GetVehicleManager()->IsActive( vehicleId ) )
+	if( CCore::Instance()->GetVehicleManager()->IsActive( vehicleId ) )
 	{
 		// Set the vehicle dirt level
-		pCore->GetVehicleManager()->Get( vehicleId )->SetDirtLevel( fDirtLevel );
+		CCore::Instance()->GetVehicleManager()->Get( vehicleId )->SetDirtLevel( fDirtLevel );
 	}
 }
 
@@ -165,10 +178,10 @@ void SetVehicleEngineState( RakNet::BitStream * pBitStream, RakNet::Packet * pPa
 	bool bState = pBitStream->ReadBit();
 
 	// Does the vehicle exist?
-	if( pCore->GetVehicleManager()->IsActive( vehicleId ) )
+	if( CCore::Instance()->GetVehicleManager()->IsActive( vehicleId ) )
 	{
 		// Set the vehicle engine state
-		pCore->GetVehicleManager()->Get( vehicleId )->SetEngineState( bState );
+		CCore::Instance()->GetVehicleManager()->Get( vehicleId )->SetEngineState( bState );
 	}
 }
 
@@ -186,9 +199,9 @@ void SetVehiclePartOpen( RakNet::BitStream * pBitStream, RakNet::Packet * pPacke
 	bool bState = pBitStream->ReadBit();
 
 	// Does the vehicle exist?
-	if( pCore->GetVehicleManager()->IsActive( vehicleId ) )
+	if( CCore::Instance()->GetVehicleManager()->IsActive( vehicleId ) )
 	{
-		pCore->GetVehicleManager()->Get(vehicleId)->SetPartOpen(iPart, bState);
+		CCore::Instance()->GetVehicleManager()->Get(vehicleId)->SetPartOpen(iPart, bState);
 	}
 }
 
@@ -202,10 +215,10 @@ void SetVehicleSirenState( RakNet::BitStream * pBitStream, RakNet::Packet * pPac
 	bool bState = pBitStream->ReadBit();
 
 	// Does the vehicle exist?
-	if( pCore->GetVehicleManager()->IsActive( vehicleId ) )
+	if( CCore::Instance()->GetVehicleManager()->IsActive( vehicleId ) )
 	{
 		// Set the vehicle siren state
-		pCore->GetVehicleManager()->Get( vehicleId )->SetSirenState( bState );
+		CCore::Instance()->GetVehicleManager()->Get( vehicleId )->SetSirenState( bState );
 	}
 }
 
@@ -219,10 +232,10 @@ void SetVehicleHornState( RakNet::BitStream * pBitStream, RakNet::Packet * pPack
 	bool bState = pBitStream->ReadBit();
 
 	// Does the vehicle exist?
-	if( pCore->GetVehicleManager()->IsActive( vehicleId ) )
+	if( CCore::Instance()->GetVehicleManager()->IsActive( vehicleId ) )
 	{
 		// Set the vehicle horn state
-		pCore->GetVehicleManager()->Get( vehicleId )->SetHornState( bState );
+		CCore::Instance()->GetVehicleManager()->Get( vehicleId )->SetHornState( bState );
 	}
 }
 
@@ -240,10 +253,10 @@ void SetVehicleWindowOpen( RakNet::BitStream * pBitStream, RakNet::Packet * pPac
 	bool bState = pBitStream->ReadBit();
 
 	// Does the vehicle exist?
-	if( pCore->GetVehicleManager()->IsActive( vehicleId ) )
+	if( CCore::Instance()->GetVehicleManager()->IsActive( vehicleId ) )
 	{
 		// Set the vehicle window state
-		pCore->GetVehicleManager()->Get(vehicleId)->SetWindowOpen(iSeat, bState);
+		CCore::Instance()->GetVehicleManager()->Get(vehicleId)->SetWindowOpen(iSeat, bState);
 	}
 }
 
@@ -258,10 +271,10 @@ void SetVehicleTuningTable( RakNet::BitStream * pBitStream, RakNet::Packet * pPa
 	pBitStream->ReadCompressed( iTable );
 
 	// Does the vehicle exist?
-	if( pCore->GetVehicleManager()->IsActive( vehicleId ) )
+	if( CCore::Instance()->GetVehicleManager()->IsActive( vehicleId ) )
 	{
 		// Set the tuning table
-		pCore->GetVehicleManager()->Get( vehicleId )->SetTuningTable( iTable );
+		CCore::Instance()->GetVehicleManager()->Get( vehicleId )->SetTuningTable( iTable );
 	}
 }
 
@@ -280,10 +293,10 @@ void SetVehicleWheelTexture( RakNet::BitStream * pBitStream, RakNet::Packet * pP
 	pBitStream->ReadCompressed( iTexture );
 
 	// Does the vehicle exist?
-	if( pCore->GetVehicleManager()->IsActive( vehicleId ) )
+	if( CCore::Instance()->GetVehicleManager()->IsActive( vehicleId ) )
 	{
 		// Set the tuning table
-		pCore->GetVehicleManager()->Get( vehicleId )->SetWheelTexture( iWheelIndex, iTexture );
+		CCore::Instance()->GetVehicleManager()->Get( vehicleId )->SetWheelTexture( iWheelIndex, iTexture );
 	}
 }
 
@@ -298,10 +311,10 @@ void SetVehicleSpeed( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 	pBitStream->Read ( vecSpeed );
 
 	// Does the vehicle exist?
-	if( pCore->GetVehicleManager()->IsActive( vehicleId ) )
+	if( CCore::Instance()->GetVehicleManager()->IsActive( vehicleId ) )
 	{
 		// Set the vehicle speed
-		pCore->GetVehicleManager()->Get( vehicleId )->SetSpeedVec ( vecSpeed );
+		CCore::Instance()->GetVehicleManager()->Get( vehicleId )->SetSpeedVec ( vecSpeed );
 	}
 }
 
@@ -316,10 +329,10 @@ void SetVehicleFuel( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 	pBitStream->Read ( fFuel );
 
 	// Does the vehicle exist?
-	if( pCore->GetVehicleManager()->IsActive( vehicleId ) )
+	if( CCore::Instance()->GetVehicleManager()->IsActive( vehicleId ) )
 	{
 		// Set the vehicel fuel
-		pCore->GetVehicleManager()->Get( vehicleId )->SetFuel ( fFuel );
+		CCore::Instance()->GetVehicleManager()->Get( vehicleId )->SetFuel ( fFuel );
 	}
 }
 
@@ -333,10 +346,10 @@ void SetVehicleLightState( RakNet::BitStream * pBitStream, RakNet::Packet * pPac
 	bool bLightState = pBitStream->ReadBit ();
 
 	// Does the vehicle exist?
-	if( pCore->GetVehicleManager()->IsActive( vehicleId ) )
+	if( CCore::Instance()->GetVehicleManager()->IsActive( vehicleId ) )
 	{
 		// Set the vehicel light state
-		pCore->GetVehicleManager()->Get( vehicleId )->SetLightState ( bLightState );
+		CCore::Instance()->GetVehicleManager()->Get( vehicleId )->SetLightState ( bLightState );
 	}
 }
 
@@ -351,9 +364,9 @@ void SetVehicleModel(RakNet::BitStream * pBitStream, RakNet::Packet * Packet)
 	pBitStream->ReadCompressed(bModel);
 
 	// Does the vehicle exist?
-	if (pCore->GetVehicleManager()->IsActive( vehicleId )){
+	if (CCore::Instance()->GetVehicleManager()->IsActive( vehicleId )){
 		// Set the vehicle model
-		pCore->GetVehicleManager()->Get( vehicleId )->SetModel( bModel);
+		CCore::Instance()->GetVehicleManager()->Get( vehicleId )->SetModel( bModel);
 	}
 }
 

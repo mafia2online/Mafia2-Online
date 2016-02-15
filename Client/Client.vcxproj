@@ -59,16 +59,16 @@
     <ClCompile>
       <WarningLevel>TurnOffAllWarnings</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>../Libraries/CrashRpt;../Libraries/cegui-0.4.0-custom/include;../Libraries/DXSDK/include;../Libraries/squirrel;../Libraries/lua;../Libraries/RakNet/Source;../Shared;../Libraries/Detours;../Libraries/zlib-1.2.5;../Libraries/lpng142;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./;../Libraries/CrashRpt;../Libraries/cegui-0.4.0-custom/include;../Libraries/DXSDK/include;../Libraries/squirrel;../Libraries/lua;../Libraries/RakNet/Source;../Shared;../Libraries/Detours;../Libraries/zlib-1.2.5;../Libraries/lpng142;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_WIN32;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_CLIENT;_DEBUG;CEGUI_STATIC;LOGGER;WIN32_LEAN_AND_MEAN;NO_GARBAGE_COLLECTOR;DEBUG_LOG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <DisableSpecificWarnings>4996;4409;4482;4800;4305;4018;4390;4099;4244;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <PrecompiledHeaderFile>BaseInc.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <AdditionalDependencies>crashrpt1401.lib;winmm.lib;ws2_32.lib;comctl32.lib;d3d9.lib;d3dx9d.lib;dxguid.lib;dinput8.lib;DxErr9.lib;detours.lib;RakNetStatic_d.lib;zlib_d.lib;libpng_d.lib;dbghelp.lib;CEGUIBase_d.lib;CEGUIFalagardBase_d.lib;DirectX9GUIRenderer_d.lib;freetype2110.lib;tinyxml_d.lib;bass.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -102,7 +102,9 @@
       <CompileAs>Default</CompileAs>
       <DisableSpecificWarnings>4996;4409;4482;4800;4305;4018;4390;4099;4244;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>../Libraries/CrashRpt;../Libraries/cegui-0.4.0-custom/include;../Libraries/DXSDK/include;../Libraries/squirrel;../Libraries/lua;../Libraries/RakNet/Source;../Shared;../Libraries/Detours;../Libraries/zlib-1.2.5;../Libraries/lpng142;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./;../Libraries/CrashRpt;../Libraries/cegui-0.4.0-custom/include;../Libraries/DXSDK/include;../Libraries/squirrel;../Libraries/lua;../Libraries/RakNet/Source;../Shared;../Libraries/Detours;../Libraries/zlib-1.2.5;../Libraries/lpng142;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>BaseInc.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
@@ -169,6 +171,7 @@
     <ClInclude Include="..\Shared\CXML.h" />
     <ClInclude Include="..\Shared\CZlib.h" />
     <ClInclude Include="..\Shared\DbgView.h" />
+    <ClInclude Include="..\Shared\ExplicitSingleton.h" />
     <ClInclude Include="..\Shared\Game\CGame.h" />
     <ClInclude Include="..\Shared\Math\CMaths.h" />
     <ClInclude Include="..\Shared\Math\CMatrix.h" />
@@ -197,6 +200,7 @@
     <ClInclude Include="..\Shared\Threading\CThread.h" />
     <ClInclude Include="..\Shared\Timers\CTimer.h" />
     <ClInclude Include="..\Shared\Timers\CTimerManager.h" />
+    <ClInclude Include="BaseInc.h" />
     <ClInclude Include="C3DTextLabel.h" />
     <ClInclude Include="C3DTextLabelManager.h" />
     <ClInclude Include="C3DTextLabelNatives.h" />
@@ -249,7 +253,6 @@
     <ClInclude Include="CMainMenu.h" />
     <ClInclude Include="CMasterList.h" />
     <ClInclude Include="CModelManager.h" />
-    <ClInclude Include="CMouseHandler.h" />
     <ClInclude Include="CNameTag.h" />
     <ClInclude Include="CNetworkModelManager.h" />
     <ClInclude Include="CNetworkModule.h" />
@@ -419,7 +422,6 @@
     <ClCompile Include="CMasterList.cpp" />
     <ClCompile Include="CMenuSettings.cpp" />
     <ClCompile Include="CModelManager.cpp" />
-    <ClCompile Include="CMouseHandler.cpp" />
     <ClCompile Include="CNameTag.cpp" />
     <ClCompile Include="CNetworkModelManager.cpp" />
     <ClCompile Include="CNetworkModule.cpp" />
@@ -451,7 +453,6 @@
     <ClCompile Include="engine\CM2Entity.cpp" />
     <ClCompile Include="engine\CM2Misc.cpp" />
     <ClCompile Include="engine\CM2Navigation.cpp" />
-    <ClCompile Include="engine\CM2Object.cpp" />
     <ClCompile Include="engine\CM2ObjectTable.cpp" />
     <ClCompile Include="engine\CM2Ped.cpp" />
     <ClCompile Include="engine\CM2Vehicle.cpp" />

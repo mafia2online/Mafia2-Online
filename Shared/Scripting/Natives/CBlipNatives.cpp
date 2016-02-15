@@ -10,12 +10,27 @@
 #include	"CBlipNatives.h"
 
 #ifdef _CLIENT
-#include	"../../../Client/StdInc.h"
+#include	"../../../Client/BaseInc.h"
+#include	"../../../Client/CCore.h"
+#include	"../../../Client/CBlipManager.h"
+#include	"../../../Client/CNetworkPlayer.h"
+#include	"../../../Client/CRemotePlayer.h"
+#include	"../../../Client/CNetworkVehicle.h"
+#include	"../../../Client/CPlayerManager.h"
+#include	"../../../Client/CVehicleManager.h"
+#include	"../../../Client/CPed.h"
+#include	"../../../Client/CPedManager.h"
 #else
-#include	"../../../Server/StdInc.h"
+#include	"../../../Client/BaseInc.h"
+#include	"../../../Server/CCore.h"
+#include	"../../../Server/CBlipManager.h"
+#include	"../../../Server/CNetworkPlayer.h"
+#include	"../../../Server/CNetworkVehicle.h"
+#include	"../../../Server/CPlayerManager.h"
+#include	"../../../Server/CVehicleManager.h"
+#include	"../../../Server/CPed.h"
+#include	"../../../Server/CPedManager.h"
 #endif
-
-extern	CCore			* pCore;
 
 void CBlipNatives::Register( CScriptingManager * pScriptingManager )
 {
@@ -39,9 +54,9 @@ SQInteger CBlipNatives::Create( SQVM * pVM )
 
 	// Add the blip into the blip manager
 #ifdef _CLIENT
-	sq_pushinteger( pVM, pCore->GetBlipManager()->AddClientBlip( fX, fY, iLibrary, iIcon ) );
+	sq_pushinteger( pVM, CCore::Instance()->GetBlipManager()->AddClientBlip( fX, fY, iLibrary, iIcon ) );
 #else
-	sq_pushinteger( pVM, pCore->GetBlipManager()->Add( fX, fY, iLibrary, iIcon ) );
+	sq_pushinteger( pVM, CCore::Instance()->GetBlipManager()->Add( fX, fY, iLibrary, iIcon ) );
 #endif
 	return 1;
 }
@@ -54,9 +69,9 @@ SQInteger CBlipNatives::Destroy( SQVM * pVM )
 
 	// Remove this blip from the blip manager
 #ifdef _CLIENT
-	sq_pushbool( pVM, pCore->GetBlipManager()->RemoveClientBlip( blipId ) );
+	sq_pushbool( pVM, CCore::Instance()->GetBlipManager()->RemoveClientBlip( blipId ) );
 #else
-	sq_pushbool( pVM, pCore->GetBlipManager()->Remove( blipId ) );
+	sq_pushbool( pVM, CCore::Instance()->GetBlipManager()->Remove( blipId ) );
 #endif
 	return 1;
 }
@@ -69,16 +84,16 @@ SQInteger CBlipNatives::AttachToPlayer ( SQVM * pVM )
 	sq_getinteger ( pVM, -1, &playerId );
 
 #ifdef _CLIENT
-	if ( pCore->GetBlipManager()->IsClientBlipActive( blipId ) && pCore->GetPlayerManager()->IsActive( playerId ) )
+	if ( CCore::Instance()->GetBlipManager()->IsClientBlipActive( blipId ) && CCore::Instance()->GetPlayerManager()->IsActive( playerId ) )
 #else
-	if ( pCore->GetBlipManager()->IsActive( blipId ) && pCore->GetPlayerManager()->IsActive( playerId ) )
+	if ( CCore::Instance()->GetBlipManager()->IsActive( blipId ) && CCore::Instance()->GetPlayerManager()->IsActive( playerId ) )
 #endif
 	{
 		// Attach the blip to the player
 #ifdef _CLIENT
-		pCore->GetBlipManager()->GetClientBlip( blipId )->AttachToPlayer ( pCore->GetPlayerManager()->Get( playerId ) );
+		CCore::Instance()->GetBlipManager()->GetClientBlip( blipId )->AttachToPlayer ( CCore::Instance()->GetPlayerManager()->Get( playerId ) );
 #else
-		pCore->GetBlipManager()->Get( blipId )->AttachToPlayer ( pCore->GetPlayerManager()->Get( playerId ) );
+		CCore::Instance()->GetBlipManager()->Get( blipId )->AttachToPlayer ( CCore::Instance()->GetPlayerManager()->Get( playerId ) );
 #endif
 
 		sq_pushbool ( pVM, true );
@@ -97,16 +112,16 @@ SQInteger CBlipNatives::AttachToVehicle ( SQVM * pVM )
 	sq_getinteger ( pVM, -1, &vehicleId );
 
 #ifdef _CLIENT
-	if ( pCore->GetBlipManager()->IsClientBlipActive( blipId ) && pCore->GetVehicleManager()->IsActive( vehicleId ) )
+	if ( CCore::Instance()->GetBlipManager()->IsClientBlipActive( blipId ) && CCore::Instance()->GetVehicleManager()->IsActive( vehicleId ) )
 #else
-	if ( pCore->GetBlipManager()->IsActive( blipId ) && pCore->GetVehicleManager()->IsActive( vehicleId ) )
+	if ( CCore::Instance()->GetBlipManager()->IsActive( blipId ) && CCore::Instance()->GetVehicleManager()->IsActive( vehicleId ) )
 #endif
 	{
 		// Attach the blip to the vehicle
 #ifdef _CLIENT
-		pCore->GetBlipManager()->GetClientBlip( blipId )->AttachToVehicle ( pCore->GetVehicleManager()->Get( vehicleId ) );
+		CCore::Instance()->GetBlipManager()->GetClientBlip( blipId )->AttachToVehicle ( CCore::Instance()->GetVehicleManager()->Get( vehicleId ) );
 #else
-		pCore->GetBlipManager()->Get( blipId )->AttachToVehicle ( pCore->GetVehicleManager()->Get( vehicleId ) );
+		CCore::Instance()->GetBlipManager()->Get( blipId )->AttachToVehicle ( CCore::Instance()->GetVehicleManager()->Get( vehicleId ) );
 #endif
 
 		sq_pushbool ( pVM, true );
@@ -125,16 +140,16 @@ SQInteger CBlipNatives::AttachToPed ( SQVM * pVM )
 	sq_getinteger ( pVM, -1, &pedId );
 
 #ifdef _CLIENT
-	if ( pCore->GetBlipManager()->IsClientBlipActive( blipId ) && pCore->GetPedManager()->IsActive( pedId ) )
+	if ( CCore::Instance()->GetBlipManager()->IsClientBlipActive( blipId ) && CCore::Instance()->GetPedManager()->IsActive( pedId ) )
 #else
-	if ( pCore->GetBlipManager()->IsActive( blipId ) && pCore->GetPedManager()->IsActive( pedId ) )
+	if ( CCore::Instance()->GetBlipManager()->IsActive( blipId ) && CCore::Instance()->GetPedManager()->IsActive( pedId ) )
 #endif
 	{
 		// Attach the blip to the ped
 #ifdef _CLIENT
-		pCore->GetBlipManager()->GetClientBlip( blipId )->AttachToPed ( pCore->GetPedManager()->Get( pedId ) );
+		CCore::Instance()->GetBlipManager()->GetClientBlip( blipId )->AttachToPed ( CCore::Instance()->GetPedManager()->Get( pedId ) );
 #else
-		pCore->GetBlipManager()->Get( blipId )->AttachToPed ( pCore->GetPedManager()->Get( pedId ) );
+		CCore::Instance()->GetBlipManager()->Get( blipId )->AttachToPed ( CCore::Instance()->GetPedManager()->Get( pedId ) );
 #endif
 
 		sq_pushbool ( pVM, true );

@@ -9,7 +9,13 @@
 
 #pragma once
 
-class CPlayerManager
+#include "CCommon.h"
+#include "ExplicitSingleton.h"
+
+class CLocalPlayer;
+class CRemotePlayer;
+
+class CPlayerManager : public ExplicitSingleton<CPlayerManager>
 {
 
 private:
@@ -33,8 +39,6 @@ public:
 
 	CRemotePlayer				* GetFromGameGUID( DWORD dwGUID );
 	EntityId					GetIdFromGameGUID( DWORD dwGUID );
-
-	int							GetLocalPing( bool bAverage = false );
 
 	void						RespawnAll( void );
 	void						HandleLocalDeath( void );

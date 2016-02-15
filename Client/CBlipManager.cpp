@@ -7,9 +7,18 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
+#include	"BaseInc.h"
 
-extern CCore		* pCore;
+#include	"CCore.h"
+
+#include	"CVehicleManager.h"
+#include	"CNetworkVehicle.h"
+#include	"CPlayerManager.h"
+#include	"CNetworkPlayer.h"
+#include	"CRemotePlayer.h"
+#include	"CPedManager.h"
+
+#include	"CBlipManager.h"
 
 CBlipManager::CBlipManager( void )
 {
@@ -56,11 +65,11 @@ bool CBlipManager::AddServerBlip( EntityId blipId, float fX, float fY, int iLibr
 
 	// Are we attaching the blip to an entity?
 	if ( blipType == eBlipType::BLIP_TYPE_PLAYER )
-		m_pServerBlip[blipId]->AttachToPlayer ( pCore->GetPlayerManager()->Get(entityId) );
+		m_pServerBlip[blipId]->AttachToPlayer ( CCore::Instance()->GetPlayerManager()->Get(entityId) );
 	else if ( blipType == eBlipType::BLIP_TYPE_VEHICLE )
-		m_pServerBlip[blipId]->AttachToVehicle ( pCore->GetVehicleManager()->Get(entityId) );
+		m_pServerBlip[blipId]->AttachToVehicle ( CCore::Instance()->GetVehicleManager()->Get(entityId) );
 	else if ( blipType == eBlipType::BLIP_TYPE_PED )
-		m_pServerBlip[blipId]->AttachToPed ( pCore->GetPedManager()->Get(entityId) );
+		m_pServerBlip[blipId]->AttachToPed ( CCore::Instance()->GetPedManager()->Get(entityId) );
 	else
 		m_pServerBlip[blipId]->Create();
 
