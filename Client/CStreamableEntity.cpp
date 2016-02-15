@@ -7,9 +7,10 @@
 *
 ***************************************************************/
 
-#include "StdInc.h"
+#include "BaseInc.h"
 
-extern	CCore				* pCore;
+#include "CStreamer.h"
+#include "CStreamableEntity.h"
 
 CStreamableEntity::CStreamableEntity( eStreamEntityType type, CM2Entity * pEntity, float fStreamDistance )
 {
@@ -22,13 +23,13 @@ CStreamableEntity::CStreamableEntity( eStreamEntityType type, CM2Entity * pEntit
 	SetType( type );
 
 	// Add ourselfs to the streamer
-	pCore->GetStreamer()->push_back( this );
+	CStreamer::Instance()->push_back( this );
 }
 
 CStreamableEntity::~CStreamableEntity( void )
 {
 	// Remove ourselfs from the streamer
-	pCore->GetStreamer()->remove( this );
+	CStreamer::Instance()->remove( this );
 }
 
 void CStreamableEntity::StreamIn( void )

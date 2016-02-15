@@ -7,10 +7,42 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
+#include	"BaseInc.h"
 #include	<math.h>
 
-extern	CCore			* pCore;
+#include "CCore.h"
+
+#include "CChat.h"
+
+#include "CGUICallback.h"
+#include "CGUIEvent.h"
+#include "CGUI.h"
+#include "gui_impl\CGUI_Impl.h"
+
+#include "CGraphics.h"
+#include "CMainMenu.h"
+
+#include "CString.h"
+#include "CColor.h"
+#include "Math/CVector3.h"
+
+#include "CLocalPlayer.h"
+#include "CNetworkPlayer.h"
+#include "CPlayerManager.h"
+#include "CNetworkModule.h"
+
+#include "BitStream.h"
+#include "../Libraries/RakNet/Source/PacketPriority.h"
+#include "../Shared/CNetworkRPC.h"
+
+#include "SharedUtility.h"
+
+#include "CClientScriptingManager.h"
+#include "CEvents.h"
+#include "Scripting\CSquirrelArguments.h"
+
+#include "CM2Camera.h"
+
 bool m_bChatOldCameraState;
 
 CChat::CChat(CGUI_Impl * pGUI, float fX, float fY)
@@ -121,7 +153,7 @@ void CChat::Render(void)
 		return;
 
 	// Get the default font
-	CGraphics * pGraphics = pCore->GetGraphics();
+	CGraphics * pGraphics = CCore::Instance()->GetGraphics();
 
 	// Calculate the render Y position
 	float fCurrentY = m_fY;
@@ -248,12 +280,12 @@ bool CChat::ClearSelectText(void)
 
 float CChat::GetFontHeight(void)
 {
-	return pCore->GetGraphics()->GetFontHeight(1.0f, GetFont());
+	return CCore::Instance()->GetGraphics()->GetFontHeight(1.0f, GetFont());
 }
 
 float CChat::GetCharacterWidth(int iChar)
 {
-	return pCore->GetGraphics()->GetCharacterWidth(iChar, 1.0f, GetFont());
+	return CCore::Instance()->GetGraphics()->GetCharacterWidth(iChar, 1.0f, GetFont());
 }
 
 void CChat::AddChatMessage(CNetworkPlayer * pNetworkPlayer, const char * szMessage)
@@ -312,7 +344,7 @@ void CChat::AddChatMessage(CNetworkPlayer * pNetworkPlayer, const char * szMessa
 	sprintf(m_chatLine[0].szName, "%s: ", pNetworkPlayer->GetNick().Get());
 	m_chatLine[0].ulMsgColour = D3DCOLOR_ARGB(255, 255, 255, 255);
 	m_chatLine[0].ulNameColour = colour.dwHexColor;
-	m_chatLine[0].fNameExtent = pCore->GetGraphics()->GetTextWidth(m_chatLine[0].szName, 1.0f, "tahoma-bold");
+	m_chatLine[0].fNameExtent = CCore::Instance()->GetGraphics()->GetTextWidth(m_chatLine[0].szName, 1.0f, "tahoma-bold");
 }
 
 void CChat::AddInfoMessage(const char * szInfo, ...)
@@ -365,11 +397,11 @@ void CChat::AddDebugMessage(const char * szDebug, ...)
 bool CChat::HandleKeyInput(CGUIKeyEventArgs keyArgs)
 {
 	// Are we not connected?
-	if (!pCore->GetNetworkModule() || !pCore->GetNetworkModule()->IsConnected())
+	if (!CCore::Instance()->GetNetworkModule() || !CCore::Instance()->GetNetworkModule()->IsConnected())
 		return false;
 
 	// Is the input focused on the GUI?
-	if (pCore->GetGUI()->GetCEGUI()->IsInputEnabled())
+	if (CCore::Instance()->GetGUI()->GetCEGUI()->IsInputEnabled())
 		return false;
 
 	// Are we enabling the chat?
@@ -469,7 +501,7 @@ bool CChat::HandleKeyInput(CGUIKeyEventArgs keyArgs)
 bool CChat::HandleKeyDown(CGUIKeyEventArgs keyArgs)
 {
 	// Are we not connected?
-	if (!pCore->GetNetworkModule() || !pCore->GetNetworkModule()->IsConnected())
+	if (!CCore::Instance()->GetNetworkModule() || !CCore::Instance()->GetNetworkModule()->IsConnected())
 		return false;
 
 	// Switch the scancode
@@ -636,7 +668,7 @@ bool CChat::HandleKeyDown(CGUIKeyEventArgs keyArgs)
 void CChat::ProcessInput(void)
 {
 	// Are we not connected?
-	if (!pCore->GetNetworkModule() || !pCore->GetNetworkModule()->IsConnected())
+	if (!CCore::Instance()->GetNetworkModule() || !CCore::Instance()->GetNetworkModule()->IsConnected())
 		return;
 
 	// Was anything entered?
@@ -674,22 +706,22 @@ void CChat::ProcessInput(void)
 			if (strCommand == "q" || strCommand == "quit" || strCommand == "exit")
 			{
 				// Shutdown
-				pCore->Shutdown();
+				CCore::Instance()->Shutdown();
 				return;
 			}
 			else if (strCommand == "disconnect")
 			{
 				// Are we connected?
-				if (pCore->GetNetworkModule() && pCore->GetNetworkModule()->IsConnected())
+				if (CCore::Instance()->GetNetworkModule() && CCore::Instance()->GetNetworkModule()->IsConnected())
 				{
 					// Disconnect from the network
-					pCore->GetNetworkModule()->Disconnect();
+					CCore::Instance()->GetNetworkModule()->Disconnect();
 
 					// Stop multiplayer
-					pCore->StopMultiplayer();
+					CCore::Instance()->StopMultiplayer();
 
 					// Go back to main menu
-					pCore->GetGUI()->GetMainMenu()->SetVisible(true);
+					CCore::Instance()->GetGUI()->GetMainMenu()->SetVisible(true);
 				}
 
 				bHasUsedCmd = true;
@@ -699,7 +731,7 @@ void CChat::ProcessInput(void)
 				bHasUsedCmd = true;
 
 				// Are we spawned?
-				if (pCore->GetPlayerManager()->GetLocalPlayer()->IsSpawned())
+				if (CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->IsSpawned())
 				{
 					//
 					CVector3 vecPosition;
@@ -707,21 +739,21 @@ void CChat::ProcessInput(void)
 					bool bOnFoot = true;
 
 					// Is the player on-foot?
-					if (pCore->GetPlayerManager()->GetLocalPlayer()->GetState() == ePlayerState::PLAYERSTATE_ONFOOT)
+					if (CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetState() == ePlayerState::PLAYERSTATE_ONFOOT)
 					{
 						// Get the localplayer position
-						pCore->GetPlayerManager()->GetLocalPlayer()->GetPosition(&vecPosition);
+						CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetPosition(&vecPosition);
 
 						// Get the localplayer rotation
-						pCore->GetPlayerManager()->GetLocalPlayer()->GetRotation(&vecRotation);
+						CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetRotation(&vecRotation);
 					}
-					else if (pCore->GetPlayerManager()->GetLocalPlayer()->GetState() == ePlayerState::PLAYERSTATE_DRIVER || pCore->GetPlayerManager()->GetLocalPlayer()->GetState() == ePlayerState::PLAYERSTATE_PASSENGER)
+					else if (CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetState() == ePlayerState::PLAYERSTATE_DRIVER || CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetState() == ePlayerState::PLAYERSTATE_PASSENGER)
 					{
 						// Get the vehicle position
-						pCore->GetPlayerManager()->GetLocalPlayer()->GetVehicle()->GetPosition(&vecPosition);
+						CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetVehicle()->GetPosition(&vecPosition);
 
 						// Get the vehicle rotation
-						pCore->GetPlayerManager()->GetLocalPlayer()->GetVehicle()->GetRotation(&vecRotation);
+						CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetVehicle()->GetRotation(&vecRotation);
 
 						//
 						bOnFoot = false;
@@ -734,7 +766,7 @@ void CChat::ProcessInput(void)
 					if (pFile)
 					{
 						// Get the localplayer pointer
-						CLocalPlayer * pLocalPlayer = pCore->GetPlayerManager()->GetLocalPlayer();
+						CLocalPlayer * pLocalPlayer = CCore::Instance()->GetPlayerManager()->GetLocalPlayer();
 
 						// Save the player position
 						fprintf(pFile, "%d, %f, %f, %f, %f, %f, %f // %s\n", (bOnFoot ? pLocalPlayer->GetModel() : pLocalPlayer->GetVehicle()->GetModel()), vecPosition.fX, vecPosition.fY, vecPosition.fZ, vecRotation.fX, vecRotation.fY, vecRotation.fZ, strParams.c_str());
@@ -776,10 +808,10 @@ void CChat::ProcessInput(void)
 		}
 
 		// Is the network module instance valid?
-		if (pCore->GetNetworkModule())
+		if (CCore::Instance()->GetNetworkModule())
 		{
 			// Are we connected?
-			if (pCore->GetNetworkModule()->IsConnected())
+			if (CCore::Instance()->GetNetworkModule()->IsConnected())
 			{
 				RakNet::BitStream bitStream;
 				RakNet::RakString strInput;
@@ -811,17 +843,17 @@ void CChat::ProcessInput(void)
 				pArguments.push(bIsCommand);
 
 				// Should we send this message?
-				if (pCore->GetClientScriptingManager()->GetEvents()->Call("onClientChat", &pArguments).GetInteger() == 1)
+				if (CCore::Instance()->GetClientScriptingManager()->GetEvents()->Call("onClientChat", &pArguments).GetInteger() == 1)
 				{
 					// Send it to the server
-					pCore->GetNetworkModule()->Call(RPC_PLAYER_CHAT, &bitStream, HIGH_PRIORITY, RELIABLE_ORDERED, true);
+					CCore::Instance()->GetNetworkModule()->Call(RPC_PLAYER_CHAT, &bitStream, HIGH_PRIORITY, RELIABLE_ORDERED, true);
 
 					// Add this message to the history
 					AddToHistory();
 
 					// Add the chat message for the localplayer if it's not a command
 					if (!bIsCommand)
-						AddChatMessage(pCore->GetPlayerManager()->GetLocalPlayer(), GetInputText());
+						AddChatMessage(CCore::Instance()->GetPlayerManager()->GetLocalPlayer(), GetInputText());
 				}
 			}
 		}
@@ -834,32 +866,32 @@ void CChat::LockGameControls(bool bLock)
 	if (bLock)
 	{
 		// Get the old control state
-		m_bOldLockState = pCore->GetPlayerManager()->GetLocalPlayer()->AreControlsLocked();
+		m_bOldLockState = CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->AreControlsLocked();
 
 		// Get the old camera state
-		m_bChatOldCameraState = pCore->GetCamera()->IsLocked();
+		m_bChatOldCameraState = CCore::Instance()->GetCamera()->IsLocked();
 
 		// Lock the player controls
-		pCore->GetPlayerManager()->GetLocalPlayer()->LockControls(true);
+		CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->LockControls(true);
 
 		// Lock the camera control
-		pCore->GetCamera()->LockControl(true);
+		CCore::Instance()->GetCamera()->LockControl(true);
 
 		// Are we in a vehicle?
-		if (pCore->GetPlayerManager()->GetLocalPlayer()->IsInVehicle())
+		if (CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->IsInVehicle())
 		{
 			// Reset some vehicle stuff
-			pCore->GetPlayerManager()->GetLocalPlayer()->GetVehicle()->GetVehicle()->SetPower(false);
-			pCore->GetPlayerManager()->GetLocalPlayer()->GetVehicle()->GetVehicle()->SetBrake(false);
+			CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetVehicle()->GetVehicle()->SetPower(false);
+			CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetVehicle()->GetVehicle()->SetBrake(false);
 		}
 	}
 	else
 	{
 		// Restore the player controls
-		pCore->GetPlayerManager()->GetLocalPlayer()->LockControls(m_bOldLockState);
+		CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->LockControls(m_bOldLockState);
 
 		// Restore the camera control
-		pCore->GetCamera()->LockControl(m_bChatOldCameraState);
+		CCore::Instance()->GetCamera()->LockControl(m_bChatOldCameraState);
 	}
 }
 

@@ -7,9 +7,18 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
+#include	"BaseInc.h"
 
-extern CCore			* pCore;
+#include	"CCore.h"
+
+#include	"CString.h"
+
+#include	"CEvents.h"
+#include	"CCommands.h"
+#include	"Scripting\CScriptingManager.h"
+#include	"CClientScriptGUIManager.h"
+
+#include	"CClientScriptingManager.h"
 
 CClientScriptingManager::CClientScriptingManager( void )
 {

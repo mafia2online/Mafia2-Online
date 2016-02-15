@@ -7,7 +7,43 @@
 *
 ***************************************************************/
 
-class CCore
+#pragma once
+
+#include <Windows.h>
+
+#include "d3d9.h"
+#include "d3dx9.h"
+
+#include "ExplicitSingleton.h"
+
+#include	"CString.h"
+
+class CUpdater;
+class CMafia;
+class CNetworkModule;
+class CGraphics;
+class CChat;
+class CPlayerManager;
+class CFPSCounter;
+class CBlipManager;
+class CVehicleManager;
+class CPedManager;
+class CGUI;
+class CKeyBinds;
+class CStreamer;
+class CModelManager;
+class CNameTag;
+class CAudioManager;
+class C3DTextLabelManager;
+class M2Game;
+class CM2Camera;
+class CM2Hud;
+class CClientScriptingManager;
+class CTimerManager;
+class CFileTransferManager;
+class String;
+
+class CCore : public ExplicitSingleton<CCore>
 {
 
 private:

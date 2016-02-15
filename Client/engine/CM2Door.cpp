@@ -7,7 +7,9 @@
 *
 ***************************************************************/
 
-#include "../StdInc.h"
+#include "BaseInc.h"
+
+#include "CM2Door.h"
 
 void CM2Door::Open( CVector3 * pvPosition )
 {

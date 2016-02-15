@@ -9,7 +9,15 @@
 
 #pragma once
 
+#include	"CSync.h"
+
+#include	"Interfaces\CMultiplayerVehicle.h"
+#include	"Interfaces\CMultiplayerPlayer.h"
+
 class CNetworkVehicle;
+
+#include	"CNetworkVehicle.h"
+
 class CNetworkPlayer : public CMultiplayerPlayer
 {
 
@@ -108,7 +116,7 @@ public:
 	void							Ping						( void );
 
 	void							SetVehicle					( CNetworkVehicle * pVehicle ) { m_pVehicle = pVehicle; }
-	CNetworkVehicle					* GetVehicle				( void ) { return m_pVehicle; }
+	CNetworkVehicle					* GetVehicle(void)			{ return m_pVehicle; }
 	bool							IsInVehicle					( void ) { return (m_pVehicle != NULL); }
 
 	void							SetSeat						( EntityId iSeat ) { m_iSeat = iSeat; }

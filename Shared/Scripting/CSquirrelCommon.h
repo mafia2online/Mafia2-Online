@@ -12,9 +12,9 @@
 #pragma once
 
 #ifdef _CLIENT
-#include	"../../Client/StdInc.h"
+#include	"../../Client/BaseInc.h"
 #else
-#include	"../../Server/StdInc.h"
+#include	"../../Client/BaseInc.h"
 #endif
 
 #include	"../Scripting/CSquirrel.h"

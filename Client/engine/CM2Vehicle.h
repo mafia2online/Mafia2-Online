@@ -9,6 +9,10 @@
 
 #pragma once
 
+#include	"../../Shared/CColor.h"
+
+#include	"CM2Ped.h"
+
 enum eVehiclePartType
 {
 	PART_TYPE_WHEEL					= 2,

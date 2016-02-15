@@ -7,9 +7,24 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
+#include	"BaseInc.h"
 
-extern	CCore			* pCore;
+#include	<RakPeerInterface.h>
+#include	<BitStream.h>
+#include	<MessageIdentifiers.h>
+#include	<RPC4Plugin.h>
+
+#include	"CCore.h"
+
+#include	"SharedUtility.h"
+
+#include	"CGUI.h"
+
+#include	"CServerBrowser.h"
+#include	"CServerList.h"
+#include	"CServerQuery.h"
+
+#include	"CServerList.h"
 
 bool ReadString( std::string &strRead, const char * szBuffer, unsigned int &i, unsigned int nLength )
 {
@@ -120,7 +135,7 @@ bool CServerListItem::Parse( const char * szBuffer, unsigned int uiLength )
 	}
 
 	// Add this server to the serverbrowser
-	pCore->GetGUI()->GetServerBrowser()->AddServer ( m_type, this );
+	CCore::Instance()->GetGUI()->GetServerBrowser()->AddServer ( m_type, this );
 	
 	// Mark as scanned and return
 	return bScanned = true;

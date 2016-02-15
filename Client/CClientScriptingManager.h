@@ -9,6 +9,14 @@
 
 #pragma once
 
+class CScriptingManager;
+class CEvents;
+class CCommands;
+class CClientScriptGUIManager;
+
+class String;
+class CSquirrel;
+
 struct SClientScript
 {
 	String strName;

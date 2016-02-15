@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include "../Libraries/lua/lua.h"
+
 class M2ScriptMachine
 {
 public:

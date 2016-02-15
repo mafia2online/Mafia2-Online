@@ -12,6 +12,14 @@
 #include	<map>
 #include	<list>
 
+#include	"../../Libraries/squirrel/squirrel.h"
+#include	"../../Libraries/squirrel/sqvm.h"
+
+#include	"Scripting\CSquirrel.h"
+#include	"Scripting\CSquirrelArguments.h"
+#include	"Scripting\CScriptingManager.h"
+#include	"Scripting\CSquirrelCommon.h"
+
 class CEventHandler
 {
 public:
@@ -73,7 +81,9 @@ public:
 #endif
 */
 
-class CEvents : public std::map< std::string, std::list< CEventHandler *> >
+#include "ExplicitSingleton.h"
+
+class CEvents : public std::map< std::string, std::list< CEventHandler *> >, public ExplicitSingleton<CEvents>
 /*#ifndef _CLIENT
 	, public CEventsInterface
 #endif*/

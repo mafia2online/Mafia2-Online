@@ -9,6 +9,11 @@
 
 #pragma once
 
+#include <Windows.h>
+
+#define DIRECTINPUT_VERSION	0x0800
+#include "dinput.h"
+
 typedef HRESULT		( WINAPI * DirectInput8Create_t ) ( HINSTANCE, DWORD, REFIID, LPVOID *, LPUNKNOWN );
 
 class CDirectInput8Hook

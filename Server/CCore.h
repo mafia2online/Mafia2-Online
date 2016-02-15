@@ -9,7 +9,47 @@
 
 #pragma once
 
-class CCore : public CCoreInterface
+#include	"CSettings.h"
+
+#include	"Interfaces\CCoreInterface.h"
+#include	"Interfaces\CMultiplayerBlip.h"
+#include	"Interfaces\CMultiplayerBlipManager.h"
+#include	"Interfaces\CMultiplayerPlayer.h"
+#include	"Interfaces\CMultiplayerPlayerManager.h"
+#include	"Interfaces\CMultiplayerVehicle.h"
+#include	"Interfaces\CMultiplayerVehicleManager.h"
+
+#include	"CNetworkModule.h"
+#include	"CNetworkPlayer.h"
+#include	"CNetworkVehicle.h"
+
+#include	"CPlayerManager.h"
+#include	"CVehicleManager.h"
+
+#include	"CEvents.h"
+
+#include	"CMasterList.h"
+#include	"CQuery.h"
+#include	"CWebServer.h"
+#include	"CWebRequest.h"
+
+#include	"CClientScriptingManager.h"
+#include	"Timers\CTimer.h"
+#include	"Timers\CTimerManager.h"
+
+#include	"CBanManager.h"
+#include	"CModuleManager.h"
+
+#include	"CPedManager.h"
+
+#include	"CBlipManager.h"
+#include	"CResourceManager.h"
+
+#include	"CCommands.h"
+
+#include	"ExplicitSingleton.h"
+
+class CCore : public CCoreInterface, public ExplicitSingleton<CCore>
 {
 
 private:

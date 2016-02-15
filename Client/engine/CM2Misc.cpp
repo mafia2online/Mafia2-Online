@@ -7,10 +7,14 @@
 *
 ***************************************************************/
 
-#include "../StdInc.h"
-#include "CM2Misc.h"
+#include "BaseInc.h"
 
-extern	CCore				* pCore;
+#include "CMafia.h"
+#include "CCore.h"
+
+#include "CIE.h"
+
+#include "CM2Misc.h"
 
 typedef C_TrafficModelDescriptor * ( __thiscall * CTrafficModelDesc__constructor_t )( void *, void *, int, char * );
 CTrafficModelDesc__constructor_t CTrafficModelDesc__constructor = ( CTrafficModelDesc__constructor_t )( 0x00A16980 );
@@ -26,7 +30,7 @@ C_TrafficActorCache * GetTrafficActorCache( void )
 C_TrafficModelDescriptor * LoadHumanModel( char * szModelFileName )
 {
 	// Allocate memory
-	C_TrafficModelDescriptor * pDescriptor = (C_TrafficModelDescriptor *)pCore->GetGame()->allocate( 0x1C );
+	C_TrafficModelDescriptor * pDescriptor = (C_TrafficModelDescriptor *)CCore::Instance()->GetGame()->allocate( 0x1C );
 
 	// Did we fail to allocate enough memory?
 	if( !pDescriptor )

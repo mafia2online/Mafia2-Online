@@ -7,10 +7,14 @@
 *
 ***************************************************************/
 
-#include "StdInc.h"
-
 #ifndef CAUDIO_H
 #define CAUDIO_H
+
+#include	"CString.h"
+#include	"Math\CVector3.h"
+
+class String;
+class CVector3;
 
 class CAudio
 {
@@ -26,11 +30,11 @@ private:
 	DWORD			m_dwChannel;
 
 public:
-	CAudio(String strStreamName, bool bReplay = false, bool bIsOnlineStream = false);
+	CAudio(const String& strStreamName, bool bReplay = false, bool bIsOnlineStream = false);
 	~CAudio();
 
 	bool			Load();
-	inline bool		IsLoaded() { return (m_dwChannel != 0); }
+	inline bool		IsLoaded() const { return (m_dwChannel != 0); }
 	void			Unload();
 	bool			Play();
 	void			Pause();
@@ -40,12 +44,12 @@ public:
 	void			Stop();
 	void			SetUsePosition(bool bUsePosition);
 	inline bool		GetUsePosition() { return m_bUsePosition; }
-	void			SetPosition(CVector3 vecPosition, float fRange);
+	void			SetPosition(const CVector3& vecPosition, float fRange);
 	void			GetPosition(CVector3& vecPosition, float& fRange);
 	void			SetVolume(float fVolume);
 	float			GetVolume();
 	void			Mute();
-	inline bool		IsMuted() { return m_bIsMuted; }
+	inline bool		IsMuted() const { return m_bIsMuted; }
 	void			Unmute();
 	void			Process();
 	int				GetLength();

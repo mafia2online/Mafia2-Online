@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include "d3d9.h"
+
 class CDirect3D9Hook
 {
 
@@ -23,10 +25,7 @@ private:
 
 public:
 
-	CDirect3D9Hook( ) { };
-	~CDirect3D9Hook( ) { };
-
-	static	bool					Install( );
-	static	void					Uninstall( );
+	static	bool					Install( void );
+	static	void					Uninstall( void );
 
 };

@@ -7,9 +7,25 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
+#include	"BaseInc.h"
 
-extern	CCore				* pCore;
+#include	"CCore.h"
+
+#include	"CString.h"
+#include	"Math\CVector3.h"
+
+#include	"CRemotePlayer.h"
+#include	"CNetworkPlayer.h"
+#include	"CLocalPlayer.h"
+
+#include	"engine\CM2Ped.h"
+
+#include	"Scripting\CSquirrelArguments.h"
+
+#include	"CClientScriptingManager.h"
+#include	"CEvents.h"
+
+#include	"CPlayerManager.h"
 
 CPlayerManager::CPlayerManager( void )
 {
@@ -72,7 +88,7 @@ bool CPlayerManager::Add( EntityId playerId, String strNick, unsigned int uiColo
 		CSquirrelArguments pArguments;
 		pArguments.push( playerId );
 		pArguments.push( strNick );
-		pCore->GetClientScriptingManager()->GetEvents()->Call( "onClientPlayerConnect", &pArguments );
+		CCore::Instance()->GetClientScriptingManager()->GetEvents()->Call( "onClientPlayerConnect", &pArguments );
 
 		return true;
 	}
@@ -91,7 +107,7 @@ void CPlayerManager::Remove( EntityId playerId )
 	// Call the client script event
 	CSquirrelArguments pArguments;
 	pArguments.push( playerId );
-	pCore->GetClientScriptingManager()->GetEvents()->Call( "onClientPlayerDisconnect", &pArguments );
+	CCore::Instance()->GetClientScriptingManager()->GetEvents()->Call( "onClientPlayerDisconnect", &pArguments );
 
 	// Destroy the network player instance
 	SAFE_DELETE( m_pNetworkPlayer[playerId] );

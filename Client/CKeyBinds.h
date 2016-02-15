@@ -9,6 +9,13 @@
 
 #pragma once
 
+#include "squirrel.h"
+#include "sqobject.h"
+
+#include <list>
+
+class String;
+
 class CKeyBind
 {
 

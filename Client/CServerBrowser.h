@@ -9,7 +9,16 @@
 
 #pragma once
 
+#include	"CServerPassword.h"
+#include	<MessageIdentifiers.h>
+
 #define MAX_SERVER_LISTS							3
+
+class CGUI_Impl;
+
+class CGUIWindow_Impl;
+class CGUITabPanel_Impl;
+class CGUITab_Impl;
 
 enum ServerBrowserType
 {
@@ -21,6 +30,8 @@ enum ServerBrowserType
 };
 
 class CMasterList;
+class CServerQuery;
+
 class CServerList;
 class CServerListItem;
 

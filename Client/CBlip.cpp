@@ -7,9 +7,26 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
+#include	"BaseInc.h"
 
-extern	CCore			* pCore;
+#include	"CCore.h"
+
+#include	"Math\CVector3.h"
+
+#include	"CMafia.h"
+
+#include	"CPed.h"
+#include	"CNetworkPlayer.h"
+#include	"CNetworkVehicle.h"
+#include	"CVehicleManager.h"
+#include	"CPlayerManager.h"
+#include	"CPedManager.h"
+#include	"CRemotePlayer.h"
+
+#include	"engine\CM2Navigation.h"
+#include	"engine\CM2Ped.h"
+
+#include	"CBlip.h"
 
 CBlip::CBlip( EntityId blipId, float fX, float fY, int iLibrary, int iIcon )
 {
@@ -38,7 +55,7 @@ void CBlip::Create( void )
 		return;
 
 	// Create the blip
-	m_internalId = pCore->GetGame()->GetNavigation()->RegisterIconPos( Vector2( m_fX, m_fY ), m_iLibrary, m_iIcon );
+	m_internalId = CCore::Instance()->GetGame()->GetNavigation()->RegisterIconPos( Vector2( m_fX, m_fY ), m_iLibrary, m_iIcon );
 
 	// Mark as created
 	m_bCreated = true;
@@ -54,7 +71,7 @@ void CBlip::Destroy( void )
 	if ( IsAttachedToEntity () )
 		Detach ( false );
 	else
-		pCore->GetGame()->GetNavigation()->UnregisterIconPos( m_internalId );
+		CCore::Instance()->GetGame()->GetNavigation()->UnregisterIconPos(m_internalId);
 
 	// Reset
 	m_internalId = -1;
@@ -73,7 +90,7 @@ void CBlip::AttachToPlayer ( CNetworkPlayer * pPlayer )
 	if ( pPlayer->GetPlayerPed () && pPlayer->GetPlayerPed()->GetPed () )
 	{
 		// Create the blip attached to the player entity
-		m_internalId = pCore->GetGame()->GetNavigation()->RegisterIconEntity ( pPlayer->GetPlayerPed()->GetEntity(), m_iLibrary, m_iIcon );
+		m_internalId = CCore::Instance()->GetGame()->GetNavigation()->RegisterIconEntity(pPlayer->GetPlayerPed()->GetEntity(), m_iLibrary, m_iIcon);
 
 		// Mark as created
 		m_bCreated = true;
@@ -97,7 +114,7 @@ void CBlip::AttachToVehicle ( CNetworkVehicle * pVehicle )
 	if ( pVehicle->GetVehicle () && pVehicle->GetVehicle()->GetVehicle () )
 	{
 		// Create the blip attached to the player entity
-		m_internalId = pCore->GetGame()->GetNavigation()->RegisterIconEntity ( pVehicle->GetVehicle()->GetEntity(), m_iLibrary, m_iIcon );
+		m_internalId = CCore::Instance()->GetGame()->GetNavigation()->RegisterIconEntity(pVehicle->GetVehicle()->GetEntity(), m_iLibrary, m_iIcon);
 
 		CLogFile::Printf ( "CBlip::AttachToVehicle() - Blip attached! (Internal id: %d, Lib: %d, Icon: %d)", m_internalId, m_iLibrary, m_iIcon );
 
@@ -123,7 +140,7 @@ void CBlip::AttachToPed ( CPed * pPed )
 	if ( pPed->GetPed () && pPed->GetPed()->GetPed () )
 	{
 		// Create the blip attached to the player entity
-		m_internalId = pCore->GetGame()->GetNavigation()->RegisterIconEntity ( pPed->GetPed()->GetEntity(), m_iLibrary, m_iIcon );
+		m_internalId = CCore::Instance()->GetGame()->GetNavigation()->RegisterIconEntity(pPed->GetPed()->GetEntity(), m_iLibrary, m_iIcon);
 
 		// Mark as created
 		m_bCreated = true;
@@ -148,15 +165,15 @@ void CBlip::Detach ( bool bRecreate )
 		
 		// Find the attached entity
 		if ( m_blipType == eBlipType::BLIP_TYPE_PLAYER )
-			pAttachedEntity = pCore->GetPlayerManager()->Get ( entityId )->GetPlayerPed()->GetPed ();
+			pAttachedEntity = CCore::Instance()->GetPlayerManager()->Get(entityId)->GetPlayerPed()->GetPed();
 		else if ( m_blipType == eBlipType::BLIP_TYPE_VEHICLE )
-			pAttachedEntity = pCore->GetVehicleManager()->Get ( entityId )->GetVehicle()->GetVehicle ();
+			pAttachedEntity = CCore::Instance()->GetVehicleManager()->Get(entityId)->GetVehicle()->GetVehicle();
 		else if ( m_blipType == eBlipType::BLIP_TYPE_PED )
-			pAttachedEntity = pCore->GetPedManager()->Get ( entityId )->GetPed()->GetPed ();
+			pAttachedEntity = CCore::Instance()->GetPedManager()->Get(entityId)->GetPed()->GetPed();
 
 		// Destroy the blip
 		if ( pAttachedEntity )
-			pCore->GetGame()->GetNavigation()->UnregisterIconEntity ( pAttachedEntity );
+			CCore::Instance()->GetGame()->GetNavigation()->UnregisterIconEntity(pAttachedEntity);
 
 		// Reset
 		m_internalId = -1;

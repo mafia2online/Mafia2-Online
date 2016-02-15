@@ -7,9 +7,14 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
+#include	"BaseInc.h"
 
-extern	CCore			* pCore;
+#include	"CCore.h"
+
+#include	"CString.h"
+#include	"Math\CVector3.h"
+
+#include	"C3DTextLabel.h"
 
 C3DTextLabel::C3DTextLabel(EntityId serverID, float fX, float fY, float fZ, String text, int color, float distance)
 {

@@ -9,6 +9,12 @@
 
 #pragma once
 
+#include	"CGUI.h"
+#include	"gui_impl\CGUI_Impl.h"
+#include	"gui_impl\CGUIElement_Impl.h"
+#include	"gui_impl\CGUIWindow_Impl.h"
+#include	"gui_impl\CGUIProgressBar_Impl.h"
+
 class CDownloadProgress
 {
 

@@ -7,9 +7,15 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
+#include "BaseInc.h"
 
-extern	CCore			* pCore;
+#include "CGUI.h"
+#include "CChat.h"
+#include "CCore.h"
+
+#include "CDirectInput8Hook.h"
+#include "CDirectInputDevice8Proxy.h"
+
 extern	bool			bInputHookCreated;
 
 bool					bMouseHookCreated = false;
@@ -90,6 +96,8 @@ HRESULT STDMETHODCALLTYPE CDirectInputDevice8Proxy::GetDeviceState(DWORD p0, LPV
 	// Is this device from our gui?
 	if( !m_bGameDevice )
 		return m_pDevice->GetDeviceState( p0, p1 );
+
+	CCore *pCore = CCore::Instance();
 
 	// Get the game load state
 	bool bGameLoaded = pCore->IsGameLoaded();

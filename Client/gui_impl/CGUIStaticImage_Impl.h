@@ -9,6 +9,10 @@
 
 #pragma once
 
+#include	"CGUI_Impl.h"
+#include	"CGUIElement_Impl.h"
+#include	"CGUITexture_Impl.h"
+
 class CGUIStaticImage_Impl : public CGUIElement_Impl
 {
 

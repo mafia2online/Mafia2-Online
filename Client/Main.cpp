@@ -7,9 +7,15 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
+#include	"BaseInc.h"
 
-CCore		* pCore = NULL;
+#include	"CCore.h"
+#include	"CExceptionHandler.h"
+
+#include	"CNetworkModule.h"
+#include	<RakPeerInterface.h>
+
+CCore*		pCore = NULL;
 HMODULE		g_hModule = NULL;
 
 BOOL WINAPI DllMain( HMODULE hModule, DWORD dwReason, void * pReserved )
@@ -42,12 +48,12 @@ BOOL WINAPI DllMain( HMODULE hModule, DWORD dwReason, void * pReserved )
 			CLogFile::Print( "DLL_PROCESS_DETACH" );
 
 			// Is the core instance valid?
-			if( pCore && pCore->GetNetworkModule() && pCore->GetNetworkModule()->GetRakPeer() )
+			if (pCore && CCore::Instance()->GetNetworkModule() && CCore::Instance()->GetNetworkModule()->GetRakPeer())
 			{
 				CLogFile::Print( "Shutting down the network..." );
 
 				// Shutdown the network
-				pCore->GetNetworkModule()->GetRakPeer()->Shutdown( 500 );
+				CCore::Instance()->GetNetworkModule()->GetRakPeer()->Shutdown( 500 );
 			}
 
 			CLogFile::Print( "Terminating process" );

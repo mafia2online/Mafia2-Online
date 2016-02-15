@@ -7,7 +7,35 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
+#include "CNameTag.h"
+
+#include "CCore.h"
+
+#include "CGraphics.h"
+
+#include "CGUI.h"
+#include "CServerBrowser.h"
+#include "CMainMenu.h"
+
+#include "Math/CVector3.h"
+#include "Math/CMaths.h"
+
+#include "CString.h"
+
+#include "CCommon.h"
+
+#include "CPed.h"
+#include "CPedManager.h"
+#include "engine/CM2Entity.h"
+#include "engine/CM2Ped.h"
+
+#include "CColor.h"
+
+#include "CPlayerManager.h"
+
+#include "CNetworkPlayer.h"
+#include "CLocalPlayer.h"
+#include "CRemotePlayer.h"
 
 
 extern	CCore			* pCore;
@@ -51,7 +79,7 @@ void CNameTag::DrawPed(void)
 
 	for ( EntityId i = 0; i < MAX_PEDS; ++i )
 	{
-		CPed *pPed = pCore->GetPedManager()->Get ( i );
+		CPed *pPed = CCore::Instance()->GetPedManager()->Get(i);
 
 		if ( !pPed )
 			continue;
@@ -62,7 +90,7 @@ void CNameTag::DrawPed(void)
 			continue;
 
 		CVector3 pedPos;
-		pGamePed->GetPosition ( &pedPos );
+		pGamePed->GetPosition ( pedPos );
 		float fDistance = Math::GetDistanceBetweenPoints ( localPos, pedPos );
 
 		if ( fDistance > RENDER_DISTANCE_PED )

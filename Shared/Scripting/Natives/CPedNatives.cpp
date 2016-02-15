@@ -8,19 +8,24 @@
 ***************************************************************/
 
 #pragma once
-#ifdef _CLIENT
 
 #include	"CPedNatives.h"
 #include	"../../Math/CMaths.h"
 #include	"../CSquirrelCommon.h"
 
 #ifdef _CLIENT
-#include	"../../../Client/StdInc.h"
+#include	"../../../Client/BaseInc.h"
+#include	"../../../Client/CCore.h"
+#include	"../../../Client/CClientScriptingManager.h"
+#include	"../../../Client/CClientScriptGUIManager.h"
+#include	"../../../Client/CPedManager.h"
 #else
 #include	"../../../Server/StdInc.h"
 #endif
 
-extern	CCore			* pCore;
+#include	"../../../Shared/CEvents.h"
+#include	"../../../Shared/CCommands.h"
+#include	"../../../Shared/Scripting/CSquirrelCommon.h"
 
 void CPedNatives::Register( CScriptingManager * pScriptingManager )
 {
@@ -53,7 +58,7 @@ SQInteger CPedNatives::CreatePed( SQVM * pVM )
 	CLogFile::Printf( "Model: %d, Pos: %f, %f, %f, Rot: %f, %f, %f", iModelIndex, vecPosition.fX, vecPosition.fY, vecPosition.fZ, vecRotation.fX, vecRotation.fY, vecRotation.fZ );
 
 	// Add the ped to the manager
-	sq_pushinteger( pVM, pCore->GetPedManager()->Add( iModelIndex, vecPosition, vecRotation ) );
+	sq_pushinteger( pVM, CCore::Instance()->GetPedManager()->Add( iModelIndex, vecPosition, vecRotation ) );
 	return 1;
 }
 
@@ -63,7 +68,7 @@ SQInteger CPedNatives::DestroyPed( SQVM * pVM )
 	sq_getinteger( pVM, -1, &pedId );
 
 	// Delete the ped from the manager
-	sq_pushbool( pVM, pCore->GetPedManager()->Delete( pedId ) );
+	sq_pushbool( pVM, CCore::Instance()->GetPedManager()->Delete( pedId ) );
 	return 1;
 }
 
@@ -75,10 +80,10 @@ SQInteger CPedNatives::SetPedName(SQVM * pVM)
 	sq_getinteger(pVM, -2, &pedId);
 	sq_getstring(pVM, -1, &pedName);
 
-	if (pCore->GetPedManager()->IsActive(pedId) && pCore->GetPedManager()->Get(pedId) != NULL)
+	if (CCore::Instance()->GetPedManager()->IsActive(pedId) && CCore::Instance()->GetPedManager()->Get(pedId) != NULL)
 	{
 		// Change nick
-		pCore->GetPedManager()->Get(pedId)->SetNick(pedName);
+		CCore::Instance()->GetPedManager()->Get(pedId)->SetNick(pedName);
 
 		// Push the return
 		sq_pushbool(pVM, true);
@@ -94,10 +99,10 @@ SQInteger CPedNatives::GetPedName(SQVM * pVM)
 
 	sq_getinteger(pVM, -1, &pedId);
 
-	if (pCore->GetPedManager()->IsActive(pedId) && pCore->GetPedManager()->Get(pedId) != NULL)
+	if (CCore::Instance()->GetPedManager()->IsActive(pedId) && CCore::Instance()->GetPedManager()->Get(pedId) != NULL)
 	{
 		// Get the nick
-		String nick = pCore->GetPedManager()->Get(pedId)->GetNick();
+		String nick = CCore::Instance()->GetPedManager()->Get(pedId)->GetNick();
 
 		// Push the return
 		sq_pushstring(pVM, nick.Get(), nick.GetLength());
@@ -115,10 +120,10 @@ SQInteger CPedNatives::ShowPedName(SQVM *pVM)
 	sq_getinteger(pVM, -2, &pedId);
 	sq_getbool(pVM, -1, &bShow);
 
-	if (pCore->GetPedManager()->IsActive(pedId) && pCore->GetPedManager()->Get(pedId) != NULL)
+	if (CCore::Instance()->GetPedManager()->IsActive(pedId) && CCore::Instance()->GetPedManager()->Get(pedId) != NULL)
 	{
 		// Change nick state
-		pCore->GetPedManager()->Get(pedId)->ShowNick(bShow);
+		CCore::Instance()->GetPedManager()->Get(pedId)->ShowNick(bShow);
 
 		// Return
 		sq_pushbool(pVM, true);
@@ -133,9 +138,9 @@ SQInteger CPedNatives::GetPedModel(SQVM *pVM)
 	SQInteger	pedId;
 
 	sq_getinteger(pVM, -1, &pedId);
-	if (pCore->GetPedManager()->IsActive(pedId) && pCore->GetPedManager()->Get(pedId) != NULL)
+	if (CCore::Instance()->GetPedManager()->IsActive(pedId) && CCore::Instance()->GetPedManager()->Get(pedId) != NULL)
 	{
-		sq_pushinteger(pVM, pCore->GetPedManager()->Get(pedId)->GetModel());
+		sq_pushinteger(pVM, CCore::Instance()->GetPedManager()->Get(pedId)->GetModel());
 		return (1);
 	}
 	sq_pushbool(pVM, false);
@@ -150,9 +155,9 @@ SQInteger CPedNatives::SetPedModel(SQVM *pVM)
 	sq_getinteger(pVM, -2, &pedId);
 	sq_getinteger(pVM, -1, &pedModel);
 
-	if (pCore->GetPedManager()->IsActive(pedId) && pCore->GetPedManager()->Get(pedId) != NULL)
+	if (CCore::Instance()->GetPedManager()->IsActive(pedId) && CCore::Instance()->GetPedManager()->Get(pedId) != NULL)
 	{
-		pCore->GetPedManager()->Get(pedId)->SetModel(pedModel);
+		CCore::Instance()->GetPedManager()->Get(pedId)->SetModel(pedModel);
 
 		sq_pushbool(pVM, true);
 		return (1);
@@ -167,12 +172,12 @@ SQInteger CPedNatives::GetPedPosition(SQVM *pVM)
 
 	sq_getinteger(pVM, -1, &pedId);
 
-	if (pCore->GetPedManager()->IsActive(pedId) && pCore->GetPedManager()->Get(pedId) != NULL)
+	if (CCore::Instance()->GetPedManager()->IsActive(pedId) && CCore::Instance()->GetPedManager()->Get(pedId) != NULL)
 	{
 		CVector3 pos;
 		
 		// Get the position
-		pCore->GetPedManager()->Get(pedId)->GetPed()->GetPosition(&pos);
+		CCore::Instance()->GetPedManager()->Get(pedId)->GetPed()->GetPosition(pos);
 
 		// Create array
 		sq_newarray(pVM, 0);
@@ -193,4 +198,3 @@ SQInteger CPedNatives::GetPedPosition(SQVM *pVM)
 	sq_pushbool(pVM, false);
 	return 1;
 }
-#endif

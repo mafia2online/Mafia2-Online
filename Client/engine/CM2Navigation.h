@@ -9,6 +9,12 @@
 
 #pragma once
 
+#include	"Math/CVector3.h"
+#include	"../COffsets.h"
+
+class M2Entity;
+class Vector2;
+
 class M2Navigation
 {
 public:
@@ -30,7 +36,7 @@ public:
 	void					SetNavigation					( M2Navigation * pNavigation ) { m_pNavigation = pNavigation; }
 	M2Navigation			* GetNavigation					( void ) { return m_pNavigation; }
 
-	int						RegisterIconPos					( Vector2 vecPosition, int iLibrary, int iIcon );
+	int						RegisterIconPos					( const Vector2& vecPosition, int iLibrary, int iIcon );
 	int						RegisterIconEntity				( M2Entity * pEntity, int iLibrary, int iIcon );
 
 	void					UnregisterIconPos				( int iconId );

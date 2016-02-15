@@ -7,10 +7,19 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
+#include	"BaseInc.h"
 
-extern	CCore				* pCore;
+#include	"CCore.h"
 
+#include	"gui_impl\CGUI_Impl.h"
+#include	"gui_impl\CGUIElement_Impl.h"
+
+#include	"Scripting\CSquirrel.h"
+
+#include	"CClientScriptingManager.h"
+#include	"CEvents.h"
+
+#include	"CClientScriptGUIManager.h"
 CClientScriptGUIManager::CClientScriptGUIManager( void )
 {
 	// Flag as not hidden
@@ -188,5 +197,5 @@ void CClientScriptGUIManager::HandleEvent( const char * szEventName, CGUIElement
 	// Call the scripting event
 	CSquirrelArguments args;
 	args.pushUserPointer( (void *)pElement );
-	pCore->GetClientScriptingManager()->GetEvents()->Call( szEventName, &args, pScript );
+	CCore::Instance()->GetClientScriptingManager()->GetEvents()->Call( szEventName, &args, pScript );
 }

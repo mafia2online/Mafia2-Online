@@ -9,6 +9,9 @@
 
 #pragma once
 
+#include	"CM2Entity.h"
+#include	"CM2PlayerPed.h"
+
 class C_TrafficModelUnkData
 {
 public:

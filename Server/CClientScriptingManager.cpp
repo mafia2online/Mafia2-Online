@@ -8,8 +8,7 @@
 ***************************************************************/
 
 #include	"StdInc.h"
-
-extern		CCore			* pCore;
+#include	"CCore.h"
 
 CClientScriptingManager::CClientScriptingManager( bool bScriptManager )
 {
@@ -45,7 +44,7 @@ bool CClientScriptingManager::Start( String strName, String strDirectory )
 	CFileChecksum fileChecksum;
 
 	// Copy the file to the webserver
-	if( !pCore->GetWebServer()->FileCopy( strDirectory, strName, &fileChecksum, bIsScript ) )
+	if( !CCore::Instance()->GetWebServer()->FileCopy( strDirectory, strName, &fileChecksum, bIsScript ) )
 	{
 		CLogFile::Printf( "Failed to copy file %s to web server!", strName.Get() );
 		return false;
@@ -75,7 +74,7 @@ bool CClientScriptingManager::Start( String strName, String strDirectory )
 	pBitStream.Write( (char *)&fileChecksum, sizeof(CFileChecksum) );
 
 	// Send it to all clients
-	pCore->GetNetworkModule()->Call( RPC_NEWFILE, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, INVALID_ENTITY_ID, true );*/
+	CCore::Instance()->GetNetworkModule()->Call( RPC_NEWFILE, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, INVALID_ENTITY_ID, true );*/
 
 	return true;
 }
@@ -98,7 +97,7 @@ bool CClientScriptingManager::Stop( String strName )
 			pBitStream.Write( RakNet::RakString( strName.Get() ) );
 
 			// Send it to all clients
-			pCore->GetNetworkModule()->Call( RPC_DELETEFILE, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, INVALID_ENTITY_ID, true );
+			CCore::Instance()->GetNetworkModule()->Call( RPC_DELETEFILE, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, INVALID_ENTITY_ID, true );
 
 			// Erase the script
 			erase( iter );
@@ -162,6 +161,6 @@ void CClientScriptingManager::HandlePlayerJoin( EntityId playerId )
 		pBitStream.Write( (char *)&((*iter).fileChecksum), sizeof(CFileChecksum) );
 
 		// Send it to the client
-		pCore->GetNetworkModule()->Call( RPC_NEWFILE, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, playerId, false );
+		CCore::Instance()->GetNetworkModule()->Call( RPC_NEWFILE, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, playerId, false );
 	}
 }

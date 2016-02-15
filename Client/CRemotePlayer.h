@@ -9,6 +9,10 @@
 
 #pragma once
 
+#include	"CNetworkPlayer.h"
+#include	"CSync.h"
+#include	"Math\CVector3.h"
+
 class CRemotePlayer : public CNetworkPlayer
 {
 

@@ -7,9 +7,18 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
+#include "BaseInc.h"
 
-extern	CCore		* pCore;
+#include "CString.h"
+#include "SharedUtility.h"
+
+#include "CCore.h"
+
+#include "CRC.h"
+#include "CZlib.h"
+
+#include "CGameFiles.h"
+
 String				CGameFiles::m_strError;
 std::list< String >	CGameFiles::m_deleteFiles;
 
@@ -38,6 +47,8 @@ gameFiles[] =
 
 bool CGameFiles::CheckFiles( void )
 {
+	CCore *pCore = CCore::Instance();
+
 	// Generate the multilpayer path
 	String strMultiplayerPath( "%s\\pc\\sds\\multiplayer", pCore->GetGameDirectory().Get() );
 
@@ -127,7 +138,7 @@ void CGameFiles::CleanFiles( void )
 	m_deleteFiles.clear( );
 
 	// Reset the current directory
-	SetCurrentDirectory( pCore->GetModDirectory().Get() );
+	SetCurrentDirectory( CCore::Instance()->GetModDirectory().Get() );
 }
 
 void CGameFiles::SetLastError( String strError )

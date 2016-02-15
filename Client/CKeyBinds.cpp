@@ -7,9 +7,19 @@
 *
 ***************************************************************/
 
-#include "StdInc.h"
+#include "BaseInc.h"
 
-extern CCore			* pCore;
+#include "Scripting/CSquirrel.h"
+#include "Scripting/CScriptingManager.h"
+#include "CClientScriptingManager.h"
+
+#include "CString.h"
+
+#include "CKeyBinds.h"
+
+#include "CChat.h"
+
+#include "CCore.h"
 
 CKeyBind::CKeyBind( const char * szKey, const char * szState, SQVM * pVM, SQObjectPtr pFunction )
 {
@@ -24,7 +34,7 @@ CKeyBind::CKeyBind( const char * szKey, const char * szState, SQVM * pVM, SQObje
 void CKeyBind::Trigger( void )
 {
 	// Get the script from the VM
-	CSquirrel * pScript = pCore->GetClientScriptingManager()->GetScriptingManager()->Get( m_pVM );
+	CSquirrel* pScript = CCore::Instance()->GetClientScriptingManager()->GetScriptingManager()->Get( m_pVM );
 
 	// Did we fail to find the script?
 	if( !pScript )
@@ -217,7 +227,7 @@ String GetKeyNameByCode( DWORD dwCode )
 void CKeyBinds::ProcessInput( UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
 	// Is the chat window input active?
-	if( pCore->GetChat() && pCore->GetChat()->IsInputVisible() )
+	if( CChat::Instance()->IsInputVisible() )
 		return;
 
 	// Do we not have any keybinds?

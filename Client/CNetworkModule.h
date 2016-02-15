@@ -9,6 +9,10 @@
 
 #pragma once
 
+#include "ExplicitSingleton.h"
+
+#include	<RPC4Plugin.h>
+
 enum eNetworkResponse
 {
 	NETWORK_RESPONSE_SUCCESS = 0,
@@ -20,7 +24,7 @@ enum eNetworkResponse
 	NETWORK_RESPONSE_NO_HOST_SET = 6
 };
 
-class CNetworkModule
+class CNetworkModule : public ExplicitSingleton<CNetworkModule>
 {
 
 private:

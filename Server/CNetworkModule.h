@@ -9,6 +9,9 @@
 
 #pragma once
 
+#include	<RakPeerInterface.h>
+#include	<RPC4Plugin.h>
+
 class CNetworkModule
 {
 

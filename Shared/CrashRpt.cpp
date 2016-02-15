@@ -7,11 +7,16 @@
 *
 ***************************************************************/
 
+#include	<time.h>
+
 #ifdef _CLIENT
-#include	"../Client/StdInc.h"
+#include	"../Client/BaseInc.h"
 #else
-#include	"../Server/StdInc.h"
+#include	"../Client/BaseInc.h"
 #endif
+
+#include "CrashRpt.h"
+#include "SharedUtility.h"
 
 bool CrashRpt::AddProp( char * pszName, char * pszValue )
 {

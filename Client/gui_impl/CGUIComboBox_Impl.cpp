@@ -7,7 +7,16 @@
 *
 ***************************************************************/
 
-#include	"../StdInc.h"
+#include	"../BaseInc.h"
+
+#include	"../../Shared/CString.h"
+
+#include	"../CGUI.h"
+
+#include	"CGUI_Impl.h"
+#include	"CGUIElement_Impl.h"
+#include	"CGUIListItem_Impl.h"
+#include	"CGUIComboBox_Impl.h"
 
 CGUIComboBox_Impl::CGUIComboBox_Impl( CGUI_Impl * pGUI, const char * szCaption, CGUIElement_Impl * pParent )
 {

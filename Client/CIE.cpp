@@ -8,11 +8,33 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
-#include	"CModelManager.h"
-#include	"engine/CM2Misc.h"
+#include "BaseInc.h"
 
-extern	CCore		* pCore;
+#include "CCore.h"
+
+#include "CModelManager.h"
+
+#include "engine/CM2Misc.h"
+#include "engine/CM2Entity.h"
+#include "engine/CM2Core.h"
+#include "engine/CM2Ped.h"
+#include "engine/CM2Vehicle.h"
+#include "engine/CM2SlotManager.h"
+
+#include "CM2ScriptMachine.h"
+
+#include "CIE.h"
+
+#include "COffsets.h"
+#include "CString.h"
+
+#include "Game/CGame.h"
+
+#include "CNetworkModelManager.h"
+
+#include "Math/CVector3.h"
+
+#include "lua.hpp"
 
 typedef void * ( __cdecl * CreateObjectByType_t )( int );
 CreateObjectByType_t CreateObjectByType = ( CreateObjectByType_t )( 0x0115F840 );
@@ -209,7 +231,7 @@ namespace IE
 		return pBaseEntity;
 	}
 
-	M2Entity * CreateItem( CVector3 vecPosition )
+	M2Entity * CreateItem( const CVector3& vecPosition )
 	{
 		M2Entity * pEntity;
 
@@ -234,7 +256,7 @@ namespace IE
 	}
 
 	// FIXME: random cloth color, etc. (apply params from table?)
-	M2Ped * CreatePed( M2ModelMgr * pModelMgr, CVector3 vecPosition )
+	M2Ped * CreatePed( M2ModelMgr * pModelMgr, const CVector3& vecPosition )
 	{
 		// Create the ped human object
 		M2Ped * pPed = ( M2Ped *)( CreateObjectByType( OBJTYPE_Human ) );
@@ -292,7 +314,7 @@ namespace IE
 		return NULL;
 	}
 
-	M2Vehicle * CreateVehicle( M2ModelMgr * pModelMgr, CVector3 vecPosition )
+	M2Vehicle * CreateVehicle( M2ModelMgr * pModelMgr, const CVector3& vecPosition )
 	{
 		if ( !pModelMgr || !pModelMgr->GetModel( ) )
 			return NULL;
@@ -362,13 +384,8 @@ namespace IE
 		return NULL;
 	}
 
-	void * Malloc( size_t uiSize )
+	void _declspec(naked) *Malloc( size_t uiSize )
 	{
-		__asm
-		{
-			push uiSize
-			call COffsets::FUNC_M2malloc
-			add esp, 4
-		}
+		__asm jmp COffsets::FUNC_M2malloc;
 	}
 };

@@ -9,6 +9,14 @@
 
 #pragma once
 
+#include	"ExplicitSingleton.h"
+
+#include	"CGUI.h"
+#include	"gui_impl\CGUI_Impl.h"
+#include	"gui_impl\CGUIElement_Impl.h"
+
+#include	"CColor.h"
+
 #define		MAX_MESSAGE_LEN					128
 #define		MAX_CHAT_LINES					12
 #define		MAX_CHAT_HISTORY				12
@@ -22,7 +30,9 @@ struct ChatLine
 };
 
 class CNetworkPlayer;
-class CChat
+class String;
+
+class CChat : public ExplicitSingleton<CChat>
 {
 
 private:
