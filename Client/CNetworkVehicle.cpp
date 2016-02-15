@@ -714,7 +714,7 @@ void CNetworkVehicle::SetPartOpen( int iPart, bool bOpen )
 	// Is the vehicle instance valid?
 	if( m_pVehicle )
 	{
-		if (iPart == 0) {
+		if (iPart == VEHICLE_PART_HOOD) {
 			bOpen ? m_pVehicle->OpenHood() : m_pVehicle->CloseHood();
 			m_bPartState[VEHICLE_PART_HOOD] = bOpen;
 		}
@@ -727,8 +727,6 @@ void CNetworkVehicle::SetPartOpen( int iPart, bool bOpen )
 
 bool CNetworkVehicle::IsPartOpen( int iPart )
 {
-	// Todo : fix with isHoodOpen/isTrunkOpen
-
 	// Is the vehicle instance valid ?
 	if (m_pVehicle){
 		if (iPart == VEHICLE_PART_HOOD)
