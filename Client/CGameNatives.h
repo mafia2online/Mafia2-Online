@@ -28,6 +28,8 @@ private:
 	static	SQInteger		DestroyHudTimer( SQVM * pVM );
 	static	SQInteger		OpenMap ( SQVM * pVM );
 	static	SQInteger		IsMapOpen ( SQVM * pVM );
+	static	SQInteger		SetGPSTarget( SQVM * pVM );
+	static	SQInteger		RemoveGPSTarget( SQVM * pVM );
 
 public:
 

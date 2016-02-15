@@ -178,4 +178,7 @@ public:
 	void				SetWantedLevel(int level, float size);
 	int					GetWantedLevel(void) { return (m_wantedLevel); }
 
+	void				StartGPS(float fX, float fY);
+	void				StopGPS();
+
 };

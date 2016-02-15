@@ -35,6 +35,8 @@ void CGameNatives::Register( CScriptingManager * pScriptingManager )
 	pScriptingManager->RegisterFunction( "destroyHudTimer", DestroyHudTimer, 0, NULL );
 	pScriptingManager->RegisterFunction( "openMap", OpenMap, 0, NULL );
 	pScriptingManager->RegisterFunction( "isMapOpen", IsMapOpen, 0, NULL );
+	pScriptingManager->RegisterFunction( "setGPSTarget", SetGPSTarget, 2, "ff" );
+	pScriptingManager->RegisterFunction( "removeGPSTarget", RemoveGPSTarget, 0, NULL );
 }
 
 // setWeather( string weather );
@@ -242,4 +244,27 @@ SQInteger CGameNatives::IsMapOpen( SQVM * pVM )
 {
 	sq_pushbool( pVM, CCore::Instance()->GetGame()->IsMapOpen () );
 	return 1;
+}
+
+// setGPSTarget(float fX, float fY);
+SQInteger	CGameNatives::SetGPSTarget(SQVM * pVM)
+{
+	SQFloat fX;
+	SQFloat fY;
+
+	sq_getfloat(pVM, -2, &fX);
+	sq_getfloat(pVM, -1, &fY);
+
+	CCore::Instance()->GetHud()->StartGPS(fX, fY);
+	sq_pushbool(pVM, true);
+	return (1);
+}
+
+
+// removeGPSTarget();
+SQInteger	CGameNatives::RemoveGPSTarget(SQVM * pVM)
+{
+	CCore::Instance()->GetHud()->StopGPS();
+	sq_pushbool(pVM, true);
+	return (1);
 }
