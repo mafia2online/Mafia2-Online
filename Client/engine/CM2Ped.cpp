@@ -684,7 +684,7 @@ void CM2Ped::ModelToHand(int iHand, int iModel)
 
 	M2EntityData* pEntityData = m_pPed->m_pEntityData;
 
-	DWORD func = 0x90C860;
+	DWORD func = 0x90C860; //Todo: move to COffsets
 
 	_asm
 	{
@@ -706,7 +706,7 @@ void CM2Ped::SetAnimStyle(const char *dir, const char *set)
 
 	M2EntityData *pEntityData = CLocalPlayer::Instance()->GetPlayerPed()->GetPed()->m_pEntityData;
 
-	DWORD func = 0x956720;
+	DWORD func = 0x956720; // Move to COffsets
 
 	_asm
 	{

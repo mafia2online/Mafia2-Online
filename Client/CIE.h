@@ -16,13 +16,18 @@ class CVector3;
 
 enum E_ObjType : unsigned char
 {
-	OBJTYPE_Human			=	0xE,
-	OBJTYPE_Player			=	0x10,
-	OBJTYPE_Car				=	0x12,
-	OBJTYPE_Train			=	0x13,
-	OBJTYPE_Item			=	0x24,
-	OBJTYPE_Door			=	0x26,
-	OBJTYPE_TrafficHuman	=	0x16
+	OBJTYPE_Human			=	0xE, // 14
+	OBJTYPE_Player			=	0x10, // 16
+	OBJTYPE_Car				=	0x12, // 18
+	OBJTYPE_Train			=	0x13, // 19
+	OBJTYPE_TrafficHuman	=	0x16, // 22
+	OBJTYPE_Item			=	0x24, // 36
+	OBJTYPE_Door			=	0x26, // 28
+	OBJTYPE_UNK1			=	0x27, // 39 - Maybe something like crashobject
+	OBJTYPE_UNK2			=	0x34, // 52 - Maybe something like crashobject (again ?)
+	OBJTYPE_UNK3			=	0x42, // 66 - Something related to car
+	OBJTYPE_UNK4			=	0x47, // 71 - Related to crashobject (again ??)
+
 };
 
 class M2Window

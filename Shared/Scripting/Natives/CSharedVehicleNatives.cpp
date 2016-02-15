@@ -539,10 +539,10 @@ SQInteger CSharedVehicleNatives::SetBeaconLightState(SQVM * pVM)
 	sq_getbool(pVM, -1, &bState);
 
 	// Is the vehicle active?
-	if (pCore->GetVehicleManager()->IsActive(vehicleId))
+	if (CCore::Instance()->GetVehicleManager()->IsActive(vehicleId))
 	{
 		// Set the beacon light state
-		pCore->GetVehicleManager()->Get(vehicleId)->SetBeaconLightState(bState);
+		CCore::Instance()->GetVehicleManager()->Get(vehicleId)->SetBeaconLightState(bState);
 
 		sq_pushbool(pVM, true);
 		return 1;
@@ -559,9 +559,9 @@ SQInteger CSharedVehicleNatives::GetBeaconLightState(SQVM * pVM)
 	sq_getinteger(pVM, -1, &vehicleId);
 
 	// Is the vehicle active?
-	if (pCore->GetVehicleManager()->IsActive(vehicleId))
+	if (CCore::Instance()->GetVehicleManager()->IsActive(vehicleId))
 	{
-		sq_pushbool(pVM, pCore->GetVehicleManager()->Get(vehicleId)->GetBeaconLightState());
+		sq_pushbool(pVM, CCore::Instance()->GetVehicleManager()->Get(vehicleId)->GetBeaconLightState());
 		return 1;
 	}
 

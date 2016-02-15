@@ -222,6 +222,12 @@
     <Filter Include="Header Files\Client\Network\3DTextLabel">
       <UniqueIdentifier>{e3eaedd3-f383-4a31-b7b1-1822e5fed53e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Client\Network\Icon">
+      <UniqueIdentifier>{dbdd3159-0a29-4084-9d0f-111bbc2ac224}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Client\Network\Icon">
+      <UniqueIdentifier>{7b3fd08a-c40c-4b66-95b9-2d01f30f878e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Shared\CRC.h">
@@ -797,6 +803,9 @@
     <ClInclude Include="BaseInc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CIcon.h">
+      <Filter>Header Files\Client\Network\Icon</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -1281,6 +1290,9 @@
     </ClCompile>
     <ClCompile Include="C3DTextLabelNatives.cpp">
       <Filter>Source Files\Client\Scripting\Natives</Filter>
+    </ClCompile>
+    <ClCompile Include="CIcon.cpp">
+      <Filter>Source Files\Client\Network\Icon</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
