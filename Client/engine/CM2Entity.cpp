@@ -118,7 +118,7 @@ void CM2Entity::GetPosition( CVector3& vecPosition, bool bCheckVehicle )
 	}
 }
 
-void CM2Entity::SetDirection( const CVector3& vecDirection )
+void CM2Entity::SetDirection( const CVector3 vecDirection )
 {
 	// Is the entity valid?
 	if( m_pEntity )
@@ -153,7 +153,7 @@ void CM2Entity::GetDirection( CVector3& vecDirection )
 	}
 }
 
-void CM2Entity::SetRotation( const Quaternion& quatRotation )
+void CM2Entity::SetRotation( const Quaternion quatRotation )
 {
 	// Is the entity valid?
 	if( m_pEntity )
