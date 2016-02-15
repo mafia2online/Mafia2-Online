@@ -175,7 +175,7 @@ public:
 	void 				SetDrunkLevel(int level);
 	int					GetDrunkLevel(void) { return (m_drunkLevel); }
 
-	void				SetWantedLevel(int level);
+	void				SetWantedLevel(int level, float size);
 	int					GetWantedLevel(void) { return (m_wantedLevel); }
 
 };

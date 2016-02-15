@@ -436,14 +436,16 @@ SQInteger CPlayerNatives::ResetDrunkLevel(SQVM *pVM)
 SQInteger CPlayerNatives::SetWantedLevel(SQVM *pVM)
 {
 	SQInteger wantedLevel;
+	SQFloat	size;
 
 	// Get the drunk level
-	sq_getinteger(pVM, -1, &wantedLevel);
+	sq_getinteger(pVM, -2, &wantedLevel);
+	sq_getfloat(pVM, -1, &size);
 
 	if (CCore::Instance()->GetHud() != NULL){
 
 		// Set the drunk level
-		CCore::Instance()->GetHud()->SetWantedLevel(wantedLevel);
+		CCore::Instance()->GetHud()->SetWantedLevel(wantedLevel, size);
 
 		sq_pushbool(pVM, true);
 		return (1);

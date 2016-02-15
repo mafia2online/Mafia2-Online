@@ -388,21 +388,22 @@ void CM2Hud::SetDrunkLevel(int level)
 	m_drunkLevel = level;
 }
 
-void CM2Hud::SetWantedLevel(int level)
+void CM2Hud::SetWantedLevel(int level, float size)
 {
+	/* Works but quickly reset */
 	if (m_pHud)
 	{
-		DWORD function = 0x883860;
+		DWORD dwFunc = 0x883860;
 		void * wanted = m_pHud->m_pWantedLevel;
-		float value = 1.0;
-
+		float value = 1.0f; // Still unknow
+		float value2 = 1.0f; // Size of the pic
 		_asm
 		{
-			push value;
+			push value2;
 			push value;
 			push level;
 			mov ecx, wanted;
-			call function;
+			call dwFunc;
 		}
 	}
 }
