@@ -11,7 +11,7 @@
 #pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 
 #ifdef _DEBUG
-#define CORE_MODULE	"m2online_d.dll"
+#define CORE_MODULE	"m2online.dll"
 #else
 #define	CORE_MODULE	"m2online.dll" 
 #endif
@@ -110,8 +110,9 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 
 	// Get the full path to m2mp.dll
 	String strModulePath( "%s\\%s", SharedUtility::GetAppPath(), CORE_MODULE );
+	CLogFile::Printf("M2Online : %s", strModulePath.Get());
 
-	// Does m2mp.dll not exist?
+	// Does m2online.dll not exist?
 	if( !SharedUtility::Exists( strModulePath.Get() ) )
 	{
 		ShowMessageBox( "Failed to find m2online.dll ! Can't launch." );
@@ -119,7 +120,9 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	}
 
 	String strBassPath("%s\\%s", SharedUtility::GetAppPath(), BASS_MODULE);
-	// Does m2online.dll not exist?
+	CLogFile::Printf("Bass : %s", strBassPath.Get());
+
+	// Does bass.dll not exist?
 	if (!SharedUtility::Exists(strBassPath.Get()))
 	{
 		ShowMessageBox("Failed to find bass.dll ! Can't launch.");
