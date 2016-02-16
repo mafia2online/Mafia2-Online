@@ -14,6 +14,20 @@ class COffsets
 
 public:
 
+	// CIE
+	static	unsigned int		FUNC_CIE_CreateObject;
+	static	unsigned int		FUNC_CIE_Assign_Model;
+	static	unsigned int		FUNC_CIE_SetHashName;
+	static	unsigned int		FUNC_CIE_SetFlag;
+	static	unsigned int		FUNC_CIE_SetModel;
+	static	unsigned int		FUNC_CIE_UnkFunc;
+	static	unsigned int		FUNC_CIE_GetTrafficHuman;
+	static	unsigned int		FUNC_CIE_SetTrafficHuman;
+	static	unsigned int		FUNC_CIE_GetHashedString;
+	static	unsigned int		FUNC_CIE_LoadModel;
+	static	unsigned int		FUNC_CIE_CCarSetup;
+	static	unsigned int		FUNC_CIE_SetCarParams;
+
 	// Game
 	static	unsigned int		VAR_CGame;
 	static	unsigned int		FUNC_CGame__OnGameInit;
