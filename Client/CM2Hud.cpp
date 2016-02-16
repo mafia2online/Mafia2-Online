@@ -12,6 +12,7 @@
 #include "CM2Hud.h"
 
 #include "COffsets.h"
+#include "CPatcher.h"
 
 #include "CLua.h"
 
@@ -356,27 +357,53 @@ void CM2Hud::SpeedoShow ( bool bShow )
 	}
 }
 
-
-int _declspec(naked) sub_8CC740(int messageType, const wchar_t *string, int showMode, float delay, int a5, int a6)
+void CM2Hud::ShowMessage(int position, int showMode, const char * text, float delay)
 {
-	_asm {
-		mov eax, 0x8CC740
-			jmp eax
-	}
-}
-
-void CM2Hud::ShowMessage(const char * text, int delay)
-{
+	/*
+	Pos 0 : top left corner
+	Pos 1 : bottom left corner
+	Pos 2 : Just beside the radar
+	Pos 3 : Center of the screen
+	
+	Mode 0 : Grey
+	Mode 1 : Red/Yellow
+	Mode 2 : Blue
+	Mode 3 : Fluo blue/green
+	*/
 	if (m_pHud)
 	{
-		sub_8CC740(0, L"Hello World", 2, 1.0f, 0, 0);
+		/*
+		This workig with textId
+		*/
+		DWORD dwFunc = 0x08EAB80;
+		__asm
+		{
+			push 0;
+			push delay;
+			push showMode;
+			push 0;
+			push 0;
+			push 0;
+			push 0;
+			push text;
+			push position;
+			call dwFunc;
+		}
+
+		
+		/*DWORD dwFunc = 0x8CC740;
+
+		__asm
+		{
+			push 0;
+			push 0;
+			push delay;
+			push showMode; // Showmode
+			push text;
+			push position; // Position
+			call dwFunc;
+		};*/
 	}
-}
-
-
-void CM2Hud::ShowHelp(const char * text, int delay)
-{
-	CLua::Executef("game.hud:HelpHintShowQuick( \"%s\", \"%d\")", text, delay); // Idk if we can show custom message, gonna try
 }
 
 void CM2Hud::SetDrunkLevel(int level)
@@ -434,4 +461,14 @@ void CM2Hud::StopGPS()
 
 	CLua::Execute("game.navigation:UnregisterObjectivePos(pos)");
 	m_bTargetGPS = false;
+}
+
+void CM2Hud::EnableFPV(bool bEnable)
+{
+	if (bEnable){
+		CLua::Execute("game.cameramanager:GetPlayerMainCamera(0):EnableFPV(game.game:GetActivePlayer(),true)");
+	}
+	else {
+		CLua::Execute("game.cameramanager:GetPlayerMainCamera(0):EnableFPV(game.game:GetActivePlayer(),false)");
+	}
 }
