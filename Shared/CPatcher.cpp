@@ -44,7 +44,7 @@ void * CPatcher::InstallDetourPatchInternal(DWORD dwAddress, DWORD dwDetourAddre
 
 	// Write the type to the trampoline memory
 	pbyteTrampoline[iSize] = byteType;
-	
+
 	// Write the detour to the trampoline memory
 	*(void **)(&pbyteTrampoline[iSize + 1]) = (void *)((pbyteAddr + iSize) - (pbyteTrampoline + iSize) - 5);
 
@@ -81,14 +81,14 @@ void CPatcher::UninstallDetourPatchInternal(DWORD dwAddress, void ** pTrampoline
 	*pTrampoline = pbyteAddr;
 }
 
-void * CPatcher::InstallDetourPatch( char * szLibrary, char * szFunction, DWORD dwFunctionAddress )
+void * CPatcher::InstallDetourPatch(char * szLibrary, char * szFunction, DWORD dwFunctionAddress)
 {
-	return DetourFunction( DetourFindFunction( szLibrary, szFunction ), (BYTE *)dwFunctionAddress );
+	return DetourFunction(DetourFindFunction(szLibrary, szFunction), (BYTE *)dwFunctionAddress);
 }
 
-void * CPatcher::InstallDetourPatch( DWORD dwAddress, DWORD dwFunctionAddress )
+void * CPatcher::InstallDetourPatch(DWORD dwAddress, DWORD dwFunctionAddress)
 {
-	return DetourFunction( (BYTE *)dwAddress, (BYTE *)dwFunctionAddress );
+	return DetourFunction((BYTE *)dwAddress, (BYTE *)dwFunctionAddress);
 }
 
 BOOL CPatcher::UninstallDetourPatch(void * pTrampoline, DWORD dwFunctionAddress)
@@ -100,49 +100,49 @@ void CPatcher::PatchAddress(DWORD dwAddress, BYTE *bPatch, size_t iSize)
 {
 	DWORD d, ds;
 
-	VirtualProtect( ( void* )dwAddress, iSize, PAGE_EXECUTE_READWRITE, &d );
-	memcpy( ( void* )dwAddress, bPatch, iSize );
-	VirtualProtect( ( void* )dwAddress, iSize, d, &ds );
+	VirtualProtect((void*)dwAddress, iSize, PAGE_EXECUTE_READWRITE, &d);
+	memcpy((void*)dwAddress, bPatch, iSize);
+	VirtualProtect((void*)dwAddress, iSize, d, &ds);
 }
 
-void CPatcher::PatchAddress( DWORD dwAddress, DWORD dwPatch )
+void CPatcher::PatchAddress(DWORD dwAddress, DWORD dwPatch)
 {
 	DWORD d, ds;
 
-	VirtualProtect( ( void* )dwAddress, sizeof(DWORD), PAGE_EXECUTE_READWRITE, &d );
+	VirtualProtect((void*)dwAddress, sizeof(DWORD), PAGE_EXECUTE_READWRITE, &d);
 	*(DWORD *)(dwAddress) = dwPatch;
-	VirtualProtect( ( void* )dwAddress, sizeof(DWORD), d, &ds );
+	VirtualProtect((void*)dwAddress, sizeof(DWORD), d, &ds);
 }
 
-void * CPatcher::InstallCallPatch( DWORD dwAddress, DWORD dwCallAddress, int iSize )
+void * CPatcher::InstallCallPatch(DWORD dwAddress, DWORD dwCallAddress, int iSize)
 {
-	return InstallDetourPatchInternal( dwAddress, dwCallAddress, X86_CALL, iSize );
+	return InstallDetourPatchInternal(dwAddress, dwCallAddress, X86_CALL, iSize);
 }
 
-void * CPatcher::InstallJmpPatch( DWORD dwAddress, DWORD dwJmpAddress, int iSize )
+void * CPatcher::InstallJmpPatch(DWORD dwAddress, DWORD dwJmpAddress, int iSize)
 {
-	return InstallDetourPatchInternal( dwAddress, dwJmpAddress, X86_JMP, iSize );
+	return InstallDetourPatchInternal(dwAddress, dwJmpAddress, X86_JMP, iSize);
 }
 
-void CPatcher::InstallNopPatch( DWORD dwAddress, int iSize )
+void CPatcher::InstallNopPatch(DWORD dwAddress, int iSize)
 {
 	DWORD dwAddr = dwAddress;
 
 	// Unprotect the address memory
-	ProtectionInfo protectionInfo = Unprotect( dwAddr, iSize );
+	ProtectionInfo protectionInfo = Unprotect(dwAddr, iSize);
 
 	// Write the no operation to the address memory
-	memset( (void *)dwAddr, X86_NOP, iSize );
+	memset((void *)dwAddr, X86_NOP, iSize);
 
 	// Re-protect the address memory
-	Reprotect( protectionInfo );
+	Reprotect(protectionInfo);
 }
 
-bool CPatcher::bDataCompare( const unsigned char * pData, const unsigned char * bMask, const char * szMask )
+bool CPatcher::bDataCompare(const unsigned char * pData, const unsigned char * bMask, const char * szMask)
 {
-    for( ; *szMask; ++szMask, ++pData, ++bMask )
+	for (; *szMask; ++szMask, ++pData, ++bMask)
 	{
-		if( *szMask == 'x' && *pData != *bMask )
+		if (*szMask == 'x' && *pData != *bMask)
 		{
 			return false;
 		}
@@ -151,34 +151,55 @@ bool CPatcher::bDataCompare( const unsigned char * pData, const unsigned char * 
 	return (*szMask) == 0;
 }
 
-unsigned long CPatcher::FindPattern2( DWORD dwAddress, DWORD dwLen, unsigned char * bMask, char * szMask )
+unsigned long CPatcher::FindPattern2(DWORD dwAddress, DWORD dwLen, unsigned char * bMask, char * szMask)
 {
-    for( unsigned long i = 0; i < dwLen; i++ )
+	for (unsigned long i = 0; i < dwLen; i++)
 	{
-		if( bDataCompare( (unsigned char *)( dwAddress + i ), bMask, szMask ) )
+		if (bDataCompare((unsigned char *)(dwAddress + i), bMask, szMask))
 		{
-			return (unsigned long)( dwAddress + i );
+			return (unsigned long)(dwAddress + i);
 		}
 	}
 
 	return 0;
 }
 
-unsigned long CPatcher::FindPattern( unsigned char * bMask, char * szMask )
+unsigned long CPatcher::FindPattern(unsigned char * bMask, char * szMask)
 {
-	return FindPattern2( (DWORD)GetModuleHandle( NULL ), 0xFFFFFFFF, bMask, szMask );
+	return FindPattern2((DWORD)GetModuleHandle(NULL), 0xFFFFFFFF, bMask, szMask);
 }
 
-int CPatcher::ToInteger( String strString )
+int CPatcher::ToInteger(String strString)
 {
-	return atoi( strString.Get() );
+	return atoi(strString.Get());
 }
 
-void CPatcher::DumpVFTable( DWORD dwAddress, int iFunctionCount )
+void CPatcher::DumpVFTable(DWORD dwAddress, int iFunctionCount)
 {
-	CLogFile::Printf( "Dumping Virtual Function Table at 0x%p...", dwAddress );
-	for( int i = 0; i < iFunctionCount; i++ )
+	CLogFile::Printf("Dumping Virtual Function Table at 0x%p...", dwAddress);
+	for (int i = 0; i < iFunctionCount; i++)
 	{
-		CLogFile::Printf( "VFTable Offset: %d, Function: 0x%p (At Address: 0x%p)", (i * 4), *(PDWORD)(dwAddress + (i * 4)), (dwAddress + (i * 4)) );
+		CLogFile::Printf("VFTable Offset: %d, Function: 0x%p (At Address: 0x%p)", (i * 4), *(PDWORD)(dwAddress + (i * 4)), (dwAddress + (i * 4)));
+	}
+}
+
+void CPatcher::Initialize(void)
+{
+	// Prepare headers
+	PBYTE pbImageBase = (PBYTE)GetModuleHandle(NULL);
+	PIMAGE_DOS_HEADER pDosHeader = (PIMAGE_DOS_HEADER)pbImageBase;
+	PIMAGE_NT_HEADERS pNtHeaders = (PIMAGE_NT_HEADERS)(pbImageBase + pDosHeader->e_lfanew);
+	PIMAGE_SECTION_HEADER pSection = IMAGE_FIRST_SECTION(pNtHeaders);
+
+	// Loop thought all sections
+	for (int iSection = 0; iSection < pNtHeaders->FileHeader.NumberOfSections; iSection++, pSection++)
+	{
+		char * szSectionName = (char*)pSection->Name;
+		if (!strcmp(szSectionName, ".text") || !strcmp(szSectionName, ".rdata") || !strcmp(szSectionName, ".textnc"))
+		{
+			// Unprotect segment
+			DWORD dwOld = 0;//Temp variable
+			VirtualProtect((void *)(pbImageBase + pSection->VirtualAddress), ((pSection->Misc.VirtualSize + 4095)&~4095), PAGE_EXECUTE_READWRITE, &dwOld);
+		}
 	}
 }

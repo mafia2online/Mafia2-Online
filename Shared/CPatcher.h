@@ -32,29 +32,31 @@ class CPatcher
 
 public:
 
-	static	ProtectionInfo		Unprotect( DWORD dwAddress, int iSize );
-	static	void				Reprotect( ProtectionInfo protectionInfo );
+	static	ProtectionInfo		Unprotect(DWORD dwAddress, int iSize);
+	static	void				Reprotect(ProtectionInfo protectionInfo);
 
-	static	void				* InstallDetourPatchInternal( DWORD dwAddress, DWORD dwDetourAddress, BYTE byteType, int iSize = 5 );
-	static	void				UninstallDetourPatchInternal( DWORD dwAddress, void ** pTrampoline, int iSize = 5 );
+	static	void				* InstallDetourPatchInternal(DWORD dwAddress, DWORD dwDetourAddress, BYTE byteType, int iSize = 5);
+	static	void				UninstallDetourPatchInternal(DWORD dwAddress, void ** pTrampoline, int iSize = 5);
 
-	static	void				* InstallDetourPatch( char * szLibrary, char * szFunction, DWORD dwFunctionAddress );
-	static	void				* InstallDetourPatch( DWORD dwAddress, DWORD dwFunctionAddress );
-	static	BOOL				UninstallDetourPatch( void * pTrampoline, DWORD dwFunctionAddress );
+	static	void				* InstallDetourPatch(char * szLibrary, char * szFunction, DWORD dwFunctionAddress);
+	static	void				* InstallDetourPatch(DWORD dwAddress, DWORD dwFunctionAddress);
+	static	BOOL				UninstallDetourPatch(void * pTrampoline, DWORD dwFunctionAddress);
 
-	static	void				PatchAddress( DWORD dwAddress, BYTE * bPatch, size_t iSize );
-	static	void				PatchAddress( DWORD dwAddress, DWORD dwPatch );
+	static	void				PatchAddress(DWORD dwAddress, BYTE * bPatch, size_t iSize);
+	static	void				PatchAddress(DWORD dwAddress, DWORD dwPatch);
 
-	static	void				* InstallCallPatch( DWORD dwAddress, DWORD dwCallAddress, int iSize = 5 );
-	static	void				* InstallJmpPatch( DWORD dwAddress, DWORD dwJmpAddress, int iSize = 5 );
-	static	void				InstallNopPatch( DWORD dwAddress, int iSize = 1 );
+	static	void				* InstallCallPatch(DWORD dwAddress, DWORD dwCallAddress, int iSize = 5);
+	static	void				* InstallJmpPatch(DWORD dwAddress, DWORD dwJmpAddress, int iSize = 5);
+	static	void				InstallNopPatch(DWORD dwAddress, int iSize = 1);
 
-	static	bool				bDataCompare( const unsigned char * pData, const unsigned char * bMask, const char * szMask );
-	static	unsigned long		FindPattern2( DWORD dwAddress, DWORD dwLen, unsigned char * bMask, char * szMask );
-	static	unsigned long		FindPattern( unsigned char * bMask, char * szMask );
+	static	bool				bDataCompare(const unsigned char * pData, const unsigned char * bMask, const char * szMask);
+	static	unsigned long		FindPattern2(DWORD dwAddress, DWORD dwLen, unsigned char * bMask, char * szMask);
+	static	unsigned long		FindPattern(unsigned char * bMask, char * szMask);
 
-	static	int					ToInteger( String strString );
+	static	int					ToInteger(String strString);
 
-	static	void				DumpVFTable( DWORD dwAddress, int iFunctionCount );
+	static	void				DumpVFTable(DWORD dwAddress, int iFunctionCount);
+
+	static	void				Initialize(void);
 
 };
