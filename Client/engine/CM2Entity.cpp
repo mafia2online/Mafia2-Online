@@ -9,6 +9,8 @@
 
 #include "BaseInc.h"
 
+#include "../COffsets.h"
+
 #include "Math/CVector3.h"
 #include "Math/CQuaternion.h"
 
@@ -43,7 +45,7 @@ void CM2Entity::Activate( void )
 	// Is the entity valid?
 	if( m_pEntity )
 	{
-		DWORD dwFunc = FUNC_CEntity__Activate;
+		DWORD dwFunc = COffsets::FUNC_CEntity__Activate;
 		M2Entity * pEntity = m_pEntity;
 
 		_asm
@@ -59,7 +61,7 @@ void CM2Entity::Deactivate( void )
 	// Is the entity valid?
 	if( m_pEntity )
 	{
-		DWORD dwFunc = FUNC_CEntity__Deactivate;
+		DWORD dwFunc = COffsets::FUNC_CEntity__Deactivate;
 		M2Entity * pEntity = m_pEntity;
 
 		_asm
