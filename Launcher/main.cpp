@@ -128,8 +128,13 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 
 
 	// Terminate Mafia II process if it's already running?
-	if( SharedUtility::IsProcessRunning( "Mafia2.exe" ) )
-		SharedUtility::_TerminateProcess( "Mafia2.exe" );
+	if (SharedUtility::IsProcessRunning("Mafia2.exe")){
+		if (SharedUtility::_TerminateProcess("Mafia2.exe") == false)
+		{
+			ShowMessageBox("Failed to start kill Mafia.exe. Cannot launch.");
+			return 1;
+		}
+	}
 
 	// Create the startup info struct
 	STARTUPINFO siStartupInfo;
