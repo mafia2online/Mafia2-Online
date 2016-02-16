@@ -85,6 +85,7 @@
 #define		RPC_SETVEHICLEMODEL			"RPC_Script_SetVehicleModel"
 #define		RPC_SETVEHICLEPARTOPEN		"RPC_Script_SetVehiclePartOpen"
 #define		RPC_SETVEHICLESIRENSTATE	"RPC_Script_SetVehicleSirenState"
+#define		RPC_SETVEHICLEBEACONLIGHT	"RPC_Script_SetVehicleBeaconLight"
 #define		RPC_SETVEHICLEHORNSTATE		"RPC_Script_SetVehicleHornState"
 #define		RPC_SETVEHICLEWINDOWOPEN	"RPC_Script_SetVehicleWindowOpen"
 #define		RPC_SETVEHICLETUNINGTABLE	"RPC_Script_SetVehicleTuningTable"

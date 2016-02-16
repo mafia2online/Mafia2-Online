@@ -222,6 +222,23 @@ void SetVehicleSirenState( RakNet::BitStream * pBitStream, RakNet::Packet * pPac
 	}
 }
 
+void SetVehicleBeaconLightState(RakNet::BitStream * pBitStream, RakNet::Packet * pPacket)
+{
+	// Read the vehicle id
+	EntityId vehicleId;
+	pBitStream->ReadCompressed(vehicleId);
+
+	// Read the beacon light state
+	bool bState = pBitStream->ReadBit();
+
+	// Does the vehicle exist?
+	if (CCore::Instance()->GetVehicleManager()->IsActive(vehicleId))
+	{
+		// Set the vehicle siren state
+		CCore::Instance()->GetVehicleManager()->Get(vehicleId)->SetBeaconLightState(bState);
+	}
+}
+
 void SetVehicleHornState( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 {
 	// Read the vehicle id
@@ -388,6 +405,7 @@ void CVehicleRPC::Register( RakNet::RPC4 * pRPC )
 	pRPC->RegisterFunction( RPC_SETVEHICLEENGINESTATE, SetVehicleEngineState );
 	pRPC->RegisterFunction( RPC_SETVEHICLEPARTOPEN, SetVehiclePartOpen );
 	pRPC->RegisterFunction( RPC_SETVEHICLESIRENSTATE, SetVehicleSirenState );
+	pRPC->RegisterFunction( RPC_SETVEHICLEBEACONLIGHT, SetVehicleBeaconLightState);
 	pRPC->RegisterFunction( RPC_SETVEHICLEHORNSTATE, SetVehicleHornState );
 	pRPC->RegisterFunction( RPC_SETVEHICLEWINDOWOPEN, SetVehicleWindowOpen );
 	pRPC->RegisterFunction( RPC_SETVEHICLETUNINGTABLE, SetVehicleTuningTable );
@@ -415,6 +433,7 @@ void CVehicleRPC::Unregister( RakNet::RPC4 * pRPC )
 	pRPC->UnregisterFunction( RPC_SETVEHICLEENGINESTATE );
 	pRPC->UnregisterFunction( RPC_SETVEHICLEPARTOPEN );
 	pRPC->UnregisterFunction( RPC_SETVEHICLESIRENSTATE );
+	pRPC->UnregisterFunction( RPC_SETVEHICLEBEACONLIGHT );
 	pRPC->UnregisterFunction( RPC_SETVEHICLEHORNSTATE );
 	pRPC->UnregisterFunction( RPC_SETVEHICLEWINDOWOPEN );
 	pRPC->UnregisterFunction( RPC_SETVEHICLETUNINGTABLE );

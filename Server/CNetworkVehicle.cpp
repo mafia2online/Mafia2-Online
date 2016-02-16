@@ -536,6 +536,29 @@ bool CNetworkVehicle::GetSirenState( void )
 	return m_lastSyncData.m_bSirenState;
 }
 
+void CNetworkVehicle::SetBeaconLightState(bool bState)
+{
+	// Construct a new bitstream
+	RakNet::BitStream pBitStream;
+
+	// Write the vehicle id
+	pBitStream.WriteCompressed(m_vehicleId);
+
+	// Write the beacon light state
+	bState ? pBitStream.Write1() : pBitStream.Write0();
+
+	// Send it to all clients
+	CCore::Instance()->GetNetworkModule()->Call(RPC_SETVEHICLEBEACONLIGHT, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, INVALID_ENTITY_ID, true);
+
+	// Store the last siren state
+	m_lastSyncData.m_bBeaconLightState = bState;
+}
+
+bool CNetworkVehicle::GetBeaconLightState(void)
+{
+	return (m_lastSyncData.m_bBeaconLightState);
+}
+
 void CNetworkVehicle::SetHornState( bool bState )
 {
 	// Construct a new bitstream
