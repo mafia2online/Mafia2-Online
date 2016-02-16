@@ -49,7 +49,7 @@
     <OutDir>$(SolutionDir)Binary\debug</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <TargetName>m2mp_d</TargetName>
+    <TargetName>m2online</TargetName>
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(IncludePath)</IncludePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
