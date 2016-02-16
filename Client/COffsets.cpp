@@ -13,6 +13,19 @@
 #include	"CPatcher.h"
 #include	"CPatches.h"
 
+unsigned int COffsets::FUNC_CIE_CreateObject = 0;
+unsigned int COffsets::FUNC_CIE_Assign_Model = 0;
+unsigned int COffsets::FUNC_CIE_SetHashName = 0;
+unsigned int COffsets::FUNC_CIE_SetFlag = 0;
+unsigned int COffsets::FUNC_CIE_SetModel = 0;
+unsigned int COffsets::FUNC_CIE_UnkFunc = 0;
+unsigned int COffsets::FUNC_CIE_GetTrafficHuman = 0;
+unsigned int COffsets::FUNC_CIE_SetTrafficHuman = 0;
+unsigned int COffsets::FUNC_CIE_GetHashedString = 0;
+unsigned int COffsets::FUNC_CIE_LoadModel = 0;
+unsigned int COffsets::FUNC_CIE_CCarSetup = 0;
+unsigned int COffsets::FUNC_CIE_SetCarParams = 0;
+
 unsigned int COffsets::VAR_CGame = 0;
 unsigned int COffsets::FUNC_CGame__OnGameInit = 0;
 unsigned int COffsets::FUNC_CGame__OnGameEvent = 0;
@@ -247,6 +260,20 @@ void COffsets::Initialise(BYTE byteVersion, unsigned int uiBase)
 
 void COffsets::CommonInitialise(unsigned int uiBase)
 {
+	// CIE
+	FUNC_CIE_CreateObject	=	(0x0115F840);
+	FUNC_CIE_Assign_Model	=	(0x014E2970);
+	FUNC_CIE_SetHashName	=	(0x014AEA40);
+	FUNC_CIE_SetFlag		=	(0x014AEAC0);
+	FUNC_CIE_SetModel		=	(0x0115CB10);
+	FUNC_CIE_UnkFunc		=	(0x0098DA20);
+	FUNC_CIE_GetTrafficHuman	=	(0x00A2FD60);
+	FUNC_CIE_SetTrafficHuman	=	(0x0093E6A0);
+	FUNC_CIE_GetHashedString	=	(0x180F3E0);
+	FUNC_CIE_LoadModel		=	(0x124F2F0);
+	FUNC_CIE_CCarSetup		=	(0x00A04B40);
+	FUNC_CIE_SetCarParams	=	(0x009906B0);
+
 	// Game
 	FUNC_CGame__OnGameInit = (uiBase + 0x410440); // Steam: 0x4105F0
 	FUNC_CGame__OnGameEvent = (uiBase + 0x1173A00); // Steam: 0x117BCA0
