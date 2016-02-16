@@ -104,19 +104,20 @@ __int64 CM2Door::GetHash( void )
 	vDoorPos.fY = *( float *)( *( DWORD *)( ( DWORD )( this ) + 0x60 ) + 0x54 );
 	vDoorPos.fZ = *( float *)( *( DWORD *)( ( DWORD )( this ) + 0x60 ) + 0x64 );
 
-	char szDoorPos[255] = { 0 };
+	char szDoorPos[512] = { 0 };
 	sprintf( szDoorPos, "DOOR_%0.0f_%0.0f_%0.0f", vDoorPos.fX, vDoorPos.fY, vDoorPos.fZ );
 
 	unsigned int uiHash = 0;
 
-	_asm push 0CBF29CE4h;						//.text:005AB1CB                 push    0CBF29CE4h
-	_asm push 84222325h;						//.text:005AB1D0                 push    84222325h
-	_asm push szDoorPos;
-	_asm call COffsets::FUNC_fnv64;
-	_asm mov uiHash, eax;
-	_asm add esp, 0Ch;
-
-	CLogFile::Printf ( "Door hash: 0x%p (0x%p)", uiHash, (__int64)uiHash );
+	__asm
+	{
+		push 0CBF29CE4h;						//.text:005AB1CB                 push    0CBF29CE4h
+		push 84222325h;						//.text:005AB1D0                 push    84222325h
+		push szDoorPos;
+		call COffsets::FUNC_fnv64;
+		mov uiHash, eax;
+		add esp, 0Ch;
+	}
 
 	return 0;
 }

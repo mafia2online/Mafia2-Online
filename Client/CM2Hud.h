@@ -170,8 +170,7 @@ public:
 	void				ShowLowHealthFX( bool bShow );
 	void				SpeedoShow( bool bShow );
 
-	void 				ShowMessage(const char * text, int delay);
-	void				ShowHelp(const char * text, int delay);
+	void 				ShowMessage(int position, int showMode, const char * text, float delay);
 
 	void 				SetDrunkLevel(int level);
 	int					GetDrunkLevel(void) { return (m_drunkLevel); }
@@ -181,5 +180,7 @@ public:
 
 	void				StartGPS(float fX, float fY);
 	void				StopGPS();
+
+	void				EnableFPV(bool bEnable);
 
 };

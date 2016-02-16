@@ -111,7 +111,7 @@ void __declspec ( naked ) HOOK_CDoor__OnUse ( void )
 		{
 			CLogFile::Printf ( "Is door closed? %s", (pDoor->IsClosed () ? "Yes" : "No") );
 			CChat::Instance()->AddDebugMessage ( "Is door closed? %s", (pDoor->IsClosed () ? "Yes" : "No") );
-			//pDoor->GetHash ();
+			pDoor->GetHash ();
 		}
 
 	}
@@ -251,11 +251,14 @@ void __declspec ( naked ) HOOK_C_Game__OnGameLoad ( void )
 	// Call the game load handler
 	CCore::Instance()->OnGameLoad ();
 
-	_asm popad;
-	_asm push ebx;
-	_asm mov ebx, ecx;
-	_asm mov eax, [ebx];
-	_asm jmp HOOK_C_Game__OnGameLoad__JMP;
+	_asm
+	{
+		popad;
+		push ebx;
+		mov ebx, ecx;
+		mov eax, [ebx];
+		jmp HOOK_C_Game__OnGameLoad__JMP;
+	}
 }
 
 void __fastcall HOOK_C_Player__ProcessKeyboard ( M2Entity * pEntity, void * _EDX, int a2, int a3, float a4 )
