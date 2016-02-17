@@ -11,6 +11,7 @@
 
 #include	"engine\CM2Entity.h"
 #include	"engine\CM2Vehicle.h"
+#include	"engine\CM2ModelManager.h"
 #include	"CModelManager.h"
 #include	"CSync.h"
 
@@ -34,7 +35,7 @@ private:
 	CVector3						m_vecTempRotation;
 
 	CM2Vehicle						* m_pVehicle;
-	M2ModelMgr						* m_pVehicleModelManager;
+	CM2ModelManager					* m_pVehicleModelManager;
 
 	InVehicleSync					m_lastSyncData;
 	bool							m_bProcessSyncOnSpawn;

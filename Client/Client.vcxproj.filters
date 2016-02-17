@@ -806,6 +806,9 @@
     <ClInclude Include="CIcon.h">
       <Filter>Header Files\Client\Network\Icon</Filter>
     </ClInclude>
+    <ClInclude Include="engine\CM2ModelManager.h">
+      <Filter>Header Files\Client\Game\Engine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -1293,6 +1296,9 @@
     </ClCompile>
     <ClCompile Include="CIcon.cpp">
       <Filter>Source Files\Client\Network\Icon</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\CM2ModelManager.cpp">
+      <Filter>Source Files\Client\Game\Engine</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -71,7 +71,7 @@ SQInteger CPlayerNatives::GetMoveState(SQVM *pVM)
 	sq_getinteger(pVM, -1, &playerId);
 
 	// Player control structure
-	C_PlayerControls controls;
+	M2PlayerControls controls;
 
 	// Is this not the localPlayer ?
 	if (playerId != CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetId())
@@ -82,7 +82,7 @@ SQInteger CPlayerNatives::GetMoveState(SQVM *pVM)
 			controls = CCore::Instance()->GetPlayerManager()->Get(playerId)->GetPlayerPed()->GetPed()->m_playerControls;
 
 			// Return it
-			sq_pushinteger(pVM, controls.m_ePlayerMovementState);
+			sq_pushinteger(pVM, controls.m_playerMovementState);
 			return (true);
 		}
 	}
@@ -91,7 +91,7 @@ SQInteger CPlayerNatives::GetMoveState(SQVM *pVM)
 		controls = CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetPlayerPed()->GetPed()->m_playerControls;
 
 		// Return it
-		sq_pushinteger(pVM, controls.m_ePlayerMovementState);
+		sq_pushinteger(pVM, controls.m_playerMovementState);
 		return (true);
 	}
 
