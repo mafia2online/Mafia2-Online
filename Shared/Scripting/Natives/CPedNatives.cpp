@@ -177,7 +177,7 @@ SQInteger CPedNatives::GetPedPosition(SQVM *pVM)
 		CVector3 pos;
 		
 		// Get the position
-		CCore::Instance()->GetPedManager()->Get(pedId)->GetPed()->GetPosition(pos);
+		CCore::Instance()->GetPedManager()->Get(pedId)->GetPed()->GetPosition(&pos);
 
 		// Create array
 		sq_newarray(pVM, 0);

@@ -378,8 +378,8 @@ void CNetworkVehicle::StoreVehicleSync( InVehicleSync vehicleSync, bool bInterpo
 			m_pVehicle->SetBeaconLightOn(vehicleSync.m_bBeaconLightState);
 
 		// Has the fuel changed?
-		if ( m_pVehicle->GetFuel () != vehicleSync.m_fFuel )
-			m_pVehicle->SetFuel ( vehicleSync.m_fFuel );
+		/*if ( m_pVehicle->GetFuel () != vehicleSync.m_fFuel )
+			m_pVehicle->SetFuel ( vehicleSync.m_fFuel );*/
 
 		// Has the speed changed?
 		CVector3 vecVelocity;
@@ -596,7 +596,7 @@ void CNetworkVehicle::GetPosition( CVector3 * vecPosition )
 
 	// Is the vehicle instance valid?
 	if( m_pVehicle )
-		m_pVehicle->GetPosition( *vecPosition );
+		m_pVehicle->GetPosition( vecPosition );
 }
 
 void CNetworkVehicle::SetRotation( CVector3 vecRotation )
@@ -623,7 +623,7 @@ void CNetworkVehicle::GetRotation( CVector3 * vecRotation )
 	{
 		// Get the vehicle rotation
 		Quaternion quatRotation;
-		m_pVehicle->GetRotation( quatRotation );
+		m_pVehicle->GetRotation( &quatRotation );
 
 		// Copy the rotation quaternion to the eular angles vector
 		memcpy( vecRotation, &quatRotation.toEularAngles(), sizeof(CVector3) );

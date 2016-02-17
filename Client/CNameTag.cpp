@@ -90,7 +90,7 @@ void CNameTag::DrawPed(void)
 			continue;
 
 		CVector3 pedPos;
-		pGamePed->GetPosition ( pedPos );
+		pGamePed->GetPosition ( &pedPos );
 		float fDistance = Math::GetDistanceBetweenPoints ( localPos, pedPos );
 
 		if ( fDistance > RENDER_DISTANCE_PED )

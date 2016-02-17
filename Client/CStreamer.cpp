@@ -64,7 +64,7 @@ void CStreamer::Process( void )
 
 			// Get the current entity position
 			CVector3 vecPos;
-			(*iter)->GetEntity()->GetPosition( vecPos );
+			(*iter)->GetEntity()->GetPosition( &vecPos );
 
 			// Is the current entity in range?
 			bIsInRange = ((vecLocalPos - vecPos).Length() <= (*iter)->GetStreamDistance());
