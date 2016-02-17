@@ -93,8 +93,8 @@ void CPed::SetModel( unsigned int uiModelIndex )
 	CVector3	tempRot;
 
 	// Save position
-	m_pPed->GetPosition(pos);
-	m_pPed->GetRotation(rot);
+	m_pPed->GetPosition(&pos);
+	m_pPed->GetRotation(&rot);
 
 	// Store temp rotation
 	tempRot.fX = rot.fX;

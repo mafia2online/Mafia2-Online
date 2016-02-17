@@ -418,7 +418,7 @@ void CNetworkPlayer::GetPosition( CVector3 * vecPosition )
 
 	// Is the player ped valid?
 	if( m_pPlayerPed && IsSpawned() )
-		m_pPlayerPed->GetPosition( (*vecPosition), true );
+		m_pPlayerPed->GetPosition( vecPosition, true );
 }
 
 void CNetworkPlayer::SetRotation( CVector3 vecRotation )
@@ -445,7 +445,7 @@ void CNetworkPlayer::GetRotation( CVector3 * vecRotation )
 	{
 		// Get the player rotation
 		Quaternion quatRotation;
-		m_pPlayerPed->GetRotation( quatRotation );
+		m_pPlayerPed->GetRotation( &quatRotation );
 
 		// Copy the rotation eular angles
 		memcpy( vecRotation, &quatRotation.toEularAngles(), sizeof(CVector3) );

@@ -236,7 +236,7 @@ void CLocalPlayer::SendOnFootSync( void )
 	GetRotation ( &onFootSync.m_vecRotation );
 
 	// Get the player direction
-	m_pPlayerPed->GetDirection ( onFootSync.m_vecDirection );
+	m_pPlayerPed->GetDirection ( &onFootSync.m_vecDirection );
 
 	// Get the player health
 	onFootSync.m_fHealth = GetHealth ();

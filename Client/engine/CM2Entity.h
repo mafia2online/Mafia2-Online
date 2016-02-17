@@ -98,14 +98,14 @@ public:
 	
 	DWORD					GetGUID							( void );
 	
-	void					SetPosition						( const CVector3 vecPosition );
-	void					GetPosition						( CVector3& vecPosition, bool bCheckVehicle = false );
+	void					SetPosition						( CVector3 vecPosition );
+	void					GetPosition						( CVector3 * vecPosition, bool bCheckVehicle = false );
 
-	void					SetDirection					( const CVector3 vecDirection );
-	void					GetDirection					( CVector3& vecDirection );
+	void					SetDirection					( CVector3 vecDirection );
+	void					GetDirection					( CVector3 * vecDirection );
 
-	void					SetRotation						( const Quaternion quatRotation );
-	void					GetRotation						( Quaternion& quatRotation );
+	void					SetRotation						( Quaternion quatRotation );
+	void					GetRotation						( Quaternion * quatRotation );
 
 	bool					IsOnScreen						( void );
 
