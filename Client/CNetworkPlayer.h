@@ -81,29 +81,6 @@ private:
 
 	struct
 	{
-		struct
-		{
-			CVector3				vecStart;
-			CVector3				vecTarget;
-			CVector3				vecError;
-			float					fLastAlpha;
-			unsigned long			ulStartTime;
-			unsigned long			ulFinishTime;
-		} position;
-
-		struct
-		{
-			CVector3				vecStart;
-			CVector3				vecTarget;
-			CVector3				vecError;
-			float					fLastAlpha;
-			unsigned long			ulStartTime;
-			unsigned long			ulFinishTime;
-		} direction;
-	} m_interp;
-
-	struct
-	{
 		CNetworkVehicle				* m_pTargetVehicle;
 		EntityId					m_targetSeat;
 		bool						m_bIsEntering;
@@ -122,8 +99,6 @@ public:
 
 	CNetworkPlayer( bool bLocalPlayer );
 	~CNetworkPlayer( void );
-
-	void							Pulse(void);
 
 	bool							IsLocalPlayer( void ) { return m_bLocalPlayer; }
 
@@ -227,22 +202,6 @@ public:
 
 	CVector3						GetLastPosition( void ) { return m_vecPosition; }
 	CVector3						GetLastRotation( void ) { return m_vecRotation; }
-
-	// Interpolation
-	void							Interpolate(void);
-	void							ResetInterpolation(void);
-
-	// Position Interpolation
-	void							SetTargetPosition(CVector3 vecPosition);
-	void							UpdateTargetPosition(void);
-	void							RemoveTargetPosition(void);
-	bool							HasTargetPosition(void) { return (m_interp.position.ulFinishTime != 0); }
-
-	// Direction Interpolation
-	void							SetTargetDirection(CVector3 vecDirection);
-	void							UpdateTargetDirection(void);
-	void							RemoveTargetDirection(void);
-	bool							HasTargetDirection(void) { return (m_interp.direction.ulFinishTime != 0); }
 
 	// Vehicles
 	void							EnterVehicle( CNetworkVehicle * pVehicle, M2Enums::eVehicleSeat seat, bool bEnter = true );
