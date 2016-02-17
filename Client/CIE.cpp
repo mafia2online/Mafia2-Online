@@ -184,7 +184,7 @@ namespace IE
 		CModel__AssignModel(pModel, pModelManager->m_pModel);
 
 		// Set the model name hash
-		CModel__SetNameHashByName(pModel, "m2mp_player");
+		CModel__SetNameHashByName(pModel, "m2online_player");
 
 		// Set model flags
 		CModel__SetFlag(pModel, 2);
@@ -277,7 +277,7 @@ namespace IE
 		CModel__AssignModel(pModel, pModelManager->m_pModel);
 
 		// Set the model name hash
-		CModel__SetNameHashByName(pModel, "m2mp_ped");
+		CModel__SetNameHashByName(pModel, "m2online_ped");
 
 		// Set the initial position
 		*(float *)((DWORD)(pModel)+0x44) = 0.0f;
@@ -356,7 +356,7 @@ namespace IE
 		CModel__AssignModel(pModel, pModelManager->m_pModel);
 
 		// Set name hash
-		CModel__SetNameHashByName(pModel, "m2mp_vehicle");
+		CModel__SetNameHashByName(pModel, "m2online_vehicle");
 
 		// Set the initial position
 		*(float *)((DWORD)(pModel)+0x44) = 0.0f;

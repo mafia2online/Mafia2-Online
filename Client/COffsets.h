@@ -154,6 +154,8 @@ public:
 	static	unsigned int		FUNC_CHuman__AnimationReset;
 	static	unsigned int		FUNC_CHuman__GetInOutCar;
 	static	unsigned int		FUNC_CHuman__TakeDamage;
+	static	unsigned int		FUNC_CHuman__SetAnimStyle;
+	static	unsigned int		FUNC_CHuman__SetModelToHand;
 
 	// Vehicle
 	static	unsigned int		VAR_VehiclePool;
