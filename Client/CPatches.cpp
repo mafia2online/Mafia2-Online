@@ -44,6 +44,9 @@ bool					bFirstLoad = true;
 typedef void			( __thiscall * C_Player__ProcessKeyboard_t )	( M2Entity * pEntity, int a2, int a3, float a4 );
 C_Player__ProcessKeyboard_t C_Player__ProcessKeyboard = NULL;
 
+typedef int (__cdecl * CreateObjectByType_tp)(int);
+CreateObjectByType_tp CreateObjectByTypePatch = NULL;
+
 M2Ped * pPed = NULL;
 DWORD sub_98B630_jmp = 0x98B63C;
 DWORD sub_98B630_edx = 0x0;
@@ -268,6 +271,13 @@ void __fastcall HOOK_C_Player__ProcessKeyboard ( M2Entity * pEntity, void * _EDX
 		C_Player__ProcessKeyboard ( pEntity, a2, a3, a4 );
 }
 
+void __fastcall Hook_CreateObject(int type)
+{
+		CCore::Instance()->GetChat()->AddDebugMessage("Request create object of type : %d | %04x", type, type);
+		CLogFile::Printf("Request create object of type : %d | %04x", type, type);
+		CreateObjectByTypePatch(type);
+}
+
 void CPatches::Initialise( void )
 {
 	CLogFile::Printf( "Installing patches..." );
@@ -295,6 +305,9 @@ void CPatches::Initialise( void )
 	// Hook to prevent remote player peds following the localplayer keyboard controls
 	C_Player__ProcessKeyboard = (C_Player__ProcessKeyboard_t) CPatcher::InstallJmpPatch ( 0x42A9E0, (DWORD)HOOK_C_Player__ProcessKeyboard );
 	CPatcher::InstallNopPatch ( 0x4387A3, 0x86 ); // Fix crash - NEED TO LOOK AT THIS MORE (CAUSES CRASH WITH LOCALPLAYER WHEN JUMPING) // Steam: 0x0438A43
+
+	// Hook CreateObject
+	//CreateObjectByTypePatch = (CreateObjectByType_tp)CPatcher::InstallCallPatch(0x0115F840, (DWORD)Hook_CreateObject);
 
 	// Hook C_HumanInventory__DoShot
 	CPatcher::InstallJmpPatch ( COffsets::FUNC_CHumanInventory__ProcessShot, (DWORD)HOOK_CHumanInventory__DoShot );

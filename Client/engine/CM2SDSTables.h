@@ -7,6 +7,8 @@
 *
 ***************************************************************/
 
+#include	"../BaseInc.h"
+
 class M2SDSPlayersTable
 {
 public:

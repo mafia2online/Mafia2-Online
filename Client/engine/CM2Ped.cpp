@@ -651,7 +651,7 @@ void CM2Ped::ModelToHand(int iHand, int iModel)
 
 	M2EntityData* pEntityData = m_pPed->m_pEntityData;
 
-	DWORD func = 0x90C860; //Todo: move to COffsets
+	DWORD func = COffsets::FUNC_CHuman__SetModelToHand;
 
 	_asm
 	{
@@ -673,7 +673,7 @@ void CM2Ped::SetAnimStyle(const char *dir, const char *set)
 
 	M2EntityData *pEntityData = m_pPed->m_pEntityData;
 
-	DWORD func = 0x956720; // Move to COffsets
+	DWORD func = COffsets::FUNC_CHuman__SetAnimStyle;
 
 	_asm
 	{
