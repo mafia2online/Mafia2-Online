@@ -11,6 +11,7 @@
 
 #include	"engine\CM2Entity.h"
 #include	"engine\CM2Ped.h"
+#include	"engine\CM2ModelManager.h"
 #include	"CModelManager.h"
 
 class CPed
@@ -24,7 +25,7 @@ private:
 	bool							m_pShowNick;
 
 	CM2Ped							* m_pPed;
-	M2ModelMgr						* m_pPedModelManager;
+	CM2ModelManager					* m_pPedModelManager;
 
 public:
 

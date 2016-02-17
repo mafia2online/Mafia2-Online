@@ -9,8 +9,23 @@
 
 #pragma once
 
-#include	"CM2Enums.h"
+#include	"../BaseInc.h"
+
 #include	"CM2Entity.h"
+#include	"../CM2Enums.h"
+#include	"../CM2SyncObject.h"
+
+class M2Vehicle;
+class CM2Vehicle;
+
+enum ePlayerMovementState : BYTE
+{
+	E_WALK = 0,
+	E_JOG = 1,
+	E_SPRINT = 2,
+	E_IDLE = 3,
+	E_STOPPING = 5
+};
 
 class M2WeaponData
 {
@@ -28,12 +43,37 @@ public:
 	DWORD m_dwAimType;										// 01C4 - 01C8 (0 = Not aiming, 1 = hip aim, 3 = ADS aim)
 };
 
-class M2PlayerControls
+class M2PlayerControls // 0240 - 02E8
 {
 public:
-	PAD(M2PlayerControls, pad0, 0xA0);						// 0000 - 00A0
-	DWORD m_dwUnknown;										// 00A0 - 00A4
+	PAD(M2PlayerControls, pad0, 0xA0);					// 0000 - 00A0
+	ePlayerMovementState m_playerMovementState;				// 00A0 - 00A1
+	BYTE m_byteModifiers;									// 00A1 - 00A2
+	bool m_bIsAiming;										// 00A2 - 00A3
+	BYTE m_byteMouseFlags;									// 00A3 - 00A4
+	BYTE m_byteUnknown1;									// 00A4 - 00A5
+	BYTE m_byteUnknown2;									// 00A5 - 00A6
+	BYTE m_byteKeyboardFlags;								// 00A6 - 00A7
+	BYTE m_byteUnknown3;									// 00A7 - 00A8
 };
+
+/*
+class C_PlayerControls // 0x61
+{
+public:
+ePlayerMovementState m_ePlayerMovementState;			// 02E0 - 02E1
+BYTE m_byteModifiers;									// 02E1 - 02E2
+bool m_bIsAiming;										// 02E2 - 02E3
+BYTE m_byteMouseFlags;									// 02E3 - 02E4
+BYTE m_byteUnknown1;									// 02E4 - 02E5
+BYTE m_byteUnknown2;									// 02E5 - 02E6
+BYTE m_byteKeyboardFlags;								// 02E6 - 02E7
+PAD(M2PlayerControls, pad0, 0x29);						// 02E7 - 0310
+bool m_bIsMoving;										// 0310 - 0311
+PAD(M2PlayerControls, pad1, 0x2F);						// 0311 - 0340
+bool m_bIsCrouching;									// 0340 - 0341
+};
+*/
 
 class M2ProjectileInventory
 {
@@ -49,7 +89,6 @@ public:
 	void * m_pUnknown;										// 0044 - 004C
 };
 
-class C_SyncObject;
 class M2EntityData
 {
 public:
@@ -57,49 +96,20 @@ public:
 	DWORD m_dwType;											// 001C - 0020
 	PAD(M2EntityData, pad1, 0x88);							// 0020 - 00A8
 	M2PedUnk001 * m_pUnknown;								// 00A8 - 00AC
-
 	int PlayAnim(C_SyncObject **syncObject, const char *const animName, const bool unknown, int, int, float, float, float);
 };
-
-enum ePlayerMovementState : BYTE
-{
-	E_WALK = 0,
-	E_JOG = 1,
-	E_SPRINT = 2,
-	E_IDLE = 3,
-	E_STOPPING = 5
-};
-
-class C_PlayerControls // 0x61
-{
-public:
-	ePlayerMovementState m_ePlayerMovementState;			// 02E0 - 02E1
-	BYTE m_byteModifiers;									// 02E1 - 02E2
-	bool m_bIsAiming;										// 02E2 - 02E3
-	BYTE m_byteMouseFlags;									// 02E3 - 02E4
-	BYTE m_byteUnknown1;									// 02E4 - 02E5
-	BYTE m_byteUnknown2;									// 02E5 - 02E6
-	BYTE m_byteKeyboardFlags;								// 02E6 - 02E7
-	PAD(M2PlayerControls, pad0, 0x29);						// 02E7 - 0310
-	bool m_bIsMoving;										// 0310 - 0311
-	PAD(M2PlayerControls, pad1, 0x2F);						// 0311 - 0340
-	bool m_bIsCrouching;									// 0340 - 0341
-};
-
-class M2Entity;
-class M2Vehicle;
 
 class M2Ped : public M2Entity
 {
 public:
-															// 0000 - 0064
+	// 0000 - 0064
 	M2Vehicle * m_pCurrentVehicle;							// 0064 - 0068
 	PAD(M2Ped, pad0, 0x10);									// 0068 - 0078
-	int m_iUnkNum;											// 0078 - 007C
+	int m_iSlotSDS;											// 0078 - 007C
 	PAD(M2Ped, pad1, 0x24);									// 007C - 00A0
 	M2WeaponData * m_pWeaponData;							// 00A0 - 00A4
 	M2EntityData * m_pEntityData;							// 00A4 - 00A8
-	PAD(M2Entity, pad2, 0x4);								// 00A8 - 00AC
+	PAD(M2Ped, pad2, 0x4);									// 00A8 - 00AC
 	M2Inventory * m_pInventory;								// 00AC - 00B0
 	M2ProjectileInventory * m_pProjectileInventory;			// 00B0 - 00B4
 	PAD(M2Ped, pad3, 0x1C);									// 00B4 - 00D0
@@ -113,15 +123,19 @@ public:
 	// 0xEC = bool
 	// 0xED = bool
 	PAD(M2Ped, pad5, 0x157);								// 00E9 - 0240
-	M2PlayerControls * m_pControls;							// 0240 - 0244
+	M2PlayerControls m_playerControls;						// 0240 - 02E8
+	PAD(M2Ped, pad6, 0x3C);									// 02E8 - 0324
+	DWORD m_dwAimedAtGUID;									// 0324 - 0328
+	PAD(M2Ped, pad7, 0x8);									// 0328 - 0330
+	M2Ped * m_pAimedAtPed;									// 0330 - 0334
+
+	/*M2PlayerControls * m_pControls;						// 0240 - 0244
 	PAD(M2Ped, pad6, 0x9C);									// 0244 - 02E0
-	C_PlayerControls m_playerControls;						// 02E0 - 0341
+	C_PlayerControls m_playerControls;						// 02E0 - 0341*/
 
 	// 0x1CC, 0x1D0 = current surface walking on (in czech)
+	// 0x12C = GameCamera that is attached to player (M2Camera)
 };
-
-class CM2Entity;
-class CVector3;
 
 class CM2Ped : public CM2Entity
 {
@@ -132,64 +146,60 @@ private:
 
 public:
 
-							CM2Ped							( M2Ped * pPed );
-							~CM2Ped							( void );
-							
-	void					SetPed							( M2Ped * pPed ) { m_pPed = pPed; }
-	M2Ped					* GetPed						( void ) { return m_pPed; }
+	CM2Ped(M2Ped * pPed);
+	~CM2Ped(void);
 
-	BYTE					GetControlState					( void );
-	DWORD					GetState						( void );
-							
-	void					SetInfiniteAmmo					( bool bInifiniteAmmo );
-	bool					HasInfiniteAmmo					( void );
-							
-	void					SetSelectedWeapon				( DWORD dwWeapon, bool bUseAnimation = false );
-	DWORD					GetSelectedWeapon				( void );
+	void					SetPed(M2Ped * pPed) { m_pPed = pPed; }
+	M2Ped					* GetPed(void) { return m_pPed; }
 
-	bool					IsAiming						( void );
-	bool					IsShooting						( void );
-	bool					IsCrouching						( void );
-	bool					IsMoving						( void );
+	BYTE					GetControlState(void);
+	DWORD					GetState(void);
 
-	void					SetCrouching					( bool bCrouching );
-							
-	void					SetHealth						( float fHealth );
-	float					GetHealth						( void );
-	
+	void					SetInfiniteAmmo(bool bInifiniteAmmo);
+	bool					HasInfiniteAmmo(void);
+
+	void					SetSelectedWeapon(DWORD dwWeapon, bool bUseAnimation = false);
+	DWORD					GetSelectedWeapon(void);
+
+	bool					IsAiming(void);
+	bool					IsShooting(void);
+
+	void					SetHealth(float fHealth);
+	float					GetHealth(void);
+
 	//void					SetHealthMax					( float fHealthMax );
-	float					GetHealthMax					( void );
-	float					GetRealHealth					( void );
-	
-	void					SetInvulnerable					( bool bInvulnerable );
-	bool					IsInvulnerable					( void );
+	float					GetHealthMax(void);
+	float					GetRealHealth(void);
 
-	void					GiveWeapon						( DWORD dwWeapon, DWORD dwAmmo );
-	void					RemoveWeapon					( DWORD dwWeapon, DWORD dwWeaponAmmo = 0 );
-	void					RemoveAllWeapons				( void );
-	void					ReloadWeapon					( void );
-	bool					HaveThrowingWeaponInHand		( void );
+	void					SetInvulnerable(bool bInvulnerable);
+	bool					IsInvulnerable(void);
 
-	bool					HasItem							( DWORD dwItem );
+	void					GiveWeapon(DWORD dwWeapon, DWORD dwAmmo);
+	void					RemoveWeapon(DWORD dwWeapon, DWORD dwWeaponAmmo = 0);
+	void					RemoveAllWeapons(void);
+	void					ReloadWeapon(void);
+	bool					HaveThrowingWeaponInHand(void);
 
-	C_SyncObject			* GetInOutVehicle				( M2Vehicle * pVehicle, int iSeat, bool bEnter = true, bool bForced = false );
-	M2Vehicle				* GetCurrentVehicle				( void );
+	bool					HasItem(DWORD dwItem);
 
-	void					AddMoney						( int iDollars, int iCents );
-	void					RemoveMoney						( int iDollars, int iCents );
-	float					GetMoney						( void );
+	C_SyncObject			* GetInOutVehicle(M2Vehicle * pVehicle, int iSeat, bool bEnter = true, bool bForced = false);
+	M2Vehicle				* GetCurrentVehicle(void);
+
+	void					AddMoney(int iDollars, int iCents);
+	void					RemoveMoney(int iDollars, int iCents);
+	float					GetMoney(void);
 
 	// These should only be used on peds that are not localplayer
-	C_SyncObject			* MoveVec						( CVector3 vecPosition, M2Enums::eMoveType moveType, CVector3 vecEndDirection );
-	C_SyncObject			* AimAt							( CVector3 vecPosition );
-	C_SyncObject			* ShootAt						( CVector3 vecPosition );
-	C_SyncObject			* LookAt						( CVector3 vecPosition );
+	C_SyncObject			* MoveVec(CVector3 vecPosition, M2Enums::eMoveType moveType, CVector3 vecEndDirection);
+	C_SyncObject			* AimAt(CVector3 vecPosition);
+	C_SyncObject			* ShootAt(CVector3 vecPosition);
+	C_SyncObject			* LookAt(CVector3 vecPosition);
 
-	void					PlayAnimation					(char *strAnimation);
-	void					StopAnimation					(char *strAnimation);
-	bool					IsAnimFinished					(char *strAnimation);
+	void					PlayAnimation(char *strAnimation);
+	void					StopAnimation(char *strAnimation);
+	bool					IsAnimFinished(char *strAnimation);
 
-	void					ModelToHand						(int iHand, int iModel);
-	void					SetAnimStyle					(const char *dir, const char *set);
+	void					ModelToHand(int iHand, int iModel);
+	void					SetAnimStyle(const char *dir, const char *set);
 
 };

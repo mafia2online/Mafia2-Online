@@ -155,7 +155,6 @@ void CRemotePlayer::StoreOnFootSync( OnFootSync * onFootSync )
 
 		// Update their crouch
 		/* UpdateCrouching( onFootSync->m_bCrouching ); */
-		m_pPlayerPed->SetCrouching(onFootSync->m_bCrouching);
 
 		// Update their aim
 		UpdateAim(onFootSync->m_bAiming);

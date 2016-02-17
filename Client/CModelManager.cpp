@@ -15,93 +15,76 @@
 
 #include "CIE.h"
 
-void M2ModelMgr::ChangeModel( const char * pszDir, const char * pszModel, int iHumanColour )
-{
-	CModelManager::SetDir( pszDir );
+CModelManager::CModelManager(void) {}
 
-	// Change model
-	_asm
+CModelManager::~CModelManager(void)
+{
+	// Clear the loaded model list
+	m_modelManagers.clear();
+}
+
+CM2ModelManager * CModelManager::Load(String strModelDirectory, String strModelName)
+{
+	return Load(strModelDirectory.Get(), strModelName.Get());
+}
+
+CM2ModelManager * CModelManager::Load(const char * szModelDirectory, const char * szModelName)
+{
+	// Have we loaded too many models?
+	if (m_modelManagers.size() >= MODELMGR_MAX)
 	{
-		push iHumanColour;
-		push pszModel;
-		mov ecx, this;
-		call COffsets::FUNC_CModelMgr__ChangeModel;
-	}
-
-	CModelManager::SetDir( SDS_LOAD_DIR_PLAYER );
-}
-
-char * CModelManager::GetDir( void )
-{
-	return ( char *)( SDS_LOAD_DIR_ADDR );
-}
-
-void CModelManager::SetDir( const char * pszDirectory )
-{
-	char * pszLoadPath = ( char *)( SDS_LOAD_DIR_ADDR );
-
-	DWORD dwOldProtect = 0;
-	VirtualProtect( pszLoadPath, 0x20, PAGE_READWRITE, &dwOldProtect );
-
-	// modify path
-	sprintf( pszLoadPath, "%s%%s.sds", pszDirectory );
-
-	VirtualProtect( pszLoadPath, 0x20, dwOldProtect, &dwOldProtect );
-}
-
-M2ModelMgr * CModelManager::LoadModel( const char * pszDirectory, const char * pszFileName )
-{
-	if ( m_ModelMgrs.size() >= MODELMGR_MAX )
-		return NULL;
-
-	M2ModelMgr * pModelMgr = ( M2ModelMgr *)( IE::Malloc( 0x50 ) );
-
-	if ( !pModelMgr )
-	{
-		CLogFile::Printf( "Can't allocate memory for model manager!" );
+		CLogFile::Printf("ERROR - CModelManager::Load - Can't load model because model limit reached! (%d/%d)", m_modelManagers.size(), MODELMGR_MAX);
 		return NULL;
 	}
 
-	// Construct the model manager
-	pModelMgr->Construct ();
+	// Create the model manager instance
+	CM2ModelManager * pModelManager = new CM2ModelManager();
 
-	// dirty hack :D
-	SetDir( pszDirectory );
-	bool bLoadResult = pModelMgr->Load( pszFileName );
-	SetDir( SDS_LOAD_DIR_PLAYER );
-
-	CLogFile::Printf ( "CModelManager::LoadModel - Result: %s", (bLoadResult ? "true" : "false") );
+	// Did the model manager fail to create?
+	if (!pModelManager)
+		return NULL;
 
 	// Did the model fail to load?
-	if ( !bLoadResult )
+	if (!pModelManager->Load(szModelDirectory, szModelName))
 	{
-		// Delete the model manager
-		pModelMgr->Free ();
+		CLogFile::Printf("ERROR - CModelManager::Load - Failed to load model '%s'", szModelName);
 
+		// Delete the model manager instance
+		SAFE_DELETE(pModelManager);
 		return NULL;
 	}
 
-	m_ModelMgrs.push_back( pModelMgr );
+	CLogFile::Printf("CModelManager::Load ( \"%s\" ) - Model loaded successfully!", szModelName);
 
-	return pModelMgr;
+	// Add the current model manager to the list
+	m_modelManagers.push_back(pModelManager);
+
+	return pModelManager;
 }
 
-bool CModelManager::FreeModel( const char * pszModelName )
+bool CModelManager::Free(const char * szModelName)
 {
-	for ( unsigned int I = 0; I < m_ModelMgrs.size( ); I++ )
+	// Loop over all model managers
+	for (std::list < CM2ModelManager * >::iterator iter = m_modelManagers.begin(); iter != m_modelManagers.end(); iter++)
 	{
-		M2ModelMgr * pModelMgr = m_ModelMgrs[I];
+		// Get the current model manager
+		CM2ModelManager * pModelManager = (*iter);
 
-		if ( !pModelMgr )
+		// Does the current model manager not have a slot linked?
+		if (!pModelManager->GetModelManager()->m_pSlot)
 			continue;
 
-		if ( !pModelMgr->GetSlot( ) )
-			continue;
-
-		if ( pModelMgr->GetSlot()->GetModelByName( pszModelName ) )
+		// Is the model loaded in this slot?
+		if (pModelManager->GetSlot()->GetModelByName(szModelName))
 		{
-			m_ModelMgrs.erase( m_ModelMgrs.begin() + I );
-			pModelMgr->Free ();
+			// Free the current model manager
+			m_modelManagers.remove(pModelManager);
+
+			// Delete the model manager instance
+			SAFE_DELETE(pModelManager);
+
+			CLogFile::Printf("CModelManager::Free ( \"%s\" ) - Model unloaded successfully! (%d models loaded)", szModelName, m_modelManagers.size());
+
 			return true;
 		}
 	}
@@ -109,44 +92,63 @@ bool CModelManager::FreeModel( const char * pszModelName )
 	return false;
 }
 
-M2Model * CModelManager::GetModelByName( const char * pszModelName )
+bool CModelManager::Free(CM2ModelManager * pModelManager)
 {
-	M2ModelMgr * pModelMgr = GetModelMgrByName( pszModelName );
+	// Is the model manager invalid?
+	if (!pModelManager || !pModelManager->GetModelManager())
+		return false;
 
-	return ( pModelMgr ? pModelMgr->GetModel( ) : NULL );
+	// Try and remove by name
+	return Free(pModelManager->GetModelName());
 }
 
-M2Model * CModelManager::GetModelByIndex( int nIndex )
-{
-	M2ModelMgr * pModelMgr = GetModelMgrByIndex( nIndex );
-
-	return ( pModelMgr ? pModelMgr->GetModel( ) : NULL );
-}
-
-M2ModelMgr * CModelManager::GetModelMgrByName( const char * pszModelName )
+void CModelManager::Clear(void)
 {
 	// Loop over all loaded models
-	for ( std::vector< M2ModelMgr* >::iterator iter = m_ModelMgrs.begin(); iter != m_ModelMgrs.end(); iter++ )
+	for (std::list < CM2ModelManager * >::iterator iter = m_modelManagers.begin(); iter != m_modelManagers.end(); iter++)
 	{
-		// Get a pointer to the current model manager
-		M2ModelMgr * pModelManager = *iter;
+		// Delete the current model manager instance
+		SAFE_DELETE(*iter);
+	}
 
-		// Is the current model manager valid?
-		if ( *iter && (*iter)->GetSlot () )
-		{
-			// Is this the model manager we're looking for?
-			if ( (*iter)->GetSlot()->GetModelByName ( pszModelName ) )
-				return *iter;
-		}
+	// Clear the loaded model list
+	m_modelManagers.clear();
+}
+
+CM2ModelManager * CModelManager::GetModelManagerByName(const char * szModelName)
+{
+	// Loop over all model managers
+	for (std::list < CM2ModelManager * >::iterator iter = m_modelManagers.begin(); iter != m_modelManagers.end(); iter++)
+	{
+		// Get the current model manager
+		CM2ModelManager * pModelManager = (*iter);
+
+		// Does the current model manager not have a slot linked?
+		if (!pModelManager->GetModelManager() || !pModelManager->GetModelManager()->m_pSlot)
+			continue;
+
+		// Is the model loaded in this slot?
+		if (!strcmp(szModelName, pModelManager->GetModelManager()->m_szModelName))
+			return pModelManager;
 	}
 
 	return NULL;
 }
 
-M2ModelMgr * CModelManager::GetModelMgrByIndex( int nIndex )
+char * CModelManager::GetDir(void)
 {
-	if ( m_ModelMgrs.size() >= MODELMGR_MAX )
-		return NULL;
+	return (char *)(SDS_LOAD_DIR_ADDR);
+}
 
-	return m_ModelMgrs[nIndex];
+void CModelManager::SetDir(const char * pszDirectory)
+{
+	char * pszLoadPath = (char *)(SDS_LOAD_DIR_ADDR);
+
+	DWORD dwOldProtect = 0;
+	VirtualProtect(pszLoadPath, 0x20, PAGE_READWRITE, &dwOldProtect);
+
+	// modify path
+	sprintf(pszLoadPath, "%s%%s.sds", pszDirectory);
+
+	VirtualProtect(pszLoadPath, 0x20, dwOldProtect, &dwOldProtect);
 }

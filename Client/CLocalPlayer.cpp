@@ -16,10 +16,13 @@
 #include	"CString.h"
 
 #include	"CM2Hud.h"
+#include	"engine\CM2ModelManager.h"
 #include	"engine\CM2Entity.h"
 #include	"engine\CM2Ped.h"
 #include	"engine\CM2Vehicle.h"
 #include	"CM2Camera.h"
+
+#include	"CModelManager.h"
 
 #include	"CMafia.h"
 #include	"Game\CGame.h"
@@ -109,10 +112,10 @@ void CLocalPlayer::Pulse( void )
 	}
 
 	// Store controls
-	C_PlayerControls playerControls = m_pPlayerPed->GetPed()->m_playerControls;
+	M2PlayerControls playerControls = m_pPlayerPed->GetPed()->m_playerControls;
 
 	// Is our move state still the same ?
-	int newState = playerControls.m_ePlayerMovementState;
+	int newState = playerControls.m_playerMovementState;
 
 	// State changed and not locked ?
 	if (m_oldMoveState != newState && CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->AreControlsLocked() == false)
@@ -255,9 +258,6 @@ void CLocalPlayer::SendOnFootSync( void )
 
 	// Get the shooting state
 	onFootSync.m_bShooting = CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->IsShooting();
-
-	// Get the crouching state
-	onFootSync.m_bCrouching = m_pPlayerPed->IsCrouching();
 
 	// Write the model index
 	onFootSync.m_uiModelIndex = Game::GetIdFromPlayerModel ( m_pPlayerModelManager->GetModelName() );

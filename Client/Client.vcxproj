@@ -288,6 +288,7 @@
     <ClInclude Include="engine\CM2Door.h" />
     <ClInclude Include="engine\CM2Entity.h" />
     <ClInclude Include="engine\CM2Misc.h" />
+    <ClInclude Include="engine\CM2ModelManager.h" />
     <ClInclude Include="engine\CM2Navigation.h" />
     <ClInclude Include="engine\CM2Object.h" />
     <ClInclude Include="engine\CM2ObjectTable.h" />
@@ -455,6 +456,7 @@
     <ClCompile Include="engine\CM2Door.cpp" />
     <ClCompile Include="engine\CM2Entity.cpp" />
     <ClCompile Include="engine\CM2Misc.cpp" />
+    <ClCompile Include="engine\CM2ModelManager.cpp" />
     <ClCompile Include="engine\CM2Navigation.cpp" />
     <ClCompile Include="engine\CM2ObjectTable.cpp" />
     <ClCompile Include="engine\CM2Ped.cpp" />

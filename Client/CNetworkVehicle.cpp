@@ -133,7 +133,7 @@ void CNetworkVehicle::Create( void )
 		return;
 
 	// Create the vehicle instance
-	m_pVehicle = new CM2Vehicle ( IE::CreateVehicle ( m_pVehicleModelManager, m_vecSpawnPosition ) );
+	m_pVehicle = IE::CreateWrapperVehicle(m_pVehicleModelManager);
 
 #ifdef DEBUG
 	CLogFile::Printf ( "CNetworkVehicle< %d >::Create( ) - Wrapper Vehicle: 0x%p, Engine vehicle: 0x%p", m_vehicleId, m_pVehicle, (m_pVehicle ? m_pVehicle->GetVehicle () : NULL) );

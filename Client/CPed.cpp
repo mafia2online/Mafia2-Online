@@ -53,12 +53,12 @@ void CPed::Create(CVector3 vecPosition, CVector3 vecRotation)
 	Game::GetPlayerModelFromId(m_uiModelIndex, &strModel, &strDirectory);
 
 	// Try load the ped model
-	m_pPedModelManager = CNetworkModelManager::Load(strDirectory.Get(), strModel.Get());
+	m_pPedModelManager = CCore::Instance()->GetModelManager()->Load(strDirectory.Get(), strModel.Get());
 
 	CLogFile::Printf("Loaded! 0x%p", m_pPedModelManager);
 
 	// Create the ped
-	m_pPed = new CM2Ped(IE::CreatePed(m_pPedModelManager, vecPosition));
+	m_pPed = IE::CreateWrapperPed(m_pPedModelManager);
 
 	CLogFile::Printf("Ped created. 0x%p", m_pPed);
 
@@ -73,7 +73,7 @@ void CPed::Destroy()
 		m_pPed->Deactivate();
 	}
 	// Free the model
-	CNetworkModelManager::Unload(m_pPedModelManager);
+	CCore::Instance()->GetModelManager()->Free(m_pPedModelManager);
 
 	// Destroy the ped
 	SAFE_DELETE(m_pPed);

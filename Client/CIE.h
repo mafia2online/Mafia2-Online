@@ -10,24 +10,30 @@
 
 #pragma once
 
-#include "CCommon.h"
+#include	"CCommon.h"
+
+#include	"engine\CM2Entity.h"
+#include	"engine\CM2Ped.h"
+#include	"engine\CM2ModelManager.h"
+#include	"CM2ScriptMachine.h"
 
 class CVector3;
 
 enum E_ObjType : unsigned char
 {
-	OBJTYPE_Human			=	0xE, // 14
-	OBJTYPE_Player			=	0x10, // 16
-	OBJTYPE_Car				=	0x12, // 18
-	OBJTYPE_Train			=	0x13, // 19
-	OBJTYPE_TrafficHuman	=	0x16, // 22
-	OBJTYPE_Item			=	0x24, // 36
-	OBJTYPE_Door			=	0x26, // 28
-	OBJTYPE_UNK1			=	0x27, // 39 - Maybe something like crashobject
-	OBJTYPE_UNK2			=	0x34, // 52 - Maybe something like crashobject (again ?)
-	OBJTYPE_UNK3			=	0x42, // 66 - Something related to car
-	OBJTYPE_UNK4			=	0x47, // 71 - Related to crashobject (again ??)
-
+	OBJTYPE_Human = 0xE, // 14
+	OBJTYPE_Player = 0x10, // 16
+	OBJTYPE_Car = 0x12, // 18
+	OBJTYPE_Train = 0x13, // 19
+	OBJTYPE_TrafficHuman = 0x16, // 22
+	OBJTYPE_Item = 0x24, // 36
+	OBJTYPE_Door = 0x26, // 28
+	OBJTYPE_UNK1 = 0x27, // 39 - Unknow
+	OBJTYPE_UNK2 = 0x2D, // 45 - Unknow
+	OBJTYPE_UNK3 = 0x2E, // 46 - Unknow
+	OBJTYPE_UNK4 = 0x34, // 52 - Function similar to UNK1 but unknow
+	OBJTYPE_UNK5 = 0x42, // 66 - Something related to car
+	OBJTYPE_UNK6 = 0x47 // 71 - Related to crashobject
 };
 
 class M2Window
@@ -45,21 +51,21 @@ public:
 	// 0x20 = window name
 
 	// Maybe it's just marking as minimized?
-	void SetMinimized( bool bMinimized )
+	void SetMinimized(bool bMinimized)
 	{
-		DWORD dwFunc = 0x57BDE0; //Todo: Move to COffsets
+		DWORD dwFunc = 0x57BDE0;
 
 		_asm push bMinimized;
 		_asm mov ecx, this;
 		_asm call dwFunc;
 	}
 
-	bool HasFocus( void )
+	bool HasFocus(void)
 	{
 		return m_bFocus;
 	}
 
-	static M2Window * GetInstance( void );
+	static M2Window * GetInstance(void);
 };
 
 class M2GameVFTable
@@ -82,13 +88,11 @@ public:
 	void* m_pUnknown;
 };
 
-class M2Ped;
 class M2Game
 {
 public:
 	M2GameVFTable * m_pVFTable;					// 0000 - 0004
-	// 0x4 = BYTE m_byteFlags;
-	PAD(M2Game, pad0, 0x4);						// 0004 - 0008
+	DWORD m_dwFlags;						// 0004 - 0008
 	DWORD m_dwRunTime;							// 0008 - 000C
 	// 0xC = Pointer to unknown class that contains LoadActorsFromFile
 	// 0x9 = actors bin directory (char *)
@@ -104,17 +108,27 @@ public:
 	// 0x130 = Entity Pool Size (DWORD)
 	// 0x144 = Entity Pool
 
-	static M2Game * GetInstance( void );
+	static M2Game * GetInstance(void);
+
+	void SetEntityAtIndex(int iIndex, M2Entity * pEntity)
+	{
+		// Get the function address
+		DWORD dwFunc = m_pVFTable->SetEntityAtIndex;
+
+		_asm push iIndex;
+		_asm push pEntity;
+		_asm mov ecx, this;
+		_asm call dwFunc;
+	}
 
 	// 1370 total indexs - fuck knows what kind of entitys there is. (Index 0 = LocalPlayer from 0x118)
-	void * GetEntityFromIndex( int iIndex )
+	M2Entity * GetEntityFromIndex(int iIndex)
 	{
-		void * pReturn = NULL;
+		M2Entity * pReturn = NULL;
 
-		// Get the function pointer
+		// Get the function address
 		DWORD dwFunc = m_pVFTable->GetEntityFromIndex;
 
-		// Execute the function
 		_asm push iIndex;
 		_asm mov ecx, this;
 		_asm call dwFunc;
@@ -124,61 +138,40 @@ public:
 	}
 };
 
-class M2ScriptHandler;
-
 class M2ScriptEngine
 {
 public:
 	void * m_pVFTable;							// 0000 - 0004
 	M2ScriptHandler * m_pScriptHandler;			// 0004 - 0008
 
-	static M2ScriptEngine * GetInstance( void );
+	static M2ScriptEngine * GetInstance(void);
 };
 
 class M2WrapperList
 {
 public:
-	static M2WrapperList * GetInstance( void );
+	static M2WrapperList * GetInstance(void);
 };
-
-class M2VehiclePool
-{
-public:
-	PAD(M2VehiclePool, pad0, 0x4);				// 0000 - 0004
-
-	// 0x20 = Class
-	// 0x3C = Class (M2VehicleBaseEntity) - Maybe get the localplayer active vehicle?
-	//	+ 0x4 = M2VehicleEntity
-	//		+ 0xC = m_guid
-
-	static M2VehiclePool * GetInstance( void );
-};
-
-// forward decl
-class M2BaseEntity;
-class M2Entity;
-class M2Vehicle;
-class M2ModelMgr;
-
-struct lua_State;
 
 namespace IE
 {
-	void				* Malloc( size_t uiSize );
+	void				* alloc(int size);
+	void				free(void * memory);
 
-	M2Game				* GetGame( void );
-	M2Window			* GetWindow( void );
-	M2ScriptEngine		* GetScriptEngine( void );
-	M2WrapperList		* GetWrapperList( void );
-	M2VehiclePool		* GetVehiclePool( void );
+	M2Game				* GetGame(void);
+	M2Window			* GetWindow(void);
+	M2ScriptEngine		* GetScriptEngine(void);
+	M2WrapperList		* GetWrapperList(void);
 
-	bool				LoadPointers( void );
-	HWND				GetWindowHandle( void );
-	lua_State			* GetState( void );
+	bool				LoadPointers(void);
+	HWND				GetWindowHandle(void);
+	lua_State			* GetState(void);
 
-	M2BaseEntity		* GetEntityByName( const char * szEntityName );
-	M2Ped				* CreatePlayerPed ( void );
-	M2Entity			* CreateItem( const CVector3& vecPosition );
-	M2Ped				* CreatePed( M2ModelMgr * pModelMgr, const CVector3& vecPosition );
-	M2Vehicle			* CreateVehicle( M2ModelMgr * pModelMgr, const CVector3& vecPosition );
+	M2Ped				* CreateEnginePed(M2ModelManager * pModelManager);
+	M2Vehicle			* CreateEngineVehicle(M2ModelManager * pModelManager);
+
+	M2Ped				* CreateEnginePlayerPed(M2ModelManager * pModelManager);
+
+	CM2Ped				* CreateWrapperPed(CM2ModelManager * pModelManager);
+	CM2Vehicle			* CreateWrapperVehicle(CM2ModelManager * pModelManager);
 };

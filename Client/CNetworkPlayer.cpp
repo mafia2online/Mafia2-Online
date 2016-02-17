@@ -16,6 +16,7 @@
 #include	"Math\CMaths.h"
 
 #include	"CM2Enums.h"
+#include	"engine\CM2ModelManager.h"
 #include	"engine\CM2Entity.h"
 #include	"engine\CM2Ped.h"
 #include	"engine\CM2Vehicle.h"
@@ -91,7 +92,7 @@ CNetworkPlayer::CNetworkPlayer( bool bLocalPlayer )
 		m_pPlayerPed = new CM2Ped( IE::GetGame()->m_pLocalPed );
 
 		// Set the localplayer model manager instance
-		m_pPlayerModelManager = *(M2ModelMgr **)( 0x1AACDAC );
+		m_pPlayerModelManager = *(CM2ModelManager **)( 0x1AACDAC );
 
 		// Update the model index
 		m_uiModelIndex = Game::GetIdFromPlayerModel ( m_pPlayerModelManager->GetModelName () );
@@ -134,7 +135,7 @@ void CNetworkPlayer::Create( void )
 		return;
 
 	// Create the playerped instance
-	m_pPlayerPed = new CM2Ped( IE::CreatePed( m_pPlayerModelManager, CVector3() ) );
+	m_pPlayerPed = IE::CreateWrapperPed(m_pPlayerModelManager);
 
 	// Did the playerped instance fail to create?
 	if( !m_pPlayerPed )
@@ -555,8 +556,8 @@ void CNetworkPlayer::RemoveWeapon( DWORD dwWeapon, DWORD dwAmmo )
 bool CNetworkPlayer::IsMoving(void)
 {
 	// Is the player ped valid?
-	if ( m_pPlayerPed )
-		return m_pPlayerPed->IsMoving();
+	/*if ( m_pPlayerPed )
+		return m_pPlayerPed->IsMoving();*/
 
 	return false;
 }

@@ -11,13 +11,14 @@
 
 #include	"CCore.h"
 
+#include	"engine\CM2ModelManager.h"
 #include	"CModelManager.h"
 
 #include	"CNetworkModelManager.h"
 
 std::list< CNetworkModel* > CNetworkModelManager::m_loadedModels;
 
-CNetworkModel::CNetworkModel( M2ModelMgr * pModelMgr, const char * szModel )
+CNetworkModel::CNetworkModel( CM2ModelManager * pModelMgr, const char * szModel )
 {
 	//
 	m_pModelMgr = pModelMgr;
@@ -39,7 +40,7 @@ CNetworkModel::~CNetworkModel( void )
 	m_strModelName.clear();
 }
 
-M2ModelMgr * CNetworkModelManager::Load( const char * szDir, const char * szModel )
+CM2ModelManager * CNetworkModelManager::Load(const char * szDir, const char * szModel)
 {
 	// Try get the network model
 	CNetworkModel * pNetModel = Get( szModel );
@@ -48,7 +49,7 @@ M2ModelMgr * CNetworkModelManager::Load( const char * szDir, const char * szMode
 	if( !pNetModel )
 	{
 		// Try get the model from the SDS model manager
-		M2ModelMgr * pModelMgr = CCore::Instance()->GetModelManager()->GetModelMgrByName( szModel );
+		CM2ModelManager * pModelMgr = CCore::Instance()->GetModelManager()->GetModelManagerByName(szModel);
 
 		// Is the model not loaded?
 		if( CCore::Instance()->GetModelManager() && !pModelMgr )
@@ -57,7 +58,7 @@ M2ModelMgr * CNetworkModelManager::Load( const char * szDir, const char * szMode
 			CLogFile::Printf( "CNetworkModelManager::Load() - Loading model '%s' (%s)", szModel, szDir );
 #endif
 			// Load the model
-			pModelMgr = CCore::Instance()->GetModelManager()->LoadModel( szDir, szModel );
+			pModelMgr = CCore::Instance()->GetModelManager()->Load( szDir, szModel );
 		}
 
 #ifdef DEBUG
@@ -80,7 +81,7 @@ M2ModelMgr * CNetworkModelManager::Load( const char * szDir, const char * szMode
 	return pNetModel->m_pModelMgr;
 }
 
-void CNetworkModelManager::Unload( M2ModelMgr * pModelMgr )
+void CNetworkModelManager::Unload(CM2ModelManager * pModelMgr)
 {
 	// Try get the network model
 	CNetworkModel * pNetModel = Get( pModelMgr );
@@ -127,7 +128,7 @@ CNetworkModel * CNetworkModelManager::Get( const char * szModel )
 	return NULL;
 }
 
-CNetworkModel * CNetworkModelManager::Get( M2ModelMgr * pModelMgr )
+CNetworkModel * CNetworkModelManager::Get(CM2ModelManager * pModelMgr)
 {
 	// Loop over our list
 	for( std::list< CNetworkModel* >::iterator iter = m_loadedModels.begin(); iter != m_loadedModels.end(); iter++ )

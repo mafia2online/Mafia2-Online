@@ -11,6 +11,7 @@
 
 #include	"CString.h"
 
+#include	"engine\CM2ModelManager.h"
 #include	"engine\CM2Entity.h"
 #include	"engine\CM2Ped.h"
 #include	"engine\CM2Vehicle.h"
@@ -41,7 +42,7 @@ private:
 
 	CM2Ped							* m_pPlayerPed;
 	CNetworkVehicle					* m_pVehicle;
-	M2ModelMgr						* m_pPlayerModelManager;
+	CM2ModelManager					* m_pPlayerModelManager;
 	unsigned int					m_uiModelIndex;
 	EntityId						m_seat;
 
