@@ -89,14 +89,24 @@ CNetworkPlayer::CNetworkPlayer( bool bLocalPlayer )
 	if( IsLocalPlayer() )
 	{
 		// Get the player ped instance
-		m_pPlayerPed = new CM2Ped( IE::GetGame()->m_pLocalPed );
+		m_pPlayerPed = new CM2Ped ( IE::GetGame()->m_pLocalPed );
 
 		// Set the localplayer model manager instance
-		m_pPlayerModelManager = *(CM2ModelManager **)( 0x1AACDAC );
+		m_pPlayerModelManager = new CM2ModelManager ( *(M2ModelManager **)(0x1AACDAC) );
 
 		// Update the model index
 		m_uiModelIndex = Game::GetIdFromPlayerModel ( m_pPlayerModelManager->GetModelName () );
 	}
+}
+
+void CNetworkPlayer::Pulse(void)
+{
+	// Are we not spawned or in a vehicle?
+	if (!IsSpawned() || IsInVehicle())
+		return;
+
+	// Interpolate
+	Interpolate();
 }
 
 CNetworkPlayer::~CNetworkPlayer( void )
@@ -122,10 +132,6 @@ void CNetworkPlayer::Create( void )
 	// Get the model name and directory
 	String strModel, strDirectory;
 	Game::GetPlayerModelFromId( m_uiModelIndex, &strModel, &strDirectory );
-
-#ifdef DEBUG
-	CLogFile::Printf( "CNetworkPlayer< %d >::Create( %d ) - Building ped with model '%s' (%s)...", m_playerId, m_uiModelIndex, strModel.Get(), strDirectory.Get() );
-#endif
 
 	// Try load the player model
 	m_pPlayerModelManager = CNetworkModelManager::Load( strDirectory.Get(), strModel.Get() );
@@ -164,6 +170,9 @@ void CNetworkPlayer::Create( void )
 
 	// Mark as spawned
 	SetSpawned( true );
+
+	// Reset interpolation
+	ResetInterpolation();
 
 	// Set the initial state
 	m_playerState = ePlayerState::PLAYERSTATE_ONFOOT;
@@ -690,22 +699,22 @@ void CNetworkPlayer::UpdateShot( bool bShooting )
 void CNetworkPlayer::GiveMoney( int iAmount )
 {
 	// Is the player ped valid?
-	//if( m_pPlayerPed )
-	//	m_pPlayerPed->GiveMoney ( iAmount );
+	if( m_pPlayerPed )
+		m_pPlayerPed->AddMoney ( iAmount, 0 );//Todo: add cents management
 }
 
 void CNetworkPlayer::RemoveMoney( int iAmount )
 {
 	// Is the player ped valid?
-	//if( m_pPlayerPed )
-	//	m_pPlayerPed->RemoveMoney ( iAmount );
+	if( m_pPlayerPed )
+		m_pPlayerPed->RemoveMoney ( iAmount,0 );//Todo: add cents management
 }
 
 int CNetworkPlayer::GetMoney( void )
 {
 	// Is the player ped valid?
-	//if( m_pPlayerPed )
-	//	return m_pPlayerPed->GetMoney ();
+	if( m_pPlayerPed )
+		return m_pPlayerPed->GetMoney ();
 
 	return 0;
 }
@@ -769,6 +778,173 @@ M2Enums::eEntityState CNetworkPlayer::GetEntityState( bool bLatest )
 		return (M2Enums::eEntityState)m_pPlayerPed->GetState();
 
 	return m_lastState;
+}
+
+void CNetworkPlayer::Interpolate(void)
+{
+	// Update the position interpolation
+	UpdateTargetPosition();
+
+	// Update the direction interpolateion
+	UpdateTargetDirection();
+}
+
+void CNetworkPlayer::ResetInterpolation(void)
+{
+	// Remove the position interpolation
+	RemoveTargetPosition();
+
+	// Remove the direction interpolation
+	RemoveTargetDirection();
+}
+
+void CNetworkPlayer::SetTargetPosition(CVector3 vecPosition)
+{
+	// Are we not spawned?
+	if (!IsSpawned())
+		return;
+
+	// Update position interpolation
+	UpdateTargetPosition();
+
+	// Get the current player position
+	CVector3 vecCurrentPosition;
+	GetPosition(&vecCurrentPosition);
+
+	// Set the target position
+	m_interp.position.vecTarget = vecPosition;
+
+	// Calculate the error
+	m_interp.position.vecError = (vecPosition - vecCurrentPosition);
+
+	// Calculate the interpolation time
+	unsigned long ulCurrentTime = SharedUtility::GetTime();
+	m_interp.position.ulStartTime = ulCurrentTime;
+	m_interp.position.ulFinishTime = (ulCurrentTime + (NETWORK_TICKRATE * 2));
+
+	// Start the interpolation
+	m_interp.position.fLastAlpha = 0.0f;
+}
+
+void CNetworkPlayer::UpdateTargetPosition(void)
+{
+	// Do we not have a target position?
+	if (!HasTargetPosition())
+		return;
+
+	// Get the current time
+	unsigned long ulCurrentTime = SharedUtility::GetTime();
+
+	// Get the factor of time spent from the interpolation start to now
+	float fAlpha = Math::Clamp(0.0f, Math::Unlerp(m_interp.position.ulStartTime, ulCurrentTime, m_interp.position.ulFinishTime), 1.0f);
+
+	// Calculate the current error to compensate
+	float fCurrentAlpha = (fAlpha - m_interp.position.fLastAlpha);
+
+	// Set the last alpha
+	m_interp.position.fLastAlpha = fAlpha;
+
+	// Apply the error compensation
+	CVector3 vecCompensation = Math::Lerp(CVector3(), fCurrentAlpha, m_interp.position.vecError);
+
+	// If we're finished compensating the error, wait until next frame
+	if (fAlpha == 1.0f)
+		m_interp.position.ulFinishTime = 0;
+
+	// Get the current player position
+	CVector3 vecCurrentPosition;
+	GetPosition(&vecCurrentPosition);
+
+	// Calculate the new position
+	CVector3 vecPosition = (vecCurrentPosition + vecCompensation);
+
+	// Is the interpolation distance too far?
+	if ((vecCurrentPosition - m_interp.position.vecTarget).Length() > 5)
+	{
+		// Abort interpolation
+		m_interp.position.ulFinishTime = 0;
+		vecPosition = m_interp.position.vecTarget;
+	}
+
+	// Update the new position
+	Teleport(vecPosition);
+}
+
+void CNetworkPlayer::RemoveTargetPosition(void)
+{
+	// Remove the interpolation finish time
+	m_interp.position.ulFinishTime = 0;
+}
+
+
+void CNetworkPlayer::SetTargetDirection(CVector3 vecDirection)
+{
+	// Are we not spawned?
+	if (!IsSpawned())
+		return;
+
+	// Update direction interpolation
+	UpdateTargetDirection();
+
+	// Get the current player direction
+	CVector3 vecCurrentDirection;
+	m_pPlayerPed->GetDirection(&vecCurrentDirection);
+
+	// Set the target direction
+	m_interp.direction.vecTarget = vecDirection;
+
+	// Calculate the error
+	m_interp.direction.vecError = (vecDirection - vecCurrentDirection);
+
+	// Calculate the interpolation time
+	unsigned long ulCurrentTime = SharedUtility::GetTime();
+	m_interp.direction.ulStartTime = ulCurrentTime;
+	m_interp.direction.ulFinishTime = (ulCurrentTime + (NETWORK_TICKRATE * 2));
+
+	// Start the interpolation
+	m_interp.direction.fLastAlpha = 0.0f;
+}
+
+void CNetworkPlayer::UpdateTargetDirection(void)
+{
+	// Do we not have a target direction?
+	if (!HasTargetDirection())
+		return;
+
+	// Get the current time
+	unsigned long ulCurrentTime = SharedUtility::GetTime();
+
+	// Get the factor of time spent from the interpolation start to now
+	float fAlpha = Math::Clamp(0.0f, Math::Unlerp(m_interp.direction.ulStartTime, ulCurrentTime, m_interp.direction.ulFinishTime), 1.0f);
+
+	// Calculate the current error to compensate
+	float fCurrentAlpha = (fAlpha - m_interp.direction.fLastAlpha);
+
+	// Set the last alpha
+	m_interp.direction.fLastAlpha = fAlpha;
+
+	// Apply the error compensation
+	CVector3 vecCompensation = Math::Lerp(CVector3(), fCurrentAlpha, m_interp.direction.vecError);
+
+	// If we're finished compensating the error, wait until next frame
+	if (fAlpha == 1.0f)
+		m_interp.direction.ulFinishTime = 0;
+
+	// Get the current player direction
+	CVector3 vecCurrentDirection;
+	m_pPlayerPed->GetDirection(&vecCurrentDirection);
+
+	// Calculate the new direction
+	CVector3 vecDirection = (vecCurrentDirection + vecCompensation);
+
+	// Set the new direction
+	m_pPlayerPed->SetDirection(vecDirection);
+}
+
+void CNetworkPlayer::RemoveTargetDirection(void)
+{
+	// Remove the interpolation finish time
+	m_interp.direction.ulFinishTime = 0;
 }
 
 void CNetworkPlayer::EnterVehicle( CNetworkVehicle * pVehicle, M2Enums::eVehicleSeat seat, bool bEnter )

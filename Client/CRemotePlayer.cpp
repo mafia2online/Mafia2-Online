@@ -44,6 +44,9 @@ void CRemotePlayer::Pulse( void )
 {
 	DEBUG_TRACE("CRemotePlayer::Pulse");
 
+	// Pulse the network player
+	CNetworkPlayer::Pulse();
+
 	// Are we spawned?
 	if ( IsSpawned() )
 	{
