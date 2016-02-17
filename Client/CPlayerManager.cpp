@@ -123,7 +123,7 @@ void CPlayerManager::Pulse( void )
 	for( EntityId i = 0; i < MAX_PLAYERS; i++ )
 	{
 		// Is the current player active?
-		if( IsActive(i) && i != m_pLocalPlayer->GetId())
+		if( IsActive(i) )
 		{
 			// Pulse this player
 			m_pNetworkPlayer[i]->Pulse ();
