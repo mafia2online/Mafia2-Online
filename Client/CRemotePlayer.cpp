@@ -167,10 +167,10 @@ void CRemotePlayer::StoreOnFootSync( OnFootSync * onFootSync )
 			SetModel( onFootSync->m_uiModelIndex );
 
 		// Update the animStyle
-		CCore::Instance()->GetPlayerManager()->Get(m_playerId)->SetAnimStyle(onFootSync->m_styleDirectory, onFootSync->m_styleName);
+		SetAnimStyle(onFootSync->m_styleDirectory, onFootSync->m_styleName);
 		
 		// Update the handModel
-		CCore::Instance()->GetPlayerManager()->Get(m_playerId)->SetHandModel(onFootSync->m_iHand, onFootSync->m_iHandModel);
+		SetHandModel(onFootSync->m_iHand, onFootSync->m_iHandModel);
 	}
 	else
 	{
