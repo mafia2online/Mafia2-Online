@@ -195,7 +195,7 @@ public:
 	C_SyncObject			* ShootAt(CVector3 vecPosition);
 	C_SyncObject			* LookAt(CVector3 vecPosition);
 
-	void					PlayAnimation(char *strAnimation);
+	void					PlayAnimation(char *strAnimation, bool bRepeat);
 	void					StopAnimation(char *strAnimation);
 	bool					IsAnimFinished(char *strAnimation);
 
