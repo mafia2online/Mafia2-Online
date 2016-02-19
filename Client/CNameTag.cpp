@@ -150,14 +150,15 @@ void CNameTag::DrawPlayer(void)
 
 		int healthWidth = (int)( ( ( Math::Clamp< float > ( 0.0, pRemotePlayer->GetHealth(), 720 ) * 100 ) / 720 ) / 100 * ( BOX_WIDTH - 4 ) );
 
-		DWORD color = pRemotePlayer->GetColour();
+
+		CColor colour(pRemotePlayer->GetColour(), true);
 
 		playerPos.fZ += PLAYER_NAMETAG_Z_OFFSET;
 
 		CVector3 vecScreen;
 		pCore->GetGraphics()->WorldToScreen ( playerPos, &vecScreen );
 
-		pGraphics->DrawText ( (vecScreen.fX - dimensionWidth / 2) + 1, vecScreen.fY + 1, color, NAMETAG_SCALE, "tahoma-bold", false, text.Get() );
+		pGraphics->DrawText ( (vecScreen.fX - dimensionWidth / 2) + 1, vecScreen.fY + 1, colour.dwHexColor, NAMETAG_SCALE, "tahoma-bold", false, text.Get() );
 
 		pGraphics->DrawBox ( (vecScreen.fX - (BOX_WIDTH / 2)), (vecScreen.fY + 16.0), BOX_WIDTH, BOX_HEIGHT, colBackground.dwHexColor );
 		pGraphics->DrawBox ( (vecScreen.fX - (BOX_WIDTH / 2) + 2.0), (vecScreen.fY + 18.0), (BOX_WIDTH - 4.0), (BOX_HEIGHT - 4.0), colInnerBackground.dwHexColor );
