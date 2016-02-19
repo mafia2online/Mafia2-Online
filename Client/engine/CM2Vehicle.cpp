@@ -574,8 +574,6 @@ bool CM2Vehicle::IsBeaconLightOn(void)
 	{
 		DWORD dwVehicleData = (DWORD)(m_pVehicle)  + 0xA8;
 		DWORD retn = (*(DWORD *)(dwVehicleData + 0x6F0 - 1) & 0x40);
-		CCore::Instance()->GetChat()->AddDebugMessage("LightOn : %02X", retn);
-
 		return (retn);
 	}
 
