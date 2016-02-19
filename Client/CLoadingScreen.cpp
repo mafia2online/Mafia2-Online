@@ -25,50 +25,44 @@
 #include	"CLoadingScreen.h"
 
 CGUIStaticImage_Impl	* CLoadingScreen::m_pLogo = NULL;
-CGUIStaticImage_Impl	* CLoadingScreen::m_pLogoM2MP = NULL;
-CGUIStaticImage_Impl	* CLoadingScreen::m_pLogoRakNet = NULL;
+CGUIStaticImage_Impl	* CLoadingScreen::m_pLogotypes = NULL;
 
 void CLoadingScreen::Start( void )
 {
 	float fX = CCore::Instance()->GetGUI()->GetCEGUI()->GetResolution().fX;
 	float fY = CCore::Instance()->GetGUI()->GetCEGUI()->GetResolution().fY;
+	float fXhalf = (fX / 2);
+	float fYhalf = (fY / 2);
+	float fPadding[2] = { 25.0, 25.0 };
 
 	// Create the gui image
 	m_pLogo = CCore::Instance()->GetGUI()->GetCEGUI()->CreateStaticImage();
-	m_pLogoM2MP = CCore::Instance()->GetGUI()->GetCEGUI()->CreateStaticImage();
-	m_pLogoRakNet = CCore::Instance()->GetGUI()->GetCEGUI()->CreateStaticImage();
+	m_pLogotypes = CCore::Instance()->GetGUI()->GetCEGUI()->CreateStaticImage();
 
 	// Logo Mafia2-Online
 	m_pLogo->LoadFromFile("loadingscreen.png", SharedUtility::GetAbsolutePath("data\\gui\\images"));
-	m_pLogo->SetPosition(Vector2((fX - 512), (fY - 256)));
+	m_pLogo->SetPosition(Vector2((fXhalf - 512), (fYhalf - 256)));
 	m_pLogo->SetSize(Vector2(1024, 512));
 	m_pLogo->SetAlwaysOnTop(true);
 
-	// Logo RakNet
-	m_pLogoRakNet->LoadFromFile("logo_raknet.jpg", SharedUtility::GetAbsolutePath("data\\gui\\images"));
-	m_pLogoRakNet->SetPosition(Vector2((fX + 700), (fY + 320)));
-	m_pLogoRakNet->SetSize(Vector2(152, 152));
-	m_pLogoRakNet->SetAlwaysOnTop(true);
-
-	// Logo M2MP
-	m_pLogoM2MP->LoadFromFile("logo_m2mp.png", SharedUtility::GetAbsolutePath("data\\gui\\images"));
-	m_pLogoM2MP->SetPosition(Vector2((fX - 950), (fY + 270)));
-	m_pLogoM2MP->SetSize(Vector2(500, 250));
-	m_pLogoM2MP->SetAlwaysOnTop(true);
+	// Other logo
+	m_pLogotypes->LoadFromFile("loadingscreen_logos.png", SharedUtility::GetAbsolutePath("data\\gui\\images"));
+	m_pLogotypes->SetPosition(Vector2((fX - 493 - fPadding[0]), (fY - 85 - fPadding[1])));
+	m_pLogotypes->SetSize(Vector2(493, 85));
+	m_pLogotypes->SetAlwaysOnTop(true);
 }
 
 void CLoadingScreen::Finish( void )
 {
 	// Destroy the gui image instance
 	SAFE_DELETE(m_pLogo);
-	SAFE_DELETE(m_pLogoM2MP);
-	SAFE_DELETE(m_pLogoRakNet);
+	SAFE_DELETE(m_pLogotypes);
 }
 
 void CLoadingScreen::Render ( void )
 {
 	// Is the image valid?
-	if (m_pLogo && m_pLogoRakNet && m_pLogoM2MP)
+	if (m_pLogo && m_pLogotypes)
 	{
 		// Draw a black box over the screen
 		CCore::Instance()->GetGraphics()->DrawBox(0, 0, CCore::Instance()->GetGUI()->GetCEGUI()->GetResolution().fX, CCore::Instance()->GetGUI()->GetCEGUI()->GetResolution().fY, 0xFF000000);

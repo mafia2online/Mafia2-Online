@@ -157,6 +157,8 @@ void CNetworkModule::Disconnect( bool bRestart )
 		// Clear the chat
 		CCore::Instance()->GetChat()->Clear ();
 		CCore::Instance()->GetChat()->ClearHistory ();
+		CCore::Instance()->GetChat()->ClearSelectText();
+		CCore::Instance()->GetChat()->ClearInputText();	
 
 		// Reset player model
 		//pCore->GetPlayerManager()->GetLocalPlayer()->SetModel ( 10 );

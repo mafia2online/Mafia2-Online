@@ -46,6 +46,7 @@ void CPlayerNatives::Register( CScriptingManager * pScriptingManager )
 	pScriptingManager->RegisterFunction( "getPlayerRotation", GetRotation, 1, "i" );
 	pScriptingManager->RegisterFunction( "getPlayerHealth", GetHealth, 1, "i" );
 	pScriptingManager->RegisterFunction( "togglePlayerControls", ToggleControls, 1, "b" );
+	pScriptingManager->RegisterFunction( "isTogglePlayerControls", IsToggleControls, 0, NULL );
 	pScriptingManager->RegisterFunction( "isPlayerInVehicle", IsInVehicle, 1, "i" );
 	pScriptingManager->RegisterFunction( "getPlayerVehicle", GetVehicle, 1, "i" );
 	pScriptingManager->RegisterFunction( "setPlayerDrunkLevel", SetDrunkLevel, 1, "i");
@@ -351,6 +352,13 @@ SQInteger CPlayerNatives::ToggleControls( SQVM * pVM )
 	CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->LockControls( bToggle );
 
 	sq_pushbool( pVM, true );
+	return 1;
+}
+
+// isTogglePlayerControls( bool bToggle );
+SQInteger CPlayerNatives::IsToggleControls( SQVM * pVM )
+{
+	sq_pushbool( pVM, CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->AreControlsLocked() );
 	return 1;
 }
 
