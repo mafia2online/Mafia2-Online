@@ -635,14 +635,14 @@ void CCore::OnGameProcess( void )
 	// DEBUG
 	if( GetAsyncKeyState( VK_F8 ) & 0x1 )
 	{
-		CVector3 vecPos;
+		/*CVector3 vecPos;
 		m_pPlayerManager->GetLocalPlayer()->GetPosition ( &vecPos );
 
 		pPlayerPed = new CM2Ped ( IE::CreatePlayerPed () );
 		pPlayerPed->SetPosition ( vecPos );
 		pPlayerPed->Activate ();
 
-		CCore::Instance()->GetChat()->AddDebugMessage ( "Ped: 0x%p", pPlayerPed->GetPed() );
+		CCore::Instance()->GetChat()->AddDebugMessage ( "Ped: 0x%p", pPlayerPed->GetPed() );*/
 	}
 
 	if (GetAsyncKeyState(VK_F7) & 0x1)
