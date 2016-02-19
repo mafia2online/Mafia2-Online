@@ -74,7 +74,7 @@ CNetworkVehicle::CNetworkVehicle( void )
 	m_lastSyncData.m_model = 0;
 	memcpy( &m_lastSyncData.m_primaryColour, &predefinedColours[ rand() % 20 ], sizeof(CColor) );
 	memcpy( &m_lastSyncData.m_secondaryColour, &predefinedColours[ rand() % 20 ], sizeof(CColor) );
-	strcpy( m_lastSyncData.m_szPlateText, "EB01" );
+	strcpy( m_lastSyncData.m_szPlateText, String("EB%d", m_vehicleId).Get() );
 	m_lastSyncData.m_bLightState = false;
 }
 

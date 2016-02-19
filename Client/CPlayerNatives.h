@@ -25,6 +25,7 @@ private:
 	static	SQInteger		GetRotation( SQVM * pVM );
 	static	SQInteger		GetHealth( SQVM * pVM );
 	static	SQInteger		ToggleControls( SQVM * pVM );
+	static	SQInteger		IsToggleControls( SQVM * pVM );
 	static	SQInteger		IsInVehicle( SQVM * pVM );
 	static	SQInteger		GetVehicle( SQVM * pVM );
 
