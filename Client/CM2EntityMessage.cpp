@@ -29,14 +29,12 @@ bool CM2EntityMessage::HandleEntityEvent( M2EntityMessage * pMessage )
 	if( !pMessage )
 		return false;
 
-	CCore *pCore = CCore::Instance();
-
 	// Is the localplayer instance invalid?
-	if( !pCore->GetPlayerManager() || !pCore->GetPlayerManager()->GetLocalPlayer() )
+	if( !CCore::Instance()->GetPlayerManager() || !CCore::Instance()->GetPlayerManager()->GetLocalPlayer() )
 		return false;
 
 	// Get the localplayer
-	CLocalPlayer * pLocalPlayer = pCore->GetPlayerManager()->GetLocalPlayer();
+	CLocalPlayer * pLocalPlayer = CCore::Instance()->GetPlayerManager()->GetLocalPlayer();
 
 	// Get the localplayer ped
 	CM2Ped * pLocalPed = pLocalPlayer->GetPlayerPed();
@@ -49,58 +47,66 @@ bool CM2EntityMessage::HandleEntityEvent( M2EntityMessage * pMessage )
 			
 		case M2Enums::ON_USE_DOOR:
 			{
-				pCore->GetChat()->AddDebugMessage( "DOOR_OPEN (0x%p, %d, %d, %d, %d)", pMessage, pMessage->m_dwSenderGUID, pMessage->m_dwReceiveGUID, pMessage->m_dwUnknown1, pMessage->m_dwUnknown2 );
+				CCore::Instance()->GetChat()->AddDebugMessage( "DOOR_OPEN (0x%p, %d, %d, %d, %d)", pMessage, pMessage->m_dwSenderGUID, pMessage->m_dwReceiveGUID, pMessage->m_dwUnknown1, pMessage->m_dwUnknown2 );
 				break;
 			}
 
 		case M2Enums::ON_DOOR_KICK:
 			{
-				pCore->GetChat()->AddDebugMessage( "DOOR_KICK (0x%p, %d, %d)", pMessage, pMessage->m_dwSenderGUID, pMessage->m_dwReceiveGUID );
+				CCore::Instance()->GetChat()->AddDebugMessage( "DOOR_KICK (0x%p, %d, %d)", pMessage, pMessage->m_dwSenderGUID, pMessage->m_dwReceiveGUID );
 				break;
 			}
 		
 		case M2Enums::ON_SHOOT:
 			{
-				pCore->GetChat()->AddDebugMessage("ON_SHOOT (0x%p, %d, %d)", pMessage, pMessage->m_dwSenderGUID, pMessage->m_dwReceiveGUID);
-				pCore->GetPlayerManager()->GetLocalPlayer()->SetShooting(true);
+				CCore::Instance()->GetChat()->AddDebugMessage("ON_SHOOT (0x%p, %d, %d)", pMessage, pMessage->m_dwSenderGUID, pMessage->m_dwReceiveGUID);
+				CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->SetShooting(true);
 				break;
 			}
 
 		case M2Enums::ON_SHOT_HIT_ENTITY:
 			{
-				pCore->GetChat()->AddDebugMessage("ON_SHOT_HIT_ENTITY (0x%p, %d, %d)", pMessage, pMessage->m_dwSenderGUID, pMessage->m_dwReceiveGUID);
+				CCore::Instance()->GetChat()->AddDebugMessage("ON_SHOT_HIT_ENTITY (0x%p, %d, %d)", pMessage, pMessage->m_dwSenderGUID, pMessage->m_dwReceiveGUID);
 				break;
 			}
 
 		case M2Enums::ON_DAMAGE:
 			{
-				pCore->GetChat()->AddDebugMessage("ON_DAMAGE (0x%p, %d, %d)", pMessage, pMessage->m_dwSenderGUID, pMessage->m_dwReceiveGUID);
+				CCore::Instance()->GetChat()->AddDebugMessage("ON_DAMAGE (0x%p, %d, %d)", pMessage, pMessage->m_dwSenderGUID, pMessage->m_dwReceiveGUID);
 				break;
 			}
 
 		case M2Enums::ON_AIM_ENTER:
 			{
-				pCore->GetChat()->AddDebugMessage("ON_AIM_ENTER (0x%p, %d, %d)", pMessage, pMessage->m_dwSenderGUID, pMessage->m_dwReceiveGUID);
-				pCore->GetPlayerManager()->GetLocalPlayer()->SetAiming(true);
+				int selectedWeapon = CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetSelectedWeapon();
+				if (selectedWeapon != 0 && selectedWeapon != 1)
+				{
+					CCore::Instance()->GetChat()->AddDebugMessage("ON_AIM_ENTER (0x%p, %d, %d)", pMessage, pMessage->m_dwSenderGUID, pMessage->m_dwReceiveGUID);
+					CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->SetAiming(true);
+				}
 				break;
 			}
 
 		case M2Enums::ON_AIM_LEAVE:
 			{
-				pCore->GetChat()->AddDebugMessage("ON_AIM_LEAVE (0x%p, %d, %d)", pMessage, pMessage->m_dwSenderGUID, pMessage->m_dwReceiveGUID);
-				pCore->GetPlayerManager()->GetLocalPlayer()->SetAiming(false);
+				int selectedWeapon = CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetSelectedWeapon();
+				if (selectedWeapon != 0 && selectedWeapon != 1)
+				{
+					CCore::Instance()->GetChat()->AddDebugMessage("ON_AIM_LEAVE (0x%p, %d, %d)", pMessage, pMessage->m_dwSenderGUID, pMessage->m_dwReceiveGUID);
+					CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->SetAiming(false);
+				}
 				break;
 			}
 
 		case M2Enums::CAR_BREAK_IN:
 			{
-				pCore->GetChat()->AddDebugMessage("CAR_BREAK_IN (0x%p, %d, %d)", pMessage, pMessage->m_dwSenderGUID, pMessage->m_dwReceiveGUID);
+				CCore::Instance()->GetChat()->AddDebugMessage("CAR_BREAK_IN (0x%p, %d, %d)", pMessage, pMessage->m_dwSenderGUID, pMessage->m_dwReceiveGUID);
 				break;
 			}
 
 		case M2Enums::ON_ACTION:
 			{
-				pCore->GetChat()->AddDebugMessage("ON_ACTION (0x%p, %d, %d)", pMessage, pMessage->m_dwSenderGUID, pMessage->m_dwReceiveGUID);
+				CCore::Instance()->GetChat()->AddDebugMessage("ON_ACTION (0x%p, %d, %d)", pMessage, pMessage->m_dwSenderGUID, pMessage->m_dwReceiveGUID);
 				break;
 			}
 
@@ -128,7 +134,7 @@ bool CM2EntityMessage::HandleEntityEvent( M2EntityMessage * pMessage )
 		case M2Enums::ON_DEATH:
 			{
 				// Find the killer from the ped guid
-				CNetworkPlayer * pKiller = pCore->GetPlayerManager()->GetFromGameGUID( pMessage->M2HumanDeathMessage__dwKillerGUID );
+				CNetworkPlayer * pKiller = CCore::Instance()->GetPlayerManager()->GetFromGameGUID( pMessage->M2HumanDeathMessage__dwKillerGUID );
 
 				// Call our event
 				pLocalPlayer->OnDeath( pKiller );
@@ -137,7 +143,7 @@ bool CM2EntityMessage::HandleEntityEvent( M2EntityMessage * pMessage )
 
 		default:
 			{
-				pCore->GetChat()->AddDebugMessage("Unhandled entity message %d", pMessage->m_dwMessage);
+				CCore::Instance()->GetChat()->AddDebugMessage("Unhandled entity message %d", pMessage->m_dwMessage);
 				break;
 			}
 		}
