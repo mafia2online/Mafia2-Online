@@ -572,7 +572,7 @@ C_SyncObject * CM2Ped::LookAt(CVector3 vecPosition)
 	return NULL;
 }
 
-int _declspec(naked) M2EntityData::PlayAnim(C_SyncObject **syncObject, const char *const animName, const bool unknown, int, int, float, float, float)
+int _declspec(naked) M2EntityData::PlayAnim(C_SyncObject **syncObject, const char *const animName, const bool repeat, int, int, float, float, float)
 {
 	_asm {
 		mov eax, 0x00982CC0
@@ -580,19 +580,15 @@ int _declspec(naked) M2EntityData::PlayAnim(C_SyncObject **syncObject, const cha
 	}
 }
 
-void CM2Ped::PlayAnimation(char *strAnimation)
+void CM2Ped::PlayAnimation(char *strAnimation, bool repeat)
 {
 	if (m_pPed && m_pPed->m_pEntityData)
 	{
 		M2EntityData * pEntityData = m_pPed->m_pEntityData;
 
 		C_SyncObject *pSyncObject = NULL;
-		pEntityData->PlayAnim(&pSyncObject, strAnimation, false, 0, 0, 0.0f, 0.30000001f, 0.3000000f);
-		CM2SyncObject *_pSyncObject = new CM2SyncObject(pSyncObject);
-		CLogFile::Printf("%p", pSyncObject);
-		CLogFile::Printf("IsDone = %s", _pSyncObject->IsDone() ? "true" : "false");
-		CLogFile::Printf("IsFailed = %s", _pSyncObject->IsFail() ? "true" : "false");
-		++pSyncObject->m_dwState; // increase ref count..
+		pEntityData->PlayAnim(&pSyncObject, strAnimation, repeat, 0, 0, 0.0f, 0.30000001f, 0.3000000f);
+		++pSyncObject->m_dwState;
 	}
 }
 
@@ -663,6 +659,23 @@ void CM2Ped::ModelToHand(int iHand, int iModel)
 	}
 }
 
+void CM2Ped::ModelToMouth(int iModel)
+{
+	if (!m_pPed)
+		return;
+
+	M2EntityData * pEntityData = m_pPed->m_pEntityData;
+
+	DWORD dwFunc = 0x042D940;
+
+	__asm
+	{
+		push iModel;
+		mov ecx, pEntityData;
+		call dwFunc;
+	}
+}
+
 void CM2Ped::SetAnimStyle(const char *dir, const char *set)
 {
 	if (strlen(dir) <= 0 || strlen(set) <= 0)
@@ -681,5 +694,22 @@ void CM2Ped::SetAnimStyle(const char *dir, const char *set)
 		push dir;
 		mov ecx, pEntityData;
 		call func;
+	}
+}
+
+void CM2Ped::SetPhysState(ePhysState state)
+{
+	if (!m_pPed)
+		return;
+
+	M2EntityData *pEntityData = m_pPed->m_pEntityData;
+
+	DWORD dwFunc = 0x092A460;
+
+	__asm
+	{
+		push state;
+		mov ecx, pEntityData;
+		call dwFunc;
 	}
 }

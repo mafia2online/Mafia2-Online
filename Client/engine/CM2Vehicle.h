@@ -325,4 +325,5 @@ public:
 	void					MarkForSale						(bool bSale);
 	bool					IsMarkedForSale					();
 
+	void					SetPainting						(const char *paint);
 };
