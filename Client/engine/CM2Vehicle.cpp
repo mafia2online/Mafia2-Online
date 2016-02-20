@@ -1072,9 +1072,12 @@ void CM2Vehicle::MarkForSale(bool bSale)
 		M2Vehicle * pVehicle = m_pVehicle;
 		DWORD dwVehicleData = (DWORD)(pVehicle)+0xA8;
 
-		_asm push bSale;
-		_asm mov ecx, dwVehicleData;
-		_asm call func;
+		_asm
+		{
+			push bSale;
+			mov ecx, dwVehicleData;
+			call func;
+		}
 	}
 }
 
@@ -1086,4 +1089,21 @@ bool CM2Vehicle::IsMarkedForSale()
 		return (*(DWORD *)(dwVehicleData + 0xCAC) & 20);
 	}
 	return (false);
+}
+
+void CM2Vehicle::SetPainting(const char *paint)
+{
+	if (m_pVehicle)
+	{
+		DWORD dwFunc = 0x0446B70;
+		M2Vehicle *pVeh = m_pVehicle;
+		DWORD dwVeh = (DWORD)(pVeh) + 0xA8;
+
+		__asm
+		{
+			push paint;
+			mov ecx, dwVeh;
+			call dwFunc;
+		}
+	}
 }
