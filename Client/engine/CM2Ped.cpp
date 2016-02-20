@@ -693,3 +693,17 @@ void CM2Ped::SetAnimStyle(const char *dir, const char *set)
 		call func;
 	}
 }
+
+void CM2Ped::SetPhysState(ePhysState state)
+{
+	M2EntityData *pEntityData = m_pPed->m_pEntityData;
+
+	DWORD dwFunc = 0x092A460;
+
+	__asm
+	{
+		push state;
+		mov ecx, pEntityData;
+		call dwFunc;
+	}
+}
