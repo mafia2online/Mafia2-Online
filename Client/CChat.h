@@ -19,6 +19,7 @@
 
 #define		MAX_MESSAGE_LEN					128
 #define		MAX_CHAT_LINES					12
+#define		MAX_CHAT_LINES_HISTORY			30
 #define		MAX_CHAT_HISTORY				12
 #define		CHAT_CMD_CHAR					'/'
 
@@ -26,7 +27,8 @@ struct ChatLine
 {
 	char szMessage[MAX_MESSAGE_LEN + 1], szName[MAX_PLAYER_NAME + 3];
 	unsigned long ulMsgColour, ulNameColour;
-	float fNameExtent;
+	float fNameExtent, fTimeSendExtent;
+	String szTimeSend;
 };
 
 class CNetworkPlayer;
@@ -43,6 +45,7 @@ private:
 	String					m_strFont;
 	float					m_fX;
 	float					m_fY;
+	bool					m_bTimeStamp;
 
 	// Input
 	String					m_strInput;
@@ -106,5 +109,8 @@ public:
 	void					ProcessInput(void);
 
 	void					LockGameControls(bool bLock);
+
+	void					SetTimeStampVisible				( bool bTimeStamp ) { m_bTimeStamp = bTimeStamp; }
+	bool					IsTimeStampVisible				( void ) { return m_bTimeStamp; }
 
 };

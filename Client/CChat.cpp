@@ -43,6 +43,8 @@
 
 #include "CM2Camera.h"
 
+#include "CSettings.h"
+
 bool m_bChatOldCameraState;
 
 CChat::CChat(CGUI_Impl * pGUI, float fX, float fY)
@@ -65,6 +67,9 @@ CChat::CChat(CGUI_Impl * pGUI, float fX, float fY)
 	m_iCurrentHistory = -1;
 	m_bInputVisible = false;
 	m_bOldLockState = false;
+
+	// Get timestamp param
+	m_bTimeStamp = CVAR_GET_BOOL("timestamp");
 
 	// Set the key handlers
 	pGUI->SetCharacterKeyHandler(GUI_CALLBACK_KEY(&CChat::HandleKeyInput, this));
@@ -162,19 +167,40 @@ void CChat::Render(void)
 	// Loop over each chat line
 	for (int i = 0; i < MAX_CHAT_LINES; i++)
 	{
+		float fTSOffset = 0.0;
+
 		// Do we have a name?
-		if (m_chatLine[iCurrentMessage - i].fNameExtent > 0.0f)
+		if (m_chatLine[iCurrentMessage - i].fNameExtent > 0.0f )
 		{
+			if ( IsTimeStampVisible() )
+			{
+				// Draw the timestamp
+				pGraphics->DrawText(m_fX, fCurrentY, m_chatLine[iCurrentMessage - i].ulMsgColour, 1.0f, "tahoma-bold", true, m_chatLine[iCurrentMessage - i].szTimeSend);
+
+				// Offset x
+				fTSOffset = m_chatLine[iCurrentMessage - i].fTimeSendExtent;
+			}
+
 			// Draw the player name
-			pGraphics->DrawText(m_fX, fCurrentY, m_chatLine[iCurrentMessage - i].ulNameColour, 1.0f, "tahoma-bold", true, m_chatLine[iCurrentMessage - i].szName);
+			pGraphics->DrawText( m_fX + fTSOffset, fCurrentY, m_chatLine[iCurrentMessage - i].ulNameColour, 1.0f, "tahoma-bold", true, m_chatLine[iCurrentMessage - i].szName );
 
 			// Draw the chat text
-			pGraphics->DrawText((m_fX + m_chatLine[iCurrentMessage - i].fNameExtent), fCurrentY, m_chatLine[iCurrentMessage - i].ulMsgColour, 1.0f, "tahoma-bold", true, m_chatLine[iCurrentMessage - i].szMessage);
+			pGraphics->DrawText( (m_fX + m_chatLine[iCurrentMessage - i].fNameExtent + fTSOffset), fCurrentY, m_chatLine[iCurrentMessage - i].ulMsgColour, 1.0f, "tahoma-bold", true, m_chatLine[iCurrentMessage - i].szMessage );
 		}
 		else
 		{
-			// Draw the text
-			pGraphics->DrawText(m_fX, fCurrentY, m_chatLine[iCurrentMessage - i].ulMsgColour, 1.0f, "tahoma-bold", true, m_chatLine[iCurrentMessage - i].szMessage);
+			// Get the timestamp settings
+			if ( IsTimeStampVisible() )
+			{
+				// Draw the text
+				pGraphics->DrawText( m_fX, fCurrentY, m_chatLine[iCurrentMessage - i].ulMsgColour, 1.0f, "tahoma-bold", true, m_chatLine[iCurrentMessage - i].szTimeSend );
+
+				// Offset x
+				fTSOffset = m_chatLine[iCurrentMessage - i].fTimeSendExtent;
+			}
+
+			// Draw the chat text
+			pGraphics->DrawText( (m_fX + fTSOffset), fCurrentY, m_chatLine[iCurrentMessage - i].ulMsgColour, 1.0f, "tahoma-bold", true, m_chatLine[iCurrentMessage - i].szMessage );
 		}
 
 		// Increase the current offset
@@ -187,19 +213,34 @@ void CChat::Render(void)
 		// Calculate the input render position
 		float fInputY = (m_fY + (16.0f * MAX_CHAT_LINES) + 10.0f);
 
-		// Offset text cursor
-		int iOffsetCursor = strlen("Say: ");
-
 		// String for printing
-		String strSay = String("%s%s", "Say: ", m_strInput.Get());
+		String strSay = m_strInput.Get();
+
+
+		// Get intput text width
+		float fStrInputWidth = pGraphics->GetTextWidth(m_strInput.Get(), 1.0, "tahoma-bold");
+		
+		// Initial size
+		float fWidthInputSubstrate = 500.0f;
+
+		// Width to size of the text
+		if (fStrInputWidth > fWidthInputSubstrate - 22.0)
+			fWidthInputSubstrate = (fWidthInputSubstrate + (fStrInputWidth - fWidthInputSubstrate) + 22.0);
+
+		// Draw the input substrate
+		pGraphics->DrawBox(m_fX - 5.0f, fInputY - 3.0f, fWidthInputSubstrate, 22.0, D3DCOLOR_ARGB(140, 0, 0, 0));
+
+
+		pGraphics->DrawText(30.0f, 400.0f, D3DCOLOR_ARGB(255, 255, 255, 255), 1.0f, "tahoma-bold", true, "m_iCountSelectedChars: %d, m_iTextCursorPosition: %d", m_iCountSelectedChars, m_iTextCursorPosition );
+
 
 		//Is text select?
 		if (m_iCountSelectedChars != 0)
 		{
 			// Start select position
-			int iStartPos = iOffsetCursor + m_iTextCursorPosition + (m_iCountSelectedChars > 0 ? 0 : m_iCountSelectedChars);
+			int iStartPos = m_iTextCursorPosition + (m_iCountSelectedChars > 0 ? 0 : m_iCountSelectedChars);
 			// End select position
-			int iEndPos = iOffsetCursor + m_iTextCursorPosition + (m_iCountSelectedChars > 0 ? m_iCountSelectedChars : 0);
+			int iEndPos = m_iTextCursorPosition + (m_iCountSelectedChars > 0 ? m_iCountSelectedChars : 0);
 
 			// Split string
 			String strFirst = strSay.substr(0, iStartPos);
@@ -224,7 +265,7 @@ void CChat::Render(void)
 		else
 		{
 			// Draw the input message
-			strSay.Insert(m_iTextCursorPosition + iOffsetCursor, '|');
+			strSay.Insert(m_iTextCursorPosition, '|');
 			pGraphics->DrawText(m_fX, fInputY, D3DCOLOR_ARGB(255, 255, 255, 255), 1.0f, "tahoma-bold", true, strSay.Get());
 		}
 	}
@@ -375,6 +416,8 @@ void CChat::AddInfoMessage(CColor colour, const char * szInfo, ...)
 	m_chatLine[0].szMessage[MAX_MESSAGE_LEN] = '\0';
 	m_chatLine[0].ulMsgColour = colour.dwHexColor;
 	m_chatLine[0].fNameExtent = 0.0f;
+	m_chatLine[0].szTimeSend.Format("[%s] ", SharedUtility::GetTimeString());
+	m_chatLine[0].fTimeSendExtent = CCore::Instance()->GetGraphics()->GetTextWidth(m_chatLine[0].szTimeSend, 1.0f, "tahoma-bold");
 }
 
 void CChat::AddDebugMessage(const char * szDebug, ...)
@@ -392,6 +435,8 @@ void CChat::AddDebugMessage(const char * szDebug, ...)
 	m_chatLine[0].szMessage[MAX_MESSAGE_LEN] = '\0';
 	m_chatLine[0].ulMsgColour = D3DCOLOR_ARGB(255, 179, 179, 179);
 	m_chatLine[0].fNameExtent = 0.0f;
+	m_chatLine[0].szTimeSend.Format("[%s] ", SharedUtility::GetTimeString());
+	m_chatLine[0].fTimeSendExtent = CCore::Instance()->GetGraphics()->GetTextWidth(m_chatLine[0].szTimeSend, 1.0f, "tahoma-bold");
 }
 
 bool CChat::HandleKeyInput(CGUIKeyEventArgs keyArgs)
@@ -405,7 +450,7 @@ bool CChat::HandleKeyInput(CGUIKeyEventArgs keyArgs)
 		return false;
 
 	// Are we enabling the chat?
-	if ((keyArgs.codepoint == 116 || keyArgs.codepoint == 96 || keyArgs.codepoint == 84 || keyArgs.codepoint == 229) && !IsInputVisible())
+	if ((keyArgs.codepoint == 116 || keyArgs.codepoint == 229 || keyArgs.codepoint == 13) && !IsInputVisible()) // T and Enter
 	{
 		// Set the input visible
 		SetInputVisible(true);
@@ -477,17 +522,17 @@ bool CChat::HandleKeyInput(CGUIKeyEventArgs keyArgs)
 		// Have we got any room left?
 		if (sInputLen < MAX_MESSAGE_LEN)
 		{
-			// Text cursor doesn't last 
-			if (m_iTextCursorPosition < sInputLen)
+			// Do not respond to combination (Ctrl+A, Ctrl+C and etc)
+			if ( keyArgs.codepoint != 1 && keyArgs.codepoint != 3 && keyArgs.codepoint != 10 && keyArgs.codepoint != 22 && keyArgs.codepoint != 24 && keyArgs.codepoint != 26 && keyArgs.codepoint != 37) // Ctrl+A, Ctrl+C, Ctrl+Enter, Ctrl+V, Ctrl+X, Ctrl+Z, 37=%
 			{
-				//char cInputedChar = static_cast< char >(keyArgs.codepoint);
-				m_strInput.Insert(m_iTextCursorPosition, static_cast< char >(keyArgs.codepoint));
-				++m_iTextCursorPosition;
-			}
-			else
-			{
-				// Add the character to the end of the input text
-				m_strInput += static_cast< char >(keyArgs.codepoint);
+				// Text cursor doesn't last 
+				if ( m_iTextCursorPosition < sInputLen )			
+					// Add the character to the position cursor
+					m_strInput.Insert(m_iTextCursorPosition, static_cast< char >(keyArgs.codepoint));
+				else
+					// Add the character to the end of the input text
+					m_strInput += static_cast< char >(keyArgs.codepoint);
+		
 				++m_iTextCursorPosition;
 			}
 		}
@@ -605,50 +650,70 @@ bool CChat::HandleKeyDown(CGUIKeyEventArgs keyArgs)
 			break;
 		}
 
-		/*case CGUIKeys::C:
+		case CGUIKeys::C:
 		case CGUIKeys::X:
 		{
-		// Is the control key down and the input is visible?
-		if( (keyArgs.sysKeys & CEGUI::SystemKey::Control) && IsInputVisible () )
-		{
-		// Do we have select text?
-		if( m_iCountSelectedChars != 0 )
-		{
-		int start = m_iTextCursorPosition + ( m_iCountSelectedChars > 0 ? 0 : m_iCountSelectedChars );
-		SharedUtility::SetClipboardText( m_strInput.substr(start, abs(m_iCountSelectedChars)), abs(m_iCountSelectedChars) + 1);
+			// Is the control key down and the input is visible?
+			if( (keyArgs.sysKeys & CEGUI::SystemKey::Control) && IsInputVisible () )
+			{
+				// Do we have select text?
+				if( m_iCountSelectedChars != 0 )
+				{
+					int start = m_iTextCursorPosition + ( m_iCountSelectedChars > 0 ? 0 : m_iCountSelectedChars );
+					SharedUtility::SetClipboardText( m_strInput.substr(start, abs(m_iCountSelectedChars)), abs(m_iCountSelectedChars) + 1);
 
-		// Are we cutting data?
-		if ( keyArgs.scancode == CGUIKeys::X )
-		{
-		// Clear the current input text
-		ClearInputText ();
-		m_iTextCursorPosition = start;
-		}
-		}
-		}
-		break;
+					// Are we cutting data?
+					if ( keyArgs.scancode == CGUIKeys::X )
+					{
+						// Get the input text length
+						size_t sLen = m_strInput.GetLength();
+
+						// Do we have select text?
+						ClearSelectText();
+
+						// Do we have any input?
+						if (sLen > 0 && m_iTextCursorPosition > 0)
+						{
+							--m_iTextCursorPosition;
+							m_strInput.Erase(m_iTextCursorPosition, 1);
+						}
+					}
+				}
+			}
+			break;
 		}
 
 		case CGUIKeys::V:
 		{
-		// Is the control key down and the input is visible?
-		if( (keyArgs.sysKeys & CEGUI::SystemKey::Control) && IsInputVisible () )
-		{
-		// Get data from the clipboard
-		const char * szClipboard = SharedUtility::GetClipboardText ();
+			// Is the control key down and the input is visible?
+			if( (keyArgs.sysKeys & CEGUI::SystemKey::Control) && IsInputVisible () )
+			{
+				// Get data from the clipboard
+				const char * szClipboard = SharedUtility::GetClipboardText ();
 
-		// Do we have data in the clipboard?
-		if ( strlen ( szClipboard ) )
-		{
-		//Clear the select text
-		ClearSelectText();
+				// Do we have data in the clipboard?
+				if ( strlen ( szClipboard ) )
+				{
+					// Clear the select text
+					ClearSelectText();
 
-		// Update the input
-		m_strInput.Insert(m_iTextCursorPosition, strlen( szClipboard ));
-		m_iTextCursorPosition = m_iTextCursorPosition + strlen (szClipboard) - 1;
-		}
-		}
-		break;
+					// Get the input text length
+					size_t szClipLen = String(szClipboard).GetLength();
+
+					// If message is large
+					if (szClipLen + m_strInput.GetLength() < 128)
+					{
+						// Insert text
+						m_strInput.Insert( m_iTextCursorPosition, szClipboard);
+
+						// Place the cursor at the end of the inserted text
+						m_iTextCursorPosition = m_iTextCursorPosition + strlen(szClipboard);
+					}
+					else
+						AddInfoMessage(CColor(197, 205, 76, 255), "The total length of the string exceeds 128 characters.");
+				}
+			}
+			break;
 		}
 
 		case CGUIKeys::A:
@@ -656,11 +721,11 @@ bool CChat::HandleKeyDown(CGUIKeyEventArgs keyArgs)
 			// Is the control key down and the input is visible?
 			if ((keyArgs.sysKeys & CEGUI::SystemKey::Control) && IsInputVisible())
 			{
-				m_iTextCursorPosition = m_strInput.GetLength();
-				m_iCountSelectedChars = -1 * m_strInput.GetLength();
+				m_iTextCursorPosition = 0;
+				m_iCountSelectedChars = m_strInput.GetLength();				
 			}
 			break;
-		}*/
+		}
 	}
 	return true;
 }
@@ -784,6 +849,15 @@ void CChat::ProcessInput(void)
 					}
 				}
 			}
+			else if (strCommand == "timestamp")
+			{
+				// Get settings timestamp
+				bool bStatusTimestamp = CVAR_GET_BOOL("timestamp");
+
+				// Set != old condition timestamp
+				CVAR_SET( "timestamp", !bStatusTimestamp );
+				SetTimeStampVisible( !bStatusTimestamp );
+			}
 #ifdef DEBUG
 			else if (strCommand == "lua")
 			{
@@ -842,15 +916,18 @@ void CChat::ProcessInput(void)
 				pArguments.push(strInput.C_String());
 				pArguments.push(bIsCommand);
 
+
+				// It is here that you can turn off the display of messages to the client to format your posts. Therefore, it is here and not out there \/
+
+				// Send it to the server
+				CCore::Instance()->GetNetworkModule()->Call(RPC_PLAYER_CHAT, &bitStream, HIGH_PRIORITY, RELIABLE_ORDERED, true);
+
+				// Add this message to the history
+				AddToHistory();
+
 				// Should we send this message?
 				if (CCore::Instance()->GetClientScriptingManager()->GetEvents()->Call("onClientChat", &pArguments).GetInteger() == 1)
 				{
-					// Send it to the server
-					CCore::Instance()->GetNetworkModule()->Call(RPC_PLAYER_CHAT, &bitStream, HIGH_PRIORITY, RELIABLE_ORDERED, true);
-
-					// Add this message to the history
-					AddToHistory();
-
 					// Add the chat message for the localplayer if it's not a command
 					if (!bIsCommand)
 						AddChatMessage(CCore::Instance()->GetPlayerManager()->GetLocalPlayer(), GetInputText());
