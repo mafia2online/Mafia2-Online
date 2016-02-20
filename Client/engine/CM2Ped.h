@@ -199,6 +199,7 @@ public:
 	void					StopAnimation(char *strAnimation);
 	bool					IsAnimFinished(char *strAnimation);
 
+	void					ModelToMouth(int iModel);
 	void					ModelToHand(int iHand, int iModel);
 	void					SetAnimStyle(const char *dir, const char *set);
 
