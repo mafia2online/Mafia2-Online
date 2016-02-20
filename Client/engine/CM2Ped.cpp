@@ -661,6 +661,9 @@ void CM2Ped::ModelToHand(int iHand, int iModel)
 
 void CM2Ped::ModelToMouth(int iModel)
 {
+	if (!m_pPed)
+		return;
+
 	M2EntityData * pEntityData = m_pPed->m_pEntityData;
 
 	DWORD dwFunc = 0x042D940;
@@ -696,6 +699,9 @@ void CM2Ped::SetAnimStyle(const char *dir, const char *set)
 
 void CM2Ped::SetPhysState(ePhysState state)
 {
+	if (!m_pPed)
+		return;
+
 	M2EntityData *pEntityData = m_pPed->m_pEntityData;
 
 	DWORD dwFunc = 0x092A460;
