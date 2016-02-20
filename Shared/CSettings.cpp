@@ -61,6 +61,7 @@ void CSettings::LoadDefaults( void )
 #ifdef _CLIENT
 	// Default client settings
 	DEFAULT( "nick", "Player" );
+	DEFAULT( "timestamp", true );
 	DEFAULT( "auto-updates", true );
 	DEFAULT( "multisample-anti-aliasing", 0 );
 	DEFAULT( "anisotropic-filtering", 0 );
