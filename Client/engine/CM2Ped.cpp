@@ -659,6 +659,20 @@ void CM2Ped::ModelToHand(int iHand, int iModel)
 	}
 }
 
+void CM2Ped::ModelToMouth(int iModel)
+{
+	M2EntityData * pEntityData = m_pPed->m_pEntityData;
+
+	DWORD dwFunc = 0x042D940;
+
+	__asm
+	{
+		push iModel;
+		mov ecx, pEntityData;
+		call dwFunc;
+	}
+}
+
 void CM2Ped::SetAnimStyle(const char *dir, const char *set)
 {
 	if (strlen(dir) <= 0 || strlen(set) <= 0)
