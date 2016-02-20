@@ -42,10 +42,6 @@ CPed::~CPed( void )
 
 void CPed::Create(CVector3 vecPosition, CVector3 vecRotation)
 {
-	/* This causes crash */
-	/*if (m_pPed)
-		Destroy();*/
-
 	CLogFile::Print("Loading ped model manager...");
 
 	// Get the model name and directory
@@ -59,6 +55,12 @@ void CPed::Create(CVector3 vecPosition, CVector3 vecRotation)
 
 	// Create the ped
 	m_pPed = IE::CreateWrapperPed(m_pPedModelManager);
+
+	// Creation succeed ?
+	if (!m_pPed){
+		CLogFile::Print("Failed to create ped");
+		return;
+	}
 
 	CLogFile::Printf("Ped created. 0x%p", m_pPed);
 
@@ -109,5 +111,6 @@ void CPed::SetModel( unsigned int uiModelIndex )
 void CPed::SetNick(const char *szNick)
 {
 	// Store the nick
-	m_pNick.Set(szNick);
+	if (strlen(szNick) > 0)
+		m_pNick.Set(szNick);
 }

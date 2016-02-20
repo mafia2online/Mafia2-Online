@@ -27,6 +27,14 @@ enum ePlayerMovementState : BYTE
 	E_STOPPING = 5
 };
 
+enum ePhysState : BYTE
+{
+	E_DYNAMIC = 0,
+	E_ENABLED = 1,
+	E_KINEMATIC = 2,
+	E_DISABLED = 3
+};
+
 class M2WeaponData
 {
 public:
@@ -195,11 +203,14 @@ public:
 	C_SyncObject			* ShootAt(CVector3 vecPosition);
 	C_SyncObject			* LookAt(CVector3 vecPosition);
 
-	void					PlayAnimation(char *strAnimation);
+	void					PlayAnimation(char *strAnimation, bool bRepeat);
 	void					StopAnimation(char *strAnimation);
 	bool					IsAnimFinished(char *strAnimation);
 
+	void					ModelToMouth(int iModel);
 	void					ModelToHand(int iHand, int iModel);
 	void					SetAnimStyle(const char *dir, const char *set);
+
+	void					SetPhysState(ePhysState state);
 
 };

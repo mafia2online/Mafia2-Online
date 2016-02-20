@@ -267,7 +267,7 @@ void CNetworkVehicle::HandleRespawn( void )
 		m_pVehicle->SetColour( m_primarySpawnColour, m_secondarySpawnColour );
 
 		// Reset the platetext
-		m_pVehicle->SetPlateText( "EB01" );
+		m_pVehicle->SetPlateText(String("EB%d", m_vehicleId).Get());
 
 		// Reset the speed
 		m_pVehicle->SetSpeed( 0.0f );
