@@ -59,8 +59,12 @@ bool CM2EntityMessage::HandleEntityEvent( M2EntityMessage * pMessage )
 		
 		case M2Enums::ON_SHOOT:
 			{
-				CCore::Instance()->GetChat()->AddDebugMessage("ON_SHOOT (0x%p, %d, %d)", pMessage, pMessage->m_dwSenderGUID, pMessage->m_dwReceiveGUID);
-				CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->SetShooting(true);
+				int selectedWeapon = CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetSelectedWeapon();
+				if (selectedWeapon != 0 && selectedWeapon != 1)
+				{
+					CCore::Instance()->GetChat()->AddDebugMessage("ON_SHOOT (0x%p, %d, %d)", pMessage, pMessage->m_dwSenderGUID, pMessage->m_dwReceiveGUID);
+					CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->SetShooting(true);
+				}
 				break;
 			}
 

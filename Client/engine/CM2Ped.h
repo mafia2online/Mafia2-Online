@@ -54,7 +54,7 @@ public:
 class M2PlayerControls // 0240 - 02E8
 {
 public:
-	PAD(M2PlayerControls, pad0, 0xA0);					// 0000 - 00A0
+	PAD(M2PlayerControls, pad0, 0xA0);						// 0000 - 00A0
 	ePlayerMovementState m_playerMovementState;				// 00A0 - 00A1
 	BYTE m_byteModifiers;									// 00A1 - 00A2
 	bool m_bIsAiming;										// 00A2 - 00A3
@@ -63,6 +63,7 @@ public:
 	BYTE m_byteUnknown2;									// 00A5 - 00A6
 	BYTE m_byteKeyboardFlags;								// 00A6 - 00A7
 	BYTE m_byteUnknown3;									// 00A7 - 00A8
+	bool m_bIsShooting;										// 00A8 - 00A9
 };
 
 /*
