@@ -116,7 +116,7 @@ bool CM2Ped::IsShooting(void)
 	DEBUG_TRACE("CM2Ped::IsShooting");
 
 	if (m_pPed)
-		return false; // todo fix
+		return (m_pPed->m_playerControls.m_bIsShooting);
 
 	return false;
 }
