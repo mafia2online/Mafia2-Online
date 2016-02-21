@@ -326,4 +326,6 @@ public:
 	bool					IsMarkedForSale					();
 
 	void					SetPainting						(const char *paint);
+
+	void					ToggleGarageEnter				(bool bToggle);
 };
