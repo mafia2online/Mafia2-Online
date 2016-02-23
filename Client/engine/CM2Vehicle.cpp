@@ -396,10 +396,10 @@ void CM2Vehicle::SetFuel( float fFuel )
 	if( m_pVehicle && m_pVehicle->m_pFuelUnk )
 	{
 		// Get the fuel tank capacity
-		float fCapacity = GetFuelTankCapacity();
+		//float fCapacity = GetFuelTankCapacity(); // It doesn't always give the correct value
 
 		// Calculate the new fuel
-		fFuel -= fCapacity;
+		//fFuel -= fCapacity;
 
 		// Set the fuel amount
 		m_pVehicle->m_pFuelUnk->m_pUnknown->m_pFuelTank->m_fFuel = fFuel;
