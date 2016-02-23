@@ -20,38 +20,6 @@
 
 #include	"COffsets.h"
 
-void _declspec(naked) M2Vehicle::UnlockPlayerEntryPoints(void)
-{
-	_asm {
-		mov eax, 0xD63DD0
-		jmp eax
-	}
-}
-
-int _declspec(naked) M2VehicleData::sub_120DBB0(int, int)
-{
-	_asm {
-		mov eax, 0x120DBB0
-		jmp eax
-	}
-}
-
-int _declspec(naked) M2VehicleData::sub_120E340(int, int)
-{
-	_asm {
-		mov eax, 0x120E340
-		jmp eax
-	}
-}
-
-void _declspec(naked) M2Vehicle::sub_468EB0(void)
-{
-	_asm {
-		mov eax, 0x468EB0
-		jmp eax
-	}
-}
-
 CM2Vehicle::CM2Vehicle( M2Vehicle * pVehicle ) : CM2Entity( pVehicle )
 {
 	DEBUG_TRACE("CM2Vehicle::CM2Vehicle");
@@ -59,51 +27,20 @@ CM2Vehicle::CM2Vehicle( M2Vehicle * pVehicle ) : CM2Entity( pVehicle )
 	// Set the vehicle
 	SetVehicle( pVehicle );
 
-#ifdef _DEBUG
-	CLogFile::Printf( "CM2Vehicle::CM2Vehicle( 0x%p )", pVehicle );
-#endif
+	if (!m_pVehicle)
+		return;
 
-	// Prohibit the vehicle from entering garages (house garage)
-	// todo: make this a function!
-	BYTE byteFlags = pVehicle->m_byteFlags5;
-	pVehicle->m_byteFlags1 |= 0x8000000;			// (&= 0xF7FFFFFFu;  to restore)
-	pVehicle->m_byteFlags5 = byteFlags;
+	this->ToggleGarageEnter(false);
 
-	// Unlock entry points
-	byteFlags = pVehicle->m_byteFlags5;
-	pVehicle->m_byteFlags1 &= 0xFFFFFDFF;
-	pVehicle->m_byteFlags5 = byteFlags;
-
-	/* Unlock player entry points (Doesn't work!)
-	DWORD dwFunc = 0x9BC150; // FUNC_CVehicle__UnlockPlayerEntryPoints
-	_asm mov ecx, pVehicle;
-	_asm call dwFunc;*/
-	//pVehicle->UnlockPlayerEntryPoints();
-
-	// Unlock
-	/*DWORD dwFunc = 0x120DBB0;
-	// (DWORD)(pVehicle + 8) + 0xA8
-	M2VehicleData *const pVehicleData = &m_pVehicle->m_vehicleData;
-
-	pVehicleData->sub_120DBB0(1, -1);
-	pVehicleData->sub_120E340(0x80000000, 0);
-	m_pVehicle->sub_468EB0();*/
-
-	/*_asm push -1;
-	_asm push 1;
-	_asm mov ecx, dwVehicleData;
+	/* Try to unlock but don't work */
+	M2Vehicle * ppVehicle = m_pVehicle;
+	DWORD dwFunc = 0x9905B0;
+	_asm mov ecx, ppVehicle;
 	_asm call dwFunc;
 
-	dwFunc = 0x120E340;
-	_asm push 0;
-	_asm push 80000000h;
-	_asm mov ecx, dwVehicleData;
-	_asm call dwFunc;*/
-
-	/*M2Vehicle * pVehicle = m_pVehicle;
-	DWORD dwFunc = 0x9905B0;
-	_asm mov ecx, pvehicle;
-	_asm call dwFunc;*/
+	DWORD dwFunc2 = 0x09BC150;
+	_asm mov ecx, ppVehicle;
+	_asm call dwFunc;
 }
 
 CM2Vehicle::~CM2Vehicle( void )
@@ -964,13 +901,16 @@ bool CM2Vehicle::IsWindowOpen(int iSeat)
 		DWORD func = COffsets::FUNC_CVehicle__IsWindowOpen;
 		M2Vehicle * pVehicle = m_pVehicle;
 
-		bool bRetn = false;
+		int bRetn = false;
 
-		_asm push iSeat
-		_asm mov ecx, pVehicle
-		_asm call func;
-		_asm mov bRetn, al
-		return (bRetn);
+		_asm
+		{
+			push iSeat;
+			mov ecx, pVehicle;
+			call func;
+			mov bRetn, eax;
+		}
+		return ((bool)bRetn);
 	}
 
 	return (false);
@@ -1105,5 +1045,24 @@ void CM2Vehicle::SetPainting(const char *paint)
 			mov ecx, dwVeh;
 			call dwFunc;
 		}
+	}
+}
+
+void CM2Vehicle::ToggleGarageEnter(bool bToggle)
+{
+	if (!m_pVehicle)
+		return;
+
+	if (bToggle) // Allow to enter in garages
+	{
+		BYTE byteFlags = m_pVehicle->m_byteFlags5;
+		m_pVehicle->m_byteFlags1 &= 0xF7FFFFFFu;
+		m_pVehicle->m_byteFlags5 = byteFlags;
+	}
+	else
+	{
+		BYTE byteFlags = m_pVehicle->m_byteFlags5;
+		m_pVehicle->m_byteFlags1 |= 0x8000000;
+		m_pVehicle->m_byteFlags5 = byteFlags;
 	}
 }

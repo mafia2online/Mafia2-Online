@@ -151,6 +151,7 @@ CMenuSettings::CMenuSettings( CGUI_Impl * pGUI )
 	m_pMultiplayer = m_pTabs->CreateTab ( "Multiplayer" );
 	m_pVideo = m_pTabs->CreateTab ( "Video" );
 	m_pAudio = m_pTabs->CreateTab ( "Audio" );
+	m_pAuth = m_pTabs->CreateTab( "Authentication" );
 
 	// Create the nickname edit label
 	m_pNicknameLabel = pGUI->CreateLabel( "Nickname:", NULL, m_pMultiplayer );
@@ -316,6 +317,47 @@ CMenuSettings::CMenuSettings( CGUI_Impl * pGUI )
 	m_pRadioVolumeValue = pGUI->CreateLabel ( "", NULL, m_pAudio );
 	m_pRadioVolumeValue->SetSize( Vector2( 120, 25 ) );
 	m_pRadioVolumeValue->SetPosition( Vector2( 230, 140 ) );
+
+	// Create username edit label
+	m_pM2OUsernameLabel = pGUI->CreateLabel("M2ONetwork Username :", NULL, m_pAuth);
+	m_pM2OUsernameLabel->SetSize(Vector2(125, 25));
+	m_pM2OUsernameLabel->SetPosition(Vector2(15, 45));
+
+	// Create the username edit
+	m_pM2OUsername = pGUI->CreateEdit("", m_pAuth);
+	m_pM2OUsername->SetSize(Vector2(125, 25));
+	m_pM2OUsername->SetPosition(Vector2(150, 45));
+	m_pM2OUsername->SetMaxLength(MAX_PLAYER_NAME);
+
+	// Create passwod edit label
+	m_pM2OPasswordLabel = pGUI->CreateLabel("M2ONetwork Password :", NULL, m_pAuth);
+	m_pM2OPasswordLabel->SetSize(Vector2(125, 25));
+	m_pM2OPasswordLabel->SetPosition(Vector2(15, 75));
+
+	// Create the password edit
+	m_pM2OPassword = pGUI->CreateEdit("", m_pAuth);
+	m_pM2OPassword->SetSize(Vector2(125, 25));
+	m_pM2OPassword->SetPosition(Vector2(150, 75));
+	m_pM2OPassword->SetMaxLength(12);
+
+	// Create the checkbox
+	m_pRememberMe = pGUI->CreateCheckBox("Remember me ?", m_pAuth);
+	m_pRememberMe->SetSize(Vector2(125, 25));
+	m_pRememberMe->SetPosition(Vector2(12, 100));
+
+	// Create the login button
+	m_pLogin = pGUI->CreateButton("Connect", m_pAuth);
+	m_pLogin->SetSize(Vector2(75, 20));
+	m_pLogin->SetPosition(Vector2(90, 130));
+	m_pLogin->SetClickHandler(GUI_CALLBACK(&CMenuSettings::Event_OnClickLogin, this));
+	m_pLogin->SetVisible(true);
+
+	// Create the logout button
+	m_pLogout = pGUI->CreateButton("Disconnect", m_pAuth);
+	m_pLogout->SetSize(Vector2(75, 20));
+	m_pLogout->SetPosition(Vector2(90, 130));
+	m_pLogout->SetClickHandler(GUI_CALLBACK(&CMenuSettings::Event_OnClickLogout, this));
+	m_pLogout->SetVisible(false);
 }
 
 CMenuSettings::~CMenuSettings( void )
@@ -348,11 +390,19 @@ CMenuSettings::~CMenuSettings( void )
 	SAFE_DELETE( m_pRadioLabel );
 	SAFE_DELETE( m_pRadioVolume );
 	SAFE_DELETE( m_pRadioVolumeValue );
+	SAFE_DELETE( m_pM2OUsernameLabel );
+	SAFE_DELETE( m_pM2OUsername );
+	SAFE_DELETE( m_pM2OPasswordLabel );
+	SAFE_DELETE( m_pM2OPassword );
+	SAFE_DELETE( m_pLogin );
+	SAFE_DELETE( m_pLogout );
+	SAFE_DELETE( m_pRememberMe );
 
 	// Delete the tabs
 	SAFE_DELETE( m_pMultiplayer );
 	SAFE_DELETE( m_pVideo );
 	SAFE_DELETE( m_pAudio );
+	SAFE_DELETE( m_pAuth );
 
 	// Delete the tab panel
 	SAFE_DELETE( m_pTabs );
@@ -680,8 +730,32 @@ bool CMenuSettings::Event_OnConnectionsScroll ( CGUIElement_Impl * pElement )
 	return true;
 }
 
-void CMenuSettings::OnScreenSizeChange ( float fX, float fY )
+bool CMenuSettings::Event_OnClickLogin(CGUIElement_Impl *pElement)
+{
+	/* Trigger elements */
+	m_pM2OPassword->SetReadOnly(true);
+	m_pM2OUsername->SetReadOnly(true);
+	m_pLogin->SetVisible(false);
+	m_pLogout->SetVisible(true);
+
+	/* Process */
+	return (true);
+}
+
+bool CMenuSettings::Event_OnClickLogout(CGUIElement_Impl * pElement)
+{
+	/* Trigger elements */
+	m_pM2OPassword->SetReadOnly(false);
+	m_pM2OUsername->SetReadOnly(false);
+	m_pLogin->SetVisible(true);
+	m_pLogout->SetVisible(false);
+	
+	/* Process */
+	return (true);
+}
+
+void CMenuSettings::OnScreenSizeChange(float fX, float fY)
 {
 	// Adjust the window position
-	m_pWindow->SetPosition( Vector2( (fX / 2) - 150, (fY / 2) - 137.5 ) );
+	m_pWindow->SetPosition(Vector2((fX / 2) - 150, (fY / 2) - 137.5));
 }
