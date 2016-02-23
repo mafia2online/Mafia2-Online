@@ -65,7 +65,7 @@ void CSharedVehicleNatives::Register( CScriptingManager * pScriptingManager )
 	pScriptingManager->RegisterFunction( "setVehicleSpeed", SetSpeed, 3, "ifff" );
 	pScriptingManager->RegisterFunction( "getVehicleSpeed", GetSpeed, 1, "i" );
 	pScriptingManager->RegisterFunction( "setVehicleFuel", SetFuel, 2, "if" );
-	pScriptingManager->RegisterFunction( "getVehicleFuel", SetFuel, 1, "i" );
+	pScriptingManager->RegisterFunction( "getVehicleFuel", GetFuel, 1, "i" );
 	pScriptingManager->RegisterFunction( "setVehicleLightState", SetLightState, 2, "ib" );
 	pScriptingManager->RegisterFunction( "getVehicleLightState", GetLightState, 1, "i" );
 }
