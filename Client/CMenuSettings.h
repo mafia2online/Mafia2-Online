@@ -20,10 +20,19 @@ private:
 	CGUITab_Impl									* m_pMultiplayer;
 	CGUITab_Impl									* m_pVideo;
 	CGUITab_Impl									* m_pAudio;
+	CGUITab_Impl									* m_pAuth;
 
 	CGUILabel_Impl									* m_pNicknameLabel;
 	CGUIEdit_Impl									* m_pNickname;
 	CGUIButton_Impl									* m_pSave;
+
+	CGUILabel_Impl									* m_pM2OUsernameLabel;
+	CGUILabel_Impl									* m_pM2OPasswordLabel;
+	CGUIEdit_Impl									* m_pM2OUsername;
+	CGUIEdit_Impl									* m_pM2OPassword;
+	CGUIButton_Impl									* m_pLogin;
+	CGUIButton_Impl									* m_pLogout;
+	CGUICheckBox_Impl								* m_pRememberMe;
 
 	CGUIScrollBar_Impl								* m_pConnectionsValue;
 	CGUILabel_Impl									* m_pConnectionsValueLabel;
@@ -71,6 +80,9 @@ private:
 	bool				Event_OnRadioScroll			( CGUIElement_Impl * pElement );
 
 	bool				Event_OnConnectionsScroll	( CGUIElement_Impl * pElement );
+
+	bool				Event_OnClickLogin			( CGUIElement_Impl * pElement );
+	bool				Event_OnClickLogout			( CGUIElement_Impl * pElement );
 
 public:
 
