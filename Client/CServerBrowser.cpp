@@ -262,7 +262,7 @@ void CServerBrowser::SetupUI( float fX, float fY, float fWidth, float fHeight )
 	m_pPlayersGridList = m_pGUI->CreateGridList( m_pPlayersTab );
 	m_pPlayersGridList->SetPosition( Vector2( 1, 1 ) );
 	m_pPlayersGridList->SetSize( Vector2( 247, (fHeight - 26) ) );
-	m_pPlayersGridList->AddColumn ( "Name", 0.65f );
+	m_pPlayersGridList->AddColumn ( "Name", 0.60f );
 	m_pPlayersGridList->AddColumn ( "Ping", 0.30f );
 
 	// Create the locked image
@@ -351,11 +351,11 @@ void CServerBrowser::CreateTab( ServerBrowserType type, const char * szName, flo
 	// Create the server grid list columns
 	m_pServerGridList[ type ]->AddColumn( "", 0.02f );
 	m_pServerGridList[ type ]->AddColumn( "Hostname", 0.45f );
-	m_pServerGridList[ type ]->AddColumn( "Players", 0.13f );
-	m_pServerGridList[ type ]->AddColumn( "Gamemode", 0.25f );
-	m_pServerGridList[ type ]->AddColumn( "Ping", 0.14f );
-	m_pServerGridList[ type ]->AddColumn( "Host", 0.13f );
-	m_pServerGridList[ type ]->AddColumn( "Port", 0.5f );
+	m_pServerGridList[ type ]->AddColumn( "Players", 0.07f );
+	m_pServerGridList[ type ]->AddColumn( "Gamemode", 0.26f );
+	m_pServerGridList[ type ]->AddColumn( "Ping", 0.04f );
+	m_pServerGridList[ type ]->AddColumn( "Host", 0.08f );
+	m_pServerGridList[ type ]->AddColumn( "Port", 0.04f );
 
 	// Create the server list instance
 	m_pServerList[ type ] = new CServerList( type, m_pServerQuery );
