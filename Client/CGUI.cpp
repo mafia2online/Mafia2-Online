@@ -26,6 +26,9 @@
 #include	"CM2Camera.h"
 #include	"CChat.h"
 
+#include	"CClientScriptingManager.h" // \/
+#include	"CClientScriptGUIManager.h" // for delete clientscript gui
+
 CGUI::CGUI( IDirect3DDevice9 * pDevice )
 {
 	// Store the d3d9 device
@@ -150,6 +153,22 @@ void CGUI::SetCursorVisible( bool bVisible )
 bool CGUI::IsCursorVisible( void )
 {
 	return m_pGUI->IsCursorEnabled();
+}
+
+bool CGUI::DeleteAllClientScriptGUI( void )
+{
+	if ( CCore::Instance()->GetClientScriptingManager() && CCore::Instance()->GetClientScriptingManager()->GetScriptGUIManager() )
+	{
+		CCore::Instance()->GetClientScriptingManager()->GetScriptGUIManager()->Hide();
+		//CCore::Instance()->GetClientScriptingManager()->GetScriptGUIManager()->DeleteAll(); // todo
+
+#ifdef _DEBUG
+		CLogFile::Print("CGUI::HideAllClientScriptGUI > Hide all scriptGUI elements.");
+#endif
+		return true;
+	}
+
+	return false;
 }
 
 void CGUI::Render( void )
