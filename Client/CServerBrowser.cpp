@@ -823,6 +823,9 @@ void CServerBrowser::ProcessNetworkPacket( DefaultMessageIDTypes packet )
 
 void CServerBrowser::SetDisconnectReason( bool bDisconnect, const char * szReason, ... )
 {
+	// Delete all the clientscript gui elements
+	CCore::Instance()->GetGUI()->DeleteAllClientScriptGUI();
+
 	// Should we disconnect from the network?
 	if( bDisconnect )
 	{

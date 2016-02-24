@@ -76,6 +76,8 @@ public:
 	void									SetCursorVisible( bool bVisible );
 	bool									IsCursorVisible( void );
 
+	bool									DeleteAllClientScriptGUI( void );
+
 	void									Render( void );
 	void									ProcessMouse( void );
 

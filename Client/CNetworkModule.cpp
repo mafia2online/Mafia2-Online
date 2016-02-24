@@ -135,6 +135,9 @@ void CNetworkModule::Disconnect( bool bRestart )
 	if( !IsConnected() )
 		return;
 
+	// Delete all the clientscript gui elements
+	CCore::Instance()->GetGUI()->DeleteAllClientScriptGUI();
+
 	// Close the connection
 	m_pRakPeer->CloseConnection( RakNet::UNASSIGNED_SYSTEM_ADDRESS, true );
 
@@ -230,6 +233,9 @@ void CNetworkModule::UpdateNetwork( void )
 			// Did we timeout?
 			if( pPacket->data[0] == ID_DISCONNECTION_NOTIFICATION || pPacket->data[0] == ID_CONNECTION_LOST )
 			{
+				// Delete all the clientscript gui elements
+				CCore::Instance()->GetGUI()->DeleteAllClientScriptGUI();
+
 				// Stop multiplayer
 				CCore::Instance()->StopMultiplayer ();
 
