@@ -65,8 +65,10 @@ CChat::CChat(CGUI_Impl * pGUI, float fX, float fY)
 	m_iTextCursorPosition = 0;
 	m_iCountSelectedChars = 0;
 	m_iCurrentHistory = -1;
+	m_iChatScrollOffset = 0;
 	m_bInputVisible = false;
 	m_bOldLockState = false;
+	m_bLastFixUnnec = false;
 
 	// Get timestamp param
 	m_bTimeStamp = CVAR_GET_BOOL("timestamp");
@@ -74,6 +76,9 @@ CChat::CChat(CGUI_Impl * pGUI, float fX, float fY)
 	// Set the key handlers
 	pGUI->SetCharacterKeyHandler(GUI_CALLBACK_KEY(&CChat::HandleKeyInput, this));
 	pGUI->SetKeyDownHandler(GUI_CALLBACK_KEY(&CChat::HandleKeyDown, this));
+
+	// Set the mouse handlers
+	pGUI->SetMouseWheelHandler( GUI_CALLBACK_MOUSE( &CChat::HandleMouseWheel, this) );
 }
 
 CChat::~CChat(void)
@@ -83,7 +88,7 @@ CChat::~CChat(void)
 void CChat::PushUp(void)
 {
 	// Loop over all chatlines
-	for (int i = (MAX_CHAT_LINES - 1); i; i--)
+	for (int i = (MAX_CHAT_LINES_HISTORY - 1); i; i--)
 	{
 		// Copy the current chat line to the next one
 		memcpy(&m_chatLine[i], &m_chatLine[i - 1], sizeof(ChatLine));
@@ -151,6 +156,26 @@ void CChat::HistoryDown(void)
 	}
 }
 
+void CChat::ScrollUpChatHistory( void )
+{
+	if ( m_iChatScrollOffset < (MAX_CHAT_LINES_HISTORY - MAX_CHAT_LINES) )
+	{
+		// Get message len
+		String szChattext = m_chatLine[MAX_CHAT_LINES + m_iChatScrollOffset].szMessage;
+		size_t sLenMsg = szChattext.GetLength();
+
+		// Do not scroll, if the messages have ended on top
+		if ( (int)sLenMsg > 0 )
+			m_iChatScrollOffset++;
+	}
+}
+
+void CChat::ScrollDwnChatHistory( void )
+{
+	if ( m_iChatScrollOffset > 0 )
+		m_iChatScrollOffset--;
+}
+
 void CChat::Render(void)
 {
 	// Is the chat not visible?
@@ -162,7 +187,7 @@ void CChat::Render(void)
 
 	// Calculate the render Y position
 	float fCurrentY = m_fY;
-	int iCurrentMessage = (MAX_CHAT_LINES - 1);
+	int iCurrentMessage = ((MAX_CHAT_LINES - 1) + m_iChatScrollOffset);
 
 	// Loop over each chat line
 	for (int i = 0; i < MAX_CHAT_LINES; i++)
@@ -230,9 +255,9 @@ void CChat::Render(void)
 		// Draw the input substrate
 		pGraphics->DrawBox(m_fX - 5.0f, fInputY - 3.0f, fWidthInputSubstrate, 22.0, D3DCOLOR_ARGB(140, 0, 0, 0));
 
-
+#ifdef _DEBUG
 		pGraphics->DrawText(30.0f, 400.0f, D3DCOLOR_ARGB(255, 255, 255, 255), 1.0f, "tahoma-bold", true, "m_iCountSelectedChars: %d, m_iTextCursorPosition: %d", m_iCountSelectedChars, m_iTextCursorPosition );
-
+#endif
 
 		//Is text select?
 		if (m_iCountSelectedChars != 0)
@@ -268,6 +293,49 @@ void CChat::Render(void)
 			strSay.Insert(m_iTextCursorPosition, '|');
 			pGraphics->DrawText(m_fX, fInputY, D3DCOLOR_ARGB(255, 255, 255, 255), 1.0f, "tahoma-bold", true, strSay.Get());
 		}
+
+
+
+
+		// Calculate scroll box position
+		int iMaxChatHistMinRender = (MAX_CHAT_LINES_HISTORY - MAX_CHAT_LINES);
+		int	iMessagesIsset = 0;
+		float fXScrlBx = m_fX - 20.0f;
+		float fYScrlBx = m_fY + 3.0f;
+		float fHScrlBx = fInputY - 39.0f;
+
+		for( int i = MAX_CHAT_LINES; i < MAX_CHAT_LINES_HISTORY; i++ )
+		{
+			String szChattext = m_chatLine[i].szMessage;
+			size_t sLenMsg = szChattext.GetLength();
+
+			// We add if there is a message beyond the borders of the render
+			if ( (int)sLenMsg > 0 )
+				iMessagesIsset++;
+		}
+	
+		// Max height
+		float fScrMaxHeight = (fHScrlBx - 2.0f);
+		// Take the 4 percent of the maximum length
+		float fScrollingOneStrPr = (fScrMaxHeight * 4 / 100);
+		// Reduce the length when more than 12 posts
+		float fScrHeight = ( fScrMaxHeight - (iMessagesIsset * fScrollingOneStrPr) );
+		// Drop down the scroll bar and lift as you scroll through
+		float fScrlYPos = ((fYScrlBx + 1.0f) + (fScrMaxHeight - fScrHeight) - (m_iChatScrollOffset * fScrollingOneStrPr));		
+
+		// Just in case
+		if ( fScrlYPos > (fYScrlBx + 1.0f) && iMessagesIsset == m_iChatScrollOffset && iMessagesIsset != 0  )
+			fScrlYPos = (fYScrlBx + 1.0f);
+
+		// Draw scrollbox
+		pGraphics->DrawBox(fXScrlBx, fYScrlBx, 10.0, fHScrlBx, D3DCOLOR_ARGB(140, 0, 0, 0));
+		pGraphics->DrawBox(fXScrlBx + 1.0f, fScrlYPos, 8.0, fScrHeight, D3DCOLOR_ARGB(128, 200, 200, 200));
+
+
+#ifdef _DEBUG
+		pGraphics->DrawText(25.0f, 450.0f, D3DCOLOR_ARGB(255, 255, 255, 255), 1.0f, "tahoma-bold", true, "fScrollingProportion: %f, fScrHeight: %f, fScrlYPos: %f, iMessagesIsset: %d, m_iChatScrollOffset: %d\n kastil: %f", fScrollingOneStrPr, fScrHeight, fScrlYPos, iMessagesIsset, m_iChatScrollOffset, (fYScrlBx + 1.0f));
+#endif
+
 	}
 }
 
@@ -439,6 +507,43 @@ void CChat::AddDebugMessage(const char * szDebug, ...)
 	m_chatLine[0].fTimeSendExtent = CCore::Instance()->GetGraphics()->GetTextWidth(m_chatLine[0].szTimeSend, 1.0f, "tahoma-bold");
 }
 
+bool CChat::HandleMouseWheel( CGUIMouseEventArgs mouseArgs )
+{
+	// Are we not connected?
+	if (!CCore::Instance()->GetNetworkModule() || !CCore::Instance()->GetNetworkModule()->IsConnected())
+		return false;
+
+	// Open main menu?
+	if ( CCore::Instance()->GetGUI()->GetMainMenu()->IsVisible() )
+		return false;
+
+	// Is the input focused on the GUI?
+	if ( CCore::Instance()->GetGUI()->GetCEGUI()->IsInputEnabled() )
+		return false;
+
+	// Is the input not visible?
+	if ( !IsInputVisible() )
+		return false;
+
+	// If you then show the cursor - unnecessary scrolling
+	if ( m_bLastFixUnnec )
+	{
+		if ( mouseArgs.wheelChange > 0 )
+			ScrollUpChatHistory();
+		else
+			ScrollDwnChatHistory();
+
+#ifdef _DEBUG
+		CCore::Instance()->GetGraphics()->DrawText(30, 300, D3DCOLOR_ARGB(200, 200, 200, 0), 1.0f, "tahoma-bold", true, "MOUSE WHEEL BRO: %f, m_iChatScrollOffset: %d", mouseArgs.wheelChange, m_iChatScrollOffset);
+#endif
+	}
+
+	// If you then show the cursor - unnecessary scrolling
+	m_bLastFixUnnec = true;
+	
+	return true;
+}
+
 bool CChat::HandleKeyInput(CGUIKeyEventArgs keyArgs)
 {
 	// Are we not connected?
@@ -452,6 +557,9 @@ bool CChat::HandleKeyInput(CGUIKeyEventArgs keyArgs)
 	// Are we enabling the chat?
 	if ((keyArgs.codepoint == 116 || keyArgs.codepoint == 229 || keyArgs.codepoint == 13) && !IsInputVisible()) // T and Enter
 	{
+		// Enable cursor
+		CCore::Instance()->GetGUI()->SetCursorVisible(true);
+
 		// Set the input visible
 		SetInputVisible(true);
 
@@ -469,11 +577,20 @@ bool CChat::HandleKeyInput(CGUIKeyEventArgs keyArgs)
 	{
 	case VK_RETURN:
 	{
+		// Reset scroll chat
+		m_iChatScrollOffset = 0;
+
+		// If you then show the cursor - unnecessary scrolling
+		m_bLastFixUnnec = false;
+
 		// Disable the input
 		SetInputVisible(false);
 
 		// Restore game controls
 		LockGameControls(false);
+
+		// Hide cursor
+		CCore::Instance()->GetGUI()->SetCursorVisible(false);
 
 		// Process the input
 		ProcessInput();
@@ -485,11 +602,20 @@ bool CChat::HandleKeyInput(CGUIKeyEventArgs keyArgs)
 
 	case VK_ESCAPE:
 	{
+		// Reset scroll chat
+		m_iChatScrollOffset = 0;	
+
+		// If you then show the cursor - unnecessary scrolling
+		m_bLastFixUnnec = false;
+
 		// Disable the input
 		SetInputVisible(false);
 
 		// Restore game controls
 		LockGameControls(false);
+
+		// Hide cursor
+		CCore::Instance()->GetGUI()->SetCursorVisible(false);
 		break;
 	}
 
