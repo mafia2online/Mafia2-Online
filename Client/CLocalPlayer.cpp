@@ -198,6 +198,10 @@ void CLocalPlayer::Pulse( void )
 
 		// Activate the player ped
 		m_pPlayerPed->Activate ();
+
+		// Restore the camera (I don't understand why it works. Correcting a flying camera after death)
+		CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->LockControls(true);
+		CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->LockControls(false);
 	}
 
 	// Are we spawned, in a vehicle and typing?
@@ -531,7 +535,7 @@ void CLocalPlayer::OnEnterVehicleDone( void )
 		SetEnteringVehicle( NULL, INVALID_ENTITY_ID );
 
 #ifdef _DEBUG
-		//CCore::Instance()->GetChat()->AddDebugMessage( "CLocalPlayer::OnEnterVehicleDone( %d, %d )", GetVehicle()->GetId(), GetSeat() );
+		CCore::Instance()->GetChat()->AddDebugMessage( "CLocalPlayer::OnEnterVehicleDone( %d, %d )", GetVehicle()->GetId(), GetSeat() );
 #endif
 	}
 }
