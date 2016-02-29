@@ -144,9 +144,6 @@ void CGUI::SetCursorVisible( bool bVisible )
 			// Restore the old camera state before we locked it
 			CCore::Instance()->GetCamera()->LockControl(m_bPreviousCameraState);
 
-			// Restore the camera control
-			CCore::Instance()->GetCamera()->LockControl(false);
-
 			// Reset the old camera state
 			m_bPreviousCameraState = false;
 		}
