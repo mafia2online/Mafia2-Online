@@ -85,6 +85,28 @@ CChat::~CChat(void)
 {
 }
 
+void CChat::SetInputVisible( bool bVisible )
+{
+	// Set input visible
+	m_bInputVisible = bVisible;
+
+	// Should we input visible?
+	if ( bVisible )
+	{
+		// Save the old cursor state
+		m_bOldCursorState = CCore::Instance()->GetGUI()->IsCursorVisible();
+
+		// Enable cursor
+		CCore::Instance()->GetGUI()->SetCursorVisible( true );
+		//CCore::Instance()->GetChat()->AddDebugMessage("Old state cursor: %s", m_bOldCursorState ? "true" : "false");
+	}
+	else
+	{
+		// Restore cursor
+		CCore::Instance()->GetGUI()->SetCursorVisible( m_bOldCursorState );
+	}
+}
+
 void CChat::PushUp(void)
 {
 	// Loop over all chatlines
@@ -557,9 +579,6 @@ bool CChat::HandleKeyInput(CGUIKeyEventArgs keyArgs)
 	// Are we enabling the chat?
 	if ((keyArgs.codepoint == 116 || keyArgs.codepoint == 229 || keyArgs.codepoint == 13) && !IsInputVisible()) // T and Enter
 	{
-		// Enable cursor
-		CCore::Instance()->GetGUI()->SetCursorVisible(true);
-
 		// Set the input visible
 		SetInputVisible(true);
 
@@ -583,14 +602,11 @@ bool CChat::HandleKeyInput(CGUIKeyEventArgs keyArgs)
 		// If you then show the cursor - unnecessary scrolling
 		m_bLastFixUnnec = false;
 
-		// Disable the input
-		SetInputVisible(false);
-
 		// Restore game controls
 		LockGameControls(false);
 
-		// Hide cursor
-		CCore::Instance()->GetGUI()->SetCursorVisible(false);
+		// Disable the input
+		SetInputVisible(false);
 
 		// Process the input
 		ProcessInput();
@@ -608,14 +624,12 @@ bool CChat::HandleKeyInput(CGUIKeyEventArgs keyArgs)
 		// If you then show the cursor - unnecessary scrolling
 		m_bLastFixUnnec = false;
 
-		// Disable the input
-		SetInputVisible(false);
-
 		// Restore game controls
 		LockGameControls(false);
 
-		// Hide cursor
-		CCore::Instance()->GetGUI()->SetCursorVisible(false);
+		// Disable the input
+		SetInputVisible(false);
+
 		break;
 	}
 
