@@ -50,6 +50,7 @@ private:
 	// Input
 	String					m_strInput;
 	bool					m_bInputVisible;
+	bool					m_bOldCursorState;
 	bool					m_bOldLockState;
 	int						m_iTextCursorPosition;
 	int						m_iCountSelectedChars;
@@ -87,7 +88,7 @@ public:
 	void					SetVisible			( bool bVisible) { m_bVisible = bVisible; }
 	bool					IsVisible			( void ) { return m_bVisible; }
 
-	void					SetInputVisible		( bool bVisible ) { m_bInputVisible = bVisible; }
+	void					SetInputVisible		( bool bVisible );
 	bool					IsInputVisible		( void ) { return m_bInputVisible; }
 
 	void					SetInputText		( const char * szText );
