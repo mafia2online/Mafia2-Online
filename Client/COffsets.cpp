@@ -133,6 +133,9 @@ unsigned int COffsets::FUNC_CHuman__GetInOutCar = 0;
 unsigned int COffsets::FUNC_CHuman__TakeDamage = 0;
 unsigned int COffsets::FUNC_CHuman__SetAnimStyle = 0;
 unsigned int COffsets::FUNC_CHuman__SetModelToHand = 0;
+unsigned int COffsets::FUNC_CHuman__SetModelToMouth = 0;
+unsigned int COffsets::FUNC_CHuman__SetStealthMove = 0;
+unsigned int COffsets::FUNC_CHuman__SetPhysState = 0;
 
 unsigned int COffsets::VAR_VehiclePool = 0;
 unsigned int COffsets::FUNC_CVehicle__OpenHood = 0;
@@ -391,6 +394,9 @@ void COffsets::CommonInitialise(unsigned int uiBase)
 	FUNC_CHuman__TakeDamage = (uiBase + 0x97EE60);
 	FUNC_CHuman__SetAnimStyle = (uiBase + 0x956720);
 	FUNC_CHuman__SetModelToHand = (uiBase + 0x90C860);
+	FUNC_CHuman__SetModelToMouth = (uiBase + 0x042D940);
+	FUNC_CHuman__SetStealthMove = (uiBase + 0x090CCE0);
+	FUNC_CHuman__SetPhysState = (uiBase + 0x092A460);
 
 	// Vehicle
 	FUNC_CVehicle__OpenHood = (uiBase + 0x9AC050); // Steam: 0x09BCFB0

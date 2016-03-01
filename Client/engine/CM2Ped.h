@@ -214,4 +214,7 @@ public:
 
 	void					SetPhysState(ePhysState state);
 
+	void					SetStealthMove(bool bStealthMove);
+	bool					IsStealthMoving();
+
 };
