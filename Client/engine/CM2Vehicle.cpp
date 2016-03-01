@@ -22,9 +22,6 @@
 
 CM2Vehicle::CM2Vehicle( M2Vehicle * pVehicle ) : CM2Entity( pVehicle )
 {
-	DEBUG_TRACE("CM2Vehicle::CM2Vehicle");
-
-	// Set the vehicle
 	SetVehicle( pVehicle );
 
 	if (!m_pVehicle)
@@ -45,31 +42,26 @@ CM2Vehicle::CM2Vehicle( M2Vehicle * pVehicle ) : CM2Entity( pVehicle )
 
 CM2Vehicle::~CM2Vehicle( void )
 {
-	DEBUG_TRACE("CM2Vehicle::~CM2Vehicle");
 }
 
 void CM2Vehicle::SetEngineOn( bool bEngine, bool bRevOnStart )
 {
-	DEBUG_TRACE("CM2Vehicle::SetEngineOn");
-
-	// Is the vehicle valid?
 	if( m_pVehicle )
 	{
-		//
 		DWORD dwVehicleData = (DWORD)(m_pVehicle) + 0xA8;
 
-		_asm push bRevOnStart;
-		_asm push bEngine;
-		_asm mov ecx, dwVehicleData;
-		_asm call COffsets::FUNC_CVehicle__SetEngineOn;
+		_asm
+		{
+			push bRevOnStart;
+			push bEngine;
+			mov ecx, dwVehicleData;
+			call COffsets::FUNC_CVehicle__SetEngineOn;
+		}
 	}
 }
 
 bool CM2Vehicle::IsEngineOn( void )
 {
-	DEBUG_TRACE("CM2Vehicle::IsEngineOn");
-
-	// Is the vehicle valid?
 	if( m_pVehicle )
 	{
 		DWORD dwVehicleData = (DWORD)(m_pVehicle) + 0xA8;
@@ -81,115 +73,112 @@ bool CM2Vehicle::IsEngineOn( void )
 
 void CM2Vehicle::OpenHood(void)
 {
-	DEBUG_TRACE("CM2Vehicle::OpenHood");
-
-	// Is the vehicle valid?
 	if (m_pVehicle)
 	{
 		M2Vehicle * pVehicle = m_pVehicle;
 
-		_asm mov ecx, pVehicle;
-		_asm call COffsets::FUNC_CVehicle__OpenHood;
+		_asm
+		{
+			mov ecx, pVehicle;
+			call COffsets::FUNC_CVehicle__OpenHood;
+		}
 	}
 }
 
 void CM2Vehicle::CloseHood( void )
 {
-	DEBUG_TRACE("CM2Vehicle::CloseHood");
-
-	// Is the vehicle valid?
 	if( m_pVehicle )
 	{
 		M2Vehicle * pVehicle = m_pVehicle;
 
-		_asm mov ecx, pVehicle;
-		_asm call COffsets::FUNC_CVehicle__CloseHood;
+		_asm
+		{
+			mov ecx, pVehicle;
+			call COffsets::FUNC_CVehicle__CloseHood;
+		}
 	}
 }
 
 void CM2Vehicle::OpenTrunk( void )
 {
-	DEBUG_TRACE("CM2Vehicle::OpenTrunk");
-
-	// Is the vehicle valid?
 	if( m_pVehicle )
 	{
 		M2Vehicle * pVehicle = m_pVehicle;
 
-		_asm mov ecx, pVehicle;
-		_asm call COffsets::FUNC_CVehicle__OpenTrunk;
+		_asm
+		{
+			mov ecx, pVehicle;
+			call COffsets::FUNC_CVehicle__OpenTrunk;
+		}
 	}
 }
 
 void CM2Vehicle::CloseTrunk( void )
 {
-	DEBUG_TRACE("CM2Vehicle::CloseTrunk");
-
-	// Is the vehicle valid?
 	if( m_pVehicle )
 	{
 		M2Vehicle * pVehicle = m_pVehicle;
 
-		_asm mov ecx, pVehicle;
-		_asm call COffsets::FUNC_CVehicle__CloseTrunk;
+		_asm
+		{
+			mov ecx, pVehicle;
+			call COffsets::FUNC_CVehicle__CloseTrunk;
+		}
 	}
 }
 
 void CM2Vehicle::SetEngineDamage( float fEngineDamage )
 {
-	DEBUG_TRACE("CM2Vehicle::SetEngineDamage");
-
-	// Is the vehicle valid?
 	if( m_pVehicle )
 	{
 		M2Vehicle * pVehicle = m_pVehicle;
 
-		_asm push fEngineDamage;
-		_asm mov ecx, pVehicle;
-		_asm call COffsets::FUNC_CVehicle__SetEngineDamage;
+		_asm
+		{
+			push fEngineDamage;
+			mov ecx, pVehicle;
+			call COffsets::FUNC_CVehicle__SetEngineDamage;
+		}
 	}
 }
 
 float CM2Vehicle::GetEngineDamage( void )
 {
-	DEBUG_TRACE("CM2Vehicle::GetEngineDamage");
-
-	// Is the vehicle valid?
 	if( m_pVehicle )
 	{
 		float fEngineDamage = 0.0f;
 		M2Vehicle * pVehicle = m_pVehicle;
 
-		_asm mov ecx, pVehicle;
-		_asm call COffsets::FUNC_CVehicle__GetEngineDamage;
-		_asm mov fEngineDamage, eax;
+		_asm
+		{
+			mov ecx, pVehicle;
+			call COffsets::FUNC_CVehicle__GetEngineDamage;
+			mov fEngineDamage, eax;
+		}
 
-		return fEngineDamage;
+		return (fEngineDamage);
 	}
 
-	return 0.0f;
+	return (0.0f);
 }
 
 void CM2Vehicle::SetSpeed( float fSpeed )
 {
-	DEBUG_TRACE("CM2Vehicle::SetSpeed");
-
-	// Is the vehicle valid?
 	if( m_pVehicle )
 	{
 		M2Vehicle * pVehicle = m_pVehicle;
 
-		_asm push fSpeed;
-		_asm mov ecx, pVehicle;
-		_asm call COffsets::FUNC_CVehicle__SetSpeedFloat;
+		_asm
+		{
+			push fSpeed;
+			mov ecx, pVehicle;
+			call COffsets::FUNC_CVehicle__SetSpeedFloat;
+		}
 	}
 }
 
 float CM2Vehicle::GetSpeed( void )
 {
-	DEBUG_TRACE("CM2Vehicle::GetSpeed");
-
-	// Is the vehicle valid?
 	if( m_pVehicle )
 		return (m_pVehicle->m_fSpeed * 3.599999904632568);
 
@@ -198,51 +187,45 @@ float CM2Vehicle::GetSpeed( void )
 
 void CM2Vehicle::SetMoveSpeed ( CVector3 vecMoveSpeed )
 {
-	DEBUG_TRACE("CM2Vehicle::SetMoveSpeed");
-
-	// Is the vehicle valid?
 	if ( m_pVehicle )
 	{
 		DWORD FUNC_C_Vehicle__SetSpeedVec = 0x120E910;
 		DWORD dwVehicleData = (DWORD)(m_pVehicle) + 0xA8;
 
-		_asm push 1;
-		_asm lea ecx, vecMoveSpeed;
-		_asm push ecx;
-		_asm mov ecx, dwVehicleData;
-		_asm call FUNC_C_Vehicle__SetSpeedVec;
+		_asm
+		{
+			push 1;
+			lea ecx, vecMoveSpeed;
+			push ecx;
+			mov ecx, dwVehicleData;
+			call FUNC_C_Vehicle__SetSpeedVec;
+		}
 	}
 }
 
 void CM2Vehicle::GetMoveSpeed ( CVector3 * vecMoveSpeed )
 {
-	DEBUG_TRACE("CM2Vehicle::GetMoveSpeed");
-
-	// Is the vehicle valid?
 	if ( m_pVehicle )
 		memcpy ( vecMoveSpeed, &m_pVehicle->m_vecMoveSpeed, sizeof(CVector3) );
 }
 
 void CM2Vehicle::SetDirtLevel( float fDirtLevel )
 {
-	DEBUG_TRACE("CM2Vehicle::SetDirtLevel");
-
-	// Is the vehicle valid?
 	if( m_pVehicle )
 	{
 		M2Vehicle * pVehicle = m_pVehicle;
 
-		_asm push fDirtLevel;
-		_asm mov ecx, pVehicle;
-		_asm call COffsets::FUNC_CVehicle__SetDirtLevel;
+		_asm
+		{
+			push fDirtLevel;
+			mov ecx, pVehicle;
+			call COffsets::FUNC_CVehicle__SetDirtLevel;
+		}
 	}
 }
 
 float CM2Vehicle::GetDirtLevel( void )
 {
-	DEBUG_TRACE("CM2Vehicle::GetDirtLevel");
-
-	// Is the vehicle valid?
 	if( m_pVehicle )
 		return m_pVehicle->m_fDirtLevel;
 
@@ -252,16 +235,16 @@ float CM2Vehicle::GetDirtLevel( void )
 // todo: not working fully (limiter is enabled, but quickly resets)
 void CM2Vehicle::SetSpeedLimited( bool bSpeedLimited )
 {
-	DEBUG_TRACE("CM2Vehicle::SetSpeedLimited");
-
-	// Is the vehicle valid?
 	if( m_pVehicle )
 	{
 		M2Vehicle * pVehicle = m_pVehicle;
 
-		_asm push bSpeedLimited;
-		_asm mov ecx, pVehicle;
-		_asm call COffsets::FUNC_CVehicle__SetSpeedLimited;
+		_asm
+		{
+			push bSpeedLimited;
+			mov ecx, pVehicle;
+			call COffsets::FUNC_CVehicle__SetSpeedLimited;
+		}
 
 		CLogFile::Printf( "CM2Vehicle::SetSpeedLimited - Setting unknown flags..." );
 
@@ -275,9 +258,6 @@ void CM2Vehicle::SetSpeedLimited( bool bSpeedLimited )
 
 bool CM2Vehicle::IsSpeedLimited( void )
 {
-	DEBUG_TRACE("CM2Vehicle::IsSpeedLimited");
-
-	// Is the vehicle valid?
 	if( m_pVehicle )
 		if( m_pVehicle->m_byteFlags1 & 0x10000 )
 			return true;
@@ -287,15 +267,11 @@ bool CM2Vehicle::IsSpeedLimited( void )
 
 void CM2Vehicle::SetSpeedLimiterSpeed( float fSpeed )
 {
-	DEBUG_TRACE("CM2Vehicle::SetSpeedLimiterSpeed");
-
-	// Is the vehicle valid?
 	if( m_pVehicle )
 	{
 		// Update the speed limiter speed
 		m_pVehicle->m_fSpeedLimiterSpeed = (fSpeed / 3.599999904632568);
 
-		// Is the speed limited?
 		if( IsSpeedLimited() )
 		{
 			// Update the speed limiter gui
@@ -309,9 +285,6 @@ void CM2Vehicle::SetSpeedLimiterSpeed( float fSpeed )
 
 float CM2Vehicle::GetSpeedLimiterSpeed( void )
 {
-	DEBUG_TRACE("CM2Vehicle::GetSpeedLimiterSpeed");
-
-	// Is the vehicle valid?
 	if( m_pVehicle )
 		return (m_pVehicle->m_fSpeedLimiterSpeed * 3.599999904632568);
 
@@ -320,24 +293,21 @@ float CM2Vehicle::GetSpeedLimiterSpeed( void )
 
 void CM2Vehicle::SetTuningTable( int iTuningTable )
 {
-	DEBUG_TRACE("CM2Vehicle::SetTuningTable");
-
-	// Is the vehicle valid?
 	if( m_pVehicle )
 	{
 		M2Vehicle * pVehicle = m_pVehicle;
 
-		_asm push iTuningTable;
-		_asm mov ecx, pVehicle;
-		_asm call COffsets::FUNC_CVehicle__SetActualTuningTable;
+		_asm
+		{
+			push iTuningTable;
+			mov ecx, pVehicle;
+			call COffsets::FUNC_CVehicle__SetActualTuningTable;
+		}
 	}
 }
 
 int CM2Vehicle::GetTuningTable( void )
 {
-	DEBUG_TRACE("CM2Vehicle::GetTuningTable");
-
-	// Is the vehicle valid?
 	if( m_pVehicle )
 		return (m_pVehicle->m_iTuningTable - 2);
 
@@ -346,9 +316,6 @@ int CM2Vehicle::GetTuningTable( void )
 
 void CM2Vehicle::SetColour( CColor primary, CColor secondary )
 {
-	DEBUG_TRACE("CM2Vehicle::SetColour");
-
-	// Is the vehicle valid?
 	if( m_pVehicle )
 	{
 		// Copy the primary colour
@@ -371,17 +338,12 @@ void CM2Vehicle::SetColour( CColor primary, CColor secondary )
 
 void CM2Vehicle::GetColour( CColor * primary, CColor * secondary )
 {
-	DEBUG_TRACE("CM2Vehicle::GetColour");
-
-	// Is the vehicle valid?
 	if( m_pVehicle )
 	{
-		// Copy the primary colour
 		primary->R = (m_pVehicle->m_fPrimaryRed / 0.00390625);
 		primary->G = (m_pVehicle->m_fPrimaryGreen / 0.00390625);
 		primary->B = (m_pVehicle->m_fPrimaryBlue / 0.00390625);
 
-		// Copy the secondary colour
 		secondary->R = (m_pVehicle->m_fSecondaryRed / 0.00390625);
 		secondary->G = (m_pVehicle->m_fSecondaryGreen / 0.00390625);
 		secondary->B = (m_pVehicle->m_fSecondaryBlue / 0.00390625);
@@ -390,9 +352,6 @@ void CM2Vehicle::GetColour( CColor * primary, CColor * secondary )
 
 void CM2Vehicle::SetFuel( float fFuel )
 {
-	DEBUG_TRACE("CM2Vehicle::SetFuel");
-
-	// Is the vehicle valid?
 	if( m_pVehicle && m_pVehicle->m_pFuelUnk )
 	{
 		// Get the fuel tank capacity
@@ -408,9 +367,6 @@ void CM2Vehicle::SetFuel( float fFuel )
 
 float CM2Vehicle::GetFuel( void )
 {
-	DEBUG_TRACE("CM2Vehicle::GetFuel");
-
-	// Is the vehicle valid?
 	if( m_pVehicle && m_pVehicle->m_pFuelUnk )
 		return m_pVehicle->m_pFuelUnk->m_pUnknown->m_pFuelTank->m_fFuel;
 
@@ -419,9 +375,6 @@ float CM2Vehicle::GetFuel( void )
 
 float CM2Vehicle::GetFuelTankCapacity( void )
 {
-	DEBUG_TRACE("CM2Vehicle::GetFuelTankCapacity");
-
-	// Is the vehicle valid?
 	if( m_pVehicle && m_pVehicle->m_pFuelUnk )
 		return m_pVehicle->m_pFuelUnk->m_pUnknown->m_pFuelTank->m_fFuelTankCapacity;
 
@@ -430,29 +383,25 @@ float CM2Vehicle::GetFuelTankCapacity( void )
 
 void CM2Vehicle::SetHornOn( bool bHornOn )
 {
-	DEBUG_TRACE("CM2Vehicle::SetHornOn");
-
-	// Is the vehicle valid?
 	if( m_pVehicle )
 	{
 		DWORD dwFunc = m_pVehicle->m_pVFTable->SetHornOn;
 		M2Vehicle * pVehicle = m_pVehicle;
 
-		_asm push 1;
-		_asm push bHornOn;
-		_asm mov ecx, pVehicle;
-		_asm call dwFunc;
+		_asm
+		{
+			push 1;
+			push bHornOn;
+			mov ecx, pVehicle;
+			call dwFunc;
+		}
 	}
 }
 
 bool CM2Vehicle::IsHornOn( void )
 {
-	DEBUG_TRACE("CM2Vehicle::IsHornOn");
-
-	// Is the vehicle valid?
 	if( m_pVehicle )
 	{
-		//
 		DWORD dwVehicleData = (DWORD)(m_pVehicle) + 0xA8;
 		return (*(DWORD *)(dwVehicleData + 0x85C) & 1) == 1;
 	}
@@ -462,8 +411,6 @@ bool CM2Vehicle::IsHornOn( void )
 
 void CM2Vehicle::SetSirenOn( bool bSirenOn )
 {
-	DEBUG_TRACE("CM2Vehicle::SetSirenOn");
-
 	if( m_pVehicle )
 	{
 		DWORD dwVehicleData = (DWORD)(m_pVehicle) + 0xA8;
@@ -477,27 +424,24 @@ void CM2Vehicle::SetSirenOn( bool bSirenOn )
 
 void CM2Vehicle::SetBeaconLightOn(bool bOn)
 {
-	DEBUG_TRACE("CM2Vehicle::SetBeaconLightOn");
-
 	if (m_pVehicle)
 	{
 		DWORD dwVehicleData = (DWORD)(m_pVehicle)+0xA8;
 
 		DWORD C_Vehicle__SetBeaconLightOn = 0x1203DD0;
-		_asm push bOn;
-		_asm mov ecx, dwVehicleData;
-		_asm call C_Vehicle__SetBeaconLightOn;
+		_asm
+		{
+			push bOn;
+			mov ecx, dwVehicleData;
+			call C_Vehicle__SetBeaconLightOn;
+		}
 	}
 }
 
 bool CM2Vehicle::IsSirenOn( void )
 {
-	DEBUG_TRACE("CM2Vehicle::IsSirenOn");
-
-	// Is the vehicle valid?
 	if( m_pVehicle )
 	{
-		//
 		DWORD dwVehicleData = (DWORD)(m_pVehicle) + 0xA8;
 		return (*(DWORD *)(dwVehicleData + 0x85C) & 2) == 2;
 	}
@@ -519,60 +463,53 @@ bool CM2Vehicle::IsBeaconLightOn(void)
 
 void CM2Vehicle::SetPlateText( const char * szText )
 {
-	DEBUG_TRACE("CM2Vehicle::SetPlateText");
-
-	// Is the vehicle valid?
 	if( m_pVehicle )
 	{
-		//
 		DWORD dwFunc = m_pVehicle->m_vehicleData.m_pVFTable->SetSPZText;
 		DWORD dwVehicleData = (DWORD)(m_pVehicle) + 0xA8;
 
-		_asm push 0;
-		_asm push szText;
-		_asm mov ecx, dwVehicleData;
-		_asm call dwFunc;
+		_asm
+		{
+			push 0;
+			push szText;
+			mov ecx, dwVehicleData;
+			call dwFunc;
+		}
 	}
 }
 
 const char * CM2Vehicle::GetPlateText( void )
 {
-	DEBUG_TRACE("CM2Vehicle::GetPlateText");
-
-	// Is the vehicle valid?
 	if( m_pVehicle )
 		return m_pVehicle->m_szPlateText;
 
-	return "M2MP1B";
+	return ("Unk");
 }
 
 void CM2Vehicle::SetVehiclePart( int iPart, bool bToggle )
 {
-	// Is the vehicle valid?
 	if( m_pVehicle )
 	{
-		//
 		DWORD dwFunc = (bToggle ? COffsets::FUNC_CVehicle__SetOnPart : COffsets::FUNC_CVehicle__SetOffPart);
 		DWORD dwVehicleData = (DWORD)(m_pVehicle) + 0xA8;
 
-		//
-		_asm push iPart;
-		_asm mov ecx, dwVehicleData;
-		_asm call dwFunc;
+		_asm
+		{
+			push iPart;
+			mov ecx, dwVehicleData;
+			call dwFunc;
+		}
 	}
 }
 
-//Todo: fix with CM2Enums::eVehiclePart
 bool CM2Vehicle::GetVehiclePart( int iPart )
 {
-	// Is the vehicle valid?
 	if( m_pVehicle )
 	{
 		// Get a pointer to the vehicle part
 		DWORD dwVehicleParts = (DWORD)m_pVehicle->m_vehicleData.m_pVehicleParts;
 		M2VehiclePart * pPart = (M2VehiclePart *)(*(DWORD *)(dwVehicleParts + (iPart * 4)));
 
-		// Is the part valid?
 		if( pPart )
 			return (pPart->m_byteFlags == 4);
 	}
@@ -580,94 +517,86 @@ bool CM2Vehicle::GetVehiclePart( int iPart )
 	return false;
 }
 
-void CM2Vehicle::Repair( void )
+void CM2Vehicle::Repair( int cleanDirt )
 {
-	// Is the vehicle valid?
 	if( m_pVehicle )
 	{
-		//
 		M2Vehicle * pVehicle = m_pVehicle;
 
-		_asm push 0;
-		_asm push 0; clean dirt
-		_asm push 1;
-		_asm mov ecx, pVehicle;
-		_asm call COffsets::FUNC_CVehicle__Repair;
+		_asm
+		{
+			push 0;
+			push cleanDirt;
+			push 1;
+			mov ecx, pVehicle;
+			call COffsets::FUNC_CVehicle__Repair;
+		}
 	}
 }
 
 void CM2Vehicle::Explode( void )
 {
-	// Is the vehicle valid?
 	if( m_pVehicle )
 	{
-		//
 		M2Vehicle * pVehicle = m_pVehicle;
 
-		_asm mov ecx, pVehicle;
-		_asm call COffsets::FUNC_CVehicle__Explode;
+		_asm
+		{
+			mov ecx, pVehicle;
+			call COffsets::FUNC_CVehicle__Explode;
+		}
 	}
 }
 
 void CM2Vehicle::AddSteer( float fSteer )
 {
-	DEBUG_TRACE("CM2Vehicle::AddSteer");
-
-	// Is the vehicle valid?
 	if( m_pVehicle )
 	{
-		//
 		DWORD dwFunc = 0x11FB4E0;
 		DWORD dwVehicleData = (DWORD)(m_pVehicle) + 0xA8;
 		float steer = (fSteer / m_pVehicle->m_fMaxSteerAngle);
 
-		_asm push steer;
-		_asm mov ecx, dwVehicleData;
-		_asm call dwFunc;
+		_asm
+		{
+			push steer;
+			mov ecx, dwVehicleData;
+			call dwFunc;
+		}
 	}
 }
 
 float CM2Vehicle::GetAddedSteer( void )
 {
-	// Is the vehicle valid?
 	if( m_pVehicle )
-		return m_pVehicle->m_fAddedSteer;
+		return (m_pVehicle->m_fAddedSteer);
 	
-	return 0.0f;
+	return (0.0f);
 }
 
 float CM2Vehicle::GetSteer( void )
 {
-	DEBUG_TRACE("CM2Vehicle::GetSteer");
-
-	// Is the vehicle valid?
 	if( m_pVehicle )
-		return m_pVehicle->m_fSteer;
-
-	return 0.0f;
+		return (m_pVehicle->m_fSteer);
+	
+	return (0.0f);
 }
 
 void CM2Vehicle::SetSpentMoney( float fSpentMoney )
 {
-	// Is the vehicle valid?
 	if( m_pVehicle )
 		m_pVehicle->m_fSpentMoney = fSpentMoney;
 }
 
 float CM2Vehicle::GetSpentMoney( void )
 {
-	// Is the vehicle valid?
 	if( m_pVehicle )
-		return m_pVehicle->m_fSpentMoney;
+		return (m_pVehicle->m_fSpentMoney);
 
-	return 0.0f;
+	return (0.0f);
 }
 
 void CM2Vehicle::SetPower( bool bPower )
 {
-	DEBUG_TRACE("CM2Vehicle::SetPower");
-
-	// Is the vehicle valid?
 	if( m_pVehicle )
 	{
 		DWORD C_Vehicle__SetPower = 0x120E720;
@@ -678,28 +607,25 @@ void CM2Vehicle::SetPower( bool bPower )
 		if( bPower )
 			fPower = 1.0f;
 
-		_asm push fPower;
-		_asm mov ecx, dwVehicleData;
-		_asm call C_Vehicle__SetPower;
+		_asm
+		{
+			push fPower;
+			mov ecx, dwVehicleData;
+			call C_Vehicle__SetPower;
+		}
 	}
 }
 
 bool CM2Vehicle::GetPower( void )
 {
-	DEBUG_TRACE("CM2Vehicle::GetPower");
-
-	// Is the vehicle valid?
 	if( m_pVehicle )
 		return (m_pVehicle->m_fPower == 1.0f);
 
-	return false;
+	return (false);
 }
 
 void CM2Vehicle::SetBrake( bool bBrake )
 {
-	DEBUG_TRACE("CM2Vehicle::SetBrake");
-
-	// Is the vehicle valid?
 	if( m_pVehicle )
 	{
 		DWORD C_Vehicle__SetBrake = 0x120E7D0;
@@ -710,39 +636,36 @@ void CM2Vehicle::SetBrake( bool bBrake )
 		if( bBrake )
 			fBrake = 1.0f;
 
-		_asm push fBrake;
-		_asm mov ecx, dwVehicleData;
-		_asm call C_Vehicle__SetBrake;
+		_asm
+		{
+			push fBrake;
+			mov ecx, dwVehicleData;
+			call C_Vehicle__SetBrake;
+		}
 	}
 }
 
 bool CM2Vehicle::GetBrake( void )
 {
-	DEBUG_TRACE("CM2Vehicle::GetBrake");
-
-	// Is the vehicle valid?
 	if( m_pVehicle )
 		return (m_pVehicle->m_fBrake == 1.0f);
 
-	return false;
+	return (false);
 }
 
 void CM2Vehicle::SetWheelsProtected( bool bProtected )
 {
-	// Is the vehicle valid?
 	if( m_pVehicle )
 	{
 		// Are we protecting the wheels?
 		if( bProtected )
 		{
-			// Protect the wheels
 			BYTE byteFlags = (m_pVehicle->m_byteFlags5);
 			m_pVehicle->m_byteFlags1 |= 0x80000;
 			m_pVehicle->m_byteFlags5 = byteFlags;
 		}
 		else
 		{
-			// Unprotect the wheels
 			BYTE byteFlags = (m_pVehicle->m_byteFlags5);
 			m_pVehicle->m_byteFlags1 &= 0xFFF7FFFF;
 			m_pVehicle->m_byteFlags5 = byteFlags;
@@ -752,52 +675,50 @@ void CM2Vehicle::SetWheelsProtected( bool bProtected )
 
 bool CM2Vehicle::AreWheelsProtected( void )
 {
-	// Is the vehicle valid?
 	if( m_pVehicle )
 		return (m_pVehicle->m_byteFlags1 & 0x80000);
 
-	return false;
+	return (false);
 }
 
 void CM2Vehicle::FixPosition( bool bFix )
 {
-	// Is the vehicle valid?
 	if( m_pVehicle )
 	{
-		//
 		DWORD C_Vehicle__FixCarPos = 0x480580;
 		M2Vehicle * pVehicle = m_pVehicle;
 
-		_asm push bFix;
-		_asm mov ecx, pVehicle;
-		_asm call C_Vehicle__FixCarPos;
+		_asm
+		{
+			push bFix;
+			mov ecx, pVehicle;
+			call C_Vehicle__FixCarPos;
+		}
 	}
 }
 
 bool CM2Vehicle::IsPositionFixed( void )
 {
-	// Is the vehicle valid?
 	if( m_pVehicle )
-	{
-		CLogFile::Printf( "CM2Vehicle::IsPositionFixed() - 0x%p", *(DWORD *)(m_pVehicle + 0xD98) );
 		return (*(DWORD *)(m_pVehicle + 0xD98) != NULL);
-	}
 
-	return false;
+	return (false);
 }
 
 void CM2Vehicle::SetHandbrake ( bool bHandbrake )
 {
-	// Is the vehicle valid?
 	if( m_pVehicle )
 	{
-		// Release the vehicle handbrake
 		DWORD C_Vehicle__SetHandbrake = 0x11FB6D0;
 		DWORD dwVehicleData = (DWORD)(m_pVehicle) + 0xA8;
-		_asm push 0;
-		_asm push 0;
-		_asm mov ecx, dwVehicleData;
-		_asm call C_Vehicle__SetHandbrake;
+
+		_asm
+		{
+			push 0;
+			push 0;
+			mov ecx, dwVehicleData;
+			call C_Vehicle__SetHandbrake;
+		}
 	}
 }
 
@@ -809,51 +730,46 @@ bool CM2Vehicle::IsHandbrakeOn ( void )
 
 int CM2Vehicle::GetTotalSeats( void )
 {
-	// Is the vehicle valid?
 	if( m_pVehicle )
 	{
-		//
 		DWORD dwFunc = m_pVehicle->m_pVFTable->GetTotalSeats;
 		M2Vehicle * pVehicle = m_pVehicle;
 		int iSeats = 0;
 
-		_asm mov ecx, pVehicle;
-		_asm call dwFunc;
-		_asm mov iSeats, eax;
+		_asm
+		{
+			mov ecx, pVehicle;
+			call dwFunc;
+			mov iSeats, eax;
+		}
 
-		return iSeats;
+		return (iSeats);
 	}
 
-	return 0;
+	return (0);
 }
 
 int CM2Vehicle::GetPedOccupiedSeat( M2Ped * pPed )
 {
-	// Is the vehicle valid?
 	if( m_pVehicle && m_pVehicle->m_pSeats )
 	{
-		// Loop over all seats
 		for( int i = 0; i < GetTotalSeats(); i++ )
 		{
-			// Get the vehicle seat instance
 			M2VehicleSeat * pSeat = m_pVehicle->m_pSeats->m_pSeat[ i ];
 
-			// Is the current seat valid?
 			if( pSeat )
 			{
-				// Is the ped in this seat?
 				if( pSeat->m_pOccupant == pPed )
-					return i;
+					return (i);
 			}
 		}
 	}
 
-	return 0;
+	return (0);
 }
 
 M2Ped * CM2Vehicle::GetSeatOccupant( int iSeat )
 {
-	// Is the vehicle valid?
 	if( m_pVehicle && m_pVehicle->m_pSeats )
 	{
 		// Fix the seat index
@@ -866,36 +782,35 @@ M2Ped * CM2Vehicle::GetSeatOccupant( int iSeat )
 		// Is the seat valid? (NOTE: internal seats are 0-3, GetTotalSeats returns 1-4)
 		if( iSeat >= 0 && iSeat < GetTotalSeats() )
 		{
-			// Get the vehicle seat instance
 			M2VehicleSeat * pSeat = m_pVehicle->m_pSeats->m_pSeat[ iSeat ];
 
-			// Is the seat instance valid?
 			if( pSeat )
-				return pSeat->m_pOccupant;
+				return (pSeat->m_pOccupant);
 		}
 	}
 
-	return NULL;
+	return (NULL);
 }
 
 void CM2Vehicle::SetWindowOpen(int iSeat, bool bState)
 {
-	// Is the vehicle valid ?
 	if (m_pVehicle)
 	{
 		DWORD callOff = COffsets::FUNC_CVehicle__OpenSeatWindow;
 		M2Vehicle * pVehicle = m_pVehicle;
 
-		_asm push bState
-		_asm push iSeat
-		_asm mov ecx, pVehicle
-		_asm call callOff;
+		_asm
+		{
+			push bState;
+			push iSeat;
+			mov ecx, pVehicle;
+			call callOff;
+		}
 	}
 }
 
 bool CM2Vehicle::IsWindowOpen(int iSeat)
 {
-	// Is the vehicle valid?
 	if (m_pVehicle)
 	{
 		DWORD func = COffsets::FUNC_CVehicle__IsWindowOpen;
@@ -918,26 +833,25 @@ bool CM2Vehicle::IsWindowOpen(int iSeat)
 
 void CM2Vehicle::SetWheelTexture ( int iWheelIndex, const char * szTexture )
 {
-	// Is the vehicle valid?
 	if( m_pVehicle )
 	{
-		//
 		DWORD C_Vehicle__SetWheelMatrixAtIndex = 0x9BE450;
 		M2Vehicle * pVehicle = m_pVehicle;
 
-		_asm push szTexture;
-		_asm push iWheelIndex;
-		_asm mov ecx, pVehicle;
-		_asm call C_Vehicle__SetWheelMatrixAtIndex;
+		_asm
+		{
+			push szTexture;
+			push iWheelIndex;
+			mov ecx, pVehicle;
+			call C_Vehicle__SetWheelMatrixAtIndex;
+		}
 	}
 }
 
 const char * CM2Vehicle::GetWheelTexture ( int iWheelIndex )
 {
-	// Is the vehicle valid?
 	if( m_pVehicle )
 	{
-		//
 		DWORD C_Vehicle__GetWheelsMaterial = 0x990CF0;
 		M2Vehicle * pVehicle = m_pVehicle;
 		const char * szMaterial;
@@ -946,19 +860,17 @@ const char * CM2Vehicle::GetWheelTexture ( int iWheelIndex )
 		DWORD dwVehicleData = (DWORD)(m_pVehicle) + 0xA8;
 		DWORD v4 = *(DWORD *)( *(DWORD *)( dwVehicleData + 0x230 ) + 0xBA8 * iWheelIndex );
 
-#ifdef DEBUG
-		CLogFile::Printf ( "v4: 0x%p", v4 );
-#endif
-
 		if ( !v4 )
 			return "(null)";
 
-		_asm push iWheelIndex;
-		_asm mov ecx, pVehicle;
-		_asm call C_Vehicle__GetWheelsMaterial;
-		_asm mov szMaterial, eax;
-		
-		return szMaterial;
+		_asm
+		{
+			push iWheelIndex;
+			mov ecx, pVehicle;
+			call C_Vehicle__GetWheelsMaterial;
+			mov szMaterial, eax;
+		}
+		return (szMaterial);
 	}
 
 	return "(null)";
@@ -966,10 +878,8 @@ const char * CM2Vehicle::GetWheelTexture ( int iWheelIndex )
 
 void CM2Vehicle::SetLightState ( bool bLightState )
 {
-	// Is the vehicle valid?
 	if ( m_pVehicle )
 	{
-		// Toggle the lights
 		M2Vehicle * pVehicle = m_pVehicle;
 		DWORD dwVehicleData = (DWORD)(pVehicle) + 0xA8;
 		DWORD C_Vehicle__SetLightState = 0x11EED00;
@@ -978,6 +888,7 @@ void CM2Vehicle::SetLightState ( bool bLightState )
 		// Unlock light state
 		*(BYTE *)(dwVehicleData + 0x6F3) = 0;
 
+		// Toggle the lights
 		_asm {
 			push 0;										front lights
 			push iLightState;
@@ -994,14 +905,13 @@ void CM2Vehicle::SetLightState ( bool bLightState )
 
 bool CM2Vehicle::GetLightState ( void )
 {
-	// Is the vehicle valid?
 	if ( m_pVehicle )
 	{
 		DWORD dwVehicleData = (DWORD)(m_pVehicle) + 0xA8;
 		return (*(DWORD *)(dwVehicleData + 0x6F0) & 2);
 	}
 
-	return false;
+	return (false);
 }
 
 void CM2Vehicle::MarkForSale(bool bSale)
