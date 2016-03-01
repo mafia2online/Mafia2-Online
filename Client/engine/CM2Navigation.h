@@ -42,4 +42,7 @@ public:
 	void					UnregisterIconPos				( int iconId );
 	void					UnregisterIconEntity			( M2Entity * pEntity );
 
+	void					SetForegroundColor				(int iIconId, int iColor);
+	void					SetBackgroundColor				(int iIconId, int iColor);
+
 };

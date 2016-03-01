@@ -142,3 +142,37 @@ void CM2Navigation::UnregisterIconEntity( M2Entity * pEntity )
 		}
 	}
 }
+
+void CM2Navigation::SetForegroundColor(int iIconId, int iColor)
+{
+	if (m_pNavigation)
+	{
+		M2Navigation *pNavigation = m_pNavigation;
+
+		DWORD dwFunc = 0x083B740;
+		__asm
+		{
+			push iColor;
+			push iIconId;
+			mov ecx, pNavigation;
+			call dwFunc;
+		}
+	}
+}
+
+void CM2Navigation::SetBackgroundColor(int iIconId, int iColor)
+{
+	if (m_pNavigation)
+	{
+		M2Navigation *pNavigation = m_pNavigation;
+
+		DWORD dwFunc = 0x083B6F0;
+		__asm
+		{
+			push iColor;
+			push iIconId;
+			mov ecx, pNavigation;
+			call dwFunc;
+		}
+	}
+}
