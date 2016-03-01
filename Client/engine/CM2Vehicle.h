@@ -283,7 +283,7 @@ public:
 	void					SetVehiclePart					( int iPart, bool bToggle );
 	bool					GetVehiclePart					( int iPart );
 
-	void					Repair							( void );
+	void					Repair							( int cleanDirt = 0 );
 	void					Explode							( void );
 
 	void					AddSteer						( float fSteer );

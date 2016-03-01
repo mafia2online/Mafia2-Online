@@ -119,5 +119,5 @@ __int64 CM2Door::GetHash( void )
 		add esp, 0Ch;
 	}
 
-	return 0;
+	return (uiHash);
 }
