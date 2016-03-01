@@ -666,7 +666,7 @@ void CM2Ped::ModelToMouth(int iModel)
 
 	M2EntityData * pEntityData = m_pPed->m_pEntityData;
 
-	DWORD dwFunc = 0x042D940;
+	DWORD dwFunc = COffsets::FUNC_CHuman__SetModelToMouth;
 
 	__asm
 	{
@@ -704,7 +704,7 @@ void CM2Ped::SetPhysState(ePhysState state)
 
 	M2EntityData *pEntityData = m_pPed->m_pEntityData;
 
-	DWORD dwFunc = 0x092A460;
+	DWORD dwFunc = COffsets::FUNC_CHuman__SetPhysState;
 
 	__asm
 	{
@@ -712,4 +712,41 @@ void CM2Ped::SetPhysState(ePhysState state)
 		mov ecx, pEntityData;
 		call dwFunc;
 	}
+}
+
+void CM2Ped::SetStealthMove(bool bStealthMove)
+{
+	if (!m_pPed)
+		return;
+
+	M2EntityData *pEntityData = m_pPed->m_pEntityData;
+
+	DWORD dwFunc = COffsets::FUNC_CHuman__SetStealthMove;
+
+	__asm
+	{
+		push bStealthMove;
+		mov ecx, pEntityData;
+		call  dwFunc;
+	}
+}
+
+bool CM2Ped::IsStealthMoving()
+{
+	if (m_pPed)
+	{
+		M2EntityData *pEntityData = m_pPed->m_pEntityData;
+
+		DWORD dwFunc = 0x0D67C30;
+		bool bRetn = 0;
+		__asm
+		{
+			mov ecx, pEntityData;
+			call dwFunc;
+			mov bRetn, al;
+		}
+		return (bRetn);
+	}
+
+	return (false);
 }
