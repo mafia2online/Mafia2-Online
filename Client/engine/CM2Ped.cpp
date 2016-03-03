@@ -575,7 +575,7 @@ C_SyncObject * CM2Ped::LookAt(CVector3 vecPosition)
 int _declspec(naked) M2EntityData::PlayAnim(C_SyncObject **syncObject, const char *const animName, const bool repeat, int, int, float, float, float)
 {
 	_asm {
-		mov eax, 0x00982CC0
+		mov eax, 0x0982CC0
 		jmp eax
 	}
 }
