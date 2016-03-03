@@ -106,6 +106,7 @@ public:
 	PAD(M2EntityData, pad1, 0x88);							// 0020 - 00A8
 	M2PedUnk001 * m_pUnknown;								// 00A8 - 00AC
 	int PlayAnim(C_SyncObject **syncObject, const char *const animName, const bool unknown, int, int, float, float, float);
+	int AnimPlayEffect(C_SyncObject **syncObject, const char *const effectName, const bool unknow, int);
 };
 
 class M2Ped : public M2Entity
@@ -207,6 +208,9 @@ public:
 	void					PlayAnimation(char *strAnimation, bool bRepeat);
 	void					StopAnimation(char *strAnimation);
 	bool					IsAnimFinished(char *strAnimation);
+
+	void					PlayAnimEffect(const char *effectName, bool unknow);
+	void					AnimEffectStop();
 
 	void					ModelToMouth(int iModel);
 	void					ModelToHand(int iHand, int iModel);
