@@ -634,6 +634,43 @@ bool CM2Ped::IsAnimFinished(char *strAnimation)
 	return bReturn;
 }
 
+int _declspec(naked) M2EntityData::AnimPlayEffect(C_SyncObject **syncObject, const char *const effectName, const bool unknow, int)
+{
+	__asm
+	{
+		mov eax, 0x0951700
+		jmp eax
+	}
+}
+
+void CM2Ped::PlayAnimEffect(const char *effectName, bool bRepeat)
+{
+	if (!m_pPed || !m_pPed->m_pEntityData)
+		return;
+
+	M2EntityData *pEntityData = m_pPed->m_pEntityData;
+
+	C_SyncObject *pSyncObject = NULL;
+	pEntityData->AnimPlayEffect(&pSyncObject, effectName, bRepeat, 0);
+	++pSyncObject->m_dwState;
+}
+
+
+
+void CM2Ped::AnimEffectStop()
+{
+	if (!m_pPed || !m_pPed->m_pEntityData)
+		return;
+
+	DWORD dwFunc = 0x0D65F60;
+
+	__asm
+	{
+		mov ecx, m_pPed;
+		call dwFunc;
+	}	
+}
+
 void CM2Ped::ModelToHand(int iHand, int iModel)
 {
 	if (iHand != 1 && iHand != 2) // 1 : right hand & 2 : left hand
