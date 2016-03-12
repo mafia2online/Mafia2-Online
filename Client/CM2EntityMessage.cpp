@@ -23,6 +23,8 @@
 #include "CLocalPlayer.h"
 #include "CPlayerManager.h"
 
+#include "SharedUtility.h"
+
 bool CM2EntityMessage::HandleEntityEvent( M2EntityMessage * pMessage )
 {
 	// Is the event invalid?
@@ -63,7 +65,9 @@ bool CM2EntityMessage::HandleEntityEvent( M2EntityMessage * pMessage )
 				if (selectedWeapon != 0 && selectedWeapon != 1)
 				{
 					CCore::Instance()->GetChat()->AddDebugMessage("ON_SHOOT (0x%p, %d, %d)", pMessage, pMessage->m_dwSenderGUID, pMessage->m_dwReceiveGUID);
-					CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->SetShooting(true);
+					
+					CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->SetTimeStartShooting( SharedUtility::GetTime() );
+					CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->SetShooting( true );
 				}
 				break;
 			}
