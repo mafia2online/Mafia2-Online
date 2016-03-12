@@ -59,6 +59,7 @@ private:
 
 	bool							m_bAiming;
 	bool							m_bShooting;
+	unsigned long					m_uMarkTimeStartShooting;
 	bool							m_bCrouching;
 
 	CVector3						m_vecLookAt;
@@ -126,6 +127,7 @@ public:
 	void							SetCrouching(bool bCrouching) { m_bCrouching = bCrouching; }
 	bool							IsCrouching( void ) { return m_bCrouching; }
 
+	void							SetTimeStartShooting( unsigned long uMarkTimeStartShooting ) { m_uMarkTimeStartShooting = uMarkTimeStartShooting; }
 	void							SetShooting( bool bShooting ) { m_bShooting = bShooting; }
 	bool							IsShooting( void ) { return m_bShooting; }
 

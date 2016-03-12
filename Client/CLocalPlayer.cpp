@@ -139,11 +139,16 @@ void CLocalPlayer::Pulse( void )
 	memcpy ( &m_vecLastGoodRotation, &vecCurrentRotation, sizeof ( CVector3 ) );
 
 	// Is player flagged as shooting ?
-	if (CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->IsShooting())
+	if ( CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->IsShooting() )
 	{
-		// Store mouse controls
-		if (CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetPlayerPed()->GetSelectedWeapon() == 0 || playerControls.m_byteUnknown1 != 3){
-			CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->SetShooting(false);
+		// Get the current time
+		unsigned long ulCurrentTime = SharedUtility::GetTime();
+
+		// How much time has passed since the shot
+		if ( m_uMarkTimeStartShooting + 200 < ulCurrentTime )
+		{
+			// Stop shooting
+			CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->SetShooting( false );
 		}
 	}
 
