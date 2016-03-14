@@ -99,9 +99,7 @@ bool CM2ModelManager::ChangeModel(const char * szModelDirectory, const char * sz
 	if (!m_pModelManager)
 		return false;
 
-	// Get the model manager pointer
 	bool bResult = false;
-	M2ModelManager * pModelManager = m_pModelManager;
 
 	// Set the model directory
 	CModelManager::SetDir(szModelDirectory);
@@ -109,7 +107,7 @@ bool CM2ModelManager::ChangeModel(const char * szModelDirectory, const char * sz
 	// Change the model
 	_asm push iHumanColour;
 	_asm push szModelName;
-	_asm mov ecx, pModelManager;
+	_asm mov ecx, this;
 	_asm call COffsets::FUNC_CModelMgr__ChangeModel;
 	_asm mov bResult, al;
 
