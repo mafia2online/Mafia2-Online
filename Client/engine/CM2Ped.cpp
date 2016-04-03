@@ -580,37 +580,91 @@ int _declspec(naked) M2EntityData::PlayAnim(C_SyncObject **syncObject, const cha
 	}
 }
 
-void CM2Ped::PlayAnimation(char *strAnimation, bool repeat)
+C_SyncObject *CM2Ped::PlayAnimation(char *strAnimation, bool repeat)
 {
+	C_SyncObject *pSyncObject = NULL;
 	if (m_pPed && m_pPed->m_pEntityData)
 	{
 		M2EntityData * pEntityData = m_pPed->m_pEntityData;
 
-		C_SyncObject *pSyncObject = NULL;
 		pEntityData->PlayAnim(&pSyncObject, strAnimation, repeat, 0, 0, 0.0f, 0.30000001f, 0.3000000f);
 		++pSyncObject->m_dwState;
 	}
+	return (pSyncObject);
 }
 
-void CM2Ped::StopAnimation(char *strAnimation)
+/*
+** Animation system
+*/
+
+class Allocator
+{
+public:
+	void *Alloc(size_t count);
+};
+
+void _declspec(naked) *Allocator::Alloc(size_t count)
+{
+	_asm {
+		mov eax, 0x410150
+		jmp eax
+	}
+}
+
+class UnknownPacket
+{
+public:
+	DWORD		vtable;		// 00-04
+	DWORD		unused[5];	// 04-18
+
+
+	void Initialize(int a1, int a2);
+};
+
+void _declspec(naked) UnknownPacket::Initialize(int a1, int a2)
+{
+	_asm {
+		mov eax, 0xF37EC0
+		jmp eax
+	}
+}
+
+void _declspec(naked) M2EntityData_Unknown_000::UnknownMethodVX20()
+{
+	_asm {
+		mov eax, [ecx]
+		mov edx, [eax + 0x20]
+		jmp edx
+	}
+}
+
+void CM2Ped::StopAnimation(C_SyncObject *_test)
 {
 	if (m_pPed && m_pPed->m_pEntityData)
 	{
 		M2EntityData * pEntityData = m_pPed->m_pEntityData;
 
-		int iAnimation = (int)strAnimation;// trololol
-		DWORD dwAddress = 0xD6FD70; // hacky, todo fix
+		M2EntityData_Unknown_000 *unk000 = pEntityData->m_pUnknown0;
 
-		_asm
+		unk000->UnknownMethodVX20();
+
+		Allocator *allocator = *(Allocator **)(0x1BB5AF4);
+		UnknownPacket *data = (UnknownPacket *)allocator->Alloc(24);
+		data->Initialize(0, 8);
+		data->vtable = 0x18DDFA8;
+
+		DWORD _data = *(DWORD *)((*(DWORD *)(*(DWORD *)((DWORD)(pEntityData)) + 0xA8)) + 0xC);
+		DWORD dwFunc = 0x0FA24C0;
+		__asm
 		{
-			push iAnimation;
-			mov ecx, pEntityData;
-			call dwAddress;
+			push data
+			mov ecx, _data
+			call dwFunc
 		}
 	}
 }
 
-bool CM2Ped::IsAnimFinished(char *strAnimation)
+bool CM2Ped::IsAnimFinished()
 {
 	bool bReturn = false;
 
@@ -618,18 +672,6 @@ bool CM2Ped::IsAnimFinished(char *strAnimation)
 	{
 		M2EntityData * pEntityData = m_pPed->m_pEntityData;
 
-		int iAnimation = (int)strAnimation;// trololol
-		DWORD dwAddress = 0xD6FD40; // hacky, todo fix
-
-		_asm
-		{
-			push iAnimation;
-			mov ecx, pEntityData;
-			call dwAddress;
-			mov bReturn, al;
-		}
-
-		return bReturn;
 	}
 	return bReturn;
 }
@@ -643,16 +685,17 @@ int _declspec(naked) M2EntityData::AnimPlayEffect(C_SyncObject **syncObject, con
 	}
 }
 
-void CM2Ped::PlayAnimEffect(const char *effectName, bool bRepeat)
+C_SyncObject  *CM2Ped::PlayAnimEffect(const char *effectName, bool bRepeat)
 {
 	if (!m_pPed || !m_pPed->m_pEntityData)
-		return;
+		return (NULL);
 
 	M2EntityData *pEntityData = m_pPed->m_pEntityData;
 
 	C_SyncObject *pSyncObject = NULL;
 	pEntityData->AnimPlayEffect(&pSyncObject, effectName, bRepeat, 0);
 	++pSyncObject->m_dwState;
+	return (pSyncObject);
 }
 
 
@@ -663,13 +706,16 @@ void CM2Ped::AnimEffectStop()
 		return;
 
 	DWORD dwFunc = 0x0D65F60;
+	M2Ped *ped = m_pPed;
 
 	__asm
 	{
-		mov ecx, m_pPed;
+		mov ecx, ped;
 		call dwFunc;
-	}	
+	}
 }
+
+/* End of animation system */
 
 void CM2Ped::ModelToHand(int iHand, int iModel)
 {
@@ -751,6 +797,29 @@ void CM2Ped::SetPhysState(ePhysState state)
 	}
 }
 
+ePhysState	CM2Ped::GetPhysState(void)
+{
+	if (!m_pPed)
+		return (E_DYNAMIC);
+
+	M2EntityData *pEntityData = m_pPed->m_pEntityData;
+
+	DWORD dwFunc = 0x090CA8;
+
+	int iRetn = E_DYNAMIC;
+
+	__asm
+	{
+		mov ecx, pEntityData;
+		call dwFunc;
+		mov iRetn, eax;
+	}
+
+	return ((ePhysState)iRetn);
+}
+
+/* StealthMoving things */
+
 void CM2Ped::SetStealthMove(bool bStealthMove)
 {
 	if (!m_pPed)
@@ -768,22 +837,26 @@ void CM2Ped::SetStealthMove(bool bStealthMove)
 	}
 }
 
+int _declspec(naked) M2EntityData_Unknown_000::UnknowMethodVX198()
+{
+	_asm {
+		mov eax, [ecx]
+		mov edx, [eax + 0x198]
+		jmp edx
+		movzx eax, al
+	}
+}
+
 bool CM2Ped::IsStealthMoving()
 {
-	if (m_pPed)
-	{
-		M2EntityData *pEntityData = m_pPed->m_pEntityData;
+	if (!m_pPed)
+		return (false);
 
-		DWORD dwFunc = 0x0D67C30;
-		bool bRetn = 0;
-		__asm
-		{
-			mov ecx, pEntityData;
-			call dwFunc;
-			mov bRetn, al;
-		}
-		return (bRetn);
-	}
+	M2EntityData *pEntityData = m_pPed->m_pEntityData;
 
-	return (false);
+	M2EntityData_Unknown_000 *unk000 = pEntityData->m_pUnknown0;
+
+	return (unk000->UnknowMethodVX198());
 }
+
+/* End of StealthMoving things */
