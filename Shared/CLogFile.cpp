@@ -57,6 +57,12 @@ void CLogFile::Print( const char * szString )
 	// Print the message to the log file
 	PrintToFile( szString );
 
+#ifdef _WIN32
+	// Print message to VS output.
+	OutputDebugStringA( szString );
+	OutputDebugStringA( "\r\n" );
+#endif
+
 	// Unlock the mutex
 	m_mutex.Unlock( );
 }
