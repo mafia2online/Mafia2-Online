@@ -60,6 +60,7 @@ CNetworkPlayer::CNetworkPlayer( bool bLocalPlayer )
 	m_dwDeathTime = 0;
 	m_bAiming = false;
 	m_bShooting = false;
+	m_bCrouching = false;
 	m_iControlStyle = 0;
 	m_usPing = 0;
 	m_dwWeaponSelect = NULL;
@@ -567,6 +568,14 @@ bool CNetworkPlayer::IsCrouching(void)
 		return (m_pPlayerPed->IsStealthMoving());
 	
 	return (false);
+}
+
+void CNetworkPlayer::SetCrouching(bool bCrouching)
+{
+	if (m_pPlayerPed){
+		m_pPlayerPed->SetStealthMove(bCrouching);
+		m_bCrouching = bCrouching;
+	}
 }
 
 void CNetworkPlayer::UpdateAim( bool bAiming )
