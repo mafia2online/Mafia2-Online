@@ -125,6 +125,47 @@ static int WeaponNameID[] =
 	17, 21
 };
 
+static char * Doors[] = 
+{
+	"GS_door",				"GS_door00",		"GS_door01",
+	"Wash_gate00",			"Wash_gate01",
+	"GUNSHOP_Door_Glass00",
+	"C_Door",				"C_Door00",			"C_Door01",
+	"GIUSH_Door_Vstup00",
+	"GIUSH_Door00",
+	"RS_vrata01",
+	"EntryDoor"
+};
+
+unsigned int Game::GetIdFromDoorName(String doorName)
+{
+	int returnId = -1;
+	for (unsigned int i = 0; i < sizeof(Doors) / sizeof(*Doors); i++)
+	{
+		if (doorName.Compare(Doors[i]))
+		{
+			returnId = i;
+			break;
+		}
+	}
+	return (returnId);
+}
+
+String Game::GetDoorNameFromId(unsigned int doorId)
+{
+	String retnName = "Unknow";
+
+	for (unsigned int i = 0; i < sizeof(Doors) / sizeof(*Doors); i++)
+	{
+		if (i == doorId)
+		{
+			retnName.Set(Doors[i]);
+			break;
+		}
+	}
+	return (retnName);
+}
+
 unsigned int Game::GetWeaponIdFromName(String strName)
 {
 	int foundId = -1;
