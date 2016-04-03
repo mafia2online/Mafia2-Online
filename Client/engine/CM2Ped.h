@@ -218,11 +218,11 @@ public:
 	C_SyncObject			* LookAt(CVector3 vecPosition);
 
 	C_SyncObject			* PlayAnimation(char *strAnimation, bool bRepeat);
-	void					StopAnimation(C_SyncObject *test);
+	void					StopAnimation(C_SyncObject *obj);
 	bool					IsAnimFinished();
 
 	C_SyncObject			* PlayAnimEffect(const char *effectName, bool unknow);
-	void					AnimEffectStop();
+	void					AnimEffectStop(C_SyncObject *obj);
 
 	void					ModelToMouth(int iModel);
 	void					ModelToHand(int iHand, int iModel);

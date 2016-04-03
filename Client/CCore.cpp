@@ -514,6 +514,13 @@ void CCore::OnDeviceRender( void )
 	if( m_pPedManager )
 		m_pPedManager->Pulse();
 
+	if (m_pPlayerManager && m_pPlayerManager->GetLocalPlayer() && m_pPlayerManager->GetLocalPlayer()->IsSpawned()) {
+		CM2Ped * pPlayerPed = m_pPlayerManager->GetLocalPlayer()->GetPlayerPed();
+		M2PlayerControls playerControls = pPlayerPed->GetPed()->m_playerControls;
+
+		CCore::Instance()->GetGraphics()->DrawText(300, 300, D3DCOLOR_ARGB(255, 255, 0, 0), 1.0f, "tahoma-bold", true, "Is shooting: %s\nMovement State: %d\nModifiers: %d\nMouse Flags: %d\nKeyboard Flags: %d\nIs Aiming: %s\n", playerControls.m_bIsShooting ? "Yes" : "No", playerControls.m_playerMovementState, playerControls.m_byteModifiers, playerControls.m_byteMouseFlags, playerControls.m_byteKeyboardFlags, playerControls.m_bIsAiming ? "Yes" : "No");
+	}
+
 	// Was the hide stuff key pressed?
 	if ( GetAsyncKeyState ( VK_F10 ) & 0x1 )
 	{
@@ -633,23 +640,22 @@ void CCore::OnGameProcess( void )
 	CM2VideoSettings::Pulse ();
 
 	// DEBUG
-	if( GetAsyncKeyState( VK_F8 ) & 0x1 )
+	static C_SyncObject *_test = NULL;
+	if( GetAsyncKeyState( VK_F7 ) & 0x1 )
 	{
-		/*CVector3 vecPos;
-		m_pPlayerManager->GetLocalPlayer()->GetPosition ( &vecPos );
-
-		pPlayerPed = new CM2Ped ( IE::CreatePlayerPed () );
-		pPlayerPed->SetPosition ( vecPos );
-		pPlayerPed->Activate ();
-
-		CCore::Instance()->GetChat()->AddDebugMessage ( "Ped: 0x%p", pPlayerPed->GetPed() );*/
+		CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->LockControls(true);
+		_test = CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetPlayerPed()->PlayAnimEffect("00-WALK-A", true);
 	}
 
-	if (GetAsyncKeyState(VK_F7) & 0x1)
+	if (GetAsyncKeyState(VK_F8) & 0x1)
 	{
-		/*CCore::Instance()->GetChat()->AddDebugMessage("Etat : %d", CCore::Instance()->GetVehicleManager()->Get(CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetVehicle()->GetId())->IsWindowOpen(0));
-		CCore::Instance()->GetVehicleManager()->Get(CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetVehicle()->GetId())->SetWindowOpen(0, true);
-		CCore::Instance()->GetChat()->AddDebugMessage("Etat : %d", CCore::Instance()->GetVehicleManager()->Get(CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetVehicle()->GetId())->IsWindowOpen(0));*/
+		CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetPlayerPed()->AnimEffectStop(_test);
+		CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->LockControls(false);
+	}
+
+	if (GetAsyncKeyState(VK_F6) & 0x1)
+	{
+		CCore::Instance()->GetChat()->AddDebugMessage("IsStealthMoving : %s", (CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetPlayerPed()->IsStealthMoving()) ? "Oui" : "Non");
 	}
 
 	// Call the script event
