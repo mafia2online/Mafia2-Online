@@ -98,10 +98,22 @@ public:
 	void * m_pUnknown;										// 0044 - 004C
 };
 
+class M2EntityData_Unknown_000
+{
+public:
+	unsigned vtable;
+
+
+	// Unknown Method in V table on heX offset 20.
+	void UnknownMethodVX20();
+	int	UnknowMethodVX198();
+};
+
 class M2EntityData
 {
 public:
-	PAD(M2EntityData, pad0, 0x1C);							// 0000 - 001C
+	M2EntityData_Unknown_000* m_pUnknown0;				    // 0000 - 0004
+	PAD(M2EntityData, pad0, 0x18);							// 0004 - 001C
 	DWORD m_dwType;											// 001C - 0020
 	PAD(M2EntityData, pad1, 0x88);							// 0020 - 00A8
 	M2PedUnk001 * m_pUnknown;								// 00A8 - 00AC
@@ -205,11 +217,11 @@ public:
 	C_SyncObject			* ShootAt(CVector3 vecPosition);
 	C_SyncObject			* LookAt(CVector3 vecPosition);
 
-	void					PlayAnimation(char *strAnimation, bool bRepeat);
-	void					StopAnimation(char *strAnimation);
-	bool					IsAnimFinished(char *strAnimation);
+	C_SyncObject			* PlayAnimation(char *strAnimation, bool bRepeat);
+	void					StopAnimation(C_SyncObject *test);
+	bool					IsAnimFinished();
 
-	void					PlayAnimEffect(const char *effectName, bool unknow);
+	C_SyncObject			* PlayAnimEffect(const char *effectName, bool unknow);
 	void					AnimEffectStop();
 
 	void					ModelToMouth(int iModel);
@@ -217,6 +229,7 @@ public:
 	void					SetAnimStyle(const char *dir, const char *set);
 
 	void					SetPhysState(ePhysState state);
+	ePhysState				GetPhysState(void);
 
 	void					SetStealthMove(bool bStealthMove);
 	bool					IsStealthMoving();
