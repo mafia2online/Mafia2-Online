@@ -572,11 +572,15 @@ C_SyncObject * CM2Ped::LookAt(CVector3 vecPosition)
 	return NULL;
 }
 
+/*
+** Animation system
+*/
+
 int _declspec(naked) M2EntityData::PlayAnim(C_SyncObject **syncObject, const char *const animName, const bool repeat, int, int, float, float, float)
 {
 	_asm {
 		mov eax, 0x0982CC0
-		jmp eax
+			jmp eax
 	}
 }
 
@@ -592,10 +596,6 @@ C_SyncObject *CM2Ped::PlayAnimation(char *strAnimation, bool repeat)
 	}
 	return (pSyncObject);
 }
-
-/*
-** Animation system
-*/
 
 class Allocator
 {
@@ -638,7 +638,7 @@ void _declspec(naked) M2EntityData_Unknown_000::UnknownMethodVX20()
 	}
 }
 
-void CM2Ped::StopAnimation(C_SyncObject *_test)
+void CM2Ped::StopAnimation(C_SyncObject *obj)
 {
 	if (m_pPed && m_pPed->m_pEntityData)
 	{
@@ -700,7 +700,7 @@ C_SyncObject  *CM2Ped::PlayAnimEffect(const char *effectName, bool bRepeat)
 
 
 
-void CM2Ped::AnimEffectStop()
+void CM2Ped::AnimEffectStop(C_SyncObject *obj)
 {
 	if (!m_pPed || !m_pPed->m_pEntityData)
 		return;
@@ -708,11 +708,6 @@ void CM2Ped::AnimEffectStop()
 	DWORD dwFunc = 0x0D65F60;
 	M2Ped *ped = m_pPed;
 
-	__asm
-	{
-		mov ecx, ped;
-		call dwFunc;
-	}
 }
 
 /* End of animation system */
