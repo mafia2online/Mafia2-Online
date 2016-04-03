@@ -45,6 +45,8 @@
 
 #include "CSettings.h"
 
+#include "CLua.h"
+
 bool m_bChatOldCameraState;
 
 CChat::CChat(CGUI_Impl * pGUI, float fX, float fY)
