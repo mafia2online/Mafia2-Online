@@ -26,4 +26,7 @@ namespace Game
 	unsigned int		GetWeaponIdFromName				( String strName );
 	String				GetWeaponNameFromId				( unsigned int uiModel );
 
+	unsigned int		GetIdFromDoorName				(String doorName);
+	String				GetDoorNameFromId				(unsigned int doorId);
+
 };
