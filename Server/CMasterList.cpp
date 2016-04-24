@@ -38,11 +38,19 @@ void CMasterList::WorkerThread ( CThread * pCreator )
 			{
 				case E_STATE_ADD:
 				{
-					// Generate the string for RakNet
-					if ( strlen ( CVAR_GET_STRING ( "serverip" ) ) > 0 )
-						post = RakNet::RakString::FormatForGET ( RakNet::RakString ( "http://"MASTERLIST_HOST"/query?port=%d&ip=%s", pMasterList->GetServerPort(), CVAR_GET_STRING ( "serverip" ) ), RakNet::RakString ( "User-Agent: Mafia2Online/1.0" ) );
-					else
-						post = RakNet::RakString::FormatForGET ( RakNet::RakString ( "http://"MASTERLIST_HOST"/query?port=%d", pMasterList->GetServerPort() ), RakNet::RakString ( "User-Agent: Mafia2Online/1.0" ) );
+					post = RakNet::RakString::FormatForPOST(RakNet::RakString(MASTERLIST_HOST"/api/v1/server/update"),
+						RakNet::RakString("application/x-www-form-urlencoded"),
+						RakNet::RakString("key=%s&players=%d", CVAR_GET_STRING("serverkey"), CCore::Instance()->GetPlayerManager()->GetCount()), 
+						RakNet::RakString("User-Agent: Mafia2Online/1.0"));
+					break;
+				}
+
+				case E_STATE_UPDATE:
+				{
+					post = RakNet::RakString::FormatForPOST(RakNet::RakString(MASTERLIST_HOST"/api/v1/server/update"),
+						RakNet::RakString("application/x-www-form-urlencoded"),
+						RakNet::RakString("key=%s&players=%d", CVAR_GET_STRING("serverkey"), CCore::Instance()->GetPlayerManager()->GetCount()), 
+						RakNet::RakString("User-Agent: Mafia2Online/1.0"));
 					break;
 				}
 			}
@@ -85,6 +93,9 @@ CMasterList::CMasterList( void )
 	// Set the server port
 	SetServerPort( CVAR_GET_INTEGER( "port" ) );
 
+	// Set the auth key
+	SetAuthKey(CVAR_GET_STRING("serverkey"));
+
 	// Reset the last update time
 	SetLastUpdateTime ( 0 );
 
@@ -101,16 +112,19 @@ CMasterList::CMasterList( void )
 	tcp->Start ( 0, 64 );
 
 	// Create the worker thread
-	m_workerThread.SetUserData< bool > ( true );
-	m_workerThread.Start ( WorkerThread );
+	if (strlen(CVAR_GET_STRING("serverkey")) > 0){
+		m_workerThread.SetUserData< bool >(true);
+		m_workerThread.Start(WorkerThread);
+	}
 }
 
 CMasterList::~CMasterList( void )
 {
 	// Stop the worker thread
-	m_workerThread.SetUserData< bool > ( false );
-	m_workerThread.Stop ( false, true );
-
+	if (m_workerThread.IsRunning()){
+		m_workerThread.SetUserData< bool > ( false );
+		m_workerThread.Stop ( false, true );
+	}
 	// Stop the TCP interface
 	tcp->Stop ();
 
