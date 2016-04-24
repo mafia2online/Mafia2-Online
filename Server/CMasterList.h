@@ -32,6 +32,8 @@ private:
 	bool							m_bIsAdded;
 	RakNet::TCPInterface			* tcp;
 
+	String							m_sAuthKey;
+
 	CThread							m_workerThread;
 
 	static void						WorkerThread						( CThread * pCreator );
@@ -51,5 +53,8 @@ public:
 	bool							IsAdded								( void ) { return m_bIsAdded; }
 
 	RakNet::TCPInterface			* GetTCPInterface					( void ) { return tcp; }
+
+	void							SetAuthKey							(String key){ m_sAuthKey = key; }
+	String							GetAuthKey							(void){ return m_sAuthKey; }
 
 };
