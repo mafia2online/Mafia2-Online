@@ -36,6 +36,9 @@
 #include	<errno.h>
 #include	<stdio.h>
 
+#include	<chrono>
+#include	<stdexcept>
+
 #include	"CLogFile.h"
 
 #ifndef _LAUNCHER
@@ -126,13 +129,7 @@ namespace SharedUtility
 
 	unsigned long GetTime( void )
 	{
-#ifdef _WIN32
-		return timeGetTime ();
-#else
-		timeval ts;
-		gettimeofday ( &ts, 0 );
-		return (DWORD)(ts.tv_sec * 1000 + (ts.tv_usec / 1000));
-#endif
+		return (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count());
 	}
 
 	bool Exists( const char * szPath )
@@ -210,11 +207,14 @@ namespace SharedUtility
 #ifdef _CLIENT
 	DWORD GetSerial( void )
 	{
-		// Get the C: serial
+#ifdef _WIN32
 		DWORD dwSerial;
-		GetVolumeInformation( "C:\\", NULL, 0, &dwSerial, NULL, NULL, NULL, 0 );
+		GetVolumeInformation(_T("C:\\"), nullptr, 0, &dwSerial, nullptr, nullptr, nullptr, 0);
 
 		return dwSerial;
+#else
+		throw std::logic_error("utility::getSerial() not implemented");
+#endif
 	}
 
 	String GetSerialHash( void )
