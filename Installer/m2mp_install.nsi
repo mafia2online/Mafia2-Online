@@ -166,6 +166,9 @@ Section "Install"
 	SetOutPath "$INSTDIR\edit\tables"
 	File ..\Binary\gamefiles\StreamM2MP.bin
 	File ..\Binary\gamefiles\tables.sds
+
+	SetOutPath "${MOD_DIR}\data\sounds"
+	File ..\Binary\sounds\menu.mp3
 	
 	# Write the uninstaller
 	WriteUninstaller "${MOD_DIR}\Uninstall.exe"
