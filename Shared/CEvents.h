@@ -15,10 +15,10 @@
 #include	"../Libraries/squirrel/squirrel.h"
 #include	"../Libraries/squirrel/sqvm.h"
 
-#include	"../Shared/Scripting\CSquirrel.h"
-#include	"../Shared/Scripting\CSquirrelArguments.h"
-#include	"../Shared/Scripting\CScriptingManager.h"
-#include	"../Shared/Scripting\CSquirrelCommon.h"
+#include	"../Shared/Scripting/CSquirrel.h"
+#include	"../Shared/Scripting/CSquirrelArguments.h"
+#include	"../Shared/Scripting/CScriptingManager.h"
+#include	"../Shared/Scripting/CSquirrelCommon.h"
 
 class CEventHandler
 {
