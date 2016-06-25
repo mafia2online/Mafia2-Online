@@ -32,6 +32,8 @@
 #define		MAX_PATH		PATH_MAX
 #endif
 
+#include	<tchar.h>
+
 #include	<sys/stat.h>
 #include	<errno.h>
 #include	<stdio.h>
