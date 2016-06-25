@@ -9,3 +9,8 @@ branches:
   only:
   - master
   - "/^v\\d+\\./"
+
+addons:
+  apt:
+    packages:
+    - libc6-dev-i386
