@@ -514,12 +514,14 @@ void CCore::OnDeviceRender( void )
 	if( m_pPedManager )
 		m_pPedManager->Pulse();
 
+#ifdef DEBUG
 	if (m_pPlayerManager && m_pPlayerManager->GetLocalPlayer() && m_pPlayerManager->GetLocalPlayer()->IsSpawned()) {
 		CM2Ped * pPlayerPed = m_pPlayerManager->GetLocalPlayer()->GetPlayerPed();
 		M2PlayerControls playerControls = pPlayerPed->GetPed()->m_playerControls;
 
 		CCore::Instance()->GetGraphics()->DrawText(300, 300, D3DCOLOR_ARGB(255, 255, 0, 0), 1.0f, "tahoma-bold", true, "Is shooting: %s\nMovement State: %d\nModifiers: %d\nMouse Flags: %d\nKeyboard Flags: %d\nIs Aiming: %s\n", playerControls.m_bIsShooting ? "Yes" : "No", playerControls.m_playerMovementState, playerControls.m_byteModifiers, playerControls.m_byteMouseFlags, playerControls.m_byteKeyboardFlags, playerControls.m_bIsAiming ? "Yes" : "No");
 	}
+#endif
 
 	// Was the hide stuff key pressed?
 	if ( GetAsyncKeyState ( VK_F10 ) & 0x1 )
@@ -640,6 +642,7 @@ void CCore::OnGameProcess( void )
 	CM2VideoSettings::Pulse ();
 
 	// DEBUG
+#ifdef DEBUG
 	static C_SyncObject *_test = NULL;
 	if( GetAsyncKeyState( VK_F7 ) & 0x1 )
 	{
@@ -657,6 +660,7 @@ void CCore::OnGameProcess( void )
 	{
 		CCore::Instance()->GetChat()->AddDebugMessage("IsStealthMoving : %s", (CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetPlayerPed()->IsStealthMoving()) ? "Oui" : "Non");
 	}
+#endif
 
 	// Call the script event
 	if( m_pClientScriptingManager )
