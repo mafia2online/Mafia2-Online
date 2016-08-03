@@ -121,10 +121,10 @@ Section "Install"
 	File ..\Binary\crashprt\dbghelp.dll
 	
 	SetOutPath "${MOD_DIR}\data\game"
-	File ..\Binary\gamefiles\0.m2mp
-	File ..\Binary\gamefiles\1.m2mp
-	File ..\Binary\gamefiles\2.m2mp
-	File ..\Binary\gamefiles\3.m2mp
+	File ..\Binary\gamefiles\0.m2o
+	File ..\Binary\gamefiles\1.m2o
+	File ..\Binary\gamefiles\2.m2o
+	File ..\Binary\gamefiles\3.m2o
 	
 	SetOutPath "${MOD_DIR}\data\gui\fonts"
 	File ..\Binary\guifiles\tahoma.ttf
@@ -158,13 +158,13 @@ Section "Install"
 	File ..\Binary\guifiles\default.imageset.xml
 	
 	SetOutPath "$INSTDIR\pc\sds\missionscript"
-	File ..\Binary\gamefiles\freeraid_m2mp.sds
+	File ..\Binary\gamefiles\freeraid_m2o.sds
 	
 	SetOutPath "$INSTDIR\edit"
-	File ..\Binary\gamefiles\sdsconfig_m2mp.bin
+	File ..\Binary\gamefiles\sdsconfig_m2o.bin
 	
 	SetOutPath "$INSTDIR\edit\tables"
-	File ..\Binary\gamefiles\StreamM2MP.bin
+	File ..\Binary\gamefiles\StreamM2O.bin
 	File ..\Binary\gamefiles\tables.sds
 
 	SetOutPath "${MOD_DIR}\data\sounds"

@@ -77,10 +77,11 @@ void CSettings::LoadDefaults( void )
 	DEFAULT( "serverip", "" );
 	DEFAULT( "port", 27015 );
 	DEFAULT( "maxplayers", MAX_PLAYERS );
-	DEFAULT( "weburl", "www.m2-multiplayer.com" );
+	DEFAULT( "weburl", "www.mafia2-online.com" );
 	DEFAULT( "password", "" );
 	DEFAULT( "modules", "" );
 	DEFAULT( "resources", "" );
+	DEFAULT( "serverkey", "" );
 #endif
 }
 

@@ -40,7 +40,7 @@ void CMasterList::WorkerThread ( CThread * pCreator )
 				{
 					post = RakNet::RakString::FormatForPOST(RakNet::RakString(MASTERLIST_HOST"/api/v1/server/update"),
 						RakNet::RakString("application/x-www-form-urlencoded"),
-						RakNet::RakString("key=%s&players=%d", CVAR_GET_STRING("serverkey"), CCore::Instance()->GetPlayerManager()->GetCount()), 
+						RakNet::RakString("key=%s&players=%d&maxplayers=%d", CVAR_GET_STRING("serverkey"), CCore::Instance()->GetPlayerManager()->GetCount(), CVAR_GET_INTEGER("maxplayers")), 
 						RakNet::RakString("User-Agent: Mafia2Online/1.0"));
 					break;
 				}
@@ -49,7 +49,7 @@ void CMasterList::WorkerThread ( CThread * pCreator )
 				{
 					post = RakNet::RakString::FormatForPOST(RakNet::RakString(MASTERLIST_HOST"/api/v1/server/update"),
 						RakNet::RakString("application/x-www-form-urlencoded"),
-						RakNet::RakString("key=%s&players=%d", CVAR_GET_STRING("serverkey"), CCore::Instance()->GetPlayerManager()->GetCount()), 
+						RakNet::RakString("key=%s&players=%d&maxplayers=%d", CVAR_GET_STRING("serverkey"), CCore::Instance()->GetPlayerManager()->GetCount(), CVAR_GET_INTEGER("maxplayers")), 
 						RakNet::RakString("User-Agent: Mafia2Online/1.0"));
 					break;
 				}
