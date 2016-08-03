@@ -358,6 +358,15 @@ CMenuSettings::CMenuSettings( CGUI_Impl * pGUI )
 	m_pLogout->SetPosition(Vector2(90, 130));
 	m_pLogout->SetClickHandler(GUI_CALLBACK(&CMenuSettings::Event_OnClickLogout, this));
 	m_pLogout->SetVisible(false);
+
+
+	/*
+		Remove this before working on M2Network
+	*/
+	m_pM2OPassword->SetReadOnly(true);
+	m_pM2OUsername->SetReadOnly(true);
+	m_pLogin->SetVisible(false);
+	m_pLogout->SetVisible(false);
 }
 
 CMenuSettings::~CMenuSettings( void )
