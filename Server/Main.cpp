@@ -163,7 +163,8 @@ void InputThread()
 	{
 		std::getline(std::cin, input);
 		m_inputMutex.lock();
-		m_inputQueue.push(input);
+		if (input.size() > 0)
+			m_inputQueue.push(input);
 		m_inputMutex.unlock();
 	}
 }
