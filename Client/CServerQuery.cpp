@@ -24,53 +24,20 @@
 #include	"SharedUtility.h"
 
 #include	"CServerQuery.h"
-const char * GetIPFromSocketAddress(int af, const void * src, char * dst, int cnt) // TODO: Move this function to the shared library! It's used in Server/CQuery.cpp also!
-{
-	if(af == AF_INET || af == PF_INET)
-	{
-		sockaddr_in in;
-		memset(&in, 0, sizeof(in));
-		in.sin_family = af;
-		memcpy(&in.sin_addr, src, sizeof(in_addr));
-		getnameinfo((sockaddr *)&in, sizeof(sockaddr_in), dst, cnt, NULL, 0, NI_NUMERICHOST);
-		return dst;
-	}
-	else if(af == AF_INET6 || af == PF_INET6)
-	{
-		struct sockaddr_in6 in;
-		memset(&in, 0, sizeof(in));
-		in.sin6_family = af;
-		memcpy(&in.sin6_addr, src, sizeof(in.sin6_addr));
-		getnameinfo((sockaddr *)&in, sizeof(sockaddr_in6), dst, cnt, NULL, 0, NI_NUMERICHOST);
-		return dst;
-	}
-
-	return NULL;
-}
 
 void CServerQuery::WorkerThread ( CThread * pCreator )
 {
-	// Loop until we end the thread
 	while ( pCreator->GetUserData < bool > () )
 	{
-		// Get the server query pointer
 		CServerQuery * pServerQuery = CCore::Instance()->GetGUI()->GetServerBrowser()->GetServerQuery ();
-
-		// Is the server query pointer valid?
 		if ( pServerQuery )
 		{
-			// Remove any stale queries
 			for ( std::list< CServerListItem* >::iterator iter = pServerQuery->GetQueue().begin (); iter != pServerQuery->GetQueue().end (); )
 			{
-				// Get the current query
 				CServerListItem * pServerQueryItem = *iter;
-
-				// Has the query timed out?
 				if ( (SharedUtility::GetTime () - pServerQueryItem->ulQueryStart) > 10000 )
 				{
 					CLogFile::Printf ( "Deleting stale query." );
-
-					// Erase the query item from the list
 					delete pServerQueryItem;
 					pServerQuery->Remove ( pServerQueryItem );
 				}
@@ -78,79 +45,60 @@ void CServerQuery::WorkerThread ( CThread * pCreator )
 					iter++;
 			}
 
-			// Prepare the socket address
 			sockaddr_in address;
 			memset ( &address, 0, sizeof ( sockaddr_in ) );
 			int iFromLen = sizeof ( sockaddr_in );
-
-			// Create the temp buffer
 			static char szBuffer [ 2048 ];
 
-			// Loop until everything is read from the socket buffer
 			int iBytesRead = -1;
 			while ( (iBytesRead = recvfrom ( pServerQuery->GetSocket (), szBuffer, sizeof ( szBuffer ), NULL, (sockaddr *)&address, &iFromLen )) != -1 )
 			{
 				// Is this query for M2Online?
 				if ( szBuffer [ 0 ] == 'M' && szBuffer [ 1 ] == '2' && szBuffer [ 2 ] == 'O' && szBuffer [ 3 ] == 'n' && szBuffer[4] == 'l' && szBuffer[5] == 'i' && szBuffer[6] == 'n' && szBuffer[7] == 'e')
 				{
-					// Convert the socket address into an IP
 					char szIpAddress [ 64 ];
-					GetIPFromSocketAddress ( address.sin_family, &address.sin_addr, szIpAddress, sizeof ( szIpAddress ) );
-
-					// Get the socket address port
+					SharedUtility::GetIPFromSocketAddress(address.sin_family, &address.sin_addr, szIpAddress, sizeof(szIpAddress));
 					unsigned short usPort = ntohs ( address.sin_port );
 
-					// Get the server query item pointer
 					CServerListItem * pServerItem = pServerQuery->GetQueryItem ( szIpAddress, (usPort - 1) );
-
-					// Is the query item invalid?
 					if ( !pServerItem )
 						continue;
 
-					// Parse the server info
 					pServerItem->Parse ( szBuffer, strlen ( szBuffer ) );
 
-					// Remove the item from the query queue
 					pServerQuery->Remove ( pServerItem );
+				}
+				else {
+					CLogFile::Printf("Received query but ignored it (%s)", szBuffer);
 				}
 			}
 		}
-
-		// Sleep
 		Sleep ( 50 );
 	}
 }
 
 CServerQuery::CServerQuery ( void )
 {
-	// Startup winsock
 	WSADATA wsaData;
 	WSAStartup ( MAKEWORD( 2, 2 ), &wsaData );
 
-	// Prepare the socket
 	m_iSocket = socket ( AF_INET, SOCK_DGRAM, IPPROTO_UDP );
 
-	// Set the socket non blocking
 	unsigned long sockopt = 1;
 	ioctlsocket ( m_iSocket, FIONBIO, &sockopt );
 }
 
 CServerQuery::~CServerQuery ( void )
 {
-	// Reset all queries
 	Reset ();
-
-	// Close the socket if it's valid
 	if ( m_iSocket != -1 )
 		closesocket ( m_iSocket );
-
-	// Cleanup winsock
 	WSACleanup ();
 }
 
 bool CServerQuery::Query ( CServerListItem * pServerItem )
 {
-	// Prepare the address
+	CLogFile::Printf("Querying... %s", pServerItem->strHost.Get());
 	sockaddr_in address;
 	memset ( &address, 0, sizeof ( sockaddr_in ) );
 	address.sin_family = AF_INET;
@@ -161,26 +109,25 @@ bool CServerQuery::Query ( CServerListItem * pServerItem )
 	CLogFile::Printf ( "Sending query to %s:%d...", pServerItem->strHost.Get(), pServerItem->usGamePort );
 #endif
 
-	// Send the query to the server
-	if ( sendto ( m_iSocket, "M2Online", 8, NULL, (sockaddr *)&address, sizeof ( sockaddr_in ) ) == 4 )
+	int sentChars = sendto(m_iSocket, "M2Online", 8, NULL, (sockaddr *)&address, sizeof(sockaddr_in));
+	if ( sentChars == 8 )
 	{
-		// Set the query start time
 		pServerItem->ulQueryStart = SharedUtility::GetTime ();
-
-		// Add the query item to the queue
 		m_queryQueue.push_back ( pServerItem );
 
 		CLogFile::Printf ( "CServerQuery::Query () - Queue size: %d", m_queryQueue.size () );
 
-		// Is the worker thread inactive?
 		if ( !m_workerThread.IsRunning () )
 		{
-			// Create the worker thread
 			m_workerThread.SetUserData< bool > ( true );
 			m_workerThread.Start ( WorkerThread );
 		}
-
 		return true;
+	}
+	else {
+#ifdef _DEBUG
+		CLogFile::Printf("Sent %d chars", sentChars);
+#endif
 	}
 
 	return false;
@@ -188,13 +135,10 @@ bool CServerQuery::Query ( CServerListItem * pServerItem )
 
 void CServerQuery::Remove ( CServerListItem * pServerItem )
 {
-	// Loop over the query queue
 	for ( std::list< CServerListItem* >::iterator iter = m_queryQueue.begin (); iter != m_queryQueue.end (); iter ++ )
 	{
-		// Is this the item we're looking for?
 		if ( pServerItem == *iter )
 		{
-			// Remove the item
 			m_queryQueue.erase ( iter );
 			break;
 		}
@@ -202,23 +146,17 @@ void CServerQuery::Remove ( CServerListItem * pServerItem )
 
 	CLogFile::Printf ( "CServerQuery::Remove () - Queue size: %d", m_queryQueue.size () );
 
-	// Are we out of queue items?
 	if ( !m_queryQueue.size () )
 	{
-		// Reset
 		Reset ();
 	}
 }
 
 void CServerQuery::Reset ( void )
 {
-	// Clear the query queue
 	m_queryQueue.clear ();
-
-	// Is the worker thread active?
 	if ( m_workerThread.IsRunning () )
 	{
-		// Terminate the worker thread
 		m_workerThread.SetUserData< bool > ( false );
 		m_workerThread.Stop ( false, true );
 	}
@@ -226,10 +164,8 @@ void CServerQuery::Reset ( void )
 
 CServerListItem * CServerQuery::GetQueryItem ( const char * szHost, unsigned short usPort )
 {
-	// Loop over the query queue
 	for ( std::list< CServerListItem* >::iterator iter = m_queryQueue.begin (); iter != m_queryQueue.end (); iter ++ )
 	{
-		// Is this the query we're looking for?
 		if ( !(*iter)->strHost.Compare ( szHost ) && (*iter)->usGamePort == usPort )
 			return *iter;
 	}
@@ -239,22 +175,16 @@ CServerListItem * CServerQuery::GetQueryItem ( const char * szHost, unsigned sho
 
 void CServerQuery::Process ( void )
 {
-	// Do we not have any queries?
 	if ( !m_queryQueue.size () )
 		return;
 
-	/*
-	// Remove any stale queries
 	for ( std::list< CServerListItem* >::iterator iter = m_queryQueue.begin (); iter != m_queryQueue.end (); iter ++ )
 	{
-		// Has the query timed out?
 		if ( (SharedUtility::GetTime () - (*iter)->ulQueryStart) > 10000 )
 		{
-			// Erase the query item from the list
 			iter = m_queryQueue.erase ( iter );
 		}
 		else
 			iter ++;
 	}
-	*/
 }

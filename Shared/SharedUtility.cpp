@@ -839,4 +839,28 @@ namespace SharedUtility
 		return (false);
 	}
 #endif
+
+	const char * GetIPFromSocketAddress(int af, const void * src, char * dst, int cnt)
+	{
+		if (af == AF_INET || af == PF_INET)
+		{
+			sockaddr_in in;
+			memset(&in, 0, sizeof(in));
+			in.sin_family = af;
+			memcpy(&in.sin_addr, src, sizeof(in_addr));
+			getnameinfo((sockaddr *)&in, sizeof(sockaddr_in), dst, cnt, NULL, 0, NI_NUMERICHOST);
+			return dst;
+		}
+		else if (af == AF_INET6 || af == PF_INET6)
+		{
+			struct sockaddr_in6 in;
+			memset(&in, 0, sizeof(in));
+			in.sin6_family = af;
+			memcpy(&in.sin6_addr, src, sizeof(in.sin6_addr));
+			getnameinfo((sockaddr *)&in, sizeof(sockaddr_in6), dst, cnt, NULL, 0, NI_NUMERICHOST);
+			return dst;
+		}
+
+		return NULL;
+	}
 };
