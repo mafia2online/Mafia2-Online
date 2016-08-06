@@ -200,20 +200,20 @@ void DecompressFile( const char * szFileName, const char * szOutputName )
 int main( int argc, char **argv )
 {
 	// Compress
-	//CompressFile( "gamefiles\\original\\gui.sds", "gamefiles\\0.m2mp" );
-	//CompressFile( "gamefiles\\original\\gui-main.sds", "gamefiles\\1.m2mp" );
-	CompressFile( "gamefiles\\original\\tables.sds", "gamefiles\\2.m2mp" );
-	//CompressFile( "original\\ls-001.png", "3.m2mp" );
-	//CompressFile( "original\\sky_m2mp.sds", "4.m2mp" );
+	//CompressFile( "gamefiles\\original\\gui.sds", "gamefiles\\0.m2o" );
+	//CompressFile( "gamefiles\\original\\gui-main.sds", "gamefiles\\1.m2o" );
+	CompressFile( "gamefiles\\original\\tables.sds", "gamefiles\\2.m2o" );
+	//CompressFile( "original\\ls-001.png", "3.m2o" );
+	//CompressFile( "original\\sky_m2o.sds", "4.m2o" );
 
-	//CompressFile( "gamefiles\\original\\tables.sds", "gamefiles\\2.m2mp" );
+	//CompressFile( "gamefiles\\original\\tables.sds", "gamefiles\\2.m2o" );
 
 	// Decompress
-	/*DecompressFile( "0.m2mp", "original\\gui.sds" );
-	DecompressFile( "1.m2mp", "original\\gui-main.sds" );
-	DecompressFile( "2.m2mp", "original\\tables.sds" );
-	DecompressFile( "3.m2mp", "original\\ls-001.png" );
-	DecompressFile( "4.m2mp", "original\\sky_m2mp.sds" );*/
+	/*DecompressFile( "0.m2o", "original\\gui.sds" );
+	DecompressFile( "1.m2o", "original\\gui-main.sds" );
+	DecompressFile( "2.m2o", "original\\tables.sds" );
+	DecompressFile( "3.m2o", "original\\ls-001.png" );
+	DecompressFile( "4.m2o", "original\\sky_m2o.sds" );*/
 
 	return 1;
 }

@@ -97,15 +97,15 @@ bool CrashRpt::InstallMain( char * pszName, char * pszVersion )
 	}
 
 #ifdef _CLIENT
-	AddFilef( "Settings XML", "m2mp-settings.xml", "%s%s", SharedUtility::GetAppPath(), "settings.xml" );
-	AddFilef( "Core Log File", "m2mp-core.log", "%s%s", SharedUtility::GetAppPath(), "logs\\core.log" );
-	AddFilef( "GUI Log File", "m2mp-gui.log", "%s%s", SharedUtility::GetAppPath(), "logs\\gui.log" );
+	AddFilef( "Settings XML", "m2o-settings.xml", "%s%s", SharedUtility::GetAppPath(), "settings.xml" );
+	AddFilef( "Core Log File", "m2o-core.log", "%s%s", SharedUtility::GetAppPath(), "logs\\core.log" );
+	AddFilef( "GUI Log File", "m2o-gui.log", "%s%s", SharedUtility::GetAppPath(), "logs\\gui.log" );
 #else
 	time_t t = time( NULL );
 	const struct tm * tm = localtime( &t );
 	const char * szDateStr = SharedUtility::DateToString();
-	String strLogFile( "logs\\%s\\m2mp-server-%d-%d-%d.log", szDateStr, tm->tm_mday, (tm->tm_mon + 1), (1900 + tm->tm_year) );
-	AddFilef( "Server Log File", "m2mp-server.log", "%s%s", SharedUtility::GetAppPath(), strLogFile.Get() );
+	String strLogFile( "logs\\%s\\m2o-server-%d-%d-%d.log", szDateStr, tm->tm_mday, (tm->tm_mon + 1), (1900 + tm->tm_year) );
+	AddFilef( "Server Log File", "m2o-server.log", "%s%s", SharedUtility::GetAppPath(), strLogFile.Get() );
 #endif
 
 	return true;

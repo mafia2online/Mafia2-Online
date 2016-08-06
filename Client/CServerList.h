@@ -55,8 +55,6 @@ public:
 		usGamePort = uPort;
 		usPlayers = 0;
 		usMaxPlayers = 0;
-		usMaxPlayers = 0;
-		usMaxPlayers = 0;
 		bPassworded = false;
 		bSkipped = false;
 		bScanned = false;
