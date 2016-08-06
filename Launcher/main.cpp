@@ -108,7 +108,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	if( bFoundCustomDirectory )
 		SharedUtility::WriteRegistryString( HKEY_LOCAL_MACHINE, "Software\\Wow6432Node\\Mafia2-Online", "GameDir", szInstallDirectory, sizeof(szInstallDirectory) );
 
-	// Get the full path to m2mp.dll
+	// Get the full path to m2o.dll
 	String strModulePath( "%s\\%s", SharedUtility::GetAppPath(), CORE_MODULE );
 	CLogFile::Printf("M2Online : %s", strModulePath.Get());
 
@@ -134,7 +134,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	if (SharedUtility::IsProcessRunning("Mafia2.exe")){
 		if (SharedUtility::_TerminateProcess("Mafia2.exe") == false)
 		{
-			ShowMessageBox("Failed to start kill Mafia.exe. Cannot launch.");
+			ShowMessageBox("Failed to kill Mafia.exe. Cannot launch.");
 			return 1;
 		}
 	}
@@ -153,13 +153,13 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 		return 1;
 	}
 
-	// Inject m2mp.dll into Mafia2.exe
+	// Inject m2o.dll into Mafia2.exe
 	int iReturn = SharedUtility::InjectLibraryIntoProcess( piProcessInfo.hProcess, strModulePath.Get() );
 
 	// Inject bass.dll into Mafia2.exe
 	iReturn += SharedUtility::InjectLibraryIntoProcess(piProcessInfo.hProcess, strBassPath.Get());
 
-	// Did m2mp.dll fail to inject?
+	// Did m2o.dll fail to inject?
 	if( iReturn > 0)
 	{
 		// Terminate Mafia2.exe
@@ -178,6 +178,11 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 
 		// Show the error message
 		ShowMessageBox( strError.Get() );
+
+		// Kill mafia2 process
+		if (SharedUtility::IsProcessRunning("Mafia2.exe")){
+			SharedUtility::_TerminateProcess("Mafia2.exe");
+		}
 		return 1;
 	}
 
