@@ -39,6 +39,7 @@ void CGUIElement_Impl::AddEvents( void )
 {
 	// Register default events
 	m_pWindow->subscribeEvent( CEGUI::Window::EventMouseClick, CEGUI::Event::Subscriber( &CGUIElement_Impl::Event_OnClick, this ) );
+	m_pWindow->subscribeEvent( CEGUI::Window::EventMouseDoubleClick, CEGUI::Event::Subscriber( &CGUIElement_Impl::Event_OnDoubleClick, this));
 	m_pWindow->subscribeEvent( CEGUI::Window::EventMoved, CEGUI::Event::Subscriber( &CGUIElement_Impl::Event_OnMove, this ) );
 	m_pWindow->subscribeEvent( CEGUI::Window::EventSized, CEGUI::Event::Subscriber( &CGUIElement_Impl::Event_OnResize, this ) );
 	m_pWindow->subscribeEvent( CEGUI::Window::EventMouseEnters, CEGUI::Event::Subscriber( &CGUIElement_Impl::Event_OnMouseEnter, this ) );
@@ -345,6 +346,19 @@ bool CGUIElement_Impl::Event_OnClick( const CEGUI::EventArgs &e )
 	// Pass the event to the client gui manager
 	if( CCore::Instance()->GetClientScriptingManager() && CCore::Instance()->GetClientScriptingManager()->GetScriptGUIManager() )
 		CCore::Instance()->GetClientScriptingManager()->GetScriptGUIManager()->HandleEvent( "onGuiElementClick", this );
+
+	return true;
+}
+
+bool CGUIElement_Impl::Event_OnDoubleClick(const CEGUI::EventArgs &e)
+{
+	// Call the click handler
+	if (m_pfnDoubleClickHandler)
+		m_pfnDoubleClickHandler(this);
+
+	// Pass the event to the client gui manager
+	if (CCore::Instance()->GetClientScriptingManager() && CCore::Instance()->GetClientScriptingManager()->GetScriptGUIManager())
+		CCore::Instance()->GetClientScriptingManager()->GetScriptGUIManager()->HandleEvent("onGuiElementDoubleClick", this);
 
 	return true;
 }

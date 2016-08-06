@@ -41,25 +41,19 @@ bool						bOldChatWindowState;
 
 CMafia::CMafia( void )
 {
-	// Reset
 	m_bMapOpen = false;
 	m_bSummer = true;
 }
 
 CMafia::~CMafia( void )
 {
-	// Delete the file system
 	SAFE_DELETE( m_pFileSystem );
-	
-	// Delete the navigation
 	SAFE_DELETE( m_pNavigation );
 }
 
 void CMafia::LoadPointers( void )
 {
-	// Load the physfs pointer
 	m_pFileSystem = new CM2PhysFS( *(M2PhysFS **)COffsets::VAR_CPhysFS );
-	// Load the navigation pointer
 	m_pNavigation = new CM2Navigation( *(M2Navigation **)COffsets::VAR_CNavigation );
 }
 
@@ -117,23 +111,17 @@ void CMafia::ChangeWeather( String strWeather, int iChangeTime )
 	_asm push szWeather;
 	_asm call C_Game__SetWeatherTemplate;
 
-	// Store the weather
 	m_strWeather = strWeather;
 }
 
 void CMafia::ChangeSeason ( bool bSummer )
 {
-	// Get the current player position
 	CVector3 vecPosition;
 	CLocalPlayer::Instance()->GetPosition ( &vecPosition );
 
-	// Are we changing to summer?
 	if ( bSummer && !m_bSummer )
 	{
-		// Set summer
 		m_bSummer = true;
-
-		// Load summer
 		CLua::Execute ( "game.game:GetActivePlayer():SetPos(0)" );
 		CLua::Execute ( "game.sds:ActivateStreamMapLine( \"free_summer_load\" )" );
 		CLua::Execute ( "game.gfx:SetWeatherTemplate( \"DT_RTRclear_day_afternoon\" )" );
@@ -141,10 +129,7 @@ void CMafia::ChangeSeason ( bool bSummer )
 	}
 	else if ( !bSummer && m_bSummer )
 	{
-		// Set winter
 		m_bSummer = false;
-
-		// Load winter
 		CLua::Execute ( "game.game:GetActivePlayer():SetPos(0)" );
 		CLua::Execute ( "game.sds:ActivateStreamMapLine( \"free_winter_load\" )" );
 		CLua::Execute ( "game.gfx:SetWeatherTemplate( \"DTFreeRideDaySnow\" )" );
@@ -154,31 +139,23 @@ void CMafia::ChangeSeason ( bool bSummer )
 
 void CMafia::Spawn( bool bFade )
 {
-	// Hide the main menu
 	if (CGUI::Instance()->GetMainMenu()) {
 		CGUI::Instance()->GetMainMenu()->SetVisible(false);
 		CGUI::Instance()->SetCursorVisible(false);
-		// We reload the weather to prevent black ground with winter
 		m_bSummer = !m_bSummer;
 		ChangeSeason(!m_bSummer);
 	}
 
 	CM2Hud *pHud = CCore::Instance()->GetHud();
 
-	// Set the default sensitity multiplier
 	SetMouseSensitivityMultiplier( 1.0f );
 
-	// Should we fade in ?
 	if( bFade )
 	{
-		// Re-fade the screen
 		pHud->FadeIn( 1000 );
-
-		// Fade in the sound
 		FadeSound( false, 1 );
 	}
 
-	// Handle the spawn with the localplayer
 	CLocalPlayer::Instance()->HandleSpawn( false );
 
 	// Disable npc generators and far ambients
@@ -189,30 +166,17 @@ void CMafia::Spawn( bool bFade )
 	CLua::Execute( "game.garage:CheatAbandonCars()" );
 	CLua::Execute( "game.garage:SetMaxGaragePlaces( 0 )" );
 
-	// Set all shops found
 	CLua::Execute( "game.shop:SetAllShopExplored()" );
 
-	// Enable the hud
 	pHud->Show( true );
-
-	// Disable low-health FX
-	//pCore->GetHud()->ShowLowHealthFX( false );
-
-	// Disable action buttons
-	//ActionButtonsShow( false );
+	CCore::Instance()->GetHud()->ShowLowHealthFX( false );
+	ActionButtonsShow( false );
 
 	bool bIsSummer = CCore::Instance()->IsSummer();
 
-	// Load season
 	CCore::Instance()->GetGame()->ChangeSeason ( bIsSummer );
-
-	// Set the radio to the summer setting
 	SetSummerRadio ( bIsSummer );
-
-	// Unlock player controls
 	CLocalPlayer::Instance()->LockControls( false );
-
-	// Unlock camera control
 	CCore::Instance()->GetCamera()->LockControl( false );
 
 	// Don't reload game after death
@@ -374,12 +338,9 @@ bool CMafia::OpenMap ( bool bOpen )
 
 void CMafia::OnGameStart( void )
 {
-	// Lock player controls
 	CLocalPlayer::Instance()->LockControls( true );
 
-	// Lock camera control
 	CCore::Instance()->GetCamera()->LockControl( true );
 
-	// Mute the sound
 	FadeSound( true, 0 );
 }

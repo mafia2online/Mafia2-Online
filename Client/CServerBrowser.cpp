@@ -347,6 +347,7 @@ void CServerBrowser::CreateTab( ServerBrowserType type, const char * szName, flo
 	m_pServerGridList[ type ]->SetSize( Vector2( fWidth, fHeight ) );
 	m_pServerGridList[ type ]->SetClickHandler( GUI_CALLBACK( &CServerBrowser::Event_OnMouseClick, this ) );
 	// todo: double click handler
+	m_pServerGridList[ type ]->SetDoubleClickHandler( GUI_CALLBACK( &CServerBrowser::Event_OnMouseDoubleClick, this));
 
 	// Create the server grid list columns
 	m_pServerGridList[ type ]->AddColumn( "", 0.02f );
@@ -543,17 +544,17 @@ bool CServerBrowser::Event_OnMouseClick( CGUIElement_Impl * pElement )
 	return false;
 }
 
-bool CServerBrowser::Event_OnMouseDoubleClick( CGUIMouseEventArgs args )
+bool CServerBrowser::Event_OnMouseDoubleClick( CGUIElement_Impl * pElement )
 {
 	// Get the serverbrowser instance
 	CServerBrowser * pInst = CCore::Instance()->GetGUI()->GetServerBrowser();
 
 	// Was the clicked element the server grid list?
-	if( args.pWindow == pInst->GetServerGridList( ServerBrowserType::INTERNET ) || args.pWindow == pInst->GetServerGridList( ServerBrowserType::HOSTED ) ||
-		args.pWindow == pInst->GetServerGridList( ServerBrowserType::FAVOURITES ) || args.pWindow == pInst->GetServerGridList( ServerBrowserType::HISTORY ) )
+	if (pElement == pInst->GetServerGridList(ServerBrowserType::INTERNET) || pElement == pInst->GetServerGridList(ServerBrowserType::HOSTED) ||
+		pElement == pInst->GetServerGridList(ServerBrowserType::FAVOURITES) || pElement == pInst->GetServerGridList(ServerBrowserType::HISTORY))
 	{
-		// Handle the mouse double click
-		pInst->OnDoubleClick( args.pWindow );
+		// Handle the mouse click
+		pInst->OnDoubleClick(pElement);
 
 		return true;
 	}
@@ -676,6 +677,25 @@ void CServerBrowser::OnClick( CGUIElement_Impl * pElement )
 
 void CServerBrowser::OnDoubleClick( CGUIElement_Impl * pElement )
 {
+	ServerBrowserType type = GetCurrentServerBrowserType();
+
+	if (m_pServerGridList[type]->GetSelectedCount() > 0)
+	{
+		int iSelectedIndex = m_pServerGridList[type]->GetSelectedItemRow();
+
+		CServerList * pServerList = GetServerList(type);
+		CServerListIterator iter, begin = pServerList->IteratorBegin(), end = pServerList->IteratorEnd();
+
+		for (iter = begin; iter != end; iter++)
+		{
+			CServerListItem * pCurrentServer = *iter;
+
+			if (pCurrentServer && pCurrentServer->iRow == iSelectedIndex)
+			{
+				ConnectToSelectedServer();
+			}
+		}
+	}
 }
 
 void CServerBrowser::SetVisible( bool bVisible )
