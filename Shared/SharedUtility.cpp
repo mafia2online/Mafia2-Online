@@ -818,4 +818,25 @@ namespace SharedUtility
 		closesocket(Socket);
 		return true;
 	}
+
+#ifdef _CLIENT
+	bool IsEXESignatureAllowed(unsigned int signature)
+	{
+		unsigned int signatures[] = {
+			0x97FA8A06,//Skidrow 1
+			0x189BB75A,//Skidrow 2
+			0x2F388D11,//Skidrow 3
+			0xAE196A1E,//M2MP patched one
+		};
+		int length = sizeof(signatures) / sizeof(*signatures);
+
+		for (int i = 0; i < length; i++)
+		{
+			if (signatures[i] == signature)
+				return (true);
+		}
+
+		return (false);
+	}
+#endif
 };

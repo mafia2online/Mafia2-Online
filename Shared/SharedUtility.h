@@ -110,4 +110,6 @@ namespace SharedUtility
 	bool				IsValidIP ( const char * szIpAddress );
 
 	bool				GetHTTPHeaderAndData(String host, String page, String post, String *header, String *data);
+
+	bool				IsEXESignatureAllowed(unsigned int signature);
 };
