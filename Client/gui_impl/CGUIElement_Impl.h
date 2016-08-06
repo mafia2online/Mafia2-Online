@@ -19,12 +19,14 @@ protected:
 	CGUI_Impl										* m_pManager;
 
 	GUI_CALLBACK									m_pfnClickHandler;
+	GUI_CALLBACK									m_pfnDoubleClickHandler;
 	GUI_CALLBACK									m_pfnMoveHandler;
 	GUI_CALLBACK									m_pfnResizeHandler;
 	GUI_CALLBACK									m_pfnMouseEnterHandler;
 	GUI_CALLBACK									m_pfnMouseLeaveHandler;
 
 	bool				Event_OnClick				( const CEGUI::EventArgs &e );
+	bool				Event_OnDoubleClick			( const CEGUI::EventArgs &e );
 	bool				Event_OnMove				( const CEGUI::EventArgs &e );
 	bool				Event_OnResize				( const CEGUI::EventArgs &e );
 	bool				Event_OnMouseEnter			( const CEGUI::EventArgs &e );
@@ -93,6 +95,7 @@ public:
 	const char			* GetFont					( void );
 
 	void				SetClickHandler				( GUI_CALLBACK pfnClickHandler ) { m_pfnClickHandler = pfnClickHandler; }
+	void				SetDoubleClickHandler		( GUI_CALLBACK pfnDoubleClickHandler) { m_pfnDoubleClickHandler = pfnDoubleClickHandler; }
 	void				SetMoveHandler				( GUI_CALLBACK pfnMoveHandler ) { m_pfnMoveHandler = pfnMoveHandler; }
 	void				SetResizeHandler			( GUI_CALLBACK pfnResizeHandler ) { m_pfnResizeHandler = pfnResizeHandler; }
 	void				SetMouseEnterHandler		( GUI_CALLBACK pfnMouseEnterHandler ) { m_pfnMouseEnterHandler = pfnMouseEnterHandler; }

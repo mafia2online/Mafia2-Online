@@ -98,7 +98,7 @@ private:
 
 	// Gui Events
 	bool				Event_OnMouseClick			( CGUIElement_Impl * pElement );
-	static bool			Event_OnMouseDoubleClick	( CGUIMouseEventArgs args );
+	bool				Event_OnMouseDoubleClick	( CGUIElement_Impl * pElement );
 
 	// Masterlist Events
 	static void			Event_MasterListQueryHandler( const std::vector<String>& servers );
