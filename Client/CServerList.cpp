@@ -13,6 +13,7 @@
 #include	<BitStream.h>
 #include	<MessageIdentifiers.h>
 #include	<RPC4Plugin.h>
+#include	<errno.h>
 
 #include	"CCore.h"
 
@@ -45,14 +46,12 @@ bool ReadString( std::string &strRead, const char * szBuffer, unsigned int &i, u
 
 bool CServerListItem::Query ( void )
 {
-	// Prepare the socket
 	sockaddr_in addr;
 	memset ( &addr, 0, sizeof(addr) );
 	addr.sin_family = AF_INET;
 	addr.sin_port = htons ( usGamePort + 1 );
 	addr.sin_addr.s_addr = inet_addr ( strHost.Get() );
 
-	// Is the socket invalid?
 	if ( m_iSocket == INVALID_SOCKET )
 	{
 		// Initialise the socket
@@ -61,10 +60,9 @@ bool CServerListItem::Query ( void )
 		ioctlsocket ( m_iSocket, FIONBIO, &flag );
 	}
 
-	// Send the query
-	if ( sendto ( m_iSocket, "M2Online", 4, 0, (sockaddr *)&addr, sizeof(addr) ) == 4 )
+	int sentChars = sendto(m_iSocket, "M2Online", 8, 0, (sockaddr *)&addr, sizeof(addr));
+	if ( sentChars == 8 )
 	{
-		// Set the query start time
 		ulQueryStart = SharedUtility::GetTime ();
 		return true;
 	}
@@ -75,14 +73,14 @@ bool CServerListItem::Query ( void )
 bool CServerListItem::Parse( const char * szBuffer, unsigned int uiLength )
 {
 	// Check the header
-	if( strncmp( szBuffer, "M2Online", 4 ) != 0 )
+	if( strncmp( szBuffer, "M2Online", 8 ) != 0 )
 		return false;
 
 	// Calculate the ping
 	usPing = ((SharedUtility::GetTime () - ulQueryStart) / 2);
 
 	// Parse the data
-	unsigned int i = 4;
+	unsigned int i = 8;
 
 	// Hostname
 	std::string sHost;
@@ -163,6 +161,7 @@ String CServerListItem::Pulse ( void )
 	int len = recvfrom ( m_iSocket, szBuffer, 4096, 0, (sockaddr *)&addr, &addrLen );
 	if ( len >= 0 )
 	{
+		CLogFile::Printf("Len : %d", len);
 		// Parse data
 		Parse ( szBuffer, len );
 		return "ParsedQuery";

@@ -78,7 +78,10 @@ static char * PlayerModels[][2] =
 	{ "/sds/traffic/", "cvez6" },		{ "/sds/traffic/", "cvez7" },		{ "/sds/traffic/", "cvezci1" },
 	{ "/sds/traffic/", "cvezci2" },		{ "/sds/traffic/", "cvezci3" },		{ "/sds/traffic/", "cvezedv" },
 	{ "/sds/traffic/", "cvezga1" },		{ "/sds/traffic/", "cvezga2" },		{ "/sds/traffic/", "cvezjim" },
-	{ "/sds/traffic/", "cvezjon" },		{ "/sds/traffic/", "cvezvin" },		{ "/sds/traffic/", "driver" }
+	{ "/sds/traffic/", "cvezjon" },		{ "/sds/traffic/", "cvezvin" },		{ "/sds/traffic/", "driver" },
+
+	// Police chars
+	//{ "/sds/police_char", "m11police" },{ "/sds/police_char", "m14china_pol" },{ "/sds/police_char", "police_char" }
 };
 
 static char * VehicleModels[] = 

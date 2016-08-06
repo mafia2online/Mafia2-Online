@@ -112,4 +112,6 @@ namespace SharedUtility
 	bool				GetHTTPHeaderAndData(String host, String page, String post, String *header, String *data);
 
 	bool				IsEXESignatureAllowed(unsigned int signature);
+
+	const char *		GetIPFromSocketAddress(int af, const void * src, char * dst, int cnt);
 };
