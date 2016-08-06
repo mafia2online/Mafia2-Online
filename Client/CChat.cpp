@@ -579,7 +579,7 @@ bool CChat::HandleKeyInput(CGUIKeyEventArgs keyArgs)
 		return false;
 
 	// Are we enabling the chat?
-	if ((keyArgs.codepoint == 116 || keyArgs.codepoint == 229 || keyArgs.codepoint == 13) && !IsInputVisible()) // T and Enter
+	if (((keyArgs.codepoint == 116 || keyArgs.codepoint == 229 || keyArgs.codepoint == 84) || keyArgs.codepoint == 13) && !IsInputVisible()) // T and Enter
 	{
 		// Set the input visible
 		SetInputVisible(true);
