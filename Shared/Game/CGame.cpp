@@ -25,16 +25,13 @@ static char * PlayerModels[][2] =
 	{ "/sds/player/", "vitvez" },		{ "/sds/player/", "vitvop" },		{ "/sds/player/", "vitvov" },
 	{ "/sds/player/", "vitvov2i" },		{ "/sds/player/", "vitvov3" },
 
-	/*
 	// Mission Characters
-	{ "/sds/hchar/", "albert" },		{ "/sds/hchar/", "brianc" },		{ "/sds/hchar/", "brianv" },
-	{ "/sds/hchar/", "consig" },		{ "/sds/hchar/", "derek" },			{ "/sds/hchar/", "desmond" },
+	{ "/sds/hchar/", "albert" },		{ "/sds/hchar/", "brianc" },		{ "/sds/hchar/", "consig" },		
+	{ "/sds/hchar/", "derek" },			{ "/sds/hchar/", "desmond" },		{ "/sds/hchar/", "joeoblf" },
 	{ "/sds/hchar/", "eddies" },		{ "/sds/hchar/", "franca" },		{ "/sds/hchar/", "frank" },
 	{ "/sds/hchar/", "joebryl" },		{ "/sds/hchar/", "joeciv" },		{ "/sds/hchar/", "joeneup" },
-	{ "/sds/hchar/", "joeobl" },		{ "/sds/hchar/", "joeoblf" },		{ "/sds/hchar/", "joeruka" },
-	{ "/sds/hchar/", "joeruka" },		{ "/sds/hchar/", "leospo" },		{ "/sds/hchar/", "joeoblf" },
-	{ "/sds/hchar/", "joeruka" },		{ "/sds/hchar/", "marty" },			{ "/sds/hchar/", "steve" },
-	*/
+	{ "/sds/hchar/", "joeobl" },		{ "/sds/hchar/", "leospo" },		{ "/sds/hchar/", "steve" },
+	{ "/sds/hchar/", "joeruka" },		{ "/sds/hchar/", "marty" },			
 
 	// Traffic
 	{ "/sds/traffic/", "cbarma" },		{ "/sds/traffic/", "cbarma2" },		{ "/sds/traffic/", "ccerb1" },
