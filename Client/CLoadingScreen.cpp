@@ -54,17 +54,14 @@ void CLoadingScreen::Start( void )
 
 void CLoadingScreen::Finish( void )
 {
-	// Destroy the gui image instance
 	SAFE_DELETE(m_pLogo);
 	SAFE_DELETE(m_pLogotypes);
 }
 
 void CLoadingScreen::Render ( void )
 {
-	// Is the image valid?
 	if (m_pLogo && m_pLogotypes)
 	{
-		// Draw a black box over the screen
 		CCore::Instance()->GetGraphics()->DrawBox(0, 0, CCore::Instance()->GetGUI()->GetCEGUI()->GetResolution().fX, CCore::Instance()->GetGUI()->GetCEGUI()->GetResolution().fY, 0xFF000000);
 	}
 }
