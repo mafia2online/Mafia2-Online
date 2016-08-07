@@ -325,52 +325,44 @@ bool CGUI_Impl::IsInputEnabled( void )
 
 String CGUI_Impl::GetUniqueName( void )
 {
-	// Generate the name string
 	String strName( "window_%d", m_uiUnique );
 
-	// Increase the unique number
 	m_uiUnique++;
 	return strName;
 }
 
 void CGUI_Impl::AddChild( CGUIElement_Impl * pChild )
 {
-	// Add the child to the default window
 	m_pDefaultWindow->addChildWindow( pChild->GetWindow() );
 }
 
 void CGUI_Impl::AddToRedrawQueue( CGUIElement_Impl * pElement )
 {
-	// Loop over the redraw queue
-	std::list< CGUIElement_Impl* >::const_iterator iter = m_redrawQueue.begin();
-	for( ; iter != m_redrawQueue.end(); ++iter )
+	if (m_redrawQueue.size() != 0)
 	{
-		// 
-		if( pElement->GetParent() == *iter )
-			return;
-		else if( (*iter)->GetParent() == pElement )
+		std::list< CGUIElement_Impl* >::const_iterator iter = m_redrawQueue.begin();
+		for( ; iter != m_redrawQueue.end(); ++iter )
 		{
-			// Remove this element from the redraw queue
-			m_redrawQueue.remove( *iter );
-
-			// If the redraw queue is empty, finish up
-			if( m_redrawQueue.empty() )
+			if( pElement->GetParent() == *iter )
 				return;
-
-			// Set the iter to the start of the queue
-			iter = m_redrawQueue.begin();
+			else if( (*iter)->GetParent() == pElement )
+			{
+				m_redrawQueue.remove( *iter );
+				if( m_redrawQueue.empty() )
+					return;
+				iter = m_redrawQueue.begin();
+			}
+			else if( *iter == pElement )
+				return;
 		}
-		else if( *iter == pElement )
-			return;
 	}
-
-	// Push the element to the back of the queue
 	m_redrawQueue.push_back( pElement );
 }
 
 void CGUI_Impl::RemoveFromRedrawQueue( CGUIElement_Impl * pElement )
 {
-	// Remove the element from the redraw queue
+	if (m_redrawQueue.size() <= 0)
+		return;
 	m_redrawQueue.remove( pElement );
 }
 
