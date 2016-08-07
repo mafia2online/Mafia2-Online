@@ -57,9 +57,6 @@ CChat::CChat(CGUI_Impl * pGUI, float fX, float fY)
 	m_fY = fY;
 	m_bVisible = false;
 
-	// Set the default font
-	//SetFont( "tahoma-bold" );
-
 	// Reset the input
 	memset(m_szCurrentHistory, 0, sizeof(m_szCurrentHistory));
 	memset(m_szHistory, 0, sizeof(m_szHistory));
@@ -878,22 +875,13 @@ void CChat::ProcessInput(void)
 	if (!CCore::Instance()->GetNetworkModule() || !CCore::Instance()->GetNetworkModule()->IsConnected())
 		return;
 
-	// Was anything entered?
 	if (m_strInput.GetLength() > 0)
 	{
-		// Is the input a command?
 		bool bIsCommand = (m_strInput.GetChar(0) == CHAT_CMD_CHAR);
-
-		// Internal cmds
 		bool bHasUsedCmd = false;
-
-		// Process internal commands
 		if (bIsCommand)
 		{
-			//
 			std::string sInput = m_strInput.Get();
-
-			// Get the end of the command
 			size_t sCommandEnd = sInput.find(" ");
 
 			// If we don't have a valid end use the end of the string
@@ -903,31 +891,22 @@ void CChat::ProcessInput(void)
 			// Get the command name
 			std::string strCommand = sInput.substr(1, (sCommandEnd - 1));
 
-			// Get the command parameters
 			std::string strParams;
 
-			// Do we have any parameters?
 			if (sCommandEnd < sInput.length())
 				strParams = sInput.substr((sCommandEnd + 1), sInput.length());
 
 			if (strCommand == "q" || strCommand == "quit" || strCommand == "exit")
 			{
-				// Shutdown
 				CCore::Instance()->Shutdown();
 				return;
 			}
 			else if (strCommand == "disconnect")
 			{
-				// Are we connected?
 				if (CCore::Instance()->GetNetworkModule() && CCore::Instance()->GetNetworkModule()->IsConnected())
 				{
-					// Disconnect from the network
 					CCore::Instance()->GetNetworkModule()->Disconnect();
-
-					// Stop multiplayer
 					CCore::Instance()->StopMultiplayer();
-
-					// Go back to main menu
 					CCore::Instance()->GetGUI()->GetMainMenu()->SetVisible(true);
 				}
 
@@ -1113,99 +1092,3 @@ void CChat::LockGameControls(bool bLock)
 		CCore::Instance()->GetCamera()->LockControl(m_bChatOldCameraState);
 	}
 }
-
-/*
-// TEMP
-char * szWeather[87] =
-{
-"",
-"DTFreeRideDay",
-"DTFreeRideDayRain",
-"DTFreeRideDaySnow",
-"DTFreeRideDayWinter",
-"DTFreeRideNightSnow",
-"DTFreerideNight",
-
-"DT_RTRclear_day_afternoon",
-"DT_RTRclear_day_early_morn1",
-"DT_RTRclear_day_early_morn2",
-"DT_RTRclear_day_evening",
-"DT_RTRclear_day_late_afternoon",
-"DT_RTRclear_day_late_even",
-"DT_RTRclear_day_morning",
-"DT_RTRclear_day_night",
-"DT_RTRclear_day_noon",
-"DT_RTRfoggy_day_afternoon",
-"DT_RTRfoggy_day_early_morn1",
-"DT_RTRfoggy_day_evening",
-"DT_RTRfoggy_day_late_afternoon",
-"DT_RTRfoggy_day_late_even",
-"DT_RTRfoggy_day_morning",
-"DT_RTRfoggy_day_night",
-"DT_RTRfoggy_day_noon",
-"DT_RTRrainy_day_afternoon",
-"DT_RTRrainy_day_early_morn",
-"DT_RTRrainy_day_evening",
-"DT_RTRrainy_day_late_afternoon",
-"DT_RTRrainy_day_late_even",
-"DT_RTRrainy_day_morning",
-"DT_RTRrainy_day_night",
-"DT_RTRrainy_day_noon",
-
-"DT01part01sicily_svit",
-"DT01part02sicily",
-"DT02part01Railwaystation",
-"DT02part02JoesFlat",
-"DT02part03Charlie",
-"DT02part04Giuseppe",
-"DT02part05Derek",
-"DT02NewStart1",
-"DT02NewStart2",
-"DT03part01JoesFlat",
-"DT03part02FreddysBar",
-"DT03part03MariaAgnelo",
-"DT03part04PriceOffice",
-"DT04part01JoesFlat",
-"DT04part02",
-"DT05Distillery_inside",
-"DT05part01JoesFlat",
-"DT05part02FreddysBar",
-"DT05part03HarrysGunshop",
-"DT05part04Distillery",
-"DT05part05ElGreco",
-"DT05part06Francesca",
-"DT06part01",
-"DT06part02",
-"DT06part03",
-"DT07part01fromprison",
-"DT07part02dereksubquest",
-"DT07part03prepadrestaurcie",
-"DT07part04night_bordel",
-"DT08part01cigarettesriver",
-"DT08part02cigarettesmill",
-"DT08part03crazyhorse",
-"DT08part04subquestwarning",
-"DT09part1VitosFlat",
-"DT09part2MalteseFalcone",
-"DT09part3SlaughterHouseAfter",
-"DT09part4MalteseFalcone2",
-"DT13part01death",
-"DT10part02Roof",
-"DT10part02bSUNOFF",
-"DT10part03Evening",
-"DT10part03Subquest",
-"DT11part01",
-"DT11part02",
-"DT11part03",
-"DT11part04",
-"DT11part05",
-"DT12_part_all",
-"DT13part02",
-"DT14part1_6",
-"DT14part7_10",
-"DT14part11",
-"DT15",
-"DT15_interier",
-"DT15end",
-};
-int iCurrentIndex = 0;*/

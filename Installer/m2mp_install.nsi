@@ -158,13 +158,13 @@ Section "Install"
 	File ..\Binary\guifiles\default.imageset.xml
 	
 	SetOutPath "$INSTDIR\pc\sds\missionscript"
-	File ..\Binary\gamefiles\freeraid_m2o.sds
+	File ..\Binary\gamefiles\freeraid_m2mp.sds
 	
 	SetOutPath "$INSTDIR\edit"
-	File ..\Binary\gamefiles\sdsconfig_m2o.bin
+	File ..\Binary\gamefiles\sdsconfig_m2mp.bin
 	
 	SetOutPath "$INSTDIR\edit\tables"
-	File ..\Binary\gamefiles\StreamM2O.bin
+	File ..\Binary\gamefiles\StreamM2MP.bin
 	File ..\Binary\gamefiles\tables.sds
 
 	SetOutPath "${MOD_DIR}\data\sounds"
