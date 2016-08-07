@@ -54,8 +54,9 @@ CM2ModelManager * CModelManager::Load(const char * szModelDirectory, const char 
 		return NULL;
 	}
 
+#ifdef DEBUG
 	CLogFile::Printf("CModelManager::Load ( \"%s\" ) - Model loaded successfully!", szModelName);
-
+#endif
 	// Add the current model manager to the list
 	m_modelManagers.push_back(pModelManager);
 
