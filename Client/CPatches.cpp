@@ -408,11 +408,11 @@ void CPatches::Initialise( void )
 	CPatcher::PatchAddress( COffsets::VAR_TablesSds, tables, sizeof(tables) );
 
 	// Patch the stream map binary file
-	unsigned char streamMapa[23] = "/tables/StreamM2O.bin";
+	unsigned char streamMapa[23] = "/tables/StreamM2MP.bin";
 	CPatcher::PatchAddress( COffsets::VAR_StreamBin, streamMapa, sizeof(streamMapa) );
 
 	// Patch the SDS config file
-	unsigned char sdsConf[20] = "/sdsconfig_m2o.bin";
+	unsigned char sdsConf[20] = "/sdsconfig_m2mp.bin";
 	CPatcher::PatchAddress( 0x18F76A4, sdsConf, sizeof(sdsConf) );
 
 	CLogFile::Printf( "Patches installed." );

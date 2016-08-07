@@ -36,9 +36,9 @@ struct GameFile
 }
 gameFiles[] =
 {
-	{ 0x7C95AB5E,	"edit\\tables\\StreamM2O.bin",					false,		"",										false,	TYPE_GAME },
-	{ 0xE3DC0B73,	"edit\\sdsconfig_m2o.bin",						false,		"",										false,	TYPE_GAME },
-	{ 0xC8136525,	"pc\\sds\\missionscript\\freeraid_m2o.sds",		false,		"",										false,	TYPE_GAME },
+	{ 0x7C95AB5E,	"edit\\tables\\StreamM2MP.bin",					false,		"",										false,	TYPE_GAME },
+	{ 0xE3DC0B73,	"edit\\sdsconfig_m2mp.bin",						false,		"",										false,	TYPE_GAME },
+	{ 0xC8136525,	"pc\\sds\\missionscript\\freeraid_m2mp.sds",		false,		"",										false,	TYPE_GAME },
 	{ 0xAE3CCEE2,	"data\\game\\0.m2o",							true,		"sds\\multiplayer\\gui.sds",			true,	TYPE_MOD },
 	{ 0x0B551386,	"data\\game\\1.m2o",							true,		"sds\\multiplayer\\gui-main.sds",		true,	TYPE_MOD },
 	{ 0xE1E987D6,	"data\\game\\2.m2o",							true,		"sds\\multiplayer\\tables.sds",			true,	TYPE_MOD },
