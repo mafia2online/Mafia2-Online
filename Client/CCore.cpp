@@ -214,14 +214,11 @@ bool CCore::Initialise( void )
 	CSettings::Load( "settings.xml" );
 	CSettings::ParseCommandLine ( GetCommandLine() );
 
-	CLogFile::Printf ( "IP: %s, Port: %s", CVAR_GET_STRING ( "ip" ), CVAR_GET_STRING ( "port" ) );
-
 	// Get the applicatin base address
 	m_uiBaseAddress = (unsigned int)GetModuleHandle( NULL );
 
 	// Subtract the image size from the base address
 	m_uiBaseAddress -= 0x400000;
-
 
 	// Create the game instance
 	m_pGame = new CMafia;
