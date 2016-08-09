@@ -7,51 +7,45 @@
     </Filter>
     <Filter Include="Header Files">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
     <Filter Include="Resource Files">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header Files\Shared">
-      <UniqueIdentifier>{bac9888a-77bc-454d-994b-1f83fad5d158}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Shared">
-      <UniqueIdentifier>{fa14c0cd-a328-4e6b-b890-b22994f7f4df}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Shared\md5">
-      <UniqueIdentifier>{1fa92b7c-f4d9-42a8-947c-718f62e49eba}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Shared\Network">
-      <UniqueIdentifier>{a86cd4fd-3cc0-42bf-b8d5-04a95c93927b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Shared\Threading">
-      <UniqueIdentifier>{b68e7143-0813-458f-a133-846fb15983d9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Shared\md5">
-      <UniqueIdentifier>{47dec6ac-b43f-438e-8904-e034b58194a6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Shared\Network">
-      <UniqueIdentifier>{4a98fa57-14a2-4d40-a08a-dce4f2a7df57}</UniqueIdentifier>
+      <UniqueIdentifier>{ec9d790f-f8ea-4888-8ea4-85c9206aef6b}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Shared\Threading">
-      <UniqueIdentifier>{72ed5637-bac0-4f47-843e-b9fcd7be2e4e}</UniqueIdentifier>
+      <UniqueIdentifier>{92c5f54b-5b6f-402e-9306-4a8c8259c56c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Shared\Network">
+      <UniqueIdentifier>{f0ae1d73-858e-4af5-8b18-42a9652973db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Shared\md5">
+      <UniqueIdentifier>{fb47fda6-1507-4bec-858d-2ee927c4dde0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Shared">
+      <UniqueIdentifier>{0b4dc10c-e19b-4c91-9cd7-5aa0c00021c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Shared\Threading">
+      <UniqueIdentifier>{d1d15223-bd73-42e2-956e-f899ae15b751}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Shared\Network">
+      <UniqueIdentifier>{ef1d267f-8b0b-4c10-857f-f5c7ed07715b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Shared\md5">
+      <UniqueIdentifier>{2f7215a4-288d-475e-9dc4-4a20522ec97f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\General">
+      <UniqueIdentifier>{68d91c29-4054-46b9-bbc2-140fd3a9fcba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\General">
+      <UniqueIdentifier>{205930c3-779f-4df0-966d-afe046965c03}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="ReadMe.txt" />
-    <None Include="app.ico">
-      <Filter>Resource Files</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Client.Launcher2.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="AssemblyInfo.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="stdafx.cpp">
+    <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\Shared\CLogFile.cpp">
@@ -60,14 +54,11 @@
     <ClCompile Include="..\Shared\CString.cpp">
       <Filter>Source Files\Shared</Filter>
     </ClCompile>
-    <ClCompile Include="..\Shared\SharedUtility.cpp">
+    <ClCompile Include="..\Shared\CXML.cpp">
       <Filter>Source Files\Shared</Filter>
     </ClCompile>
-    <ClCompile Include="..\Shared\md5\md5.cpp">
-      <Filter>Source Files\Shared\md5</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Shared\Network\CHttpClient.cpp">
-      <Filter>Source Files\Shared\Network</Filter>
+    <ClCompile Include="..\Shared\SharedUtility.cpp">
+      <Filter>Source Files\Shared</Filter>
     </ClCompile>
     <ClCompile Include="..\Shared\Threading\CMutex.cpp">
       <Filter>Source Files\Shared\Threading</Filter>
@@ -75,20 +66,20 @@
     <ClCompile Include="..\Shared\Threading\CThread.cpp">
       <Filter>Source Files\Shared\Threading</Filter>
     </ClCompile>
-    <ClCompile Include="CUpdate.cpp">
+    <ClCompile Include="..\Shared\Network\CHttpClient.cpp">
+      <Filter>Source Files\Shared\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Shared\md5\md5.cpp">
+      <Filter>Source Files\Shared\md5</Filter>
+    </ClCompile>
+    <ClCompile Include="CCore.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ProjectGlobals.cpp">
+      <Filter>Source Files\General</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Form1.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="stdafx.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\Shared\CCommon.h">
       <Filter>Header Files\Shared</Filter>
     </ClInclude>
@@ -101,14 +92,11 @@
     <ClInclude Include="..\Shared\CString.h">
       <Filter>Header Files\Shared</Filter>
     </ClInclude>
-    <ClInclude Include="..\Shared\SharedUtility.h">
+    <ClInclude Include="..\Shared\CXML.h">
       <Filter>Header Files\Shared</Filter>
     </ClInclude>
-    <ClInclude Include="..\Shared\md5\md5.h">
-      <Filter>Header Files\Shared\md5</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Shared\Network\CHttpClient.h">
-      <Filter>Header Files\Shared\Network</Filter>
+    <ClInclude Include="..\Shared\SharedUtility.h">
+      <Filter>Header Files\Shared</Filter>
     </ClInclude>
     <ClInclude Include="..\Shared\Threading\CMutex.h">
       <Filter>Header Files\Shared\Threading</Filter>
@@ -116,18 +104,23 @@
     <ClInclude Include="..\Shared\Threading\CThread.h">
       <Filter>Header Files\Shared\Threading</Filter>
     </ClInclude>
-    <ClInclude Include="CUpdate.h">
+    <ClInclude Include="..\Shared\Network\CHttpClient.h">
+      <Filter>Header Files\Shared\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\md5\md5.h">
+      <Filter>Header Files\Shared\md5</Filter>
+    </ClInclude>
+    <ClInclude Include="StdInc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="app.rc">
-      <Filter>Resource Files</Filter>
-    </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Form1.resX">
-      <Filter>Resource Files</Filter>
-    </EmbeddedResource>
+    <ClInclude Include="CSingleton.h">
+      <Filter>Header Files\General</Filter>
+    </ClInclude>
+    <ClInclude Include="CCore.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ProjectGlobals.h">
+      <Filter>Header Files\General</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
