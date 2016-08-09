@@ -22,28 +22,28 @@ private:
 
 public:
 
-									CVehicleManager			( void );
-									~CVehicleManager		( void );
+	CVehicleManager(void);
+	~CVehicleManager(void);
 
-	bool							Add						( EntityId vehicleId, int iModel, CVector3 vecPosition, CVector3 vecRotation );
-	void							Remove					( EntityId vehicleId );
-	bool							IsActive				( EntityId vehicleId ) { return (m_pNetworkVehicle[vehicleId] != NULL); }
+	bool							Add(EntityId vehicleId, VehicleSpawnProperties spawnProperties);
+	void							Remove(EntityId vehicleId);
+	bool							IsActive(EntityId vehicleId) { return (m_pNetworkVehicle[vehicleId] != NULL); }
 
-	void							Pulse					( void );
+	void							Pulse(void);
 
-	void							PreProcess				( void );
-	void							Process					( void );
+	void							PreProcess(void);
+	void							Process(void);
 
-	void							ProcessSpawnQueue		( void );
+	void							ProcessSpawnQueue(void);
 
-	CNetworkVehicle					* Get					( EntityId vehicleId ) { return m_pNetworkVehicle[vehicleId]; }
-	CNetworkVehicle					* GetFromGameGUID		( DWORD dwGuid );
+	CNetworkVehicle					* Get(EntityId vehicleId) { return m_pNetworkVehicle[vehicleId]; }
+	CNetworkVehicle					* GetFromGameGUID(DWORD dwGuid);
 
-	void							AddToSpawnQueue			( CNetworkVehicle * pVehicle ) { m_spawnQueue.push_back( pVehicle ); }
-	void							RemoveFromSpawnQueue	( CNetworkVehicle * pVehicle ) { m_spawnQueue.remove( pVehicle ); }
+	void							AddToSpawnQueue(CNetworkVehicle * pVehicle) { m_spawnQueue.push_back(pVehicle); }
+	void							RemoveFromSpawnQueue(CNetworkVehicle * pVehicle) { m_spawnQueue.remove(pVehicle); }
 
-	EntityId						GetCount				( void );
+	EntityId						GetCount(void);
 
-	void							RespawnAll				( void );
+	void							RespawnAll(void);
 
 };

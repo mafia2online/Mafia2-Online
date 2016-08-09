@@ -384,28 +384,36 @@ void RemoveBlip( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 }
 
 // Vehicles
-void NewVehicle( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
+void NewVehicle(RakNet::BitStream * pBitStream, RakNet::Packet * pPacket)
 {
-	// Read the vehicleid
+	/*
+	NewVehicle structure:
+	VehicleID to assign
+	pos,rot vector
+	VehicleSpawnProperties field
+	*/
+
+	CCore::Instance()->GetChat()->AddDebugMessage("NewVehicle RPC!");
+
 	EntityId vehicleId;
-	pBitStream->ReadCompressed( vehicleId );
+	VehicleSpawnProperties spawnProperties;
+	CVector3 pos, rot;
+	pBitStream->ReadCompressed(vehicleId);
+	pBitStream->Read(pos);
+	pBitStream->Read(rot);
+	pBitStream->Read((char *)&spawnProperties, sizeof(VehicleSpawnProperties));
 
-	// Read the model
-	int iModel;
-	pBitStream->Read( iModel );
-
-	// Read the last sync data
-	InVehicleSync vehicleSync;
-	pBitStream->Read( (char *)&vehicleSync, sizeof(InVehicleSync) );
 
 	// Add the vehicle to the manager
-	if( CCore::Instance()->GetVehicleManager()->Add( vehicleId, iModel, CVector3(), CVector3() ) )
+	if (CCore::Instance()->GetVehicleManager()->Add(vehicleId, spawnProperties))
 	{
-		// Set the last sync data
-		CCore::Instance()->GetVehicleManager()->Get(vehicleId)->SetSyncData(vehicleSync);
-
-		// Mark process sync on spawn
-		CCore::Instance()->GetVehicleManager()->Get(vehicleId)->ProcessSyncOnSpawn(true);
+		CNetworkVehicle *pVehicle = CCore::Instance()->GetVehicleManager()->Get(vehicleId);
+		if (pVehicle)
+		{
+			pVehicle->SetSpawnPosition(pos);
+			pVehicle->SetSpawnRotation(rot);
+			pVehicle->Create();
+		}
 	}
 }
 
@@ -865,7 +873,7 @@ void CNetworkRPC::Register( RakNet::RPC4 * pRPC )
 	pRPC->RegisterFunction( RPC_NEW_PLAYER, NewPlayer );
 	pRPC->RegisterFunction( RPC_REMOVE_PLAYER, RemovePlayer );
 	pRPC->RegisterFunction( RPC_PLAYER_CHAT, PlayerChat );
-	pRPC->RegisterFunction( RPC_PLAYER_SYNC, PlayerSync );
+	//pRPC->RegisterFunction( RPC_PLAYER_SYNC, PlayerSync );
 	pRPC->RegisterFunction( RPC_PLAYER_DEATH, PlayerDeath );
 	pRPC->RegisterFunction( RPC_PLAYER_SPAWN, PlayerSpawn );
 	pRPC->RegisterFunction( RPC_KICKPLAYER, KickPlayer );
@@ -905,7 +913,7 @@ void CNetworkRPC::Unregister( RakNet::RPC4 * pRPC )
 	pRPC->UnregisterFunction( RPC_NEW_PLAYER );
 	pRPC->UnregisterFunction( RPC_REMOVE_PLAYER );
 	pRPC->UnregisterFunction( RPC_PLAYER_CHAT );
-	pRPC->UnregisterFunction( RPC_PLAYER_SYNC );
+	//pRPC->UnregisterFunction( RPC_PLAYER_SYNC );
 	pRPC->UnregisterFunction( RPC_PLAYER_DEATH );
 	pRPC->UnregisterFunction( RPC_PLAYER_SPAWN );
 	pRPC->UnregisterFunction( RPC_KICKPLAYER );
