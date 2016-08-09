@@ -54,6 +54,12 @@ bool CrashRpt::InstallMain( char * pszName, char * pszVersion )
 	CrInstallInfo.pszAppVersion = pszVersion;
 	CrInstallInfo.dwFlags = 0;
 	CrInstallInfo.dwFlags |= CR_INST_ALL_POSSIBLE_HANDLERS;
+#ifdef _CLIENT
+	CrInstallInfo.dwFlags |= CR_INST_DONT_SEND_REPORT;		// only for devs
+	std::string sErrorReportDir(SharedUtility::GetAppPath());
+	sErrorReportDir += "logs\\Crash Reports\\";
+	CrInstallInfo.pszErrorReportSaveDir = sErrorReportDir.c_str();
+#endif
 
 #ifndef _CLIENT
 	CrInstallInfo.dwFlags |= CR_INST_DONT_SEND_REPORT;		// only for devs
@@ -61,7 +67,7 @@ bool CrashRpt::InstallMain( char * pszName, char * pszVersion )
 	CrInstallInfo.dwFlags |= CR_INST_NO_GUI;				// silent mode
 #endif
 
-	CrInstallInfo.uMiniDumpType = MiniDumpNormal;
+	CrInstallInfo.uMiniDumpType = MiniDumpWithFullMemory; // MiniDumpNormal;
 
 #ifdef _CLIENT
 	CrInstallInfo.uPriorities[CR_HTTP] = 1;
@@ -70,7 +76,7 @@ bool CrashRpt::InstallMain( char * pszName, char * pszVersion )
 #endif
 
 	CrInstallInfo.uPriorities[CR_SMTP] = CR_NEGATIVE_PRIORITY;
-	CrInstallInfo.uPriorities[CR_SMAPI] = CR_NEGATIVE_PRIORITY;
+	CrInstallInfo.uPriorities[CR_SMAPI] = CR_NEGATIVE_PRIORITY; //
 
 #ifndef _CLIENT
 	std::string sErrorReportDir( SharedUtility::GetAppPath() );

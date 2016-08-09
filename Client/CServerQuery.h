@@ -9,8 +9,9 @@
 
 #pragma once
 
-#include <thread>
+#include <Threading/CThread.h>
 
+class CThread;
 class CServerListItem;
 class CServerQuery
 {
@@ -19,10 +20,9 @@ private:
 
 	int													m_iSocket;
 	std::list< CServerListItem* >						m_queryQueue;
-	std::thread											m_thread;
-	bool												m_processQueries;
+	CThread												m_workerThread;
 
-	void					WorkerThread				( );
+	static	void			WorkerThread				( CThread * pCreator );
 	void					Process						( void );
 
 public:

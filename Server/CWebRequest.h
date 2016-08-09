@@ -8,8 +8,6 @@
 ***************************************************************/
 
 #pragma once
-
-#include	<thread>
 #include	"../Shared/Network/CHttpClient.h"
 
 struct SWebRequest
@@ -32,10 +30,9 @@ private:
 	bool							m_bActive;
 	SWebRequest						* m_activeRequest;
 
-	std::thread						m_thread;
-	bool							m_processRequest;
+	CThread							m_workerThread;
 
-	void							WorkerThread				();
+	static	void					WorkerThread				( CThread * pCreator );
 	static	bool					RecieveHandler				( const char * szData, unsigned int uiDataSize, void * pUserData );
 
 public:

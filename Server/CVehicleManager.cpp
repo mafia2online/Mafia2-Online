@@ -56,10 +56,6 @@ EntityId CVehicleManager::Add( int iModel, CVector3 vecPosition, CVector3 vecRot
 
 	// Add the vehicle for everyone
 	m_pNetworkVehicle[ id ]->AddForWorld();
-
-	// Spawn the vehicle for everyone
-	m_pNetworkVehicle[ id ]->SpawnForWorld();
-
 	return id;
 }
 
@@ -173,7 +169,7 @@ void CVehicleManager::HandlePlayerQuit( EntityId playerId )
 void CVehicleManager::HandlePlayerSpawn( EntityId playerId )
 {
 	// Loop over all vehicles
-	for( int i = 0; i < MAX_VEHICLES; i++ )
+	/*for( int i = 0; i < MAX_VEHICLES; i++ )
 	{
 		// Is the current vehicle active?
 		if( IsActive( i ) )
@@ -181,5 +177,5 @@ void CVehicleManager::HandlePlayerSpawn( EntityId playerId )
 			// Add the vehicle for this player
 			m_pNetworkVehicle[ i ]->SpawnForPlayer( playerId );
 		}
-	}
+	}*/
 }

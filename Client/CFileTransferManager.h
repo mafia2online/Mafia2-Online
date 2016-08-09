@@ -10,8 +10,8 @@
 #pragma once
 
 #include	"CFileTransfer.h"
-#include	<thread>
-#include	<mutex>
+#include	"Threading\CThread.h"
+#include	"Threading\CMutex.h"
 
 class CFileTransferManager
 {
@@ -19,15 +19,13 @@ class CFileTransferManager
 private:
 
 	std::list < CFileTransfer* >	m_transferList;
-	std::thread						m_thread;
-	std::mutex						m_mutex;
-
-	bool							m_processTransfer;
+	CThread							m_workerThread;
+	CMutex							m_transferListMutex;
 
 	String							m_strHost;
 	unsigned short					m_usHttpPort;
 
-	void							WorkerThread					();
+	static	void					WorkerThread					( CThread * pCreator );
 
 public:
 

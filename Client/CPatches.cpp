@@ -183,9 +183,6 @@ void __declspec(naked) C_Vehicle__PlayerStartEnter ( void )
 	_asm pop ebp;
 	_asm pushad;
 
-#ifdef DEBUG
-	pCore->GetChat()->AddDebugMessage ( "C_Vehicle__PlayerStartEnter - Seat: %d", iiTargetSeat );
-#endif
 
 	_asm popad;
 	_asm sub esp, 1Ch;
@@ -278,9 +275,85 @@ void __fastcall Hook_CreateObject(int type)
 		CreateObjectByTypePatch(type);
 }
 
+DWORD sub_B38339_orig = 0xB383A6;
+DWORD wwback = 0xB383C8;
+DWORD sub_162A300 = 0x162A300;
+
+/*
+test ecx, ecx
+je cont
+
+jmp[wwback]
+
+cont:
+jmp[sub_B38339_orig]
+*/
+DWORD _eax = 0x0;
+DWORD lasteax = 0x0;
+char buf[128];
+void _cdecl CrashAverted(DWORD id)
+{
+	if (lasteax != _eax)
+	{
+		sprintf_s(buf, 128, "EAX: %x", _eax);
+		MessageBoxA(NULL, buf, "Try!", MB_OK);
+		lasteax = _eax;
+	}
+}
+
+#define CRASH_AVERTED(id) \
+			    } \
+    _asm pushfd \
+    _asm pushad \
+    _asm mov eax, id \
+    _asm push eax \
+    _asm call CrashAverted \
+    _asm add esp, 4 \
+    _asm popad \
+    _asm popfd \
+    _asm \
+    {
+
+void __declspec(naked) sub_B38339(void)
+{
+	__asm 
+	{
+		mov _eax, ecx
+		CRASH_AVERTED(0)
+		test ecx, ecx
+		jz escape
+		call[sub_162A300]
+		jmp[sub_B38339_orig]
+	
+		
+		escape:
+		jmp[wwback]
+	}
+
+	/*__asm {
+		call[sub_B259C0]
+		push eax
+		//lea  eax, [esp + 40]
+
+		jmp[wwback]
+		/*
+		mov _eax, eax
+		CRASH_AVERTED(0)
+		test eax, eax
+		jz escape
+
+		jmp[sub_B38339_orig]
+
+	escape:
+		jmp[wwback]
+	}*/
+}
+
 void CPatches::Initialise( void )
 {
 	CLogFile::Printf( "Installing patches..." );
+
+//	CPatcher::InstallJmpPatch(0xB383A1, (DWORD)sub_B38339, 5);
 
 	// Unprotect the .text segment
 	CPatcher::Unprotect( (CCore::Instance()->GetBaseAddress() + 0x400000 + 0x1000), 0x94C000 );
@@ -408,11 +481,11 @@ void CPatches::Initialise( void )
 	CPatcher::PatchAddress( COffsets::VAR_TablesSds, tables, sizeof(tables) );
 
 	// Patch the stream map binary file
-	unsigned char streamMapa[23] = "/tables/StreamM2MP.bin";
+	unsigned char streamMapa[23] = "/tables/StreamM2O.bin";
 	CPatcher::PatchAddress( COffsets::VAR_StreamBin, streamMapa, sizeof(streamMapa) );
 
 	// Patch the SDS config file
-	unsigned char sdsConf[20] = "/sdsconfig_m2mp.bin";
+	unsigned char sdsConf[20] = "/sdsconfig_m2o.bin";
 	CPatcher::PatchAddress( 0x18F76A4, sdsConf, sizeof(sdsConf) );
 
 	CLogFile::Printf( "Patches installed." );

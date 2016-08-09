@@ -25,9 +25,9 @@
 
 #include	"CServerQuery.h"
 
-void CServerQuery::WorkerThread()
+void CServerQuery::WorkerThread ( CThread * pCreator )
 {
-	while (m_processQueries)
+	while ( pCreator->GetUserData < bool > () )
 	{
 		CServerQuery * pServerQuery = CCore::Instance()->GetGUI()->GetServerBrowser()->GetServerQuery ();
 		if ( pServerQuery )
@@ -53,6 +53,7 @@ void CServerQuery::WorkerThread()
 			int iBytesRead = -1;
 			while ( (iBytesRead = recvfrom ( pServerQuery->GetSocket (), szBuffer, sizeof ( szBuffer ), NULL, (sockaddr *)&address, &iFromLen )) != -1 )
 			{
+				// Is this query for M2Online?
 				if ( szBuffer [ 0 ] == 'M' && szBuffer [ 1 ] == '2' && szBuffer [ 2 ] == 'O' && szBuffer [ 3 ] == 'n' && szBuffer[4] == 'l' && szBuffer[5] == 'i' && szBuffer[6] == 'n' && szBuffer[7] == 'e')
 				{
 					char szIpAddress [ 64 ];
@@ -66,6 +67,9 @@ void CServerQuery::WorkerThread()
 					pServerItem->Parse ( szBuffer, strlen ( szBuffer ) );
 
 					pServerQuery->Remove ( pServerItem );
+				}
+				else {
+					CLogFile::Printf("Received query but ignored it (%s)", szBuffer);
 				}
 			}
 		}
@@ -82,7 +86,6 @@ CServerQuery::CServerQuery ( void )
 
 	unsigned long sockopt = 1;
 	ioctlsocket ( m_iSocket, FIONBIO, &sockopt );
-	m_processQueries = false;
 }
 
 CServerQuery::~CServerQuery ( void )
@@ -102,6 +105,10 @@ bool CServerQuery::Query ( CServerListItem * pServerItem )
 	address.sin_port = htons ( pServerItem->usGamePort + 1 );
 	address.sin_addr.s_addr = inet_addr ( pServerItem->strHost.Get () );
 
+#ifdef _DEBUG
+	CLogFile::Printf ( "Sending query to %s:%d...", pServerItem->strHost.Get(), pServerItem->usGamePort );
+#endif
+
 	int sentChars = sendto(m_iSocket, "M2Online", 8, NULL, (sockaddr *)&address, sizeof(sockaddr_in));
 	if ( sentChars == 8 )
 	{
@@ -110,12 +117,17 @@ bool CServerQuery::Query ( CServerListItem * pServerItem )
 
 		CLogFile::Printf ( "CServerQuery::Query () - Queue size: %d", m_queryQueue.size () );
 
-		if ( !m_thread.joinable() )
+		if ( !m_workerThread.IsRunning () )
 		{
-			m_processQueries = true;
-			m_thread = std::thread(&CServerQuery::WorkerThread, this);
+			m_workerThread.SetUserData< bool > ( true );
+			m_workerThread.Start ( WorkerThread );
 		}
 		return true;
+	}
+	else {
+#ifdef _DEBUG
+		CLogFile::Printf("Sent %d chars", sentChars);
+#endif
 	}
 
 	return false;
@@ -143,10 +155,10 @@ void CServerQuery::Remove ( CServerListItem * pServerItem )
 void CServerQuery::Reset ( void )
 {
 	m_queryQueue.clear ();
-	if (m_thread.joinable())
+	if ( m_workerThread.IsRunning () )
 	{
-		m_processQueries = false;
-		m_thread.join();
+		m_workerThread.SetUserData< bool > ( false );
+		m_workerThread.Stop ( false, true );
 	}
 }
 

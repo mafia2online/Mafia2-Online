@@ -213,6 +213,19 @@ void PlayerChat( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 
 void PlayerSync( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 {
+	EntityId playerId = (EntityId)pPacket->guid.systemIndex;
+	OnFootSync onFootSync;
+
+	RakNet::BitStream bsSyncData(pPacket->data, pPacket->length, false);
+	bsSyncData.IgnoreBytes(sizeof(RakNet::MessageID));
+	bsSyncData.Read((PCHAR)&onFootSync, sizeof(OnFootSync));
+
+	CNetworkPlayer * pNetworkPlayer = CCore::Instance()->GetPlayerManager()->Get(playerId);
+	if (pNetworkPlayer)
+		pNetworkPlayer->StoreOnFootSync(&onFootSync);
+
+	/*
+	
 	// Get the player id
 	EntityId playerId = (EntityId)pPacket->guid.systemIndex;
 
@@ -229,6 +242,7 @@ void PlayerSync( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 		// Store the sync data
 		pNetworkPlayer->StoreOnFootSync( &onFootSync );
 	}
+	*/
 }
 
 void PlayerDeath( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
@@ -540,7 +554,7 @@ void CNetworkRPC::Register( RakNet::RPC4 * pRPC )
 	
 	// Player rpcs
 	pRPC->RegisterFunction( RPC_PLAYER_CHAT, PlayerChat );
-	pRPC->RegisterFunction( RPC_PLAYER_SYNC, PlayerSync );
+//	pRPC->RegisterFunction( RPC_PLAYER_SYNC, PlayerSync );
 	pRPC->RegisterFunction( RPC_PLAYER_DEATH, PlayerDeath );
 	pRPC->RegisterFunction( RPC_PLAYER_SPAWN, PlayerSpawn );
 	pRPC->RegisterFunction( RPC_PLAYER_RESPAWN, PlayerRespawn );

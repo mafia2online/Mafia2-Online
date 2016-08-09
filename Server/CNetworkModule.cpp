@@ -96,6 +96,40 @@ int CNetworkModule::GetPlayerPing( EntityId playerId )
 	return m_pRakPeer->GetLastPing( m_pRakPeer->GetSystemAddressFromIndex( playerId ) );
 }
 
+void Packet_PlayerSync(RakNet::BitStream * pBitStream, RakNet::Packet * pPacket)
+{
+	EntityId playerId = (EntityId)pPacket->guid.systemIndex;
+	OnFootSync onFootSync;
+
+	RakNet::BitStream bsSyncData(pPacket->data, pPacket->length, false);
+	bsSyncData.IgnoreBytes(sizeof(RakNet::MessageID));
+	bsSyncData.Read((PCHAR)&onFootSync, sizeof(OnFootSync));
+
+	CNetworkPlayer * pNetworkPlayer = CCore::Instance()->GetPlayerManager()->Get(playerId);
+	if (pNetworkPlayer)
+		pNetworkPlayer->StoreOnFootSync(&onFootSync);
+
+	/*
+
+	// Get the player id
+	EntityId playerId = (EntityId)pPacket->guid.systemIndex;
+
+	// Read the player sync data
+	OnFootSync onFootSync;
+	pBitStream->Read( (char *)&onFootSync, sizeof(OnFootSync) );
+
+	// Get a pointer to the player
+	CNetworkPlayer * pNetworkPlayer = CCore::Instance()->GetPlayerManager()->Get( playerId );
+
+	// Is the player pointer valid?
+	if( pNetworkPlayer )
+	{
+	// Store the sync data
+	pNetworkPlayer->StoreOnFootSync( &onFootSync );
+	}
+	*/
+}
+
 void CNetworkModule::UpdateNetwork( void )
 {
 	// Create a packet
@@ -106,6 +140,9 @@ void CNetworkModule::UpdateNetwork( void )
 	{
 		switch( pPacket->data[0] )
 		{
+		case ID_PLAYERSYNC:
+			Packet_PlayerSync(nullptr, pPacket);
+			break;
 		case ID_NEW_INCOMING_CONNECTION:
 			{
 				CLogFile::Printf( "[network] Incoming connection from %s.", pPacket->systemAddress.ToString( true, ':' ) );

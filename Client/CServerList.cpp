@@ -161,6 +161,7 @@ String CServerListItem::Pulse ( void )
 	int len = recvfrom ( m_iSocket, szBuffer, 4096, 0, (sockaddr *)&addr, &addrLen );
 	if ( len >= 0 )
 	{
+		CLogFile::Printf("Len : %d", len);
 		// Parse data
 		Parse ( szBuffer, len );
 		return "ParsedQuery";

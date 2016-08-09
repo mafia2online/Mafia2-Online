@@ -202,6 +202,45 @@ void CNetworkModule::Call( const char * szIdentifier, RakNet::BitStream * pBitSt
 	m_pRPC->Call( szIdentifier, pBitStream, priority, reliability, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, bBroadCast );
 }
 
+#include	"CRemotePlayer.h"
+#include	"CLocalPlayer.h"
+void Packet_PlayerSync(RakNet::Packet * pPacket)
+{
+	RakNet::BitStream bsSyncData(pPacket->data, pPacket->length, false);
+	bsSyncData.IgnoreBytes(sizeof(RakNet::MessageID));
+
+	EntityId playerId;
+	bsSyncData.ReadCompressed(playerId);
+
+	unsigned short usPing;
+	bsSyncData.ReadCompressed(usPing);
+
+	OnFootSync onFootSync;
+	bsSyncData.Read((PCHAR)&onFootSync, sizeof(OnFootSync));
+
+
+	// Get a pointer to the player
+	CRemotePlayer * pRemotePlayer = CCore::Instance()->GetPlayerManager()->Get(playerId);
+
+	// Is the player pointer valid?
+	if (pRemotePlayer)
+	{
+		// Set the player ping
+		pRemotePlayer->SetPing(usPing);
+
+		// Is the localplayer spawned?
+		if (CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->IsSpawned())
+		{
+			// Fail safe
+			if (playerId == CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetId())
+				return;
+
+			// Deserialse the player with the bitstream
+			pRemotePlayer->StoreOnFootSync(&onFootSync);
+		}
+	}
+}
+
 void CNetworkModule::UpdateNetwork( void )
 {
 	// Create a packet
@@ -216,7 +255,10 @@ void CNetworkModule::UpdateNetwork( void )
 		// Is the packet invalid?
 		if ( !pPacket )
 			continue;
-
+		if (pPacket->data[0] == ID_PLAYERSYNC)
+		{
+			Packet_PlayerSync(pPacket);
+		}
 		// Have we connected?
 		if( pPacket->data[0] == ID_CONNECTION_REQUEST_ACCEPTED )
 		{
