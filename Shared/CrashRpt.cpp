@@ -18,42 +18,48 @@
 #include "CrashRpt.h"
 #include "SharedUtility.h"
 
-bool CrashRpt::AddProp( char * pszName, char * pszValue )
+bool CrashRpt::AddProp(char * pszName, char * pszValue)
 {
-	return ( crAddPropertyA( pszName, pszValue ) == 0 );
+	return (crAddPropertyA(pszName, pszValue) == 0);
 }
 
-bool CrashRpt::AddPropf( char * pszName, char * pszFmt, ... )
+bool CrashRpt::AddPropf(char * pszName, char * pszFmt, ...)
 {
-	if ( !pszFmt )
+	if (!pszFmt)
 		return false;
 
 	va_list VAList;
-	va_start( VAList, pszFmt );
+	va_start(VAList, pszFmt);
 
 	static char szBuffer[1024];
-	ZeroMemory( szBuffer, sizeof( szBuffer ) );
-	_vsnprintf_s( szBuffer, sizeof( szBuffer ) - strlen( szBuffer ), pszFmt, VAList );
+	ZeroMemory(szBuffer, sizeof(szBuffer));
+	_vsnprintf_s(szBuffer, sizeof(szBuffer) - strlen(szBuffer), pszFmt, VAList);
 
-	va_end( VAList );
+	va_end(VAList);
 
-	return AddProp( pszName, szBuffer );
+	return AddProp(pszName, szBuffer);
 }
 
-bool CrashRpt::InstallMain( char * pszName, char * pszVersion )
+bool CrashRpt::InstallMain(char * pszName, char * pszVersion)
 {
 #ifndef _WIN32
 #error CrashRpt is Windows Only
 #endif
 
 	CR_INSTALL_INFO CrInstallInfo;
-	memset( &CrInstallInfo, 0, sizeof( CR_INSTALL_INFO ) );
+	memset(&CrInstallInfo, 0, sizeof(CR_INSTALL_INFO));
 
-	CrInstallInfo.cb = sizeof( CR_INSTALL_INFO );
+	CrInstallInfo.cb = sizeof(CR_INSTALL_INFO);
 	CrInstallInfo.pszAppName = pszName;
 	CrInstallInfo.pszAppVersion = pszVersion;
 	CrInstallInfo.dwFlags = 0;
 	CrInstallInfo.dwFlags |= CR_INST_ALL_POSSIBLE_HANDLERS;
+#ifdef _CLIENT
+	CrInstallInfo.dwFlags |= CR_INST_DONT_SEND_REPORT;		// only for devs
+	std::string sErrorReportDir(SharedUtility::GetAppPath());
+	sErrorReportDir += "logs\\Crash Reports\\";
+	CrInstallInfo.pszErrorReportSaveDir = sErrorReportDir.c_str();
+#endif
 
 #ifndef _CLIENT
 	CrInstallInfo.dwFlags |= CR_INST_DONT_SEND_REPORT;		// only for devs
@@ -61,7 +67,7 @@ bool CrashRpt::InstallMain( char * pszName, char * pszVersion )
 	CrInstallInfo.dwFlags |= CR_INST_NO_GUI;				// silent mode
 #endif
 
-	CrInstallInfo.uMiniDumpType = MiniDumpNormal;
+	CrInstallInfo.uMiniDumpType = MiniDumpWithFullMemory; // MiniDumpNormal;
 
 #ifdef _CLIENT
 	CrInstallInfo.uPriorities[CR_HTTP] = 1;
@@ -70,10 +76,10 @@ bool CrashRpt::InstallMain( char * pszName, char * pszVersion )
 #endif
 
 	CrInstallInfo.uPriorities[CR_SMTP] = CR_NEGATIVE_PRIORITY;
-	CrInstallInfo.uPriorities[CR_SMAPI] = CR_NEGATIVE_PRIORITY;
+	CrInstallInfo.uPriorities[CR_SMAPI] = CR_NEGATIVE_PRIORITY; //
 
 #ifndef _CLIENT
-	std::string sErrorReportDir( SharedUtility::GetAppPath() );
+	std::string sErrorReportDir(SharedUtility::GetAppPath());
 	sErrorReportDir += "logs\\Crash Reports\\";
 	CrInstallInfo.pszErrorReportSaveDir = sErrorReportDir.c_str();
 	CrInstallInfo.pszRestartCmdLine = "/restart_crash_occurred";
@@ -82,85 +88,85 @@ bool CrashRpt::InstallMain( char * pszName, char * pszVersion )
 	CrInstallInfo.pszUrl = CRASHRPT_HOST;
 	CrInstallInfo.pszPrivacyPolicyURL = CRASHRPT_POLICY;
 
-	if ( crInstall( &CrInstallInfo ) != 0 )
+	if (crInstall(&CrInstallInfo) != 0)
 	{
 		char szErrorMsg[512];
-		crGetLastErrorMsg( szErrorMsg, 512 );
+		crGetLastErrorMsg(szErrorMsg, 512);
 
-	#ifdef _CLIENT
-		MessageBoxA( NULL, szErrorMsg, "CrashRpt Error!", MB_OK | MB_ICONERROR );
-	#else
-		CLogFile::Printf( "CrashRpt Error: %s", szErrorMsg );
-	#endif
-		
+#ifdef _CLIENT
+		MessageBoxA(NULL, szErrorMsg, "CrashRpt Error!", MB_OK | MB_ICONERROR);
+#else
+		CLogFile::Printf("CrashRpt Error: %s", szErrorMsg);
+#endif
+
 		return false;
 	}
 
 #ifdef _CLIENT
-	AddFilef( "Settings XML", "m2o-settings.xml", "%s%s", SharedUtility::GetAppPath(), "settings.xml" );
-	AddFilef( "Core Log File", "m2o-core.log", "%s%s", SharedUtility::GetAppPath(), "logs\\core.log" );
-	AddFilef( "GUI Log File", "m2o-gui.log", "%s%s", SharedUtility::GetAppPath(), "logs\\gui.log" );
+	AddFilef("Settings XML", "m2o-settings.xml", "%s%s", SharedUtility::GetAppPath(), "settings.xml");
+	AddFilef("Core Log File", "m2o-core.log", "%s%s", SharedUtility::GetAppPath(), "logs\\core.log");
+	AddFilef("GUI Log File", "m2o-gui.log", "%s%s", SharedUtility::GetAppPath(), "logs\\gui.log");
 #else
-	time_t t = time( NULL );
-	const struct tm * tm = localtime( &t );
+	time_t t = time(NULL);
+	const struct tm * tm = localtime(&t);
 	const char * szDateStr = SharedUtility::DateToString();
-	String strLogFile( "logs\\%s\\m2o-server-%d-%d-%d.log", szDateStr, tm->tm_mday, (tm->tm_mon + 1), (1900 + tm->tm_year) );
-	AddFilef( "Server Log File", "m2o-server.log", "%s%s", SharedUtility::GetAppPath(), strLogFile.Get() );
+	String strLogFile("logs\\%s\\m2o-server-%d-%d-%d.log", szDateStr, tm->tm_mday, (tm->tm_mon + 1), (1900 + tm->tm_year));
+	AddFilef("Server Log File", "m2o-server.log", "%s%s", SharedUtility::GetAppPath(), strLogFile.Get());
 #endif
 
 	return true;
 }
 
-bool CrashRpt::UninstallMain( void )
+bool CrashRpt::UninstallMain(void)
 {
-	return ( crUninstall() == 0 );
+	return (crUninstall() == 0);
 }
 
-bool CrashRpt::InstallToCurrentThread( void )
+bool CrashRpt::InstallToCurrentThread(void)
 {
-	return ( crInstallToCurrentThread2( 0 ) == 0 );
+	return (crInstallToCurrentThread2(0) == 0);
 }
 
-bool CrashRpt::UninstallFromCurrentThread( void )
+bool CrashRpt::UninstallFromCurrentThread(void)
 {
-	return ( crUninstallFromCurrentThread() == 0 );
+	return (crUninstallFromCurrentThread() == 0);
 }
 
-bool CrashRpt::TestGenerateReport( BOOL bManual )
+bool CrashRpt::TestGenerateReport(BOOL bManual)
 {
 	CR_EXCEPTION_INFO ExceptionInfo;
-	memset( &ExceptionInfo, 0, sizeof( CR_EXCEPTION_INFO ) );
-	ExceptionInfo.cb = sizeof( CR_EXCEPTION_INFO );
+	memset(&ExceptionInfo, 0, sizeof(CR_EXCEPTION_INFO));
+	ExceptionInfo.cb = sizeof(CR_EXCEPTION_INFO);
 	ExceptionInfo.exctype = CR_SEH_EXCEPTION;
 	ExceptionInfo.code = 0x1234;
 	ExceptionInfo.pexcptrs = NULL;
 	ExceptionInfo.bManual = bManual;
 
-	return ( crGenerateErrorReport( &ExceptionInfo ) == 0 );
+	return (crGenerateErrorReport(&ExceptionInfo) == 0);
 }
 
-bool CrashRpt::TestEmulateCrash( int nType )
+bool CrashRpt::TestEmulateCrash(int nType)
 {
-	return ( crEmulateCrash( nType ) == 0 );
+	return (crEmulateCrash(nType) == 0);
 }
 
-bool CrashRpt::AddFile( char * pszDesc, char * pszDestFile, char * pszFile )
+bool CrashRpt::AddFile(char * pszDesc, char * pszDestFile, char * pszFile)
 {
-	return ( crAddFile2A( pszFile, pszDestFile, pszDesc, 
-				CR_AF_MAKE_FILE_COPY | CR_AF_MISSING_FILE_OK ) == 0 );
+	return (crAddFile2A(pszFile, pszDestFile, pszDesc,
+		CR_AF_MAKE_FILE_COPY | CR_AF_MISSING_FILE_OK) == 0);
 }
 
-bool CrashRpt::AddFilef( char * pszDesc, char * pszDestFile, char * pszFmt, ... )
+bool CrashRpt::AddFilef(char * pszDesc, char * pszDestFile, char * pszFmt, ...)
 {
 	va_list VAList;
-	va_start( VAList, pszFmt );
+	va_start(VAList, pszFmt);
 
 	static char szBuffer[1024];
-	ZeroMemory( szBuffer, sizeof( szBuffer ) );
-	_vsnprintf_s( szBuffer, sizeof( szBuffer ) - strlen( szBuffer ), pszFmt, VAList );
+	ZeroMemory(szBuffer, sizeof(szBuffer));
+	_vsnprintf_s(szBuffer, sizeof(szBuffer) - strlen(szBuffer), pszFmt, VAList);
 
-	va_end( VAList );
+	va_end(VAList);
 
-	return ( crAddFile2A( szBuffer, pszDestFile, pszDesc, 
-				CR_AF_MAKE_FILE_COPY | CR_AF_MISSING_FILE_OK ) == 0 );
+	return (crAddFile2A(szBuffer, pszDestFile, pszDesc,
+		CR_AF_MAKE_FILE_COPY | CR_AF_MISSING_FILE_OK) == 0);
 }

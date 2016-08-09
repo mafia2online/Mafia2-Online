@@ -25,20 +25,13 @@ class CNetworkVehicle
 private:
 
 	EntityId						m_vehicleId;
-	unsigned int					m_uiModelIndex;
-	CVector3						m_vecSpawnPosition;
-	CVector3						m_vecSpawnRotation;
 	bool							m_bSpawned;
-	CColor							m_primarySpawnColour;
-	CColor							m_secondarySpawnColour;
 
 	CVector3						m_vecTempRotation;
-
+	CVector3 m_vecSpawnPosition; // the client DOESN'T need this!
+	CVector3 m_vecSpawnRotation;
 	CM2Vehicle						* m_pVehicle;
 	CM2ModelManager					* m_pVehicleModelManager;
-
-	InVehicleSync					m_lastSyncData;
-	bool							m_bProcessSyncOnSpawn;
 
 	CVector3						m_vecLastGoodPosition;
 	CVector3						m_vecLastGoodRotation;
@@ -46,7 +39,10 @@ private:
 	CBlip							* m_pAttachedBlip;
 	bool							m_bBlipAttached;
 
-	bool							m_bPartState[1];
+	// Sync related
+	VehicleSpawnProperties			m_spawnProperties;
+	InVehicleSync					m_syncData;
+
 
 	struct
 	{
@@ -77,7 +73,7 @@ private:
 			unsigned long			ulFinishTime;
 		} steer;
 
-				struct
+		struct
 		{
 			CVector3				vecTarget;
 			CVector3				vecError;
@@ -96,147 +92,152 @@ private:
 
 public:
 
-									CNetworkVehicle						( void );
-									~CNetworkVehicle					( void );
+	CNetworkVehicle(void);
+	~CNetworkVehicle(void);
 
-	void							SetId								( EntityId vehicleId ) { m_vehicleId = vehicleId; }
-	EntityId						GetId								( void ) { return m_vehicleId; }
+	void							SetId(EntityId vehicleId) { m_vehicleId = vehicleId; }
+	EntityId						GetId(void) { return m_vehicleId; }
 
-	void							SetModel							( unsigned int uiModelIndex, bool bRebuild = true );
-	unsigned int					GetModel							( void ) { return m_uiModelIndex; }
+	void							SetModel(unsigned int uiModelIndex, bool bRebuild = true);
+	unsigned int					GetModel(void) { return m_spawnProperties.m_uiModelIndex; }
 
-	void							SetSpawned							( bool bSpawned ) { m_bSpawned = bSpawned; }
-	bool							IsSpawned							( void ) { return m_bSpawned; }
+	void							Spawn();
+	void							Reset();
+	void							SetSpawned(bool bSpawned) { m_bSpawned = bSpawned; }
+	bool							IsSpawned(void) { return m_bSpawned; }
 
-	void							SetLastSyncer						( CNetworkPlayer * pPlayer ) { m_pLastSyncer = pPlayer; }
-	CNetworkPlayer					* GetLastSyncer						( void ) { return m_pLastSyncer; }
+	void							SetLastSyncer(CNetworkPlayer * pPlayer) { m_pLastSyncer = pPlayer; }
+	CNetworkPlayer					* GetLastSyncer(void) { return m_pLastSyncer; }
 
-	void							SetSyncData							( InVehicleSync vehicleSync ) { memcpy( &m_lastSyncData, &vehicleSync, sizeof(InVehicleSync) ); }
-	void							GetSyncData							( InVehicleSync * vehicleSync ) { memcpy( vehicleSync, &m_lastSyncData, sizeof(InVehicleSync) ); }
+	void							SetSyncData(InVehicleSync vehicleSync) { memcpy(&m_syncData, &vehicleSync, sizeof(InVehicleSync)); }
+	void							GetSyncData(InVehicleSync* vehicleSync) { memcpy(vehicleSync, &m_syncData, sizeof(InVehicleSync)); }
 
-	void							SetSpawnPosition					( CVector3 vecSpawnPosition ) { memcpy( &m_vecSpawnPosition, &vecSpawnPosition, sizeof(CVector3) ); }
-	void							GetSpawnPosition					( CVector3 * vecSpawnPosition ) { memcpy( vecSpawnPosition, &m_vecSpawnPosition, sizeof(CVector3) ); }
+	void							SetSpawnProperties(VehicleSpawnProperties vehicleSync) { memcpy(&m_spawnProperties, &vehicleSync, sizeof(VehicleSpawnProperties)); }
+	void							GetSpawnProperties(VehicleSpawnProperties* vehicleSync) { memcpy(vehicleSync, &m_spawnProperties, sizeof(VehicleSpawnProperties)); }
 
-	void							SetSpawnRotation					( CVector3 vecSpawnRotation ) { memcpy( &m_vecSpawnRotation, &vecSpawnRotation, sizeof(CVector3) ); }
-	void							GetSpawnRotation					( CVector3 * vecSpawnRotation ) { memcpy( vecSpawnRotation, &m_vecSpawnRotation, sizeof(CVector3) ); }
+	void							SetSpawnPosition(CVector3 vecSpawnPosition) { memcpy(&m_vecSpawnPosition, &vecSpawnPosition, sizeof(CVector3)); }
+	void							GetSpawnPosition(CVector3* vecSpawnPosition) { memcpy(vecSpawnPosition, &m_vecSpawnPosition, sizeof(CVector3)); }
 
-	void							ProcessSyncOnSpawn					( bool bProcess ) { m_bProcessSyncOnSpawn = bProcess; }
-	bool							ShouldProcessSyncOnSpawn			( void ) { return m_bProcessSyncOnSpawn; }
+	void							SetSpawnRotation(CVector3 vecSpawnRotation) { memcpy(&m_vecSpawnRotation, &vecSpawnRotation, sizeof(CVector3)); }
+	void							GetSpawnRotation(CVector3* vecSpawnRotation) { memcpy(vecSpawnRotation, &m_vecSpawnRotation, sizeof(CVector3)); }
 
-	void							Create								( void );
-	void							Destroy								( void );
+	//void							ProcessSyncOnSpawn					( bool bProcess ) { m_bProcessSyncOnSpawn = bProcess; }
+	//bool							ShouldProcessSyncOnSpawn			( void ) { return m_bProcessSyncOnSpawn; }
 
-	void							Respawn								( void );
-	void							HandleRespawn						( void );
+	void							Create(void);
+	void							Destroy(void);
 
-	void							Deserialise							( RakNet::BitStream * pBitStream );
-	void							ProcessLastSyncData					( bool bFirstSpawn = false );
+	void							Respawn(void);
+	void							HandleRespawn(void);
 
-	void							StoreVehicleSync					( InVehicleSync vehicleSync, bool bInterpolate = true, bool bSpawn = false );
+	void							Deserialise(RakNet::BitStream * pBitStream);
+	void							ProcessLastSyncData(bool bFirstSpawn = false);
 
-	void							Pulse								( void );
+	void							StoreVehicleSync(InVehicleSync vehicleSync, bool bInterpolate = true, bool bSpawn = false);
 
-	void							SetPosition							( CVector3 vecPosition );
-	void							GetPosition							( CVector3 * vecPosition );
+	void							Pulse(void);
 
-	void							SetRotation							( CVector3 vecRotation );
-	void							GetRotation							( CVector3 * vecRotation );
+	void							SetPosition(CVector3 vecPosition);
+	void							GetPosition(CVector3 * vecPosition);
 
-	void							SetColour							( CColor primary, CColor secondary );
-	void							GetColour							( CColor * primary, CColor * secondary );
+	void							SetRotation(CVector3 vecRotation);
+	void							GetRotation(CVector3 * vecRotation);
 
-	void							SetPlateText						( const char * szPlateText );
-	const char						* GetPlateText						( void );
+	void							SetColour(CColor primary, CColor secondary);
+	void							GetColour(CColor * primary, CColor * secondary);
 
-	void							Repair								( void );
-	void							Explode								( void );
+	void							SetPlateText(const char * szPlateText);
+	const char						* GetPlateText(void);
 
-	void							SetDirtLevel						( float fDirtLevel );
-	float							GetDirtLevel						( void );
+	void							Repair(void);
+	void							Explode(void);
 
-	void							SetEngineState						( bool bState );
-	bool							GetEngineState						( void );
+	void							SetDirtLevel(float fDirtLevel);
+	float							GetDirtLevel(void);
 
-	void							SetPartOpen							( int iPart, bool bOpen );
-	bool							IsPartOpen							( int iPart );
+	void							SetEngineState(bool bState);
+	bool							GetEngineState(void);
 
-	void							SetSirenState						( bool bState );
-	bool							GetSirenState						( void );
+	void							SetPartOpen(int iPart, bool bOpen);
+	bool							IsPartOpen(int iPart);
 
-	void							SetBeaconLightState					(bool bState);
-	bool							GetBeaconLightState					(void);
+	void							SetSirenState(bool bState);
+	bool							GetSirenState(void);
 
-	void							SetHornState						( bool bState );
-	bool							GetHornState						( void );
+	void							SetBeaconLightState(bool bState);
+	bool							GetBeaconLightState(void);
 
-	void							SetWindowOpen						( int iSeat, bool bOpen );
-	bool							IsWindowOpen						( int iSeat );
+	void							SetHornState(bool bState);
+	bool							GetHornState(void);
 
-	void							SetTuningTable						( int iTable );
-	int								GetTuningTable						( void );
+	void							SetWindowOpen(int iSeat, bool bOpen);
+	bool							IsWindowOpen(int iSeat);
 
-	void							SetWheelTexture						( int iWheelIndex, int iTexture );
-	int								GetWheelTexture						( int iWheelIndex );
+	void							SetTuningTable(int iTable);
+	int								GetTuningTable(void);
 
-	void							SetSteer							( float fSteer );
-	float							GetSteer							( void );
+	void							SetWheelTexture(int iWheelIndex, int iTexture);
+	int								GetWheelTexture(int iWheelIndex);
 
-	void							SetSpeed							( float fSpeed );
-	float							GetSpeed							( void );
+	void							SetSteer(float fSteer);
+	float							GetSteer(void);
 
-	void							SetSpeedVec							( CVector3 vecSpeed );
-	void							GetSpeedVec							( CVector3 * vecSpeed );
+	void							SetSpeed(float fSpeed);
+	float							GetSpeed(void);
 
-	void							SetFuel								( float fFuel );
-	float							GetFuel								( void );
+	void							SetSpeedVec(CVector3 vecSpeed);
+	void							GetSpeedVec(CVector3 * vecSpeed);
 
-	void							SetLightState						( bool bState );
-	bool							GetLightState						( void );
+	void							SetFuel(float fFuel);
+	float							GetFuel(void);
 
-	void							HandlePlayerEnter					( CNetworkPlayer * pNetworkPlayer, EntityId seatId );
-	void							HandlePlayerExit					( CNetworkPlayer * pNetworkPlayer, EntityId seatId, bool bResetInterpolation = true );
+	void							SetLightState(bool bState);
+	bool							GetLightState(void);
 
-	CM2Vehicle						* GetVehicle						( void ) { return m_pVehicle; }
-	CNetworkPlayer					* GetDriver							( void ) { return m_pDriver; }
-	CNetworkPlayer					* GetPassenger						( int iIndex ) { return m_pPassenger[ iIndex ]; }
+	void							HandlePlayerEnter(CNetworkPlayer * pNetworkPlayer, EntityId seatId);
+	void							HandlePlayerExit(CNetworkPlayer * pNetworkPlayer, EntityId seatId, bool bResetInterpolation = true);
 
-	void							SetOccupant							( int iIndex, CNetworkPlayer * pPlayer ) { if( iIndex == 0 ) { m_pDriver = pPlayer; } else { m_pPassenger[ iIndex ] = pPlayer; } }
+	CM2Vehicle						* GetVehicle(void) { return m_pVehicle; }
+	CNetworkPlayer					* GetDriver(void) { return m_pDriver; }
+	CNetworkPlayer					* GetPassenger(int iIndex) { return m_pPassenger[iIndex]; }
+
+	void							SetOccupant(int iIndex, CNetworkPlayer * pPlayer) { if (iIndex == 0) { m_pDriver = pPlayer; } else { m_pPassenger[iIndex] = pPlayer; } }
 
 	// Interpolation
-	void							ResetInterpolation					( void );
-	void							Interpolate							( void );
+	void							ResetInterpolation(void);
+	void							Interpolate(void);
 
 	// Position Interpolation
-	void							SetTargetPosition					( CVector3 vecPosition );
-	void							RemoveTargetPosition				( void ) { m_Interpolation.position.ulFinishTime = 0; }
-	void							UpdateTargetPosition				( void );
-	bool							HasTargetPosition					( void ) { return (m_Interpolation.position.ulFinishTime != 0); }
+	void							SetTargetPosition(CVector3 vecPosition);
+	void							RemoveTargetPosition(void) { m_Interpolation.position.ulFinishTime = 0; }
+	void							UpdateTargetPosition(void);
+	bool							HasTargetPosition(void) { return (m_Interpolation.position.ulFinishTime != 0); }
 
 	// Rotation Interpolation
-	void							SetTargetRotation					( CVector3 vecRotation );
-	void							RemoveTargetRotation				( void ) { m_Interpolation.rotation.ulFinishTime = 0; }
-	void							UpdateTargetRotation				( void );
-	bool							HasTargetRotation					( void ) { return (m_Interpolation.rotation.ulFinishTime != 0); }
+	void							SetTargetRotation(CVector3 vecRotation);
+	void							RemoveTargetRotation(void) { m_Interpolation.rotation.ulFinishTime = 0; }
+	void							UpdateTargetRotation(void);
+	bool							HasTargetRotation(void) { return (m_Interpolation.rotation.ulFinishTime != 0); }
 
 	// Steer Interpolation
-	void							SetTargetSteer						( float fSteer );
-	void							RemoveTargetSteer					( void ) { m_Interpolation.steer.ulFinishTime = 0; }
-	void							UpdateTargetSteer					( void );
-	bool							HasTargetSteer						( void ) { return (m_Interpolation.steer.ulFinishTime != 0); }
+	void							SetTargetSteer(float fSteer);
+	void							RemoveTargetSteer(void) { m_Interpolation.steer.ulFinishTime = 0; }
+	void							UpdateTargetSteer(void);
+	bool							HasTargetSteer(void) { return (m_Interpolation.steer.ulFinishTime != 0); }
 
 	// Speed Interpolation
-	void							SetTargetSpeed						( CVector3 vecSpeed );
-	void							RemoveTargetSpeed					( void ) { m_Interpolation.speed.ulFinishTime = 0; }
-	void							UpdateTargetSpeed					( void );
-	bool							HasTargetSpeed						( void ) { return (m_Interpolation.speed.ulFinishTime != 0); }
+	void							SetTargetSpeed(CVector3 vecSpeed);
+	void							RemoveTargetSpeed(void) { m_Interpolation.speed.ulFinishTime = 0; }
+	void							UpdateTargetSpeed(void);
+	bool							HasTargetSpeed(void) { return (m_Interpolation.speed.ulFinishTime != 0); }
 
-	bool							GetClosestPlayer					( CNetworkPlayer ** pNetworkPlayer );
+	bool							GetClosestPlayer(CNetworkPlayer ** pNetworkPlayer);
 
-	void							ProcessUnoccupiedSync				( RakNet::BitStream * pBitStream );
+	void							ProcessUnoccupiedSync(RakNet::BitStream * pBitStream);
 
 	// Blips
-	void							AttachBlip							( CBlip * pBlip );
-	void							DetachBlip							( void );
-	CBlip							* GetAttachedBlip					( void ) { return m_pAttachedBlip; }
+	void							AttachBlip(CBlip * pBlip);
+	void							DetachBlip(void);
+	CBlip							* GetAttachedBlip(void) { return m_pAttachedBlip; }
 
 };
