@@ -15,6 +15,7 @@ public:
 	void		run();
 	bool		init();
 	bool		inject();
+	void		runGame();
 
 protected:
 	CCore();

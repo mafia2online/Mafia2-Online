@@ -91,14 +91,8 @@ bool	CCore::inject()
 	return (true);
 }
 
-void	CCore::run()
+void	CCore::runGame()
 {
-	if (this->init() == false)
-	{
-		MessageBox(NULL, "Cannot init the launcher", ProjectGlobals::getModName().c_str(), MB_ICONEXCLAMATION | MB_OK);
-		return;
-	}
-
 	if (this->inject() == false)
 	{
 		MessageBox(NULL, "Cannot start and inject process", ProjectGlobals::getModName().c_str(), MB_ICONEXCLAMATION | MB_OK);
@@ -110,4 +104,15 @@ void	CCore::run()
 	}
 
 	ResumeThread(m_piProcessInfo.hThread);
+}
+
+void	CCore::run()
+{
+	if (this->init() == false)
+	{
+		MessageBox(NULL, "Cannot init the launcher", ProjectGlobals::getModName().c_str(), MB_ICONEXCLAMATION | MB_OK);
+		return;
+	}
+
+	this->runGame();
 }
