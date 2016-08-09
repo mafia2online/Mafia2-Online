@@ -28,15 +28,17 @@
 #include	"CClientScriptingManager.h"
 #include	"CEvents.h"
 
-bool CScreenShot::m_bSaving = false;
-
 static unsigned char * m_ucData = NULL;
 
 #define	BYTES_PER_PIXEL								4
 #define SCREEN_SHOT_FORMAT							D3DFMT_A8R8G8B8
 #define SCREEN_SHOT_FORMAT_BYTES_PER_PIXEL			(32 / 8)
 
-DWORD CScreenShot::WorkerThread( LPVOID lpParam )
+CScreenShot::CScreenShot() : m_bSaving(false)
+{
+}
+
+DWORD CScreenShot::WorkerThread()
 {
 	unsigned long ulStartTime = SharedUtility::GetTime();
 
@@ -118,20 +120,17 @@ bool CScreenShot::BeginWrite( unsigned char * ucData )
 	if( m_bSaving )
 		return false;
 
-	HANDLE hThread = CreateThread( NULL, 0, (LPTHREAD_START_ROUTINE)CScreenShot::WorkerThread, NULL, CREATE_SUSPENDED, NULL );
 
-	if( !hThread )
+	m_bSaving = true;
+	m_ucData = ucData;
+	m_thread = std::thread(&CScreenShot::WorkerThread, this);
+
+	if( !m_thread.joinable())
 	{
 		CCore::Instance()->GetChat()->AddInfoMessage(CColor(255, 0, 0, 255), "Failed to save screenshot. (Can't create worker thread)");
 		CLogFile::Printf( "Failed to save screenshot. (Can't create worker thread)" );
 		return false;
 	}
-
-	m_bSaving = true;
-	m_ucData = ucData;
-
-	SetThreadPriority( hThread, THREAD_PRIORITY_LOWEST );
-	ResumeThread( hThread );
 	return true;
 }
 

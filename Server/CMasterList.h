@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include	<thread>
+
 #include	<TCPInterface.h>
 #include	<RakSleep.h>
 
@@ -34,9 +36,10 @@ private:
 
 	String							m_sAuthKey;
 
-	CThread							m_workerThread;
+	std::thread						m_thread;
+	bool							m_processQueries;
 
-	static void						WorkerThread						( CThread * pCreator );
+	void							WorkerThread						();
 
 public:
 

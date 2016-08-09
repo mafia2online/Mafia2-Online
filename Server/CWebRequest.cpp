@@ -6,97 +6,67 @@
 * Developers : AaronLad <aaron@m2-multiplayer.com>
 *
 ***************************************************************/
-
+#include	<thread>
 #include	"StdInc.h"
 #include	"CCore.h"
 
-void CWebRequest::WorkerThread ( CThread * pCreator )
+#include	"CWebRequest.h"
+
+void CWebRequest::WorkerThread()
 {
-	// Loop until the thread is closed
-	while ( pCreator->GetUserData < bool > () )
+	while (m_processRequest)
 	{
-		// Get the web request instance
-		CWebRequest* pWebRequest = CCore::Instance()->GetWebRequest ();
-
-		// Is the web request valid?
-		if ( pWebRequest )
+		if ( !IsActive () )
 		{
-			// Are we not waiting for any data?
-			if ( !pWebRequest->IsActive () )
+			if ( size () )
 			{
-				// Do we have any waiting requests?
-				if ( pWebRequest->size () )
+				SWebRequest* pCurrent = front ();
+				m_activeRequest = pCurrent;
+				pCurrent->ulTime = SharedUtility::GetTime();
+				SetActive ( true );
+				m_pHttpClient->SetHost ( pCurrent->strUrl );
+				m_pHttpClient->SetPort ( pCurrent->iPort );
+
+				switch( pCurrent->iType )
 				{
-					// Get the current request
-					SWebRequest* pCurrent = pWebRequest->front ();
-
-					// Set the active request
-					pWebRequest->m_activeRequest = pCurrent;
-
-					// Set the request time
-					pCurrent->ulTime = SharedUtility::GetTime();
-
-					// Mark as active
-					pWebRequest->SetActive ( true );
-
-					// Set the http host
-					pWebRequest->GetHttpClient()->SetHost ( pCurrent->strUrl );
-
-					// Set the http port
-					pWebRequest->GetHttpClient()->SetPort ( pCurrent->iPort );
-
-					// Send the http request
-					switch( pCurrent->iType )
+				case HTTP_TYPE_GET:
 					{
-					case HTTP_TYPE_GET:
-						{
-							pWebRequest->GetHttpClient()->Get ( String( "%s", pCurrent->strPost.Get () ) );
-							break;
-						}
-
-					case HTTP_TYPE_POST:
-						{
-							pWebRequest->GetHttpClient()->Post ( false, String( "%s", pCurrent->strPost.Get () ) );
-							break;
-						}
+						m_pHttpClient->Get ( String( "%s", pCurrent->strPost.Get () ) );
+						break;
 					}
 
-					// Was this a post?
-					if ( pCurrent->iType == HTTP_TYPE_POST )
+				case HTTP_TYPE_POST:
 					{
-						// Reset
-						pWebRequest->Reset ();
+						m_pHttpClient->Post ( false, String( "%s", pCurrent->strPost.Get () ) );
+						break;
 					}
 				}
-			}
-			else
-			{
-				// Do we have any data?
-				if ( pWebRequest->GetHttpClient()->IsBusy () )
+
+				if ( pCurrent->iType == HTTP_TYPE_POST )
 				{
-					// Process the http client
-					pWebRequest->GetHttpClient()->Process ();
-
-					// Is the request done?
-					if ( pWebRequest->GetHttpClient()->GotData () )
-					{
-						// Call the script function
-						CSquirrelArguments args;
-						args.push( pWebRequest->m_activeRequest->iType );
-						args.push( pWebRequest->GetHttpClient()->GetData()->Get() );
-						args.push( (int)(SharedUtility::GetTime() - pWebRequest->m_activeRequest->ulTime) );
-						CCore::Instance()->GetScriptingManager()->Call( pWebRequest->m_activeRequest->pFunction, &args, pWebRequest->m_activeRequest->pVM );
-
-						// Reset
-						pWebRequest->Reset ();
-					}
+					Reset ();
 				}
 			}
 		}
+		else
+		{
+			if ( m_pHttpClient->IsBusy () )
+			{
+				m_pHttpClient->Process ();
+				if ( m_pHttpClient->GotData () )
+				{
+					CSquirrelArguments args;
+					args.push( m_activeRequest->iType );
+					args.push( m_pHttpClient->GetData()->Get() );
+					args.push( (int)(SharedUtility::GetTime() - m_activeRequest->ulTime) );
+					CCore::Instance()->GetScriptingManager()->Call( m_activeRequest->pFunction, &args, m_activeRequest->pVM );
 
-		// Sleep
-		Sleep ( 100 );
+					Reset ();
+				}
+			}
+		}
 	}
+	Sleep ( 100 );
 }
 
 bool CWebRequest::RecieveHandler ( const char * szData, unsigned int uiDataSize, void * pUserData )
@@ -104,42 +74,30 @@ bool CWebRequest::RecieveHandler ( const char * szData, unsigned int uiDataSize,
 	return true;
 }
 
-CWebRequest::CWebRequest( void )
+CWebRequest::CWebRequest()
 {
-	// Mark as not active
 	m_bActive = false;
 
-	// Create the http instance
 	m_pHttpClient = new CHttpClient ();
+	m_pHttpClient->SetReceiveHandle ( RecieveHandler, this );
 
-	// Set the http receive handler
-	m_pHttpClient->SetReceiveHandle ( RecieveHandler, this ); // todo: Http client crashes if there's no receive handler - fix it!
-
-	// Create the worker thread
-	m_workerThread.SetUserData < bool > ( true );
-	m_workerThread.Start ( WorkerThread );
+	m_thread = std::thread(&CWebRequest::WorkerThread, this);
+	m_processRequest = true;
 }
 
-CWebRequest::~CWebRequest( void )
+CWebRequest::~CWebRequest()
 {
-	// Is the worker thread running?
-	if ( m_workerThread.IsRunning () )
+	if ( m_thread.joinable () )
 	{
-		// Stop the worker thread
-		m_workerThread.SetUserData < bool > ( false );
-		m_workerThread.Stop ( false, true );
+		m_processRequest = false;
+		m_thread.join();
 	}
-
-	// Clear the request queue
 	clear ();
-	
-	// Delete the http client
 	SAFE_DELETE ( m_pHttpClient );
 }
 
 void CWebRequest::AddToQueue( int iType, String strUrl, int iPort, String strPost, SQObjectPtr pFunction, SQVM * pVM )
 {
-	// Create a web request struct
 	SWebRequest * webRequest = new SWebRequest;
 	webRequest->iType = iType;
 	webRequest->strUrl = SharedUtility::StripForWebRequest( strUrl );
@@ -149,22 +107,15 @@ void CWebRequest::AddToQueue( int iType, String strUrl, int iPort, String strPos
 	webRequest->pVM = pVM;
 	webRequest->ulTime = 0;
 
-	// Add the request to the queue
 	push_back( webRequest );
 }
 
-void CWebRequest::Reset ( void )
+void CWebRequest::Reset ()
 {
-	// Remove the current request from the queue
 	if ( m_activeRequest )
 		remove ( m_activeRequest );
 
-	// Delete the active request memory
 	SAFE_DELETE ( m_activeRequest );
-
-	// Reset the http client
 	m_pHttpClient->Reset ();
-
-	// Mark as inactive
 	SetActive ( false );
 }
