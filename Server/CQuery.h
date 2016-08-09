@@ -9,15 +9,17 @@
 
 #pragma once
 
+#include	<thread>
+
 class CQuery
 {
 
 private:
-
-	CThread													m_workerThread;
+	std::thread					m_thread;
+	bool						m_processQueries;
 	int														m_iSocket;
 
-	static	void				WorkerThread				( CThread * pCreator );
+	void						WorkerThread				();
 
 public:
 
