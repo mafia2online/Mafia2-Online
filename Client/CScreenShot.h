@@ -9,21 +9,24 @@
 
 #pragma once
 
-#include	"../Shared/Threading/CThread.h"
+#include <thread>
 
 class CScreenShot
 {
-
 private:
 
-	static	bool											m_bSaving;
+	std::thread								m_thread;
+	bool									m_bSaving;
 
-	static	DWORD			WorkerThread					( LPVOID lpParam );
-	static	const char		* GetValidScreenshotName		( void );
+	DWORD			WorkerThread					( );
+	const char		* GetValidScreenshotName		( void );
 
 public:
 
-	static	bool			BeginWrite						( unsigned char * ucData );
-	static	bool			IsSaving						( void );
+	CScreenShot();
+	~CScreenShot() = default;
+
+	bool			BeginWrite						( unsigned char * ucData );
+	bool			IsSaving						( void );
 
 };

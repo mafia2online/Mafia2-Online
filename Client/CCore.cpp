@@ -127,26 +127,27 @@ CCore::CCore( void )
 	SetGlobalSpeedLimited ( false );
 	SetSummer ( true );
 
-	m_pNetworkModule = NULL;
-	m_pPlayerManager = NULL;
-	m_pCamera = NULL;
-	m_pHud = NULL;
-	m_pClientScriptingManager = NULL;
-	m_pFPSCounter = NULL;
-	m_pTimerManager = NULL;
-	m_pFileTransferManager = NULL;
-	m_pBlipManager = NULL;
-	m_pVehicleManager = NULL;
-	m_pPedManager = NULL;
-	m_pGame = NULL;
-	m_pGUI = NULL;
-	m_pKeyBinds = NULL;
-	m_pStreamer = NULL;
-	m_pModelManager = NULL;
-	m_pUpdater = NULL;
-	m_pNameTag = NULL;
-	m_pAudioManager = NULL;
-	m_p3DTextLabelManager = NULL;
+	m_pNetworkModule = nullptr;
+	m_pPlayerManager = nullptr;
+	m_pCamera = nullptr;
+	m_pHud = nullptr;
+	m_pClientScriptingManager = nullptr;
+	m_pFPSCounter = nullptr;
+	m_pTimerManager = nullptr;
+	m_pFileTransferManager = nullptr;
+	m_pBlipManager = nullptr;
+	m_pVehicleManager = nullptr;
+	m_pPedManager = nullptr;
+	m_pGame = nullptr;
+	m_pGUI = nullptr;
+	m_pKeyBinds = nullptr;
+	m_pStreamer = nullptr;
+	m_pModelManager = nullptr;
+	m_pUpdater = nullptr;
+	m_pNameTag = nullptr;
+	m_pAudioManager = nullptr;
+	m_p3DTextLabelManager = nullptr;
+	m_pScreenshotManager = nullptr;
 }
 
 CCore::~CCore( void )
@@ -162,6 +163,7 @@ CCore::~CCore( void )
 	SAFE_DELETE(m_pModelManager);
 	SAFE_DELETE(m_pAudioManager);
 	SAFE_DELETE(m_p3DTextLabelManager);
+	SAFE_DELETE(m_pScreenshotManager);
 
 	CWPMHook::Uninstall();
 
@@ -216,6 +218,7 @@ bool CCore::Initialise( void )
 	m_pFPSCounter = new CFPSCounter;
 	m_pStreamer = new CStreamer;
 	m_pModelManager = new CModelManager;
+	m_pScreenshotManager = new CScreenShot;
 
 	if (m_pGraphics->IsUsingChipset()){
 		MessageBox(NULL, "Your game is currently starting on graphic chipset\n\nYou may encounter graphical problems thats not belong to M2-Online", "Mafia2-Online - Warning", MB_OK | MB_ICONWARNING);
@@ -415,7 +418,7 @@ void CCore::OnDeviceRender( void )
 	{
 		TakeScreenshot ();
 	}
-	if( m_bCaptureScreenshot && !CScreenShot::IsSaving() )
+	if (m_bCaptureScreenshot && !m_pScreenshotManager->IsSaving())
 	{
 		unsigned long ulScreenWidth = m_pCamera->GetGameCamera()->m_iWindowWidth;
 		unsigned long ulScreenHeight = m_pCamera->GetGameCamera()->m_iWindowHeight;
@@ -423,7 +426,7 @@ void CCore::OnDeviceRender( void )
 
 		if( m_pGraphics->GetFrontBufferPixels( &ucData ) )
 		{
-			CScreenShot::BeginWrite( ucData );
+			m_pScreenshotManager->BeginWrite(ucData);
 		}
 		m_bCaptureScreenshot = false;
 	}

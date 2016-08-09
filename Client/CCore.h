@@ -42,6 +42,7 @@ class CClientScriptingManager;
 class CTimerManager;
 class CFileTransferManager;
 class String;
+class CScreenShot;
 
 class CCore : public ExplicitSingleton<CCore>
 {
@@ -72,6 +73,7 @@ private:
 	CNameTag						* m_pNameTag;
 	CAudioManager					* m_pAudioManager;
 	C3DTextLabelManager				* m_p3DTextLabelManager;
+	CScreenShot						* m_pScreenshotManager;
 
 	HWND							m_gameHwnd;
 
@@ -141,6 +143,7 @@ public:
 	CModelManager					* GetModelManager			( void ) { return m_pModelManager; }
 	CAudioManager					* GetAudioManager			( void ) { return m_pAudioManager; }
 	C3DTextLabelManager				* Get3DTextLabelManager		( void ) { return m_p3DTextLabelManager; }
+	CScreenShot						* GetScreenshotManager		( void ) { return m_pScreenshotManager; }
 
 	void							SetGameHwnd					( HWND hwnd ) { m_gameHwnd = hwnd; }
 	HWND							GetGameHwnd					( void ) { return m_gameHwnd; }
