@@ -29,7 +29,10 @@
 
 void CFileTransferManager::WorkerThread()
 {
-	if (m_mutex.try_lock()){
+	CLogFile::Printf("Starting workerThread");
+	while (m_processTransfer)
+	{
+		m_mutex.lock();
 		for ( std::list< CFileTransfer* >::iterator iter = m_transferList.begin (); iter != m_transferList.end (); iter ++ )
 		{
 			m_mutex.unlock ();
@@ -51,7 +54,10 @@ CFileTransferManager::CFileTransferManager ( void ) :
 
 CFileTransferManager::~CFileTransferManager ( void )
 {
-	m_processTransfer = false;
+	if (m_thread.joinable()){
+		m_processTransfer = false;
+		m_thread.join();
+	}
 	Reset ( false );
 }
 
@@ -61,10 +67,9 @@ void CFileTransferManager::Add ( String strFileName, String strFileType, CFileCh
 	if ( !pFileTransfer )
 		return;
 
-	if (m_mutex.try_lock()){
-		m_transferList.push_back(pFileTransfer);
-		m_mutex.unlock();
-	}
+	m_mutex.lock();
+	m_transferList.push_back(pFileTransfer);
+	m_mutex.unlock();
 }
 
 // todo: Remove this?
@@ -78,6 +83,7 @@ void CFileTransferManager::Reset ( bool bKillThread )
 	if ( bKillThread )
 	{
 		m_processTransfer = false;
+		m_thread.join();
 	}
 	for ( std::list < CFileTransfer* >::iterator iter = m_transferList.begin (); iter != m_transferList.end (); iter ++ )
 	{
@@ -88,7 +94,7 @@ void CFileTransferManager::Reset ( bool bKillThread )
 
 void CFileTransferManager::Pulse ( void )
 {
-	if ( m_thread.joinable () )
+	if ( !m_thread.joinable () )
 		return;
 
 	for ( std::list < CFileTransfer* >::iterator iter = m_transferList.begin (); iter != m_transferList.end (); iter ++ )
@@ -126,8 +132,6 @@ void CFileTransferManager::SetServerInformation ( const char * szHost, unsigned 
 	m_strHost.Set ( szHost );
 	m_usHttpPort = usHttpPort;
 
-	if (!m_thread.joinable() && !m_processTransfer){
-		m_thread = std::thread(&CFileTransferManager::WorkerThread, this);
-		m_processTransfer = true;
-	}
+	m_thread = std::thread(&CFileTransferManager::WorkerThread, this);
+	m_processTransfer = true;
 }
