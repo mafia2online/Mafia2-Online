@@ -209,35 +209,28 @@ void PlayerChat( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 
 void PlayerSync( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 {
-	// Read the playerid
+	RakNet::BitStream bsSyncData(pPacket->data, pPacket->length, false);
+	bsSyncData.IgnoreBytes(sizeof(RakNet::MessageID));
+
 	EntityId playerId;
 	pBitStream->ReadCompressed( playerId );
 
-	// Read the player ping
 	unsigned short usPing;
 	pBitStream->ReadCompressed( usPing );
 
-	// Read the player sync
 	OnFootSync onFootSync;
-	pBitStream->Read( (char *)&onFootSync, sizeof(OnFootSync) );
+	bsSyncData.Read((PCHAR)&onFootSync, sizeof(OnFootSync));
 
-	// Get a pointer to the player
 	CRemotePlayer * pRemotePlayer = CCore::Instance()->GetPlayerManager()->Get(playerId);
 
-	// Is the player pointer valid?
 	if( pRemotePlayer )
 	{
-		// Set the player ping
 		pRemotePlayer->SetPing( usPing );
-
-		// Is the localplayer spawned?
 		if (CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->IsSpawned())
 		{
-			// Fail safe
 			if (playerId == CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetId())
 				return;
 
-			// Deserialse the player with the bitstream
 			pRemotePlayer->StoreOnFootSync( &onFootSync );
 		}
 	}
@@ -403,8 +396,6 @@ void NewVehicle(RakNet::BitStream * pBitStream, RakNet::Packet * pPacket)
 	pBitStream->Read(rot);
 	pBitStream->Read((char *)&spawnProperties, sizeof(VehicleSpawnProperties));
 
-
-	// Add the vehicle to the manager
 	if (CCore::Instance()->GetVehicleManager()->Add(vehicleId, spawnProperties))
 	{
 		CNetworkVehicle *pVehicle = CCore::Instance()->GetVehicleManager()->Get(vehicleId);

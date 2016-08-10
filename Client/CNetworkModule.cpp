@@ -163,7 +163,6 @@ void Packet_PlayerSync(RakNet::Packet * pPacket)
 	OnFootSync onFootSync;
 	bsSyncData.Read((PCHAR)&onFootSync, sizeof(OnFootSync));
 
-
 	CRemotePlayer * pRemotePlayer = CCore::Instance()->GetPlayerManager()->Get(playerId);
 	if (pRemotePlayer)
 	{
