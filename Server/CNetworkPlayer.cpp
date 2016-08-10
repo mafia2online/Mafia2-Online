@@ -575,17 +575,14 @@ void CNetworkPlayer::SendOnFootSync( void )
 	// Construct a new bitstream
 	RakNet::BitStream bitStream;
 
-	// Write the player id
-	bitStream.WriteCompressed( m_playerId );
+	// Write the sync structure into the bitstream
+	bitStream.Write((RakNet::MessageID)ID_PLAYERSYNC);
+	bitStream.WriteCompressed(m_playerId);
+	bitStream.WriteCompressed(GetPing());
+	bitStream.Write((char *)&m_onFootSync, sizeof(OnFootSync));
 
-	// Write the player ping
-	bitStream.WriteCompressed( GetPing() );
-
-	// Write the sync data
-	bitStream.Write( (char *)&m_onFootSync, sizeof(OnFootSync) );
-
-	// Send it to other clients
-	CCore::Instance()->GetNetworkModule()->Call( RPC_PLAYER_SYNC, &bitStream, LOW_PRIORITY, UNRELIABLE_SEQUENCED, m_playerId, true );
+	// Send the bitstream to the server
+	CCore::Instance()->GetNetworkModule()->GetRakPeer()->Send(&bitStream, HIGH_PRIORITY, UNRELIABLE_SEQUENCED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
 }
 
 void CNetworkPlayer::SendInVehicleSync( void )
@@ -610,7 +607,7 @@ void CNetworkPlayer::SendInVehicleSync( void )
 	bitStream.Write( (char *)&m_inVehicleSync, sizeof(InVehicleSync) );
 
 	// Send it to other clients
-	CCore::Instance()->GetNetworkModule()->Call( RPC_VEHICLE_SYNC, &bitStream, LOW_PRIORITY, UNRELIABLE_SEQUENCED, m_playerId, true );
+	CCore::Instance()->GetNetworkModule()->Call(RPC_VEHICLE_SYNC, &bitStream, LOW_PRIORITY, UNRELIABLE_SEQUENCED, INVALID_ENTITY_ID, true);
 }
 
 void CNetworkPlayer::SendPassengerSync( void )
