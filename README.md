@@ -1,2 +1,5 @@
-# Mafia 2 Multiplayer
-Mafia 2 Multiplayer Source Code (http://m2-multiplayer.com/)
+# Mafia 2 Online
+Source code of the M2Online mod, based on Mafia 2 MultiPlayer.
+
+# Informations
+- Has to be compiled with VS2013 due to some outdated functions
