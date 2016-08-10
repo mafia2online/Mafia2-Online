@@ -30,258 +30,202 @@
 
 #include	"../Libraries/RakNet/Source/MessageIdentifiers.h"
 
+#include	"CRemotePlayer.h"
+#include	"CLocalPlayer.h"
+
 #include	"CNetworkModule.h"
 
 RakNet::RPC4			* CNetworkModule::m_pRPC = NULL;
 
-CNetworkModule::CNetworkModule( void )
+CNetworkModule::CNetworkModule(void)
 {
-	// Get the RakPeerInterface instance
 	m_pRakPeer = RakNet::RakPeerInterface::GetInstance();
 
-	// Get the RPC4 instance
 	m_pRPC = RakNet::RPC4::GetInstance();
+	m_pRakPeer->AttachPlugin(m_pRPC);
 
-	// Attact RPC4 to RakPeerInterface
-	m_pRakPeer->AttachPlugin( m_pRPC );
+	CNetworkRPC::Register(m_pRPC);
+	CScriptingRPC::Register(m_pRPC);
 
-	// Register the network RPC's
-	CNetworkRPC::Register( m_pRPC );
+	SetNetworkState(NETSTATE_NONE);
 
-	// Register the scripting RPC's
-	CScriptingRPC::Register( m_pRPC );
-
-	// Set the network state
-	SetNetworkState( NETSTATE_NONE );
-
-	// Reset the last connection try
-	m_uiLastConnectionTry = (unsigned int)SharedUtility::GetTime ();
+	m_uiLastConnectionTry = (unsigned int)SharedUtility::GetTime();
 }
 
-CNetworkModule::~CNetworkModule( void )
+CNetworkModule::~CNetworkModule(void)
 {
-	// Are we connected?
-	if( IsConnected() )
+	if (IsConnected())
 	{
-		// Disconnect from the network
 		Disconnect();
 	}
 
-	// Unregister the network RPC's
-	CNetworkRPC::Unregister( m_pRPC );
-
-	// Unregister the scripting RPC's
-	CScriptingRPC::Unregister( m_pRPC );
-
-	// Detach RPC4 from RakPeerInterface
-	m_pRakPeer->DetachPlugin( m_pRPC );
-
-	// Destroy the RPC4 instance
-	RakNet::RPC4::DestroyInstance( m_pRPC );
-
-	// Destroy the RakPeerInterface instance
-	RakNet::RakPeerInterface::DestroyInstance( m_pRakPeer );
+	CNetworkRPC::Unregister(m_pRPC);
+	CScriptingRPC::Unregister(m_pRPC);
+	m_pRakPeer->DetachPlugin(m_pRPC);
+	RakNet::RPC4::DestroyInstance(m_pRPC);
+	RakNet::RakPeerInterface::DestroyInstance(m_pRakPeer);
 }
 
-bool CNetworkModule::Startup( void )
+bool CNetworkModule::Startup(void)
 {
-	return ( m_pRakPeer->Startup( 1, &RakNet::SocketDescriptor(), 1, THREAD_PRIORITY_NORMAL ) == RakNet::RAKNET_STARTED );
+	return (m_pRakPeer->Startup(1, &RakNet::SocketDescriptor(), 1, THREAD_PRIORITY_NORMAL) == RakNet::RAKNET_STARTED);
 }
 
-void CNetworkModule::Shutdown( void )
+void CNetworkModule::Shutdown(void)
 {
-	// Are we connected?
-	if( IsConnected() )
-		Disconnect( false );
+	if (IsConnected())
+		Disconnect(false);
 
-	// Shutdown rakpeer
-	m_pRakPeer->Shutdown( 500, 0, HIGH_PRIORITY );
+	m_pRakPeer->Shutdown(500, 0, HIGH_PRIORITY);
 }
 
-eNetworkResponse CNetworkModule::Connect( String strHost, unsigned short usPort, String strPass )
+eNetworkResponse CNetworkModule::Connect(String strHost, unsigned short usPort, String strPass)
 {
-	// Are we already connected?
-	if( IsConnected() )
+	if (IsConnected())
 	{
-		// Disconnect
 		Disconnect();
 	}
 
-	// Store the connection info
-	SetLastConnection( strHost, usPort, strPass );
+	SetLastConnection(strHost, usPort, strPass);
 
-	// Attempt to connect
-	int iConnectionResult = m_pRakPeer->Connect( strHost.Get(), usPort, strPass.Get(), strPass.GetLength() );
-
-	// Set the network state
-	SetNetworkState( NETSTATE_CONNECTING );
-
-	// Did we fail to connect?
-	if (iConnectionResult != RakNet::INVALID_PARAMETER )
+	int iConnectionResult = m_pRakPeer->Connect(strHost.Get(), usPort, strPass.Get(), strPass.GetLength());
+	SetNetworkState(NETSTATE_CONNECTING);
+	if (iConnectionResult != RakNet::INVALID_PARAMETER)
 	{
-		// Set the network state
-		SetNetworkState( NETSTATE_NONE );
-
-		// Set the last connection try
+		SetNetworkState(NETSTATE_NONE);
 		m_uiLastConnectionTry = (unsigned int)SharedUtility::GetTime();
 	}
 
 	return (eNetworkResponse)iConnectionResult;
 }
 
-void CNetworkModule::Disconnect( bool bRestart )
+void CNetworkModule::Disconnect(bool bRestart)
 {
-	// Are we not connected?
-	if( !IsConnected() )
+	if (!IsConnected())
 		return;
 
-	// Delete all the clientscript gui elements
 	CCore::Instance()->GetGUI()->DeleteAllClientScriptGUI();
+	m_pRakPeer->CloseConnection(RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+	SetNetworkState(NETSTATE_DISCONNECTED);
 
-	// Close the connection
-	m_pRakPeer->CloseConnection( RakNet::UNASSIGNED_SYSTEM_ADDRESS, true );
-
-	// Set the network state
-	SetNetworkState( NETSTATE_DISCONNECTED );
-
-	// Shutdown raknet
 	Shutdown();
-
-	// Should we restart raknet?
-	if( bRestart )
+	if (bRestart)
 	{
-		// Start up raknet again
 		Startup();
 
-		// Reset default server info
-		CCore::Instance()->SetServerName( "M2Online Server" );
-		CCore::Instance()->SetServerMaxPlayers( 0 );
+		CCore::Instance()->SetServerName("M2Online Server");
+		CCore::Instance()->SetServerMaxPlayers(0);
 
-		// Clear the chat
-		CCore::Instance()->GetChat()->Clear ();
-		CCore::Instance()->GetChat()->ClearHistory ();
+		CCore::Instance()->GetChat()->Clear();
+		CCore::Instance()->GetChat()->ClearHistory();
 		CCore::Instance()->GetChat()->ClearSelectText();
-		CCore::Instance()->GetChat()->ClearInputText();	
+		CCore::Instance()->GetChat()->ClearInputText();
 
-		// Reset player model
 		//pCore->GetPlayerManager()->GetLocalPlayer()->SetModel ( 10 );
 	}
 }
 
-void CNetworkModule::Pulse( void )
+void CNetworkModule::Pulse(void)
 {
-	// Is the game not loaded?
-	if( !CCore::Instance()->IsGameLoaded() )
+	if (!CCore::Instance()->IsGameLoaded())
 		return;
 
-	// Are we disconnected from the network?
-	if( GetNetworkState() == NETSTATE_DISCONNECTED )
+	if (GetNetworkState() == NETSTATE_DISCONNECTED)
 		return;
 
-	// Process the network
-	UpdateNetwork ();
-
-	// Are we connected?
-	if( IsConnected() )
+	UpdateNetwork();
+	if (IsConnected())
 	{
-		// Pulse the player manager
-		CCore::Instance()->GetPlayerManager()->Pulse ();
-
-		// Pulse the vehicle manager
-		CCore::Instance()->GetVehicleManager()->Pulse ();
+		CCore::Instance()->GetPlayerManager()->Pulse();
+		CCore::Instance()->GetVehicleManager()->Pulse();
 	}
 }
 
-void CNetworkModule::Call( const char * szIdentifier, RakNet::BitStream * pBitStream, PacketPriority priority, PacketReliability reliability, bool bBroadCast )
+void CNetworkModule::Call(const char * szIdentifier, RakNet::BitStream * pBitStream, PacketPriority priority, PacketReliability reliability, bool bBroadCast)
 {
-	// Are we not connected to a server?
-	if( !IsConnected() )
+	if (!IsConnected())
 		return;
 
-	// Pass it to RPC4
-	m_pRPC->Call( szIdentifier, pBitStream, priority, reliability, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, bBroadCast );
+	m_pRPC->Call(szIdentifier, pBitStream, priority, reliability, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, bBroadCast);
 }
 
-void CNetworkModule::UpdateNetwork( void )
+void Packet_PlayerSync(RakNet::Packet * pPacket)
 {
-	// Create a packet
+	RakNet::BitStream bsSyncData(pPacket->data, pPacket->length, false);
+	bsSyncData.IgnoreBytes(sizeof(RakNet::MessageID));
+
+	EntityId playerId;
+	bsSyncData.ReadCompressed(playerId);
+
+	unsigned short usPing;
+	bsSyncData.ReadCompressed(usPing);
+
+	OnFootSync onFootSync;
+	bsSyncData.Read((PCHAR)&onFootSync, sizeof(OnFootSync));
+
+	CRemotePlayer * pRemotePlayer = CCore::Instance()->GetPlayerManager()->Get(playerId);
+	if (pRemotePlayer)
+	{
+		pRemotePlayer->SetPing(usPing);
+		if (CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->IsSpawned())
+		{
+			if (playerId == CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetId())
+				return;
+			pRemotePlayer->StoreOnFootSync(&onFootSync);
+		}
+	}
+}
+
+void CNetworkModule::UpdateNetwork(void)
+{
 	RakNet::Packet * pPacket = NULL;
 
-	//
 	bool bDisconnect = false;
 
-	// Process RakNet
-	while( pPacket = m_pRakPeer->Receive() )
+	while (pPacket = m_pRakPeer->Receive())
 	{
-		// Is the packet invalid?
-		if ( !pPacket )
+		if (!pPacket)
 			continue;
-
-		// Have we connected?
-		if( pPacket->data[0] == ID_CONNECTION_REQUEST_ACCEPTED )
+		if (pPacket->data[0] == ID_PLAYERSYNC)
 		{
-			// Call the connection accepted handler
-			ConnectionAccepted( pPacket );
-
-			// Process this packet with the server browser
-			CCore::Instance()->GetGUI()->GetServerBrowser()->ProcessNetworkPacket( (DefaultMessageIDTypes)pPacket->data[0] );
+			Packet_PlayerSync(pPacket);
 		}
-		else if( pPacket->data[0] == ID_DISCONNECTION_NOTIFICATION || pPacket->data[0] == ID_CONNECTION_LOST ||
-			 pPacket->data[0] == ID_NO_FREE_INCOMING_CONNECTIONS || pPacket->data[0] == ID_INVALID_PASSWORD ||
-			 pPacket->data[0] == ID_CONNECTION_BANNED || pPacket->data[0] == ID_CONNECTION_ATTEMPT_FAILED || pPacket->data[0] == ID_ALREADY_CONNECTED )
+		if (pPacket->data[0] == ID_CONNECTION_REQUEST_ACCEPTED)
 		{
-			// Did we timeout?
-			if( pPacket->data[0] == ID_DISCONNECTION_NOTIFICATION || pPacket->data[0] == ID_CONNECTION_LOST )
+			ConnectionAccepted(pPacket);
+			CCore::Instance()->GetGUI()->GetServerBrowser()->ProcessNetworkPacket((DefaultMessageIDTypes)pPacket->data[0]);
+		}
+		else if (pPacket->data[0] == ID_DISCONNECTION_NOTIFICATION || pPacket->data[0] == ID_CONNECTION_LOST ||
+			pPacket->data[0] == ID_NO_FREE_INCOMING_CONNECTIONS || pPacket->data[0] == ID_INVALID_PASSWORD ||
+			pPacket->data[0] == ID_CONNECTION_BANNED || pPacket->data[0] == ID_CONNECTION_ATTEMPT_FAILED || pPacket->data[0] == ID_ALREADY_CONNECTED)
+		{
+			if (pPacket->data[0] == ID_DISCONNECTION_NOTIFICATION || pPacket->data[0] == ID_CONNECTION_LOST)
 			{
-				// Delete all the clientscript gui elements
 				CCore::Instance()->GetGUI()->DeleteAllClientScriptGUI();
-
-				// Stop multiplayer
-				CCore::Instance()->StopMultiplayer ();
-
-				// Start multiplayer
-				CCore::Instance()->StartMultiplayer ();
+				CCore::Instance()->StopMultiplayer();
+				CCore::Instance()->StartMultiplayer();
 			}
 
-			// Set the network state
-			SetNetworkState( NETSTATE_NONE );
-
-			// Process this packet with the server browser
-			CCore::Instance()->GetGUI()->GetServerBrowser()->ProcessNetworkPacket( (DefaultMessageIDTypes)pPacket->data[0] );
+			SetNetworkState(NETSTATE_NONE);
+			CCore::Instance()->GetGUI()->GetServerBrowser()->ProcessNetworkPacket((DefaultMessageIDTypes)pPacket->data[0]);
 		}
 
-		// Deallocate the memory used by the packet
-		m_pRakPeer->DeallocatePacket( pPacket );
-
-		// Should we disconnect?
-		if ( bDisconnect )
+		m_pRakPeer->DeallocatePacket(pPacket);
+		if (bDisconnect)
 		{
-			// Restart raknet
-			Disconnect ();
-
-			//
+			Disconnect();
 			bDisconnect = false;
 		}
 	}
 }
 
-void CNetworkModule::ConnectionAccepted( RakNet::Packet * pPacket )
+void CNetworkModule::ConnectionAccepted(RakNet::Packet * pPacket)
 {
-	// Set the network state
-	SetNetworkState( NETSTATE_CONNECTED );
+	SetNetworkState(NETSTATE_CONNECTED);
 
-	// Construct a new bitstream
 	RakNet::BitStream pBitStream;
-
-	// Write the network version
-	pBitStream.Write( NETWORK_VERSION );
-
-	// Write the player nickname
-	pBitStream.Write( RakNet::RakString( CCore::Instance()->GetNick().Get() ) );
-
-	// Write the player serial
-	pBitStream.Write( RakNet::RakString( SharedUtility::GetSerialHash().Get() ) );
-		
-	// Send to the server
-	Call( RPC_INITIAL_DATA, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, true );
+	pBitStream.Write(NETWORK_VERSION);
+	pBitStream.Write(RakNet::RakString(CCore::Instance()->GetNick().Get()));
+	pBitStream.Write(RakNet::RakString(SharedUtility::GetSerialHash().Get()));
+	Call(RPC_INITIAL_DATA, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, true);
 }

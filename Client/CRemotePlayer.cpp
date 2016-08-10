@@ -168,12 +168,12 @@ void CRemotePlayer::StoreOnFootSync( OnFootSync * onFootSync )
 			SetModel( onFootSync->m_uiModelIndex );
 
 		// Update the animStyle
-		if (GetAnimStyleDirectory() != onFootSync->m_styleDirectory || GetAnimStyleName() != onFootSync->m_styleName)
+		/*if (GetAnimStyleDirectory() != onFootSync->m_styleDirectory || GetAnimStyleName() != onFootSync->m_styleName)
 			SetAnimStyle(onFootSync->m_styleDirectory, onFootSync->m_styleName);
 		
 		// Update the handModel
 		if (GetHandModel() != onFootSync->m_iHandModel || GetHandModelHand() != onFootSync->m_iHand)
-			SetHandModel(onFootSync->m_iHand, onFootSync->m_iHandModel);
+			SetHandModel(onFootSync->m_iHand, onFootSync->m_iHandModel);*/
 	}
 	else
 	{

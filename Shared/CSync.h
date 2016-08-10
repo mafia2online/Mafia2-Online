@@ -3,7 +3,7 @@
 * Solution   : Mafia 2 Multiplayer
 * Project    : Shared Library
 * File       : CSync.h
-* Developers : AaronLad <aaron@m2-multiplayer.com>
+* Developers : AaronLad <aaron@m2-multiplayer.com>, MyU <myudev0@gmail.com>
 *
 ***************************************************************/
 
@@ -30,35 +30,48 @@ struct OnFootSync
 	CVector3		m_vecLookAt;
 	int				m_iHandModel;
 	int				m_iHand;
-	const char		*m_styleName;
-	const char		*m_styleDirectory;
+	/*const char		*m_styleName;
+	const char		*m_styleDirectory;*/
+};
+
+struct MiscInfo {
+	unsigned int bHornState : 1;
+	unsigned int bSirenState : 1;
+	unsigned int bBeaconLightState : 1;
+	unsigned int bEngineState : 1;
+
+	unsigned int bPower : 1;
+	unsigned int bBrake : 1;
+	unsigned int bHandbrake : 1;
+	unsigned int bLightState : 1;
+	unsigned int bPartState_Hood : 1;
+	unsigned int bPartState_Trunk : 1;
+}; // TODO: change it.. just do it there are some things that NOT need to be synced every freakin second - MyU
+
+
+struct VehicleSpawnProperties {
+	//#pragma pack(1) // TODO: think about the access impact - MyU
+	float			m_fDirtLevel;
+	int				m_iTuningTable;
+	float			m_fFuel;
+	char			m_szPlateText[6];
+	unsigned int	m_uiModelIndex;
+	DWORD			m_primaryColour; // cast to CColor on the client / server side.
+	DWORD			m_secondaryColour;
+	BYTE			m_bWheelModels[3];
 };
 
 struct InVehicleSync
 {
+	//#pragma pack(1) // TODO: think about the access impact - MyU
 	CVector3		m_vecPosition;
 	CVector3		m_vecRotation;
 	CVector3		m_vecVelocity;
-	float			m_fDirtLevel;
-	int				m_iTuningTable;
-	bool			m_bHornState;
-	bool			m_bSirenState;
-	bool			m_bBeaconLightState;
-	bool			m_bEngineState;
-	float			m_fFuel;
+
 	float			m_fTurnSpeed;
 	float			m_fEngineDamage;
-	char			m_szPlateText[6];
-	int				m_model;
-	CColor			m_primaryColour;
-	CColor			m_secondaryColour;
-	bool			m_bPower;
-	bool			m_bBrake;
-	BYTE			m_bWheelModels[3];
-	bool			m_bHandbrake;
-	bool			m_bLightState;
-	bool			m_bPartState_Hood;
-	bool			m_bPartState_Trunk;
+
+	MiscInfo		m_Flags;
 };
 
 struct InPassengerSync

@@ -46,6 +46,8 @@
 #include	"SharedUtility.h"
 
 #include	"../Libraries/RakNet/Source/PacketPriority.h"
+#include	"../Libraries/RakNet/Source/MessageIdentifiers.h"
+#include	"../Libraries/RakNet/Source/RakPeerInterface.h"
 
 #include	"CLocalPlayer.h"
 
@@ -56,7 +58,6 @@ bool bOldCTRLState = false;
 
 CLocalPlayer::CLocalPlayer( void ) : CNetworkPlayer( true )
 {
-	// Reset
 	m_bFirstSpawn = true;
 	m_bFastExitVehicle = false;
 	m_bIsBeingForcefullyRemoved = false;
@@ -68,59 +69,45 @@ CLocalPlayer::CLocalPlayer( void ) : CNetworkPlayer( true )
 
 CLocalPlayer::~CLocalPlayer( void )
 {
-	// Clear the syncing vehicles list
 	m_syncingVehicles.clear ();
 }
 
 void CLocalPlayer::Pulse( void )
 {
-	// Are we experiencing connection trouble?
 	if ( IsSpawned() && (SharedUtility::GetTime() - m_ulLastPingTime) > 6000 )
 		CCore::Instance()->SetConnectionProblem(true);
 
-	// Get our current position and rotation
 	CVector3 vecCurrentPosition, vecCurrentRotation;
 	GetPosition( &vecCurrentPosition );
 	GetRotation( &vecCurrentRotation );
 
-	// Is our position or rotation invalid?
 	if ( !Math::IsValidVector ( vecCurrentPosition ) || !Math::IsValidVector ( vecCurrentRotation ) )
 	{
 		CLogFile::Printf ( "ERROR - Player position or rotation was invalid. Warped back to the last good saved state." );
 
-		// Warp the player back to their last good saved position and rotation
 		Teleport ( m_vecLastGoodPosition );
 		SetRotation ( m_vecLastGoodRotation );
 
-		// Is the last good state invalid?
 		if ( !Math::IsValidVector ( m_vecLastGoodPosition ) || !Math::IsValidVector ( m_vecLastGoodRotation ) )
 		{
-			// Fade hud and sound quickly
 			CCore::Instance()->GetHud()->FadeOut(0);
 			CCore::Instance()->GetGame()->FadeSound(true, 0);
 
-			// Reset position
 			Teleport ( CVector3() );
 			SetRotation ( CVector3() );
 
-			// Kill the player
 			SetHealth ( 0.0f );
 		}
 
-		// Return so we don't overwrite the last good position with invalid positions
 		return;
 	}
 
-	// Store controls
 	M2PlayerControls playerControls = m_pPlayerPed->GetPed()->m_playerControls;
 
-	// Is our move state still the same ?
 	int newState = playerControls.m_playerMovementState;
 
-	// State changed and not locked ?
 	if (m_oldMoveState != newState && CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->AreControlsLocked() == false)
 	{
-		// Call the event
 		if (m_oldMoveState != -1){
 			CSquirrelArguments pArguments;
 
@@ -130,252 +117,148 @@ void CLocalPlayer::Pulse( void )
 
 			CCore::Instance()->GetClientScriptingManager()->GetEvents()->Call("onClientPlayerMoveStateChange", &pArguments);
 		}
-		// Update stored state
 		m_oldMoveState = newState;
 	}
 
-	// Save this current position and rotation
 	memcpy ( &m_vecLastGoodPosition, &vecCurrentPosition, sizeof ( CVector3 ) );
 	memcpy ( &m_vecLastGoodRotation, &vecCurrentRotation, sizeof ( CVector3 ) );
 
-	// Is player flagged as shooting ?
 	if ( CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->IsShooting() )
 	{
-		// Get the current time
 		unsigned long ulCurrentTime = SharedUtility::GetTime();
 
-		// How much time has passed since the shot
 		if ( m_uMarkTimeStartShooting + 200 < ulCurrentTime )
 		{
-			// Stop shooting
 			CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->SetShooting( false );
 		}
 	}
 
-	// Do we need a full sync?
 	if( IsFullSyncNeeded () )
 	{
-		// Are we not in a vehicle?
 		if( !InternalIsInVehicle() )
 		{
-			// Send onfoot sync data
 			SendOnFootSync();
 		}
 		else
 		{
-			// Are we the vehicle driver?
 			if( GetState() == PLAYERSTATE_DRIVER )
 			{
-				// Send invehicle sync data
 				SendInVehicleSync();
 			}
-
-			// Send passenger sync data
 			SendPassengerSync();
 		}
 	}
 
-	// Are we spawned and not dead?
 	if( IsSpawned() && ((SharedUtility::GetTime() - m_ulSpawnTime) > 5000) && !IsDead() )
 	{
-		// Are we falling below the map?
 		if( vecCurrentPosition.fZ <= -150.0f )
 		{
-			// Kill ourself
 			SetHealth( 0.0f );
 		}
 	}
 
-	// Have we been dead for 3 seconds?
 	if ( (SharedUtility::GetTime() - m_ulDeathTime) > 4000 && IsDead() )
 	{
-		// Deactivate the player ped
 		m_pPlayerPed->Deactivate ();
-
-		// Respawn
 		HandleSpawn ( true );
-
-		// Fade the hud back in
 		CCore::Instance()->GetHud()->FadeIn(1000);
-
-		// Fade the sound back in
 		CCore::Instance()->GetGame()->FadeSound(false, 1);
-
-		// Activate the player ped
 		m_pPlayerPed->Activate ();
 
-		// Restore the camera (I don't understand why it works. Correcting a flying camera after death)
 		CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->LockControls(true);
 		CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->LockControls(false);
 	}
 
-	// Are we spawned, in a vehicle and typing?
 	if (IsSpawned() && IsInVehicle() && CCore::Instance()->GetChat()->IsInputVisible())
 	{
-		// Reset the vehicle steering (prevent car turning to sides)
 		if( m_pVehicle->GetVehicle() )
 			m_pVehicle->GetVehicle()->AddSteer( 0.0f );
 	}
 
-	// Loop over all vehicles we're syncing
-	//for( std::list< CNetworkVehicle* >::iterator iter = m_syncingVehicles.begin(); iter != m_syncingVehicles.end(); iter++ )
-	//{
-		// Send the vehicle sync for this vehicle
-	//	SendUnoccupiedVehicleSync( *iter );
-	//}
 }
 
 void CLocalPlayer::SendOnFootSync( void )
 {
-	// Are we not connected to the network?
 	if( !CCore::Instance()->GetNetworkModule()->IsConnected() )
 		return;
 
-	// Are we dead?
 	if( IsDead() )
 		return;
 
-	// Construct a new bitstream
 	RakNet::BitStream pBitStream;
 
-	// Construct a new foot sync data structure
 	OnFootSync onFootSync;
 
-	// Get the player position
-	GetPosition ( &onFootSync.m_vecPosition );
+	GetPosition(&onFootSync.m_vecPosition); // Get the player position
+	GetRotation(&onFootSync.m_vecRotation); // Get the player rotation
+	m_pPlayerPed->GetDirection(&onFootSync.m_vecDirection); // Get the player direction
+	onFootSync.m_fHealth = GetHealth(); // Get the player health
+	onFootSync.m_dwSelectedWeapon = GetSelectedWeapon(); // Get the player selected weapon
+	onFootSync.m_bControlState = m_pPlayerPed->GetControlState(); // Get the player control state
+	CCore::Instance()->GetCamera()->GetLookAt(&onFootSync.m_vecLookAt); // Get the look at position
+	onFootSync.m_bAiming = m_pPlayerPed->IsAiming(); // Get the aiming state
+	onFootSync.m_bShooting = CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->IsShooting(); // Get the shooting state
+	onFootSync.m_bCrouching = CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->IsCrouching(); // Get the crouching state
+	onFootSync.m_uiModelIndex = Game::GetIdFromPlayerModel(m_pPlayerModelManager->GetModelName()); // Write the model index
+	onFootSync.m_iHand = CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetHandModelHand(); // Write the hand
+	onFootSync.m_iHandModel = CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetHandModelHand(); // Write the handModel
+	//onFootSync.m_styleName = CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetAnimStyleName().Get();
+	//onFootSync.m_styleDirectory = CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetAnimStyleDirectory().Get();
 
-	// Get the player rotation
-	GetRotation ( &onFootSync.m_vecRotation );
+	pBitStream.Write((RakNet::MessageID)ID_PLAYERSYNC);
+	pBitStream.Write((char *)&onFootSync, sizeof(OnFootSync));
 
-	// Get the player direction
-	m_pPlayerPed->GetDirection ( &onFootSync.m_vecDirection );
-
-	// Get the player health
-	onFootSync.m_fHealth = GetHealth ();
-
-	// Get the player selected weapon
-	onFootSync.m_dwSelectedWeapon = GetSelectedWeapon ();
-
-	// Get the player control state
-    onFootSync.m_bControlState = m_pPlayerPed->GetControlState ();
-
-	// Get the look at position
-	CCore::Instance()->GetCamera()->GetLookAt(&onFootSync.m_vecLookAt);
-
-	// Get the aiming state
-	onFootSync.m_bAiming = m_pPlayerPed->IsAiming ();
-
-	// Get the shooting state
-	onFootSync.m_bShooting = CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->IsShooting();
-
-	// Get the crouching state
-	onFootSync.m_bCrouching = CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->IsCrouching();
-
-	// Write the model index
-	onFootSync.m_uiModelIndex = Game::GetIdFromPlayerModel ( m_pPlayerModelManager->GetModelName() );
-
-	// Write the hand
-	onFootSync.m_iHand = CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetHandModelHand();
-
-	// Write the handModel
-	onFootSync.m_iHandModel = CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetHandModelHand();
-
-	// Write the animStyle name
-	onFootSync.m_styleName = CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetAnimStyleName().Get();
-
-	// Write the animStyle directory
-	onFootSync.m_styleDirectory = CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetAnimStyleDirectory().Get();
-
-	// Write the sync structure into the bitstream
-	pBitStream.Write( (char *)&onFootSync, sizeof(OnFootSync) );
-
-	// Send the bitstream to the server
-	CCore::Instance()->GetNetworkModule()->Call(RPC_PLAYER_SYNC, &pBitStream, IMMEDIATE_PRIORITY, UNRELIABLE_SEQUENCED, true);
+	CCore::Instance()->GetNetworkModule()->GetRakPeer()->Send(&pBitStream, HIGH_PRIORITY, UNRELIABLE_SEQUENCED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
 }
 
 void CLocalPlayer::SendInVehicleSync( void )
 {
-	// Are we not connected to the network?
 	if (!CCore::Instance()->GetNetworkModule()->IsConnected())
 		return;
 
-	// Are we dead?
 	if( IsDead() )
 		return;
 
-	// Get the vehicle instance
 	CNetworkVehicle * pVehicle = CCore::Instance()->GetVehicleManager()->GetFromGameGUID(GetPlayerPed()->GetCurrentVehicle()->m_dwGUID);
 
-	// Did we fail to find the vehicle?
 	if( !pVehicle )
 		return;
 
-	// Construct a new bitstream
 	RakNet::BitStream pBitStream;
 
-	// Write the vehicle id
 	pBitStream.WriteCompressed( pVehicle->GetId() );
 
-	// Construct a new in vehicle sync data structure
 	InVehicleSync inVehicleSync;
 
-	// Get the vehicle position
-	pVehicle->GetPosition( &inVehicleSync.m_vecPosition );
+	pVehicle->GetPosition(&inVehicleSync.m_vecPosition);
+	pVehicle->GetRotation(&inVehicleSync.m_vecRotation);
+	pVehicle->GetSpeedVec(&inVehicleSync.m_vecVelocity);
 
-	// Get the vehicle rotation
-	pVehicle->GetRotation( &inVehicleSync.m_vecRotation );
+	/*inVehicleSync.m_Flags.fDirtLevel = pVehicle->GetVehicle()->GetDirtLevel();
+	inVehicleSync.m_Flags.iTuningTable = pVehicle->GetVehicle()->GetTuningTable();
+	inVehicleSync.m_Flags.fFuel = pVehicle->GetVehicle()->GetFuel();*/
+	inVehicleSync.m_Flags.bHornState = pVehicle->GetVehicle()->IsHornOn();
+	inVehicleSync.m_Flags.bSirenState = pVehicle->GetVehicle()->IsSirenOn();
+	inVehicleSync.m_Flags.bPower = pVehicle->GetVehicle()->GetPower();
+	inVehicleSync.m_Flags.bBrake = pVehicle->GetVehicle()->GetBrake();
+	inVehicleSync.m_Flags.bHandbrake = pVehicle->GetVehicle()->IsHandbrakeOn();
+	inVehicleSync.m_Flags.bLightState = pVehicle->GetVehicle()->GetLightState();
 
-	// Get the vehicle dirt level
-	inVehicleSync.m_fDirtLevel = pVehicle->GetVehicle()->GetDirtLevel();
-
-	// Get the vehicle tuning table
-	inVehicleSync.m_iTuningTable = pVehicle->GetVehicle()->GetTuningTable();
-
-	// Get the vehicle horn state
-	inVehicleSync.m_bHornState = pVehicle->GetVehicle()->IsHornOn();
-
-	// Get the vehicle siren state
-	inVehicleSync.m_bSirenState = pVehicle->GetVehicle()->IsSirenOn();
-
-	// Get the vehicle fuel
-	inVehicleSync.m_fFuel = pVehicle->GetVehicle()->GetFuel();
-
-	// Get the vehicle speed
-	pVehicle->GetSpeedVec( &inVehicleSync.m_vecVelocity );
-
-	// Get the turn speed
 	inVehicleSync.m_fTurnSpeed = pVehicle->GetSteer();
-
-	// Get the engine damage
 	inVehicleSync.m_fEngineDamage = pVehicle->GetVehicle()->GetEngineDamage();
 
-	// Get the vehicle plate text
+	/*// Get the vehicle plate text
 	strcpy( inVehicleSync.m_szPlateText, pVehicle->GetPlateText() );
 	inVehicleSync.m_szPlateText[ 6 ] = '\0';
 
 	// Get the vehicle colour
 	pVehicle->GetColour( &inVehicleSync.m_primaryColour, &inVehicleSync.m_secondaryColour );
 
-	// Get the power state
-	inVehicleSync.m_bPower = pVehicle->GetVehicle()->GetPower();
-
-	// Get the brake state
-	inVehicleSync.m_bBrake = pVehicle->GetVehicle()->GetBrake();
-
 	// Get the vehicle wheel models (DISABLED FOR TESTING)
 	for ( int i = 0; i < 3; i++ )
-		inVehicleSync.m_bWheelModels[ i ] = 0xFF; //Game::GetIdFromVehicleWheelModel ( pVehicle->GetVehicle()->GetWheelTexture ( i ) );
+		inVehicleSync.m_bWheelModels[ i ] = 0xFF; //Game::GetIdFromVehicleWheelModel ( pVehicle->GetVehicle()->GetWheelTexture ( i ) );*/
 
-	// Get the handbrake state
-	inVehicleSync.m_bHandbrake = pVehicle->GetVehicle()->IsHandbrakeOn ();
-
-	// Get the light state
-	inVehicleSync.m_bLightState = pVehicle->GetVehicle()->GetLightState ();
-
-	// Write the sync structure into the bitstream
-	pBitStream.Write( (char *)&inVehicleSync, sizeof(InVehicleSync) );
-
-	// Send the bitstream to the server
+	pBitStream.Write((char *)&inVehicleSync, sizeof(InVehicleSync));
 	CCore::Instance()->GetNetworkModule()->Call(RPC_VEHICLE_SYNC, &pBitStream, IMMEDIATE_PRIORITY, UNRELIABLE_SEQUENCED, true);
 }
 
