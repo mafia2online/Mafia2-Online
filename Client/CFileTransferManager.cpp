@@ -27,111 +27,167 @@
 #include	"CFileTransfer.h"
 #include	"CFileTransferManager.h"
 
-void CFileTransferManager::WorkerThread()
+void CFileTransferManager::WorkerThread(CThread * pCreator)
 {
-	CLogFile::Printf("Starting workerThread");
-	while (m_processTransfer)
+	// Get the file transfer manager singleton
+	CFileTransferManager * pFileTransferManager = pCreator->GetUserData < CFileTransferManager* >();
+
+	// Lock the transfer list mutex
+	pFileTransferManager->m_transferListMutex.Lock();
+
+	// Loop through the transfer list
+	for (std::list< CFileTransfer* >::iterator iter = pFileTransferManager->m_transferList.begin(); iter != pFileTransferManager->m_transferList.end(); iter++)
 	{
-		m_mutex.lock();
-		for ( std::list< CFileTransfer* >::iterator iter = m_transferList.begin (); iter != m_transferList.end (); iter ++ )
-		{
-			m_mutex.unlock ();
+		// Unlock the transfer list mutex
+		pFileTransferManager->m_transferListMutex.Unlock();
 
-			(*iter)->Pulse ( m_strHost, m_usHttpPort );
-			m_mutex.lock ();
-		}
-		m_mutex.unlock ();
+		// Pulse the current file
+		(*iter)->Pulse(pFileTransferManager->m_strHost, pFileTransferManager->m_usHttpPort);
+
+		// Lock the transfer list mutex
+		pFileTransferManager->m_transferListMutex.Lock();
 	}
+
+	// Unlock the transfer list mutex
+	pFileTransferManager->m_transferListMutex.Unlock();
 }
 
-CFileTransferManager::CFileTransferManager ( void ) :
-	m_strHost ( "" ),
-	m_usHttpPort ( 0 )
+CFileTransferManager::CFileTransferManager(void) :
+m_strHost(""),
+m_usHttpPort(0)
 {
-	if ( !SharedUtility::Exists ( "cache" ) )
-		SharedUtility::CreateDirectory ( "cache" );
+	// Set our thread user data
+	m_workerThread.SetUserData < CFileTransferManager* >(this);
+
+	// Create the cache folder if it doesn't exists
+	if (!SharedUtility::Exists("cache"))
+		SharedUtility::CreateDirectory("cache");
 }
 
-CFileTransferManager::~CFileTransferManager ( void )
+CFileTransferManager::~CFileTransferManager(void)
 {
-	if (m_thread.joinable()){
-		m_processTransfer = false;
-		m_thread.join();
+	// Is the worker thread running?
+	if (m_workerThread.IsRunning())
+	{
+		// Stop the worker thread
+		m_workerThread.Stop();
 	}
-	Reset ( false );
+
+	// Reset
+	Reset(false);
 }
 
-void CFileTransferManager::Add ( String strFileName, String strFileType, CFileChecksum fileChecksum, bool bIsScript )
+void CFileTransferManager::Add(String strFileName, String strFileType, CFileChecksum fileChecksum, bool bIsScript)
 {
-	CFileTransfer * pFileTransfer = new CFileTransfer ( strFileName, fileChecksum, bIsScript );
-	if ( !pFileTransfer )
+	// Create the file transfer pointer
+	CFileTransfer * pFileTransfer = new CFileTransfer(strFileName, fileChecksum, bIsScript);
+
+	// Did the file transfer instance fail to create?
+	if (!pFileTransfer)
 		return;
 
-	m_mutex.lock();
+	// Lock the transfer list mutex
+	m_transferListMutex.Lock();
+
+	// Add the file transfer to the transfer list
 	m_transferList.push_back(pFileTransfer);
-	m_mutex.unlock();
+
+	// Unlock the transfer list mutex
+	m_transferListMutex.Unlock();
 }
 
 // todo: Remove this?
-bool CFileTransferManager::Remove ( String strFileName )
+bool CFileTransferManager::Remove(String strFileName)
 {
 	return false;
 }
 
-void CFileTransferManager::Reset ( bool bKillThread )
+void CFileTransferManager::Reset(bool bKillThread)
 {
-	if ( bKillThread )
+	// Is the worker thread running?
+	if (bKillThread && m_workerThread.IsRunning())
 	{
-		m_processTransfer = false;
-		m_thread.join();
+		// Kill the worker thread
+		m_workerThread.Stop(false, true);
 	}
-	for ( std::list < CFileTransfer* >::iterator iter = m_transferList.begin (); iter != m_transferList.end (); iter ++ )
+
+	// Loop through the transfer list
+	for (std::list < CFileTransfer* >::iterator iter = m_transferList.begin(); iter != m_transferList.end(); iter++)
 	{
-		SAFE_DELETE ( *iter );
+		// Delete this transfer item
+		SAFE_DELETE(*iter);
 	}
-	m_transferList.clear ();
+
+	// Clear the transfer list
+	m_transferList.clear();
 }
 
-void CFileTransferManager::Pulse ( void )
+void CFileTransferManager::Pulse(void)
 {
-	if ( !m_thread.joinable () )
+	// Is the worker thread running?
+	if (m_workerThread.IsRunning())
 		return;
 
-	for ( std::list < CFileTransfer* >::iterator iter = m_transferList.begin (); iter != m_transferList.end (); iter ++ )
+	// Loop over each file transfer
+	for (std::list < CFileTransfer* >::iterator iter = m_transferList.begin(); iter != m_transferList.end(); iter++)
 	{
-		if ( (*iter)->IsComplete () )
+		// Is the current transfer complete?
+		if ((*iter)->IsComplete())
 		{
-			if ( (*iter)->HasSucceeded () )
+			// Has the download succeeded?
+			if ((*iter)->HasSucceeded())
 			{
-				if ( (*iter)->IsScript () )
+				// Is this transfer a script?
+				if ((*iter)->IsScript())
 				{
+					// Add the client script to the client scripting manager
 					CCore::Instance()->GetClientScriptingManager()->AddScript((*iter)->m_strFileName, SharedUtility::GetAbsolutePath("%s%s", SharedUtility::GetClientScriptFolder(CCore::Instance()->GetHost(), CCore::Instance()->GetPort()).Get(), (*iter)->m_strFileName.Get()));
+
+					// Load the client script
 					CCore::Instance()->GetClientScriptingManager()->Load((*iter)->m_strFileName.Get());
 				}
 			}
-			m_transferList.remove ( *iter );
-			iter = m_transferList.begin ();
-			if ( iter == m_transferList.end () )
+
+			// Remove the current item from the transfer list
+			m_transferList.remove(*iter);
+
+			// Start from the begining again
+			iter = m_transferList.begin();
+
+			// Are we done?
+			if (iter == m_transferList.end())
 			{
-				Complete ();
+				// Done
+				Complete();
+
 				break;
 			}
 		}
 	}
 }
 
-void CFileTransferManager::Complete ()
+void CFileTransferManager::Complete(void)
 {
-	Reset ( true );
+	// Reset everything
+	Reset(true);
+
+	// Hide the download progress bar
 	CCore::Instance()->GetGUI()->GetDownloadProgress()->SetVisible(false);
+
+	// Start the game
 	CCore::Instance()->GetGame()->Spawn();
 }
 
-void CFileTransferManager::SetServerInformation ( const char * szHost, unsigned short usHttpPort )
+void CFileTransferManager::SetServerInformation(const char * szHost, unsigned short usHttpPort)
 {
-	m_strHost.Set ( szHost );
+	// Set the server information
+	m_strHost.Set(szHost);
 	m_usHttpPort = usHttpPort;
 
-	m_thread = std::thread(&CFileTransferManager::WorkerThread, this);
-	m_processTransfer = true;
+	// Start the worker thread
+	if (!m_workerThread.IsRunning())
+	{
+		// Start the worker thread
+		m_workerThread.Start(WorkerThread);
+	}
 }
