@@ -35,7 +35,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	}
 	#endif
 
-	pGUI = new CGUI;
+	/*pGUI = new CGUI;*/
 	bool bFoundCustomDirectory = false;
 	char szInstallDirectory[ MAX_PATH ];
 
