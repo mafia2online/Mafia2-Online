@@ -9,9 +9,8 @@
 
 #pragma once
 
-class CPlayerManager : public CMultiplayerPlayerManager
+class CPlayerManager
 {
-
 private:
 
 	CNetworkPlayer													* m_pNetworkPlayer[ MAX_PLAYERS ];
@@ -23,7 +22,7 @@ public:
 
 	bool						Add									( EntityId playerId, const char * szNick, const char * szIP, const char * szSerial );
 	void						Remove								( EntityId playerId, unsigned int uiReason );
-	bool						IsActive							( EntityId playerId );
+	bool						IsActive							( EntityId playerId ) const;
 
 	void						Pulse								( void );
 

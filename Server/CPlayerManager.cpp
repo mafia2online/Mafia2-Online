@@ -92,10 +92,9 @@ void CPlayerManager::Remove( EntityId playerId, unsigned int uiReason )
 	SAFE_DELETE( m_pNetworkPlayer[ playerId ] );
 }
 
-bool CPlayerManager::IsActive( EntityId playerId )
+bool CPlayerManager::IsActive( EntityId playerId ) const
 {
-	// Is the player id invalid?
-	if ( playerId < 0 || playerId > MAX_PLAYERS )
+	if ( playerId >= MAX_PLAYERS )
 		return false;
 
 	return (m_pNetworkPlayer[ playerId ] != NULL);

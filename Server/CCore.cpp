@@ -237,7 +237,8 @@ void CCore::Deinitialise( void )
 
 void CCore::Pulse( void )
 {
-	if (this->IsActive() == true){
+	if (IsActive() == true)
+	{
 		// Pulse the network module
 		if (m_pNetworkModule)
 			m_pNetworkModule->Pulse();
