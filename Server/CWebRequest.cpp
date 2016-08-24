@@ -65,8 +65,9 @@ void CWebRequest::WorkerThread()
 				}
 			}
 		}
+
+		Sleep ( 100 );
 	}
-	Sleep ( 100 );
 }
 
 bool CWebRequest::RecieveHandler ( const char * szData, unsigned int uiDataSize, void * pUserData )

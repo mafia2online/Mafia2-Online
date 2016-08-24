@@ -166,6 +166,8 @@ void InputThread()
 		if (input.size() > 0)
 			m_inputQueue.push(input);
 		m_inputMutex.unlock();
+
+		Sleep(10);
 	}
 }
 
@@ -196,9 +198,9 @@ int main( int argc, char * argv[] )
 
 	m_ulStartTime = SharedUtility::GetTime();
 
-	while( pCore->IsActive() )
+	while (pCore->IsActive())
 	{
-		pCore->Pulse( );
+		pCore->Pulse();
 
 		if (m_inputMutex.try_lock())
 		{
@@ -215,9 +217,11 @@ int main( int argc, char * argv[] )
 			}
 			m_inputMutex.unlock();
 		}
+
+		Sleep(5);
 	}
 	Shutdown ();
-	return (0);
+	return 0;
 }
 
 void Shutdown( void )

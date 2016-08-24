@@ -40,8 +40,9 @@ void CQuery::WorkerThread ()
 				sendto ( iSocket, reply.c_str (), reply.length (), NULL, (sockaddr *)&address, sizeof ( sockaddr_in ) );
 			}
 		}
+
+		Sleep ( 50 );
 	}
-	Sleep ( 50 );
 }
 
 CQuery::CQuery( unsigned short usPort )
