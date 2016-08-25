@@ -551,6 +551,8 @@ void CCore::StopMultiplayer( void )
 	m_pChat->Clear();
 	m_pChat->ClearHistory();
 
+	CCore::Instance()->GetAudioManager()->RemoveAll();
+
 	CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->LockControls( true );
 
 	SAFE_DELETE( m_pKeyBinds );
