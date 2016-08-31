@@ -22,6 +22,4 @@
 #include <Network/CHttpClient.h>
 
 // Project
-#include "CGUI.h"
-#include "CUpdate.h"
 #include "../Shared/CCommon.h"

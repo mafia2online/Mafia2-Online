@@ -74,6 +74,7 @@
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
       <AdditionalManifestDependencies>"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'";%(AdditionalManifestDependencies)</AdditionalManifestDependencies>
+      <SubSystem>Windows</SubSystem>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -95,6 +96,7 @@
       <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
+      <SubSystem>Windows</SubSystem>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -105,8 +107,6 @@
     <ClCompile Include="..\Shared\SharedUtility.cpp" />
     <ClCompile Include="..\Shared\Threading\CMutex.cpp" />
     <ClCompile Include="..\Shared\Threading\CThread.cpp" />
-    <ClCompile Include="CGUI.cpp" />
-    <ClCompile Include="CUpdate.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -119,8 +119,6 @@
     <ClInclude Include="..\Shared\SharedUtility.h" />
     <ClInclude Include="..\Shared\Threading\CMutex.h" />
     <ClInclude Include="..\Shared\Threading\CThread.h" />
-    <ClInclude Include="CGUI.h" />
-    <ClInclude Include="CUpdate.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="StdInc.h" />
   </ItemGroup>

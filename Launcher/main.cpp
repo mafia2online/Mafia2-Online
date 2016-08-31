@@ -18,9 +18,6 @@
 
 #define BASS_MODULE "bass.dll"
 
-CUpdate * pUpdater = NULL;
-CGUI * pGUI = NULL;
-
 int ShowMessageBox( const char * szText, UINT uType = (MB_ICONEXCLAMATION | MB_OK) )
 {
 	return MessageBox( NULL, szText, MOD_NAME, uType );
@@ -35,7 +32,6 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	}
 	#endif
 
-	/*pGUI = new CGUI;*/
 	bool bFoundCustomDirectory = false;
 	char szInstallDirectory[ MAX_PATH ];
 
