@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -14,18 +14,19 @@
     <ProjectGuid>{8C084B19-A368-4AC4-9CBC-A7D0358EEA38}</ProjectGuid>
     <RootNamespace>Server</RootNamespace>
     <ProjectName>Server.Core</ProjectName>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>NotSet</CharacterSet>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140_xp</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <WholeProgramOptimization>false</WholeProgramOptimization>
     <CharacterSet>NotSet</CharacterSet>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140_xp</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -38,20 +39,20 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(SolutionDir)\Binary\debug</OutDir>
+    <OutDir>$(SolutionDir)Binary\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <TargetName>m2online-svr</TargetName>
     <LibraryPath>$(LibraryPath)</LibraryPath>
-    <IntDir>$(Configuration)\</IntDir>
+    <IntDir>$(SolutionDir)Objs\$(ProjectName)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(SolutionDir)\Binary\release</OutDir>
+    <OutDir>$(SolutionDir)Binary\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <TargetName>m2online-svr</TargetName>
     <LibraryPath>$(LibraryPath)</LibraryPath>
-    <IntDir>$(Configuration)\</IntDir>
+    <IntDir>$(SolutionDir)Objs\$(ProjectName)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -59,12 +60,13 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_WIN32;_CRT_SECURE_NO_WARNINGS;_SERVER;WIN32_LEAN_AND_MEAN;_DEBUG;NO_GARBAGE_COLLECTOR;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>../Shared;../Libraries/CrashRpt;../Libraries/RakNet/Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>crashrpt1401.lib;winmm.lib;ws2_32.lib;dbghelp.lib;RakNetStatic_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>../Libraries/CrashRpt;../Libraries/RakNet/Lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>crashrpt1401.lib;winmm.lib;ws2_32.lib;dbghelp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../Libraries/CrashRpt</AdditionalLibraryDirectories>
+      <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -76,6 +78,7 @@
       <DisableSpecificWarnings>4996;4409;4482;4800;4305;4018;4390;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <AdditionalIncludeDirectories>../Shared;../Libraries/CrashRpt;../Libraries/RakNet/Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_WIN32;_CRT_SECURE_NO_WARNINGS;_SERVER;WIN32_LEAN_AND_MEAN;_RELEASE;NO_GARBAGE_COLLECTOR</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -83,6 +86,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>crashrpt1401.lib;winmm.lib;ws2_32.lib;dbghelp.lib;RakNetStatic.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>../Libraries/CrashRpt;../Libraries/RakNet/Lib</AdditionalLibraryDirectories>
+      <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -108,11 +112,6 @@
     <ClCompile Include="..\Libraries\squirrel\sqstdsystem.cpp" />
     <ClCompile Include="..\Libraries\squirrel\sqtable.cpp" />
     <ClCompile Include="..\Libraries\squirrel\sqvm.cpp" />
-    <ClCompile Include="..\Libraries\tinyxml\ticpp.cpp" />
-    <ClCompile Include="..\Libraries\tinyxml\tinystr.cpp" />
-    <ClCompile Include="..\Libraries\tinyxml\tinyxml.cpp" />
-    <ClCompile Include="..\Libraries\tinyxml\tinyxmlerror.cpp" />
-    <ClCompile Include="..\Libraries\tinyxml\tinyxmlparser.cpp" />
     <ClCompile Include="..\Shared\CCommands.cpp" />
     <ClCompile Include="..\Shared\CEvents.cpp" />
     <ClCompile Include="..\Shared\CLibrary.cpp" />
@@ -205,10 +204,6 @@
     <ClInclude Include="..\Libraries\squirrel\squserdata.h" />
     <ClInclude Include="..\Libraries\squirrel\squtils.h" />
     <ClInclude Include="..\Libraries\squirrel\sqvm.h" />
-    <ClInclude Include="..\Libraries\tinyxml\ticpp.h" />
-    <ClInclude Include="..\Libraries\tinyxml\ticpprc.h" />
-    <ClInclude Include="..\Libraries\tinyxml\tinystr.h" />
-    <ClInclude Include="..\Libraries\tinyxml\tinyxml.h" />
     <ClInclude Include="..\Shared\CColor.h" />
     <ClInclude Include="..\Shared\CCommands.h" />
     <ClInclude Include="..\Shared\CCommon.h" />
@@ -289,6 +284,14 @@
     <ClInclude Include="Interfaces\CMultiplayerVehicle.h" />
     <ClInclude Include="Interfaces\CMultiplayerVehicleManager.h" />
     <ClInclude Include="StdInc.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Libraries\RakNet\Projects\RakNetStatic.vcxproj">
+      <Project>{19e06ac6-35e8-47e2-bf29-9c897dffc37c}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Libraries\tinyxml\tinyxml.vcxproj">
+      <Project>{7d9bfc11-aeaf-435f-9b1f-ec24747bc4ef}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

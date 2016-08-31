@@ -135,12 +135,6 @@
     <Filter Include="Source Files\Server\Libraries\squirrel">
       <UniqueIdentifier>{083a47fa-f039-4b74-937c-66875de6c12c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Server\Libraries\tinyxml">
-      <UniqueIdentifier>{2d18f30d-a9e2-4731-a80d-e513573033f4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Server\Libraries\tinyxml">
-      <UniqueIdentifier>{329b769a-8759-4e95-900f-c21667cb376d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Server\Network\Peds">
       <UniqueIdentifier>{848e3960-f7b0-4210-8459-4c45f48b5c0e}</UniqueIdentifier>
     </Filter>
@@ -379,21 +373,6 @@
     </ClCompile>
     <ClCompile Include="CWhoWas.cpp">
       <Filter>Source Files\Server\General</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Libraries\tinyxml\ticpp.cpp">
-      <Filter>Source Files\Server\Libraries\tinyxml</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Libraries\tinyxml\tinystr.cpp">
-      <Filter>Source Files\Server\Libraries\tinyxml</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Libraries\tinyxml\tinyxml.cpp">
-      <Filter>Source Files\Server\Libraries\tinyxml</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Libraries\tinyxml\tinyxmlerror.cpp">
-      <Filter>Source Files\Server\Libraries\tinyxml</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Libraries\tinyxml\tinyxmlparser.cpp">
-      <Filter>Source Files\Server\Libraries\tinyxml</Filter>
     </ClCompile>
     <ClCompile Include="..\Shared\CXML.cpp">
       <Filter>Source Files\Server\Shared</Filter>
@@ -684,18 +663,6 @@
     </ClInclude>
     <ClInclude Include="CWhoWas.h">
       <Filter>Header Files\Server\General</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Libraries\tinyxml\ticpp.h">
-      <Filter>Header Files\Server\Libraries\tinyxml</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Libraries\tinyxml\ticpprc.h">
-      <Filter>Header Files\Server\Libraries\tinyxml</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Libraries\tinyxml\tinystr.h">
-      <Filter>Header Files\Server\Libraries\tinyxml</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Libraries\tinyxml\tinyxml.h">
-      <Filter>Header Files\Server\Libraries\tinyxml</Filter>
     </ClInclude>
     <ClInclude Include="..\Shared\CXML.h">
       <Filter>Header Files\Server\Shared</Filter>
