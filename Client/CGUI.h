@@ -9,6 +9,10 @@
 
 #pragma once
 
+// Silence the build messages about that CEGUI is undefining min/max macro.
+#undef		min
+#undef		max
+
 #include	<CEGUI.h>
 #include	<renderers/directx9GUIRenderer/d3d9renderer.h>
 #include	<renderers/directx9GUIRenderer/d3d9texture.h>
