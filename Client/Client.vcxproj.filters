@@ -752,9 +752,6 @@
     <ClInclude Include="CFileTransfer.h">
       <Filter>Header Files\Network\File Transfer</Filter>
     </ClInclude>
-    <ClInclude Include="StdInc.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="CServerPassword.h">
       <Filter>Header Files\GUI</Filter>
     </ClInclude>

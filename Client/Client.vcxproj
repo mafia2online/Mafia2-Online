@@ -319,7 +319,6 @@
     <ClInclude Include="gui_impl\CGUITexture_Impl.h" />
     <ClInclude Include="gui_impl\CGUIWindow_Impl.h" />
     <ClInclude Include="gui_impl\CGUI_Impl.h" />
-    <ClInclude Include="StdInc.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Libraries\squirrel\sqapi.cpp" />
