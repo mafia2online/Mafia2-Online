@@ -132,10 +132,11 @@ typedef struct {HANDLE signal, broadcast;} pthread_cond_t;
 typedef DWORD pthread_t;
 #define pid_t HANDLE // MINGW typedefs pid_t to int. Using #define here.
 
-struct timespec {
-  long tv_nsec;
-  long tv_sec;
-};
+// M2O fix: latest VC++ libs contains timespec.
+//struct timespec {
+//  long tv_nsec;
+//  long tv_sec;
+//};
 
 static int pthread_mutex_lock(pthread_mutex_t *);
 static int pthread_mutex_unlock(pthread_mutex_t *);
