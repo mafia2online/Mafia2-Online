@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -14,6 +14,7 @@
     <ProjectGuid>{A3A3B8B8-9578-4B38-95C9-42A6B4D29A07}</ProjectGuid>
     <RootNamespace>m2mp</RootNamespace>
     <ProjectName>Client.Core</ProjectName>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -21,13 +22,13 @@
     <CharacterSet>NotSet</CharacterSet>
     <UseOfMfc>false</UseOfMfc>
     <UseOfAtl>false</UseOfAtl>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140_xp</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <WholeProgramOptimization>false</WholeProgramOptimization>
     <CharacterSet>NotSet</CharacterSet>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140_xp</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -40,7 +41,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(SolutionDir)Binary\debug</OutDir>
+    <OutDir>$(SolutionDir)Binary\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <TargetExt>.dll</TargetExt>
@@ -49,12 +50,13 @@
     </LinkIncremental>
     <IncludePath>$(ProjectDir)..\Libraries\DXSDK\Include;$(ProjectDir)..\Libraries\Detours;$(ProjectDir)..\Libraries\lua\Source;$(ProjectDir)..\Libraries\zlib-1.2.5;$(ProjectDir)..\Libraries\squirrel;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)..\Libraries\DXSDK\Lib;$(ProjectDir)..\Libraries\Detours;$(ProjectDir)..\Libraries\RakNet\Lib;$(ProjectDir)..\Libraries\lua\Lib;$(ProjectDir)..\Libraries\zlib-1.2.5\projects\Debug;$(ProjectDir)..\Libraries\squirrel\Lib;$(ProjectDir)..\Libraries\libpng\projects\Debug;$(LibraryPath)</LibraryPath>
-    <IntDir>$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <IntDir>$(SolutionDir)Objs\$(ProjectName)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(SolutionDir)Binary\Release</OutDir>
+    <OutDir>$(SolutionDir)Binary\$(Configuration)\</OutDir>
     <TargetName>m2online</TargetName>
     <TargetExt>.dll</TargetExt>
+    <IntDir>$(SolutionDir)Objs\$(ProjectName)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -64,7 +66,7 @@
       <PreprocessorDefinitions>_WIN32;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_CLIENT;_DEBUG;CEGUI_STATIC;LOGGER;WIN32_LEAN_AND_MEAN;NO_GARBAGE_COLLECTOR;DEBUG_LOG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -72,8 +74,8 @@
       <PrecompiledHeaderFile>BaseInc.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>crashrpt1401.lib;winmm.lib;ws2_32.lib;comctl32.lib;d3d9.lib;d3dx9d.lib;dxguid.lib;dinput8.lib;DxErr9.lib;detours.lib;RakNetStatic_d.lib;zlib_d.lib;libpng_d.lib;dbghelp.lib;CEGUIBase_d.lib;CEGUIFalagardBase_d.lib;DirectX9GUIRenderer_d.lib;freetype2110.lib;tinyxml_d.lib;bass.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>../Libraries/CrashRpt;../Libraries/cegui-0.4.0-custom/lib;../Libraries/DXSDK/Lib;../Libraries/Detours;../Libraries/RakNet/Lib;../Libraries/zlib-1.2.5/projects/Debug;../Libraries/lpng142/projects/Debug;../Libraries/bass;../Libraries/tinyxml/Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>legacy_stdio_definitions.lib;crashrpt1401.lib;winmm.lib;ws2_32.lib;comctl32.lib;d3d9.lib;dxguid.lib;dinput8.lib;DxErr9.lib;detours.lib;dbghelp.lib;bass.lib;freetype265STd.lib;d3dx9d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../Libraries/CrashRpt;../Libraries/cegui-0.4.0-custom/lib;../Libraries/DXSDK/Lib;../Libraries/Detours;../Libraries/bass;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreAllDefaultLibraries>
       </IgnoreAllDefaultLibraries>
       <IgnoreSpecificDefaultLibraries>
@@ -96,7 +98,7 @@
       <PreprocessorDefinitions>_WIN32;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_CLIENT;_RELEASE;CEGUI_STATIC;LOGGER;WIN32_LEAN_AND_MEAN;NO_GARBAGE_COLLECTOR;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -119,8 +121,8 @@
       <TargetMachine>MachineX86</TargetMachine>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
-      <AdditionalDependencies>crashrpt1401.lib;winmm.lib;ws2_32.lib;comctl32.lib;d3d9.lib;d3dx9.lib;dxguid.lib;dinput8.lib;DxErr9.lib;detours.lib;RakNetStatic.lib;zlib.lib;libpng.lib;dbghelp.lib;CEGUIBase.lib;CEGUIFalagardBase.lib;DirectX9GUIRenderer.lib;freetype2110.lib;tinyxml.lib;bass.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>../Libraries/CrashRpt;../Libraries/cegui-0.4.0-custom/lib;../Libraries/DXSDK/Lib;../Libraries/Detours;../Libraries/RakNet/Lib;../Libraries/zlib-1.2.5/projects/Release;../Libraries/lpng142/projects/Release;../Libraries/bass;../Libraries/tinyxml/Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>legacy_stdio_definitions.lib;crashrpt1401.lib;winmm.lib;ws2_32.lib;comctl32.lib;d3d9.lib;dxguid.lib;dinput8.lib;DxErr9.lib;detours.lib;dbghelp.lib;bass.lib;freetype265ST.lib;d3dx9.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../Libraries/CrashRpt;../Libraries/cegui-0.4.0-custom/lib;../Libraries/DXSDK/Lib;../Libraries/Detours;../Libraries/bass;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
   </ItemDefinitionGroup>
@@ -483,6 +485,29 @@
     <ClCompile Include="gui_impl\CGUIWindow_Impl.cpp" />
     <ClCompile Include="gui_impl\CGUI_Impl.cpp" />
     <ClCompile Include="Main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Libraries\cegui-0.4.0-custom\makefiles\win32\vs2015\BaseSystem\BaseSystem.vcxproj">
+      <Project>{232b1f48-87c1-4ef9-98a2-cf675bac7a54}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Libraries\cegui-0.4.0-custom\makefiles\win32\vs2015\Renderers\DirectX9Renderer\DirectX9GUIRenderer.vcxproj">
+      <Project>{7582b608-d92f-4fcb-b682-2214b48d1596}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Libraries\cegui-0.4.0-custom\makefiles\win32\vs2015\WidgetSets\Falagard\Falagard.vcxproj">
+      <Project>{04e4a944-225a-4bfb-b7b5-f23aee884989}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Libraries\lpng142\projects\libpng.vcxproj">
+      <Project>{21db5d0c-2f40-4d79-be75-021e3d35b2f9}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Libraries\RakNet\Projects\RakNetStatic.vcxproj">
+      <Project>{19e06ac6-35e8-47e2-bf29-9c897dffc37c}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Libraries\tinyxml\tinyxml.vcxproj">
+      <Project>{7d9bfc11-aeaf-435f-9b1f-ec24747bc4ef}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Libraries\zlib-1.2.5\projects\zlib.vcxproj">
+      <Project>{9006d124-5d00-4cb7-bad9-f527b19502c9}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
