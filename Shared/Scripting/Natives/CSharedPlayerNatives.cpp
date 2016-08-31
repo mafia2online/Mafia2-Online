@@ -36,32 +36,26 @@ void CSharedPlayerNatives::Register( CScriptingManager * pScriptingManager )
 // getPlayers();
 SQInteger CSharedPlayerNatives::GetPlayers(SQVM * pVM)
 {
-	// Counter
-	SQInteger iCount;
+	SQInteger iCount = 0;
 
-	// Create new table
 	sq_newtable(pVM);
 
-	// Loop each entity
-	for (EntityId id = 0; id < MAX_PLAYERS; id++)
+	CPlayerManager *pPlayerManager = CCore::Instance()->GetPlayerManager();
+
+	for (EntityId id = 0; id < MAX_PLAYERS; ++id)
 	{
-		// Entity active ?
-		if (CCore::Instance()->GetPlayerManager()->IsActive(id)){
-
-			// Valid pointer ?
-			if (CCore::Instance()->GetPlayerManager()->Get(id)){
-
-				// Push id and name
-				sq_pushinteger(pVM, id);
-				sq_pushstring(pVM, CCore::Instance()->GetPlayerManager()->Get(id)->GetNick(), -1);
-
-				// Create new table slot
-				sq_createslot(pVM, -3);
-				iCount++;
-			}
+		if (!pPlayerManager->IsActive(id))
+		{
+			continue;
 		}
+
+		sq_pushinteger(pVM, id);
+		sq_pushstring(pVM, pPlayerManager->Get(id)->GetNick(), -1);
+
+		sq_createslot(pVM, -3);
+		iCount++;
 	}
-	return (1);
+	return 1;
 }
 
 // getPlayerMoney( playerId );
