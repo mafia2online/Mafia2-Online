@@ -60,9 +60,6 @@
     <ClCompile Include="CUpdate.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Shared\CXML.cpp">
-      <Filter>Source Files\Shared</Filter>
-    </ClCompile>
     <ClCompile Include="..\Shared\Network\CHttpClient.cpp">
       <Filter>Source Files\Shared\Network</Filter>
     </ClCompile>
@@ -103,9 +100,6 @@
     </ClInclude>
     <ClInclude Include="CUpdate.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Shared\CXML.h">
-      <Filter>Header Files\Shared</Filter>
     </ClInclude>
     <ClInclude Include="..\Shared\Network\CHttpClient.h">
       <Filter>Header Files\Shared\Network</Filter>
