@@ -1,8 +1,8 @@
 # Mafia 2 Online
 Source code of the M2Online mod, based on Mafia 2 MultiPlayer.
 
-# Informations
-- Has to be compiled with VS2013 due to some outdated functions
+# Build
+The projects are updated to work properly under VS2015. The linux builds are not yet done.
 
 # Contributing
 You are free to contribute, fork the mod and submit a pull request, we will review it and move in master branch if it succeed!
