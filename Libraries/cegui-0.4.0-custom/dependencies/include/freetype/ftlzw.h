@@ -4,7 +4,7 @@
 /*                                                                         */
 /*    LZW-compressed stream support.                                       */
 /*                                                                         */
-/*  Copyright 2004 by                                                      */
+/*  Copyright 2004-2016 by                                                 */
 /*  David Turner, Robert Wilhelm, and Werner Lemberg.                      */
 /*                                                                         */
 /*  This file is part of the FreeType project, and may only be used,       */
@@ -16,8 +16,8 @@
 /***************************************************************************/
 
 
-#ifndef __FTLZW_H__
-#define __FTLZW_H__
+#ifndef FTLZW_H_
+#define FTLZW_H_
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
@@ -54,7 +54,7 @@ FT_BEGIN_HEADER
   *
   * @description:
   *   Open a new stream to parse LZW-compressed font files.  This is
-  *   mainly used to support the compressed *.pcf.Z fonts that come
+  *   mainly used to support the compressed `*.pcf.Z' fonts that come
   *   with XFree86.
   *
   * @input:
@@ -63,13 +63,13 @@ FT_BEGIN_HEADER
   *   source :: The source stream.
   *
   * @return:
-  *   FreeType error code.  0 means success.
+  *   FreeType error code.  0~means success.
   *
   * @note:
   *   The source stream must be opened _before_ calling this function.
   *
-  *   Calling the internal function FT_Stream_Close on the new stream will
-  *   *not* call FT_Stream_Close on the source stream.  None of the stream
+  *   Calling the internal function `FT_Stream_Close' on the new stream will
+  *   *not* call `FT_Stream_Close' on the source stream.  None of the stream
   *   objects will be released to the heap.
   *
   *   The stream implementation is very basic and resets the decompression
@@ -81,19 +81,19 @@ FT_BEGIN_HEADER
   *   compressed file, the library will try to open a LZW stream from it
   *   and re-open the face with it.
   *
-  *   This function may return "FT_Err_Unimplemented" if your build of
-  *   FreeType was not compiled with LZW support.
+  *   This function may return `FT_Err_Unimplemented_Feature' if your build
+  *   of FreeType was not compiled with LZW support.
   */
   FT_EXPORT( FT_Error )
   FT_Stream_OpenLZW( FT_Stream  stream,
                      FT_Stream  source );
 
- /* */
+  /* */
 
 
 FT_END_HEADER
 
-#endif /* __FTLZW_H__ */
+#endif /* FTLZW_H_ */
 
 
 /* END */

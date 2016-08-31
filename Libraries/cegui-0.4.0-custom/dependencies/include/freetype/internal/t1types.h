@@ -5,7 +5,7 @@
 /*    Basic Type1/Type2 type definitions and interface (specification      */
 /*    only).                                                               */
 /*                                                                         */
-/*  Copyright 1996-2001, 2002, 2003, 2004 by                               */
+/*  Copyright 1996-2016 by                                                 */
 /*  David Turner, Robert Wilhelm, and Werner Lemberg.                      */
 /*                                                                         */
 /*  This file is part of the FreeType project, and may only be used,       */
@@ -17,14 +17,15 @@
 /***************************************************************************/
 
 
-#ifndef __T1TYPES_H__
-#define __T1TYPES_H__
+#ifndef T1TYPES_H_
+#define T1TYPES_H_
 
 
 #include <ft2build.h>
 #include FT_TYPE1_TABLES_H
 #include FT_INTERNAL_POSTSCRIPT_HINTS_H
 #include FT_INTERNAL_SERVICE_H
+#include FT_INTERNAL_HASH_H
 #include FT_SERVICE_POSTSCRIPT_CMAPS_H
 
 
@@ -58,7 +59,9 @@ FT_BEGIN_HEADER
   /*                                                                       */
   /*    code_first :: The lowest valid character code in the encoding.     */
   /*                                                                       */
-  /*    code_last  :: The highest valid character code in the encoding.    */
+  /*    code_last  :: The highest valid character code in the encoding     */
+  /*                  + 1. When equal to code_first there are no valid     */
+  /*                  character codes.                                     */
   /*                                                                       */
   /*    char_index :: An array of corresponding glyph indices.             */
   /*                                                                       */
@@ -76,22 +79,24 @@ FT_BEGIN_HEADER
   } T1_EncodingRec, *T1_Encoding;
 
 
-  typedef enum  T1_EncodingType_
+  /* used to hold extra data of PS_FontInfoRec that
+   * cannot be stored in the publicly defined structure.
+   *
+   * Note these can't be blended with multiple-masters.
+   */
+  typedef struct  PS_FontExtraRec_
   {
-    T1_ENCODING_TYPE_NONE = 0,
-    T1_ENCODING_TYPE_ARRAY,
-    T1_ENCODING_TYPE_STANDARD,
-    T1_ENCODING_TYPE_ISOLATIN1,
-    T1_ENCODING_TYPE_EXPERT
+    FT_UShort  fs_type;
 
-  } T1_EncodingType;
+  } PS_FontExtraRec;
 
 
   typedef struct  T1_FontRec_
   {
-    PS_FontInfoRec   font_info;         /* font info dictionary */
-    PS_PrivateRec    private_dict;      /* private dictionary   */
-    FT_String*       font_name;         /* top-level dictionary */
+    PS_FontInfoRec   font_info;         /* font info dictionary   */
+    PS_FontExtraRec  font_extra;        /* font info extra fields */
+    PS_PrivateRec    private_dict;      /* private dictionary     */
+    FT_String*       font_name;         /* top-level dictionary   */
 
     T1_EncodingType  encoding_type;
     T1_EncodingRec   encoding;
@@ -102,12 +107,13 @@ FT_BEGIN_HEADER
 
     FT_Int           num_subrs;
     FT_Byte**        subrs;
-    FT_PtrDist*      subrs_len;
+    FT_UInt*         subrs_len;
+    FT_Hash          subrs_hash;
 
     FT_Int           num_glyphs;
     FT_String**      glyph_names;       /* array of glyph names       */
     FT_Byte**        charstrings;       /* array of glyph charstrings */
-    FT_PtrDist*      charstrings_len;
+    FT_UInt*         charstrings_len;
 
     FT_Byte          paint_type;
     FT_Byte          font_type;
@@ -123,10 +129,55 @@ FT_BEGIN_HEADER
 
   typedef struct  CID_SubrsRec_
   {
-    FT_UInt    num_subrs;
+    FT_Int     num_subrs;
     FT_Byte**  code;
 
   } CID_SubrsRec, *CID_Subrs;
+
+
+  /*************************************************************************/
+  /*************************************************************************/
+  /*************************************************************************/
+  /***                                                                   ***/
+  /***                                                                   ***/
+  /***                AFM FONT INFORMATION STRUCTURES                    ***/
+  /***                                                                   ***/
+  /***                                                                   ***/
+  /*************************************************************************/
+  /*************************************************************************/
+  /*************************************************************************/
+
+  typedef struct  AFM_TrackKernRec_
+  {
+    FT_Int    degree;
+    FT_Fixed  min_ptsize;
+    FT_Fixed  min_kern;
+    FT_Fixed  max_ptsize;
+    FT_Fixed  max_kern;
+
+  } AFM_TrackKernRec, *AFM_TrackKern;
+
+  typedef struct  AFM_KernPairRec_
+  {
+    FT_UInt  index1;
+    FT_UInt  index2;
+    FT_Int   x;
+    FT_Int   y;
+
+  } AFM_KernPairRec, *AFM_KernPair;
+
+  typedef struct  AFM_FontInfoRec_
+  {
+    FT_Bool        IsCIDFont;
+    FT_BBox        FontBBox;
+    FT_Fixed       Ascender;
+    FT_Fixed       Descender;
+    AFM_TrackKern  TrackKerns;   /* free if non-NULL */
+    FT_UInt        NumTrackKern;
+    AFM_KernPair   KernPairs;    /* free if non-NULL */
+    FT_UInt        NumKernPair;
+
+  } AFM_FontInfoRec, *AFM_FontInfo;
 
 
   /*************************************************************************/
@@ -148,20 +199,30 @@ FT_BEGIN_HEADER
 
   typedef struct  T1_FaceRec_
   {
-    FT_FaceRec     root;
-    T1_FontRec     type1;
-    const void*    psnames;
-    const void*    psaux;
-    const void*    afm_data;
-    FT_CharMapRec  charmaprecs[2];
-    FT_CharMap     charmaps[2];
-    PS_Unicodes    unicode_map;
+    FT_FaceRec      root;
+    T1_FontRec      type1;
+    const void*     psnames;
+    const void*     psaux;
+    const void*     afm_data;
+    FT_CharMapRec   charmaprecs[2];
+    FT_CharMap      charmaps[2];
 
     /* support for Multiple Masters fonts */
-    PS_Blend       blend;
+    PS_Blend        blend;
 
-    /* since FT 2.1 - interface to PostScript hinter */
-    const void*    pshinter;
+    /* undocumented, optional: indices of subroutines that express      */
+    /* the NormalizeDesignVector and the ConvertDesignVector procedure, */
+    /* respectively, as Type 2 charstrings; -1 if keywords not present  */
+    FT_Int           ndv_idx;
+    FT_Int           cdv_idx;
+
+    /* undocumented, optional: has the same meaning as len_buildchar */
+    /* for Type 2 fonts; manipulated by othersubrs 19, 24, and 25    */
+    FT_UInt          len_buildchar;
+    FT_Long*         buildchar;
+
+    /* since version 2.1 - interface to PostScript hinter */
+    const void*     pshinter;
 
   } T1_FaceRec;
 
@@ -172,20 +233,25 @@ FT_BEGIN_HEADER
     void*            psnames;
     void*            psaux;
     CID_FaceInfoRec  cid;
+    PS_FontExtraRec  font_extra;
+#if 0
     void*            afm_data;
-    FT_Byte*         binary_data; /* used if hex data has been converted */
-    FT_Stream        cid_stream;
+#endif
     CID_Subrs        subrs;
 
-    /* since FT 2.1 - interface to PostScript hinter */
+    /* since version 2.1 - interface to PostScript hinter */
     void*            pshinter;
+
+    /* since version 2.1.8, but was originally positioned after `afm_data' */
+    FT_Byte*         binary_data; /* used if hex data has been converted */
+    FT_Stream        cid_stream;
 
   } CID_FaceRec;
 
 
 FT_END_HEADER
 
-#endif /* __T1TYPES_H__ */
+#endif /* T1TYPES_H_ */
 
 
 /* END */
