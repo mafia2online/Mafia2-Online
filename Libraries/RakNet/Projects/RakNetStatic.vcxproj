@@ -313,7 +313,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <TargetExt>.lib</TargetExt>
-    <IntDir>$(SolutionDir)Objs\$(Configuration)\</IntDir>
+    <IntDir>$(SolutionDir)Objs\$(ProjectName)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)Libs\$(Configuration)\</OutDir>
