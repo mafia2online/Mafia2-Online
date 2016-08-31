@@ -9,8 +9,6 @@
 
 #include "BaseInc.h"
 
-#include "dinput.h"
-
 #include "CDirectInput8Hook.h"
 #include "CDirectInput8Proxy.h"
 
