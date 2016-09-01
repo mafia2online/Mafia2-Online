@@ -66,7 +66,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>crashrpt1401.lib;winmm.lib;ws2_32.lib;dbghelp.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>../Libraries/CrashRpt</AdditionalLibraryDirectories>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>NotSet</SubSystem>
+      <MinimumRequiredVersion />
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -86,7 +87,8 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>crashrpt1401.lib;winmm.lib;ws2_32.lib;dbghelp.lib;RakNetStatic.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>../Libraries/CrashRpt;../Libraries/RakNet/Lib</AdditionalLibraryDirectories>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>NotSet</SubSystem>
+      <MinimumRequiredVersion />
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

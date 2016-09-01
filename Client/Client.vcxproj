@@ -60,18 +60,12 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <WarningLevel>TurnOffAllWarnings</WarningLevel>
-      <Optimization>Disabled</Optimization>
+      <WarningLevel>Level1</WarningLevel>
       <AdditionalIncludeDirectories>./;../Libraries/CrashRpt;../Libraries/cegui-0.4.0-custom/include;../Libraries/DXSDK/include;../Libraries/squirrel;../Libraries/lua;../Libraries/RakNet/Source;../Shared;../Libraries/Detours;../Libraries/zlib-1.2.5;../Libraries/lpng142;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_WIN32;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_CLIENT;_DEBUG;CEGUI_STATIC;LOGGER;WIN32_LEAN_AND_MEAN;NO_GARBAGE_COLLECTOR;DEBUG_LOG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>true</MinimalRebuild>
-      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <WarningLevel>Level3</WarningLevel>
-      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <DisableSpecificWarnings>4996;4409;4482;4800;4305;4018;4390;4099;4244;%(DisableSpecificWarnings)</DisableSpecificWarnings>
-      <PrecompiledHeaderFile>BaseInc.h</PrecompiledHeaderFile>
+      <Optimization>Disabled</Optimization>
     </ClCompile>
     <Link>
       <AdditionalDependencies>legacy_stdio_definitions.lib;crashrpt1401.lib;winmm.lib;ws2_32.lib;comctl32.lib;d3d9.lib;dxguid.lib;dinput8.lib;DxErr9.lib;detours.lib;dbghelp.lib;bass.lib;freetype265STd.lib;d3dx9.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -83,9 +77,10 @@
       <ModuleDefinitionFile>
       </ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>NotSet</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+      <MinimumRequiredVersion />
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -106,13 +101,11 @@
       <DisableSpecificWarnings>4996;4409;4482;4800;4305;4018;4390;4099;4244;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalIncludeDirectories>./;../Libraries/CrashRpt;../Libraries/cegui-0.4.0-custom/include;../Libraries/DXSDK/include;../Libraries/squirrel;../Libraries/lua;../Libraries/RakNet/Source;../Shared;../Libraries/Detours;../Libraries/zlib-1.2.5;../Libraries/lpng142;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile>BaseInc.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>NotSet</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <RandomizedBaseAddress>true</RandomizedBaseAddress>
@@ -124,6 +117,7 @@
       <AdditionalDependencies>legacy_stdio_definitions.lib;crashrpt1401.lib;winmm.lib;ws2_32.lib;comctl32.lib;d3d9.lib;dxguid.lib;dinput8.lib;DxErr9.lib;detours.lib;dbghelp.lib;bass.lib;freetype265ST.lib;d3dx9.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>../Libraries/CrashRpt;../Libraries/cegui-0.4.0-custom/lib;../Libraries/DXSDK/Lib;../Libraries/Detours;../Libraries/bass;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+      <MinimumRequiredVersion />
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
