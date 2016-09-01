@@ -27,7 +27,7 @@ BOOL WINAPI DllMain( HMODULE hModule, DWORD dwReason, void * pReserved )
 			g_hModule = hModule;
 			DisableThreadLibraryCalls( hModule );
 
-			CExceptionHandler::Install();
+			//CExceptionHandler::Install();
 
 			pCore = new CCore;
 			if( !pCore || !pCore->Initialise() )
