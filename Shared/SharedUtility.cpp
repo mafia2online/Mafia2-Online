@@ -19,6 +19,7 @@
 #include	<tlhelp32.h>
 #include	<time.h>
 #include	<ws2tcpip.h>
+#include	<assert.h>
 #else
 #include	<sys/socket.h>
 #include	<netinet/in.h>
@@ -456,15 +457,29 @@ namespace SharedUtility
 		return NULL;
 	}
 
-	int InjectLibraryIntoProcess(HANDLE hProcess, const char * szLibraryPath)
+	const char *InjectLibraryResultToString(const InjectLibraryResults result)
 	{
-		int iReturn = 0;
+		switch (result) {
+		case INJECT_LIBRARY_RESULT_OK:				return "Ok";
+		case INJECT_LIBRARY_RESULT_WRITE_FAILED:	return "Failed to write memory into process";
+		case INJECT_LIBRARY_GET_RETURN_CODE_FAILED: return "Failed to get return code of the load call";
+		case INJECT_LIBRARY_LOAD_LIBRARY_FAILED:	return "Failed to load library";
+		case INJECT_LIBRARY_THREAD_CREATION_FAILED:	return "Failed to create remote thread";
+
+		case INJECT_LIBRARY_OPEN_PROCESS_FAIL:		return "Open of the process failed";
+		default:									return "Unknown error";
+		}
+	}
+
+	InjectLibraryResults InjectLibraryIntoProcess(HANDLE hProcess, const char * szLibraryPath)
+	{
+		InjectLibraryResults result = INJECT_LIBRARY_RESULT_OK;
 
 		// Get the length of the library path
 		size_t sLibraryPathLen = (strlen(szLibraryPath) + 1);
 
 		// Allocate the a block of memory in our target process for the library path
-		void * pRemoteLibraryPath = VirtualAllocEx(hProcess, NULL, sLibraryPathLen, MEM_COMMIT, PAGE_READWRITE);
+		void * pRemoteLibraryPath = VirtualAllocEx(hProcess, NULL, sLibraryPathLen, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
 
 		// Write our library path to the allocated block of memory
 		SIZE_T sBytesWritten = 0;
@@ -472,8 +487,7 @@ namespace SharedUtility
 
 		if(sBytesWritten != sLibraryPathLen)
 		{
-			// Failed to write the library path
-			iReturn = 1;
+			result = INJECT_LIBRARY_RESULT_WRITE_FAILED;
 		}
 		else
 		{
@@ -491,22 +505,38 @@ namespace SharedUtility
 				// Wait for the created thread to end
 				WaitForSingleObject(hThread, INFINITE);
 
+				DWORD dwExitCode = 0;
+				if (GetExitCodeThread(hThread, &dwExitCode))
+				{
+					// Should never happen as we wait for the thread to be finished.
+					assert(dwExitCode != STILL_ACTIVE);
+				}
+				else {
+					result = INJECT_LIBRARY_GET_RETURN_CODE_FAILED;
+				}
+
+				// In case LoadLibrary returns handle equal to zero there was some problem.
+				if (dwExitCode == 0)
+				{
+					result = INJECT_LIBRARY_LOAD_LIBRARY_FAILED;
+				}
+
 				// Close our thread handle
 				CloseHandle(hThread);
 			}
 			else
 			{
 				// Thread creation failed
-				iReturn = 2;
+				result = INJECT_LIBRARY_THREAD_CREATION_FAILED;
 			}
 		}
 
 		// Free the allocated block of memory inside the target process
 		VirtualFreeEx(hProcess, pRemoteLibraryPath, sizeof(pRemoteLibraryPath), MEM_RELEASE);
-		return iReturn;
+		return result;
 	}
 
-	int InjectLibraryIntoProcess(DWORD dwProcessId, const char * szLibraryPath)
+	InjectLibraryResults InjectLibraryIntoProcess(DWORD dwProcessId, const char * szLibraryPath)
 	{
 		// Open our target process
 		HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, dwProcessId);
@@ -514,15 +544,15 @@ namespace SharedUtility
 		if(!hProcess)
 		{
 			// Failed to open the process
-			return 3;
+			return INJECT_LIBRARY_OPEN_PROCESS_FAIL;
 		}
 
 		// Inject the library into the process
-		int iReturn = InjectLibraryIntoProcess(hProcess, szLibraryPath);
+		InjectLibraryResults result = InjectLibraryIntoProcess(hProcess, szLibraryPath);
 
 		// Close the process handle
 		CloseHandle(hProcess);
-		return iReturn;
+		return result;
 	}
 
 	bool GetProcessIdFromProcessName(char * szProcessName, DWORD * dwProcessId)
