@@ -17,7 +17,7 @@
 #else
 #define		MOD_NAME				"Mafia2-Online"
 #endif
-#define		MOD_VERS_STR			"0.1-rc1"
+#define		MOD_VERS_STR			"0.1-rc1 (Build: " __DATE__ " " __TIME__ ")"
 
 // MasterList stuff
 
