@@ -183,7 +183,13 @@ bool CCore::Initialise( void )
 	}
 
 	CFileChecksum pChecksum;
-	pChecksum.Calculate( String( "%s\\pc\\Mafia2.exe", m_strGameDirectory.Get() ) );
+	const String strExePath("%s\\pc\\Mafia2.exe", m_strGameDirectory.Get());
+	if (!pChecksum.Calculate(strExePath))
+	{
+		String strErrorMessage("Failed to calculate checksum of the Mafia2 executable.\nPath: %s", strExePath.Get());
+		MessageBox(NULL, strErrorMessage, "Mafia2-Online - Fatal error", MB_ICONERROR);
+		return false;
+	}
 
 	CLogFile::Printf( "EXE signature: 0x%p", pChecksum.GetChecksum() );
 
