@@ -104,15 +104,16 @@ CM2Ped					* pPlayerPed = nullptr;
 
 CCore::CCore( void )
 {
-	// Get the game directory from the registry
-	char szGameDir[MAX_PATH];
-	SharedUtility::ReadRegistryString( HKEY_LOCAL_MACHINE, "Software\\Wow6432Node\\Mafia2-Online", "GameDir", NULL, szGameDir, sizeof(szGameDir) );
-	SetGameDirectory( szGameDir );
+	// Set the game directory to current exe path.
+	String gameDirectory(SharedUtility::GetExePath());
 
-	// Get the mod directory from the registry
-	char szModDir[MAX_PATH];
-	SharedUtility::ReadRegistryString( HKEY_LOCAL_MACHINE, "Software\\Wow6432Node\\Mafia2-Online", "InstallLocation", NULL, szModDir, sizeof(szModDir) );
-	SetModDirectory( szModDir );
+	// Cut the pc\\ from the path.
+	gameDirectory.Substitute("\\pc\\", "");
+
+	SetGameDirectory( gameDirectory );
+
+	// Set the mod directory to the directory where DLL is placed.
+	SetModDirectory( SharedUtility::GetAppPath() );
 
 	m_bInitialised = false;
 	m_bCaptureScreenshot = false;
