@@ -78,12 +78,12 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	if( bFoundCustomDirectory )
 		SharedUtility::WriteRegistryString( HKEY_LOCAL_MACHINE, "Software\\Wow6432Node\\Mafia2-Online", "GameDir", szInstallDirectory, sizeof(szInstallDirectory) );
 
-	String strModulePath( "%s\\%s", SharedUtility::GetAppPath(), CORE_MODULE );
+	String strModulePath( "%s%s", SharedUtility::GetAppPath(), CORE_MODULE );
 	CLogFile::Printf("M2Online : %s", strModulePath.Get());
 
 	if( !SharedUtility::Exists( strModulePath.Get() ) )
 	{
-		ShowMessageBox( "Failed to find m2online.dll ! Can't launch." );
+		ShowMessageBox( "Failed to find m2online.dll! Can't launch." );
 		return 1;
 	}
 
@@ -92,15 +92,16 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 
 	if (!SharedUtility::Exists(strBassPath.Get()))
 	{
-		ShowMessageBox("Failed to find bass.dll ! Can't launch.");
+		ShowMessageBox("Failed to find bass.dll! Can't launch.");
 		return 1;
 	}
 
 
-	if (SharedUtility::IsProcessRunning("Mafia2.exe")){
-		if (SharedUtility::_TerminateProcess("Mafia2.exe") == false)
+	if (SharedUtility::IsProcessRunning("Mafia2.exe"))
+	{
+		if (! SharedUtility::_TerminateProcess("Mafia2.exe"))
 		{
-			ShowMessageBox("Failed to kill Mafia.exe. Cannot launch.");
+			ShowMessageBox("Failed to kill Mafia 2 process. Cannot launch.");
 			return 1;
 		}
 	}
@@ -117,28 +118,16 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 		return 1;
 	}
 
-	int iReturn = SharedUtility::InjectLibraryIntoProcess( piProcessInfo.hProcess, strModulePath.Get() );
-	iReturn += SharedUtility::InjectLibraryIntoProcess(piProcessInfo.hProcess, strBassPath.Get());
+	const SharedUtility::InjectLibraryResults bassInjectResult = SharedUtility::InjectLibraryIntoProcess(piProcessInfo.hProcess, strBassPath.Get());
+	const SharedUtility::InjectLibraryResults moduleInjectResult = SharedUtility::InjectLibraryIntoProcess(piProcessInfo.hProcess, strModulePath.Get() );
 
-	if( iReturn > 0)
+	if ( moduleInjectResult != SharedUtility::INJECT_LIBRARY_RESULT_OK || bassInjectResult != SharedUtility::INJECT_LIBRARY_RESULT_OK )
 	{
-		TerminateProcess( piProcessInfo.hProcess, 0 );
-
-		String strError( "Unknown Error. Can't launch." );
-		if( iReturn == 1 )
-			strError = "[M2O] : Failed to write library path into remote process. Can't launch.";
-		else if( iReturn == 2 )
-			strError = "[M2O] : Failed to create remote thread in remote process. Can't launch.";
-		else if( iReturn == 2 )
-			strError = "[M2O] : Failed to open the remote process. Can't launch.";
+		String strError( "Failed to inject modules into game process.\nCore: %s (%i)\nBass:  %s (%i)", SharedUtility::InjectLibraryResultToString(moduleInjectResult), moduleInjectResult, SharedUtility::InjectLibraryResultToString(bassInjectResult), bassInjectResult);
 		ShowMessageBox( strError.Get() );
-		if (SharedUtility::IsProcessRunning("Mafia2.exe")){
-			SharedUtility::_TerminateProcess("Mafia2.exe");
-		}
+
+		TerminateProcess( piProcessInfo.hProcess, 0 );
 		return 1;
-	}
-	else {
-		CLogFile::Printf("iReturn : %d", iReturn);
 	}
 
 	ResumeThread( piProcessInfo.hThread );
