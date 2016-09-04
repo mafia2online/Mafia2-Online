@@ -47,6 +47,8 @@ RequestExecutionLevel admin
 
 Var vcredist2010set
 
+Var installDir
+
 !macro VerifyUserIsAdmin
 	UserInfo::GetAccountType
 	pop $0
@@ -69,8 +71,7 @@ FunctionEnd
 
 # After they choose the Mafia 2 Multiplayer directory
 Function OnChosenM2MPDirectory
-	#!undef MOD_DIR
-	#!define MOD_DIR "${MOD_NAME}"
+	StrCpy $installDir "$INSTDIR\${MOD_NAME}"
 FunctionEnd
 
 # Find the Mafia 2 install directory
@@ -98,19 +99,19 @@ Section "Install"
 	
 	SetOverwrite on
 	
-	CreateDirectory "${MOD_DIR}"
-	CreateDirectory "${MOD_DIR}\cache"
-	CreateDirectory "${MOD_DIR}\data"
-	CreateDirectory "${MOD_DIR}\data\browser"
-	CreateDirectory "${MOD_DIR}\data\game"
-	CreateDirectory "${MOD_DIR}\data\gui"
-	CreateDirectory "${MOD_DIR}\data\gui\fonts"
-	CreateDirectory "${MOD_DIR}\data\gui\images"
-	CreateDirectory "${MOD_DIR}\data\gui\skins"
-	CreateDirectory "${MOD_DIR}\logs"
-	CreateDirectory "${MOD_DIR}\screenshots"
+	CreateDirectory "$installDir"
+	CreateDirectory "$installDir\cache"
+	CreateDirectory "$installDir\data"
+	CreateDirectory "$installDir\data\browser"
+	CreateDirectory "$installDir\data\game"
+	CreateDirectory "$installDir\data\gui"
+	CreateDirectory "$installDir\data\gui\fonts"
+	CreateDirectory "$installDir\data\gui\images"
+	CreateDirectory "$installDir\data\gui\skins"
+	CreateDirectory "$installDir\logs"
+	CreateDirectory "$installDir\screenshots"
 	
-	SetOutPath "${MOD_DIR}"
+	SetOutPath "$installDir"
 	${If} ${RunningX64}
 		File ..\Binary\dist\vcredist_x64.exe
 	${Else}
@@ -126,20 +127,20 @@ Section "Install"
 	File ..\Binary\crashprt\CrashSender1401.exe
 	File ..\Binary\crashprt\dbghelp.dll
 	
-	SetOutPath "${MOD_DIR}\data\game"
+	SetOutPath "$installDir\data\game"
 	File ..\Binary\gamefiles\0.m2o
 	File ..\Binary\gamefiles\1.m2o
 	File ..\Binary\gamefiles\2.m2o
 	File ..\Binary\gamefiles\3.m2o
 	
-	SetOutPath "${MOD_DIR}\data\gui\fonts"
+	SetOutPath "$installDir\data\gui\fonts"
 	File ..\Binary\guifiles\tahoma.ttf
 	File ..\Binary\guifiles\tahoma-bold.ttf
 	File ..\Binary\guifiles\verdana.ttf
 	File ..\Binary\guifiles\verdana-bold.ttf
 	File ..\Binary\guifiles\aurora-bold-condensed-bt.ttf
 	
-	SetOutPath "${MOD_DIR}\data\gui\images"
+	SetOutPath "$installDir\data\gui\images"
 	File ..\Binary\guifiles\1.jpg
 	File ..\Binary\guifiles\2.jpg
 	File ..\Binary\guifiles\3.jpg
@@ -157,7 +158,7 @@ Section "Install"
 	File ..\Binary\guifiles\quit.png
 	File ..\Binary\guifiles\locked.png
 	
-	SetOutPath "${MOD_DIR}\data\gui\skins"
+	SetOutPath "$installDir\data\gui\skins"
 	File ..\Binary\guifiles\default.png
 	File ..\Binary\guifiles\default.xml
 	File ..\Binary\guifiles\default.looknfeel.xml
@@ -173,32 +174,32 @@ Section "Install"
 	File ..\Binary\gamefiles\StreamM2MP.bin
 	File ..\Binary\gamefiles\tables.sds
 
-	SetOutPath "${MOD_DIR}\data\sounds"
+	SetOutPath "$installDir\data\sounds"
 	File ..\Binary\sounds\menu.mp3
 	
 	# Write the uninstaller
-	WriteUninstaller "${MOD_DIR}\Uninstall.exe"
+	WriteUninstaller "$installDir\Uninstall.exe"
 	
 	# Create the desktop shortcut
-	SetOutPath "${MOD_DIR}"
-	CreateShortCut "$DESKTOP\${MOD_NAME}.lnk" "${MOD_DIR}\m2online.exe"
+	SetOutPath "$installDir"
+	CreateShortCut "$DESKTOP\${MOD_NAME}.lnk" "$installDir\m2online.exe"
 	
 	# Create the start menu shortcuts
 	CreateDirectory "$SMPROGRAMS\${MOD_NAME}"
-	CreateShortCut "$SMPROGRAMS\${MOD_NAME}\${MOD_NAME}.lnk" "${MOD_DIR}\m2online.exe"
-	CreateShortCut "$SMPROGRAMS\${MOD_NAME}\Uninstall.lnk" "${MOD_DIR}\Uninstall.exe"
+	CreateShortCut "$SMPROGRAMS\${MOD_NAME}\${MOD_NAME}.lnk" "$installDir\m2online.exe"
+	CreateShortCut "$SMPROGRAMS\${MOD_NAME}\Uninstall.lnk" "$installDir\Uninstall.exe"
 	
 	# Write the registry keys
 	WriteRegStr HKLM "${REG_NODE}" "DisplayName" "${MOD_NAME}"
-	WriteRegStr HKLM "${REG_NODE}" "InstallLocation" "${MOD_DIR}"
+	WriteRegStr HKLM "${REG_NODE}" "InstallLocation" "$installDir"
 	WriteRegStr HKLM "${REG_NODE}" "GameDir" "$INSTDIR"
 	WriteRegStr HKLM "${REG_NODE}" "Version" "${MOD_VERS}"
 	
 	# Write the URI scheme
 	WriteRegStr HKCR "m2online" "" "Mafia2-Online Protocol"
 	WriteRegStr HKCR "m2online" "URL Protocol" ""
-	WriteRegStr HKCR "m2online\DefaultIcon" "" "$\"${MOD_DIR}\m2online.exe$\",1"
-	WriteRegStr HKCR "m2online\shell\open\command" "" "$\"${MOD_DIR}\m2online.exe$\" $\"-uri %1$\""
+	WriteRegStr HKCR "m2online\DefaultIcon" "" "$\"$installDir\m2online.exe$\",1"
+	WriteRegStr HKCR "m2online\shell\open\command" "" "$\"$installDir\m2online.exe$\" $\"-uri %1$\""
 	
 SectionEnd
 
@@ -217,11 +218,11 @@ FunctionEnd
 
 Section "Uninstall"
 
-	Delete "${MOD_DIR}\m2online.exe"
-	Delete "${MOD_DIR}\m2online.dll"
+	Delete "$installDir\m2online.exe"
+	Delete "$installDir\m2online.dll"
 	Delete "$INSTDIR\..\sds\missionscript\freeraid_m2o.sds"
 	Delete "$INSTDIR\..\..\edit\tables\StreamM2O.bin"
-	RMDir /r "${MOD_DIR}"
+	RMDir /r "$installDir"
 	
 	# Delete the desktop shortcut
 	Delete "$DESKTOP\${MOD_NAME}.lnk"
@@ -245,9 +246,9 @@ Function vcredist2010installer
 	vcredist_silent_install:
 		DetailPrint "Installing Microsoft Visual C++ 2010 Redistributable..."
 		${If} ${RunningX64}
-			ExecWait '"${MOD_DIR}\vcredist_x64.exe" /q' $0
+			ExecWait '"$installDir\vcredist_x64.exe" /q' $0
 		${Else}
-			ExecWait '"${MOD_DIR}\vcredist_x86.exe" /q' $0
+			ExecWait '"$installDir\vcredist_x86.exe" /q' $0
 		${EndIf}
 		
 		ReadRegStr $0 HKLM "SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\{F0C3E5D1-1ADE-321E-8167-68EF0DE699A5}" "DisplayName"
@@ -259,25 +260,25 @@ Function vcredist2010installer
 			
       vcredist_messagebox:
       	${If} ${RunningX64}
-			MessageBox MB_OK "Failed to install Microsoft Visual C++ 2010 Redistributable (${MOD_DIR}\vcredist_x64.exe). Please ensure your system meets the minimum requirements before running the installer again."
+			MessageBox MB_OK "Failed to install Microsoft Visual C++ 2010 Redistributable ($installDir\vcredist_x64.exe). Please ensure your system meets the minimum requirements before running the installer again."
 		${Else}
-			MessageBox MB_OK "Failed to install Microsoft Visual C++ 2010 Redistributable (${MOD_DIR}\vcredist_x86.exe). Please ensure your system meets the minimum requirements before running the installer again."
+			MessageBox MB_OK "Failed to install Microsoft Visual C++ 2010 Redistributable ($installDir\vcredist_x86.exe). Please ensure your system meets the minimum requirements before running the installer again."
 		${EndIf}
         Goto vcredist_done
 		
     vcredist_success:
     	${If} ${RunningX64}
-			Delete "${MOD_DIR}\vcredist_x64.exe"
+			Delete "$installDir\vcredist_x64.exe"
 		${Else}
-			Delete "${MOD_DIR}\vcredist_x86.exe"
+			Delete "$installDir\vcredist_x86.exe"
 		${EndIf}
       	DetailPrint "Microsoft Visual C++ 2010 Redistributable was successfully installed"
 	  
 	vcredist_done:
 		${If} ${RunningX64}
-			Delete "${MOD_DIR}\vcredist_x64.exe"
+			Delete "$installDir\vcredist_x64.exe"
 		${Else}
-			Delete "${MOD_DIR}\vcredist_x86.exe"
+			Delete "$installDir\vcredist_x86.exe"
 		${EndIf}
 
 FunctionEnd
