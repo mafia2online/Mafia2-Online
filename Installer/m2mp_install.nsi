@@ -1,4 +1,6 @@
 !include "MUI2.nsh"
+!include "x64.nsh"
+
 !define MUI_ABORTWARNING
 
 !define MOD_NAME	"Mafia2-Online"
@@ -109,7 +111,11 @@ Section "Install"
 	CreateDirectory "${MOD_DIR}\screenshots"
 	
 	SetOutPath "${MOD_DIR}"
-	File ..\Binary\dist\vcredist_x86.exe
+	${If} ${RunningX64}
+		File ..\Binary\dist\vcredist_x64.exe
+	${Else}
+		File ..\Binary\dist\vcredist_x86.exe
+	${EndIf}
 	Call vcredist2010installer
 	
 	File ..\Binary\release\m2online.exe
@@ -238,7 +244,11 @@ Function vcredist2010installer
 	
 	vcredist_silent_install:
 		DetailPrint "Installing Microsoft Visual C++ 2010 Redistributable..."
-		ExecWait '"${MOD_DIR}\vcredist_x86.exe" /q' $0
+		${If} ${RunningX64}
+			ExecWait '"${MOD_DIR}\vcredist_x64.exe" /q' $0
+		${Else}
+			ExecWait '"${MOD_DIR}\vcredist_x86.exe" /q' $0
+		${EndIf}
 		
 		ReadRegStr $0 HKLM "SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\{F0C3E5D1-1ADE-321E-8167-68EF0DE699A5}" "DisplayName"
 		StrCmp $0 "Microsoft Visual C++ 2010  x86 Redistributable - 10.0.40219" vcredist_success vcredist_not_present
@@ -248,15 +258,27 @@ Function vcredist2010installer
 			IfSilent vcredist_done vcredist_messagebox
 			
       vcredist_messagebox:
-        MessageBox MB_OK "Failed to install Microsoft Visual C++ 2010 Redistributable (${MOD_DIR}\vcredist_x86.exe). Please ensure your system meets the minimum requirements before running the installer again."
+      	${If} ${RunningX64}
+			MessageBox MB_OK "Failed to install Microsoft Visual C++ 2010 Redistributable (${MOD_DIR}\vcredist_x64.exe). Please ensure your system meets the minimum requirements before running the installer again."
+		${Else}
+			MessageBox MB_OK "Failed to install Microsoft Visual C++ 2010 Redistributable (${MOD_DIR}\vcredist_x86.exe). Please ensure your system meets the minimum requirements before running the installer again."
+		${EndIf}
         Goto vcredist_done
 		
     vcredist_success:
-      Delete "${MOD_DIR}\vcredist_x86.exe"
-      DetailPrint "Microsoft Visual C++ 2010 Redistributable was successfully installed"
+    	${If} ${RunningX64}
+			Delete "${MOD_DIR}\vcredist_x64.exe"
+		${Else}
+			Delete "${MOD_DIR}\vcredist_x86.exe"
+		${EndIf}
+      	DetailPrint "Microsoft Visual C++ 2010 Redistributable was successfully installed"
 	  
 	vcredist_done:
-		Delete "${MOD_DIR}\vcredist_x86.exe" 
+		${If} ${RunningX64}
+			Delete "${MOD_DIR}\vcredist_x64.exe"
+		${Else}
+			Delete "${MOD_DIR}\vcredist_x86.exe"
+		${EndIf}
 
 FunctionEnd
 
