@@ -236,7 +236,7 @@ void CLocalPlayer::SendOnFootSync( void )
 		return;
 
 	// Construct a new bitstream
-	RakNet::BitStream pBitStream;
+	RakNet::BitStream bitStream;
 
 	// Construct a new foot sync data structure
 	OnFootSync onFootSync;
@@ -280,17 +280,17 @@ void CLocalPlayer::SendOnFootSync( void )
 	// Write the handModel
 	onFootSync.m_iHandModel = CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetHandModelHand();
 
-	// Write the animStyle name
-	onFootSync.m_styleName = CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetAnimStyleName().Get();
-
-	// Write the animStyle directory
-	onFootSync.m_styleDirectory = CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetAnimStyleDirectory().Get();
-
 	// Write the sync structure into the bitstream
-	pBitStream.Write( (char *)&onFootSync, sizeof(OnFootSync) );
+	bitStream.Write( (char *)&onFootSync, sizeof(OnFootSync) );
+
+	const RakNet::RakString strAnimStyleName(CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetAnimStyleName().Get());
+	bitStream.Write(strAnimStyleName);
+
+	const RakNet::RakString strAnimStyleDirectory(CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetAnimStyleDirectory().Get());
+	bitStream.Write(strAnimStyleDirectory);
 
 	// Send the bitstream to the server
-	CCore::Instance()->GetNetworkModule()->Call(RPC_PLAYER_SYNC, &pBitStream, IMMEDIATE_PRIORITY, UNRELIABLE_SEQUENCED, true);
+	CCore::Instance()->GetNetworkModule()->Call(RPC_PLAYER_SYNC, &bitStream, IMMEDIATE_PRIORITY, UNRELIABLE_SEQUENCED, true);
 }
 
 void CLocalPlayer::SendInVehicleSync( void )

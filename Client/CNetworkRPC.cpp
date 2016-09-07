@@ -221,26 +221,31 @@ void PlayerSync( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 	OnFootSync onFootSync;
 	pBitStream->Read( (char *)&onFootSync, sizeof(OnFootSync) );
 
+	RakNet::RakString strAnimStyleName;
+	pBitStream->Read(strAnimStyleName);
+
+	RakNet::RakString strAnimStyleDirectory;
+	pBitStream->Read(strAnimStyleDirectory);
+
+	CPlayerManager *pPlayerManager = CCore::Instance()->GetPlayerManager();
+
 	// Get a pointer to the player
-	CRemotePlayer * pRemotePlayer = CCore::Instance()->GetPlayerManager()->Get(playerId);
+	CRemotePlayer * pRemotePlayer = pPlayerManager->Get(playerId);
+	if(!pRemotePlayer)
+		return;
 
-	// Is the player pointer valid?
-	if( pRemotePlayer )
-	{
-		// Set the player ping
-		pRemotePlayer->SetPing( usPing );
+	pRemotePlayer->SetPing( usPing );
 
-		// Is the localplayer spawned?
-		if (CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->IsSpawned())
-		{
-			// Fail safe
-			if (playerId == CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetId())
-				return;
+	if (!pPlayerManager->GetLocalPlayer()->IsSpawned())
+		return;
 
-			// Deserialse the player with the bitstream
-			pRemotePlayer->StoreOnFootSync( &onFootSync );
-		}
-	}
+	if (playerId == pPlayerManager->GetLocalPlayer()->GetId())
+		return;
+
+	if (pRemotePlayer->GetAnimStyleName() != strAnimStyleName || pRemotePlayer->GetAnimStyleDirectory() != strAnimStyleDirectory)
+		pRemotePlayer->SetAnimStyle(strAnimStyleDirectory, strAnimStyleName);
+
+	pRemotePlayer->StoreOnFootSync( &onFootSync );
 }
 
 void PlayerDeath( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )

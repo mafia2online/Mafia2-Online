@@ -220,12 +220,20 @@ void PlayerSync( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 	OnFootSync onFootSync;
 	pBitStream->Read( (char *)&onFootSync, sizeof(OnFootSync) );
 
+	RakNet::RakString strAnimStyleName;
+	pBitStream->Read(strAnimStyleName);
+
+	RakNet::RakString strAnimStyleDirectory;
+	pBitStream->Read(strAnimStyleDirectory);
+
 	// Get a pointer to the player
 	CNetworkPlayer * pNetworkPlayer = CCore::Instance()->GetPlayerManager()->Get( playerId );
 
 	// Is the player pointer valid?
 	if( pNetworkPlayer )
-	{	
+	{
+		pNetworkPlayer->SetAnimStyle(strAnimStyleDirectory, strAnimStyleName);
+
 		// Store the sync data
 		pNetworkPlayer->StoreOnFootSync( &onFootSync );
 	}
