@@ -496,8 +496,13 @@ void CServerBrowser::StartConnection ( void )
 
 void CServerBrowser::ProcessConnection( void )
 {
+	CNetworkModule *pNetworkModule = CCore::Instance()->GetNetworkModule();
+	if (pNetworkModule->GetNetworkState() == NETSTATE_CONNECTING) {
+		return;
+	}
+
 	// Attempt to connect to the server
-	eNetworkResponse response = CCore::Instance()->GetNetworkModule()->Connect(m_strServerIP, m_iServerPort, m_strServerPassword);
+	eNetworkResponse response = pNetworkModule->Connect(m_strServerIP, m_iServerPort, m_strServerPassword);
 
 	// Get the response string
 	String strMessage( "An unknown error occurred." );
@@ -843,17 +848,19 @@ void CServerBrowser::ProcessNetworkPacket( DefaultMessageIDTypes packet )
 
 void CServerBrowser::SetDisconnectReason( bool bDisconnect, const char * szReason, ... )
 {
+	CCore *pCore = CCore::Instance();
+
 	// Delete all the clientscript gui elements
-	CCore::Instance()->GetGUI()->DeleteAllClientScriptGUI();
+	pCore->GetGUI()->DeleteAllClientScriptGUI();
 
 	// Should we disconnect from the network?
 	if( bDisconnect )
 	{
 		// Stop multiplayer
-		CCore::Instance()->StopMultiplayer();
+		pCore->StopMultiplayer();
 
 		// Start multiplayer
-		CCore::Instance()->StartMultiplayer();
+		pCore->StartMultiplayer();
 	}
 
 	// Get the arguments
@@ -874,7 +881,7 @@ void CServerBrowser::SetDisconnectReason( bool bDisconnect, const char * szReaso
 
 	// Disconnect from the network
 	if( bDisconnect )
-		CCore::Instance()->GetNetworkModule()->Disconnect(false);
+		pCore->GetNetworkModule()->Disconnect();
 }
 
 void CServerBrowser::SetMessageBox ( const char * szTitle, const char * szCaption )
