@@ -102,6 +102,10 @@ enum eNetworkState
 {
 	NETSTATE_NONE = 0,
 	NETSTATE_TIMEOUT,
+
+	/** Network state set when network client has postponed disconnecting operation */
+	NETSTATE_DISCONNECTING,
+
 	NETSTATE_DISCONNECTED,
 	NETSTATE_CONNECTING,
 	NETSTATE_CONNECTED

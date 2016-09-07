@@ -39,6 +39,11 @@ private:
 	unsigned short							m_usPort;
 	String									m_strPass;
 
+	/** Should we restart network (raknet etc) after disconnecting? */
+	bool									m_bRestartAfterDisconnect;
+
+	void									DoDisconnect					( bool bRestart = true );
+
 	void									UpdateNetwork					( void );
 	void									ConnectionAccepted				( RakNet::Packet * pPacket );
 

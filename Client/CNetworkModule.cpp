@@ -35,6 +35,15 @@
 RakNet::RPC4			* CNetworkModule::m_pRPC = NULL;
 
 CNetworkModule::CNetworkModule( void )
+	: m_pRakPeer(NULL)
+	, m_eNetworkState(NETSTATE_NONE)
+	, m_uiLastConnectionTry((unsigned int)SharedUtility::GetTime ())
+
+	, m_strIp("127.0.0.1")
+	, m_usPort(DEFAULT_PORT)
+	, m_strPass()
+
+	, m_bRestartAfterDisconnect(false)
 {
 	// Get the RakPeerInterface instance
 	m_pRakPeer = RakNet::RakPeerInterface::GetInstance();
@@ -50,12 +59,6 @@ CNetworkModule::CNetworkModule( void )
 
 	// Register the scripting RPC's
 	CScriptingRPC::Register( m_pRPC );
-
-	// Set the network state
-	SetNetworkState( NETSTATE_NONE );
-
-	// Reset the last connection try
-	m_uiLastConnectionTry = (unsigned int)SharedUtility::GetTime ();
 }
 
 CNetworkModule::~CNetworkModule( void )
@@ -64,7 +67,7 @@ CNetworkModule::~CNetworkModule( void )
 	if( IsConnected() )
 	{
 		// Disconnect from the network
-		Disconnect();
+		DoDisconnect(false);
 	}
 
 	// Unregister the network RPC's
@@ -101,10 +104,10 @@ void CNetworkModule::Shutdown( void )
 eNetworkResponse CNetworkModule::Connect( String strHost, unsigned short usPort, String strPass )
 {
 	// Are we already connected?
-	if( IsConnected() )
+	if ( IsConnected() )
 	{
-		// Disconnect
-		Disconnect();
+		// Forcefully disconnect.
+		DoDisconnect();
 	}
 
 	// Store the connection info
@@ -113,59 +116,35 @@ eNetworkResponse CNetworkModule::Connect( String strHost, unsigned short usPort,
 	// Attempt to connect
 	int iConnectionResult = m_pRakPeer->Connect( strHost.Get(), usPort, strPass.Get(), strPass.GetLength() );
 
-	// Set the network state
-	SetNetworkState( NETSTATE_CONNECTING );
-
-	// Did we fail to connect?
-	if (iConnectionResult != RakNet::INVALID_PARAMETER )
+	if (iConnectionResult == RakNet::CONNECTION_ATTEMPT_STARTED )
 	{
-		// Set the network state
+		SetNetworkState( NETSTATE_CONNECTING );
+	}
+	else
+	{
 		SetNetworkState( NETSTATE_NONE );
-
-		// Set the last connection try
 		m_uiLastConnectionTry = (unsigned int)SharedUtility::GetTime();
 	}
 
 	return (eNetworkResponse)iConnectionResult;
 }
 
+/**
+ * Schedule disconnect to be done after all packets are received.
+ *
+ * Due to the crash problem caused by calling Disconnect when packets are processed (RPC)
+ * we need to do "deferred" disconnect as shutting down RakPeer during the packets processing
+ * result in double-packet data removal (one in the RPC handler via RakPeer shutdown
+ * and one after RPC plugin stops processing the packet).
+ *
+ * @param bRestart Restart RakNet after doing disconnect? (So we can connect later again?)
+ */
 void CNetworkModule::Disconnect( bool bRestart )
 {
-	// Are we not connected?
-	if( !IsConnected() )
-		return;
+	assert(IsConnected());
 
-	// Delete all the clientscript gui elements
-	CCore::Instance()->GetGUI()->DeleteAllClientScriptGUI();
-
-	// Close the connection
-	m_pRakPeer->CloseConnection( RakNet::UNASSIGNED_SYSTEM_ADDRESS, true );
-
-	// Set the network state
-	SetNetworkState( NETSTATE_DISCONNECTED );
-
-	// Shutdown raknet
-	Shutdown();
-
-	// Should we restart raknet?
-	if( bRestart )
-	{
-		// Start up raknet again
-		Startup();
-
-		// Reset default server info
-		CCore::Instance()->SetServerName( "M2Online Server" );
-		CCore::Instance()->SetServerMaxPlayers( 0 );
-
-		// Clear the chat
-		CCore::Instance()->GetChat()->Clear ();
-		CCore::Instance()->GetChat()->ClearHistory ();
-		CCore::Instance()->GetChat()->ClearSelectText();
-		CCore::Instance()->GetChat()->ClearInputText();	
-
-		// Reset player model
-		//pCore->GetPlayerManager()->GetLocalPlayer()->SetModel ( 10 );
-	}
+	m_bRestartAfterDisconnect = bRestart;
+	SetNetworkState (NETSTATE_DISCONNECTING);
 }
 
 void CNetworkModule::Pulse( void )
@@ -202,13 +181,44 @@ void CNetworkModule::Call( const char * szIdentifier, RakNet::BitStream * pBitSt
 	m_pRPC->Call( szIdentifier, pBitStream, priority, reliability, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, bBroadCast );
 }
 
+void CNetworkModule::DoDisconnect( bool bRestart )
+{
+	// Delete all the clientscript gui elements
+	CCore::Instance()->GetGUI()->DeleteAllClientScriptGUI();
+
+	// Close the connection
+	m_pRakPeer->CloseConnection( RakNet::UNASSIGNED_SYSTEM_ADDRESS, true );
+
+	// Set the network state
+	SetNetworkState( NETSTATE_DISCONNECTED );
+
+	// Shutdown raknet
+	Shutdown();
+
+	if( bRestart )
+	{
+		// Start up raknet again
+		Startup();
+
+		// Reset default server info
+		CCore::Instance()->SetServerName( "M2Online Server" );
+		CCore::Instance()->SetServerMaxPlayers( 0 );
+
+		// Clear the chat
+		CCore::Instance()->GetChat()->Clear ();
+		CCore::Instance()->GetChat()->ClearHistory ();
+		CCore::Instance()->GetChat()->ClearSelectText();
+		CCore::Instance()->GetChat()->ClearInputText();	
+
+		// Reset player model
+		//pCore->GetPlayerManager()->GetLocalPlayer()->SetModel ( 10 );
+	}
+}
+
 void CNetworkModule::UpdateNetwork( void )
 {
 	// Create a packet
 	RakNet::Packet * pPacket = NULL;
-
-	//
-	bool bDisconnect = false;
 
 	// Process RakNet
 	while( pPacket = m_pRakPeer->Receive() )
@@ -252,16 +262,11 @@ void CNetworkModule::UpdateNetwork( void )
 
 		// Deallocate the memory used by the packet
 		m_pRakPeer->DeallocatePacket( pPacket );
+	}
 
-		// Should we disconnect?
-		if ( bDisconnect )
-		{
-			// Restart raknet
-			Disconnect ();
-
-			//
-			bDisconnect = false;
-		}
+	if (m_eNetworkState == NETSTATE_DISCONNECTING)
+	{
+		DoDisconnect(m_bRestartAfterDisconnect);
 	}
 }
 
