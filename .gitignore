@@ -16,3 +16,4 @@ Binary/[Rr]elease
 *.opendb
 *.sdf
 *.vcxproj.user
+*.VC.db
