@@ -1132,8 +1132,8 @@ void CNetworkPlayer::DetachBlip ( void )
 void CNetworkPlayer::SetAnimStyle(const char *directory, const char *style)
 {
 	// Is the instance valid ?
-	if (m_pPlayerPed && IsSpawned()){
-		
+	if (m_pPlayerPed && IsSpawned())
+	{
 		// Set the anim style
 		m_pPlayerPed->SetAnimStyle(directory, style);
 
@@ -1146,8 +1146,8 @@ void CNetworkPlayer::SetAnimStyle(const char *directory, const char *style)
 void CNetworkPlayer::SetHandModel(int iHand, int iModel)
 {
 	// Is the instance valid?
-	if (m_pPlayerPed && IsSpawned()){
-		
+	if (m_pPlayerPed && IsSpawned())
+	{
 		// Set the hand model
 		m_pPlayerPed->ModelToHand(iHand, iModel);
 
