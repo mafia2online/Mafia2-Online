@@ -50,8 +50,11 @@
 
 // Network
 #define		NETWORK_TIMEOUT			3000
-#define		NETWORK_VERSION			0x1B1
+#define		NETWORK_VERSION			0x1B2
 #define		NETWORK_TICKRATE		100
+
+/** The default server listen port */
+const unsigned DEFAULT_PORT			= 27015;
 
 // Macros
 #define		ARRAY_LENGTH(array)			(sizeof(array) / sizeof(array[0]))

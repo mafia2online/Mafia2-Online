@@ -58,7 +58,7 @@ bool CServerBrowser::Event_QuickConnectSubmitClick ( CGUIElement_Impl * pElement
 
 		// If an invalid port is set, use the default?
 		if ( m_iServerPort == 0 )
-			m_iServerPort = 27015;
+			m_iServerPort = DEFAULT_PORT;
 
 		// Start the connection
 		StartConnection ();
@@ -308,7 +308,7 @@ void CServerBrowser::SetupUI( float fX, float fY, float fWidth, float fHeight )
 	m_pQuickConnectAddress->SetClickHandler ( GUI_CALLBACK ( &CServerBrowser::Event_QuickConnectInputFocus, this ) );
 
 	// Create the quick connect port input
-	m_pQuickConnectPort = m_pGUI->CreateEdit ( (bRestoreInformation ? String ( "%d", CVAR_GET_INTEGER ( "last-server-port" ) ) : "27015"), m_pQuickConnectWindow );
+	m_pQuickConnectPort = m_pGUI->CreateEdit ( String ( "%d", bRestoreInformation ? CVAR_GET_INTEGER ( "last-server-port" ) : DEFAULT_PORT ), m_pQuickConnectWindow );
 	m_pQuickConnectPort->SetSize ( Vector2( 55, 24 ) );
 	m_pQuickConnectPort->SetPosition ( Vector2 ( 183, 50 ) );
 	m_pQuickConnectPort->SetClickHandler ( GUI_CALLBACK ( &CServerBrowser::Event_QuickConnectInputFocus, this ) );

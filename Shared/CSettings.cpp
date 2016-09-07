@@ -73,9 +73,9 @@ void CSettings::LoadDefaults( void )
 	DEFAULT( "radio-volume", 100 );
 #else
 	// Default server settings
-	DEFAULT( "hostname", "Default "MOD_NAME" "MOD_VERS_STR" Server" );
+	DEFAULT( "hostname", "Default " MOD_NAME " " MOD_VERS_STR " Server" );
 	DEFAULT( "serverip", "" );
-	DEFAULT( "port", 27015 );
+	DEFAULT( "port", DEFAULT_PORT );
 	DEFAULT( "maxplayers", MAX_PLAYERS );
 	DEFAULT( "weburl", "www.mafia2-online.com" );
 	DEFAULT( "password", "" );
