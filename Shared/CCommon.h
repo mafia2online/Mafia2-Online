@@ -88,7 +88,15 @@ static void	OutputDebugLog ( char * szText )
 
 // Entitys
 typedef unsigned int EntityId;
-#define	INVALID_ENTITY_ID				(MAX_PLAYERS + 1)
+
+/**
+ * The invalid entity id.
+ *
+ * The maximum value of unsigned int seems to be reasonable as our limits are much smaller
+ * and definitely we will not have any entity type which can be spawned in that amount.
+ */
+const unsigned INVALID_ENTITY_ID		= 0xFFFFFFFF;
+
 #define	ENTITY_ID_CONSOLE				INVALID_ENTITY_ID
 
 typedef EntityId ElementId;
