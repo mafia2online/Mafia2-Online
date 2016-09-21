@@ -30,8 +30,6 @@ private:
 	IDirectInputDevice8A *		m_pDevice;
 	eDIDeviceType				m_DeviceType;
 
-	bool						m_bGameDevice;
-
 public:
 
 	CDirectInputDevice8Proxy(IDirectInputDevice8A * pDevice, eDIDeviceType DeviceType);

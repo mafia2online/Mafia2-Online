@@ -16,29 +16,10 @@
 #include "CDirectInput8Hook.h"
 #include "CDirectInputDevice8Proxy.h"
 
-extern	bool			bInputHookCreated;
-
-bool					bMouseHookCreated = false;
-
 CDirectInputDevice8Proxy::CDirectInputDevice8Proxy(IDirectInputDevice8 * pDevice, eDIDeviceType DeviceType)
+	: m_pDevice(pDevice)
+	, m_DeviceType(DeviceType)
 {
-	// Initialize our device member variable
-	m_pDevice = pDevice;
-
-	// Set the device type
-	m_DeviceType = DeviceType;
-
-	// Mark as the game device
-	m_bGameDevice = true;
-
-	// Mark as not game device if this is the gui mouse device
-	if( !bMouseHookCreated )
-	{
-		m_bGameDevice = false;
-	}
-
-	// Mark as input hook created
-	bMouseHookCreated = true;
 }
 
 HRESULT STDMETHODCALLTYPE CDirectInputDevice8Proxy::QueryInterface(REFIID riid, LPVOID * ppvObj)
@@ -93,28 +74,26 @@ HRESULT STDMETHODCALLTYPE CDirectInputDevice8Proxy::Unacquire()
 
 HRESULT STDMETHODCALLTYPE CDirectInputDevice8Proxy::GetDeviceState(DWORD p0, LPVOID p1)
 {
-	// Is this device from our gui?
-	if( !m_bGameDevice )
-		return m_pDevice->GetDeviceState( p0, p1 );
-
 	CCore *pCore = CCore::Instance();
 
-	// Get the game load state
 	bool bGameLoaded = pCore->IsGameLoaded();
 
-	// Is the game loaded?
 	if( bGameLoaded )
 	{
-		// Is the cursor or chat input visible?
 		if ( pCore->GetGUI()->IsCursorVisible() || pCore->GetChat()->IsInputVisible() )
 		{
-			// Is this the keyboard, mouse or joystick input?
-			if ( m_DeviceType == DIDEVICE_TYPE_MOUSE || m_DeviceType == DIDEVICE_TYPE_KEYBOARD || m_DeviceType == DIDEVICE_TYPE_JOYSTICK )
+			if ( m_DeviceType == DIDEVICE_TYPE_MOUSE )
+			{
+				pCore->GetGUI()->ProcessMouse(m_pDevice);
+				return D3D_OK;
+			}
+
+
+			if ( m_DeviceType == DIDEVICE_TYPE_KEYBOARD || m_DeviceType == DIDEVICE_TYPE_JOYSTICK )
 				return D3D_OK;
 		}
 	}
 
-	// Get the real device state
 	HRESULT hResult = m_pDevice->GetDeviceState( p0, p1 );
 
 	// Get the key buffer
