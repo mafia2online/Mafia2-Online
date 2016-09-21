@@ -55,8 +55,6 @@ LRESULT APIENTRY CWindowSubclass::WndProc_Hook( HWND hWnd, UINT uMsg, WPARAM wPa
 	{
 		pCore->GetGame()->SetFocus( true );
 
-		ShowCursor( true );
-
 		if( pCore->GetClientScriptingManager() )
 		{
 			CSquirrelArguments args;
@@ -65,13 +63,12 @@ LRESULT APIENTRY CWindowSubclass::WndProc_Hook( HWND hWnd, UINT uMsg, WPARAM wPa
 		}
 
 		pCore->GetAudioManager()->UnmuteAll();
-		return true;
 	}
 	else if( !bFocus && pCore->GetGame()->Focused() )
 	{
 		pCore->GetGame()->SetFocus( false );
 
-		ShowCursor( false );
+		ReleaseCapture();
 
 		if( pCore->GetClientScriptingManager() )
 		{
@@ -81,28 +78,24 @@ LRESULT APIENTRY CWindowSubclass::WndProc_Hook( HWND hWnd, UINT uMsg, WPARAM wPa
 		}
 
 		pCore->GetAudioManager()->MuteAll();
-		return true;
 	}
 
-	if( bFocus )
+	if( bFocus && pCore->IsGameLoaded() )
 	{
-		if( pCore->IsGameLoaded() )
+		pCore->GetGUI()->ProcessInput( uMsg, wParam, lParam );
+
+		if( (pCore->GetNetworkModule() && pCore->GetNetworkModule()->IsConnected()) && !pCore->GetChat()->IsInputVisible() && !pCore->GetGUI()->GetCEGUI()->IsInputEnabled() )
 		{
-			pCore->GetGUI()->ProcessInput( uMsg, wParam, lParam );
-
-			if( pCore->GetNetworkModule()->IsConnected() && !pCore->GetChat()->IsInputVisible() && !pCore->GetGUI()->GetCEGUI()->IsInputEnabled() )
+			if( uMsg == WM_KEYDOWN && (DWORD)wParam == VK_ESCAPE )
 			{
-				if( uMsg == WM_KEYDOWN && (DWORD)wParam == VK_ESCAPE )
-				{
-					pCore->GetGUI()->GetMainMenu()->SetVisible( !pCore->GetGUI()->GetMainMenu()->IsVisible() );
-					return true;
-				}
-
-				if( CLocalPlayer::Instance()->ProcessControls( uMsg, wParam ) )
-					return true;
-
-				pCore->GetKeyBinds()->ProcessInput( uMsg, wParam, lParam );
+				pCore->GetGUI()->GetMainMenu()->SetVisible( !pCore->GetGUI()->GetMainMenu()->IsVisible() );
+				return true;
 			}
+
+			if( CLocalPlayer::Instance()->ProcessControls( uMsg, wParam ) )
+				return true;
+
+			pCore->GetKeyBinds()->ProcessInput( uMsg, wParam, lParam );
 		}
 	}
 	return CallWindowProc( m_wWndProc, hWnd, uMsg, wParam, lParam );
