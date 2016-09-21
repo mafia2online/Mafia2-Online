@@ -103,6 +103,55 @@ CNetworkVehicle			* pTestVehicle = nullptr;
 CM2Ped					* pPlayerPed = nullptr;
 
 CCore::CCore( void )
+	: m_bInitialised(false)
+	, m_bGameLoaded(false)
+	, m_uiBaseAddress(0)
+	, m_bMultiplayerStarted(false)
+	, m_bCaptureScreenshot(false)
+	, m_bRenderNetworkStats(false)
+	, m_bConnectionProblem(false)
+
+	, m_pGame(nullptr)
+	, m_pNetworkModule(nullptr)
+	, m_pGraphics(nullptr)
+	, m_pChat(nullptr)
+	, m_pPlayerManager(nullptr)
+	, m_pFPSCounter(nullptr)
+	, m_pBlipManager(nullptr)
+	, m_pVehicleManager(nullptr)
+	, m_pPedManager(nullptr)
+	, m_pGUI(nullptr)
+	, m_pKeyBinds(nullptr)
+	, m_pStreamer(nullptr)
+	, m_pModelManager(nullptr)
+	, m_pNameTag(nullptr)
+	, m_pAudioManager(nullptr)
+	, m_p3DTextLabelManager(nullptr)
+	, m_pScreenshotManager(nullptr)
+	, m_pClientScriptingManager(nullptr)
+	, m_pTimerManager(nullptr)
+	, m_pFileTransferManager(nullptr)
+
+	, m_pEngine(nullptr)
+	, m_pCamera(nullptr)
+	, m_pHud(nullptr)
+
+	, m_pUpdater(nullptr)
+
+	, m_gameHwnd(0)
+
+	, m_strNick()
+	, m_strHost()
+	, m_ulPort(0)
+	, m_strPass()
+
+	, m_strServerName()
+	, m_uServerMaxPlayers(0)
+	, m_bGlobalSpeedLimited(false)
+	, m_bSummer(true)
+
+	, m_strGameDirectory()
+	, m_strModDirectory()
 {
 	// Set the game directory to current exe path.
 	String gameDirectory(SharedUtility::GetExePath());
@@ -115,40 +164,6 @@ CCore::CCore( void )
 	// Set the mod directory to the directory where DLL is placed.
 	SetModDirectory( SharedUtility::GetAppPath() );
 
-	m_bInitialised = false;
-	m_bCaptureScreenshot = false;
-	m_bRenderNetworkStats = false;
-	m_bConnectionProblem = false;
-
-	SetGameLoaded( false );
-	SetMultiplayerStarted( false );
-
-	SetServerName( "M2-Online Server" );
-	SetServerMaxPlayers( 0 );
-	SetGlobalSpeedLimited ( false );
-	SetSummer ( true );
-
-	m_pNetworkModule = nullptr;
-	m_pPlayerManager = nullptr;
-	m_pCamera = nullptr;
-	m_pHud = nullptr;
-	m_pClientScriptingManager = nullptr;
-	m_pFPSCounter = nullptr;
-	m_pTimerManager = nullptr;
-	m_pFileTransferManager = nullptr;
-	m_pBlipManager = nullptr;
-	m_pVehicleManager = nullptr;
-	m_pPedManager = nullptr;
-	m_pGame = nullptr;
-	m_pGUI = nullptr;
-	m_pKeyBinds = nullptr;
-	m_pStreamer = nullptr;
-	m_pModelManager = nullptr;
-	m_pUpdater = nullptr;
-	m_pNameTag = nullptr;
-	m_pAudioManager = nullptr;
-	m_p3DTextLabelManager = nullptr;
-	m_pScreenshotManager = nullptr;
 }
 
 CCore::~CCore( void )

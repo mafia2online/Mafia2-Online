@@ -74,12 +74,18 @@ private:
 	CAudioManager					* m_pAudioManager;
 	C3DTextLabelManager				* m_p3DTextLabelManager;
 	CScreenShot						* m_pScreenshotManager;
+	CClientScriptingManager			* m_pClientScriptingManager;
+	CTimerManager					* m_pTimerManager;
+	CFileTransferManager			* m_pFileTransferManager;
 
-	HWND							m_gameHwnd;
 
 	M2Game							* m_pEngine;
 	CM2Camera						* m_pCamera;
 	CM2Hud							* m_pHud;
+
+	CUpdater						* m_pUpdater;
+
+	HWND							m_gameHwnd;
 
 	String							m_strNick;
 	String							m_strHost;
@@ -87,18 +93,13 @@ private:
 	String							m_strPass;
 
 	String							m_strServerName;
-	int								m_iServerMaxPlayers;
+	unsigned						m_uServerMaxPlayers;
 	bool							m_bGlobalSpeedLimited;
 	bool							m_bSummer;
 
 	String							m_strGameDirectory;
 	String							m_strModDirectory;
 
-	CClientScriptingManager			* m_pClientScriptingManager;
-	CTimerManager					* m_pTimerManager;
-	CFileTransferManager			* m_pFileTransferManager;
-
-	CUpdater						* m_pUpdater;
 
 public:
 
@@ -174,8 +175,8 @@ public:
 	void							SetServerName				( String strServerName ) { m_strServerName = strServerName; }
 	String							GetServerName				( void ) { return m_strServerName; }
 
-	void							SetServerMaxPlayers			( int iMaxPlayers ) { m_iServerMaxPlayers = iMaxPlayers; }
-	int								GetServerMaxPlayers			( void ) { return m_iServerMaxPlayers; }
+	void							SetServerMaxPlayers			( unsigned iMaxPlayers ) { m_uServerMaxPlayers = iMaxPlayers; }
+	unsigned						GetServerMaxPlayers			( void ) { return m_uServerMaxPlayers; }
 
 	void							SetGlobalSpeedLimited		( bool bLimited ) { m_bGlobalSpeedLimited = bLimited; }
 	bool							IsGlobalSpeedLimited		( void ) { return m_bGlobalSpeedLimited; }
