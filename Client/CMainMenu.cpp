@@ -92,7 +92,7 @@ CMainMenu::CMainMenu( CGUI_Impl * pGUI )
 
 	// Load all background images
 	LoadBackgroundImages ( fX, fY );
-	
+
 	// Get the item render position
 	float renderX = (fX - 40.0f);
 
@@ -129,10 +129,10 @@ CMainMenu::~CMainMenu( void )
 	SAFE_DELETE( m_pLogo );
 
 	// Loop over each item
-	for( std::list< CGUIStaticImage_Impl* >::iterator iter = m_items.begin(); iter != m_items.end(); iter++ )
+	while ( m_items.size() > 0 )
 	{
 		// Get a pointer to the current item
-		CGUIStaticImage_Impl * pItem = *iter;
+		CGUIStaticImage_Impl * pItem = m_items.front();
 
 		// Remove the current item from the list
 		m_items.remove( pItem );
@@ -469,7 +469,7 @@ void CMainMenu::OnScreenSizeChange ( float fX, float fY )
 	m_pConnect->SetPosition ( Vector2 ( renderX - 90, 61.5f ) );			renderX -= 130;
 	m_pDisconnect->SetPosition ( Vector2 ( renderX - 125, 61.5f ) );		renderX -= 165;
 	m_pQuickConnect->SetPosition ( Vector2 ( renderX - 26, 61.5f ) );
-	
+
 	// Adjust the server browser UI
 	CCore::Instance()->GetGUI()->GetServerBrowser()->OnScreenSizeChange(fX, fY);
 }

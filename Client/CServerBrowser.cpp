@@ -122,16 +122,58 @@ void CServerBrowser::ServerPasswordHandler ( String strPassword, void * pUserDat
 }
 
 CServerBrowser::CServerBrowser( CGUI_Impl * pGUI )
-{
-	// Store the gui pointer
-	m_pGUI = pGUI;
+	: m_pGUI(pGUI)
+	, m_pMasterList(nullptr)
+	, m_pServerQuery(nullptr)
 
-	// Reset
-	m_ulLastRefreshTime = 0;
-	m_strServerPassword.clear ();
-	m_iTotalServers = 0;
-	m_iTotalPlayers = 0;
-	m_iAvailableSlots = 0;
+	, m_ulLastRefreshTime(0)
+
+	, m_pWindow(nullptr)
+	, m_pTabs(nullptr)
+	, m_pTab()
+	, m_pServerGridList()
+	, m_pPlayersGridList(nullptr)
+	, m_pPlayers(nullptr)
+	, m_pPlayersTab(nullptr)
+	, m_pRulesTab(nullptr)
+	, m_pRefresh(nullptr)
+	, m_pConnect(nullptr)
+	, m_pFavourite(nullptr)
+	, m_pLockedImage(nullptr)
+	, m_pStatusLabel(nullptr)
+
+	, m_iTotalServers(0)
+	, m_iTotalPlayers(0)
+	, m_iAvailableSlots(0)
+
+	, m_pQuickConnectWindow(nullptr)
+	, m_pQuickConnectLabel(nullptr)
+	, m_pQuickConnectAddress(nullptr)
+	, m_pQuickConnectPort(nullptr)
+	, m_pQuickConnectPassword(nullptr)
+	, m_pQuickConnectSubmit(nullptr)
+	, m_pQuickConnectCancel(nullptr)
+
+	, m_pServerList()
+
+	, m_connectionState(CONNECTION_STATE_NONE)
+	, m_strServerIP()
+	, m_iServerPort(0)
+	, m_strServerPassword()
+	, m_ulFailedTime(0)
+	, m_iSelectedServer()
+
+	, m_pMessageBox(nullptr)
+
+	, m_pServerPassword(nullptr)
+	, m_pSelectedServer(nullptr)
+{
+	for (size_t i = 0; i < MAX_SERVER_LISTS; ++i) {
+		m_pTab[i] = nullptr;
+		m_pServerGridList[i] = nullptr;
+		m_pServerList[i] = nullptr;
+		m_iSelectedServer[i] = 0;
+	}
 
 	// Create the masterlist instance
 	m_pMasterList = new CMasterList( Event_MasterListQueryHandler );
@@ -142,9 +184,6 @@ CServerBrowser::CServerBrowser( CGUI_Impl * pGUI )
 	// Create the server password instance
 	m_pServerPassword = new CServerPassword ( pGUI );
 	m_pServerPassword->SetSubmitHandler ( ServerPasswordHandler, this );
-
-	// Reset the connection state
-	SetConnectionState( CONNECTION_STATE_NONE );
 }
 
 CServerBrowser::~CServerBrowser( void )
@@ -153,8 +192,6 @@ CServerBrowser::~CServerBrowser( void )
 	SAFE_DELETE( m_pStatusLabel );
 	SAFE_DELETE( m_pMessageBox );
 	SAFE_DELETE( m_pLockedImage );
-	SAFE_DELETE( m_pStatus );
-	SAFE_DELETE( m_pPlayers );
 	SAFE_DELETE( m_pFavourite );
 	SAFE_DELETE( m_pConnect );
 	SAFE_DELETE( m_pRefresh );
@@ -172,7 +209,7 @@ CServerBrowser::~CServerBrowser( void )
 
 	// Delete the server password instance
 	SAFE_DELETE ( m_pServerPassword );
-	
+
 	// Delete the server query instance
 	SAFE_DELETE ( m_pServerQuery );
 
@@ -364,6 +401,8 @@ void CServerBrowser::CreateTab( ServerBrowserType type, const char * szName, flo
 
 void CServerBrowser::DeleteTab( ServerBrowserType type )
 {
+	assert(type < MAX_SERVER_LISTS);
+
 	// Delete the server list instance
 	SAFE_DELETE( m_pServerList[ type ] );
 
@@ -481,7 +520,7 @@ void CServerBrowser::StartConnection ( void )
 	}
 	else
 	{
-		//If multiplayer not started, we execute 
+		//If multiplayer not started, we execute
 		if (!CCore::Instance()->IsMultiplayerStarted()) {
 			CCore::Instance()->StartMultiplayer();
 		}
@@ -842,7 +881,7 @@ void CServerBrowser::ProcessNetworkPacket( DefaultMessageIDTypes packet )
 	// We disconnect
 	CServerBrowser::SetDisconnectReason(true, strMessage);
 
-	// We show back the main menu 
+	// We show back the main menu
 	CCore::Instance()->GetGUI()->GetMainMenu()->SetVisible(true);
 }
 
@@ -891,7 +930,7 @@ void CServerBrowser::SetMessageBox ( const char * szTitle, const char * szCaptio
 
 	// Set the message box caption
 	m_pMessageBox->SetCaption ( szCaption );
-	
+
 	// Show the message box
 	m_pMessageBox->SetVisible ( true );
 	m_pMessageBox->GetWindow()->BringToFront ();

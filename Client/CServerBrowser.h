@@ -12,7 +12,7 @@
 #include	"CServerPassword.h"
 #include	<MessageIdentifiers.h>
 
-#define MAX_SERVER_LISTS							3
+
 
 class CGUI_Impl;
 
@@ -26,7 +26,8 @@ enum ServerBrowserType
 	HOSTED,
 	LAN,
 	FAVOURITES,
-	HISTORY
+	HISTORY,
+	MAX_SERVER_LISTS
 };
 
 class CMasterList;
@@ -70,7 +71,6 @@ private:
 	CGUIButton_Impl									* m_pRefresh;
 	CGUIButton_Impl									* m_pConnect;
 	CGUIButton_Impl									* m_pFavourite;
-	CGUILabel_Impl									* m_pStatus;
 	CGUIStaticImage_Impl							* m_pLockedImage;
 	CGUILabel_Impl									* m_pStatusLabel;
 
@@ -148,7 +148,6 @@ public:
 
 	void				RefreshFromFile				( const char * szFile );
 
-	CGUILabel_Impl		* GetStatusLabel			( void ) { return m_pStatus; }
 	CServerList			* GetServerList				( ServerBrowserType type );
 	CGUIGridList_Impl	* GetServerGridList			( ServerBrowserType type ) { return m_pServerGridList[ type ]; }
 
