@@ -141,7 +141,9 @@ eNetworkResponse CNetworkModule::Connect( String strHost, unsigned short usPort,
  */
 void CNetworkModule::Disconnect( bool bRestart )
 {
-	assert(IsConnected());
+	if (!IsConnected()) {
+		return;
+	}
 
 	m_bRestartAfterDisconnect = bRestart;
 	SetNetworkState (NETSTATE_DISCONNECTING);
