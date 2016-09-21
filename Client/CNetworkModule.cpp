@@ -210,7 +210,7 @@ void CNetworkModule::DoDisconnect( bool bRestart )
 		CCore::Instance()->GetChat()->Clear ();
 		CCore::Instance()->GetChat()->ClearHistory ();
 		CCore::Instance()->GetChat()->ClearSelectText();
-		CCore::Instance()->GetChat()->ClearInputText();	
+		CCore::Instance()->GetChat()->ClearInputText();
 
 		// Reset player model
 		//pCore->GetPlayerManager()->GetLocalPlayer()->SetModel ( 10 );
@@ -288,7 +288,7 @@ void CNetworkModule::ConnectionAccepted( RakNet::Packet * pPacket )
 
 	// Write the player serial
 	pBitStream.Write( RakNet::RakString( SharedUtility::GetSerialHash().Get() ) );
-		
+
 	// Send to the server
 	Call( RPC_INITIAL_DATA, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, true );
 }

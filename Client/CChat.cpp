@@ -265,7 +265,7 @@ void CChat::Render(void)
 
 		// Get intput text width
 		float fStrInputWidth = pGraphics->GetTextWidth(m_strInput.Get(), 1.0, "tahoma-bold");
-		
+
 		// Initial size
 		float fWidthInputSubstrate = 500.0f;
 
@@ -334,7 +334,7 @@ void CChat::Render(void)
 			if ( (int)sLenMsg > 0 )
 				iMessagesIsset++;
 		}
-	
+
 		// Max height
 		float fScrMaxHeight = (fHScrlBx - 2.0f);
 		// Take the 4 percent of the maximum length
@@ -342,7 +342,7 @@ void CChat::Render(void)
 		// Reduce the length when more than 12 posts
 		float fScrHeight = ( fScrMaxHeight - (iMessagesIsset * fScrollingOneStrPr) );
 		// Drop down the scroll bar and lift as you scroll through
-		float fScrlYPos = ((fYScrlBx + 1.0f) + (fScrMaxHeight - fScrHeight) - (m_iChatScrollOffset * fScrollingOneStrPr));		
+		float fScrlYPos = ((fYScrlBx + 1.0f) + (fScrMaxHeight - fScrHeight) - (m_iChatScrollOffset * fScrollingOneStrPr));
 
 		// Just in case
 		if ( fScrlYPos > (fYScrlBx + 1.0f) && iMessagesIsset == m_iChatScrollOffset && iMessagesIsset != 0  )
@@ -561,7 +561,7 @@ bool CChat::HandleMouseWheel( CGUIMouseEventArgs mouseArgs )
 
 	// If you then show the cursor - unnecessary scrolling
 	m_bLastFixUnnec = true;
-	
+
 	return true;
 }
 
@@ -618,7 +618,7 @@ bool CChat::HandleKeyInput(CGUIKeyEventArgs keyArgs)
 	case VK_ESCAPE:
 	{
 		// Reset scroll chat
-		m_iChatScrollOffset = 0;	
+		m_iChatScrollOffset = 0;
 
 		// If you then show the cursor - unnecessary scrolling
 		m_bLastFixUnnec = false;
@@ -664,14 +664,14 @@ bool CChat::HandleKeyInput(CGUIKeyEventArgs keyArgs)
 			// Do not respond to combination (Ctrl+A, Ctrl+C and etc)
 			if ( keyArgs.codepoint != 1 && keyArgs.codepoint != 3 && keyArgs.codepoint != 10 && keyArgs.codepoint != 22 && keyArgs.codepoint != 24 && keyArgs.codepoint != 26 && keyArgs.codepoint != 37) // Ctrl+A, Ctrl+C, Ctrl+Enter, Ctrl+V, Ctrl+X, Ctrl+Z, 37=%
 			{
-				// Text cursor doesn't last 
-				if ( m_iTextCursorPosition < sInputLen )			
+				// Text cursor doesn't last
+				if ( m_iTextCursorPosition < sInputLen )
 					// Add the character to the position cursor
 					m_strInput.Insert(m_iTextCursorPosition, static_cast< char >(keyArgs.codepoint));
 				else
 					// Add the character to the end of the input text
 					m_strInput += static_cast< char >(keyArgs.codepoint);
-		
+
 				++m_iTextCursorPosition;
 			}
 		}
@@ -861,7 +861,7 @@ bool CChat::HandleKeyDown(CGUIKeyEventArgs keyArgs)
 			if ((keyArgs.sysKeys & CEGUI::SystemKey::Control) && IsInputVisible())
 			{
 				m_iTextCursorPosition = 0;
-				m_iCountSelectedChars = m_strInput.GetLength();				
+				m_iCountSelectedChars = m_strInput.GetLength();
 			}
 			break;
 		}
