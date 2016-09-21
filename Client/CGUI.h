@@ -51,8 +51,6 @@ private:
 
 	//
 	IDirect3DDevice9						* m_pDevice;
-	IDirectInput8							* m_pInput;
-	IDirectInputDevice8						* m_pInputDevice;
 
 	//
 	CGUI_Impl								* m_pGUI;
@@ -70,11 +68,9 @@ private:
 	bool									m_bPreviousCameraState;
 
 public:
-
 											CGUI( IDirect3DDevice9 * pDevice );
 											~CGUI( void );
 
-	void									SetupInputDevice( void );
 	void									SetupGUI( void );
 
 	void									SetCursorVisible( bool bVisible );
@@ -83,7 +79,7 @@ public:
 	bool									DeleteAllClientScriptGUI( void );
 
 	void									Render( void );
-	void									ProcessMouse( void );
+	void									ProcessMouse( IDirectInputDevice8 *pMouseDevice );
 
 	void									OnDeviceLost( void );
 	void									OnDeviceReset( void );

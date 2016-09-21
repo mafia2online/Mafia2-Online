@@ -30,92 +30,41 @@
 #include	"CClientScriptGUIManager.h" // for delete clientscript gui
 
 CGUI::CGUI( IDirect3DDevice9 * pDevice )
+	: m_pDevice(pDevice)
+
+	, m_pGUI(nullptr)
+	, m_pDownloadProgress(nullptr)
+	, m_pMainMenu(nullptr)
+	, m_pServerBrowser(nullptr)
+	, m_pSettings(nullptr)
+
+	, m_MouseState()
+	, m_vecCursorPosition()
+	, m_byteButtonClicked()
+
+	, m_bPreviousCameraState(false)
 {
-	// Store the d3d9 device
-	m_pDevice = pDevice;
+	memset( &m_vecCursorPosition, 0, sizeof(m_vecCursorPosition) );
+	memset( m_byteButtonClicked, 0, sizeof(m_byteButtonClicked) );
 
-	// Setup the input device
-	SetupInputDevice();
-
-	// Create the gui instance
 	m_pGUI = new CGUI_Impl( pDevice );
-
-	// Reset
-	m_bPreviousCameraState = false;
 }
 
 CGUI::~CGUI( void )
 {
-	// Delete the settings
-	if( m_pSettings )
-		SAFE_DELETE( m_pSettings );
-
-	// Delete the main menu
-	if( m_pMainMenu )
-		SAFE_DELETE( m_pMainMenu );
-
-	// Delete the server browser
-	if( m_pServerBrowser )
-		SAFE_DELETE( m_pServerBrowser );
-
-	// Destroy the mod gui instancse
-	if( m_pDownloadProgress )
-		SAFE_DELETE( m_pDownloadProgress );
-
-	// Shutdown the input device
-	if( m_pInputDevice )
-	{
-		m_pInputDevice->Unacquire();
-		m_pInputDevice->Release();
-	}
-
-	// Shutdown the input
-	if( m_pInput )
-		m_pInput->Release();
-
-	// Destroy the gui instance
-	if( m_pGUI )
-		SAFE_DELETE( m_pGUI );
-}
-
-void CGUI::SetupInputDevice( void )
-{
-	// Reset mouse variables
-	memset( &m_vecCursorPosition, 0, sizeof(RECT) );
-	memset( m_byteButtonClicked, 0, sizeof(BYTE) * 8 );
-
-	// Create the input
-	DirectInput8Create( GetModuleHandle( NULL ), DIRECTINPUT_VERSION, IID_IDirectInput8A, (LPVOID *)&m_pInput, NULL );
-
-	// Create the input device
-	m_pInput->CreateDevice( GUID_SysMouse, &m_pInputDevice, NULL );
-
-	// Set the input device as a mouse
-	m_pInputDevice->SetDataFormat( &c_dfDIMouse2 );
-
-	// Set the input device to non exclusive
-	m_pInputDevice->SetCooperativeLevel(CCore::Instance()->GetGameHwnd(), DISCL_BACKGROUND | DISCL_NONEXCLUSIVE);
-
-	// Acquire the input device
-	m_pInputDevice->Acquire();
+	SAFE_DELETE( m_pSettings );
+	SAFE_DELETE( m_pMainMenu );
+	SAFE_DELETE( m_pServerBrowser );
+	SAFE_DELETE( m_pDownloadProgress );
+	SAFE_DELETE( m_pGUI );
 }
 
 void CGUI::SetupGUI( void )
 {
-	// Create the serverbrowser gui
 	m_pServerBrowser = new CServerBrowser( m_pGUI );
-
-	// Create the main menu gui
 	m_pMainMenu = new CMainMenu( m_pGUI );
-
-	// Create the download progress gui
 	m_pDownloadProgress = new CDownloadProgress;
-
-	// Create the settings gui
 	m_pSettings = new CMenuSettings( m_pGUI );
-
-	// Create the console gui
-	// todo
 }
 
 void CGUI::SetCursorVisible( bool bVisible )
@@ -123,28 +72,24 @@ void CGUI::SetCursorVisible( bool bVisible )
 	// Toggle the cursor
 	m_pGUI->SetCursorEnabled( bVisible );
 
-	// Is the camera instance valid?
-	if( CCore::Instance()->GetCamera() )
+	CCore *pCore = CCore::Instance();
+	CM2Camera *pGameCamera = pCore->GetCamera();
+	if( pGameCamera )
 	{
-		// Are we enabling the mouse?
 		if( bVisible )
 		{
-			// Store the previous camera state
-			m_bPreviousCameraState = CCore::Instance()->GetCamera()->IsLocked();
+			m_bPreviousCameraState = pGameCamera->IsLocked();
 
-			// Lock the camera control
-			CCore::Instance()->GetCamera()->LockControl(true);
+			pGameCamera->LockControl(true);
 
-			// Hide the map if it's visible
-			if (CCore::Instance()->GetGame()->IsMapOpen())
-				CCore::Instance()->GetGame()->OpenMap(false);
+			CMafia *pGame = pCore->GetGame();
+
+			if (pGame->IsMapOpen())
+				pGame->OpenMap(false);
 		}
 		else
 		{
-			// Restore the old camera state before we locked it
-			CCore::Instance()->GetCamera()->LockControl(m_bPreviousCameraState);
-
-			// Reset the old camera state
+			pGameCamera->LockControl(m_bPreviousCameraState);
 			m_bPreviousCameraState = false;
 		}
 	}
@@ -176,9 +121,6 @@ void CGUI::Render( void )
 	// Render the gui
 	m_pGUI->Draw();
 
-	// Process the mouse
-	ProcessMouse();
-
 	// Render the mouse cursor
 	m_pGUI->DrawMouseCursor();
 
@@ -187,20 +129,17 @@ void CGUI::Render( void )
 		m_pServerBrowser->Pulse();
 }
 
-void CGUI::ProcessMouse( void )
+void CGUI::ProcessMouse( IDirectInputDevice8 *pMouseDevice )
 {
 	// Process the mouse
 	if( CCore::Instance()->GetGame()->Focused() && m_pGUI->IsCursorEnabled() )
 	{
-		// Make sure the input device is valid
-		if( !m_pInputDevice )
-			return;
 
 		// If we've lose the input device, re-aquire it
-		if( m_pInputDevice->GetDeviceState( sizeof(m_MouseState), (LPVOID)&m_MouseState ) == DIERR_INPUTLOST )
+		if( pMouseDevice->GetDeviceState( sizeof(m_MouseState), (LPVOID)&m_MouseState ) == DIERR_INPUTLOST )
 		{
 			// Acquire the input device
-			m_pInputDevice->Acquire();
+			pMouseDevice->Acquire();
 		}
 
 		// Handle mouse position changes
@@ -348,7 +287,7 @@ bool CGUI::ProcessInput( UINT uMsg, WPARAM wParam, LPARAM lParam )
 			// Process the key with the gui if it's valid
 			if( dwKey > 0 )
 				m_pGUI->ProcessKeyboardInput( dwKey, false );
-                        
+
 			break;
 		}
 
