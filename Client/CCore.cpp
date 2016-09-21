@@ -91,7 +91,6 @@
 IDirect3DStateBlock9	* pStateBlock = nullptr;
 CSquirrelArguments		pArguments;
 bool					bDeviceLost = false;
-bool					bInputHookCreated = false;
 
 extern					DWORD sub_CD00A0__ECX;
 
@@ -132,7 +131,6 @@ CCore::CCore( void )
 	, m_pTimerManager(nullptr)
 	, m_pFileTransferManager(nullptr)
 
-	, m_pEngine(nullptr)
 	, m_pCamera(nullptr)
 	, m_pHud(nullptr)
 
@@ -172,14 +170,31 @@ CCore::~CCore( void )
 	CLogFile::Printf( "CCore::~CCore" );
 #endif
 
-	SAFE_DELETE( m_pNetworkModule );
+	SAFE_DELETE(m_pGame);
+	SAFE_DELETE(m_pNetworkModule);
 	SAFE_DELETE(m_pGraphics);
+	SAFE_DELETE(m_pChat);
+	SAFE_DELETE(m_pPlayerManager);
 	SAFE_DELETE(m_pFPSCounter);
+	SAFE_DELETE(m_pBlipManager);
+	SAFE_DELETE(m_pVehicleManager);
+	SAFE_DELETE(m_pPedManager);
+	SAFE_DELETE(m_pGUI);
+	SAFE_DELETE(m_pKeyBinds);
 	SAFE_DELETE(m_pStreamer);
 	SAFE_DELETE(m_pModelManager);
+	SAFE_DELETE(m_pNameTag);
 	SAFE_DELETE(m_pAudioManager);
 	SAFE_DELETE(m_p3DTextLabelManager);
 	SAFE_DELETE(m_pScreenshotManager);
+	SAFE_DELETE(m_pClientScriptingManager);
+	SAFE_DELETE(m_pTimerManager);
+	SAFE_DELETE(m_pFileTransferManager);
+
+	SAFE_DELETE(m_pCamera);
+	SAFE_DELETE(m_pHud);
+
+	SAFE_DELETE(m_pUpdater);
 
 	CWPMHook::Uninstall();
 
@@ -229,7 +244,7 @@ bool CCore::Initialise( void )
 	m_uiBaseAddress = (unsigned int)GetModuleHandle( NULL );
 	m_uiBaseAddress -= 0x400000;
 
-	m_pGame = new CMafia;
+	m_pGame = new CMafia();
 
 	COffsets::Initialise( 0, m_uiBaseAddress );
 	CPatches::Initialise ();
@@ -387,9 +402,17 @@ void CCore::OnDeviceRender( void )
 	if( bDeviceLost )
 		return;
 
-	m_pGraphics->GetDevice()->BeginScene ();
+	if (! m_pGraphics)
+		return;
 
-	if( FAILED( m_pGraphics->GetDevice()->CreateStateBlock( D3DSBT_ALL, &pStateBlock ) ) )
+	IDirect3DDevice9 *pDevice = m_pGraphics->GetDevice();
+
+	if (! pDevice)
+		return;
+
+	pDevice->BeginScene ();
+
+	if( FAILED( pDevice->CreateStateBlock( D3DSBT_ALL, &pStateBlock ) ) )
 		return;
 	pStateBlock->Capture ();
 	if ( m_pGraphics )
@@ -471,8 +494,7 @@ void CCore::OnDeviceRender( void )
 		pStateBlock->Apply();
 	SAFE_RELEASE( pStateBlock );
 
-	if ( m_pGraphics && m_pGraphics->GetDevice () )
-		m_pGraphics->GetDevice()->EndScene();
+	pDevice->EndScene();
 
 	if ( m_pFPSCounter )
 		m_pFPSCounter->Pulse ();

@@ -16,7 +16,7 @@
 
 #include "ExplicitSingleton.h"
 
-#include	"CString.h"
+#include "CString.h"
 
 class CUpdater;
 class CMafia;
@@ -78,8 +78,6 @@ private:
 	CTimerManager					* m_pTimerManager;
 	CFileTransferManager			* m_pFileTransferManager;
 
-
-	M2Game							* m_pEngine;
 	CM2Camera						* m_pCamera;
 	CM2Hud							* m_pHud;
 
@@ -148,8 +146,6 @@ public:
 
 	void							SetGameHwnd					( HWND hwnd ) { m_gameHwnd = hwnd; }
 	HWND							GetGameHwnd					( void ) { return m_gameHwnd; }
-
-	M2Game							* GetEngine					( void ) { return m_pEngine; }
 
 	void							SetCamera					( CM2Camera * pCamera ) { m_pCamera = pCamera; }
 	CM2Camera						* GetCamera					( void ) { return m_pCamera; }
