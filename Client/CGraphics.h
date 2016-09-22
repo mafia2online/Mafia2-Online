@@ -15,13 +15,17 @@
 #include "d3d9.h"
 #include "d3dx9.h"
 
-#define		NUM_FONTS				4
-
 // Font indexes
 #define		FONT_INDEX_TAHOMA		0
 #define		FONT_INDEX_TAHOMA_BD	1
 #define		FONT_INDEX_VERDANA		2
 #define		FONT_INDEX_ARIAL		3
+#define		NUM_FONTS				4
+
+// Undefine WinAPI DrawText macro.
+#ifdef DrawText
+#	undef DrawText
+#endif
 
 class CFont;
 class CVector3;

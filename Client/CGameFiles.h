@@ -23,7 +23,6 @@ private:
 
 public:
 
-	static	bool					DecompressFiles( void );
 	static	bool					CheckFiles( void );
 
 	static	void					CleanFiles( void );

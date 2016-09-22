@@ -9,6 +9,8 @@
 
 #include "BaseInc.h"
 
+#include "CLogFile.h"
+
 #include "CCore.h"
 #include "CString.h"
 
@@ -21,13 +23,14 @@
 #include "CNetworkPlayer.h"
 #include "CLocalPlayer.h"
 
-#include "../bass/bass.h" // TODO: Remove this ugly ...
+#include "bass.h"
 
 CAudio::CAudio(const String &strStreamName, bool bReplay, bool bIsOnlineStream)
 	: m_strStreamName(strStreamName)
 	, m_bReplay(bReplay)
 	, m_bIsOnlineStream(bIsOnlineStream)
 	, m_bUsePosition(false)
+	, m_vecPosition()
 	, m_fRange(0.0f)
 	, m_fVolume(100.0f)
 	, m_bIsMuted(false)
@@ -43,23 +46,23 @@ CAudio::~CAudio()
 
 bool CAudio::Load()
 {
-	if (m_dwChannel == 0)
-	{
-		// Create BASS stream
-		if (m_bIsOnlineStream)
-			m_dwChannel = BASS_StreamCreateURL(m_strStreamName, 0, (BASS_STREAM_BLOCK | BASS_STREAM_STATUS | BASS_STREAM_AUTOFREE), 0, 0);
-		else
-			m_dwChannel = BASS_StreamCreateFile(FALSE, m_strStreamName, 0, 0, BASS_STREAM_PRESCAN);
+	if (m_dwChannel)
+		return false;
 
-		// stream create check
-		if (m_dwChannel != 0)
-		{
-			BASS_ChannelSetAttribute(m_dwChannel, BASS_ATTRIB_VOL, (m_fVolume * 0.01f));
-			return true;
-		}
+	// Create BASS stream
+	if (m_bIsOnlineStream)
+		m_dwChannel = BASS_StreamCreateURL(m_strStreamName, 0, (BASS_STREAM_BLOCK | BASS_STREAM_STATUS | BASS_STREAM_AUTOFREE), 0, 0);
+	else
+		m_dwChannel = BASS_StreamCreateFile(FALSE, m_strStreamName, 0, 0, BASS_STREAM_PRESCAN);
+
+	if (!m_dwChannel)
+	{
+		CLogFile::Printf("Failed to load audio. Stream name: %s, Online stream: %s", m_strStreamName.Get(), m_bIsOnlineStream ? "Yes" : "No");
+		return false;
 	}
 
-	return false;
+	BASS_ChannelSetAttribute(m_dwChannel, BASS_ATTRIB_VOL, (m_fVolume * 0.01f));
+	return true;
 }
 
 void CAudio::Unload()

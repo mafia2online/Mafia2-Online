@@ -21,9 +21,8 @@
 #include "CStreamer.h"
 
 CStreamer::CStreamer( void )
+	: m_ulLastStreamTime(0)
 {
-	// Reset
-	m_ulLastStreamTime = 0;
 }
 
 CStreamer::~CStreamer( void )

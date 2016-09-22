@@ -193,7 +193,7 @@ void	C3DTextLabelManager::Render(void)
 					CCore::Instance()->GetGraphics()->WorldToScreen(textPos, &vecScreen);
 
 					//Draw
-					CCore::Instance()->GetGraphics()->DrawTextA(vecScreen.fX - (dimensionWidth / 2), vecScreen.fY, 0xFFFFFFFF, fScale, "tahoma-bold", true, m_p3DTextLabels[i]->GetText().Get());
+					CCore::Instance()->GetGraphics()->DrawText(vecScreen.fX - (dimensionWidth / 2), vecScreen.fY, 0xFFFFFFFF, fScale, "tahoma-bold", true, m_p3DTextLabels[i]->GetText().Get());
 				}
 			}
 		}

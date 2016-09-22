@@ -18,10 +18,11 @@
 #include "CString.h"
 #include "SharedUtility.h"
 
-#include "../bass/bass.h" // todo: remove ../
+#include "bass.h"
 
 CAudioManager::CAudioManager()
-	: m_bMuted(false)
+	: m_audioList()
+	, m_bMuted(false)
 {
 }
 
@@ -106,6 +107,6 @@ String CAudioManager::GetYoutubeStreamURL(const String& link)
 	String idBuffer;
 	if (SharedUtility::GetHTTPHeaderAndData("kingofmetin.com", String("/yt.php?url=%s", link.Get()).Get(), "", NULL, &idBuffer))
 		return idBuffer;
-	
+
 	return String("");
 }

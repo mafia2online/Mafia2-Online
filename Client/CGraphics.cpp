@@ -39,24 +39,23 @@ const unsigned char g_szPixel [] = { 0x42, 0x4D, 0x3A, 0, 0, 0, 0, 0, 0, 0, 0x36
                                     0, 0, 0, 0xFF, 0xFF, 0xFF, 0 };
 
 CGraphics::CGraphics( void )
+	: m_pSprite(nullptr)
+	, m_pDevice(nullptr)
+	, m_pPixelTexture(nullptr)
+	, m_pOriginalTarget(nullptr)
+
+	, m_pDirect(nullptr)
+	, m_pD3Identifier()
+
+	, m_fonts()
+	, m_bigFonts()
+	, m_customFonts()
+
+	, m_cachedTextureMap()
 {
-	// Invalidate the device
-	m_pDevice = NULL;
-
-	// Invalidate the sprite
-	m_pSprite = NULL;
-
-	// Invalidate stuff
-	m_pOriginalTarget = NULL;
-	m_pPixelTexture = NULL;
-
-	// Install the direct x hook
 	CDirect3D9Hook::Install ();
+	CDirectInput8Hook::Install (); // TODO: Move? Does not fit into graphics imho.
 
-	// Install the direct input 8 hook
-	CDirectInput8Hook::Install ();
-
-	// Init Direct3Device
 	m_pDirect = Direct3DCreate9(D3D_SDK_VERSION);
 }
 
@@ -224,8 +223,8 @@ void CGraphics::DrawText( float uiLeft, float uiTop, float uiRight, float uiBott
     uiBottom = uiBottom * (1.0f / fScaleY);
 
 	// Set the rect
-	RECT rect;        
-    SetRect( &rect, uiLeft, uiTop, uiRight, uiBottom );  
+	RECT rect;
+    SetRect( &rect, uiLeft, uiTop, uiRight, uiBottom );
 
 	// Set the scale
 	D3DXMATRIX matrix;
@@ -234,7 +233,7 @@ void CGraphics::DrawText( float uiLeft, float uiTop, float uiRight, float uiBott
 
 	// Begin the sprite
 	m_pSprite->Begin( D3DXSPRITE_ALPHABLEND | D3DXSPRITE_SORT_TEXTURE );
-	
+
 	// Set the sprite transform
 	D3DXMatrixTransformation2D( &matrix, NULL, 0.0f, &scaling, NULL, 0.0f, NULL );
 	m_pSprite->SetTransform( &matrix );
@@ -247,11 +246,11 @@ void CGraphics::DrawText( float uiLeft, float uiTop, float uiRight, float uiBott
 		SetRect( &shadow_rect, uiLeft + 1, uiTop + 1, uiRight + 1, uiBottom + 1 );
 
 		// Draw the text shadow
-		m_pFont->DrawText( m_pSprite, szText, -1, &shadow_rect, ulFormat, D3DCOLOR_ARGB( 255, 0, 0, 0 ) );
+		m_pFont->DrawTextA( m_pSprite, szText, -1, &shadow_rect, ulFormat, D3DCOLOR_ARGB( 255, 0, 0, 0 ) );
 	}
 
 	// Draw the text
-	m_pFont->DrawText( m_pSprite, szText, -1, &rect, ulFormat, ulColor );
+	m_pFont->DrawTextA( m_pSprite, szText, -1, &rect, ulFormat, ulColor );
 
 	// End the sprite
     m_pSprite->End( );
@@ -310,7 +309,7 @@ void CGraphics::DrawText( CVector3 vecPosition, float fDistance, unsigned long u
 	vecScreen.fX -= (GetTextWidth( strText.Get(), 1.0f, strFont ) / 2);
 
 	// Draw the text
-	DrawText( vecScreen.fX, vecScreen.fY, ulColor, fScale, strFont, bShadow, strText.Get() ); 
+	DrawText( vecScreen.fX, vecScreen.fY, ulColor, fScale, strFont, bShadow, strText.Get() );
 }
 
 void CGraphics::DrawBox( CVector3 vecPosition, float fWidth, float fHeight, float fDistance, DWORD dwBoxColour )

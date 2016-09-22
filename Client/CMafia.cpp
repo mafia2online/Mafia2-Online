@@ -40,9 +40,14 @@
 bool						bOldChatWindowState;
 
 CMafia::CMafia( void )
+	: m_strWeather()
+	, m_bFocus(false)
+	, m_bMapOpen(false)
+	, m_bSummer(true)
+
+	, m_pFileSystem(nullptr)
+	, m_pNavigation(nullptr)
 {
-	m_bMapOpen = false;
-	m_bSummer = true;
 }
 
 CMafia::~CMafia( void )
@@ -58,7 +63,7 @@ void CMafia::LoadPointers( void )
 }
 
 void CMafia::FadeSound( bool bFadeOut, float fTimeInSeconds )
-{ 
+{
 	DWORD C_SoundManager = *(DWORD *)0x1AAF2D8;
 	DWORD C_SoundManager__VFTable__FadeSound = 0x13E78E0;
 
@@ -235,7 +240,7 @@ void CMafia::SetRadioContent( const char * szChannel, const char * szContent )
 {
 	DWORD C_Radio__SetContent = 0xABFAA0;
 	const char* szUnknown = "all";
-	
+
 	_asm push szContent;
 	_asm push szUnknown;
 	_asm push szChannel;

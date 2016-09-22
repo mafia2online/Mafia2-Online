@@ -15,7 +15,10 @@
 
 #include "CIE.h"
 
-CModelManager::CModelManager(void) {}
+CModelManager::CModelManager(void)
+	: m_modelManagers()
+{
+}
 
 CModelManager::~CModelManager(void)
 {

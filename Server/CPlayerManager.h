@@ -26,7 +26,7 @@ public:
 
 	void						Pulse								( void );
 
-	CNetworkPlayer				* Get								( EntityId playerId ) { return m_pNetworkPlayer[ playerId ]; }
+	CNetworkPlayer				* Get								( EntityId playerId ) { assert(playerId < MAX_PLAYERS); return m_pNetworkPlayer[ playerId ]; }
 	EntityId					GetCount							( void );
 
 	void						HandlePlayerJoin					( EntityId playerId );

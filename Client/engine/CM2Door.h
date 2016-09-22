@@ -26,7 +26,7 @@ public:
 	{
 		return ( ( *( DWORD *)( ( DWORD )( this ) + 0x2F4 ) == 0 ) == 0 );
 	}
-	
+
 	M2Model * GetModel( void )
 	{
 		return *( M2Model **)( ( DWORD )( this ) + 0x60 );

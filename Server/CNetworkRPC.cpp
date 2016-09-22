@@ -302,7 +302,7 @@ void PlayerSpawn( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 		// Spawn all vehicles for this player
 		CCore::Instance()->GetVehicleManager()->HandlePlayerSpawn( playerId );
 
-		CLogFile::Printf( "[spawn] %s has spawned.", pNetworkPlayer->GetNick() ); 
+		CLogFile::Printf( "[spawn] %s has spawned.", pNetworkPlayer->GetNick() );
 
 		// Call the event
 		CSquirrelArguments pArguments;
@@ -545,7 +545,7 @@ void CNetworkRPC::Register( RakNet::RPC4 * pRPC )
 
 	// Default rpcs
 	pRPC->RegisterFunction( RPC_INITIAL_DATA, InitialData );
-	
+
 	// Player rpcs
 	pRPC->RegisterFunction( RPC_PLAYER_CHAT, PlayerChat );
 	pRPC->RegisterFunction( RPC_PLAYER_SYNC, PlayerSync );

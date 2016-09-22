@@ -25,15 +25,16 @@
 #include	"COffsets.h"
 
 CM2Camera::CM2Camera( void )
+	: m_pCamera(nullptr)
+	, m_pGameCamera(nullptr)
+	, m_projectionMatrix()
+	, m_fLastSensitivityMultiplier(0.0f)
 {
-	// Set the camera
-	SetCamera( NULL );
-
-	// Set the game camera
-	SetGameCamera( NULL );
+	memset(m_projectionMatrix, 0, sizeof(m_projectionMatrix));
 }
 
 CM2Camera::CM2Camera( M2Camera * pCamera )
+	: CM2Camera()
 {
 	// Set the camera
 	SetCamera( pCamera );
@@ -52,10 +53,6 @@ CM2Camera::CM2Camera( M2Camera * pCamera )
 
 	// Build the projection matrix
 	D3DXMatrixPerspectiveFovLH( &m_projectionMatrix, m_pGameCamera->m_fFovAngle, m_pGameCamera->pCameraData->m_fAspect, m_pGameCamera->pCameraData->m_fNear, m_pGameCamera->pCameraData->m_fFar );
-
-#ifdef _DEBUG
-	CCore::Instance()->GetChat()->AddDebugMessage( "CM2Camera::CM2Camera( pCamera: 0x%p, pGameCamera: 0x%p, pCameraData: 0x%p )", pCamera, m_pGameCamera, m_pGameCamera->pCameraData );
-#endif
 }
 
 CM2Camera::~CM2Camera( void )
