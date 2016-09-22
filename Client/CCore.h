@@ -18,7 +18,6 @@
 
 #include "CString.h"
 
-class CUpdater;
 class CMafia;
 class CNetworkModule;
 class CGraphics;
@@ -80,8 +79,6 @@ private:
 
 	CM2Camera						* m_pCamera;
 	CM2Hud							* m_pHud;
-
-	CUpdater						* m_pUpdater;
 
 	HWND							m_gameHwnd;
 
@@ -191,7 +188,4 @@ public:
 
 	void							SetConnectionProblem		( bool bConnectionProblem ) { m_bConnectionProblem = bConnectionProblem; }
 	bool							IsConnectionProblem			( void ) { return m_bConnectionProblem; }
-
-	CUpdater						* GetUpdater				( void ) { return m_pUpdater; }
-
 };

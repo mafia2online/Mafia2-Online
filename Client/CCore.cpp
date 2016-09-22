@@ -132,8 +132,6 @@ CCore::CCore( void )
 	, m_pCamera(nullptr)
 	, m_pHud(nullptr)
 
-	, m_pUpdater(nullptr)
-
 	, m_gameHwnd(0)
 
 	, m_strNick()
@@ -191,8 +189,6 @@ CCore::~CCore( void )
 
 	SAFE_DELETE(m_pCamera);
 	SAFE_DELETE(m_pHud);
-
-	SAFE_DELETE(m_pUpdater);
 
 	TerminateProcess( GetCurrentProcess(), 0 );
 }
