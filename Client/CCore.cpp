@@ -377,9 +377,6 @@ void CCore::OnDeviceReset( IDirect3DDevice9 * pDevice )
 
 void CCore::OnDevicePreRender( void )
 {
-	if ( m_pVehicleManager )
-		m_pVehicleManager->PreProcess ();
-
 	if( m_pClientScriptingManager && !m_pGUI->GetMainMenu()->IsVisible () )
 		m_pClientScriptingManager->GetEvents()->Call( "onClientFramePreRender" );
 }
@@ -425,8 +422,6 @@ void CCore::OnDeviceRender( void )
 		m_pGUI->Render ();
 	if ( IsConnectionProblem () )
 		CCore::Instance()->GetGraphics()->DrawText ( (CCore::Instance()->GetGUI()->GetCEGUI()->GetResolution().fX - CCore::Instance()->GetGraphics()->GetTextWidth("Connection Problem", 1.0f, "tahoma-bold") - 5), 5, D3DCOLOR_ARGB(255, 255, 0, 0), 1.0f, "tahoma-bold", true, "Connection Problem" );
-	if ( m_pVehicleManager )
-		m_pVehicleManager->Process ();
 	if( m_pPedManager )
 		m_pPedManager->Pulse();
 

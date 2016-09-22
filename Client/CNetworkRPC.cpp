@@ -391,26 +391,22 @@ void RemoveBlip( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 // Vehicles
 void NewVehicle( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 {
-	// Read the vehicleid
 	EntityId vehicleId;
 	pBitStream->ReadCompressed( vehicleId );
 
-	// Read the model
 	int iModel;
 	pBitStream->Read( iModel );
 
-	// Read the last sync data
 	InVehicleSync vehicleSync;
 	pBitStream->Read( (char *)&vehicleSync, sizeof(InVehicleSync) );
 
-	// Add the vehicle to the manager
-	if( CCore::Instance()->GetVehicleManager()->Add( vehicleId, iModel, CVector3(), CVector3() ) )
+	CVehicleManager *pVehicleManager = CCore::Instance()->GetVehicleManager();
+	if( pVehicleManager->Add( vehicleId, iModel, vehicleSync.m_vecPosition, vehicleSync.m_vecRotation ) )
 	{
-		// Set the last sync data
-		CCore::Instance()->GetVehicleManager()->Get(vehicleId)->SetSyncData(vehicleSync);
+		CNetworkVehicle *pVehicle = pVehicleManager->Get(vehicleId);
 
-		// Mark process sync on spawn
-		CCore::Instance()->GetVehicleManager()->Get(vehicleId)->ProcessSyncOnSpawn(true);
+		pVehicle->SetSyncData(vehicleSync);
+		pVehicle->ProcessSyncOnSpawn(true);
 	}
 }
 
