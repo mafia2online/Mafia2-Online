@@ -20,6 +20,22 @@
 
 #include	"COffsets.h"
 
+const DWORD C_Car__Spawn = 0x447820;
+void _declspec(naked) M2Vehicle::Spawn(void)
+{
+	_asm jmp C_Car__Spawn;
+}
+
+void _declspec(naked) M2Vehicle::SetMotorDamage(float health)
+{
+	_asm jmp COffsets::FUNC_CVehicle__SetEngineDamage;
+}
+
+float _declspec(naked) M2Vehicle::GetMotorDamage(void) const
+{
+	_asm jmp COffsets::FUNC_CVehicle__GetEngineDamage;
+}
+
 CM2Vehicle::CM2Vehicle( M2Vehicle * pVehicle ) : CM2Entity( pVehicle )
 {
 	SetVehicle( pVehicle );
@@ -27,21 +43,19 @@ CM2Vehicle::CM2Vehicle( M2Vehicle * pVehicle ) : CM2Entity( pVehicle )
 	if (!m_pVehicle)
 		return;
 
-	this->ToggleGarageEnter(false);
+	ToggleGarageEnter(false);
 
-	/* Try to unlock but don't work */
-	M2Vehicle * ppVehicle = m_pVehicle;
-	DWORD dwFunc = 0x9905B0;
-	_asm mov ecx, ppVehicle;
-	_asm call dwFunc;
-
-	DWORD dwFunc2 = 0x09BC150;
-	_asm mov ecx, ppVehicle;
-	_asm call dwFunc;
+	Spawn();
 }
 
 CM2Vehicle::~CM2Vehicle( void )
 {
+}
+
+void CM2Vehicle::Spawn ( void )
+{
+	if ( m_pVehicle )
+		m_pVehicle->Spawn();
 }
 
 void CM2Vehicle::SetEngineOn( bool bEngine, bool bRevOnStart )
@@ -67,7 +81,7 @@ bool CM2Vehicle::IsEngineOn( void )
 		DWORD dwVehicleData = (DWORD)(m_pVehicle) + 0xA8;
 		return (*(DWORD *)(dwVehicleData + 0x870) & 0x18000);
 	}
-	
+
 	return false;
 }
 
@@ -130,34 +144,13 @@ void CM2Vehicle::CloseTrunk( void )
 void CM2Vehicle::SetEngineDamage( float fEngineDamage )
 {
 	if( m_pVehicle )
-	{
-		M2Vehicle * pVehicle = m_pVehicle;
-
-		_asm
-		{
-			push fEngineDamage;
-			mov ecx, pVehicle;
-			call COffsets::FUNC_CVehicle__SetEngineDamage;
-		}
-	}
+		m_pVehicle->SetMotorDamage(fEngineDamage);
 }
 
 float CM2Vehicle::GetEngineDamage( void )
 {
 	if( m_pVehicle )
-	{
-		float fEngineDamage = 0.0f;
-		M2Vehicle * pVehicle = m_pVehicle;
-
-		_asm
-		{
-			mov ecx, pVehicle;
-			call COffsets::FUNC_CVehicle__GetEngineDamage;
-			mov fEngineDamage, eax;
-		}
-
-		return (fEngineDamage);
-	}
+		return m_pVehicle->GetMotorDamage();
 
 	return (0.0f);
 }
@@ -569,7 +562,7 @@ float CM2Vehicle::GetAddedSteer( void )
 {
 	if( m_pVehicle )
 		return (m_pVehicle->m_fAddedSteer);
-	
+
 	return (0.0f);
 }
 
@@ -577,7 +570,7 @@ float CM2Vehicle::GetSteer( void )
 {
 	if( m_pVehicle )
 		return (m_pVehicle->m_fSteer);
-	
+
 	return (0.0f);
 }
 

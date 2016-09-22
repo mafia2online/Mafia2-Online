@@ -213,6 +213,11 @@ public:
 	void UnlockPlayerEntryPoints(void);
 
 	void sub_468EB0(void);
+
+	void Spawn(void);
+
+	void SetMotorDamage(float damage);
+	float GetMotorDamage(void) const;
 };
 
 class CM2Vehicle : public CM2Entity
@@ -230,12 +235,14 @@ public:
 	void					SetVehicle						( M2Vehicle * pVehicle ) { m_pVehicle = pVehicle; }
 	M2Vehicle				* GetVehicle					( void ) { return m_pVehicle; }
 
+	void					Spawn							( void );
+
 	void					SetEngineOn						( bool bEngine, bool bRevWhenStarted = true );
 	bool					IsEngineOn						( void );
 
 	void					OpenHood						( void );
 	void					CloseHood						( void );
-	
+
 	void					OpenTrunk						( void );
 	void					CloseTrunk						( void );
 
@@ -296,7 +303,7 @@ public:
 
 	void					SetPower						( bool bPower );
 	bool					GetPower						( void );
-	
+
 	void					SetBrake						( bool bBrake );
 	bool					GetBrake						( void );
 
