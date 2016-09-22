@@ -16,8 +16,6 @@
 
 #include	"SharedUtility.h"
 
-#include	"CWPMHook.h"
-
 #include	"CRC.h"
 
 #include	"CGameFiles.h"
@@ -196,8 +194,6 @@ CCore::~CCore( void )
 
 	SAFE_DELETE(m_pUpdater);
 
-	CWPMHook::Uninstall();
-
 	TerminateProcess( GetCurrentProcess(), 0 );
 }
 
@@ -207,11 +203,6 @@ bool CCore::Initialise( void )
 		return false;
 
 	CLogFile::Open( SharedUtility::GetAbsolutePath( "logs\\core.log" ).Get() );
-	if( !CWPMHook::Install() )
-	{
-		MessageBox( NULL, "Failed to start anti-cheat module.\n\nCan't start Mafia2-Online", "Mafia2-Online - Error", MB_OK|MB_ICONERROR );
-		return false;
-	}
 
 	CFileChecksum pChecksum;
 	const String strExePath("%s\\pc\\Mafia2.exe", m_strGameDirectory.Get());

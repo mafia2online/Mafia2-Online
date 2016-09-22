@@ -164,7 +164,6 @@
     <ClInclude Include="..\Shared\CSettings.h" />
     <ClInclude Include="..\Shared\CString.h" />
     <ClInclude Include="..\Shared\CSync.h" />
-    <ClInclude Include="..\Shared\CWPMHook.h" />
     <ClInclude Include="..\Shared\CXML.h" />
     <ClInclude Include="..\Shared\CZlib.h" />
     <ClInclude Include="..\Shared\DbgView.h" />
@@ -343,7 +342,6 @@
     <ClCompile Include="..\Shared\CrashRpt.cpp" />
     <ClCompile Include="..\Shared\CSettings.cpp" />
     <ClCompile Include="..\Shared\CString.cpp" />
-    <ClCompile Include="..\Shared\CWPMHook.cpp" />
     <ClCompile Include="..\Shared\CXML.cpp" />
     <ClCompile Include="..\Shared\CZlib.cpp" />
     <ClCompile Include="..\Shared\DbgView.cpp" />

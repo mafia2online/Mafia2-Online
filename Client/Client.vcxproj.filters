@@ -9,9 +9,6 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="Source Files\Anti Cheat">
-      <UniqueIdentifier>{ddd9d9c4-64ce-4609-a344-9239fe8bd5e9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Audio">
       <UniqueIdentifier>{8d052fc8-5588-4b7c-8379-09e2662bff35}</UniqueIdentifier>
     </Filter>
@@ -113,9 +110,6 @@
     </Filter>
     <Filter Include="Source Files\Shared\Game">
       <UniqueIdentifier>{4b064cd9-624c-4993-b5f6-a311ae23a429}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Anti Cheat">
-      <UniqueIdentifier>{2b1fbfb5-907f-4796-ab4f-37fc2d69cb36}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\Audio">
       <UniqueIdentifier>{73d5825f-f948-4f5a-8d4b-d4893ee68135}</UniqueIdentifier>
@@ -698,9 +692,6 @@
     <ClInclude Include="..\Shared\Math\CQuaternion.h">
       <Filter>Header Files\Shared\Math</Filter>
     </ClInclude>
-    <ClInclude Include="..\Shared\CWPMHook.h">
-      <Filter>Header Files\Anti Cheat</Filter>
-    </ClInclude>
     <ClInclude Include="CBlipManager.h">
       <Filter>Header Files\Network</Filter>
     </ClInclude>
@@ -1197,9 +1188,6 @@
     </ClCompile>
     <ClCompile Include="CPlayerRPC.cpp">
       <Filter>Source Files\Network\RPCs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Shared\CWPMHook.cpp">
-      <Filter>Source Files\Anti Cheat</Filter>
     </ClCompile>
     <ClCompile Include="CBlipManager.cpp">
       <Filter>Source Files\Network</Filter>
