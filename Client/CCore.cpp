@@ -166,15 +166,17 @@ CCore::~CCore( void )
 	CLogFile::Printf( "CCore::~CCore" );
 #endif
 
-	SAFE_DELETE(m_pGame);
-	SAFE_DELETE(m_pNetworkModule);
+	// Destroy all entity managers.
+	SAFE_DELETE(m_pVehicleManager);
+
+	// Destroy after vehicle manager as vehicle manager depends on it. (removal of peds from car on destroy)
+	SAFE_DELETE(m_pPlayerManager);
+	SAFE_DELETE(m_pPedManager);
+
 	SAFE_DELETE(m_pGraphics);
 	SAFE_DELETE(m_pChat);
-	SAFE_DELETE(m_pPlayerManager);
 	SAFE_DELETE(m_pFPSCounter);
 	SAFE_DELETE(m_pBlipManager);
-	SAFE_DELETE(m_pVehicleManager);
-	SAFE_DELETE(m_pPedManager);
 	SAFE_DELETE(m_pGUI);
 	SAFE_DELETE(m_pKeyBinds);
 	SAFE_DELETE(m_pStreamer);
@@ -186,6 +188,9 @@ CCore::~CCore( void )
 	SAFE_DELETE(m_pClientScriptingManager);
 	SAFE_DELETE(m_pTimerManager);
 	SAFE_DELETE(m_pFileTransferManager);
+
+	SAFE_DELETE(m_pGame);
+	SAFE_DELETE(m_pNetworkModule);
 
 	SAFE_DELETE(m_pCamera);
 	SAFE_DELETE(m_pHud);
