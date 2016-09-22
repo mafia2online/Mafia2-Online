@@ -74,7 +74,7 @@ CNetworkPlayer::CNetworkPlayer( bool bLocalPlayer )
 	m_bBlipAttached = false;
 	m_iHandModel = 0;
 	m_iHand = 0;
-	
+
 	// Reset enter vehicle stuff
 	m_VehicleEnter.m_pEnterAICommand = NULL;
 	SetEnteringVehicle( NULL, INVALID_ENTITY_ID );
@@ -431,7 +431,7 @@ void CNetworkPlayer::SetRotation( CVector3 vecRotation )
 	{
 		// Convert the rotation to radians
 		vecRotation.ToRadians();
-		
+
 		// Set the player rotation
 		m_pPlayerPed->SetRotation( Quaternion( vecRotation ) );
 	}
@@ -499,7 +499,7 @@ void CNetworkPlayer::SetSelectedWeapon( DWORD dwWeapon, bool bUseAnimation )
 		// Is the weapon id over 6?
 		if( dwWeapon > 6 )
 			dwWeapon += 10;
-			
+
 		// Check if our current weapon is old
 		if( dwWeapon != m_dwWeaponSelect )
 		{
@@ -566,7 +566,7 @@ bool CNetworkPlayer::IsCrouching(void)
 {
 	if (m_pPlayerPed)
 		return (m_pPlayerPed->IsStealthMoving());
-	
+
 	return (false);
 }
 
@@ -1044,6 +1044,8 @@ void CNetworkPlayer::RemoveFromVehicle( CNetworkVehicle * pVehicle )
 	// Is the player and vehicle valid?
 	if( m_pPlayerPed && pVehicle && IsSpawned() )
 	{
+		m_pPlayerPed->Deactivate();
+
 		// Remove the player from the vehicle
 		m_pPlayerPed->GetInOutVehicle( pVehicle->GetVehicle()->GetVehicle(), m_seat, false, true );
 
@@ -1054,6 +1056,8 @@ void CNetworkPlayer::RemoveFromVehicle( CNetworkVehicle * pVehicle )
 		SetVehicle ( NULL );
 		SetSeat ( INVALID_ENTITY_ID );
 		m_playerState = ePlayerState::PLAYERSTATE_ONFOOT;
+
+		m_pPlayerPed->Activate();
 	}
 
 	// Is the player exiting a vehicle?
