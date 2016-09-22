@@ -37,7 +37,8 @@ protected:
 
 public:
 
-						CGUIElement_Impl			( void );
+						CGUIElement_Impl			( CGUI_Impl *gui );
+	virtual				~CGUIElement_Impl			( void );
 
 	void				SetVisible					( bool bVisible );
 	bool				IsVisible					( void );
@@ -56,7 +57,7 @@ public:
 
 	bool				HasParent					( void ) { return (m_pParent != NULL); }
 	bool				HasParent					( CGUIElement_Impl * pParent ) { return (m_pParent == pParent); }
-	
+
 	void				SetText						( String strText );
 	String				GetText						( void );
 

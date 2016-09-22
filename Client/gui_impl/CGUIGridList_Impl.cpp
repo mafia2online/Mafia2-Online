@@ -25,10 +25,8 @@
 #include	"CGUIGridList_Impl.h"
 
 CGUIGridList_Impl::CGUIGridList_Impl( CGUI_Impl * pGUI, CGUIElement_Impl * pParent )
+	: CGUIElement_Impl(pGUI)
 {
-	// Store the manager instance
-	m_pManager = pGUI;
-
 	// Reset
 	m_uiUniqueHandle = 0;
 	m_iIndex = 0;

@@ -24,7 +24,7 @@ public:
 						CGUITabPanel_Impl			( class CGUI_Impl * pGUI, CGUIElement_Impl * pParent = NULL );
 						~CGUITabPanel_Impl			( void );
 
-	CGUITab_Impl		* CreateTab					( String strCaption );
+	std::shared_ptr<CGUITab_Impl> CreateTab			( String strCaption );
 	void				DeleteTab					( CGUITab_Impl * pTab );
 
 	void				SetSelectedTab				( CGUITab_Impl * pTab );

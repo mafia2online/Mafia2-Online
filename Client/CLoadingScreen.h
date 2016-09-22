@@ -18,8 +18,8 @@ class CLoadingScreen
 
 private:
 
-	static	CGUIStaticImage_Impl	* m_pLogo;
-	static	CGUIStaticImage_Impl	* m_pLogotypes;
+	static std::shared_ptr<CGUIStaticImage_Impl> m_pLogo;
+	static std::shared_ptr<CGUIStaticImage_Impl> m_pLogotypes;
 
 public:
 

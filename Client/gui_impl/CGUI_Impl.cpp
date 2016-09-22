@@ -43,6 +43,37 @@
 #include	"CGUI_Impl.h"
 
 CGUI_Impl::CGUI_Impl( IDirect3DDevice9 * pDevice )
+	: m_pDevice(nullptr)
+	, m_pRenderer()
+	, m_pSystem()
+	, m_pFontManager(nullptr)
+	, m_pImageSetManager(nullptr)
+	, m_pSchemeManager(nullptr)
+	, m_pWindowManager(nullptr)
+
+	, m_pDefaultWindow(nullptr)
+	, m_pCursor(nullptr)
+
+	, m_pDefaultFont(nullptr)
+	, m_pDefaultFontBold(nullptr)
+
+	, m_uiUnique(0)
+	, m_redrawQueue()
+
+	, m_CharacterKeyHandler()
+	, m_KeyDownHandler()
+
+	, m_MouseClickHandler()
+	, m_MouseDoubleClickHandler()
+	, m_MouseButtonDownHandler()
+	, m_MouseButtonUpHandler()
+	, m_MouseMoveHandler()
+	, m_MouseEnterHandler()
+	, m_MouseLeaveHandler()
+	, m_MouseWheelHandler()
+
+	, m_FocusGainedHandler()
+	, m_FocusLostHandler()
 {
 	// Set the current directory to the mod folder
 	SetCurrentDirectory( CCore::Instance()->GetModDirectory().Get() );
@@ -51,8 +82,8 @@ CGUI_Impl::CGUI_Impl( IDirect3DDevice9 * pDevice )
 	m_pDevice = pDevice;
 
 	// Create the gui renderer and system
-	m_pRenderer = new CEGUI::DirectX9Renderer( pDevice, 0 );
-	m_pSystem = new CEGUI::System( m_pRenderer );
+	m_pRenderer = std::make_unique<CEGUI::DirectX9Renderer>( pDevice, 0 );
+	m_pSystem = std::make_unique<CEGUI::System>( m_pRenderer.get() );
 
 	// Get pointers to the cegui singletons
 	m_pFontManager = CEGUI::FontManager::getSingletonPtr();
@@ -106,22 +137,19 @@ CGUI_Impl::CGUI_Impl( IDirect3DDevice9 * pDevice )
 
 	// Set the default font
 	m_pSystem->setDefaultFont( m_pDefaultFont->GetFont() );
-	
+
 	// Get the default cursor
 	m_pCursor = CEGUI::MouseCursor::getSingletonPtr();
 
 	// Hide the mouse cursor
 	m_pCursor->hide();
 
-	// Reset the unique number
-	m_uiUnique = 0;
-
 	// Global Events
 	CEGUI::GlobalEventSet * pEvents = CEGUI::GlobalEventSet::getSingletonPtr();
 	pEvents->subscribeEvent( "Window/" + CEGUI::Window::EventRedrawRequested, CEGUI::Event::Subscriber( &CGUI_Impl::Event_RedrawRequest, this ) );
 	pEvents->subscribeEvent( "Window/" + CEGUI::Window::EventActivated, CEGUI::Event::Subscriber( &CGUI_Impl::Event_FocusGained, this ) );
 	pEvents->subscribeEvent( "Window/" + CEGUI::Window::EventDeactivated, CEGUI::Event::Subscriber( &CGUI_Impl::Event_FocusLost, this ) );
-	
+
 	// Global key events
 	pEvents->subscribeEvent( "Window/" + CEGUI::Window::EventKeyDown, CEGUI::Event::Subscriber( &CGUI_Impl::Event_OnKeyDown, this ) );
 	pEvents->subscribeEvent( "Window/" + CEGUI::Window::EventCharacterKey, CEGUI::Event::Subscriber( &CGUI_Impl::Event_CharacterKey, this ) );
@@ -142,12 +170,24 @@ CGUI_Impl::CGUI_Impl( IDirect3DDevice9 * pDevice )
 
 CGUI_Impl::~CGUI_Impl( void )
 {
+	// In case it asserts here you have some gui element leak. Check the content of list
+	// to track down what is the problem and where.
+	assert(m_elementsList.empty());
+}
+
+void CGUI_Impl::NotifyElementCreate( CGUIElement_Impl *element )
+{
+	m_elementsList.push_back(element);
+}
+
+void CGUI_Impl::NotifyElementDestroy( CGUIElement_Impl *element )
+{
+	m_elementsList.remove(element);
 }
 
 void CGUI_Impl::SetResolution( float fWidth, float fHeight )
 {
-	// Set the renderer display size
-	((CEGUI::DirectX9Renderer *)m_pRenderer)->setDisplaySize( CEGUI::Size( fWidth, fHeight ) );
+	m_pRenderer->setDisplaySize( CEGUI::Size( fWidth, fHeight ) );
 }
 
 Vector2 CGUI_Impl::GetResolution( void )
@@ -186,8 +226,7 @@ void CGUI_Impl::OnDeviceLost( void )
 {
 	try
 	{
-		// Reset the d3d9 device
-		((CEGUI::DirectX9Renderer *)m_pRenderer)->preD3DReset();
+		m_pRenderer->preD3DReset();
 	}
 	catch ( CEGUI::RendererException &e )
 	{
@@ -205,8 +244,7 @@ void CGUI_Impl::OnDeviceRestore( void )
 
 	try
 	{
-		// Restore the d3d9 device
-		((CEGUI::DirectX9Renderer *)m_pRenderer)->postD3DReset();
+		m_pRenderer->postD3DReset();
 	}
 	catch ( CEGUI::RendererException &e )
 	{
@@ -424,7 +462,7 @@ bool CGUI_Impl::Event_OnKeyDown( const CEGUI::EventArgs &e )
 					size_t sSelectionStart = pEditBox->getSelectionStartIndex();
 					size_t sSelectionEnd = pEditBox->getSelectionLength();
 					strTemp = pEditBox->getText().substr( sSelectionStart, sSelectionEnd );
-					
+
 					// Are we cutting the text?
 					if( keyArgs.scancode == CEGUI::Key::Scan::X )
 					{
@@ -451,7 +489,7 @@ bool CGUI_Impl::Event_OnKeyDown( const CEGUI::EventArgs &e )
 					size_t sSelectionStart = pEditBox->getSelectionStartIndex();
 					size_t sSelectionEnd = pEditBox->getSelectionLength();
 					strTemp = pEditBox->getText().substr( sSelectionStart, sSelectionEnd );
-					
+
 					// Are we cutting the text?
 					if( keyArgs.scancode == CEGUI::Key::Scan::X )
 					{
@@ -550,7 +588,7 @@ bool CGUI_Impl::Event_OnKeyDown( const CEGUI::EventArgs &e )
 							{
 								// Insert the text
 								strTemp.insert( pEditBox->getSelectionStartIndex(), strClipboard.c_str(), strClipboard.length() );
-							
+
 								//
 								sCaratIndex = pEditBox->getCaratIndex() + strClipboard.length();
 							}
@@ -938,77 +976,77 @@ bool CGUI_Impl::Event_FocusLost( const CEGUI::EventArgs &e )
 	return true;
 }
 
-CGUIWindow_Impl * CGUI_Impl::CreateWnd( String strCaption, CGUIElement_Impl * pParent )
+std::shared_ptr<CGUIWindow_Impl> CGUI_Impl::CreateWnd( String strCaption, CGUIElement_Impl * pParent )
 {
-	return new CGUIWindow_Impl( this, strCaption, pParent );
+	return std::make_shared<CGUIWindow_Impl>( this, strCaption, pParent );
 }
 
-CGUIFont_Impl * CGUI_Impl::CreateFnt( String strName, String strFile, unsigned int uiSize, unsigned int uFlags, bool bAutoScale )
+std::shared_ptr<CGUIFont_Impl> CGUI_Impl::CreateFnt( String strName, String strFile, unsigned int uiSize, unsigned int uFlags, bool bAutoScale )
 {
-	return new CGUIFont_Impl( this, strName, strFile, uiSize, uFlags, bAutoScale );
+	return std::make_shared<CGUIFont_Impl>( this, strName, strFile, uiSize, uFlags, bAutoScale );
 }
 
-CGUIProgressBar_Impl * CGUI_Impl::CreateProgressBar( CGUIElement_Impl * pParent )
+std::shared_ptr<CGUIProgressBar_Impl> CGUI_Impl::CreateProgressBar( CGUIElement_Impl * pParent )
 {
-	return new CGUIProgressBar_Impl( this, pParent );
+	return std::make_shared<CGUIProgressBar_Impl>( this, pParent );
 }
 
-CGUIStaticImage_Impl * CGUI_Impl::CreateStaticImage( CGUIElement_Impl * pParent )
+std::shared_ptr<CGUIStaticImage_Impl> CGUI_Impl::CreateStaticImage( CGUIElement_Impl * pParent )
 {
-	return new CGUIStaticImage_Impl( this, pParent ); 
+	return std::make_shared<CGUIStaticImage_Impl>( this, pParent );
 }
 
-CGUIButton_Impl * CGUI_Impl::CreateButton( String strCaption, CGUIElement_Impl * pParent )
+std::shared_ptr<CGUIButton_Impl> CGUI_Impl::CreateButton( String strCaption, CGUIElement_Impl * pParent )
 {
-	return new CGUIButton_Impl( this, strCaption, pParent );
+	return std::make_shared<CGUIButton_Impl>( this, strCaption, pParent );
 }
 
-CGUICheckBox_Impl * CGUI_Impl::CreateCheckBox( String strCaption, CGUIElement_Impl * pParent )
+std::shared_ptr<CGUICheckBox_Impl> CGUI_Impl::CreateCheckBox( String strCaption, CGUIElement_Impl * pParent )
 {
-	return new CGUICheckBox_Impl( this, strCaption, pParent );
+	return std::make_shared<CGUICheckBox_Impl>( this, strCaption, pParent );
 }
 
-CGUIComboBox_Impl * CGUI_Impl::CreateComboBox( const char * szCaption, CGUIElement_Impl * pParent )
+std::shared_ptr<CGUIComboBox_Impl> CGUI_Impl::CreateComboBox( const char * szCaption, CGUIElement_Impl * pParent )
 {
-	return new CGUIComboBox_Impl( this, szCaption, pParent );
+	return std::make_shared<CGUIComboBox_Impl>( this, szCaption, pParent );
 }
 
-CGUIEdit_Impl * CGUI_Impl::CreateEdit( String strText, CGUIElement_Impl * pParent )
+std::shared_ptr<CGUIEdit_Impl> CGUI_Impl::CreateEdit( String strText, CGUIElement_Impl * pParent )
 {
-	return new CGUIEdit_Impl( this, strText, pParent );
+	return std::make_shared<CGUIEdit_Impl>( this, strText, pParent );
 }
 
-CGUILabel_Impl * CGUI_Impl::CreateLabel( String strText, CGUIFont_Impl * pFont, CGUIElement_Impl * pParent )
+std::shared_ptr<CGUILabel_Impl> CGUI_Impl::CreateLabel( String strText, CGUIFont_Impl * pFont, CGUIElement_Impl * pParent )
 {
-	return new CGUILabel_Impl( this, strText, pFont, pParent );
+	return std::make_shared<CGUILabel_Impl>( this, strText, pFont, pParent );
 }
 
-CGUIRadioButton_Impl * CGUI_Impl::CreateRadioButton( String strCaption, CGUIElement_Impl * pParent )
+std::shared_ptr<CGUIRadioButton_Impl> CGUI_Impl::CreateRadioButton( String strCaption, CGUIElement_Impl * pParent )
 {
-	return new CGUIRadioButton_Impl( this, strCaption, pParent );
+	return std::make_shared<CGUIRadioButton_Impl>( this, strCaption, pParent );
 }
 
-CGUITabPanel_Impl * CGUI_Impl::CreateTabPanel( CGUIElement_Impl * pParent )
+std::shared_ptr<CGUITabPanel_Impl> CGUI_Impl::CreateTabPanel( CGUIElement_Impl * pParent )
 {
-	return new CGUITabPanel_Impl( this, pParent );
+	return std::make_shared<CGUITabPanel_Impl>( this, pParent );
 }
 
-CGUIGridList_Impl * CGUI_Impl::CreateGridList( CGUIElement_Impl * pParent )
+std::shared_ptr<CGUIGridList_Impl> CGUI_Impl::CreateGridList( CGUIElement_Impl * pParent )
 {
-	return new CGUIGridList_Impl( this, pParent );
+	return std::make_shared<CGUIGridList_Impl>( this, pParent );
 }
 
-CGUIScrollBar_Impl * CGUI_Impl::CreateScrollBar( bool bHorizontal, CGUIElement_Impl * pParent )
+std::shared_ptr<CGUIScrollBar_Impl> CGUI_Impl::CreateScrollBar( bool bHorizontal, CGUIElement_Impl * pParent )
 {
-	return new CGUIScrollBar_Impl( this, bHorizontal, pParent );
+	return std::make_shared<CGUIScrollBar_Impl>( this, bHorizontal, pParent );
 }
 
-CGUIScrollPane_Impl * CGUI_Impl::CreateScrollPane( CGUIElement_Impl * pParent )
+std::shared_ptr<CGUIScrollPane_Impl> CGUI_Impl::CreateScrollPane( CGUIElement_Impl * pParent )
 {
-	return new CGUIScrollPane_Impl( this, pParent );
+	return std::make_shared<CGUIScrollPane_Impl>( this, pParent );
 }
 
-CGUIMessageBox_Impl * CGUI_Impl::CreateMessageBox( const char * szTitle, const char * szCaption, const char * szButton1, const char * szButton2 )
+std::shared_ptr<CGUIMessageBox_Impl> CGUI_Impl::CreateMessageBox( const char * szTitle, const char * szCaption, const char * szButton1, const char * szButton2 )
 {
-	return new CGUIMessageBox_Impl( this, szTitle, szCaption, szButton1, szButton2 );
+	return std::make_shared<CGUIMessageBox_Impl>( this, szTitle, szCaption, szButton1, szButton2 );
 }

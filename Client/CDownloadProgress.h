@@ -20,8 +20,8 @@ class CDownloadProgress
 
 private:
 
-	CGUIWindow_Impl							* m_pWindow;
-	CGUIProgressBar_Impl					* m_pProgressBar;
+	std::shared_ptr<CGUIWindow_Impl>		m_pWindow;
+	std::shared_ptr<CGUIProgressBar_Impl>	m_pProgressBar;
 
 public:
 

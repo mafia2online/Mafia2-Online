@@ -48,7 +48,7 @@ CGUIMessageBox_Impl::CGUIMessageBox_Impl( CGUI_Impl * pGUI, const char * szTitle
 	// If we have don't any buttons adjust the offset
 	if ( !strlen ( szButton1 ) && !strlen ( szButton2 ) )
 		fWindowHeight -= 24.0f;
-	
+
 	// Create the window
 	m_pWindow = pGUI->CreateWnd( szTitle );
 	m_pWindow->SetAlwaysOnTop( true );
@@ -58,7 +58,7 @@ CGUIMessageBox_Impl::CGUIMessageBox_Impl( CGUI_Impl * pGUI, const char * szTitle
 	m_pWindow->SetSize( Vector2( MESSAGEBOX_WIDTH, fWindowHeight ) );
 
 	// Create the icon
-	m_pIcon = pGUI->CreateStaticImage( m_pWindow );
+	m_pIcon = pGUI->CreateStaticImage( m_pWindow.get() );
 	m_pIcon->SetPosition( Vector2( 20.0f, (fWindowHeight / 2) - (ICON_SIZE / 2) ) );
 	m_pIcon->SetSize( Vector2( ICON_SIZE, ICON_SIZE ) );
 	m_pIcon->SetVisible( true );
@@ -76,7 +76,7 @@ CGUIMessageBox_Impl::CGUIMessageBox_Impl( CGUI_Impl * pGUI, const char * szTitle
 	*/
 
 	// Create the caption
-	m_pCaption = pGUI->CreateLabel ( szCaption, NULL, m_pWindow );
+	m_pCaption = pGUI->CreateLabel ( szCaption, NULL, m_pWindow.get() );
 	m_pCaption->SetHorizontalAlignment ( CEGUI::HorizontalAlignment::HA_LEFT );
 	m_pCaption->SetVerticalAlignment ( CEGUI::VerticalAlignment::VA_CENTRE );
 	m_pCaption->SendToBack ();
@@ -92,7 +92,7 @@ CGUIMessageBox_Impl::CGUIMessageBox_Impl( CGUI_Impl * pGUI, const char * szTitle
 	if ( strlen ( szButton1 ) )
 	{
 		// Create the button
-		m_pButton[0] = pGUI->CreateButton ( szButton1, m_pWindow );
+		m_pButton[0] = pGUI->CreateButton ( szButton1, m_pWindow.get() );
 		m_pButton[0]->SetPosition ( Vector2( MESSAGEBOX_WIDTH - 94, fWindowHeight * 0.76f ) );
 		m_pButton[0]->SetSize ( Vector2 ( 84, 24 ) );
 		m_pButton[0]->SetZOrderingEnabled ( false );
@@ -116,7 +116,7 @@ CGUIMessageBox_Impl::CGUIMessageBox_Impl( CGUI_Impl * pGUI, const char * szTitle
 		}
 
 		// Create the button
-		m_pButton[1] = pGUI->CreateButton ( szButton2, m_pWindow );
+		m_pButton[1] = pGUI->CreateButton ( szButton2, m_pWindow.get() );
 		m_pButton[1]->SetPosition ( Vector2( MESSAGEBOX_WIDTH - 94, fWindowHeight * 0.76f ) );
 		m_pButton[1]->SetSize ( Vector2 ( 84, 24 ) );
 		m_pButton[1]->SetZOrderingEnabled ( false );
@@ -136,12 +136,6 @@ CGUIMessageBox_Impl::CGUIMessageBox_Impl( CGUI_Impl * pGUI, const char * szTitle
 
 CGUIMessageBox_Impl::~CGUIMessageBox_Impl( void )
 {
-	// Cleanup
-	SAFE_DELETE( m_pButton[1] );
-	SAFE_DELETE( m_pButton[0] );
-	SAFE_DELETE( m_pCaption );
-	SAFE_DELETE( m_pIcon );
-	SAFE_DELETE( m_pWindow );
 }
 
 bool CGUIMessageBox_Impl::Event_OnButton1Click ( CGUIElement_Impl * pElement )

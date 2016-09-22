@@ -19,10 +19,10 @@ class CGUIMessageBox_Impl
 
 private:
 
-	CGUIWindow_Impl									* m_pWindow;
-	CGUIStaticImage_Impl							* m_pIcon;
-	CGUILabel_Impl									* m_pCaption;
-	CGUIButton_Impl									* m_pButton[2];
+	std::shared_ptr<CGUIWindow_Impl>				m_pWindow;
+	std::shared_ptr<CGUIStaticImage_Impl>			m_pIcon;
+	std::shared_ptr<CGUILabel_Impl>					m_pCaption;
+	std::shared_ptr<CGUIButton_Impl>				m_pButton[2];
 
 	ButtonClickHandler_t							m_pfnButtonClickHandler[2];
 	void											* m_pButtonClickUserData[2];
@@ -44,7 +44,7 @@ public:
 	void				SetCaption					( const char * szCaption ) { m_pCaption->SetText ( szCaption ); }
 	const char			* GetCaption				( void ) { return m_pCaption->GetText().Get(); }
 
-	CGUIWindow_Impl		* GetWindow					( void ) { return m_pWindow; }
+	CGUIWindow_Impl		* GetWindow					( void ) { return m_pWindow.get(); }
 
 	void				SetButtonClickHandler		( int id, ButtonClickHandler_t pfnButtonClickHandler, void * pButtonClickUserData ) { m_pfnButtonClickHandler[ id ] = pfnButtonClickHandler; m_pButtonClickUserData[ id ] = pButtonClickUserData; }
 

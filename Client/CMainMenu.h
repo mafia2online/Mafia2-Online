@@ -14,7 +14,6 @@
 #include	"gui_impl\CGUIElement_Impl.h"
 #include	"gui_impl\CGUIStaticImage_Impl.h"
 
-class CUpdater;
 class CMainMenu
 {
 
@@ -24,9 +23,9 @@ private:
 	bool															m_bVisible;
 
 	int																m_iFadeAlpha;
-	CGUIStaticImage_Impl											* m_pLogo;
+	std::shared_ptr<CGUIStaticImage_Impl>							m_pLogo;
 
-	std::list< CGUIStaticImage_Impl* >								m_items;
+	std::list<std::shared_ptr<CGUIStaticImage_Impl> >				m_items;
 
 	bool							OnQuickConnectClick				( CGUIElement_Impl * pElement );
 	bool							OnDisconnectClick				( CGUIElement_Impl * pElement );
@@ -43,12 +42,12 @@ private:
 	bool															m_bPreviousControlState;
 
 	// Connect and disconnect items
-	CGUIStaticImage_Impl											* m_pQuickConnect;
-	CGUIStaticImage_Impl											* m_pConnect;
-	CGUIStaticImage_Impl											* m_pDisconnect;
-	CGUIStaticImage_Impl											* m_pRefresh;
-	CGUIStaticImage_Impl											* m_pSettings;
-	CGUIStaticImage_Impl											* m_pQuit;
+	std::shared_ptr<CGUIStaticImage_Impl>							m_pQuickConnect;
+	std::shared_ptr<CGUIStaticImage_Impl>							m_pConnect;
+	std::shared_ptr<CGUIStaticImage_Impl>							m_pDisconnect;
+	std::shared_ptr<CGUIStaticImage_Impl>							m_pRefresh;
+	std::shared_ptr<CGUIStaticImage_Impl>							m_pSettings;
+	std::shared_ptr<CGUIStaticImage_Impl>							m_pQuit;
 
 	// Background fader
 	unsigned long													m_ulLastFadeTime;
@@ -61,7 +60,7 @@ public:
 									CMainMenu						( CGUI_Impl * pGUI );
 									~CMainMenu						( void );
 
-	CGUIStaticImage_Impl			* CreateItem					( String strLocation, Vector2 vecPosition, bool bRelativePosition, Vector2 vecSize, GUI_CALLBACK pfnHandler );
+	std::shared_ptr<CGUIStaticImage_Impl> CreateItem				( String strLocation, Vector2 vecPosition, bool bRelativePosition, Vector2 vecSize, GUI_CALLBACK pfnHandler );
 
 	void							SetVisible						( bool bVisible );
 	bool							IsVisible						( void ) { return m_bVisible; }

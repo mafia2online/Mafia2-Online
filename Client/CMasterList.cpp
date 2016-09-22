@@ -32,10 +32,10 @@
 }
 
 // TODO: refactor this
-void CMasterList::WorkerThread( eRefreshType type )
+void CMasterList::WorkerThread()
 {
 	// Loop until end
-	while ( true )
+	while ( !m_forceWorkerShutdown )
 	{
 		// Is the http client busy?
 		if ( m_pHttpClient->IsBusy() )
@@ -73,22 +73,19 @@ void CMasterList::WorkerThread( eRefreshType type )
 				String strPath( MASTERLIST_NONE_URL_PATH );
 
 				// Are we requesting hosted tab servers?
-				if ( type == eRefreshType::E_REFRESH_HOSTED )
+				if ( m_refreshType == eRefreshType::E_REFRESH_HOSTED )
 					strPath = MASTERLIST_HOSTED_URL_PATH;
-
-				// Update the last refresh time
-				m_lastRefreshTime = SharedUtility::GetTime();
 
 				// Update the state
 				m_refreshState = RefreshState_InProgress;
-				
+
 				// Send the http request
 				m_pHttpClient->Get( strPath );
 
 				// Was there an error?
 				if ( m_pHttpClient->GetLastError() != HTTP_ERROR_NONE )
 				{
-					OnRefreshFailed( String( "Failed to get masterlist from server!\nError: %s (%d)", 
+					OnRefreshFailed( String( "Failed to get masterlist from server!\nError: %s (%d)",
 						m_pHttpClient->GetLastErrorString().Get(), m_pHttpClient->GetLastError() ).Get() );
 				}
 			}
@@ -110,7 +107,7 @@ void CMasterList::OnRefreshFailed( const char *errorMessage )
 
 	// Wait 3 seconds
 	std::this_thread::sleep_for( std::chrono::seconds( 3 ) );
-	
+
 	// Hide the message box
 	m_pMessageBox->SetVisible( false );
 }
@@ -122,7 +119,7 @@ void CMasterList::OnRefreshSuccess( String *serverListData )
 	// Split the servers
 	std::vector<String> servers = serverListData->split( "<br />" );
 
-	CLogFile::Printf( "Discovered %d servers. (%s)", 
+	CLogFile::Printf( "Discovered %d servers. (%s)",
 		servers.size(), SharedUtility::BytesToString(serverListData->GetLength()).Get() );
 
 	// Call our query handler
@@ -135,11 +132,14 @@ void CMasterList::OnRefreshSuccess( String *serverListData )
 
 CMasterList::CMasterList( QueryHandler_t handler )
 	: m_queryHandler( handler )
+	, m_forceWorkerShutdown(false)
 	, m_refreshState( RefreshState_Ready )
-	, m_refreshThread( nullptr )
+	, m_refreshType( E_REFRESH_NONE )
+
+	, m_pMessageBox()
 {
 	// Create the http client instance
-	m_pHttpClient = new CHttpClient;
+	m_pHttpClient = std::make_unique<CHttpClient>();
 
 	// Set the http recieve handler
 	m_pHttpClient->SetReceiveHandle( DummyReceiveHandler, this );
@@ -147,24 +147,17 @@ CMasterList::CMasterList( QueryHandler_t handler )
 	// Set the http client host
 	m_pHttpClient->SetHost( MASTERLIST_HOST );
 
-	// Reset
-	m_lastRefreshTime = SharedUtility::GetTime();
-	
 	// Create the messagebox
 	m_pMessageBox = CCore::Instance()->GetGUI()->GetCEGUI()->CreateMessageBox( "", "" );
 	m_pMessageBox->SetVisible( false );
+
+	m_refreshThread = std::thread(std::bind( &CMasterList::WorkerThread, this ));
 }
 
 CMasterList::~CMasterList( void )
 {
-	// TODO: wait for the worker thread
-	SAFE_DELETE( m_refreshThread );
-
-	// Delete the http client instance
-	SAFE_DELETE( m_pHttpClient );
-
-	// Delete the messagebox instance
-	SAFE_DELETE( m_pMessageBox );
+	m_forceWorkerShutdown = true;
+	m_refreshThread.join();
 }
 
 bool CMasterList::Refresh( eRefreshType type )
@@ -173,15 +166,12 @@ bool CMasterList::Refresh( eRefreshType type )
 	if ( m_refreshState != RefreshState_Ready )
 		return false;
 
-	// Make sure they're not spamming!
-	/*if ((SharedUtility::GetTime() - m_lastRefreshTime) > 2000)
-		return false;*/
-
 	// Reset the http client
 	m_pHttpClient->Reset();
 
 	// Update the state
 	m_refreshState = RefreshState_UpdateRequired;
+	m_refreshType = type;
 
 	// Update the message box
 	m_pMessageBox->SetTitle( "Refreshing" );
@@ -189,16 +179,6 @@ bool CMasterList::Refresh( eRefreshType type )
 	m_pMessageBox->SetVisible( true );
 	m_pMessageBox->GetWindow()->SetAlwaysOnTop( true );
 	m_pMessageBox->GetWindow()->BringToFront();
-
-	if ( m_refreshThread == nullptr )
-	{
-		// Create the refresh thread
-		m_refreshThread = new std::thread( 
-			std::bind( &CMasterList::WorkerThread, this, type ) );
-
-		// Start the refresh thread
-		m_refreshThread->detach();
-	}
 
 	return true;
 }

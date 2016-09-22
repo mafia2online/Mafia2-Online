@@ -18,7 +18,7 @@ class CGUILabel_Impl : public CGUIElement_Impl
 
 protected:
 
-	CGUIFont_Impl									* m_pFont;
+	CGUIFont_Impl								  * m_pFont;
 	bool											m_bAutoSizeEnabled;
 
 public:

@@ -21,11 +21,11 @@ class CServerPassword
 
 private:
 
-	CGUIWindow_Impl							* m_pWindow;
-	CGUILabel_Impl							* m_pLabel;
-	CGUIEdit_Impl							* m_pEdit;
-	CGUIButton_Impl							* m_pSubmit;
-	CGUIButton_Impl							* m_pCancel;
+	std::shared_ptr<CGUIWindow_Impl>		m_pWindow;
+	std::shared_ptr<CGUILabel_Impl>			m_pLabel;
+	std::shared_ptr<CGUIEdit_Impl>			m_pEdit;
+	std::shared_ptr<CGUIButton_Impl>		m_pSubmit;
+	std::shared_ptr<CGUIButton_Impl>		m_pCancel;
 
 	SubmitHandler_t							m_pfnSubmitHandler;
 	void									* m_pSubmitHandlerUserData;

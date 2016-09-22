@@ -29,15 +29,13 @@ CDownloadProgress::CDownloadProgress( void )
 	m_pWindow->SetSizingEnabled( false );
 	m_pWindow->SetVisible( false );
 
-	m_pProgressBar = CCore::Instance()->GetGUI()->GetCEGUI()->CreateProgressBar(m_pWindow);
+	m_pProgressBar = CCore::Instance()->GetGUI()->GetCEGUI()->CreateProgressBar(m_pWindow.get());
 	m_pProgressBar->SetPosition( Vector2( 2, 23 ) );
 	m_pProgressBar->SetSize( Vector2( 340, 25 ) );
 }
 
 CDownloadProgress::~CDownloadProgress( void )
 {
-	SAFE_DELETE( m_pProgressBar );
-	SAFE_DELETE( m_pWindow );
 }
 
 void CDownloadProgress::SetVisible( bool bVisible )

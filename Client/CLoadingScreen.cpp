@@ -24,8 +24,8 @@
 
 #include	"CLoadingScreen.h"
 
-CGUIStaticImage_Impl	* CLoadingScreen::m_pLogo = NULL;
-CGUIStaticImage_Impl	* CLoadingScreen::m_pLogotypes = NULL;
+std::shared_ptr<CGUIStaticImage_Impl> CLoadingScreen::m_pLogo;
+std::shared_ptr<CGUIStaticImage_Impl> CLoadingScreen::m_pLogotypes;
 
 void CLoadingScreen::Start( void )
 {
@@ -54,8 +54,8 @@ void CLoadingScreen::Start( void )
 
 void CLoadingScreen::Finish( void )
 {
-	SAFE_DELETE(m_pLogo);
-	SAFE_DELETE(m_pLogotypes);
+	m_pLogo.reset();
+	m_pLogotypes.reset();
 }
 
 void CLoadingScreen::Render ( void )

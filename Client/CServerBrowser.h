@@ -60,19 +60,19 @@ private:
 	unsigned long									m_ulLastRefreshTime;
 
 	// Gui Widgets
-	CGUIWindow_Impl									* m_pWindow;
-	CGUITabPanel_Impl								* m_pTabs;
-	CGUITab_Impl									* m_pTab[MAX_SERVER_LISTS];
-	CGUIGridList_Impl								* m_pServerGridList[MAX_SERVER_LISTS];
-	CGUIGridList_Impl								* m_pPlayersGridList;
-	CGUITabPanel_Impl								* m_pPlayers;
-	CGUITab_Impl									* m_pPlayersTab;
-	CGUITab_Impl									* m_pRulesTab;
-	CGUIButton_Impl									* m_pRefresh;
-	CGUIButton_Impl									* m_pConnect;
-	CGUIButton_Impl									* m_pFavourite;
-	CGUIStaticImage_Impl							* m_pLockedImage;
-	CGUILabel_Impl									* m_pStatusLabel;
+	std::shared_ptr<CGUIWindow_Impl>				m_pWindow;
+	std::shared_ptr<CGUITabPanel_Impl>				m_pTabs;
+	std::shared_ptr<CGUITab_Impl>					m_pTab[MAX_SERVER_LISTS];
+	std::shared_ptr<CGUIGridList_Impl>				m_pServerGridList[MAX_SERVER_LISTS];
+	std::shared_ptr<CGUIGridList_Impl>				m_pPlayersGridList;
+	std::shared_ptr<CGUITabPanel_Impl>				m_pPlayers;
+	std::shared_ptr<CGUITab_Impl>					m_pPlayersTab;
+	std::shared_ptr<CGUITab_Impl>					m_pRulesTab;
+	std::shared_ptr<CGUIButton_Impl>				m_pRefresh;
+	std::shared_ptr<CGUIButton_Impl>				m_pConnect;
+	std::shared_ptr<CGUIButton_Impl>				m_pFavourite;
+	std::shared_ptr<CGUIStaticImage_Impl>			m_pLockedImage;
+	std::shared_ptr<CGUILabel_Impl>					m_pStatusLabel;
 
 	// Counts
 	int												m_iTotalServers;
@@ -80,13 +80,13 @@ private:
 	int												m_iAvailableSlots;
 
 	// Quick Connect
-	CGUIWindow_Impl									* m_pQuickConnectWindow;
-	CGUILabel_Impl									* m_pQuickConnectLabel;
-	CGUIEdit_Impl									* m_pQuickConnectAddress;
-	CGUIEdit_Impl									* m_pQuickConnectPort;
-	CGUIEdit_Impl									* m_pQuickConnectPassword;
-	CGUIButton_Impl									* m_pQuickConnectSubmit;
-	CGUIButton_Impl									* m_pQuickConnectCancel;
+	std::shared_ptr<CGUIWindow_Impl>				m_pQuickConnectWindow;
+	std::shared_ptr<CGUILabel_Impl>					m_pQuickConnectLabel;
+	std::shared_ptr<CGUIEdit_Impl>					m_pQuickConnectAddress;
+	std::shared_ptr<CGUIEdit_Impl>					m_pQuickConnectPort;
+	std::shared_ptr<CGUIEdit_Impl>					m_pQuickConnectPassword;
+	std::shared_ptr<CGUIButton_Impl>				m_pQuickConnectSubmit;
+	std::shared_ptr<CGUIButton_Impl>				m_pQuickConnectCancel;
 
 	// Quick connect events
 	bool				Event_QuickConnectSubmitClick( CGUIElement_Impl * pElement );
@@ -112,7 +112,7 @@ private:
 	int												m_iSelectedServer[MAX_SERVER_LISTS];
 
 	//
-	CGUIMessageBox_Impl								* m_pMessageBox;
+	std::shared_ptr<CGUIMessageBox_Impl>			m_pMessageBox;
 	static void			Button1ClickHandler			( void * pUserData );
 
 	//
@@ -149,9 +149,9 @@ public:
 	void				RefreshFromFile				( const char * szFile );
 
 	CServerList			* GetServerList				( ServerBrowserType type );
-	CGUIGridList_Impl	* GetServerGridList			( ServerBrowserType type ) { return m_pServerGridList[ type ]; }
+	CGUIGridList_Impl	* GetServerGridList			( ServerBrowserType type ) { return m_pServerGridList[ type ].get(); }
 
-	ServerBrowserType	GetCurrentServerBrowserType	( void );
+	ServerBrowserType	GetCurrentServerBrowserType	( void ) const;
 
 	void				ProcessNetworkPacket		( DefaultMessageIDTypes packet );
 	void				SetConnectionState			( eConnectionState connection ) { m_connectionState = connection; }
@@ -165,6 +165,6 @@ public:
 
 	void				OnScreenSizeChange			( float fX, float fY );
 
-	CGUIMessageBox_Impl	* GetMessageBox				( void ) { return m_pMessageBox; }
+	CGUIMessageBox_Impl	* GetMessageBox				( void ) { return m_pMessageBox.get(); }
 
 };

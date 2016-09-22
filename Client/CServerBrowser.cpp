@@ -188,25 +188,6 @@ CServerBrowser::CServerBrowser( CGUI_Impl * pGUI )
 
 CServerBrowser::~CServerBrowser( void )
 {
-	// Delete the gui items
-	SAFE_DELETE( m_pStatusLabel );
-	SAFE_DELETE( m_pMessageBox );
-	SAFE_DELETE( m_pLockedImage );
-	SAFE_DELETE( m_pFavourite );
-	SAFE_DELETE( m_pConnect );
-	SAFE_DELETE( m_pRefresh );
-	SAFE_DELETE( m_pTabs );
-	SAFE_DELETE( m_pWindow );
-
-	// Delete the quick connect gui
-	SAFE_DELETE ( m_pQuickConnectCancel );
-	SAFE_DELETE ( m_pQuickConnectSubmit );
-	SAFE_DELETE ( m_pQuickConnectPassword );
-	SAFE_DELETE ( m_pQuickConnectPort );
-	SAFE_DELETE ( m_pQuickConnectAddress );
-	SAFE_DELETE ( m_pQuickConnectLabel );
-	SAFE_DELETE ( m_pQuickConnectWindow );
-
 	// Delete the server password instance
 	SAFE_DELETE ( m_pServerPassword );
 
@@ -287,7 +268,7 @@ void CServerBrowser::SetupUI( float fX, float fY, float fWidth, float fHeight )
 	m_pPlayers->SetAlwaysOnTop( true );
 
 	// Create the status label
-	m_pStatusLabel = m_pGUI->CreateLabel ( "", m_pGUI->GetDefaultFont( true ) );
+	m_pStatusLabel = m_pGUI->CreateLabel ( "", m_pGUI->GetDefaultFont( true ).get() );
 	m_pStatusLabel->SetSize ( Vector2 ( (fWidth - 260), 30 ) );
 	m_pStatusLabel->SetPosition ( Vector2 ( fX, (fY + fHeight + 10) ) );
 
@@ -296,7 +277,7 @@ void CServerBrowser::SetupUI( float fX, float fY, float fWidth, float fHeight )
 	m_pRulesTab = m_pPlayers->CreateTab( "Rules" );
 
 	// Create the players grid list
-	m_pPlayersGridList = m_pGUI->CreateGridList( m_pPlayersTab );
+	m_pPlayersGridList = m_pGUI->CreateGridList( m_pPlayersTab.get() );
 	m_pPlayersGridList->SetPosition( Vector2( 1, 1 ) );
 	m_pPlayersGridList->SetSize( Vector2( 247, (fHeight - 26) ) );
 	m_pPlayersGridList->AddColumn ( "Name", 0.60f );
@@ -331,7 +312,7 @@ void CServerBrowser::SetupUI( float fX, float fY, float fWidth, float fHeight )
 	m_pQuickConnectWindow->SetAlpha ( 1.0f );
 
 	// Create the quick connect label
-	m_pQuickConnectLabel = m_pGUI->CreateLabel ( "Enter the server IP, Port and Password:", NULL, m_pQuickConnectWindow );
+	m_pQuickConnectLabel = m_pGUI->CreateLabel ( "Enter the server IP, Port and Password:", NULL, m_pQuickConnectWindow.get() );
 	m_pQuickConnectLabel->SetSize ( Vector2 ( 200, 20 ) );
 	m_pQuickConnectLabel->SetPosition ( Vector2 ( 20, 25 ) );
 
@@ -339,32 +320,32 @@ void CServerBrowser::SetupUI( float fX, float fY, float fWidth, float fHeight )
 	bool bRestoreInformation = (strlen(CVAR_GET_STRING("last-server-ip")) != 0);
 
 	// Create the quick connect IP input
-	m_pQuickConnectAddress = m_pGUI->CreateEdit ( (bRestoreInformation ? CVAR_GET_STRING ( "last-server-ip" ) : "127.0.0.1"), m_pQuickConnectWindow );
+	m_pQuickConnectAddress = m_pGUI->CreateEdit ( (bRestoreInformation ? CVAR_GET_STRING ( "last-server-ip" ) : "127.0.0.1"), m_pQuickConnectWindow.get() );
 	m_pQuickConnectAddress->SetSize ( Vector2( 160, 24 ) );
 	m_pQuickConnectAddress->SetPosition ( Vector2 ( 18, 50 ) );
 	m_pQuickConnectAddress->SetClickHandler ( GUI_CALLBACK ( &CServerBrowser::Event_QuickConnectInputFocus, this ) );
 
 	// Create the quick connect port input
-	m_pQuickConnectPort = m_pGUI->CreateEdit ( String ( "%d", bRestoreInformation ? CVAR_GET_INTEGER ( "last-server-port" ) : DEFAULT_PORT ), m_pQuickConnectWindow );
+	m_pQuickConnectPort = m_pGUI->CreateEdit ( String ( "%d", bRestoreInformation ? CVAR_GET_INTEGER ( "last-server-port" ) : DEFAULT_PORT ), m_pQuickConnectWindow.get() );
 	m_pQuickConnectPort->SetSize ( Vector2( 55, 24 ) );
 	m_pQuickConnectPort->SetPosition ( Vector2 ( 183, 50 ) );
 	m_pQuickConnectPort->SetClickHandler ( GUI_CALLBACK ( &CServerBrowser::Event_QuickConnectInputFocus, this ) );
 
 	// Create the quick connect password input
-	m_pQuickConnectPassword = m_pGUI->CreateEdit ( (bRestoreInformation ? CVAR_GET_STRING ( "last-server-password" ) : ""), m_pQuickConnectWindow );
+	m_pQuickConnectPassword = m_pGUI->CreateEdit ( (bRestoreInformation ? CVAR_GET_STRING ( "last-server-password" ) : ""), m_pQuickConnectWindow.get() );
 	m_pQuickConnectPassword->SetSize ( Vector2( 220, 24 ) );
 	m_pQuickConnectPassword->SetPosition ( Vector2( 18, 85 ) );
 	m_pQuickConnectPassword->SetClickHandler ( GUI_CALLBACK ( &CServerBrowser::Event_QuickConnectInputFocus, this ) );
 	m_pQuickConnectPassword->SetMasked ( true );
 
 	// Create the quick connect submit button
-	m_pQuickConnectSubmit = m_pGUI->CreateButton ( "Connect", m_pQuickConnectWindow );
+	m_pQuickConnectSubmit = m_pGUI->CreateButton ( "Connect", m_pQuickConnectWindow.get() );
 	m_pQuickConnectSubmit->SetSize ( Vector2 ( 75, 20 ) );
 	m_pQuickConnectSubmit->SetPosition ( Vector2 ( 18, 120 ) );
 	m_pQuickConnectSubmit->SetClickHandler ( GUI_CALLBACK( &CServerBrowser::Event_QuickConnectSubmitClick, this ) );
 
 	// Create the quick connect cancel button
-	m_pQuickConnectCancel = m_pGUI->CreateButton ( "Cancel", m_pQuickConnectWindow );
+	m_pQuickConnectCancel = m_pGUI->CreateButton ( "Cancel", m_pQuickConnectWindow.get() );
 	m_pQuickConnectCancel->SetSize ( Vector2 ( 75, 20 ) );
 	m_pQuickConnectCancel->SetPosition ( Vector2 ( 100, 120 ) );
 	m_pQuickConnectCancel->SetClickHandler ( GUI_CALLBACK( &CServerBrowser::Event_QuickConnectCancelClick, this ) );
@@ -373,13 +354,13 @@ void CServerBrowser::SetupUI( float fX, float fY, float fWidth, float fHeight )
 void CServerBrowser::CreateTab( ServerBrowserType type, const char * szName, float fWidth, float fHeight )
 {
 	// Create the gui tab
-	CGUITab_Impl * pTab = m_pTabs->CreateTab( szName );
+	std::shared_ptr<CGUITab_Impl> pTab = m_pTabs->CreateTab( szName );
 
 	// Set the tab instance
 	m_pTab[ type ] = pTab;
 
 	// Create the server grid list
-	m_pServerGridList[ type ] = m_pGUI->CreateGridList( pTab );
+	m_pServerGridList[ type ] = m_pGUI->CreateGridList( pTab.get() );
 	m_pServerGridList[ type ]->SetPosition( Vector2( 1, 1 ) );
 	m_pServerGridList[ type ]->SetSize( Vector2( fWidth, fHeight ) );
 	m_pServerGridList[ type ]->SetClickHandler( GUI_CALLBACK( &CServerBrowser::Event_OnMouseClick, this ) );
@@ -406,11 +387,8 @@ void CServerBrowser::DeleteTab( ServerBrowserType type )
 	// Delete the server list instance
 	SAFE_DELETE( m_pServerList[ type ] );
 
-	// Delete the server grid list
-	SAFE_DELETE( m_pServerGridList[ type ] ) ;
-
-	// Delete the server tab
-	SAFE_DELETE( m_pTab[ type ] );
+	m_pServerGridList[ type ].reset();
+	m_pTab[ type ].reset();
 }
 
 void CServerBrowser::AddServer( ServerBrowserType type, CServerListItem * pServer )
@@ -423,7 +401,7 @@ void CServerBrowser::AddServer( ServerBrowserType type, CServerListItem * pServe
 
 	// Set the locked image
 	if( pServer->bPassworded )
-		m_pServerGridList[ type ]->SetItemImage( iRow, 1, m_pLockedImage );
+		m_pServerGridList[ type ]->SetItemImage( iRow, 1, m_pLockedImage.get() );
 
 	// Set the server information
 	iRow = m_pServerGridList[ type ]->SetItemText( iRow, 2, pServer->strHostname );
@@ -827,18 +805,14 @@ CServerList * CServerBrowser::GetServerList( ServerBrowserType type )
 	return m_pServerList[ type ];
 }
 
-ServerBrowserType CServerBrowser::GetCurrentServerBrowserType( void )
+ServerBrowserType CServerBrowser::GetCurrentServerBrowserType( void ) const
 {
-	// Get the tab
-	if( m_pTabs->IsTabSelected( m_pTab[ INTERNET ] ) )
-		return INTERNET;
-	else if( m_pTabs->IsTabSelected( m_pTab[ HOSTED ] ) )
-		return HOSTED;
-	else if( m_pTabs->IsTabSelected( m_pTab[ FAVOURITES ] ) )
-		return FAVOURITES;
-	else if( m_pTabs->IsTabSelected( m_pTab[ HISTORY ] ) )
-		return HISTORY;
-
+	CGUITab_Impl *pSelectedTab = m_pTabs->GetSelectedTab();
+	for (size_t i = 0; i < MAX_SERVER_LISTS; ++i) {
+		if (pSelectedTab == m_pTab[i].get()) {
+			return static_cast<ServerBrowserType>(i);
+		}
+	}
 	return INTERNET;
 }
 

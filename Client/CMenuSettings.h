@@ -14,60 +14,60 @@ class CMenuSettings
 
 private:
 
-	CGUI_Impl										* m_pGUI;
-	CGUIWindow_Impl									* m_pWindow;
-	CGUITabPanel_Impl								* m_pTabs;
-	CGUITab_Impl									* m_pMultiplayer;
-	CGUITab_Impl									* m_pVideo;
-	CGUITab_Impl									* m_pAudio;
-	CGUITab_Impl									* m_pAuth;
+	CGUI_Impl										*m_pGUI;
+	std::shared_ptr<CGUIWindow_Impl>				m_pWindow;
+	std::shared_ptr<CGUITabPanel_Impl>				m_pTabs;
+	std::shared_ptr<CGUITab_Impl>					m_pMultiplayer;
+	std::shared_ptr<CGUITab_Impl>					m_pVideo;
+	std::shared_ptr<CGUITab_Impl>					m_pAudio;
+	std::shared_ptr<CGUITab_Impl>					m_pAuth;
 
-	CGUILabel_Impl									* m_pNicknameLabel;
-	CGUIEdit_Impl									* m_pNickname;
-	CGUIButton_Impl									* m_pSave;
+	std::shared_ptr<CGUILabel_Impl>					m_pNicknameLabel;
+	std::shared_ptr<CGUIEdit_Impl>					m_pNickname;
+	std::shared_ptr<CGUIButton_Impl>				m_pSave;
 
-	CGUILabel_Impl									* m_pM2OUsernameLabel;
-	CGUILabel_Impl									* m_pM2OPasswordLabel;
-	CGUIEdit_Impl									* m_pM2OUsername;
-	CGUIEdit_Impl									* m_pM2OPassword;
-	CGUIButton_Impl									* m_pLogin;
-	CGUIButton_Impl									* m_pLogout;
-	CGUICheckBox_Impl								* m_pRememberMe;
+	std::shared_ptr<CGUILabel_Impl>					m_pM2OUsernameLabel;
+	std::shared_ptr<CGUILabel_Impl>					m_pM2OPasswordLabel;
+	std::shared_ptr<CGUIEdit_Impl>					m_pM2OUsername;
+	std::shared_ptr<CGUIEdit_Impl>					m_pM2OPassword;
+	std::shared_ptr<CGUIButton_Impl>				m_pLogin;
+	std::shared_ptr<CGUIButton_Impl>				m_pLogout;
+	std::shared_ptr<CGUICheckBox_Impl>				m_pRememberMe;
 
-	CGUIScrollBar_Impl								* m_pConnectionsValue;
-	CGUILabel_Impl									* m_pConnectionsValueLabel;
+	std::shared_ptr<CGUIScrollBar_Impl>				m_pConnectionsValue;
+	std::shared_ptr<CGUILabel_Impl	>				m_pConnectionsValueLabel;
 
-	CGUILabel_Impl									* m_pResolutionLabel;
-	CGUIComboBox_Impl								* m_pResolutionCombo;
+	std::shared_ptr<CGUILabel_Impl>					m_pResolutionLabel;
+	std::shared_ptr<CGUIComboBox_Impl>				m_pResolutionCombo;
 
-	CGUILabel_Impl									* m_pMSAALabel;
-	CGUIComboBox_Impl								* m_pMSAACombo;
+	std::shared_ptr<CGUILabel_Impl>					m_pMSAALabel;
+	std::shared_ptr<CGUIComboBox_Impl>				m_pMSAACombo;
 
-	CGUILabel_Impl									* m_pASFLabel;
-	CGUIComboBox_Impl								* m_pASFCombo;
+	std::shared_ptr<CGUILabel_Impl>					m_pASFLabel;
+	std::shared_ptr<CGUIComboBox_Impl>				m_pASFCombo;
 
-	CGUICheckBox_Impl								* m_pResolutionFullscreen;
-	CGUICheckBox_Impl								* m_pVerticalSync;
-	CGUICheckBox_Impl								* m_pAmbientOcclusion;
+	std::shared_ptr<CGUICheckBox_Impl>				m_pResolutionFullscreen;
+	std::shared_ptr<CGUICheckBox_Impl>				m_pVerticalSync;
+	std::shared_ptr<CGUICheckBox_Impl>				m_pAmbientOcclusion;
 
-	CGUILabel_Impl									* m_pAudioQualityLabel;
-	CGUIComboBox_Impl								* m_pAudioQuality;
+	std::shared_ptr<CGUILabel_Impl>					m_pAudioQualityLabel;
+	std::shared_ptr<CGUIComboBox_Impl>				m_pAudioQuality;
 
-	CGUILabel_Impl									* m_pSFXLabel;
-	CGUIScrollBar_Impl								* m_pSFXVolume;
-	CGUILabel_Impl									* m_pSFXVolumeValue;
+	std::shared_ptr<CGUILabel_Impl>					m_pSFXLabel;
+	std::shared_ptr<CGUIScrollBar_Impl>				m_pSFXVolume;
+	std::shared_ptr<CGUILabel_Impl>					m_pSFXVolumeValue;
 
-	CGUILabel_Impl									* m_pVoicesLabel;
-	CGUIScrollBar_Impl								* m_pVoicesVolume;
-	CGUILabel_Impl									* m_pVoicesVolumeValue;
+	std::shared_ptr<CGUILabel_Impl>					m_pVoicesLabel;
+	std::shared_ptr<CGUIScrollBar_Impl>				m_pVoicesVolume;
+	std::shared_ptr<CGUILabel_Impl>					m_pVoicesVolumeValue;
 
-	CGUILabel_Impl									* m_pMusicLabel;
-	CGUIScrollBar_Impl								* m_pMusicVolume;
-	CGUILabel_Impl									* m_pMusicVolumeValue;
+	std::shared_ptr<CGUILabel_Impl>					m_pMusicLabel;
+	std::shared_ptr<CGUIScrollBar_Impl>				m_pMusicVolume;
+	std::shared_ptr<CGUILabel_Impl>					m_pMusicVolumeValue;
 
-	CGUILabel_Impl									* m_pRadioLabel;
-	CGUIScrollBar_Impl								* m_pRadioVolume;
-	CGUILabel_Impl									* m_pRadioVolumeValue;
+	std::shared_ptr<CGUILabel_Impl>					m_pRadioLabel;
+	std::shared_ptr<CGUIScrollBar_Impl>				m_pRadioVolume;
+	std::shared_ptr<CGUILabel_Impl>					m_pRadioVolumeValue;
 
 	int												m_iLoadedWidth;
 	int												m_iLoadedHeight;

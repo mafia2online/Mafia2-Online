@@ -137,12 +137,12 @@ CMenuSettings::CMenuSettings( CGUI_Impl * pGUI )
 	m_pWindow->SetSizingEnabled( false );
 
 	// Create the tab panel
-	m_pTabs = pGUI->CreateTabPanel( m_pWindow );
+	m_pTabs = pGUI->CreateTabPanel( m_pWindow.get() );
 	m_pTabs->SetSize( Vector2( 284, 215 ) );
 	m_pTabs->SetPosition( Vector2( 8, 25 ) );
 
 	// Create the save button
-	m_pSave = pGUI->CreateButton( "Close", m_pWindow );
+	m_pSave = pGUI->CreateButton( "Close", m_pWindow.get() );
 	m_pSave->SetSize( Vector2( 75, 20 ) );
 	m_pSave->SetPosition( Vector2( 8, 245 ) );
 	m_pSave->SetClickHandler( GUI_CALLBACK( &CMenuSettings::Event_OnSaveClick, this ) );
@@ -154,36 +154,36 @@ CMenuSettings::CMenuSettings( CGUI_Impl * pGUI )
 	m_pAuth = m_pTabs->CreateTab( "Authentication" );
 
 	// Create the nickname edit label
-	m_pNicknameLabel = pGUI->CreateLabel( "Nickname:", NULL, m_pMultiplayer );
+	m_pNicknameLabel = pGUI->CreateLabel( "Nickname:", NULL, m_pMultiplayer.get() );
 	m_pNicknameLabel->SetSize( Vector2( 50, 25 ) );
 	m_pNicknameLabel->SetPosition( Vector2( 15, 15 ) );
 
 	// Create the nickname edit
-	m_pNickname = pGUI->CreateEdit( "", m_pMultiplayer );
+	m_pNickname = pGUI->CreateEdit( "", m_pMultiplayer.get() );
 	m_pNickname->SetSize( Vector2( 100, 25 ) );
 	m_pNickname->SetPosition( Vector2( 75, 15 ) );
 	m_pNickname->SetMaxLength( MAX_PLAYER_NAME );
 
 	// Create the connections value label
-	m_pConnectionsValueLabel = pGUI->CreateLabel ( "Browser Sockets:", NULL, m_pMultiplayer );
+	m_pConnectionsValueLabel = pGUI->CreateLabel ( "Browser Sockets:", NULL, m_pMultiplayer.get() );
 	m_pConnectionsValueLabel->SetVisible ( false );
 	//m_pConnectionsValueLabel->SetSize( Vector2( 100, 25 ) );
 	//m_pConnectionsValueLabel->SetPosition( Vector2( 75, 15 ) );
 
 	// Create the connections value
-	m_pConnectionsValue = pGUI->CreateScrollBar ( true, m_pMultiplayer );
+	m_pConnectionsValue = pGUI->CreateScrollBar ( true, m_pMultiplayer.get() );
 	m_pConnectionsValue->SetSize ( Vector2( 130, 20 ) );
 	m_pConnectionsValue->SetPosition( Vector2( 90, 50 ) );
 	m_pConnectionsValue->SetOnScrollHandler ( GUI_CALLBACK ( &CMenuSettings::Event_OnConnectionsScroll, this ) );
 	m_pConnectionsValue->SetProperty ( "StepSize", "0.1" );
 
 	// Create the resolution label
-	m_pResolutionLabel = pGUI->CreateLabel( "Resolution:", NULL, m_pVideo );
+	m_pResolutionLabel = pGUI->CreateLabel( "Resolution:", NULL, m_pVideo.get() );
 	m_pResolutionLabel->SetSize( Vector2( 120, 25 ) );
 	m_pResolutionLabel->SetPosition( Vector2( 15, 15 ) );
 
 	// Create the resoultion combo box
-	m_pResolutionCombo = pGUI->CreateComboBox ( "", m_pVideo );
+	m_pResolutionCombo = pGUI->CreateComboBox ( "", m_pVideo.get() );
 	m_pResolutionCombo->SetSize ( Vector2 ( 128, 120 ) );
 	m_pResolutionCombo->SetPosition( Vector2( 120, 15 ) );
 	m_pResolutionCombo->SetReadOnly ( true );
@@ -193,12 +193,12 @@ CMenuSettings::CMenuSettings( CGUI_Impl * pGUI )
 		m_pResolutionCombo->AddItem( resolutions[i].strResoltion.Get () )->SetData ( (void *)resolutions[i].uiIndex );
 
 	// Create the MSAA label
-	m_pMSAALabel = pGUI->CreateLabel( "Anti Aliasing:", NULL, m_pVideo );
+	m_pMSAALabel = pGUI->CreateLabel( "Anti Aliasing:", NULL, m_pVideo.get() );
 	m_pMSAALabel->SetSize( Vector2( 120, 25 ) );
 	m_pMSAALabel->SetPosition( Vector2( 15, 45 ) );
 
 	// Create the MSAA combo box
-	m_pMSAACombo = pGUI->CreateComboBox ( "", m_pVideo );
+	m_pMSAACombo = pGUI->CreateComboBox ( "", m_pVideo.get() );
 	m_pMSAACombo->SetSize ( Vector2 ( 128, 100 ) );
 	m_pMSAACombo->SetPosition( Vector2( 120, 45 ) );
 	m_pMSAACombo->SetReadOnly ( true );
@@ -208,12 +208,12 @@ CMenuSettings::CMenuSettings( CGUI_Impl * pGUI )
 		m_pMSAACombo->AddItem( AntiAliasing[i].strAA.Get () )->SetData ( (void *)AntiAliasing[i].uiIndex );
 
 	// Create the Anisotropic Filtering label
-	m_pASFLabel = pGUI->CreateLabel( "Anisotropic Filtering:", NULL, m_pVideo );
+	m_pASFLabel = pGUI->CreateLabel( "Anisotropic Filtering:", NULL, m_pVideo.get() );
 	m_pASFLabel->SetSize( Vector2( 120, 25 ) );
 	m_pASFLabel->SetPosition( Vector2( 15, 75 ) );
 
 	// Create the Anisotropic Filtering combo box
-	m_pASFCombo = pGUI->CreateComboBox ( "", m_pVideo );
+	m_pASFCombo = pGUI->CreateComboBox ( "", m_pVideo.get() );
 	m_pASFCombo->SetSize ( Vector2 ( 128, 100 ) );
 	m_pASFCombo->SetPosition( Vector2( 120, 75 ) );
 	m_pASFCombo->SetReadOnly ( true );
@@ -223,25 +223,25 @@ CMenuSettings::CMenuSettings( CGUI_Impl * pGUI )
 		m_pASFCombo->AddItem( AnisotropicFiltering[i].strAF.Get () )->SetData ( (void *)AnisotropicFiltering[i].uiIndex );
 
 	// Create the resolution fullscreen checkbox
-	m_pResolutionFullscreen = pGUI->CreateCheckBox( "Fullscreen Mode", m_pVideo );
+	m_pResolutionFullscreen = pGUI->CreateCheckBox( "Fullscreen Mode", m_pVideo.get() );
 	m_pResolutionFullscreen->SetPosition( Vector2( 15, 110 ) );
 
 	// Create the vertical sync checkbox
-	m_pVerticalSync = pGUI->CreateCheckBox ( "Enable Vertical Sync", m_pVideo );
+	m_pVerticalSync = pGUI->CreateCheckBox ( "Enable Vertical Sync", m_pVideo.get() );
 	m_pVerticalSync->SetPosition ( Vector2( 15, 135 ) );
 
 	// Create the ambient occlusion checkbox
-	m_pAmbientOcclusion = pGUI->CreateCheckBox ( "Enable Ambient Occlusion", m_pVideo );
+	m_pAmbientOcclusion = pGUI->CreateCheckBox ( "Enable Ambient Occlusion", m_pVideo.get() );
 	m_pAmbientOcclusion->SetSize ( Vector2( 150, 16 ) );
 	m_pAmbientOcclusion->SetPosition ( Vector2( 15, 160 ) );
 
 	// Create the audio quality label
-	m_pAudioQualityLabel = pGUI->CreateLabel ( "Audio Quality:", NULL, m_pAudio );
+	m_pAudioQualityLabel = pGUI->CreateLabel ( "Audio Quality:", NULL, m_pAudio.get() );
 	m_pAudioQualityLabel->SetSize( Vector2( 120, 25 ) );
 	m_pAudioQualityLabel->SetPosition( Vector2( 15, 15 ) );
 
 	// Create the audio quality combobox
-	m_pAudioQuality = pGUI->CreateComboBox ( "", m_pAudio );
+	m_pAudioQuality = pGUI->CreateComboBox ( "", m_pAudio.get() );
 	m_pAudioQuality->SetSize ( Vector2 ( 128, 60 ) );
 	m_pAudioQuality->SetPosition( Vector2( 90, 15 ) );
 	m_pAudioQuality->SetReadOnly ( true );
@@ -251,109 +251,109 @@ CMenuSettings::CMenuSettings( CGUI_Impl * pGUI )
 		m_pAudioQuality->AddItem( AudioQuality[i].strQuality.Get () )->SetData ( (void *)AudioQuality[i].uiIndex );
 
 	// Create the audio SFX label
-	m_pSFXLabel = pGUI->CreateLabel ( "SFX Volume:", NULL, m_pAudio );
+	m_pSFXLabel = pGUI->CreateLabel ( "SFX Volume:", NULL, m_pAudio.get() );
 	m_pSFXLabel->SetSize( Vector2( 120, 25 ) );
 	m_pSFXLabel->SetPosition( Vector2( 15, 50 ) );
 
 	// Create the audio SFX volume scrollbar
-	m_pSFXVolume = pGUI->CreateScrollBar ( true, m_pAudio );
+	m_pSFXVolume = pGUI->CreateScrollBar ( true, m_pAudio.get() );
 	m_pSFXVolume->SetSize ( Vector2( 130, 20 ) );
 	m_pSFXVolume->SetPosition( Vector2( 90, 50 ) );
 	m_pSFXVolume->SetOnScrollHandler ( GUI_CALLBACK ( &CMenuSettings::Event_OnSFXScroll, this ) );
 	m_pSFXVolume->SetProperty ( "StepSize", "0.01" );
 
 	// Create the audio SFX volume value label
-	m_pSFXVolumeValue = pGUI->CreateLabel ( "", NULL, m_pAudio );
+	m_pSFXVolumeValue = pGUI->CreateLabel ( "", NULL, m_pAudio.get() );
 	m_pSFXVolumeValue->SetSize( Vector2( 120, 25 ) );
 	m_pSFXVolumeValue->SetPosition( Vector2( 230, 50 ) );
 
 	// Create the audio voices label
-	m_pVoicesLabel = pGUI->CreateLabel ( "Voices Volume:", NULL, m_pAudio );
+	m_pVoicesLabel = pGUI->CreateLabel ( "Voices Volume:", NULL, m_pAudio.get() );
 	m_pVoicesLabel->SetSize( Vector2( 120, 25 ) );
 	m_pVoicesLabel->SetPosition( Vector2( 15, 80 ) );
 
 	// Create the audio voices volume scrollbar
-	m_pVoicesVolume = pGUI->CreateScrollBar ( true, m_pAudio );
+	m_pVoicesVolume = pGUI->CreateScrollBar ( true, m_pAudio.get() );
 	m_pVoicesVolume->SetSize ( Vector2( 130, 20 ) );
 	m_pVoicesVolume->SetPosition( Vector2( 90, 80 ) );
 	m_pVoicesVolume->SetOnScrollHandler ( GUI_CALLBACK ( &CMenuSettings::Event_OnVoicesScroll, this ) );
 	m_pVoicesVolume->SetProperty ( "StepSize", "0.01" );
 
 	// Create the audio voices volume value label
-	m_pVoicesVolumeValue = pGUI->CreateLabel ( "", NULL, m_pAudio );
+	m_pVoicesVolumeValue = pGUI->CreateLabel ( "", NULL, m_pAudio.get() );
 	m_pVoicesVolumeValue->SetSize( Vector2( 120, 25 ) );
 	m_pVoicesVolumeValue->SetPosition( Vector2( 230, 80 ) );
 
 	// Create the audio music label
-	m_pMusicLabel = pGUI->CreateLabel ( "Music Volume:", NULL, m_pAudio );
+	m_pMusicLabel = pGUI->CreateLabel ( "Music Volume:", NULL, m_pAudio.get() );
 	m_pMusicLabel->SetSize( Vector2( 120, 25 ) );
 	m_pMusicLabel->SetPosition( Vector2( 15, 110 ) );
 
 	// Create the audio music volume scrollbar
-	m_pMusicVolume = pGUI->CreateScrollBar ( true, m_pAudio );
+	m_pMusicVolume = pGUI->CreateScrollBar ( true, m_pAudio.get() );
 	m_pMusicVolume->SetSize ( Vector2( 130, 20 ) );
 	m_pMusicVolume->SetPosition( Vector2( 90, 110 ) );
 	m_pMusicVolume->SetOnScrollHandler ( GUI_CALLBACK ( &CMenuSettings::Event_OnMusicScroll, this ) );
 	m_pMusicVolume->SetProperty ( "StepSize", "0.01" );
 
 	// Create the audio music volume value label
-	m_pMusicVolumeValue = pGUI->CreateLabel ( "", NULL, m_pAudio );
+	m_pMusicVolumeValue = pGUI->CreateLabel ( "", NULL, m_pAudio.get() );
 	m_pMusicVolumeValue->SetSize( Vector2( 120, 25 ) );
 	m_pMusicVolumeValue->SetPosition( Vector2( 230, 110 ) );
 
 	// Create the audio radio label
-	m_pRadioLabel = pGUI->CreateLabel ( "Radio Volume:", NULL, m_pAudio );
+	m_pRadioLabel = pGUI->CreateLabel ( "Radio Volume:", NULL, m_pAudio.get() );
 	m_pRadioLabel->SetSize( Vector2( 120, 25 ) );
 	m_pRadioLabel->SetPosition( Vector2( 15, 140 ) );
 
 	// Create the audio music volume scrollbar
-	m_pRadioVolume = pGUI->CreateScrollBar ( true, m_pAudio );
+	m_pRadioVolume = pGUI->CreateScrollBar ( true, m_pAudio.get() );
 	m_pRadioVolume->SetSize ( Vector2( 130, 20 ) );
 	m_pRadioVolume->SetPosition( Vector2( 90, 140 ) );
 	m_pRadioVolume->SetOnScrollHandler ( GUI_CALLBACK ( &CMenuSettings::Event_OnRadioScroll, this ) );
 	m_pRadioVolume->SetProperty ( "StepSize", "0.01" );
 
 	// Create the audio music volume value label
-	m_pRadioVolumeValue = pGUI->CreateLabel ( "", NULL, m_pAudio );
+	m_pRadioVolumeValue = pGUI->CreateLabel ( "", NULL, m_pAudio.get() );
 	m_pRadioVolumeValue->SetSize( Vector2( 120, 25 ) );
 	m_pRadioVolumeValue->SetPosition( Vector2( 230, 140 ) );
 
 	// Create username edit label
-	m_pM2OUsernameLabel = pGUI->CreateLabel("M2ONetwork Username :", NULL, m_pAuth);
+	m_pM2OUsernameLabel = pGUI->CreateLabel("M2ONetwork Username :", NULL, m_pAuth.get());
 	m_pM2OUsernameLabel->SetSize(Vector2(125, 25));
 	m_pM2OUsernameLabel->SetPosition(Vector2(15, 45));
 
 	// Create the username edit
-	m_pM2OUsername = pGUI->CreateEdit("", m_pAuth);
+	m_pM2OUsername = pGUI->CreateEdit("", m_pAuth.get());
 	m_pM2OUsername->SetSize(Vector2(125, 25));
 	m_pM2OUsername->SetPosition(Vector2(150, 45));
 	m_pM2OUsername->SetMaxLength(MAX_PLAYER_NAME);
 
 	// Create passwod edit label
-	m_pM2OPasswordLabel = pGUI->CreateLabel("M2ONetwork Password :", NULL, m_pAuth);
+	m_pM2OPasswordLabel = pGUI->CreateLabel("M2ONetwork Password :", NULL, m_pAuth.get());
 	m_pM2OPasswordLabel->SetSize(Vector2(125, 25));
 	m_pM2OPasswordLabel->SetPosition(Vector2(15, 75));
 
 	// Create the password edit
-	m_pM2OPassword = pGUI->CreateEdit("", m_pAuth);
+	m_pM2OPassword = pGUI->CreateEdit("", m_pAuth.get());
 	m_pM2OPassword->SetSize(Vector2(125, 25));
 	m_pM2OPassword->SetPosition(Vector2(150, 75));
 	m_pM2OPassword->SetMaxLength(12);
 
 	// Create the checkbox
-	m_pRememberMe = pGUI->CreateCheckBox("Remember me ?", m_pAuth);
+	m_pRememberMe = pGUI->CreateCheckBox("Remember me ?", m_pAuth.get());
 	m_pRememberMe->SetSize(Vector2(125, 25));
 	m_pRememberMe->SetPosition(Vector2(12, 100));
 
 	// Create the login button
-	m_pLogin = pGUI->CreateButton("Connect", m_pAuth);
+	m_pLogin = pGUI->CreateButton("Connect", m_pAuth.get());
 	m_pLogin->SetSize(Vector2(75, 20));
 	m_pLogin->SetPosition(Vector2(90, 130));
 	m_pLogin->SetClickHandler(GUI_CALLBACK(&CMenuSettings::Event_OnClickLogin, this));
 	m_pLogin->SetVisible(true);
 
 	// Create the logout button
-	m_pLogout = pGUI->CreateButton("Disconnect", m_pAuth);
+	m_pLogout = pGUI->CreateButton("Disconnect", m_pAuth.get());
 	m_pLogout->SetSize(Vector2(75, 20));
 	m_pLogout->SetPosition(Vector2(90, 130));
 	m_pLogout->SetClickHandler(GUI_CALLBACK(&CMenuSettings::Event_OnClickLogout, this));
@@ -371,53 +371,6 @@ CMenuSettings::CMenuSettings( CGUI_Impl * pGUI )
 
 CMenuSettings::~CMenuSettings( void )
 {
-	// Delete gui
-	SAFE_DELETE( m_pConnectionsValueLabel );
-	SAFE_DELETE( m_pConnectionsValue );
-	SAFE_DELETE( m_pNickname );
-	SAFE_DELETE( m_pNicknameLabel );
-	SAFE_DELETE( m_pResolutionLabel );
-	SAFE_DELETE( m_pResolutionCombo );
-	SAFE_DELETE( m_pMSAALabel );
-	SAFE_DELETE( m_pMSAACombo );
-	SAFE_DELETE( m_pASFCombo );
-	SAFE_DELETE( m_pASFCombo );
-	SAFE_DELETE( m_pResolutionFullscreen );
-	SAFE_DELETE( m_pVerticalSync );
-	SAFE_DELETE( m_pAmbientOcclusion );
-	SAFE_DELETE( m_pAudioQualityLabel );
-	SAFE_DELETE( m_pAudioQuality );
-	SAFE_DELETE( m_pSFXLabel );
-	SAFE_DELETE( m_pSFXVolume );
-	SAFE_DELETE( m_pSFXVolumeValue );
-	SAFE_DELETE( m_pVoicesLabel );
-	SAFE_DELETE( m_pVoicesVolume );
-	SAFE_DELETE( m_pVoicesVolumeValue );
-	SAFE_DELETE( m_pMusicLabel );
-	SAFE_DELETE( m_pMusicVolume );
-	SAFE_DELETE( m_pMusicVolumeValue );
-	SAFE_DELETE( m_pRadioLabel );
-	SAFE_DELETE( m_pRadioVolume );
-	SAFE_DELETE( m_pRadioVolumeValue );
-	SAFE_DELETE( m_pM2OUsernameLabel );
-	SAFE_DELETE( m_pM2OUsername );
-	SAFE_DELETE( m_pM2OPasswordLabel );
-	SAFE_DELETE( m_pM2OPassword );
-	SAFE_DELETE( m_pLogin );
-	SAFE_DELETE( m_pLogout );
-	SAFE_DELETE( m_pRememberMe );
-
-	// Delete the tabs
-	SAFE_DELETE( m_pMultiplayer );
-	SAFE_DELETE( m_pVideo );
-	SAFE_DELETE( m_pAudio );
-	SAFE_DELETE( m_pAuth );
-
-	// Delete the tab panel
-	SAFE_DELETE( m_pTabs );
-
-	// Delete the main window
-	SAFE_DELETE( m_pWindow );
 }
 
 bool CMenuSettings::Event_OnSaveClick( CGUIElement_Impl * pElement )
@@ -435,7 +388,7 @@ void CMenuSettings::SetVisible( bool bVisible )
 {
 	// Toggle the main window visibility
 	m_pWindow->SetVisible( bVisible );
-	
+
 	// Bring the window to the front
 	m_pWindow->BringToFront();
 }
@@ -600,7 +553,7 @@ void CMenuSettings::SaveSettings( void )
 
 			// Write the new nickname
 			bsSend.Write( RakNet::RakString( strNewNick.Get() ) );
-			
+
 			// Send it to the server
 			CCore::Instance()->GetNetworkModule()->Call(RPC_PLAYERCHANGENICK, &bsSend, HIGH_PRIORITY, RELIABLE_ORDERED, true);
 
@@ -758,7 +711,7 @@ bool CMenuSettings::Event_OnClickLogout(CGUIElement_Impl * pElement)
 	m_pM2OUsername->SetReadOnly(false);
 	m_pLogin->SetVisible(true);
 	m_pLogout->SetVisible(false);
-	
+
 	/* Process */
 	return (true);
 }

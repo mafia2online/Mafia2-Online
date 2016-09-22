@@ -23,10 +23,8 @@
 #include	"CGUIScrollBar_Impl.h"
 
 CGUIScrollBar_Impl::CGUIScrollBar_Impl( CGUI_Impl * pGUI, bool bHorizontal, CGUIElement_Impl * pParent )
+	: CGUIElement_Impl(pGUI)
 {
-	// Store the manager instance
-	m_pManager = pGUI;
-
 	// Get a unique name for cegui
 	String strName = pGUI->GetUniqueName();
 

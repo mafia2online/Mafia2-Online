@@ -23,10 +23,8 @@
 #include	"CGUIProgressBar_Impl.h"
 
 CGUIProgressBar_Impl::CGUIProgressBar_Impl( CGUI_Impl * pGUI, CGUIElement_Impl * pParent )
+	: CGUIElement_Impl(pGUI)
 {
-	// Store the manager instance
-	m_pManager = pGUI;
-
 	// Get a unique name for cegui
 	String strName = pGUI->GetUniqueName();
 

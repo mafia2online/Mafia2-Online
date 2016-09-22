@@ -10,7 +10,6 @@
 #pragma once
 
 #include	<thread>
-#include	<atomic>
 
 #include	"CServerList.h"
 #include	"Network\CHttpClient.h"
@@ -39,20 +38,20 @@ public:
 	bool Refresh( eRefreshType type = eRefreshType::E_REFRESH_NONE );
 
 private:
-	void WorkerThread( eRefreshType type );
+	void WorkerThread();
 
 	void OnRefreshFailed( const char *errorMessage );
 	void OnRefreshSuccess( String *serverListData );
 
 private:
-	CHttpClient                 *m_pHttpClient;
-	
-	QueryHandler_t               m_queryHandler;
-	 
-	unsigned long                m_lastRefreshTime;
-	
-	std::thread                 *m_refreshThread;
-	std::atomic<RefreshState>    m_refreshState;
+	std::unique_ptr<CHttpClient> m_pHttpClient;
 
-	CGUIMessageBox_Impl         *m_pMessageBox;
+	QueryHandler_t               m_queryHandler;
+
+	std::thread					m_refreshThread;
+	mutable bool				m_forceWorkerShutdown;
+	mutable RefreshState		m_refreshState;
+	mutable eRefreshType		m_refreshType;
+
+	std::shared_ptr<CGUIMessageBox_Impl> m_pMessageBox;
 };

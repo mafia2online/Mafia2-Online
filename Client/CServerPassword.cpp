@@ -57,24 +57,24 @@ CServerPassword::CServerPassword ( CGUI_Impl * pGUI )
 	m_pWindow->SetAlpha ( 1.0f );
 
 	// Create the label
-	m_pLabel = pGUI->CreateLabel ( "Please enter the server password:", NULL, m_pWindow );
+	m_pLabel = pGUI->CreateLabel ( "Please enter the server password:", NULL, m_pWindow.get() );
 	m_pLabel->SetSize ( Vector2 ( 200, 20 ) );
 	m_pLabel->SetPosition ( Vector2 ( 20, 25 ) );
 
 	// Create the edit
-	m_pEdit = pGUI->CreateEdit ( "", m_pWindow );
+	m_pEdit = pGUI->CreateEdit ( "", m_pWindow.get() );
 	m_pEdit->SetSize ( Vector2( 220, 24 ) );
 	m_pEdit->SetPosition ( Vector2 ( 18, 50 ) );
 	m_pEdit->SetMasked ( true );
 
 	// Create the submit button
-	m_pSubmit = pGUI->CreateButton ( "Connect", m_pWindow );
+	m_pSubmit = pGUI->CreateButton ( "Connect", m_pWindow.get() );
 	m_pSubmit->SetSize ( Vector2 ( 75, 20 ) );
 	m_pSubmit->SetPosition ( Vector2 ( 18, 85 ) );
 	m_pSubmit->SetClickHandler ( GUI_CALLBACK( &CServerPassword::Event_OnSubmitClick, this ) );
 
 	// Create the cancel button
-	m_pCancel = pGUI->CreateButton ( "Cancel", m_pWindow );
+	m_pCancel = pGUI->CreateButton ( "Cancel", m_pWindow.get() );
 	m_pCancel->SetSize ( Vector2 ( 75, 20 ) );
 	m_pCancel->SetPosition ( Vector2 ( 100, 85 ) );
 	m_pCancel->SetClickHandler ( GUI_CALLBACK( &CServerPassword::Event_OnCancelClick, this ) );
@@ -82,12 +82,6 @@ CServerPassword::CServerPassword ( CGUI_Impl * pGUI )
 
 CServerPassword::~CServerPassword ( void )
 {
-	// Delete the gui items
-	SAFE_DELETE ( m_pCancel );
-	SAFE_DELETE ( m_pSubmit );
-	SAFE_DELETE ( m_pEdit );
-	SAFE_DELETE ( m_pLabel );
-	SAFE_DELETE ( m_pWindow );
 }
 
 void CServerPassword::SetVisible ( bool bVisible )

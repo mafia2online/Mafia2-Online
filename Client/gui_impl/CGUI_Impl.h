@@ -15,6 +15,8 @@
 
 #include	"../../Shared/CString.h"
 
+#include <memory>
+
 // Message box types
 enum eMessageBoxFlags
 {
@@ -48,8 +50,8 @@ class CGUI_Impl
 protected:
 
 	IDirect3DDevice9										* m_pDevice;
-	CEGUI::Renderer											* m_pRenderer;
-	CEGUI::System											* m_pSystem;
+	std::unique_ptr<CEGUI::DirectX9Renderer>				m_pRenderer;
+	std::unique_ptr<CEGUI::System>							m_pSystem;
 	CEGUI::FontManager										* m_pFontManager;
 	CEGUI::ImagesetManager									* m_pImageSetManager;
 	CEGUI::SchemeManager									* m_pSchemeManager;
@@ -58,8 +60,8 @@ protected:
 	CEGUI::DefaultWindow									* m_pDefaultWindow;
 	CEGUI::MouseCursor										* m_pCursor;
 
-	CGUIFont_Impl											* m_pDefaultFont;
-	CGUIFont_Impl											* m_pDefaultFontBold;
+	std::shared_ptr<CGUIFont_Impl>							m_pDefaultFont;
+	std::shared_ptr<CGUIFont_Impl>							m_pDefaultFontBold;
 
 	unsigned int											m_uiUnique;
 	std::list< CGUIElement_Impl* >							m_redrawQueue;
@@ -101,10 +103,15 @@ protected:
 	bool						Event_FocusGained			( const CEGUI::EventArgs &e );
 	bool						Event_FocusLost				( const CEGUI::EventArgs &e );
 
+	std::list<CGUIElement_Impl *>			m_elementsList;
+
 public:
 
 								CGUI_Impl					( IDirect3DDevice9 * pDevice );
 								~CGUI_Impl					( void );
+
+	void						NotifyElementCreate			( CGUIElement_Impl *element );
+	void						NotifyElementDestroy		( CGUIElement_Impl *element );
 
 	void						SetResolution				( float fWidth, float fHeight );
 	Vector2						GetResolution				( void );
@@ -136,26 +143,29 @@ public:
 	static CEGUI::String		GetUTFString				( const char * szInput );
     static CEGUI::String		GetUTFString                ( const String &strInput );
 
-	CGUIFont_Impl				* GetDefaultFont			( bool bBold = false ) { return (bBold ? m_pDefaultFontBold : m_pDefaultFont); }
+inline std::shared_ptr<CGUIFont_Impl> GetDefaultFont		( bool bBold = false ) const
+	{
+		return (bBold ? m_pDefaultFontBold : m_pDefaultFont);
+	}
 
-	CGUIWindow_Impl				* CreateWnd					( String strCaption, CGUIElement_Impl * pParent = NULL );
-	CGUIFont_Impl				* CreateFnt					( String strName, String strFile, unsigned int uiSize = 8, unsigned int uFlags = 0, bool bAutoScale = false );
+	std::shared_ptr<CGUIWindow_Impl> CreateWnd					( String strCaption, CGUIElement_Impl * pParent = NULL );
+	std::shared_ptr<CGUIFont_Impl> CreateFnt					( String strName, String strFile, unsigned int uiSize = 8, unsigned int uFlags = 0, bool bAutoScale = false );
 
-	CGUIProgressBar_Impl		* CreateProgressBar			( CGUIElement_Impl * pParent = NULL );
-	CGUIStaticImage_Impl		* CreateStaticImage			( CGUIElement_Impl * pParent = NULL );
-	CGUIButton_Impl				* CreateButton				( String strCaption, CGUIElement_Impl * pParent = NULL );
-	CGUICheckBox_Impl			* CreateCheckBox			( String strCaption, CGUIElement_Impl * pParent = NULL );
-	CGUIComboBox_Impl			* CreateComboBox			( const char * szCaption, CGUIElement_Impl * pParent = NULL );
-	CGUIEdit_Impl				* CreateEdit				( String strText, CGUIElement_Impl * pParent = NULL );
-	CGUILabel_Impl				* CreateLabel				( String strText, CGUIFont_Impl * pFont = NULL, CGUIElement_Impl * pParent = NULL );
-	CGUIRadioButton_Impl		* CreateRadioButton			( String strCaption, CGUIElement_Impl * pParent = NULL );
-	CGUITabPanel_Impl			* CreateTabPanel			( CGUIElement_Impl * pParent = NULL );
-	CGUIGridList_Impl			* CreateGridList			( CGUIElement_Impl * pParent = NULL );
-	CGUIScrollBar_Impl			* CreateScrollBar			( bool bHorizonatal, CGUIElement_Impl * pParent = NULL );
-	CGUIScrollPane_Impl			* CreateScrollPane			( CGUIElement_Impl * pParent = NULL );
-	CGUIMessageBox_Impl			* CreateMessageBox			( const char * szTitle, const char * szCaption, const char * szButton1 = "", const char * szButton2 = "" );
+	std::shared_ptr<CGUIProgressBar_Impl> CreateProgressBar	( CGUIElement_Impl * pParent = NULL );
+	std::shared_ptr<CGUIStaticImage_Impl> CreateStaticImage	( CGUIElement_Impl * pParent = NULL );
+	std::shared_ptr<CGUIButton_Impl> CreateButton			( String strCaption, CGUIElement_Impl * pParent = NULL );
+	std::shared_ptr<CGUICheckBox_Impl> CreateCheckBox		( String strCaption, CGUIElement_Impl * pParent = NULL );
+	std::shared_ptr<CGUIComboBox_Impl> CreateComboBox		( const char * szCaption, CGUIElement_Impl * pParent = NULL );
+	std::shared_ptr<CGUIEdit_Impl> CreateEdit				( String strText, CGUIElement_Impl * pParent = NULL );
+	std::shared_ptr<CGUILabel_Impl> CreateLabel				( String strText, CGUIFont_Impl * pFont = NULL, CGUIElement_Impl * pParent = NULL );
+	std::shared_ptr<CGUIRadioButton_Impl> CreateRadioButton	( String strCaption, CGUIElement_Impl * pParent = NULL );
+	std::shared_ptr<CGUITabPanel_Impl> CreateTabPanel		( CGUIElement_Impl * pParent = NULL );
+	std::shared_ptr<CGUIGridList_Impl> CreateGridList		( CGUIElement_Impl * pParent = NULL );
+	std::shared_ptr<CGUIScrollBar_Impl> CreateScrollBar		( bool bHorizonatal, CGUIElement_Impl * pParent = NULL );
+	std::shared_ptr<CGUIScrollPane_Impl> CreateScrollPane	( CGUIElement_Impl * pParent = NULL );
+	std::shared_ptr<CGUIMessageBox_Impl> CreateMessageBox	( const char * szTitle, const char * szCaption, const char * szButton1 = "", const char * szButton2 = "" );
 
-	CEGUI::Renderer				* GetRenderer				( void ) { return m_pRenderer; }
+	CEGUI::Renderer				* GetRenderer				( void ) { return m_pRenderer.get(); }
 	CEGUI::FontManager			* GetFontManager			( void ) { return m_pFontManager; }
 	CEGUI::ImagesetManager		* GetImageSetManager		( void ) { return m_pImageSetManager; }
 	CEGUI::SchemeManager		* GetSchemeManager			( void ) { return m_pSchemeManager; }

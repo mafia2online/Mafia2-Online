@@ -23,10 +23,8 @@
 #include	"CGUITabPanel_Impl.h"
 
 CGUITabPanel_Impl::CGUITabPanel_Impl( CGUI_Impl * pGUI, CGUIElement_Impl * pParent )
+	: CGUIElement_Impl(pGUI)
 {
-	// Store the manager instance
-	m_pManager = pGUI;
-
 	// Get a unique name for cegui
 	String strName = pGUI->GetUniqueName();
 
@@ -62,9 +60,9 @@ CGUITabPanel_Impl::~CGUITabPanel_Impl( void )
 	DestroyElement();
 }
 
-CGUITab_Impl * CGUITabPanel_Impl::CreateTab( String strCaption )
+std::shared_ptr<CGUITab_Impl> CGUITabPanel_Impl::CreateTab( String strCaption )
 {
-	return new CGUITab_Impl( m_pManager, strCaption, this );
+	return std::make_shared<CGUITab_Impl>( m_pManager, strCaption, this );
 }
 
 void CGUITabPanel_Impl::DeleteTab( CGUITab_Impl * pTab )

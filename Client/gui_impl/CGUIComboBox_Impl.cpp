@@ -19,10 +19,8 @@
 #include	"CGUIComboBox_Impl.h"
 
 CGUIComboBox_Impl::CGUIComboBox_Impl( CGUI_Impl * pGUI, const char * szCaption, CGUIElement_Impl * pParent )
+	: CGUIElement_Impl(pGUI)
 {
-	// Store the manager instance
-	m_pManager = pGUI;
-
 	// Get a unique name for cegui
 	String strName = pGUI->GetUniqueName();
 
@@ -53,7 +51,7 @@ CGUIComboBox_Impl::~CGUIComboBox_Impl( void )
 {
 	// Clear the list items
 	Clear();
-	
+
 	// Destroy the element
 	DestroyElement();
 }

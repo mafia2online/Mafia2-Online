@@ -23,9 +23,8 @@
 #include	"CGUIStaticImage_Impl.h"
 
 CGUIStaticImage_Impl::CGUIStaticImage_Impl( CGUI_Impl * pGUI, CGUIElement_Impl * pParent )
+	: CGUIElement_Impl(pGUI)
 {
-	// Initialise
-	m_pManager = pGUI;
 	m_pImagesetManager = pGUI->GetImageSetManager();
 	m_pImageset = NULL;
 	m_pImage = NULL;
@@ -62,7 +61,7 @@ CGUIStaticImage_Impl::~CGUIStaticImage_Impl( void )
 {
 	// Clear the image
 	Clear();
-	
+
 	// Destroy the element
 	DestroyElement();
 }

@@ -19,10 +19,8 @@
 #include	"CGUIButton_Impl.h"
 
 CGUIButton_Impl::CGUIButton_Impl( CGUI_Impl * pGUI, String strCaption, CGUIElement_Impl * pParent )
+	: CGUIElement_Impl(pGUI)
 {
-	// Store the manager instance
-	m_pManager = pGUI;
-
 	// Get a unique name for cegui
 	String strName = pGUI->GetUniqueName();
 

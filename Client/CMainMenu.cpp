@@ -125,27 +125,12 @@ CMainMenu::CMainMenu( CGUI_Impl * pGUI )
 
 CMainMenu::~CMainMenu( void )
 {
-	// Delete the logo image
-	SAFE_DELETE( m_pLogo );
-
-	// Loop over each item
-	while ( m_items.size() > 0 )
-	{
-		// Get a pointer to the current item
-		CGUIStaticImage_Impl * pItem = m_items.front();
-
-		// Remove the current item from the list
-		m_items.remove( pItem );
-
-		// Delete the current item
-		SAFE_DELETE( pItem );
-	}
 }
 
-CGUIStaticImage_Impl * CMainMenu::CreateItem( String strLocation, Vector2 vecPosition, bool bRelativePosition, Vector2 vecSize, GUI_CALLBACK pfnHandler )
+std::shared_ptr<CGUIStaticImage_Impl> CMainMenu::CreateItem( String strLocation, Vector2 vecPosition, bool bRelativePosition, Vector2 vecSize, GUI_CALLBACK pfnHandler )
 {
 	// Create the label
-	CGUIStaticImage_Impl * pItem = m_pGUI->CreateStaticImage();
+	std::shared_ptr<CGUIStaticImage_Impl> pItem = m_pGUI->CreateStaticImage();
 
 	// Did the item fail to create?
 	if( !pItem )
@@ -323,21 +308,11 @@ void CMainMenu::SetVisible( bool bVisible )
 	// Set the last fade time
 	m_ulLastFadeTime = SharedUtility::GetTime ();
 
-	// Toggle the background
-	//if( m_pBackground )
-	//	m_pBackground->SetVisible( bVisible );
-
-	// Toggle the logo
 	if( m_pLogo )
 		m_pLogo->SetVisible( bVisible );
 
-	// Loop over each item
-	for( std::list< CGUIStaticImage_Impl* >::iterator iter = m_items.begin(); iter != m_items.end(); iter++ )
-	{
-		// Toggle the current items visiblity
-		if( *iter )
-			(*iter)->SetVisible( bVisible );
-	}
+	for (std::shared_ptr<CGUIStaticImage_Impl> img : m_items)
+		img->SetVisible( bVisible );
 
 	// Are we showing the main menu?
 	if( bVisible )

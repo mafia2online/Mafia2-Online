@@ -268,12 +268,11 @@ SQInteger CGUINatives::CreateElement( SQVM * pVM )
 	// Get the stack top
 	int iTop = (sq_gettop( pVM ) - 1);
 
-	// 
+	//
 	if( iTop < 6 || iTop > 8 )
 		CHECK_PARAMS_MIN( "guiCreateElement", 6 );
 
 	eGUIType type = eGUIType::GUI_MAX;
-	CGUIElement_Impl * pElement = NULL;
 	CGUIElement_Impl * pParent = NULL;
 	const SQChar * szCaption;
 	Vector2 vecPosition;
@@ -339,7 +338,7 @@ SQInteger CGUINatives::CreateElement( SQVM * pVM )
 	// Get the gui pointer
 	CGUI_Impl * pGUI = CCore::Instance()->GetGUI()->GetCEGUI();
 
-	// Create the gui element
+	std::shared_ptr<CGUIElement_Impl> pElement = NULL;
 	switch( type )
 	{
 	case GUI_WINDOW: pElement = pGUI->CreateWnd( szCaption, pParent ); break;
@@ -375,7 +374,7 @@ SQInteger CGUINatives::CreateElement( SQVM * pVM )
 		if ( type == GUI_IMAGE )
 		{
 			// Load the image file
-			((CGUIStaticImage_Impl *)pElement)->LoadFromFile ( szCaption, SharedUtility::GetFileNameForScriptFile ( "", "", CCore::Instance()->GetHost (), CCore::Instance()->GetPort () ) );
+			((CGUIStaticImage_Impl *)pElement.get())->LoadFromFile ( szCaption, SharedUtility::GetFileNameForScriptFile ( "", "", CCore::Instance()->GetHost (), CCore::Instance()->GetPort () ) );
 		}
 
 		// Get the script pointer from the script vm
@@ -384,7 +383,7 @@ SQInteger CGUINatives::CreateElement( SQVM * pVM )
 		// Add the element to the client script gui manager
 		CCore::Instance()->GetClientScriptingManager()->GetScriptGUIManager()->Add( pElement, pScript );
 
-		sq_pushpointer< CGUIElement_Impl* >( pVM, pElement );
+		sq_pushpointer< CGUIElement_Impl* >( pVM, pElement.get() );
 		return 1;
 	}
 
@@ -460,7 +459,7 @@ SQInteger CGUINatives::GuiSetPosition( SQVM * pVM )
 	{
 		// Set the element position
 		pElement->SetPosition( vecPosition, bRelative );
-		
+
 		sq_pushbool( pVM, true );
 		return 1;
 	}

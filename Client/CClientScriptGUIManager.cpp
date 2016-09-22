@@ -32,7 +32,7 @@ CClientScriptGUIManager::~CClientScriptGUIManager( void )
 	DeleteAll ();
 }
 
-void CClientScriptGUIManager::Add( CGUIElement_Impl * pElement, CSquirrel * pScript )
+void CClientScriptGUIManager::Add( const std::shared_ptr<CGUIElement_Impl> &pElement, CSquirrel * pScript )
 {
 	// Create a gui element instance
 	GUIElement * pGUIElement = new GUIElement;
@@ -52,7 +52,7 @@ void CClientScriptGUIManager::Delete( CGUIElement_Impl * pElement )
 	for( std::list< GUIElement* >::iterator iter = m_elements.begin(); iter != m_elements.end(); iter++ )
 	{
 		// Is this the element we're looking for?
-		if( *iter && (*iter)->pElement == pElement )
+		if( *iter && (*iter)->pElement.get() == pElement )
 		{
 			// Delete the element
 			SAFE_DELETE( *iter );
@@ -74,7 +74,7 @@ bool CClientScriptGUIManager::Exists( CGUIElement_Impl * pElement )
 		GUIElement * pGUIElement = *iter;
 
 		// Is this the element we're looking for?
-		if( pGUIElement && pGUIElement->pElement == pElement )
+		if( pGUIElement && pGUIElement->pElement.get() == pElement )
 			return true;
 	}
 
@@ -86,9 +86,6 @@ void CClientScriptGUIManager::DeleteAll( void )
 	// Loop through all elements
 	for( std::list< GUIElement* >::iterator iter = m_elements.begin(); iter != m_elements.end(); iter++ )
 	{
-		// Delete the element
-		SAFE_DELETE( (*iter)->pElement );
-
 		// Delete the current item
 		SAFE_DELETE ( *iter );
 	}
@@ -158,7 +155,7 @@ void CClientScriptGUIManager::Hide( void )
 
 			// Hide the current element
 			(*iter)->pElement->SetVisible( false );
-			
+
 #ifdef _DEBUG
 			CLogFile::Printf( "Stored element 0x%p visibility. (%s)", (*iter)->pElement, ((*iter)->bState ? "true" : "false") );
 #endif
@@ -178,7 +175,7 @@ CSquirrel * CClientScriptGUIManager::GetScript( CGUIElement_Impl * pElement )
 		GUIElement * pGUIElement = *iter;
 
 		// Is this the element we're looking for?
-		if( pGUIElement && pGUIElement->pElement == pElement )
+		if( pGUIElement && pGUIElement->pElement.get() == pElement )
 			return pGUIElement->pScript;
 	}
 

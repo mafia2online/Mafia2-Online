@@ -27,12 +27,20 @@
 #define CGUI_NODRAW_TOP		9.0f
 #define CGUI_NODRAW_BOTTOM	9.0f
 
-CGUIElement_Impl::CGUIElement_Impl( void )
+CGUIElement_Impl::CGUIElement_Impl( CGUI_Impl *gui )
 {
 	// Reset
 	m_pWindow = NULL;
 	m_pParent = NULL;
-	m_pManager = NULL;
+	m_pManager = gui;
+
+	m_pManager->NotifyElementCreate(this);
+}
+
+CGUIElement_Impl::~CGUIElement_Impl( void )
+{
+	assert(m_pManager);
+	m_pManager->NotifyElementDestroy(this);
 }
 
 void CGUIElement_Impl::AddEvents( void )

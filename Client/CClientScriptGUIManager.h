@@ -16,7 +16,7 @@
 
 struct GUIElement
 {
-	CGUIElement_Impl	* pElement;
+	std::shared_ptr<CGUIElement_Impl> pElement;
 	CSquirrel			* pScript;
 	bool				bState;
 };
@@ -34,7 +34,7 @@ public:
 						CClientScriptGUIManager					( void );
 						~CClientScriptGUIManager				( void );
 
-	void				Add										( CGUIElement_Impl * pElement, CSquirrel * pScript );
+	void				Add										( const std::shared_ptr<CGUIElement_Impl> &pElement, CSquirrel * pScript );
 	void				Delete									( CGUIElement_Impl * pElement );
 	bool				Exists									( CGUIElement_Impl * pElement );
 
