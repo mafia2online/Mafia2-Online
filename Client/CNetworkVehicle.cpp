@@ -533,7 +533,7 @@ void CNetworkVehicle::Pulse( void )
 		unsigned long ulCurrentTime = SharedUtility::GetTime ();
 
 		// Should we activate the vehicle?
-		if( m_bSpawnProcessed && ((ulCurrentTime - m_ulSpawnTime) >= 4000 || ((ulCurrentTime - CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetSpawnTime()) >= 4000)) )
+		if( m_bSpawnProcessed/* && ((ulCurrentTime - m_ulSpawnTime) >= 4000 || ((ulCurrentTime - CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetSpawnTime()) >= 4000))*/ )
 		{
 			// Set the spawn not processed
 			m_ulSpawnTime = ulCurrentTime;
