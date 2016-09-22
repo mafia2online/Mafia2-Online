@@ -381,6 +381,8 @@ void CGUI_Impl::AddToRedrawQueue( CGUIElement_Impl * pElement )
 		std::list< CGUIElement_Impl* >::const_iterator iter = m_redrawQueue.begin();
 		for( ; iter != m_redrawQueue.end(); ++iter )
 		{
+			if (m_redrawQueue.empty()) break;
+
 			if( pElement->GetParent() == *iter )
 				return;
 			else if( (*iter)->GetParent() == pElement )
