@@ -33,7 +33,7 @@ enum E_ObjType : unsigned char
 	OBJTYPE_UNK3 = 0x2E, // 46 - Unknow
 	OBJTYPE_UNK4 = 0x34, // 52 - Function similar to UNK1 but unknow
 	OBJTYPE_UNK5 = 0x42, // 66 - Something related to car
-	OBJTYPE_UNK6 = 0x47 // 71 - Related to crashobject
+	OBJTYPE_UNK6 = 0x47 // 71 - Related to crashobject (C_WrapperLightEntity)
 };
 
 class M2Window
