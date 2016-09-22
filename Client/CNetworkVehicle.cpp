@@ -465,7 +465,7 @@ void CNetworkVehicle::Pulse( void )
 		return;
 
 	// Is the vehicle spawned?
-	if( IsSpawned() ) 
+	if( IsSpawned() )
 	{
 		// Get the vehicle position and rotation
 		CVector3 vecPosition, vecRotation;
@@ -608,7 +608,7 @@ void CNetworkVehicle::SetRotation( CVector3 vecRotation )
 	{
 		// Convert the rotation to radians
 		vecRotation.ToRadians();
-		
+
 		// Set the vehicle rotation
 		m_pVehicle->SetRotation( Quaternion( vecRotation ) );
 	}
