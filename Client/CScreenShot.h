@@ -11,22 +11,52 @@
 
 #include <thread>
 
+/**
+ * Lock-less screenshot saving utility class.
+ */
 class CScreenShot
 {
 private:
 
-	std::thread								m_thread;
-	bool									m_bSaving;
+	std::thread							m_thread;
+
+	enum JobState
+	{
+		JOB_STATE_IDLE,
+		JOB_STATE_WORKING,
+		JOB_STATE_FAILED_FILE_OPEN,
+		JOB_STATE_DONE
+	};
+
+	/** Variable indicating the state of the screenshot save job. */
+	mutable JobState					m_jobState;
+
+	/** The save operation time */
+	unsigned							m_saveTime;
+
+	/** The image data storage */
+	unsigned char					  * m_imageData;
+
+	/** Screenshot file name */
+	String								m_fileName;
+
+	/** Image size */
+	//@{
+	unsigned							m_imageWidth;
+	unsigned							m_imageHeight;
+	//@}
 
 	DWORD			WorkerThread					( );
 	const char		* GetValidScreenshotName		( void );
 
+	void			FinalizeJob						( );
 public:
 
 	CScreenShot();
-	~CScreenShot() = default;
+	~CScreenShot();
 
 	bool			BeginWrite						( unsigned char * ucData );
 	bool			IsSaving						( void );
 
+	void			ProcessRenderThread				( void );
 };

@@ -390,6 +390,9 @@ void CCore::OnDevicePreRender( void )
 
 void CCore::OnDeviceRender( void )
 {
+	if ( m_pScreenshotManager )
+		m_pScreenshotManager->ProcessRenderThread();
+
 	if( bDeviceLost )
 		return;
 
@@ -462,7 +465,10 @@ void CCore::OnDeviceRender( void )
 
 		if( m_pGraphics->GetFrontBufferPixels( &ucData ) )
 		{
-			m_pScreenshotManager->BeginWrite(ucData);
+			if (! m_pScreenshotManager->BeginWrite(ucData)) {
+				delete []ucData;
+				ucData = nullptr;
+			}
 		}
 		m_bCaptureScreenshot = false;
 	}

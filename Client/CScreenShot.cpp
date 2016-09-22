@@ -11,6 +11,7 @@
 
 #include	"CCore.h"
 
+#include	"CString.h"
 #include	"CScreenShot.h"
 
 #include	"SharedUtility.h"
@@ -18,7 +19,6 @@
 #include	"CChat.h"
 #include	"CM2Camera.h"
 
-#include	"CString.h"
 #include	"CColor.h"
 
 #include	"../Libraries/lpng142/png.h"
@@ -28,44 +28,70 @@
 #include	"CClientScriptingManager.h"
 #include	"CEvents.h"
 
-static unsigned char * m_ucData = NULL;
+const size_t	BYTES_PER_PIXEL			= 4;
+const D3DFORMAT SCREEN_SHOT_FORMAT		= D3DFMT_A8R8G8B8;
+const size_t SCREEN_SHOT_FORMAT_BYTES_PER_PIXEL = (32 / 8);
 
-#define	BYTES_PER_PIXEL								4
-#define SCREEN_SHOT_FORMAT							D3DFMT_A8R8G8B8
-#define SCREEN_SHOT_FORMAT_BYTES_PER_PIXEL			(32 / 8)
+CScreenShot::CScreenShot()
+	: m_thread()
+	, m_jobState(JOB_STATE_IDLE)
+	, m_imageData(nullptr)
+	, m_saveTime(0)
 
-CScreenShot::CScreenShot() : m_bSaving(false)
+	, m_fileName()
+
+	, m_imageWidth(0)
+	, m_imageHeight(0)
 {
+}
+
+CScreenShot::~CScreenShot()
+{
+	FinalizeJob();
+}
+
+void CScreenShot::FinalizeJob(void)
+{
+	if (m_jobState == JOB_STATE_IDLE)
+		return;
+
+	m_thread.join();
+
+	if (m_jobState == JOB_STATE_DONE) {
+		CSquirrelArguments pArguments;
+		pArguments.push( m_fileName );
+		pArguments.push( (int)m_saveTime );
+		if (CCore::Instance()->GetClientScriptingManager() && CCore::Instance()->GetClientScriptingManager()->GetEvents() && CCore::Instance()->GetClientScriptingManager()->GetEvents()->Call("onClientScreenshot", &pArguments).GetInteger() == 1)
+			CCore::Instance()->GetChat()->AddInfoMessage("Screenshot taken: %s (Took %d seconds)", m_fileName.Get(), m_saveTime);
+	}
+	else if (m_jobState == JOB_STATE_FAILED_FILE_OPEN) {
+		CCore::Instance()->GetChat()->AddInfoMessage(CColor(255, 0, 0, 255), "Failed to save screenshot. (Can't open target file)");
+		CLogFile::Printf( "Failed to save screenshot. (Can't open target file)" );
+	}
+
+
+	delete[] m_imageData;
+	m_fileName.clear();
+	m_jobState = JOB_STATE_IDLE;
 }
 
 DWORD CScreenShot::WorkerThread()
 {
 	unsigned long ulStartTime = SharedUtility::GetTime();
 
-	unsigned long ulScreenWidth = CCore::Instance()->GetCamera()->GetWindowWidth();
-	unsigned long ulScreenHeight = CCore::Instance()->GetCamera()->GetWindowHeight();
-	unsigned int uiRequestDataSize = (ulScreenHeight * ulScreenWidth * 4);
-	unsigned int uiLinePitch = (ulScreenWidth * 4);
+	unsigned uiRequestDataSize = (m_imageWidth * m_imageHeight * 4);
+	unsigned uiLinePitch = (m_imageWidth * 4);
 
-	unsigned char * tmpData = new unsigned char [ ulScreenHeight * uiLinePitch ];
-	unsigned char ** ucPtrs = new png_bytep [ ulScreenHeight ];
+	unsigned char ** ucPtrs = new png_bytep [ m_imageHeight ];
 
-	memcpy( tmpData, m_ucData, (ulScreenHeight * uiLinePitch) );
-	for( unsigned int i = 0; i < ulScreenHeight; i++ )
-		ucPtrs[i] = (tmpData + (uiLinePitch * i));
+	for( unsigned int i = 0; i < m_imageHeight; i++ )
+		ucPtrs[i] = (m_imageData + (uiLinePitch * i));
 
-	String strFileName( GetValidScreenshotName() );
-
-	FILE * fFile = fopen( strFileName.Get(), "wb" );
+	FILE * fFile = fopen( m_fileName.Get(), "wb" );
 	if( !fFile )
 	{
-		CCore::Instance()->GetChat()->AddInfoMessage(CColor(255, 0, 0, 255), "Failed to save screenshot. (Can't open target file)");
-		CLogFile::Printf( "Failed to save screenshot. (Can't open target file)" );
-
-		delete[] tmpData;
-		m_bSaving = false;
-		delete[] m_ucData;
-		m_ucData = NULL;
+		delete [] ucPtrs;
+		m_jobState = JOB_STATE_FAILED_FILE_OPEN;
 		return 0;
 	}
 
@@ -75,28 +101,17 @@ DWORD CScreenShot::WorkerThread()
 	png_init_io( png_ptr, fFile );
 	png_set_filter( png_ptr, 0, PNG_FILTER_NONE );
 	png_set_compression_level( png_ptr, 1 );
-	png_set_IHDR( png_ptr, info_ptr, ulScreenWidth, ulScreenHeight, 8, PNG_COLOR_TYPE_RGB_ALPHA, PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT );
+	png_set_IHDR( png_ptr, info_ptr, m_imageWidth, m_imageHeight, 8, PNG_COLOR_TYPE_RGB_ALPHA, PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT );
 	png_set_rows( png_ptr, info_ptr, ucPtrs );
 	png_write_png( png_ptr, info_ptr, PNG_TRANSFORM_BGR | PNG_TRANSFORM_STRIP_ALPHA, NULL );
 	png_write_end( png_ptr, info_ptr );
 	png_destroy_write_struct( &png_ptr, &info_ptr );
 
 	fclose( fFile );
-	if( tmpData )
-		delete[] tmpData;
+	delete []ucPtrs;
 
-	m_bSaving = false;
-
-	unsigned long ulElapsed = ((SharedUtility::GetTime() - ulStartTime) / 1000);
-
-	CSquirrelArguments pArguments;
-    pArguments.push( strFileName.Get() );
-    pArguments.push( (int)ulElapsed );
-	if (CCore::Instance()->GetClientScriptingManager() && CCore::Instance()->GetClientScriptingManager()->GetEvents() && CCore::Instance()->GetClientScriptingManager()->GetEvents()->Call("onClientScreenshot", &pArguments).GetInteger() == 1)
-		CCore::Instance()->GetChat()->AddInfoMessage("Screenshot taken: %s (Took %d seconds)", strFileName.Get(), ulElapsed);
-
-	delete[] m_ucData;
-	m_ucData = NULL;
+	m_saveTime = ((SharedUtility::GetTime() - ulStartTime) / 1000);
+	m_jobState = JOB_STATE_DONE;
 	return 0;
 }
 
@@ -117,12 +132,16 @@ bool CScreenShot::BeginWrite( unsigned char * ucData )
 	if( !ucData )
 		return false;
 
-	if( m_bSaving )
+	if( m_jobState != JOB_STATE_IDLE )
 		return false;
 
+	m_jobState = JOB_STATE_WORKING;
+	m_imageData = ucData;
+	m_fileName = GetValidScreenshotName();
 
-	m_bSaving = true;
-	m_ucData = ucData;
+	m_imageWidth = CCore::Instance()->GetCamera()->GetWindowWidth();
+	m_imageHeight = CCore::Instance()->GetCamera()->GetWindowHeight();
+
 	m_thread = std::thread(&CScreenShot::WorkerThread, this);
 
 	if( !m_thread.joinable())
@@ -136,5 +155,13 @@ bool CScreenShot::BeginWrite( unsigned char * ucData )
 
 bool CScreenShot::IsSaving( void )
 {
-	return m_bSaving;
+	return m_jobState != JOB_STATE_IDLE;
+}
+
+void CScreenShot::ProcessRenderThread(void)
+{
+	if (m_jobState == JOB_STATE_WORKING || m_jobState == JOB_STATE_IDLE)
+		return;
+
+	FinalizeJob();
 }
