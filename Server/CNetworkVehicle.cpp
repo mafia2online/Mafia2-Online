@@ -47,7 +47,7 @@ CNetworkVehicle::CNetworkVehicle( void )
 	SetLastSyncer( NULL );
 	m_uiTotalOccupants = 0;
 	m_ulLastOccupantTime = 0;
-	
+
 	// Set the initial respawn time
 	SetRespawnTime ( 300000 );
 
@@ -86,7 +86,7 @@ void CNetworkVehicle::SetSpawnPosition( CVector3 vecSpawnPosition )
 {
 	// Copy the spawn position
 	memcpy( &m_vecSpawnPosition, &vecSpawnPosition, sizeof(CVector3) );
-	
+
 	// Set the spawn position
 	SetPosition( vecSpawnPosition, false );
 }
@@ -95,7 +95,7 @@ void CNetworkVehicle::SetSpawnRotation( CVector3 vecSpawnRotation )
 {
 	// Copy the spawn position
 	memcpy( &m_vecSpawnRotation, &vecSpawnRotation, sizeof(CVector3) );
-	
+
 	// Set the spawn rotation
 	SetRotation( vecSpawnRotation, false );
 }
@@ -284,7 +284,7 @@ void CNetworkVehicle::SetPosition( CVector3 vecPosition, bool bBroadcast )
 	{
 		// Construct a new bitstream
 		RakNet::BitStream pBitStream;
-	
+
 		// Write the vehicle id
 		pBitStream.WriteCompressed( m_vehicleId );
 
@@ -312,7 +312,7 @@ void CNetworkVehicle::SetRotation( CVector3 vecRotation, bool bBroadcast )
 	{
 		// Construct a new bitstream
 		RakNet::BitStream pBitStream;
-	
+
 		// Write the vehicle id
 		pBitStream.WriteCompressed( m_vehicleId );
 
@@ -337,7 +337,7 @@ void CNetworkVehicle::SetColour( CColor primary, CColor secondary )
 {
 	// Construct a new bitstream
 	RakNet::BitStream pBitStream;
-	
+
 	// Write the vehicle id
 	pBitStream.WriteCompressed( m_vehicleId );
 
@@ -372,7 +372,7 @@ void CNetworkVehicle::SetPlateText( const char * szText )
 {
 	// Construct a new bitstream
 	RakNet::BitStream pBitStream;
-	
+
 	// Write the vehicle id
 	pBitStream.WriteCompressed( m_vehicleId );
 
@@ -395,7 +395,7 @@ void CNetworkVehicle::Repair( void )
 {
 	// Construct a new bitstream
 	RakNet::BitStream pBitStream;
-	
+
 	// Write the vehicle id
 	pBitStream.WriteCompressed( m_vehicleId );
 
@@ -407,7 +407,7 @@ void CNetworkVehicle::Explode( void )
 {
 	// Construct a new bitstream
 	RakNet::BitStream pBitStream;
-	
+
 	// Write the vehicle id
 	pBitStream.WriteCompressed( m_vehicleId );
 
@@ -419,7 +419,7 @@ void CNetworkVehicle::SetDirtLevel( float fDirtLevel )
 {
 	// Construct a new bitstream
 	RakNet::BitStream pBitStream;
-	
+
 	// Write the vehicle id
 	pBitStream.WriteCompressed( m_vehicleId );
 
@@ -442,7 +442,7 @@ void CNetworkVehicle::SetEngineState( bool bState )
 {
 	// Construct a new bitstream
 	RakNet::BitStream pBitStream;
-	
+
 	// Write the vehicle id
 	pBitStream.WriteCompressed( m_vehicleId );
 
@@ -466,7 +466,7 @@ void CNetworkVehicle::SetPartOpen( int iPart, bool bOpen )
 	CLogFile::Printf("[1] : Part : %d|Open : %d", iPart, bOpen);
 	// Construct a new bitstream
 	RakNet::BitStream pBitStream;
-	
+
 	// Write the vehicle id
 	pBitStream.WriteCompressed( m_vehicleId );
 
@@ -517,7 +517,7 @@ void CNetworkVehicle::SetSirenState( bool bState )
 {
 	// Construct a new bitstream
 	RakNet::BitStream pBitStream;
-	
+
 	// Write the vehicle id
 	pBitStream.WriteCompressed( m_vehicleId );
 
@@ -563,7 +563,7 @@ void CNetworkVehicle::SetHornState( bool bState )
 {
 	// Construct a new bitstream
 	RakNet::BitStream pBitStream;
-	
+
 	// Write the vehicle id
 	pBitStream.WriteCompressed( m_vehicleId );
 
@@ -586,7 +586,7 @@ void CNetworkVehicle::SetWindowOpen( int iSeat, bool bOpen )
 {
 	// Construct a new bitstream
 	RakNet::BitStream pBitStream;
-	
+
 	// Write the vehicle id
 	pBitStream.WriteCompressed( m_vehicleId );
 
@@ -614,7 +614,7 @@ void CNetworkVehicle::SetTuningTable( int iTable )
 {
 	// Construct a new bitstream
 	RakNet::BitStream pBitStream;
-	
+
 	// Write the vehicle id
 	pBitStream.WriteCompressed( m_vehicleId );
 
@@ -637,7 +637,7 @@ void CNetworkVehicle::SetWheelTexture( int iWheelIndex, int iTexture )
 {
 	// Construct a new bitstream
 	RakNet::BitStream pBitStream;
-	
+
 	// Write the vehicle id
 	pBitStream.WriteCompressed( m_vehicleId );
 
@@ -660,7 +660,7 @@ void CNetworkVehicle::SetSpeedVec ( CVector3 vecSpeed )
 {
 	// Construct a new bitstream
 	RakNet::BitStream pBitStream;
-	
+
 	// Write the vehicle id
 	pBitStream.WriteCompressed( m_vehicleId );
 
@@ -681,7 +681,7 @@ void CNetworkVehicle::SetFuel ( float fFuel )
 {
 	// Construct a new bitstream
 	RakNet::BitStream pBitStream;
-	
+
 	// Write the vehicle id
 	pBitStream.WriteCompressed( m_vehicleId );
 
@@ -701,7 +701,7 @@ void CNetworkVehicle::SetLightState ( bool bLightState )
 {
 	// Construct a new bitstream
 	RakNet::BitStream pBitStream;
-	
+
 	// Write the vehicle id
 	pBitStream.WriteCompressed( m_vehicleId );
 
@@ -751,7 +751,7 @@ void CNetworkVehicle::HandlePlayerEnter( CNetworkPlayer * pNetworkPlayer, int iS
 		return;
 	}
 
-	// 
+	//
 	CSquirrelArguments pArguments;
 	pArguments.push( pNetworkPlayer->GetId() );
 	pArguments.push( m_vehicleId );
@@ -781,7 +781,7 @@ void CNetworkVehicle::HandlePlayerExit( CNetworkPlayer * pNetworkPlayer, int iSe
 	if( !pNetworkPlayer )
 		return;
 
-	// 
+	//
 	CSquirrelArguments pArguments;
 	pArguments.push( pNetworkPlayer->GetId() );
 	pArguments.push( m_vehicleId );
