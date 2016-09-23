@@ -15,7 +15,7 @@ CCore::CCore( void )
 	SetActive( true );
 	m_iResourcesLoaded = 0;
 	m_iFailedResources = 0;
-	
+
 	// Reset pointers
 	m_pNetworkModule = NULL;
 	m_pPlayerManager = NULL;
@@ -74,6 +74,9 @@ CCore::~CCore( void )
 
 bool CCore::Initialise( int argc, char * argv[] )
 {
+	// Generate a random seed
+	srand ( SharedUtility::GetTime () );
+
 	// Does the resources path not exist?
 	if( !SharedUtility::Exists( "resources" ) )
 	{
@@ -114,7 +117,7 @@ bool CCore::Initialise( int argc, char * argv[] )
 	// Install the crash reporter
 	CrashRpt::InstallMain( MOD_NAME" (Server)", MOD_VERS_STR );
 
-	// Check if restarted after crash	
+	// Check if restarted after crash
 	if ( strstr( GetCommandLineA(), "/restart_crash_occurred" ) )
 		CLogFile::Print( "WARNING: Server restarted after crash!\n" );
 #endif
@@ -132,7 +135,7 @@ bool CCore::Initialise( int argc, char * argv[] )
 	CLogFile::Printf( "= Server name    : %s", CVAR_GET_STRING( "hostname" ) );
 	CLogFile::Printf( "= Server port    : %d", CVAR_GET_INTEGER( "port" ) );
 	CLogFile::Printf( "= Max players    : %d%s", CVAR_GET_INTEGER( "maxplayers" ), !IsPasswordProtected() ? "\n" : "" );
-	
+
 	// Is the server passworded?
 	if( IsPasswordProtected() )
 	{
@@ -230,7 +233,7 @@ void CCore::Deinitialise( void )
 	// First call the shutdown event
 	if (m_pEvents)//Todo : move to Main.cpp
 		m_pEvents->Call( "onServerShutdown" );
-	
+
 	// Delete ourselfs
 	delete this;
 }
