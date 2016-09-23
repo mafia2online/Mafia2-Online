@@ -38,9 +38,6 @@ static CColor predefinedColours[] =
 
 CNetworkVehicle::CNetworkVehicle( void )
 {
-	// Generate a random seed
-	srand ( SharedUtility::GetTime () );
-
 	// Reset variables
 	m_iModel = -1;
 	m_ulLastSyncerCheckTime = 0;
@@ -72,8 +69,8 @@ CNetworkVehicle::CNetworkVehicle( void )
 	m_lastSyncData.m_bPartState_Hood = 0;
 	m_lastSyncData.m_bPartState_Trunk = 0;
 	m_lastSyncData.m_model = 0;
-	memcpy( &m_lastSyncData.m_primaryColour, &predefinedColours[ rand() % 20 ], sizeof(CColor) );
-	memcpy( &m_lastSyncData.m_secondaryColour, &predefinedColours[ rand() % 20 ], sizeof(CColor) );
+	memcpy( &m_lastSyncData.m_primaryColour, &predefinedColours[ rand() % ARRAY_LENGTH(predefinedColours) ], sizeof(CColor) );
+	memcpy( &m_lastSyncData.m_secondaryColour, &predefinedColours[ rand() % ARRAY_LENGTH(predefinedColours) ], sizeof(CColor) );
 	strcpy( m_lastSyncData.m_szPlateText, String("EB%d", m_vehicleId).Get() );
 	m_lastSyncData.m_bLightState = false;
 }
@@ -355,8 +352,8 @@ void CNetworkVehicle::SetColour( CColor primary, CColor secondary )
 	CCore::Instance()->GetNetworkModule()->Call( RPC_SETVEHICLECOLOUR, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, INVALID_ENTITY_ID, true );
 
 	// Copy the colours into the last sync data
-	memcpy ( &m_lastSyncData.m_primaryColour, &primary, sizeof(CColor) );
-	memcpy ( &m_lastSyncData.m_secondaryColour, &secondary, sizeof(CColor) );
+	m_lastSyncData.m_primaryColour = primary;
+	m_lastSyncData.m_secondaryColour =  secondary;
 }
 
 void CNetworkVehicle::GetColour( CColor * primary, CColor * secondary )
