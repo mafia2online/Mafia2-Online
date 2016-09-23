@@ -69,13 +69,13 @@ void SetVehicleColour( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket 
 	pBitStream->ReadCompressed( vehicleId );
 
 	// Read the primary colour
-	int r1, g1, b1;
+	unsigned char r1, g1, b1;
 	pBitStream->ReadCompressed( r1 );
 	pBitStream->ReadCompressed( g1 );
 	pBitStream->ReadCompressed( b1 );
 
 	// Read the secondary colour
-	int r2, g2, b2;
+	unsigned char r2, g2, b2;
 	pBitStream->ReadCompressed( r2 );
 	pBitStream->ReadCompressed( g2 );
 	pBitStream->ReadCompressed( b2 );

@@ -106,7 +106,7 @@ SQInteger CUtilNatives::ToRGBA( SQVM * pVM )
 	sq_getinteger( pVM, -1, &iColour );
 
 	CColor m_color( (unsigned long)iColour );
-	
+
 	CSquirrelArguments args;
 	args.push( m_color.R );
 	args.push( m_color.G );
@@ -131,7 +131,7 @@ SQInteger CUtilNatives::FromRGB( SQVM * pVM )
 
 	SQInteger r, g, b;
 	SQInteger a = 255;
-	
+
 	if( iTop > 3 )
 	{
 		CHECK_TYPE( "fromRGB", 1, -4, OT_INTEGER );
@@ -154,9 +154,9 @@ SQInteger CUtilNatives::FromRGB( SQVM * pVM )
 		sq_getinteger( pVM, -2, &g );
 		sq_getinteger( pVM, -1, &b );
 	}
-	
+
 	CColor m_color( r, g, b, a );
-	sq_pushinteger( pVM, m_color.dwHexColor );
+	sq_pushinteger( pVM, m_color.ToUint() );
 	return 1;
 }
 

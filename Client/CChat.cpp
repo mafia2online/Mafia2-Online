@@ -473,7 +473,7 @@ void CChat::AddChatMessage(CNetworkPlayer * pNetworkPlayer, const char * szMessa
 	strcpy_s(m_chatLine[0].szMessage, (MAX_MESSAGE_LEN + 1), szMessageToSet);
 	sprintf(m_chatLine[0].szName, "%s: ", pNetworkPlayer->GetNick().Get());
 	m_chatLine[0].ulMsgColour = D3DCOLOR_ARGB(255, 255, 255, 255);
-	m_chatLine[0].ulNameColour = colour.dwHexColor;
+	m_chatLine[0].ulNameColour = colour.ToUint();
 	m_chatLine[0].fNameExtent = CCore::Instance()->GetGraphics()->GetTextWidth(m_chatLine[0].szName, 1.0f, "tahoma-bold");
 }
 
@@ -503,7 +503,7 @@ void CChat::AddInfoMessage(CColor colour, const char * szInfo, ...)
 
 	// Set the chat line data
 	m_chatLine[0].szMessage[MAX_MESSAGE_LEN] = '\0';
-	m_chatLine[0].ulMsgColour = colour.dwHexColor;
+	m_chatLine[0].ulMsgColour = colour.ToUint();
 	m_chatLine[0].fNameExtent = 0.0f;
 	m_chatLine[0].szTimeSend.Format("[%s] ", SharedUtility::GetTimeString());
 	m_chatLine[0].fTimeSendExtent = CCore::Instance()->GetGraphics()->GetTextWidth(m_chatLine[0].szTimeSend, 1.0f, "tahoma-bold");
