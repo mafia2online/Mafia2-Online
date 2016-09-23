@@ -75,7 +75,11 @@ void CNameTag::Draw(void)
 void CNameTag::DrawPed(void)
 {
 	CVector3 localPos;
-	pCore->GetPlayerManager()->GetLocalPlayer()->GetPosition(&localPos);
+
+	CLocalPlayer *pLocalPlayer = pCore->GetPlayerManager()->GetLocalPlayer();
+	if (! pLocalPlayer)
+		return;
+	pLocalPlayer->GetPosition(&localPos);
 
 	for ( EntityId i = 0; i < MAX_PEDS; ++i )
 	{
@@ -119,11 +123,15 @@ void CNameTag::DrawPlayer(void)
 	CPlayerManager *pPlayerManager = pCore->GetPlayerManager();
 
 	CVector3 localPos;
-	pPlayerManager->GetLocalPlayer()->GetPosition ( &localPos );
+	CLocalPlayer *pLocalPlayer = pPlayerManager->GetLocalPlayer();
+	if (! pLocalPlayer)
+		return;
+
+	pLocalPlayer->GetPosition ( &localPos );
 
 	CGraphics *pGraphics = pCore->GetGraphics();
 
-	EntityId localPlayerId = pPlayerManager->GetLocalPlayer()->GetId();
+	EntityId localPlayerId = pLocalPlayer->GetId();
 	for ( EntityId i = 0; i < MAX_PLAYERS; ++i )
 	{
 		if ( i == localPlayerId )
