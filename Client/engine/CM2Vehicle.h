@@ -24,7 +24,7 @@ enum eVehiclePartType
 	PART_TYPE_TYRE					= 14
 };
 
-class M2VehicleDataVFTable
+class C_VehicleVFTable
 {
 public:
 	PAD(M2VehicleDataVFTable, pad0, 0x88);		// 0000 - 0088
@@ -45,16 +45,47 @@ public:
 	float m_fHealth;							// 0024 - 0028
 };
 
-class M2VehicleData
+/**
+ * Illusion engine C_Vector class reimplementation.
+ *
+ * 3-component vector used for storing colors and positions.
+ *
+ * @todo Move to different file and implement rest of the methods.
+ */
+class C_Vector
 {
 public:
-	M2VehicleDataVFTable * m_pVFTable;			// 0000 - 0004
-	PAD(M2VehicleData, pad0, 0x1C);				// 0004 - 0020
+	/** Components - with allowed rgb and xyz access. */
+	//@{
+	union {
+		struct {
+			float x;
+			float y;
+			float z;
+		};
+		struct {
+			float r;
+			float g;
+			float b;
+		};
+	};
+	//@}
+
+	C_Vector() : r(0.0f), g(0.0f), b(0.0f) {}
+
+	// TODO: Dot, Cross, Rotate etc.
+
+};
+
+class C_Vehicle
+{
+public:
+	C_VehicleVFTable * m_pVFTable;				// 0000 - 0004
+	PAD(C_Vehicle, pad0, 0x1C);					// 0004 - 0020
 	void * m_pVehicleParts;						// 0020 - 0024
 
-	int sub_120DBB0(int, int);
-
-	int sub_120E340(int, int);
+	int			SetVehicleColor		(const C_Vector &primary, const C_Vector &secondary);
+	int			GetVehicleColor		(C_Vector *const primary, C_Vector *const secondary);
 };
 
 class M2FuelTank
@@ -158,7 +189,7 @@ public:
 	PAD(M2Vehicle, pad1, 0xC);					// 007C - 0088
 	M2VehicleSeats * m_pSeats;					// 0088 - 008C
 	PAD(M2Vehicle, pad2, 0x1C);					// 008C - 00A8
-	M2VehicleData m_vehicleData;				// 00A8 - 00CC
+	C_Vehicle	m_vehicleData;					// 00A8 - 00CC
 	PAD(M2Vehicle, pad3, 0x1BC);				// 00CC - 0288
 	CVector3 m_vecMoveSpeed;					// 0288 - 0294
 	float m_fEngineSpeed;						// 0294 - 0298
@@ -175,14 +206,7 @@ public:
 	float m_fSteer;								// 0490 - 0494
 	float m_fAddedSteer;						// 0494 - 0498
 	float m_fMaxSteerAngle;						// 0498 - 049C
-	PAD(M2Vehicle, pad9, 0x264);				// 02F0 - 0700
-	DWORD m_dwColourRefreshFlags;				// 0700 - 0704
-	float m_fPrimaryRed;						// 0704 - 0708
-	float m_fPrimaryGreen;						// 0708 - 070C
-	float m_fPrimaryBlue;						// 070C - 0710
-	float m_fSecondaryRed;						// 0710 - 0714
-	float m_fSecondaryGreen;					// 0714 - 0718
-	float m_fSecondaryBlue;						// 0718 - 071C
+	PAD(M2Vehicle, pad9, 0x280);				// 049C - 071C
 	float m_fDirtLevel;							// 071C - 0720
 	PAD(M2Vehicle, pad10, 0x13C);				// 0720 - 085C
 	BYTE m_byteHornFlags;						// 085C - 085D
@@ -267,7 +291,7 @@ public:
 	void					SetTuningTable					( int iTuningTable );
 	int						GetTuningTable					( void );
 
-	void					SetColour						( CColor primary, CColor secondary );
+	void					SetColour						( const CColor &primary, const CColor &secondary );
 	void					GetColour						( CColor * primary, CColor * secondary );
 
 	void					SetFuel							( float fFuel );

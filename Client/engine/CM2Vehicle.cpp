@@ -307,39 +307,56 @@ int CM2Vehicle::GetTuningTable( void )
 	return 0;
 }
 
-void CM2Vehicle::SetColour( CColor primary, CColor secondary )
+int _declspec(naked) C_Vehicle::SetVehicleColor(const C_Vector &primary, const C_Vector &secondary)
 {
-	if( m_pVehicle )
-	{
-		// Copy the primary colour
-		m_pVehicle->m_fPrimaryRed = (primary.R * 0.00390625);
-		m_pVehicle->m_fPrimaryGreen = (primary.G * 0.00390625);
-		m_pVehicle->m_fPrimaryBlue = (primary.B * 0.00390625);
-
-		// Refresh the primary colour
-		m_pVehicle->m_dwColourRefreshFlags |= 1u;
-
-		// Copy the secondary colour
-		m_pVehicle->m_fSecondaryRed = (secondary.R * 0.00390625);
-		m_pVehicle->m_fSecondaryGreen = (secondary.G * 0.00390625);
-		m_pVehicle->m_fSecondaryBlue = (secondary.B * 0.00390625);
-
-		// Refresh the secondary colour
-		m_pVehicle->m_dwColourRefreshFlags |= 2u;
+	_asm {
+		mov eax, 0x11EE9A0
+		jmp eax
 	}
 }
 
-void CM2Vehicle::GetColour( CColor * primary, CColor * secondary )
+int _declspec(naked) C_Vehicle::GetVehicleColor(C_Vector *const primary, C_Vector *const secondary)
+{
+	_asm {
+		mov eax, 0x11EEA00
+		jmp eax
+	}
+}
+
+const float MAGIC_COLOR_MULTIPLIER = 0.00390625f; // 1/255
+
+void CM2Vehicle::SetColour( const CColor &thePrimary, const CColor &theSecondary )
 {
 	if( m_pVehicle )
 	{
-		primary->R = (m_pVehicle->m_fPrimaryRed / 0.00390625);
-		primary->G = (m_pVehicle->m_fPrimaryGreen / 0.00390625);
-		primary->B = (m_pVehicle->m_fPrimaryBlue / 0.00390625);
+		C_Vector primary;
+		primary.r = (thePrimary.R * MAGIC_COLOR_MULTIPLIER);
+		primary.g = (thePrimary.G * MAGIC_COLOR_MULTIPLIER);
+		primary.b = (thePrimary.B * MAGIC_COLOR_MULTIPLIER);
 
-		secondary->R = (m_pVehicle->m_fSecondaryRed / 0.00390625);
-		secondary->G = (m_pVehicle->m_fSecondaryGreen / 0.00390625);
-		secondary->B = (m_pVehicle->m_fSecondaryBlue / 0.00390625);
+		C_Vector secondary;
+		secondary.r = (theSecondary.R * MAGIC_COLOR_MULTIPLIER);
+		secondary.g = (theSecondary.G * MAGIC_COLOR_MULTIPLIER);
+		secondary.b = (theSecondary.B * MAGIC_COLOR_MULTIPLIER);
+
+		m_pVehicle->m_vehicleData.SetVehicleColor(primary, secondary);
+	}
+}
+
+void CM2Vehicle::GetColour( CColor * outPrimary, CColor * outSecondary )
+{
+	if( m_pVehicle )
+	{
+		C_Vector primary,secondary;
+		m_pVehicle->m_vehicleData.GetVehicleColor(&primary, &secondary);
+
+		outPrimary->R = (primary.r / MAGIC_COLOR_MULTIPLIER);
+		outPrimary->G = (primary.g / MAGIC_COLOR_MULTIPLIER);
+		outPrimary->B = (primary.b / MAGIC_COLOR_MULTIPLIER);
+
+		outSecondary->R = (secondary.r / MAGIC_COLOR_MULTIPLIER);
+		outSecondary->G = (secondary.g / MAGIC_COLOR_MULTIPLIER);
+		outSecondary->B = (secondary.b / MAGIC_COLOR_MULTIPLIER);
 	}
 }
 
