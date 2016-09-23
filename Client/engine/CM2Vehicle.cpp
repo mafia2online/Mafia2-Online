@@ -36,6 +36,51 @@ float _declspec(naked) M2Vehicle::GetMotorDamage(void) const
 	_asm jmp COffsets::FUNC_CVehicle__GetEngineDamage;
 }
 
+int _declspec(naked) M2Vehicle::ResetRigidBody(void)
+{
+	_asm {
+		mov eax, 0x00468EB0
+		jmp eax
+	}
+}
+
+bool _declspec(naked) C_Vehicle::SetDynamic(const bool enable, const int unknown = -1)
+{
+	_asm {
+		mov eax, 0x0120DBB0
+		jmp eax
+	}
+}
+
+void _declspec(naked) C_Vehicle::StopAllSounds(void)
+{
+	_asm {
+		mov eax, 0x0122B690
+		jmp eax
+	}
+}
+
+void _declspec(naked) C_Vehicle::AddVehicleFlags(const uint64_t flags)
+{
+	_asm {
+		mov eax, 0x01259F40
+		jmp eax
+	}
+}
+
+void _declspec(naked) C_Vehicle::ClearVehicleFlags(const uint64_t flags)
+{
+	_asm {
+		mov eax, 0x0120E340
+		jmp eax
+	}
+}
+
+uint64_t C_Vehicle::GetVehicleFlags(void) const
+{
+	return m_flags;
+}
+
 CM2Vehicle::CM2Vehicle( M2Vehicle * pVehicle ) : CM2Entity( pVehicle )
 {
 	SetVehicle( pVehicle );
@@ -46,6 +91,7 @@ CM2Vehicle::CM2Vehicle( M2Vehicle * pVehicle ) : CM2Entity( pVehicle )
 	ToggleGarageEnter(false);
 
 	Spawn();
+	Unlock();
 }
 
 CM2Vehicle::~CM2Vehicle( void )
@@ -56,6 +102,25 @@ void CM2Vehicle::Spawn ( void )
 {
 	if ( m_pVehicle )
 		m_pVehicle->Spawn();
+}
+
+void CM2Vehicle::Lock( void )
+{
+	if (m_pVehicle) {
+		SetSpeed(0.0f);
+		m_pVehicle->m_vehicleData.SetDynamic(false);
+		m_pVehicle->m_vehicleData.AddVehicleFlags(E_VEHICLEFLAGS_DOORS_LOCKED);
+		m_pVehicle->m_vehicleData.StopAllSounds();
+	}
+}
+
+void CM2Vehicle::Unlock( void )
+{
+	if (m_pVehicle) {
+		m_pVehicle->m_vehicleData.SetDynamic(true);
+		m_pVehicle->m_vehicleData.ClearVehicleFlags(E_VEHICLEFLAGS_DOORS_LOCKED);
+		m_pVehicle->ResetRigidBody();
+	}
 }
 
 void CM2Vehicle::SetEngineOn( bool bEngine, bool bRevOnStart )
@@ -165,7 +230,7 @@ void CM2Vehicle::SetSpeed( float fSpeed )
 		{
 			push fSpeed;
 			mov ecx, pVehicle;
-			call COffsets::FUNC_CVehicle__SetSpeedFloat;
+			call COffsets::FUNC_CVehicle__SetSpeedFloat; // C_Car::SetSpeed
 		}
 	}
 }

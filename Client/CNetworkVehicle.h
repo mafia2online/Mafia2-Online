@@ -129,9 +129,6 @@ public:
 	void							Respawn								( void );
 	void							HandleRespawn						( void );
 
-	void							Deserialise							( RakNet::BitStream * pBitStream );
-	void							ProcessLastSyncData					( bool bFirstSpawn = false );
-
 	void							StoreVehicleSync					( InVehicleSync vehicleSync, bool bInterpolate = true, bool bSpawn = false );
 
 	void							Pulse								( void );
@@ -147,6 +144,10 @@ public:
 
 	bool							SetPlateText						( const char * szPlateText );
 	const char						* GetPlateText						( void ) const;
+
+	uint64_t						GetVehicleFlags						( void ) const;
+	void							ClearVehicleFlags					( uint64_t flags ) const;
+	void							SetVehicleFlags						( uint64_t flags ) const;
 
 	void							Repair								( void );
 	void							Explode								( void );

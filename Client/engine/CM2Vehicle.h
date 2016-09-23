@@ -80,13 +80,47 @@ public:
 class C_Vehicle
 {
 public:
-	C_VehicleVFTable * m_pVFTable;				// 0000 - 0004
-	PAD(C_Vehicle, pad0, 0x1C);					// 0004 - 0020
-	void * m_pVehicleParts;						// 0020 - 0024
+												// decimal offset
+	C_VehicleVFTable  * m_pVFTable;				// 0000 - 0004
+	PAD(C_Vehicle, pad0, 28);					// 0004 - 0032
+	void			  * m_pVehicleParts;		// 0032 - 0036
+	PAD(C_Vehicle, pad3, 448);					// 0036 - 0480
+	CVector3			m_vecMoveSpeed;			// 0480 - 0492
+	float				m_fEngineSpeed;			// 0492 - 0496
+	float				m_fSpeed;				// 0500 - 0504
+	PAD(C_Vehicle, pad4, 60);					// 0504 - 0564
+	M2VehicleWheels   * m_pWheels;				// 02D8 - 02DC
+	PAD(C_Vehicle, pad5, 0x10);					// 02DC - 02EC
+	M2VehicleUnk003   * m_pFuelUnk;				// 02EC - 02F0
+	PAD(C_Vehicle, pad6, 0x144);				// 02F0 - 0434
+	float				m_fBrake;				// 0434 - 0438
+	PAD(C_Vehicle, pad7, 0x8);					// 0438 - 0440
+	float				m_fPower;				// 0440 - 0444
+	PAD(C_Vehicle, pad8, 0x4C);					// 0444 - 0490
+	float				m_fSteer;				// 0490 - 0494
+	float				m_fAddedSteer;			// 0494 - 0498
+	float				m_fMaxSteerAngle;		// 0498 - 049C
+	PAD(C_Vehicle, pad9, 0x280);				// 049C - 071C
+	float				m_fDirtLevel;			// 071C - 0720
+	PAD(C_Vehicle, pad10, 0x13C);				// 0720 - 085C
+	BYTE				m_byteHornFlags;		// 085C - 085D
+	PAD(C_Vehicle, pad11, 0x83);				// 085D - 08E0
+	char				m_szPlateText[6];		// 08E0 - 08E6
+	PAD(C_Vehicle, pad12, 0x84C);				// 0024 - 0870
+	uint64_t			m_flags;				// 2160 - 2168
 
 	int			SetVehicleColor		(const C_Vector &primary, const C_Vector &secondary);
 	int			GetVehicleColor		(C_Vector *const primary, C_Vector *const secondary);
+
+	bool		SetDynamic			(const bool enable, const int unknown = -1);
+
+	void		StopAllSounds		(void);
+
+	void		AddVehicleFlags		(const uint64_t flags);
+	void		ClearVehicleFlags	(const uint64_t flags);
+	uint64_t	GetVehicleFlags		(void) const;
 };
+static_assert(sizeof(C_Vehicle) == 2168,"Incorrect C_Vehicle size");
 
 class M2FuelTank
 {
@@ -189,30 +223,8 @@ public:
 	PAD(M2Vehicle, pad1, 0xC);					// 007C - 0088
 	M2VehicleSeats * m_pSeats;					// 0088 - 008C
 	PAD(M2Vehicle, pad2, 0x1C);					// 008C - 00A8
-	C_Vehicle	m_vehicleData;					// 00A8 - 00CC
-	PAD(M2Vehicle, pad3, 0x1BC);				// 00CC - 0288
-	CVector3 m_vecMoveSpeed;					// 0288 - 0294
-	float m_fEngineSpeed;						// 0294 - 0298
-	float m_fSpeed;								// 0298 - 029C
-	PAD(M2Vehicle, pad4, 0x3C);					// 029C - 02D8
-	M2VehicleWheels * m_pWheels;				// 02D8 - 02DC
-	PAD(M2Vehicle, pad5, 0x10);					// 02DC - 02EC
-	M2VehicleUnk003 * m_pFuelUnk;				// 02EC - 02F0
-	PAD(M2Vehicle, pad6, 0x144);				// 02F0 - 0434
-	float m_fBrake;								// 0434 - 0438
-	PAD(M2Vehicle, pad7, 0x8);					// 0438 - 0440
-	float m_fPower;								// 0440 - 0444
-	PAD(M2Vehicle, pad8, 0x4C);					// 0444 - 0490
-	float m_fSteer;								// 0490 - 0494
-	float m_fAddedSteer;						// 0494 - 0498
-	float m_fMaxSteerAngle;						// 0498 - 049C
-	PAD(M2Vehicle, pad9, 0x280);				// 049C - 071C
-	float m_fDirtLevel;							// 071C - 0720
-	PAD(M2Vehicle, pad10, 0x13C);				// 0720 - 085C
-	BYTE m_byteHornFlags;						// 085C - 085D
-	PAD(M2Vehicle, pad11, 0x83);				// 085D - 08E0
-	char m_szPlateText[6];						// 08E0 - 08E6
-	PAD(M2Vehicle, pad12, 0x3A6);				// 08E6 - 0C8C
+	C_Vehicle	m_vehicleData;					// 00A8 - 0920
+	PAD(M2Vehicle, pad12, 0x36C);				// 0920 - 0C8C
 	M2VehicleUnk001 * m_pUnknown;				// 0C8C - 0C90
 	PAD(M2Vehicle, pad13, 0x18);				// 0C90 - 0CA8
 	BYTE m_byteFlags1;							// 0CA8 - 0CA9
@@ -234,14 +246,18 @@ public:
 	// 0x4A0 = float m_fMaxTurnAngle
 	// 0x4A4 = float m_fTurnAngle
 
-	void UnlockPlayerEntryPoints(void);
-
-	void sub_468EB0(void);
-
 	void Spawn(void);
 
 	void SetMotorDamage(float damage);
 	float GetMotorDamage(void) const;
+
+	int ResetRigidBody(void);
+};
+static_cast(sizeof(M2Vehicle)==0xE00,"M2Vehicle size is invalid");
+
+enum E_VehicleFlags : uint64_t
+{
+	E_VEHICLEFLAGS_DOORS_LOCKED = 0x80000000u
 };
 
 class CM2Vehicle : public CM2Entity
@@ -260,6 +276,9 @@ public:
 	M2Vehicle				* GetVehicle					( void ) { return m_pVehicle; }
 
 	void					Spawn							( void );
+
+	void					Lock							( void );
+	void					Unlock							( void );
 
 	void					SetEngineOn						( bool bEngine, bool bRevWhenStarted = true );
 	bool					IsEngineOn						( void );
