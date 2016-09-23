@@ -382,7 +382,8 @@ void CCore::OnDeviceReset( IDirect3DDevice9 * pDevice )
 
 void CCore::OnDevicePreRender( void )
 {
-	if( m_pClientScriptingManager && !m_pGUI->GetMainMenu()->IsVisible () )
+	CMainMenu *pMenu = m_pGUI->GetMainMenu();
+	if( pMenu && m_pClientScriptingManager && !pMenu->IsVisible () )
 		m_pClientScriptingManager->GetEvents()->Call( "onClientFramePreRender" );
 }
 
