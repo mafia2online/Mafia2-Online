@@ -404,15 +404,8 @@ void CNetworkVehicle::StoreVehicleSync( InVehicleSync vehicleSync, bool bInterpo
 		GetColour( &primary, &secondary );
 
 		// Has the primary colour changed?
-		if( primary != vehicleSync.m_primaryColour )
-			SetColour( vehicleSync.m_primaryColour, secondary );
-
-		// Get the colours again
-		GetColour( &primary, &secondary );
-
-		// Has the secondary colour changed?
-		if( secondary != vehicleSync.m_secondaryColour )
-			SetColour( primary, vehicleSync.m_secondaryColour );
+		if( primary != vehicleSync.m_primaryColour || secondary != vehicleSync.m_secondaryColour )
+			SetColour( vehicleSync.m_primaryColour, vehicleSync.m_secondaryColour );
 
 		// Has the power state changed?
 		if( m_pVehicle->GetPower() != vehicleSync.m_bPower )
@@ -638,6 +631,9 @@ void CNetworkVehicle::SetColour( CColor primary, CColor secondary )
 	// Is the vehicle instance valid?
 	if( m_pVehicle )
 		m_pVehicle->SetColour( primary, secondary );
+
+	m_lastSyncData.m_primaryColour = primary;
+	m_lastSyncData.m_secondaryColour = secondary;
 }
 
 void CNetworkVehicle::GetColour( CColor * primary, CColor * secondary )
@@ -652,6 +648,8 @@ void CNetworkVehicle::SetPlateText( const char * szPlateText )
 	// Is the vehicle instance valid?
 	if( m_pVehicle )
 		m_pVehicle->SetPlateText( szPlateText );
+
+	strcpy(m_lastSyncData.m_szPlateText, szPlateText);
 }
 
 const char * CNetworkVehicle::GetPlateText( void )
@@ -682,6 +680,8 @@ void CNetworkVehicle::SetDirtLevel( float fDirtLevel )
 	// Is the vehicle instance valid?
 	if( m_pVehicle )
 		m_pVehicle->SetDirtLevel( fDirtLevel );
+
+	m_lastSyncData.m_fDirtLevel = fDirtLevel;
 }
 
 float CNetworkVehicle::GetDirtLevel( void )
@@ -698,6 +698,8 @@ void CNetworkVehicle::SetEngineState( bool bState )
 	// Is the vehicle instance valid?
 	if( m_pVehicle )
 		m_pVehicle->SetEngineOn( bState );
+
+	m_lastSyncData.m_bEngineState = bState;
 }
 
 bool CNetworkVehicle::GetEngineState( void )
@@ -717,10 +719,13 @@ void CNetworkVehicle::SetPartOpen( int iPart, bool bOpen )
 		if (iPart == VEHICLE_PART_HOOD) {
 			bOpen ? m_pVehicle->OpenHood() : m_pVehicle->CloseHood();
 			m_bPartState[VEHICLE_PART_HOOD] = bOpen;
+
+			m_lastSyncData.m_bPartState_Hood = bOpen;
 		}
 		else {
 			bOpen ? m_pVehicle->OpenTrunk() : m_pVehicle->CloseTrunk();
 			m_bPartState[VEHICLE_PART_TRUNK] = bOpen;
+			m_lastSyncData.m_bPartState_Trunk = bOpen;
 		}
 	}
 }
@@ -744,6 +749,8 @@ void CNetworkVehicle::SetSirenState( bool bState )
 	// Is the vehicle instance valid?
 	if( m_pVehicle )
 		m_pVehicle->SetSirenOn( bState );
+
+	m_lastSyncData.m_bSirenState = bState;
 }
 
 bool CNetworkVehicle::GetSirenState( void )
@@ -760,6 +767,8 @@ void CNetworkVehicle::SetBeaconLightState(bool bState)
 	// Is the vehicle instance valid?
 	if (m_pVehicle)
 		m_pVehicle->SetBeaconLightOn(bState);
+
+	m_lastSyncData.m_bBeaconLightState = bState;
 }
 
 bool CNetworkVehicle::GetBeaconLightState(void)
@@ -776,6 +785,8 @@ void CNetworkVehicle::SetHornState( bool bState )
 	// Is the vehicle instance valid?
 	if( m_pVehicle )
 		m_pVehicle->SetHornOn( bState );
+
+	m_lastSyncData.m_bHornState = bState;
 }
 
 bool CNetworkVehicle::GetHornState( void )
@@ -804,6 +815,8 @@ void CNetworkVehicle::SetTuningTable( int iTable )
 	// Is the vehicle valid?
 	if( m_pVehicle )
 		m_pVehicle->SetTuningTable( iTable );
+
+	m_lastSyncData.m_iTuningTable = iTable;
 }
 
 int CNetworkVehicle::GetTuningTable( void )
@@ -820,6 +833,8 @@ void CNetworkVehicle::SetWheelTexture( int iWheelIndex, int iTexture )
 	// Is the vehicle valid?
 	if( m_pVehicle )
 		m_pVehicle->SetWheelTexture( iWheelIndex, Game::GetVehicleWheelModelFromId( iTexture ) );
+
+	m_lastSyncData.m_bWheelModels[iWheelIndex] = static_cast<BYTE>(iTexture);
 }
 
 int CNetworkVehicle::GetWheelTexture( int iWheelIndex )
@@ -836,6 +851,8 @@ void CNetworkVehicle::SetSteer ( float fSteer )
 	// Is the vehicle valid?
 	if ( m_pVehicle )
 		m_pVehicle->AddSteer ( (fSteer * (D3DX_PI / 180.0f)) );
+
+	m_lastSyncData.m_fTurnSpeed = fSteer;
 }
 
 float CNetworkVehicle::GetSteer ( void )
@@ -868,6 +885,8 @@ void CNetworkVehicle::SetSpeedVec ( CVector3 vecSpeed )
 	// Is the vehicle valid?
 	if ( m_pVehicle )
 		m_pVehicle->SetMoveSpeed ( vecSpeed );
+
+	m_lastSyncData.m_vecVelocity = vecSpeed;
 }
 
 void CNetworkVehicle::GetSpeedVec ( CVector3 * vecSpeed )
@@ -882,6 +901,8 @@ void CNetworkVehicle::SetFuel ( float fFuel )
 	// Is the vehicle valid?
 	if ( m_pVehicle )
 		m_pVehicle->SetFuel ( fFuel );
+
+	m_lastSyncData.m_fFuel = fFuel;
 }
 
 float CNetworkVehicle::GetFuel ( void )
@@ -898,6 +919,8 @@ void CNetworkVehicle::SetLightState ( bool bLightState )
 	// Set the light state
 	if ( m_pVehicle )
 		m_pVehicle->SetLightState ( bLightState );
+
+	m_lastSyncData.m_bLightState = bLightState;
 }
 
 bool CNetworkVehicle::GetLightState ( void )
