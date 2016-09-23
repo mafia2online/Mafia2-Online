@@ -76,8 +76,8 @@ public:
 	void							SetColour							( CColor primary, CColor secondary );
 	void							GetColour							( CColor * primary, CColor * secondary );
 
-	void							SetPlateText						( const char * szText );
-	const char						* GetPlateText						( void );
+	bool							SetPlateText						( const char * szText );
+	const char						* GetPlateText						( void ) const;
 
 	void							Repair								( void );
 	void							Explode								( void );
@@ -96,7 +96,7 @@ public:
 
 	void							SetBeaconLightState					(bool bState);
 	bool							GetBeaconLightState					( void );
-	
+
 	void							SetHornState						( bool bState );
 	bool							GetHornState						( void );
 
@@ -122,7 +122,7 @@ public:
 	CNetworkPlayer					* GetLastSyncer						( void ) { return m_pLastSyncer; }
 
 	void							SetOccupant							( int iIndex, CNetworkPlayer * pOccupant ) { m_pOccupants[iIndex] = pOccupant; }
-	CNetworkPlayer					* GetOccupant						( int iIndex ) { return m_pOccupants[iIndex]; }					
+	CNetworkPlayer					* GetOccupant						( int iIndex ) { return m_pOccupants[iIndex]; }
 
 	void							HandlePlayerEnter					( CNetworkPlayer * pNetworkPlayer, int iSeat );
 	void							HandlePlayerExit					( CNetworkPlayer * pNetworkPlayer, int iSeat );

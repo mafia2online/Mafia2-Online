@@ -643,22 +643,26 @@ void CNetworkVehicle::GetColour( CColor * primary, CColor * secondary )
 		m_pVehicle->GetColour( primary, secondary );
 }
 
-void CNetworkVehicle::SetPlateText( const char * szPlateText )
+bool CNetworkVehicle::SetPlateText( const char * szPlateText )
 {
+	if (!szPlateText || strlen(szPlateText) > MAX_LICENSE_PLATE_LENGTH)
+		return false;
+
 	// Is the vehicle instance valid?
 	if( m_pVehicle )
 		m_pVehicle->SetPlateText( szPlateText );
 
 	strcpy(m_lastSyncData.m_szPlateText, szPlateText);
+	return true;
 }
 
-const char * CNetworkVehicle::GetPlateText( void )
+const char * CNetworkVehicle::GetPlateText( void ) const
 {
 	// Is the vehicle instance valid?
 	if( m_pVehicle )
 		return m_pVehicle->GetPlateText();
 
-	return "Unknow";
+	return "UNKPLT";
 }
 
 void CNetworkVehicle::Repair( void )

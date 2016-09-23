@@ -32,6 +32,8 @@ struct OnFootSync
 	int				m_iHand;
 };
 
+const size_t MAX_LICENSE_PLATE_LENGTH = 6;
+
 struct InVehicleSync
 {
 	CVector3		m_vecPosition;
@@ -46,7 +48,7 @@ struct InVehicleSync
 	float			m_fFuel;
 	float			m_fTurnSpeed;
 	float			m_fEngineDamage;
-	char			m_szPlateText[6];
+	char			m_szPlateText[MAX_LICENSE_PLATE_LENGTH + 1];
 	int				m_model;
 	CColor			m_primaryColour;
 	CColor			m_secondaryColour;

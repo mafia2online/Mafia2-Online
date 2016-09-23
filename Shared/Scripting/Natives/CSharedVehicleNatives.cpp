@@ -283,10 +283,7 @@ SQInteger CSharedVehicleNatives::SetPlateText( SQVM * pVM )
 	// Is the vehicle active?
 	if( CCore::Instance()->GetVehicleManager()->IsActive( vehicleId ) )
 	{
-		// Set the vehicle plate text
-		CCore::Instance()->GetVehicleManager()->Get( vehicleId )->SetPlateText( szPlateText );
-
-		sq_pushbool( pVM, true );
+		sq_pushbool( pVM, CCore::Instance()->GetVehicleManager()->Get( vehicleId )->SetPlateText( szPlateText ) );
 		return 1;
 	}
 

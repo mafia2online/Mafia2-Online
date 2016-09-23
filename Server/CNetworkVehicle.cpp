@@ -365,8 +365,11 @@ void CNetworkVehicle::GetColour( CColor * primary, CColor * secondary )
 	memcpy( secondary, &m_lastSyncData.m_secondaryColour, sizeof(CColor) );
 }
 
-void CNetworkVehicle::SetPlateText( const char * szText )
+bool CNetworkVehicle::SetPlateText( const char * szText )
 {
+	if (!szText || strlen(szText) > MAX_LICENSE_PLATE_LENGTH)
+		return false;
+
 	// Construct a new bitstream
 	RakNet::BitStream pBitStream;
 
@@ -381,9 +384,10 @@ void CNetworkVehicle::SetPlateText( const char * szText )
 
 	// Store the plate text in the last sync data
 	strcpy ( m_lastSyncData.m_szPlateText, szText );
+	return true;
 }
 
-const char * CNetworkVehicle::GetPlateText( void )
+const char * CNetworkVehicle::GetPlateText( void ) const
 {
 	return (const char *)m_lastSyncData.m_szPlateText;
 }

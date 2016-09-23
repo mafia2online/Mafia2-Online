@@ -145,8 +145,8 @@ public:
 	void							SetColour							( CColor primary, CColor secondary );
 	void							GetColour							( CColor * primary, CColor * secondary );
 
-	void							SetPlateText						( const char * szPlateText );
-	const char						* GetPlateText						( void );
+	bool							SetPlateText						( const char * szPlateText );
+	const char						* GetPlateText						( void ) const;
 
 	void							Repair								( void );
 	void							Explode								( void );

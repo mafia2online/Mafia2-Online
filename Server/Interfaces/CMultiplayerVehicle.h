@@ -20,8 +20,8 @@ public:
 
 	// get position shit
 
-	virtual	void							SetPlateText					( const char * szPlateText ) = 0;
-	virtual	const char						* GetPlateText					( void ) = 0;
+	virtual	bool							SetPlateText					( const char * szPlateText ) = 0;
+	virtual	const char						* GetPlateText					( void ) const = 0;
 
 	virtual	void							Repair							( void ) = 0;
 	virtual	void							Explode							( void ) = 0;
