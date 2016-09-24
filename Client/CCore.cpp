@@ -88,6 +88,9 @@
 
 #include "CLogFile.h"
 
+#include "ExceptionHandler.h"
+#include "SharedUtility.h"
+
 CSquirrelArguments		pArguments;
 bool					bDeviceLost = false;
 
@@ -202,8 +205,22 @@ CCore::~CCore( void )
 
 bool CCore::Initialise( void )
 {
+#ifdef _DEBUG
+	//MessageBox(NULL, "Attach debugger", NULL, NULL);
+#endif
+
 	if( m_bInitialised )
 		return false;
+
+	char exceptionPath[MAX_PATH + 1] = { 0 };
+	strcpy(exceptionPath, SharedUtility::GetAppPath());
+	strcat(exceptionPath, "crashes");
+
+	if (!ExceptionHandler::Install(exceptionPath))
+	{
+		MessageBox(NULL, "Mafia2-Online", "Unable to initialize exception handler!", NULL);
+		return FALSE;
+	}
 
 	CLogFile::Open( SharedUtility::GetAbsolutePath( "logs\\core.log" ).Get() );
 
