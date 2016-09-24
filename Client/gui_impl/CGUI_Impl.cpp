@@ -61,6 +61,7 @@ CGUI_Impl::CGUI_Impl( IDirect3DDevice9 * pDevice )
 
 	, m_uiUnique(0)
 	, m_redrawQueue()
+	, m_redrawQueueMutex()
 
 	, m_CharacterKeyHandler()
 	, m_KeyDownHandler()
@@ -199,19 +200,22 @@ Vector2 CGUI_Impl::GetResolution( void )
 
 void CGUI_Impl::Draw( void )
 {
-	// Is the redraw queue not empty?
-	if( !m_redrawQueue.empty() )
 	{
-		// Loop over all elements in the redraw queue
-		std::list< CGUIElement_Impl* >::const_iterator iter = m_redrawQueue.begin();
-		for( ; iter != m_redrawQueue.end(); iter++ )
+		std::lock_guard<std::mutex> lock(m_redrawQueueMutex);
+		// Is the redraw queue not empty?
+		if( !m_redrawQueue.empty() )
 		{
-			// Redraw the current element
-			(*iter)->ForceRedraw();
-		}
+			// Loop over all elements in the redraw queue
+			std::list< CGUIElement_Impl* >::const_iterator iter = m_redrawQueue.begin();
+			for( ; iter != m_redrawQueue.end(); iter++ )
+			{
+				// Redraw the current element
+				(*iter)->ForceRedraw();
+			}
 
-		// Clear the redraw queue
-		m_redrawQueue.clear();
+			// Clear the redraw queue
+			m_redrawQueue.clear();
+		}
 	}
 
 	// Render the gui
@@ -378,6 +382,7 @@ void CGUI_Impl::AddChild( CGUIElement_Impl * pChild )
 
 void CGUI_Impl::AddToRedrawQueue( CGUIElement_Impl * pElement )
 {
+	std::lock_guard<std::mutex> lock(m_redrawQueueMutex);
 	if (m_redrawQueue.size() != 0)
 	{
 		std::list< CGUIElement_Impl* >::const_iterator iter = m_redrawQueue.begin();
@@ -403,6 +408,7 @@ void CGUI_Impl::AddToRedrawQueue( CGUIElement_Impl * pElement )
 
 void CGUI_Impl::RemoveFromRedrawQueue( CGUIElement_Impl * pElement )
 {
+	std::lock_guard<std::mutex> lock(m_redrawQueueMutex);
 	if (m_redrawQueue.size() <= 0)
 		return;
 	m_redrawQueue.remove( pElement );

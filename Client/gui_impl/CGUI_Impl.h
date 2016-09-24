@@ -16,6 +16,7 @@
 #include "CString.h"
 
 #include <memory>
+#include <mutex>
 
 // Message box types
 enum eMessageBoxFlags
@@ -65,6 +66,7 @@ protected:
 
 	unsigned int											m_uiUnique;
 	std::list< CGUIElement_Impl* >							m_redrawQueue;
+	std::mutex												m_redrawQueueMutex;
 
 	// Key callbacks
 	GUI_CALLBACK_KEY										m_CharacterKeyHandler;
