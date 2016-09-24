@@ -17,3 +17,6 @@ Binary/[Rr]elease
 *.sdf
 *.vcxproj.user
 *.VC.db
+ipch/
+
+wkernelbase*.pdb
