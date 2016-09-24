@@ -29,12 +29,11 @@
 
 #include "CLogFile.h"
 
-CRemotePlayer::CRemotePlayer( void ) : CNetworkPlayer( false )
+CRemotePlayer::CRemotePlayer( void )
+	: CNetworkPlayer( false )
+	, m_onFootSync()
 {
 	DEBUG_TRACE("CRemotePlayer::CRemotePlayer");
-
-	// Invalidate the on-foot sync data
-	m_pLastOnFootSync = NULL;
 }
 
 CRemotePlayer::~CRemotePlayer( void )
@@ -84,7 +83,7 @@ void CRemotePlayer::Pulse( void )
 	}
 }
 
-void CRemotePlayer::StoreOnFootSync( OnFootSync * onFootSync )
+void CRemotePlayer::StoreOnFootSync( const OnFootSync &onFootSync )
 {
 	DEBUG_TRACE("CRemotePlayer::StoreOnFootSync");
 
@@ -97,7 +96,7 @@ void CRemotePlayer::StoreOnFootSync( OnFootSync * onFootSync )
 		return;
 
 	// Is the player position out of range?
-	if ( IsPositionOutOfRange ( onFootSync->m_vecPosition ) )
+	if ( IsPositionOutOfRange ( onFootSync.m_vecPosition ) )
 		return;
 
 	// Is the player in a vehicle and not exiting?
@@ -116,77 +115,77 @@ void CRemotePlayer::StoreOnFootSync( OnFootSync * onFootSync )
 	CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetPosition( &vecLocalPos );
 
 	// Is the player in range of the localplayer?
-	if( (vecLocalPos - onFootSync->m_vecPosition).Length() < 200.0f )
+	if( (vecLocalPos - onFootSync.m_vecPosition).Length() < 200.0f )
 	{
 		// Set the move style
-		SetMoveStyle( onFootSync->m_bControlState );
+		SetMoveStyle( onFootSync.m_bControlState );
 
 		// Is there any movement being done?
-		if( onFootSync->m_vecPosition != GetLastPosition() )
+		if( (GetLastPosition() - onFootSync.m_vecPosition).Length() > 0.0001f )
 		{
 			// Set the position
-			SetPosition ( onFootSync->m_vecPosition, onFootSync->m_bControlState, onFootSync->m_vecDirection );
+			SetPosition ( onFootSync.m_vecPosition, onFootSync.m_bControlState, onFootSync.m_vecDirection );
 		}
 
 		// Set the player health
-		SetHealth( onFootSync->m_fHealth );
+		SetHealth( onFootSync.m_fHealth );
 
 		// Does the player not have this weapon selected?
-		if( GetSelectedWeapon() != onFootSync->m_dwSelectedWeapon )
+		if( GetSelectedWeapon() != onFootSync.m_dwSelectedWeapon )
 		{
 			// Does this weapon need ammo?
-			if( onFootSync->m_dwSelectedWeapon > 1 )
+			if( onFootSync.m_dwSelectedWeapon > 1 )
 			{
 				// Does the player not have the current weapon
-				if( !HasWeapon( onFootSync->m_dwSelectedWeapon ) )
+				if( !HasWeapon( onFootSync.m_dwSelectedWeapon ) )
 				{
 					// Give the player the weapon
-					GiveWeapon( onFootSync->m_dwSelectedWeapon, 250 );
+					GiveWeapon( onFootSync.m_dwSelectedWeapon, 250 );
 				}
 			}
 
 			// Set the selected weapon
-			SetSelectedWeapon( onFootSync->m_dwSelectedWeapon, true );
+			SetSelectedWeapon( onFootSync.m_dwSelectedWeapon, true );
 
-			// Cleanup sync objects
-			TerminateSyncObjects ();
+			/*if ( onFootSync.m_dwSelectedWeapon ) {
+				TerminateSyncObjects ();
+			}*/
 		}
 
 		// Set the look at position
-		SetLookAt( onFootSync->m_vecLookAt );
+		SetLookAt( onFootSync.m_vecLookAt );
 
 		// Update their crouch
-		if (m_bCrouching != onFootSync->m_bCrouching)
-			SetCrouching(onFootSync->m_bCrouching);
+		if (m_bCrouching != onFootSync.m_bCrouching)
+			SetCrouching(onFootSync.m_bCrouching);
 
 		// Update their aim
-		UpdateAim(onFootSync->m_bAiming);
+		UpdateAim(onFootSync.m_bAiming);
 
 		// Update their shot
-		UpdateShot(onFootSync->m_bShooting);
+		UpdateShot(onFootSync.m_bShooting);
 
 		// Has the player model changed?
-		if( GetModel() != onFootSync->m_uiModelIndex )
-			SetModel( onFootSync->m_uiModelIndex );
+		if( GetModel() != onFootSync.m_uiModelIndex )
+			SetModel( onFootSync.m_uiModelIndex );
 
 		// Update the handModel
-		if (GetHandModel() != onFootSync->m_iHandModel || GetHandModelHand() != onFootSync->m_iHand)
-			SetHandModel(onFootSync->m_iHand, onFootSync->m_iHandModel);
+		if (GetHandModel() != onFootSync.m_iHandModel || GetHandModelHand() != onFootSync.m_iHand)
+			SetHandModel(onFootSync.m_iHand, onFootSync.m_iHandModel);
 	}
 	else
 	{
 		// Teleport
-		Teleport( onFootSync->m_vecPosition );
+		Teleport( onFootSync.m_vecPosition );
 
 		// Cleanup
 		TerminateSyncObjects();
 	}
 
-	// Store the sync packet
-	m_pLastOnFootSync = onFootSync;
+	m_onFootSync = onFootSync;
 }
 
-void CRemotePlayer::StoreInVehicleSync( EntityId vehicleId, InVehicleSync * inVehicleSync )
+void CRemotePlayer::StoreInVehicleSync( EntityId vehicleId, const InVehicleSync &inVehicleSync )
 {
 	DEBUG_TRACE("CRemotePlayer::StoreInVehicleSync");
 
@@ -216,11 +215,11 @@ void CRemotePlayer::StoreInVehicleSync( EntityId vehicleId, InVehicleSync * inVe
 		}
 
 		// Store the vehicle sync
-		pVehicle->StoreVehicleSync( *inVehicleSync );
+		pVehicle->StoreVehicleSync( inVehicleSync );
 	}
 }
 
-void CRemotePlayer::StorePassengerSync( InPassengerSync * passengerSync )
+void CRemotePlayer::StorePassengerSync( const InPassengerSync &passengerSync )
 {
 	DEBUG_TRACE("CRemotePlayer::StorePassengerSync");
 
@@ -233,8 +232,8 @@ void CRemotePlayer::StorePassengerSync( InPassengerSync * passengerSync )
 		return;
 
 	// Update our health
-	if( GetHealth() != passengerSync->m_fHealth )
-		SetHealth ( passengerSync->m_fHealth );
+	if( GetHealth() != passengerSync.m_fHealth )
+		SetHealth ( passengerSync.m_fHealth );
 }
 
 bool CRemotePlayer::IsPositionOutOfRange ( CVector3 vecPos )

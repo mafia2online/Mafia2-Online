@@ -30,6 +30,41 @@ struct OnFootSync
 	CVector3		m_vecLookAt;
 	int				m_iHandModel;
 	int				m_iHand;
+
+	OnFootSync()
+		: m_vecPosition()
+		, m_vecRotation()
+		, m_vecDirection()
+		, m_fHealth(720.0f)
+		, m_dwSelectedWeapon(1)
+		, m_bControlState(0)
+		, m_bAiming(false)
+		, m_bShooting(false)
+		, m_bCrouching(false)
+		, m_uiModelIndex(0)
+		, m_vecLookAt()
+		, m_iHandModel(0)
+		, m_iHand(0)
+	{
+	}
+
+	OnFootSync& operator=(const OnFootSync &rhs)
+	{
+		m_vecPosition = rhs.m_vecPosition;
+		m_vecRotation = rhs.m_vecRotation;
+		m_vecDirection = rhs.m_vecDirection;
+		m_fHealth = rhs.m_fHealth;
+		m_dwSelectedWeapon = rhs.m_dwSelectedWeapon;
+		m_bControlState = rhs.m_bControlState;
+		m_bAiming = rhs.m_bAiming;
+		m_bShooting = rhs.m_bShooting;
+		m_bCrouching = rhs.m_bCrouching;
+		m_uiModelIndex = rhs.m_uiModelIndex;
+		m_vecLookAt = rhs.m_vecLookAt;
+		m_iHandModel = rhs.m_iHandModel;
+		m_iHand = rhs.m_iHand;
+		return *this;
+	}
 };
 
 const size_t MAX_LICENSE_PLATE_LENGTH = 6;

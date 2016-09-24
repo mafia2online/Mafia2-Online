@@ -98,27 +98,42 @@ public:
 	void * m_pUnknown;										// 0044 - 004C
 };
 
-class M2EntityData_Unknown_000
+//class M2EntityData_Unknown_000
+//{
+//public:
+//	unsigned vtable;
+//
+//
+//	// Unknown Method in V table on heX offset 20.
+//	void UnknownMethodVX20();
+//	int	UnknowMethodVX198();
+//};
+
+enum E_HumanMoveMode
 {
-public:
-	unsigned vtable;
-
-
-	// Unknown Method in V table on heX offset 20.
-	void UnknownMethodVX20();
-	int	UnknowMethodVX198();
+	HUMAN_MOVE_MODE_NONE = -1,
+	HUMAN_MOVE_MODE_BREATH = 0,
+	HUMAN_MOVE_MODE_STEP = 1,
+	HUMAN_MOVE_MODE_WALK = 2,
+	HUMAN_MOVE_MODE_RUN = 3,
+	HUMAN_MOVE_MODE_SPRINT = 4,
+	HUMAN_MOVE_MODE_END = 5
 };
 
-class M2EntityData
+class M2Ped;
+class C_HumanScript
 {
 public:
-	M2EntityData_Unknown_000* m_pUnknown0;				    // 0000 - 0004
-	PAD(M2EntityData, pad0, 0x18);							// 0004 - 001C
+	M2Ped* m_pHuman;										// 0000 - 0004 //C_Human ofc
+	PAD(C_HumanScript, pad0, 0x18);							// 0004 - 001C
 	DWORD m_dwType;											// 001C - 0020
-	PAD(M2EntityData, pad1, 0x88);							// 0020 - 00A8
+	PAD(C_HumanScript, pad1, 0x88);							// 0020 - 00A8
 	M2PedUnk001 * m_pUnknown;								// 00A8 - 00AC
+
 	int PlayAnim(C_SyncObject **syncObject, const char *const animName, const bool unknown, int, int, float, float, float);
 	int AnimPlayEffect(C_SyncObject **syncObject, const char *const effectName, const bool unknow, int);
+
+	C_SyncObject *ScrMoveV(C_SyncObject **syncObject, const CVector3 &begin, const E_HumanMoveMode moveMode, const CVector3 &target, const bool smoothStop = true);
 };
 
 class M2Ped : public M2Entity
@@ -130,7 +145,7 @@ public:
 	int m_iSlotSDS;											// 0078 - 007C
 	PAD(M2Ped, pad1, 0x24);									// 007C - 00A0
 	M2WeaponData * m_pWeaponData;							// 00A0 - 00A4
-	M2EntityData * m_pEntityData;							// 00A4 - 00A8
+	C_HumanScript * m_pHumanScript;							// 00A4 - 00A8
 	PAD(M2Ped, pad2, 0x4);									// 00A8 - 00AC
 	M2Inventory * m_pInventory;								// 00AC - 00B0
 	M2ProjectileInventory * m_pProjectileInventory;			// 00B0 - 00B4
@@ -157,6 +172,8 @@ public:
 
 	// 0x1CC, 0x1D0 = current surface walking on (in czech)
 	// 0x12C = GameCamera that is attached to player (M2Camera)
+
+	bool IsCrouch(void) const;
 };
 
 class CM2Ped : public CM2Entity
@@ -212,7 +229,7 @@ public:
 	float					GetMoney(void);
 
 	// These should only be used on peds that are not localplayer
-	C_SyncObject			* MoveVec(CVector3 vecPosition, M2Enums::eMoveType moveType, CVector3 vecEndDirection);
+	C_SyncObject			* MoveVec(const CVector3 &vecPosition, M2Enums::eMoveType moveType, CVector3 vecEndDirection);
 	C_SyncObject			* AimAt(CVector3 vecPosition);
 	C_SyncObject			* ShootAt(CVector3 vecPosition);
 	C_SyncObject			* LookAt(CVector3 vecPosition);

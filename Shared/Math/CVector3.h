@@ -233,9 +233,12 @@ public:
 		fZ /= vector.fZ;
 	}
 
-	bool operator != (const CVector3& vecVector)
+	bool operator != (const CVector3& vecVector) const
 	{
 		return (fX != vecVector.fX && fY != vecVector.fY && fZ != vecVector.fZ);
 	}
-
+	bool operator == (const CVector3& vecVector) const
+	{
+		return (fX == vecVector.fX && fY == vecVector.fY && fZ == vecVector.fZ);
+	}
 };

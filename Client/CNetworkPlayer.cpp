@@ -364,6 +364,8 @@ void CNetworkPlayer::SetPosition( CVector3 vecPosition, BYTE bMoveStyle, CVector
 	if( m_bLocalPlayer )
 		return Teleport( vecPosition );
 
+	CLogFile::Printf("[%u] SetPosition({%f,%f,%f}, %u, {%f,%f,%f})", m_playerId, vecPosition.fX, vecPosition.fY, vecPosition.fZ, bMoveStyle, vecEndDir.fX, vecEndDir.fY, vecEndDir.fZ);
+
 	// Is the player ped valid?
 	if( m_pPlayerPed && IsSpawned() )
 	{
@@ -372,8 +374,12 @@ void CNetworkPlayer::SetPosition( CVector3 vecPosition, BYTE bMoveStyle, CVector
 		GetPosition( &vecCurrentPosition );
 
 		// Teleport to the position if it's too far away
-		if( (vecPosition - vecCurrentPosition).Length() > 20.0f )
+		if( (vecPosition - vecCurrentPosition).Length() > 10.0f ) {
+			CLogFile::Printf("[%u] Wrap to new position", m_playerId);
 			return Teleport( vecPosition );
+		}
+
+		CLogFile::Printf("[%u] Smoth movement.", m_playerId);
 
 		// Find the move style from the control flags
 		M2Enums::eMoveType moveType = M2Enums::eMoveType::E_SPRINT;
@@ -386,23 +392,23 @@ void CNetworkPlayer::SetPosition( CVector3 vecPosition, BYTE bMoveStyle, CVector
 		else if( bMoveStyle == 2 )
 			moveType = M2Enums::eMoveType::E_SPRINT;
 
-		// Is the old move object still working?
-		/*if ( m_pMoveObject && !m_pMoveObject->IsDone () )
-		{
-			// Update the target position
-			m_pMoveObject->SetTarget ( vecPosition, E_TYPE_MOVE );
+		if (m_pMoveObject) {
+			CVector3 target;
+			m_pMoveObject->GetTarget(&target, moveType);
 
-			// Update the move object data
-			m_pMoveObject->SetMoveTargetData ( vecEndDir, (BYTE)moveType ); // doesn't work due to memory protection!
-
-			return;
-		}*/
+			if ( (vecPosition - target).Length() < 0.001f) {
+				return;
+			}
+		}
 
 		// Delete the old move object
 		SAFE_DELETE( m_pMoveObject );
 
 		// Move the playerped
 		m_pMoveObject = new CM2SyncObject( m_pPlayerPed->MoveVec( vecPosition, moveType, vecEndDir ) );
+	}
+	else {
+		CLogFile::Printf("[%u] Player is not spawned.", m_playerId);
 	}
 }
 

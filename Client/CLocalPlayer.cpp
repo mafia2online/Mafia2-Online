@@ -353,7 +353,7 @@ void CLocalPlayer::SendInVehicleSync( void )
 
 	// Get the vehicle plate text
 	strcpy( inVehicleSync.m_szPlateText, pVehicle->GetPlateText() );
-	inVehicleSync.m_szPlateText[ 6 ] = '\0';
+	inVehicleSync.m_szPlateText[ MAX_LICENSE_PLATE_LENGTH ] = '\0';
 
 	// Get the vehicle colour
 	pVehicle->GetColour( &inVehicleSync.m_primaryColour, &inVehicleSync.m_secondaryColour );
@@ -994,11 +994,11 @@ void CLocalPlayer::LockControls( bool bLock, bool bForPlayAnim )
 	// Is the playerped valid?
 	if( m_pPlayerPed && IsSpawned() )
 	{
-		M2EntityData * pEntityData = m_pPlayerPed->GetPed()->m_pEntityData;
+		C_HumanScript * pHumanScript = m_pPlayerPed->GetPed()->m_pHumanScript;
 
 		_asm push bForPlayAnim;
 		_asm push bLock;
-		_asm mov ecx, pEntityData;
+		_asm mov ecx, pHumanScript;
 		_asm call COffsets::FUNC_CHuman__LockControls;
 	}
 }
@@ -1010,9 +1010,9 @@ bool CLocalPlayer::AreControlsLocked( void )
 	// Is the playerped valid?
 	if( m_pPlayerPed && IsSpawned() )
 	{
-		M2EntityData * pEntityData = m_pPlayerPed->GetPed()->m_pEntityData;
+		C_HumanScript * pHumanScript = m_pPlayerPed->GetPed()->m_pHumanScript;
 
-		_asm mov ecx, pEntityData;
+		_asm mov ecx, pHumanScript;
 		_asm call COffsets::FUNC_CHuman__AreControlsLocked;
 		_asm mov bAreLocked, al;
 	}

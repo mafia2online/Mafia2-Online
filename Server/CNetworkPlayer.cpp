@@ -12,7 +12,7 @@
 #include "CCore.h"
 
 // temp lol
-unsigned int playerColors[] = 
+unsigned int playerColors[] =
 {
 	0xE59338FF, 0xEEDC2DFF, 0xD8C762FF, 0x3FE65CFF, 0xFF8C13FF, 0xC715FFFF, 0x20B2AAFF, 0xDC143CFF,
 	0x6495EDFF, 0xF0E68CFF, 0x778899FF, 0xFF1493FF, 0xF4A460FF, 0xEE82EEFF, 0xFFD720FF, 0x8b4513FF,
@@ -160,16 +160,13 @@ CNetworkPlayer::CNetworkPlayer( void )
 	// Reset variables
 	m_playerId = INVALID_ENTITY_ID;
 	m_uiColour = 0xFFFFFFFF;
-	m_onFootSync.m_dwSelectedWeapon = 1;
-	m_onFootSync.m_fHealth = 720.0f;
-	m_onFootSync.m_uiModelIndex = 0;
 	m_bAiming = false;
 	m_bShooting = false;
 	m_bCrouching = false;
 	m_State = PLAYERSTATE_UNKNOWN;
 	m_ulLastPingTime = 0;
 
-	// 
+	//
 	SetVehicle( NULL );
 	SetSeat( INVALID_ENTITY_ID );
 }
@@ -494,32 +491,31 @@ void CNetworkPlayer::SpawnForWorld( void )
 	}
 }
 
-void CNetworkPlayer::StoreOnFootSync( OnFootSync * onFootSync )
+void CNetworkPlayer::StoreOnFootSync( const OnFootSync &onFootSync )
 {
 	// Has the player changed weapon?
-	if( onFootSync->m_dwSelectedWeapon != m_onFootSync.m_dwSelectedWeapon )
+	if( onFootSync.m_dwSelectedWeapon != m_onFootSync.m_dwSelectedWeapon )
 	{
 		// Call the event
 		CSquirrelArguments pArguments;
 		pArguments.push( m_playerId );
-		pArguments.push( (int)onFootSync->m_dwSelectedWeapon );
+		pArguments.push( (int)onFootSync.m_dwSelectedWeapon );
 		pArguments.push( (int)m_onFootSync.m_dwSelectedWeapon );
 		CCore::Instance()->GetEvents()->Call( "onPlayerChangeWeapon", &pArguments );
 	}
 
 	// Has the player changed health?
-	if( onFootSync->m_fHealth != m_onFootSync.m_fHealth )
+	if( onFootSync.m_fHealth != m_onFootSync.m_fHealth )
 	{
 		// Call the event
 		CSquirrelArguments pArguments;
 		pArguments.push( m_playerId );
-		pArguments.push( onFootSync->m_fHealth );
+		pArguments.push( onFootSync.m_fHealth );
 		pArguments.push( m_onFootSync.m_fHealth );
 		CCore::Instance()->GetEvents()->Call( "onPlayerChangeHealth", &pArguments );
 	}
 
-	// Copy the sync data
-	memcpy( &m_onFootSync, onFootSync, sizeof(OnFootSync) );
+	m_onFootSync = onFootSync;
 
 	// Send the on foot sync
 	SendOnFootSync();
@@ -528,10 +524,10 @@ void CNetworkPlayer::StoreOnFootSync( OnFootSync * onFootSync )
 	Ping ();
 }
 
-void CNetworkPlayer::StoreInVehicleSync( InVehicleSync * inVehicleSync )
+void CNetworkPlayer::StoreInVehicleSync( const InVehicleSync &inVehicleSync )
 {
 	// Copy the sync data
-	memcpy( &m_inVehicleSync, inVehicleSync, sizeof(InVehicleSync) );
+	memcpy( &m_inVehicleSync, &inVehicleSync, sizeof(InVehicleSync) );
 
 	// Send the vehicle sync
 	SendInVehicleSync();
@@ -540,24 +536,24 @@ void CNetworkPlayer::StoreInVehicleSync( InVehicleSync * inVehicleSync )
 	Ping ();
 }
 
-void CNetworkPlayer::StorePassengerSync( InPassengerSync * passengerSync )
+void CNetworkPlayer::StorePassengerSync( const InPassengerSync &passengerSync )
 {
 	// Has the player changed health?
-	if( m_onFootSync.m_fHealth != passengerSync->m_fHealth )
+	if( m_onFootSync.m_fHealth != passengerSync.m_fHealth )
 	{
 		// Call the event
 		CSquirrelArguments pArguments;
 		pArguments.push( m_playerId );
-		pArguments.push( passengerSync->m_fHealth );
+		pArguments.push( passengerSync.m_fHealth );
 		pArguments.push( m_onFootSync.m_fHealth );
 		CCore::Instance()->GetEvents()->Call( "onPlayerChangeHealth", &pArguments );
 
 		// Store the new health
-		m_onFootSync.m_fHealth = passengerSync->m_fHealth;
+		m_onFootSync.m_fHealth = passengerSync.m_fHealth;
 	}
 
 	// Copy the sync data
-	memcpy( &m_passengerSync, passengerSync, sizeof(InPassengerSync) );
+	memcpy( &m_passengerSync, &passengerSync, sizeof(InPassengerSync) );
 
 	// Send the passenger sync
 	SendPassengerSync();
@@ -676,7 +672,7 @@ void CNetworkPlayer::Pulse( void )
 			// Should we sync this item?
 			if ( m_pDatastore->ShouldSync ( *iter ) )
 			{
-				
+
 			}
 
 			// Remove the current item from the list

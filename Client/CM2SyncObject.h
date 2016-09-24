@@ -78,6 +78,9 @@ public:
 	DWORD m_dwFlags;								// 0008 - 000C
 	PAD(C_SyncObject, pad0, 0x8);					// 000C - 0014
 	C_SyncObjectUserData* m_pUserData;				// 0014 - 0018
+
+	int SetStatus(int status);
+	unsigned Done(void);
 };
 
 class CVector3;

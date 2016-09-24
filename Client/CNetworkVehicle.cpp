@@ -318,66 +318,68 @@ void CNetworkVehicle::HandleRespawn( void )
 	}
 }
 
-void CNetworkVehicle::StoreVehicleSync( InVehicleSync vehicleSync, bool bInterpolate, bool bSpawn )
+void CNetworkVehicle::StoreVehicleSync( const InVehicleSync &vehicleSync, bool bInterpolate, bool bSpawn )
 {
 	DEBUG_TRACE("CNetworkVehicle::StoreVehicleSync");
+
+	m_lastSyncData = vehicleSync;
 
 	// Get the localplayer position
 	CVector3 vecLocalPos;
 	CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetPosition( &vecLocalPos );
 
 	// Is the last sync data invalid?
-	if ( !Math::IsValidVector ( vehicleSync.m_vecPosition ) || !Math::IsValidVector ( vehicleSync.m_vecRotation ) )
+	if ( !Math::IsValidVector ( m_lastSyncData.m_vecPosition ) || !Math::IsValidVector ( m_lastSyncData.m_vecRotation ) )
 	{
 		// Reset all positions
-		memcpy ( &vehicleSync.m_vecPosition, &m_vecSpawnPosition, sizeof(CVector3) );
-		memcpy ( &vehicleSync.m_vecRotation, &m_vecSpawnRotation, sizeof(CVector3) );
-		memcpy ( &m_vecLastGoodPosition, &m_vecSpawnPosition, sizeof(CVector3) );
-		memcpy ( &m_vecLastGoodRotation, &m_vecSpawnRotation, sizeof(CVector3) );
+		m_lastSyncData.m_vecPosition = m_vecSpawnPosition;
+		m_lastSyncData.m_vecRotation = m_vecSpawnRotation;
+		m_vecLastGoodPosition = m_vecSpawnPosition;
+		m_vecLastGoodRotation = m_vecSpawnRotation;
 	}
 
 	// Is the vehicle spawning or inrange?
-	if( bSpawn || Math::GetDistanceBetweenPoints( vecLocalPos, vehicleSync.m_vecPosition ) < 300.0f )
+	if( bSpawn || Math::GetDistanceBetweenPoints( vecLocalPos, m_lastSyncData.m_vecPosition ) < 300.0f )
 	{
 		// Should we interpolate the position and rotation?
 		if( bInterpolate )
 		{
 			// Set the target position
-			SetTargetPosition( vehicleSync.m_vecPosition );
+			SetTargetPosition( m_lastSyncData.m_vecPosition );
 
 			// Set the target rotation
-			SetTargetRotation( vehicleSync.m_vecRotation );
+			SetTargetRotation( m_lastSyncData.m_vecRotation );
 		}
 		else
 		{
 			// Set the position
-			SetPosition( vehicleSync.m_vecPosition );
+			SetPosition( m_lastSyncData.m_vecPosition );
 
 			// Set the rotation
-			SetRotation( vehicleSync.m_vecRotation );
+			SetRotation( m_lastSyncData.m_vecRotation );
 
 			CLogFile::Printf ( "Not using interpolation this frame for vehicle %d.", m_vehicleId );
 		}
 
 		// Has the vehicle dirt level changed?
-		if( GetDirtLevel() != vehicleSync.m_fDirtLevel )
-			SetDirtLevel( vehicleSync.m_fDirtLevel );
+		if( GetDirtLevel() != m_lastSyncData.m_fDirtLevel )
+			SetDirtLevel( m_lastSyncData.m_fDirtLevel );
 
 		// Has the tuning table changed?
-		if( GetTuningTable() != vehicleSync.m_iTuningTable )
-			SetTuningTable( vehicleSync.m_iTuningTable );
+		if( GetTuningTable() != m_lastSyncData.m_iTuningTable )
+			SetTuningTable( m_lastSyncData.m_iTuningTable );
 
 		// Has the horn state changed?
-		if( GetHornState() != vehicleSync.m_bHornState )
-			SetHornState( vehicleSync.m_bHornState );
+		if( GetHornState() != m_lastSyncData.m_bHornState )
+			SetHornState( m_lastSyncData.m_bHornState );
 
 		// Has the siren state changed?
-		if( m_pVehicle->IsSirenOn() != vehicleSync.m_bSirenState )
-			m_pVehicle->SetSirenOn( vehicleSync.m_bSirenState );
+		if( m_pVehicle->IsSirenOn() != m_lastSyncData.m_bSirenState )
+			m_pVehicle->SetSirenOn( m_lastSyncData.m_bSirenState );
 
 		// Has the beacon light state changed?
-		if (m_pVehicle->IsBeaconLightOn() != vehicleSync.m_bBeaconLightState)
-			m_pVehicle->SetBeaconLightOn(vehicleSync.m_bBeaconLightState);
+		if (m_pVehicle->IsBeaconLightOn() != m_lastSyncData.m_bBeaconLightState)
+			m_pVehicle->SetBeaconLightOn(m_lastSyncData.m_bBeaconLightState);
 
 		// Has the fuel changed?
 		/*if ( m_pVehicle->GetFuel () != vehicleSync.m_fFuel )
@@ -386,36 +388,36 @@ void CNetworkVehicle::StoreVehicleSync( InVehicleSync vehicleSync, bool bInterpo
 		// Has the speed changed?
 		CVector3 vecVelocity;
 		GetSpeedVec ( &vecVelocity );
-		if( Math::IsValidVector ( vehicleSync.m_vecVelocity ) && vecVelocity != vehicleSync.m_vecVelocity )
-			SetTargetSpeed ( vehicleSync.m_vecVelocity ); //SetSpeedVec( vehicleSync.m_vecVelocity );
+		if( Math::IsValidVector ( m_lastSyncData.m_vecVelocity ) && vecVelocity != m_lastSyncData.m_vecVelocity )
+			SetTargetSpeed ( m_lastSyncData.m_vecVelocity ); //SetSpeedVec( vehicleSync.m_vecVelocity );
 
 		// Has the turn speed changed?
-		if( GetSteer() != vehicleSync.m_fTurnSpeed )
-			SetTargetSteer ( vehicleSync.m_fTurnSpeed );
+		if( GetSteer() != m_lastSyncData.m_fTurnSpeed )
+			SetTargetSteer ( m_lastSyncData.m_fTurnSpeed );
 
 		// Has the engine damage changed?
-		if( m_pVehicle->GetEngineDamage() != vehicleSync.m_fEngineDamage )
-			m_pVehicle->SetEngineDamage( vehicleSync.m_fEngineDamage );
+		if( m_pVehicle->GetEngineDamage() != m_lastSyncData.m_fEngineDamage )
+			m_pVehicle->SetEngineDamage( m_lastSyncData.m_fEngineDamage );
 
 		// Has the plate text changed?
-		if( strcmp( vehicleSync.m_szPlateText, GetPlateText() ) )
-			SetPlateText( vehicleSync.m_szPlateText );
+		if( strcmp( m_lastSyncData.m_szPlateText, GetPlateText() ) )
+			SetPlateText( m_lastSyncData.m_szPlateText );
 
 		// Get the vehicle colour
 		CColor primary, secondary;
 		GetColour( &primary, &secondary );
 
 		// Has the primary colour changed?
-		if( primary != vehicleSync.m_primaryColour || secondary != vehicleSync.m_secondaryColour )
-			SetColour( vehicleSync.m_primaryColour, vehicleSync.m_secondaryColour );
+		if( primary != m_lastSyncData.m_primaryColour || secondary != m_lastSyncData.m_secondaryColour )
+			SetColour( m_lastSyncData.m_primaryColour, m_lastSyncData.m_secondaryColour );
 
 		// Has the power state changed?
-		if( m_pVehicle->GetPower() != vehicleSync.m_bPower )
-			m_pVehicle->SetPower( vehicleSync.m_bPower );
+		if( m_pVehicle->GetPower() != m_lastSyncData.m_bPower )
+			m_pVehicle->SetPower( m_lastSyncData.m_bPower );
 
 		// Has the brake state changed?
-		if( m_pVehicle->GetBrake() != vehicleSync.m_bBrake )
-			m_pVehicle->SetBrake( vehicleSync.m_bBrake );
+		if( m_pVehicle->GetBrake() != m_lastSyncData.m_bBrake )
+			m_pVehicle->SetBrake( m_lastSyncData.m_bBrake );
 
 		// This can cause some crashes
 		// Have the front wheels changed?
@@ -431,24 +433,21 @@ void CNetworkVehicle::StoreVehicleSync( InVehicleSync vehicleSync, bool bInterpo
 			m_pVehicle->SetWheelTexture ( 2, Game::GetVehicleWheelModelFromId ( vehicleSync.m_bWheelModels[ 2 ] ).Get () );*/
 
 		// Has the handbrake state changed?
-		if ( m_pVehicle->IsHandbrakeOn () != vehicleSync.m_bHandbrake )
-			m_pVehicle->SetHandbrake ( vehicleSync.m_bHandbrake );
+		if ( m_pVehicle->IsHandbrakeOn () != m_lastSyncData.m_bHandbrake )
+			m_pVehicle->SetHandbrake ( m_lastSyncData.m_bHandbrake );
 
 		// Has the light state changed?
-		if ( m_pVehicle->GetLightState () != vehicleSync.m_bLightState )
-			m_pVehicle->SetLightState ( vehicleSync.m_bLightState );
+		if ( m_pVehicle->GetLightState () != m_lastSyncData.m_bLightState )
+			m_pVehicle->SetLightState ( m_lastSyncData.m_bLightState );
 	}
 	else
 	{
 		// Set the target position
-		SetTargetPosition( vehicleSync.m_vecPosition );
+		SetTargetPosition( m_lastSyncData.m_vecPosition );
 
 		// Set the target rotation
-		SetTargetRotation( vehicleSync.m_vecRotation );
+		SetTargetRotation( m_lastSyncData.m_vecRotation );
 	}
-
-	// Store the last sync data
-	m_lastSyncData = vehicleSync;
 }
 
 void CNetworkVehicle::Pulse( void )

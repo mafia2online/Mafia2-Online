@@ -247,7 +247,7 @@ void PlayerSync( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 	if (pRemotePlayer->GetAnimStyleName() != strAnimStyleName || pRemotePlayer->GetAnimStyleDirectory() != strAnimStyleDirectory)
 		pRemotePlayer->SetAnimStyle(strAnimStyleDirectory, strAnimStyleName);
 
-	pRemotePlayer->StoreOnFootSync( &onFootSync );
+	pRemotePlayer->StoreOnFootSync( onFootSync );
 }
 
 void PlayerDeath( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
@@ -569,7 +569,7 @@ void VehicleSync( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 		pRemotePlayer->SetPing( usPing );
 
 		// Store the in vehicle sync
-		pRemotePlayer->StoreInVehicleSync( vehicleId, &inVehicleSync );
+		pRemotePlayer->StoreInVehicleSync( vehicleId, inVehicleSync );
 	}
 }
 
@@ -614,7 +614,7 @@ void PassengerSync( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 		pRemotePlayer->SetPing( usPing );
 
 		// Store the in vehicle sync
-		pRemotePlayer->StorePassengerSync( &passengerSync );
+		pRemotePlayer->StorePassengerSync( passengerSync );
 	}
 }
 

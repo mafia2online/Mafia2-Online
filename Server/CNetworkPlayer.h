@@ -102,9 +102,9 @@ public:
 	void							SpawnForPlayer				( EntityId playerId );
 	void							SpawnForWorld				( void );
 
-	void							StoreOnFootSync				( OnFootSync * onFootSync );
-	void							StoreInVehicleSync			( InVehicleSync * inVehicleSync );
-	void							StorePassengerSync			( InPassengerSync * passengerSync );
+	void							StoreOnFootSync				( const OnFootSync &onFootSync );
+	void							StoreInVehicleSync			( const InVehicleSync &inVehicleSync );
+	void							StorePassengerSync			( const InPassengerSync &passengerSync );
 
 	void							SendOnFootSync				( void );
 	void							SendInVehicleSync			( void );

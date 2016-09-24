@@ -235,7 +235,7 @@ void PlayerSync( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 		pNetworkPlayer->SetAnimStyle(strAnimStyleDirectory, strAnimStyleName);
 
 		// Store the sync data
-		pNetworkPlayer->StoreOnFootSync( &onFootSync );
+		pNetworkPlayer->StoreOnFootSync( onFootSync );
 	}
 }
 
@@ -371,7 +371,7 @@ void VehicleSync( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 	if( pNetworkPlayer && pNetworkVehicle )
 	{
 		// Process the sync data with the player
-		pNetworkPlayer->StoreInVehicleSync( &vehicleSync );
+		pNetworkPlayer->StoreInVehicleSync( vehicleSync );
 
 		// Store the sync data with the vehicle
 		pNetworkVehicle->SetSyncData( vehicleSync );
@@ -394,7 +394,7 @@ void PassengerSync( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 	if( pNetworkPlayer )
 	{
 		// Store the passenger sync
-		pNetworkPlayer->StorePassengerSync( &passengerSync );
+		pNetworkPlayer->StorePassengerSync( passengerSync );
 	}
 }
 

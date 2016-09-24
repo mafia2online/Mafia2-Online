@@ -13,6 +13,22 @@
 
 #include "CM2SyncObject.h"
 
+int _declspec(naked) C_SyncObject::SetStatus(int status)
+{
+	_asm {
+		mov eax, 0x11C4C60
+		jmp eax
+	}
+}
+
+unsigned _declspec(naked) C_SyncObject::Done(void)
+{
+	_asm {
+		mov eax, 0x11DE8C0
+		jmp eax
+	}
+}
+
 CM2SyncObject::CM2SyncObject( C_SyncObject * pSyncObject )
 {
 	SetSyncObject( pSyncObject );
@@ -22,16 +38,9 @@ CM2SyncObject::CM2SyncObject( C_SyncObject * pSyncObject )
 
 CM2SyncObject::~CM2SyncObject( void )
 {
-	if( m_pSyncObject && m_bDoneOnDelete )
-	{
-		C_SyncObject * pSyncObject = m_pSyncObject;
-		DWORD dwFunc = 0x11DE8C0; // C_SyncObject::Done
-
-		_asm
-		{
-			mov ecx, pSyncObject;
-			call dwFunc;
-		}
+	if( m_pSyncObject && m_bDoneOnDelete ) {
+		m_pSyncObject->SetStatus(0);
+		m_pSyncObject->Done();
 	}
 }
 

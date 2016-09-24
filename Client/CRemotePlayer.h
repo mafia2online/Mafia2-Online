@@ -18,7 +18,7 @@ class CRemotePlayer : public CNetworkPlayer
 
 private:
 
-	OnFootSync						* m_pLastOnFootSync;
+	OnFootSync						m_onFootSync;
 
 public:
 
@@ -27,11 +27,9 @@ public:
 
 	void							Pulse( void );
 
-	void							StoreOnFootSync( OnFootSync * onFootSync );
-	void							StoreInVehicleSync( EntityId vehicleId, InVehicleSync * inVehicleSync );
-	void							StorePassengerSync( InPassengerSync * passengerSync );
-
-	void							GetLastSync( OnFootSync * onFootSync );
+	void							StoreOnFootSync( const OnFootSync &onFootSync );
+	void							StoreInVehicleSync( EntityId vehicleId, const InVehicleSync &inVehicleSync );
+	void							StorePassengerSync( const InPassengerSync &passengerSync );
 
 	bool							IsPositionOutOfRange ( CVector3 vecPos );
 

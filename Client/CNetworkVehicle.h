@@ -129,10 +129,7 @@ public:
 	void							Respawn								( void );
 	void							HandleRespawn						( void );
 
-	void							Deserialise							( RakNet::BitStream * pBitStream );
-	void							ProcessLastSyncData					( bool bFirstSpawn = false );
-
-	void							StoreVehicleSync					( InVehicleSync vehicleSync, bool bInterpolate = true, bool bSpawn = false );
+	void							StoreVehicleSync					( const InVehicleSync &vehicleSync, bool bInterpolate = true, bool bSpawn = false );
 
 	void							Pulse								( void );
 
