@@ -108,6 +108,9 @@ CCore::CCore( void )
 	, m_bRenderNetworkStats(false)
 	, m_bConnectionProblem(false)
 
+	, m_bShutdownRequest(false)
+	, m_bRenderInProgress(false)
+
 	, m_pGame(nullptr)
 	, m_pNetworkModule(nullptr)
 	, m_pGraphics(nullptr)
@@ -171,8 +174,8 @@ CCore::~CCore( void )
 
 	// Destroy after vehicle manager as vehicle manager depends on it. (removal of peds from car on destroy)
 	SAFE_DELETE(m_pPlayerManager);
-	SAFE_DELETE(m_pPedManager);
 
+	SAFE_DELETE(m_pPedManager);
 	SAFE_DELETE(m_pGraphics);
 	SAFE_DELETE(m_pChat);
 	SAFE_DELETE(m_pFPSCounter);
@@ -194,8 +197,6 @@ CCore::~CCore( void )
 
 	SAFE_DELETE(m_pCamera);
 	SAFE_DELETE(m_pHud);
-
-	TerminateProcess( GetCurrentProcess(), 0 );
 }
 
 bool CCore::Initialise( void )
@@ -265,11 +266,7 @@ bool CCore::Initialise( void )
 
 void CCore::Shutdown( void )
 {
-	if( CCore::Instance()->GetNetworkModule()->IsConnected() )
-	{
-		CCore::Instance()->GetNetworkModule()->Disconnect( false );
-	}
-	delete this;
+	m_bShutdownRequest = true;
 }
 
 void CCore::OnGameLoad( void )
@@ -382,12 +379,14 @@ void CCore::OnDeviceReset( IDirect3DDevice9 * pDevice )
 
 void CCore::OnDevicePreRender( void )
 {
+	m_bRenderInProgress = true;
+
 	CMainMenu *pMenu = m_pGUI->GetMainMenu();
 	if( pMenu && m_pClientScriptingManager && !pMenu->IsVisible () )
 		m_pClientScriptingManager->GetEvents()->Call( "onClientFramePreRender" );
 }
 
-void CCore::OnDeviceRender( void )
+void CCore::DoRender( void )
 {
 	if ( m_pScreenshotManager )
 		m_pScreenshotManager->ProcessRenderThread();
@@ -407,6 +406,7 @@ void CCore::OnDeviceRender( void )
 
 	if( FAILED( pDevice->CreateStateBlock( D3DSBT_ALL, &pStateBlock ) ) )
 		return;
+
 	pStateBlock->Capture ();
 	if ( m_pGraphics )
 		m_pGraphics->OnSceneBegin ();
@@ -496,6 +496,25 @@ void CCore::OnDeviceRender( void )
 
 void CCore::OnGameProcess( void )
 {
+	if (m_bShutdownRequest) {
+		if( CCore::Instance()->GetNetworkModule()->IsConnected() )
+		{
+			CCore::Instance()->GetNetworkModule()->Disconnect( false );
+		}
+
+		// Wait for render thread to finish job.
+		while (m_bRenderInProgress) {
+			Sleep(5);
+		}
+
+		// This is not correct as game is "killed" not shutdown with all systems being shutdown
+		// likely leaving a lot of memory leaks in game code. This should be done better.
+
+		delete this;
+		TerminateProcess(GetCurrentProcess(), 0);
+		return;
+	}
+
 	if( m_pNetworkModule )
 		m_pNetworkModule->Pulse ();
 
@@ -536,6 +555,13 @@ void CCore::OnGameProcess( void )
 
 	if( m_pClientScriptingManager )
 		m_pClientScriptingManager->GetEvents()->Call( "onClientProcess" );
+}
+
+
+void CCore::OnDeviceRender( void )
+{
+	DoRender();
+	m_bRenderInProgress = false;
 }
 
 void CCore::HandleAntiCheatEvent( DWORD dwMessage, unsigned int uiBaseAddress, size_t nSize )

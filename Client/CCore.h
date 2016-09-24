@@ -10,6 +10,7 @@
 #pragma once
 
 #include <Windows.h>
+#include <atomic>
 
 #include "d3d9.h"
 #include "d3dx9.h"
@@ -56,6 +57,12 @@ private:
 	bool							m_bRenderNetworkStats;
 	bool							m_bConnectionProblem;
 
+	/** Is shutdown request received from any thread? */
+	std::atomic_bool				m_bShutdownRequest;
+
+	/** Is render thread rendering stuff? */
+	std::atomic_bool				m_bRenderInProgress;
+
 	CMafia							* m_pGame;
 	CNetworkModule					* m_pNetworkModule;
 	CGraphics						* m_pGraphics;
@@ -95,6 +102,7 @@ private:
 	String							m_strGameDirectory;
 	String							m_strModDirectory;
 
+	void							DoRender					( void );
 
 public:
 
