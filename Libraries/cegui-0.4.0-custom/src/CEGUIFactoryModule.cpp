@@ -2,7 +2,7 @@
 	filename: 	CEGUIFactoryModule.cpp
 	created:	12/4/2004
 	author:		Paul D Turner
-	
+
 	purpose:	Implements FactoryModule for Win32 systems
 *************************************************************************/
 /*************************************************************************
@@ -61,7 +61,8 @@ const char  FactoryModule::RegisterAllFunctionName[]     = "registerAllFactories
 	module specified.
 *************************************************************************/
 FactoryModule::FactoryModule(const String& filename) :
-	d_moduleName(filename)
+	d_moduleName(filename),
+	d_handle(NULL)
 {
 	// Statically linked factory modules (e.g. falagard), so skip!
 
@@ -134,7 +135,7 @@ void FactoryModule::registerFactory(const String& type) const
 uint FactoryModule::registerAllFactories() const
 {
 	// Statically linked factory modules (e.g. falagard), so skip!
-	
+
 	/**
 
 	// are we attempting to use a missing function export
