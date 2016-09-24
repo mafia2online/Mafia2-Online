@@ -290,6 +290,7 @@
     <ClInclude Include="engine\CM2SDSTables.h" />
     <ClInclude Include="engine\CM2Vehicle.h" />
     <ClInclude Include="engine\CM2SlotManager.h" />
+    <ClInclude Include="ExceptionHandler.h" />
     <ClInclude Include="gui_impl\CGUIButton_Impl.h" />
     <ClInclude Include="gui_impl\CGUICheckBox_Impl.h" />
     <ClInclude Include="gui_impl\CGUIComboBox_Impl.h" />
@@ -451,6 +452,7 @@
     <ClCompile Include="engine\CM2Ped.cpp" />
     <ClCompile Include="engine\CM2Vehicle.cpp" />
     <ClCompile Include="engine\CM2SlotManager.cpp" />
+    <ClCompile Include="ExceptionHandler.cpp" />
     <ClCompile Include="gui_impl\CGUIButton_Impl.cpp" />
     <ClCompile Include="gui_impl\CGUICheckBox_Impl.cpp" />
     <ClCompile Include="gui_impl\CGUIComboBox_Impl.cpp" />

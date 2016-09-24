@@ -35,6 +35,9 @@
 
 #include "CLogFile.h"
 
+#include "ExceptionHandler.h"
+#include "SharedUtility.h"
+
 sub_410440				CPatches::onGameInit = NULL;
 onGameEvent_t			CPatches::onGameEvent = NULL;
 ProcessEntities_t		CPatches::processEntities = NULL;
@@ -498,6 +501,15 @@ int __fastcall CPatches::HOOK_CEntMgr__ProcessEntities( void * This, void * _EDX
 int CPatches::HOOK_OnGameProcessStart( HINSTANCE hInstance, int a2, int a3, int a4 )
 {
 	CLogFile::Printf ( "HOOK_OnGameProcessStart" );
+	char exceptionPath[MAX_PATH + 1] = { 0 };
+	strcpy(exceptionPath, SharedUtility::GetAppPath());
+	strcat(exceptionPath, "crashes");
+
+	if (!ExceptionHandler::Install(exceptionPath))
+	{
+		MessageBox(NULL, "Mafia2-Online", "Unable to initialize exception handler!", NULL);
+		return FALSE;
+	}
 
 	return onGameProcessStart( hInstance, a2, a3, a4 );
 }
