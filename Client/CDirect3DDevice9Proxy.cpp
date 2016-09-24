@@ -132,9 +132,6 @@ HRESULT STDMETHODCALLTYPE CDirect3DDevice9Proxy::Reset(D3DPRESENT_PARAMETERS * p
 
 HRESULT STDMETHODCALLTYPE CDirect3DDevice9Proxy::Present(const RECT * pSourceRect, const RECT * pDestRect, HWND hDestWindowOverride, const RGNDATA * pDirtyRegion)
 {
-	// Call the core device render event
-	CCore::Instance()->OnDeviceRender();
-
 	return m_pD3DDevice->Present(pSourceRect, pDestRect, hDestWindowOverride, pDirtyRegion);
 }
 
@@ -263,6 +260,7 @@ HRESULT STDMETHODCALLTYPE CDirect3DDevice9Proxy::BeginScene( )
 
 HRESULT STDMETHODCALLTYPE CDirect3DDevice9Proxy::EndScene( )
 {
+	CCore::Instance()->OnDeviceRender();
 	return m_pD3DDevice->EndScene();
 }
 

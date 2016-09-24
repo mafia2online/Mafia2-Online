@@ -35,16 +35,11 @@
 
 #include "CLogFile.h"
 
-const unsigned char g_szPixel [] = { 0x42, 0x4D, 0x3A, 0, 0, 0, 0, 0, 0, 0, 0x36, 0, 0, 0, 0x28, 0, 0,
-                                    0, 0x1, 0, 0, 0, 0x1, 0, 0, 0, 0x1, 0, 0x18, 0, 0, 0, 0, 0,
-                                    0x4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                                    0, 0, 0, 0xFF, 0xFF, 0xFF, 0 };
-
 CGraphics::CGraphics( void )
 	: m_pSprite(nullptr)
 	, m_pDevice(nullptr)
-	, m_pPixelTexture(nullptr)
 	, m_pOriginalTarget(nullptr)
+	, m_pStateBlock(nullptr)
 
 	, m_pDirect(nullptr)
 	, m_pD3Identifier()
@@ -90,15 +85,30 @@ void CGraphics::Initialise( IDirect3DDevice9 * pDevice )
 		// Load the font's
 		if( !LoadFonts() )
 		{
-			CLogFile::Printf( "CGraphics::LoadFonts() - Failed to load default fonts." );
+			CLogFile::Printf( "Failed to load default fonts." );
 			TerminateProcess( GetCurrentProcess(), 0 );
 		}
 
 		// Get the original render target
 		m_pDevice->GetRenderTarget( 0, &m_pOriginalTarget );
 
-		// Create drawing devices
-		D3DXCreateTextureFromFileInMemory( pDevice,  g_szPixel, sizeof( g_szPixel ), &m_pPixelTexture );
+		CreateStateBlock();
+	}
+}
+
+
+/**
+ * Create state block if not exists.
+ */
+void CGraphics::CreateStateBlock(void)
+{
+	if ( m_pStateBlock )
+		return;
+
+	assert(m_pDevice);
+	if( FAILED( m_pDevice->CreateStateBlock( D3DSBT_ALL, &m_pStateBlock ) ) ) {
+		CLogFile::Print("Failed to initialize state block.");
+		return;
 	}
 }
 
@@ -361,11 +371,10 @@ void CGraphics::OnLostDevice( IDirect3DDevice9 * pDevice )
 	if( m_pSprite )
 		m_pSprite->OnLostDevice ();
 
-	// Release the pixel texture
-	m_pPixelTexture->Release ();
-
 	// Release the original surface
 	m_pOriginalTarget->Release ();
+
+	SAFE_RELEASE(m_pStateBlock);
 }
 
 void CGraphics::OnRestoreDevice( IDirect3DDevice9 * pDevice )
@@ -391,8 +400,7 @@ void CGraphics::OnRestoreDevice( IDirect3DDevice9 * pDevice )
 	// Get the original render target
 	m_pDevice->GetRenderTarget ( 0, &m_pOriginalTarget );
 
-	// Create drawing devices
-	D3DXCreateTextureFromFileInMemory ( pDevice, g_szPixel, sizeof( g_szPixel ), &m_pPixelTexture );
+	CreateStateBlock();
 }
 
 ID3DXFont * CGraphics::GetFont( String strFont )
@@ -527,23 +535,28 @@ void CGraphics::ScreenToWorld( CVector3 vecScreen, CVector3 * vecWorld )
 	vecWorld->fZ = out.z;
 }
 
+struct Vertex2D
+{
+	float x, y, z, rhw;
+	DWORD color;
+};
+
 void CGraphics::DrawBox( float fLeft, float fTop, float fWidth, float fHeight, DWORD dwColorBox )
 {
-	// Begin the sprite
-	m_pSprite->Begin( D3DXSPRITE_ALPHABLEND | D3DXSPRITE_SORT_TEXTURE );
+	const Vertex2D rect[] = {
+		{ fLeft,			fTop,			0.0f, 1.0f,	dwColorBox },
+		{ fLeft + fWidth,	fTop,			0.0f, 1.0f,	dwColorBox },
+		{ fLeft,			fTop + fHeight, 0.0f, 1.0f,	dwColorBox },
+		{ fLeft + fWidth,	fTop + fHeight, 0.0f, 1.0f,	dwColorBox },
+	};
 
-	// Generate the matrix
-	D3DXMATRIX matrix;
-	D3DXMatrixTransformation2D( &matrix, NULL, 0.0f, &D3DXVECTOR2( fWidth, fHeight ), NULL, 0.0f, &D3DXVECTOR2( fLeft, fTop ) );
+	m_pDevice->SetFVF(D3DFVF_XYZRHW | D3DFVF_DIFFUSE);
+	m_pDevice->SetPixelShader(NULL);
+	m_pDevice->SetVertexShader(NULL);
+	m_pDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
+	m_pDevice->SetTexture(0, NULL);
 
-	// Set the sprite transform
-	m_pSprite->SetTransform( &matrix );
-
-	// Draw the box
-	m_pSprite->Draw( m_pPixelTexture, NULL, NULL, NULL, dwColorBox );
-
-	// End the sprite
-	m_pSprite->End();
+	m_pDevice->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, &rect, sizeof(Vertex2D));
 }
 
 IDirect3DTexture9 * CGraphics::CreateTexture( DWORD * dwBitMap, unsigned int uiWidth, unsigned int uiHeight )
@@ -687,8 +700,10 @@ void CGraphics::ExpireCachedTextures( bool bErase )
 	}
 }
 
-void CGraphics::OnSceneBegin( void )
+void CGraphics::BeginRender( void )
 {
+	m_pStateBlock->Capture ();
+
 	m_pDevice->SetRenderState( D3DRS_ALPHABLENDENABLE, TRUE );
 
 	m_pDevice->SetTextureStageState( 0, D3DTSS_COLOROP, D3DTOP_MODULATE );
@@ -718,6 +733,11 @@ void CGraphics::OnSceneBegin( void )
 
 	m_pDevice->SetRenderState( D3DRS_ALPHATESTENABLE, FALSE );
 	m_pDevice->SetFVF( D3DFVF_XYZ | D3DFVF_DIFFUSE | D3DFVF_TEX1 );
+}
+
+void CGraphics::EndRender( void )
+{
+	m_pStateBlock->Apply();
 }
 
 unsigned int CGraphics::GetFontIndex( const char * szFont )

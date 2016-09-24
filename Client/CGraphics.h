@@ -37,8 +37,8 @@ private:
 
 	LPD3DXSPRITE					m_pSprite;
 	IDirect3DDevice9				* m_pDevice;
-	IDirect3DTexture9				* m_pPixelTexture;
 	IDirect3DSurface9				* m_pOriginalTarget;
+	IDirect3DStateBlock9			* m_pStateBlock;
 
 	//Graphic card detection
 	IDirect3D9						*m_pDirect;
@@ -56,6 +56,7 @@ private:
 
 	std::map< std::string, sCachedTextureInfo > m_cachedTextureMap;
 
+	void							CreateStateBlock(void);
 public:
 
 	CGraphics( );
@@ -102,7 +103,8 @@ public:
 	void							WorldToScreen( CVector3 vecWorld, CVector3 * vecScreen );
 	void							ScreenToWorld( CVector3 vecScreen, CVector3 * vecWorld );
 
-	void							OnSceneBegin( void );
+	void							BeginRender( void );
+	void							EndRender ( void );
 
 	unsigned int					GetFontIndex( const char * szFont );
 

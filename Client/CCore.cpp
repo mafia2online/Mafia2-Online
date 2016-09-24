@@ -88,7 +88,6 @@
 
 #include "CLogFile.h"
 
-IDirect3DStateBlock9	* pStateBlock = nullptr;
 CSquirrelArguments		pArguments;
 bool					bDeviceLost = false;
 
@@ -349,9 +348,6 @@ void CCore::OnDeviceLost( IDirect3DDevice9 * pDevice )
 		TerminateProcess ( GetCurrentProcess(), 0 );
 	}
 
-	if( pStateBlock )
-		SAFE_RELEASE( pStateBlock );
-
 	bDeviceLost = true;
 	if( m_pGraphics )
 		m_pGraphics->OnLostDevice( pDevice );
@@ -400,18 +396,10 @@ void CCore::DoRender( void )
 		return;
 
 	IDirect3DDevice9 *pDevice = m_pGraphics->GetDevice();
-
 	if (! pDevice)
 		return;
 
-	pDevice->BeginScene ();
-
-	if( FAILED( pDevice->CreateStateBlock( D3DSBT_ALL, &pStateBlock ) ) )
-		return;
-
-	pStateBlock->Capture ();
-	if ( m_pGraphics )
-		m_pGraphics->OnSceneBegin ();
+	m_pGraphics->BeginRender();
 
 	if( m_pClientScriptingManager && !m_pGUI->GetMainMenu()->IsVisible () )
 	{
@@ -419,78 +407,83 @@ void CCore::DoRender( void )
 		m_pClientScriptingManager->GetEvents()->Call( "onClientFrameRender", &pArguments );
 		pArguments.clear();
 	}
+
 	CLoadingScreen::Render ();
+
 	if ( m_pChat->IsVisible () )
 		m_pChat->Render ();
+
 	if ( m_pGUI->GetMainMenu () && m_pGUI->GetMainMenu()->IsVisible () )
 		m_pGUI->GetMainMenu()->Render ();
-	if ( m_pGraphics )
-		m_pGraphics->ExpireCachedTextures ();
+
+	m_pGraphics->ExpireCachedTextures ();
+
 	if ( m_pGUI )
 		m_pGUI->Render ();
+
 	if ( IsConnectionProblem () )
-		CCore::Instance()->GetGraphics()->DrawText ( (CCore::Instance()->GetGUI()->GetCEGUI()->GetResolution().fX - CCore::Instance()->GetGraphics()->GetTextWidth("Connection Problem", 1.0f, "tahoma-bold") - 5), 5, D3DCOLOR_ARGB(255, 255, 0, 0), 1.0f, "tahoma-bold", true, "Connection Problem" );
+		m_pGraphics->DrawText ( (CCore::Instance()->GetGUI()->GetCEGUI()->GetResolution().fX - CCore::Instance()->GetGraphics()->GetTextWidth("Connection Problem", 1.0f, "tahoma-bold") - 5), 5, D3DCOLOR_ARGB(255, 255, 0, 0), 1.0f, "tahoma-bold", true, "Connection Problem" );
+
 	if( m_pPedManager )
 		m_pPedManager->Pulse();
 
+	if (m_pGame && IsGameLoaded()) {
 #ifdef DEBUG
-	if (m_pPlayerManager && m_pPlayerManager->GetLocalPlayer() && m_pPlayerManager->GetLocalPlayer()->IsSpawned()) {
-		CM2Ped * pPlayerPed = m_pPlayerManager->GetLocalPlayer()->GetPlayerPed();
-		M2PlayerControls playerControls = pPlayerPed->GetPed()->m_playerControls;
+		if (m_pPlayerManager && m_pPlayerManager->GetLocalPlayer() && m_pPlayerManager->GetLocalPlayer()->IsSpawned()) {
+			CM2Ped * pPlayerPed = m_pPlayerManager->GetLocalPlayer()->GetPlayerPed();
+			M2PlayerControls playerControls = pPlayerPed->GetPed()->m_playerControls;
 
-		CCore::Instance()->GetGraphics()->DrawText(300, 300, D3DCOLOR_ARGB(255, 255, 0, 0), 1.0f, "tahoma-bold", true, "Is shooting: %s\nMovement State: %d\nModifiers: %d\nMouse Flags: %d\nKeyboard Flags: %d\nIs Aiming: %s\n", playerControls.m_bIsShooting ? "Yes" : "No", playerControls.m_playerMovementState, playerControls.m_byteModifiers, playerControls.m_byteMouseFlags, playerControls.m_byteKeyboardFlags, playerControls.m_bIsAiming ? "Yes" : "No");
-	}
+			CCore::Instance()->GetGraphics()->DrawText(300, 300, D3DCOLOR_ARGB(255, 255, 0, 0), 1.0f, "tahoma-bold", true, "Is shooting: %s\nMovement State: %d\nModifiers: %d\nMouse Flags: %d\nKeyboard Flags: %d\nIs Aiming: %s\n", playerControls.m_bIsShooting ? "Yes" : "No", playerControls.m_playerMovementState, playerControls.m_byteModifiers, playerControls.m_byteMouseFlags, playerControls.m_byteKeyboardFlags, playerControls.m_bIsAiming ? "Yes" : "No");
+		}
 #endif
 
-	if ( GetAsyncKeyState ( VK_F10 ) & 0x1 )
-	{
-		m_pHud->Show ( !m_pHud->IsShowing () );
-		m_pChat->SetVisible ( !m_pChat->IsVisible () );
-		m_pPlayerManager->GetLocalPlayer()->GetPlayerPed()->ShowModel ( !m_pPlayerManager->GetLocalPlayer()->GetPlayerPed()->IsModelShowing () );
-	}
-	if( GetAsyncKeyState( VK_F11 ) & 0x1 )
-	{
-		m_bRenderNetworkStats = !m_bRenderNetworkStats;
-	}
-	if( GetAsyncKeyState( VK_F12 ) & 0x1 )
-	{
-		TakeScreenshot ();
-	}
-	if (m_bCaptureScreenshot && !m_pScreenshotManager->IsSaving())
-	{
-		unsigned long ulScreenWidth = m_pCamera->GetGameCamera()->m_iWindowWidth;
-		unsigned long ulScreenHeight = m_pCamera->GetGameCamera()->m_iWindowHeight;
-		unsigned char * ucData = new unsigned char [ ulScreenHeight * (ulScreenWidth * 4) ];
-
-		if( m_pGraphics->GetFrontBufferPixels( &ucData ) )
+		if ( GetAsyncKeyState ( VK_F10 ) & 0x1 && m_pHud && m_pChat && m_pPlayerManager )
 		{
-			if (! m_pScreenshotManager->BeginWrite(ucData)) {
-				delete []ucData;
-				ucData = nullptr;
-			}
+			m_pHud->Show ( !m_pHud->IsShowing () );
+			m_pChat->SetVisible ( !m_pChat->IsVisible () );
+			m_pPlayerManager->GetLocalPlayer()->GetPlayerPed()->ShowModel ( !m_pPlayerManager->GetLocalPlayer()->GetPlayerPed()->IsModelShowing () );
 		}
-		m_bCaptureScreenshot = false;
-	}
-	if( m_bRenderNetworkStats )
-	{
-		m_pGraphics->DrawText( (m_pGUI->GetCEGUI()->GetResolution().fX - 275), 30, 0xFFFFFFFF, 1.0f, "tahoma-bold", false, DT_NOCLIP, CNetworkStats::GetStats().Get() );
-	}
-	if (m_pNameTag)
-		m_pNameTag->Draw();
-	if (m_p3DTextLabelManager && CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->IsSpawned() == true){
-		m_p3DTextLabelManager->Render();
-	}
-	if( m_pClientScriptingManager && !m_pGUI->GetMainMenu()->IsVisible () )
-	{
-		pArguments.push( true );
-		m_pClientScriptingManager->GetEvents()->Call( "onClientFrameRender", &pArguments );
-		pArguments.clear();
-	}
-	if ( pStateBlock )
-		pStateBlock->Apply();
-	SAFE_RELEASE( pStateBlock );
+		if( GetAsyncKeyState( VK_F11 ) & 0x1 )
+		{
+			m_bRenderNetworkStats = !m_bRenderNetworkStats;
+		}
+		if( GetAsyncKeyState( VK_F12 ) & 0x1 )
+		{
+			TakeScreenshot ();
+		}
+		if (m_bCaptureScreenshot && !m_pScreenshotManager->IsSaving())
+		{
+			unsigned long ulScreenWidth = m_pCamera->GetGameCamera()->m_iWindowWidth;
+			unsigned long ulScreenHeight = m_pCamera->GetGameCamera()->m_iWindowHeight;
+			unsigned char * ucData = new unsigned char [ ulScreenHeight * (ulScreenWidth * 4) ];
 
-	pDevice->EndScene();
+			if( m_pGraphics->GetFrontBufferPixels( &ucData ) )
+			{
+				if (! m_pScreenshotManager->BeginWrite(ucData)) {
+					delete []ucData;
+					ucData = nullptr;
+				}
+			}
+			m_bCaptureScreenshot = false;
+		}
+		if( m_bRenderNetworkStats )
+		{
+			m_pGraphics->DrawText( (m_pGUI->GetCEGUI()->GetResolution().fX - 275), 30, 0xFFFFFFFF, 1.0f, "tahoma-bold", false, DT_NOCLIP, CNetworkStats::GetStats().Get() );
+		}
+		if (m_pNameTag)
+			m_pNameTag->Draw();
+		if (m_p3DTextLabelManager && CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->IsSpawned() == true){
+			m_p3DTextLabelManager->Render();
+		}
+		if( m_pClientScriptingManager && !m_pGUI->GetMainMenu()->IsVisible () )
+		{
+			pArguments.push( true );
+			m_pClientScriptingManager->GetEvents()->Call( "onClientFrameRender", &pArguments );
+			pArguments.clear();
+		}
+	}
+
+	m_pGraphics->EndRender();
 
 	if ( m_pFPSCounter )
 		m_pFPSCounter->Pulse ();
