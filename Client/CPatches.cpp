@@ -32,7 +32,6 @@
 #include "COffsets.h"
 
 #include "CM2EntityMessage.h"
-#include "CrashRpt.h"
 
 sub_410440				CPatches::onGameInit = NULL;
 onGameEvent_t			CPatches::onGameEvent = NULL;
@@ -496,8 +495,6 @@ int __fastcall CPatches::HOOK_CEntMgr__ProcessEntities( void * This, void * _EDX
 
 int CPatches::HOOK_OnGameProcessStart( HINSTANCE hInstance, int a2, int a3, int a4 )
 {
-	// Install the crash reporter
-	CrashRpt::InstallMain( MOD_NAME, MOD_VERS_STR );
 	CLogFile::Printf ( "HOOK_OnGameProcessStart" );
 
 	return onGameProcessStart( hInstance, a2, a3, a4 );

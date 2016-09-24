@@ -61,14 +61,14 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>./;../Libraries/bass;../Libraries/CrashRpt;../Libraries/cegui-0.4.0-custom/include;../Libraries/DXSDK/include;../Libraries/squirrel;../Libraries/lua;../Libraries/RakNet/Source;../Shared;../Libraries/Detours;../Libraries/zlib-1.2.5;../Libraries/lpng142;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./;../Shared;../Libraries/tinyxml;../Libraries/bass;../Libraries/sqlite;../Libraries/cegui-0.4.0-custom/include;../Libraries/DXSDK/include;../Libraries/squirrel;../Libraries/lua;../Libraries/RakNet/Source;../Libraries/Detours;../Libraries/zlib-1.2.5;../Libraries/lpng142;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_WIN32;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_CLIENT;_DEBUG;CEGUI_STATIC;LOGGER;WIN32_LEAN_AND_MEAN;NO_GARBAGE_COLLECTOR;DEBUG_LOG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <DisableSpecificWarnings>4996;4409;4482;4800;4305;4018;4390;4099;4244;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <Optimization>Disabled</Optimization>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>legacy_stdio_definitions.lib;crashrpt1401.lib;winmm.lib;ws2_32.lib;comctl32.lib;d3d9.lib;dxguid.lib;dinput8.lib;DxErr9.lib;detours.lib;dbghelp.lib;bass.lib;freetype265STd.lib;d3dx9.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>legacy_stdio_definitions.lib;winmm.lib;ws2_32.lib;comctl32.lib;d3d9.lib;dxguid.lib;dinput8.lib;DxErr9.lib;detours.lib;dbghelp.lib;bass.lib;freetype265STd.lib;d3dx9.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>../Libraries/CrashRpt;../Libraries/cegui-0.4.0-custom/lib;../Libraries/DXSDK/Lib;../Libraries/Detours;../Libraries/bass;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreAllDefaultLibraries>
       </IgnoreAllDefaultLibraries>
@@ -100,7 +100,7 @@
       <CompileAs>Default</CompileAs>
       <DisableSpecificWarnings>4996;4409;4482;4800;4305;4018;4390;4099;4244;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>./;../Libraries/bass;../Libraries/CrashRpt;../Libraries/cegui-0.4.0-custom/include;../Libraries/DXSDK/include;../Libraries/squirrel;../Libraries/lua;../Libraries/RakNet/Source;../Shared;../Libraries/Detours;../Libraries/zlib-1.2.5;../Libraries/lpng142;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./;../Shared;../Libraries/tinyxml;../Libraries/bass;../Libraries/sqlite;../Libraries/cegui-0.4.0-custom/include;../Libraries/DXSDK/include;../Libraries/squirrel;../Libraries/lua;../Libraries/RakNet/Source;../Libraries/Detours;../Libraries/zlib-1.2.5;../Libraries/lpng142;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
@@ -114,7 +114,7 @@
       <TargetMachine>MachineX86</TargetMachine>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
-      <AdditionalDependencies>legacy_stdio_definitions.lib;crashrpt1401.lib;winmm.lib;ws2_32.lib;comctl32.lib;d3d9.lib;dxguid.lib;dinput8.lib;DxErr9.lib;detours.lib;dbghelp.lib;bass.lib;freetype265ST.lib;d3dx9.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>legacy_stdio_definitions.lib;winmm.lib;ws2_32.lib;comctl32.lib;d3d9.lib;dxguid.lib;dinput8.lib;DxErr9.lib;detours.lib;dbghelp.lib;bass.lib;freetype265ST.lib;d3dx9.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>../Libraries/CrashRpt;../Libraries/cegui-0.4.0-custom/lib;../Libraries/DXSDK/Lib;../Libraries/Detours;../Libraries/bass;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
       <MinimumRequiredVersion />
@@ -155,11 +155,9 @@
     <ClInclude Include="..\Shared\CCommands.h" />
     <ClInclude Include="..\Shared\CCommon.h" />
     <ClInclude Include="..\Shared\CEvents.h" />
-    <ClInclude Include="..\Shared\CExceptionHandler.h" />
     <ClInclude Include="..\Shared\CLogFile.h" />
     <ClInclude Include="..\Shared\CNetworkRPC.h" />
     <ClInclude Include="..\Shared\CPatcher.h" />
-    <ClInclude Include="..\Shared\CrashRpt.h" />
     <ClInclude Include="..\Shared\CRC.h" />
     <ClInclude Include="..\Shared\CSettings.h" />
     <ClInclude Include="..\Shared\CString.h" />
@@ -336,10 +334,8 @@
     <ClCompile Include="..\Libraries\squirrel\sqvm.cpp" />
     <ClCompile Include="..\Shared\CCommands.cpp" />
     <ClCompile Include="..\Shared\CEvents.cpp" />
-    <ClCompile Include="..\Shared\CExceptionHandler.cpp" />
     <ClCompile Include="..\Shared\CLogFile.cpp" />
     <ClCompile Include="..\Shared\CPatcher.cpp" />
-    <ClCompile Include="..\Shared\CrashRpt.cpp" />
     <ClCompile Include="..\Shared\CSettings.cpp" />
     <ClCompile Include="..\Shared\CString.cpp" />
     <ClCompile Include="..\Shared\CXML.cpp" />

@@ -374,9 +374,6 @@
     <ClCompile Include="..\Shared\Scripting\Natives\CSharedVehicleNatives.cpp">
       <Filter>Source Files\Shared\Scripting\Natives</Filter>
     </ClCompile>
-    <ClCompile Include="..\Shared\CrashRpt.cpp">
-      <Filter>Source Files\Shared</Filter>
-    </ClCompile>
     <ClCompile Include="..\Shared\Scripting\Natives\CHashNatives.cpp">
       <Filter>Source Files\Shared\Scripting\Natives</Filter>
     </ClCompile>
@@ -669,9 +666,6 @@
     </ClInclude>
     <ClInclude Include="CBlipManager.h">
       <Filter>Header Files\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Shared\CrashRpt.h">
-      <Filter>Header Files\Shared</Filter>
     </ClInclude>
     <ClInclude Include="StdInc.h">
       <Filter>Header Files</Filter>
