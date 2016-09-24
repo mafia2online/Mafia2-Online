@@ -10,7 +10,7 @@
 #pragma once
 
 #include	<stdio.h>
-#include	"Threading/CMutex.h"
+#include "Threading/CMutex.h"
 
 class CLogFile
 {

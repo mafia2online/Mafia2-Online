@@ -8,10 +8,10 @@
 ***************************************************************/
 
 #ifdef _WIN32
-#include	<windows.h>
+#include <windows.h>
 #endif
-#include	"CMutex.h"
-#include	"../SharedUtility.h"
+#include "CMutex.h"
+#include "SharedUtility.h"
 
 CMutex::CMutex( void )
 {

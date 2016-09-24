@@ -7,25 +7,23 @@
 *
 ***************************************************************/
 
-#include	"../CString.h"
-#include	"../../Shared/Scripting/CScriptingManager.h"
+#include "CString.h"
+#include "Scripting/CScriptingManager.h"
 
+#include "BaseInc.h"
+#include "CCore.h"
+
+#include "CLogFile.h"
+
+#include "CSquirrel.h"
+
+#include "CEvents.h"
+#include "SharedUtility.h"
 
 #ifdef _CLIENT
-#include	"../../Client/Baseinc.h"
-#include	"../../Client/CCore.h"
-#include	"../../Client/CClientScriptingManager.h"
-#include	"../../Client/engine/CM2Entity.h"
-#include	"../../Client/CModelManager.h"
-#include	"../../Client/CNetworkModelManager.h"
-#else
-#include	"../../Server/StdInc.h"
+#	include "CClientScriptingManager.h"
 #endif
 
-#include	"../../Shared/CEvents.h"
-#include	"../../Shared/SharedUtility.h"
-
-#include	"CSquirrel.h"
 void CSquirrel::PrintFunction( SQVM * pVM, const SQChar * szFormat, ... )
 {
 	va_list args;

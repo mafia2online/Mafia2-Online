@@ -7,47 +7,49 @@
 *
 ***************************************************************/
 
-#include	"BaseInc.h"
+#include "BaseInc.h"
 
-#include	"CCore.h"
+#include "CCore.h"
 
-#include	"Math\CVector3.h"
-#include	"Math\CMaths.h"
-#include	"CString.h"
+#include "Math/CVector3.h"
+#include "Math/CMaths.h"
+#include "CString.h"
 
-#include	"CM2Hud.h"
-#include	"engine\CM2ModelManager.h"
-#include	"engine\CM2Entity.h"
-#include	"engine\CM2Ped.h"
-#include	"engine\CM2Vehicle.h"
-#include	"CM2Camera.h"
+#include "CM2Hud.h"
+#include "engine/CM2ModelManager.h"
+#include "engine/CM2Entity.h"
+#include "engine/CM2Ped.h"
+#include "engine/CM2Vehicle.h"
+#include "CM2Camera.h"
 
-#include	"CModelManager.h"
+#include "CModelManager.h"
 
-#include	"CMafia.h"
-#include	"Game\CGame.h"
-#include	"CChat.h"
+#include "CMafia.h"
+#include "Game/CGame.h"
+#include "CChat.h"
 
-#include	"CPlayerManager.h"
-#include	"CVehicleManager.h"
+#include "CPlayerManager.h"
+#include "CVehicleManager.h"
 
-#include	"CNetworkPlayer.h"
-#include	"CNetworkVehicle.h"
+#include "CNetworkPlayer.h"
+#include "CNetworkVehicle.h"
 
-#include	"CEvents.h"
-#include	"Scripting\CSquirrelArguments.h"
-#include	"Scripting\CScriptingManager.h"
-#include	"CClientScriptingManager.h"
+#include "CEvents.h"
+#include "Scripting/CSquirrelArguments.h"
+#include "Scripting/CScriptingManager.h"
+#include "CClientScriptingManager.h"
 
-#include	"CNetworkModule.h"
+#include "CNetworkModule.h"
 
-#include	"../Shared/CSync.h"
-#include	"../Shared/CNetworkRPC.h"
-#include	"SharedUtility.h"
+#include "CSync.h"
+#include "Network/NetRPCs.h"
+#include "SharedUtility.h"
 
-#include	"../Libraries/RakNet/Source/PacketPriority.h"
+#include "PacketPriority.h"
 
-#include	"CLocalPlayer.h"
+#include "CLocalPlayer.h"
+
+#include "CLogFile.h"
 
 bool bOldControlState = false;
 bool bRespawnVehicle = false;
@@ -438,7 +440,7 @@ void CLocalPlayer::SendUnoccupiedVehicleSync( CNetworkVehicle * pNetworkVehicle 
 
 	// Write the sync structure to the bitstream
 	pBitStream.Write( (char *)&unoccupiedVehicleSync, sizeof(UnoccupiedVehicleSync) );
-	
+
 	// Send the bitstream to the server
 	CCore::Instance()->GetNetworkModule()->Call(RPC_UNOCCUPIED_SYNC, &pBitStream, IMMEDIATE_PRIORITY, UNRELIABLE_SEQUENCED, true);
 }
@@ -590,7 +592,7 @@ void CLocalPlayer::OnLeaveVehicle( void )
 				// Respawn the vehicle
 				m_pVehicle->Respawn();
 
-				// 
+				//
 				bRespawnVehicle = false;
 			}
 
@@ -1082,6 +1084,6 @@ bool CLocalPlayer::IsFullSyncNeeded ( void )
 		m_ulLastFullSyncTime = ulCurrentTime;
 		return true;
 	}
-	
+
 	return false;
 }

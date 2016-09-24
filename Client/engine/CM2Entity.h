@@ -9,11 +9,11 @@
 
 #pragma once
 
-#include	"d3d9.h"
-#include	"../../Shared/Math/CMaths.h"
-#include	"../../Shared/Math/CMatrix.h"
-#include	"../../Shared/Math/CQuaternion.h"
-#include	"../../Shared/Math/CVector3.h"
+#include "d3d9.h"
+#include "Math/CMaths.h"
+#include "Math/CMatrix.h"
+#include "Math/CQuaternion.h"
+#include "Math/CVector3.h"
 
 class M2EntityVFTable
 {
@@ -89,15 +89,15 @@ public:
 
 							CM2Entity						( M2Entity * pEntity );
 							~CM2Entity						( void );
-							
+
 	void					SetEntity						( M2Entity * pEntity ) { m_pEntity = pEntity; }
 	M2Entity				* GetEntity						( void ) { return m_pEntity; }
 
 	void					Activate						( void );
 	void					Deactivate						( void );
-	
+
 	DWORD					GetGUID							( void );
-	
+
 	void					SetPosition						( CVector3 vecPosition );
 	void					GetPosition						( CVector3 * vecPosition, bool bCheckVehicle = false );
 
@@ -111,5 +111,5 @@ public:
 
 	void					ShowModel						( bool bShow );
 	bool					IsModelShowing					( void );
-	
+
 };

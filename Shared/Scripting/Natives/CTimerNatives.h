@@ -9,14 +9,9 @@
 
 #pragma once
 
-#include	"../CScriptingManager.h"
-#include	"../CSquirrelCommon.h"
-
+class CScriptingManager;
 class CTimerNatives
 {
-
 public:
-
 	static	void			Register( CScriptingManager * pScriptingManager );
-
 };

@@ -12,11 +12,9 @@
 #include	<map>
 #include	<list>
 
-#include	"../../Libraries/squirrel/squirrel.h"
-#include	"../../Libraries/squirrel/sqvm.h"
-#include	"Scripting\CSquirrel.h"
-#include	"Scripting\CSquirrelArguments.h"
-#include	"Scripting\CScriptingManager.h"
+#include "Scripting/CSquirrel.h"
+#include "Scripting/CSquirrelArguments.h"
+#include "Scripting/CScriptingManager.h"
 
 class CCommandHandler
 {

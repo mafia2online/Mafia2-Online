@@ -9,10 +9,10 @@
 
 #pragma once
 
-#include	"../Libraries/tinyxml/tinyxml.h"
-#include	"../Libraries/tinyxml/ticpp.h"
-#include	<list>
-#include	"CString.h"
+#include <list>
+#include "tinyxml.h"
+#include "ticpp.h"
+#include "CString.h"
 
 class CXMLNode;
 class CXML
@@ -56,7 +56,7 @@ private:
 	CXMLNode											* m_pParent;
 
 	std::list< CXMLNode* >								m_Children;
-	
+
 public:
 
 								CXMLNode				( _TiXmlElement * pNode, CXMLNode * pParent = NULL );

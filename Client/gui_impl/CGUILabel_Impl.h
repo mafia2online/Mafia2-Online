@@ -9,9 +9,9 @@
 
 #pragma once
 
-#include	"../../Shared/CColor.h"
+#include "CColor.h"
 
-#include	"CGUIElement_Impl.h"
+#include "CGUIElement_Impl.h"
 
 class CGUILabel_Impl : public CGUIElement_Impl
 {

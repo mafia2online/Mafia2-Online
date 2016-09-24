@@ -1,7 +1,7 @@
 /* see copyright notice in squirrel.h */
 #include <new>
 #include "squirrel.h"
-#include "sqstdio.h""
+#include "sqstdio.h"
 #include <string.h>
 #include "sqstdblob.h"
 #include "sqstdstream.h"
@@ -145,9 +145,9 @@ static SQInteger _blob_constructor(HSQUIRRELVM v)
 static SQInteger _blob__cloned(HSQUIRRELVM v)
 {
 	SQBlob *other = NULL;
-	{ 
+	{
 		if(SQ_FAILED(sq_getinstanceup(v,2,(SQUserPointer*)&other,(SQUserPointer)SQSTD_BLOB_TYPE_TAG)))
-			return SQ_ERROR; 
+			return SQ_ERROR;
 	}
 	//SQBlob *thisone = new SQBlob(other->Len());
 	SQBlob *thisone = new (sq_malloc(sizeof(SQBlob)))SQBlob(other->Len());

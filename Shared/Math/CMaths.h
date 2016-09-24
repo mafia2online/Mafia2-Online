@@ -11,8 +11,8 @@
 
 #include	<math.h>
 #include	<limits>
-#include	"CVector3.h"
-#include	"CQuaternion.h"
+#include "CVector3.h"
+#include "CQuaternion.h"
 
 #ifdef max
 #undef max

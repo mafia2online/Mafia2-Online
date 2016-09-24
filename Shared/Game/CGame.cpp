@@ -9,29 +9,29 @@
 *
 ***************************************************************/
 
-#include	"CGame.h"
-#include	"../CLogFile.h"
-#include	"../Math/CMaths.h"
-#include	"../SharedUtility.h"
+#include "CGame.h"
+#include "CLogFile.h"
+#include "Math/CMaths.h"
+#include "SharedUtility.h"
 
 static char * PlayerModels[][2] =
 {
 	// Player
-	{ "/sds/player/", "vitarmy" },		{ "/sds/player/", "vitksl" },		{ "/sds/player/", "vitksl2" },	
+	{ "/sds/player/", "vitarmy" },		{ "/sds/player/", "vitksl" },		{ "/sds/player/", "vitksl2" },
 	{ "/sds/player/", "vitnah_t" },		{ "/sds/player/", "vitod1" },		{ "/sds/player/", "vitod1neup" },
 	{ "/sds/player/", "vitod2" },		{ "/sds/player/", "vitol1" },		{ "/sds/player/", "vitol2" },
-	{ "/sds/player/", "vitoveral" },	{ "/sds/player/", "vitpra" },		{ "/sds/player/", "vitspo" },	
+	{ "/sds/player/", "vitoveral" },	{ "/sds/player/", "vitpra" },		{ "/sds/player/", "vitspo" },
 	{ "/sds/player/", "vittel" },		{ "/sds/player/", "vitukl" },		{ "/sds/player/", "vitukl_kn" },
 	{ "/sds/player/", "vitvez" },		{ "/sds/player/", "vitvop" },		{ "/sds/player/", "vitvov" },
 	{ "/sds/player/", "vitvov2i" },		{ "/sds/player/", "vitvov3" },
 
 	// Mission Characters
-	{ "/sds/hchar/", "albert" },		{ "/sds/hchar/", "brianc" },		{ "/sds/hchar/", "consig" },		
+	{ "/sds/hchar/", "albert" },		{ "/sds/hchar/", "brianc" },		{ "/sds/hchar/", "consig" },
 	{ "/sds/hchar/", "derek" },			{ "/sds/hchar/", "desmond" },		{ "/sds/hchar/", "joeoblf" },
 	{ "/sds/hchar/", "eddies" },		{ "/sds/hchar/", "franca" },		{ "/sds/hchar/", "frank" },
 	{ "/sds/hchar/", "joebryl" },		{ "/sds/hchar/", "joeciv" },		{ "/sds/hchar/", "joeneup" },
 	{ "/sds/hchar/", "joeobl" },		{ "/sds/hchar/", "leospo" },		{ "/sds/hchar/", "steve" },
-	{ "/sds/hchar/", "joeruka" },		{ "/sds/hchar/", "marty" },			
+	{ "/sds/hchar/", "joeruka" },		{ "/sds/hchar/", "marty" },
 
 	// Traffic
 	{ "/sds/traffic/", "cbarma" },		{ "/sds/traffic/", "cbarma2" },		{ "/sds/traffic/", "ccerb1" },
@@ -84,7 +84,7 @@ static char * PlayerModels[][2] =
 	//{ "/sds/police_char", "m11police" },{ "/sds/police_char", "m14china_pol" },{ "/sds/police_char", "police_char" }
 };
 
-static char * VehicleModels[] = 
+static char * VehicleModels[] =
 {
 	"ascot_baileys200_pha",			"berkley_kingfisher_pha",			"fuel_tank",
 	"gai_353_military_truck",		"hank_b",							"hank_fueltank",					"hot_rod_1",
@@ -103,29 +103,29 @@ static char * VehicleModels[] =
 	"walker_rocket",				"walter_coupe"
 };
 
-static char * VehicleWheelModels[] = 
+static char * VehicleWheelModels[] =
 {
 	"wheel_civ04",		"wheel_civ05",		"wheel_civ07",		"wheel_civ08",		"wheel_civ09",
 	"wheel_civ01",		"wheel_civ02",		"wheel_civ03",		"wheel_civ06",		"wheel_civ10",
 	"wheel_civ11",		"wheel_sport",		"wheel_jeep",		"wheel_hank_f",		"wheel_truckciv01",
-	"wheel_truckciv02",	
+	"wheel_truckciv02",
 };
 
-static char * WeaponName[] = 
+static char * WeaponName[] =
 {
 	"Model 12 Revolver", "Mauser C96", "Colt M1911A1", "Colt M1911 Special", "Model 19 Revolver", "MK2 Frag Grenade",
 	"Remington Model 870 Field gun", "M3 Grease Gun", "MP40", "	Thompson 1928", "M1A1 Thompson", "Beretta Model 38A",
 	"MG42", "M1 Garand", "Kar98k", "Molotov Cocktail"
 };
 
-static int WeaponNameID[] = 
+static int WeaponNameID[] =
 {
 	2, 3, 4, 5, 6, 7, 8, 9,
 	10, 11, 12, 13, 14, 15,
 	17, 21
 };
 
-static char * Doors[] = 
+static char * Doors[] =
 {
 	"GS_door",				"GS_door00",		"GS_door01",
 	"Wash_gate00",			"Wash_gate01",

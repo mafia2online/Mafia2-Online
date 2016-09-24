@@ -7,8 +7,11 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
-#include	"CCore.h"
+#include "StdInc.h"
+#include "CCore.h"
+
+#include "squirrel.h"
+#include "sqstdio.h"
 
 CMutex				webMutex;
 
@@ -90,6 +93,49 @@ CWebServer::~CWebServer( void )
 	}
 }
 
+void CompileScript_ErrorHandler( HSQUIRRELVM vm, const SQChar * desc, const SQChar * source, SQInteger line, SQInteger column )
+{
+	CLogFile::Printf( "ERROR: Failed to compile script '%s'. (Line: %d, Column: %d, Error: %s)", source, line, column, desc );
+}
+
+bool CompileScript( const char * szFile, const char * szFileOut )
+{
+	// Open a new squirrel vm
+	HSQUIRRELVM vm = sq_open( 1024 );
+
+	// Did the vm fail to open?
+	if( !vm )
+		return false;
+
+	// Set the script compile error handler
+	sq_setcompilererrorhandler( vm, CompileScript_ErrorHandler );
+
+	// Compile the source file
+	bool bFailed = SQ_FAILED( sqstd_loadfile( vm, szFile, SQTrue ) );
+
+	// Did the script fail to compile?
+	if( bFailed )
+	{
+		// Close the vm
+		sq_close( vm );
+		return false;
+	}
+
+	// Write the closure containing the compiled script
+	bFailed = SQ_FAILED( sqstd_writeclosuretofile( vm, szFileOut ) );
+
+	// Did the script fail to write the compiled script?
+	if( bFailed )
+	{
+		// Close the vm
+		sq_close( vm );
+		return false;
+	}
+
+	sq_close( vm );
+	return true;
+}
+
 bool CWebServer::FileCopy( String strDirectory, String strFileName, CFileChecksum * pChecksum, bool bIsScript )
 {
 	// Get the file location
@@ -119,7 +165,7 @@ bool CWebServer::FileCopy( String strDirectory, String strFileName, CFileChecksu
 		if( bIsScript )
 		{
 			// Compile the script
-			if( !SharedUtility::CompileScript( strFile.Get(), strWebServerFilePath.Get() ) )
+			if( !CompileScript( strFile.Get(), strWebServerFilePath.Get() ) )
 				return false;
 		}
 		else

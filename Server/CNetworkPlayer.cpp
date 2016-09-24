@@ -7,9 +7,9 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
+#include "StdInc.h"
 
-#include	"CCore.h"
+#include "CCore.h"
 
 // temp lol
 unsigned int playerColors[] = 

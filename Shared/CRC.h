@@ -10,11 +10,11 @@
 #pragma once
 
 #ifdef _LINUX
-#include	"Linux.h"
+#include "Linux.h"
 #endif
 
-#include	"CString.h"
-#include	"SharedUtility.h"
+#include "CString.h"
+#include "SharedUtility.h"
 
 #define	ADD_TEMPLATE(in, size) 			Add((unsigned char *)&in, size)
 

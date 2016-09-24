@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include	"CGUIElement_Impl.h"
+#include "CGUIElement_Impl.h"
 
 class CGUIWindow_Impl : public CGUIElement_Impl
 {

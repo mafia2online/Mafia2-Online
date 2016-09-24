@@ -21,6 +21,8 @@
 
 #include "CCore.h"
 
+#include "CLogFile.h"
+
 CKeyBind::CKeyBind( const char * szKey, const char * szState, SQVM * pVM, SQObjectPtr pFunction )
 {
 	// Initialise

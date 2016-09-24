@@ -7,26 +7,28 @@
 *
 ***************************************************************/
 
-#include	"BaseInc.h"
+#include "BaseInc.h"
 
-#include	"CCore.h"
+#include "CCore.h"
 
-#include	"CString.h"
-#include	"CScreenShot.h"
+#include "CString.h"
+#include "CScreenShot.h"
 
-#include	"SharedUtility.h"
+#include "SharedUtility.h"
 
-#include	"CChat.h"
-#include	"CM2Camera.h"
+#include "CChat.h"
+#include "CM2Camera.h"
 
-#include	"CColor.h"
+#include "CColor.h"
 
-#include	"../Libraries/lpng142/png.h"
+#include "png.h"
 
-#include	"Scripting\CSquirrelArguments.h"
+#include "Scripting/CSquirrelArguments.h"
 
-#include	"CClientScriptingManager.h"
-#include	"CEvents.h"
+#include "CClientScriptingManager.h"
+#include "CEvents.h"
+
+#include "CLogFile.h"
 
 const size_t	BYTES_PER_PIXEL			= 4;
 const D3DFORMAT SCREEN_SHOT_FORMAT		= D3DFMT_A8R8G8B8;

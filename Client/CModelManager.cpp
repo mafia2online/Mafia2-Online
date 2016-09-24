@@ -15,6 +15,8 @@
 
 #include "CIE.h"
 
+#include "CLogFile.h"
+
 CModelManager::CModelManager(void)
 	: m_modelManagers()
 {

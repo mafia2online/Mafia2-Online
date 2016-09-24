@@ -7,44 +7,44 @@
 *
 ***************************************************************/
 
-#include	"BaseInc.h"
+#include "BaseInc.h"
 
-#include	"CCore.h"
-#include	"CString.h"
-#include	"Math\CVector3.h"
+#include "CCore.h"
+#include "CString.h"
+#include "Math/CVector3.h"
 
-#include	"gui_impl\CGUI_Impl.h"
-#include	"gui_impl\CGUIElement_Impl.h"
-#include	"gui_impl\CGUIEdit_Impl.h"
-#include	"gui_impl\CGUIWindow_Impl.h"
-#include	"gui_impl\CGUIMessageBox_Impl.h"
-#include	"gui_impl\CGUITabPanel_Impl.h"
-#include	"gui_impl\CGUILabel_Impl.h"
-#include	"gui_impl\CGUIGridList_Impl.h"
-#include	"gui_impl\CGUIStaticImage_Impl.h"
-#include	"gui_impl\CGUIButton_Impl.h"
+#include "gui_impl/CGUI_Impl.h"
+#include "gui_impl/CGUIElement_Impl.h"
+#include "gui_impl/CGUIEdit_Impl.h"
+#include "gui_impl/CGUIWindow_Impl.h"
+#include "gui_impl/CGUIMessageBox_Impl.h"
+#include "gui_impl/CGUITabPanel_Impl.h"
+#include "gui_impl/CGUILabel_Impl.h"
+#include "gui_impl/CGUIGridList_Impl.h"
+#include "gui_impl/CGUIStaticImage_Impl.h"
+#include "gui_impl/CGUIButton_Impl.h"
 
-#include	"../Shared/CSettings.h"
+#include "CSettings.h"
 
-#include	"CGUI.h"
-#include	"CGUIEvent.h"
-#include	"CGUICallback.h"
-#include	"CMainMenu.h"
+#include "CGUI.h"
+#include "CGUIEvent.h"
+#include "CGUICallback.h"
+#include "CMainMenu.h"
 
-#include	"CServerList.h"
-#include	"CMasterList.h"
-#include	"CServerQuery.h"
-#include	"CServerPassword.h"
+#include "CServerList.h"
+#include "CMasterList.h"
+#include "CServerQuery.h"
+#include "CServerPassword.h"
 
-#include	"CNetworkModule.h"
+#include "CNetworkModule.h"
 
-#include	"CChat.h"
+#include "CChat.h"
 
-#include	"../Libraries/RakNet/Source/MessageIdentifiers.h"
+#include "MessageIdentifiers.h"
 
-#include	"SharedUtility.h"
+#include "SharedUtility.h"
 
-#include	"CServerBrowser.h"
+#include "CServerBrowser.h"
 
 bool CServerBrowser::Event_QuickConnectSubmitClick ( CGUIElement_Impl * pElement )
 {
@@ -286,7 +286,7 @@ void CServerBrowser::SetupUI( float fX, float fY, float fWidth, float fHeight )
 	// Create the locked image
 	m_pLockedImage = m_pGUI->CreateStaticImage();
 	m_pLockedImage->SetVisible( false );
-	m_pLockedImage->LoadFromFile( "locked.png", SharedUtility::GetAbsolutePath( "data\\gui\\images" ) );
+	m_pLockedImage->LoadFromFile( "locked.png", SharedUtility::GetAbsolutePath( "data//gui//images" ) );
 	m_pLockedImage->SetSize ( Vector2 ( 12, 12 ) );
 
 	// Create the tabs
@@ -637,12 +637,12 @@ void CServerBrowser::Refresh( void )
 	/*else if( type == ServerBrowserType::FAVOURITES )
 	{
 		// Refresh the favourites
-		RefreshFromFile( "data\\browser\\favourites.xml" );
+		RefreshFromFile( "data//browser//favourites.xml" );
 	}
 	else if( type == ServerBrowserType::HISTORY )
 	{
 		// Refresh the history
-		RefreshFromFile( "data\\browser\\history.xml" );
+		RefreshFromFile( "data//browser//history.xml" );
 	}*/
 }
 

@@ -7,9 +7,9 @@
 *
 ***************************************************************/
 
-#include	"BaseInc.h"
+#include "BaseInc.h"
 
-#include	"CIcon.h"
+#include "CIcon.h"
 
 CIcon::CIcon(EntityId iconId, int type, CVector3 pos, float renderDistance)
 {

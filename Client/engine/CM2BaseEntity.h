@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include	"../BaseInc.h"
+#include "BaseInc.h"
 
 class M2Entity;
 

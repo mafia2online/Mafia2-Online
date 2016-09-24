@@ -9,8 +9,8 @@
 
 #pragma once
 
-#include	"CDirectInput8Hook.h"
-#include	"CDirectInput8Proxy.h"
+#include "CDirectInput8Hook.h"
+#include "CDirectInput8Proxy.h"
 
 #define DIRECTINPUT_VERSION		0x0800
 

@@ -9,9 +9,9 @@
 
 #include	<list>
 
-#include	"StdInc.h"
+#include "StdInc.h"
 
-#include	"CFileTransferManager.h"
+#include "CFileTransferManager.h"
 
 void CFileTransferManager::WorkerThread(CThread * pCreator)
 {

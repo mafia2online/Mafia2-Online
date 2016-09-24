@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include	"Math\CVector3.h"
+#include "Math/CVector3.h"
 
 class CIcon
 {

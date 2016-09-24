@@ -7,17 +7,17 @@
 *
 ***************************************************************/
 
-#include	"BaseInc.h"
+#include "BaseInc.h"
 
-#include	"CCore.h"
+#include "CCore.h"
 
-#include	"Scripting\CScriptingManager.h"
-#include	"Scripting\CSquirrelCommon.h"
+#include "Scripting/CScriptingManager.h"
+#include "Scripting/CSquirrelCommon.h"
 
-#include	"CMafia.h"
-#include	"CM2Hud.h"
+#include "CMafia.h"
+#include "CM2Hud.h"
 
-#include	"CGameNatives.h"
+#include "CGameNatives.h"
 
 void CGameNatives::Register( CScriptingManager * pScriptingManager )
 {

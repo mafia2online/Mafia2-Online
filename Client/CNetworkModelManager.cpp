@@ -7,14 +7,14 @@
 *
 ***************************************************************/
 
-#include	"BaseInc.h"
+#include "BaseInc.h"
 
-#include	"CCore.h"
+#include "CCore.h"
 
-#include	"engine\CM2ModelManager.h"
-#include	"CModelManager.h"
+#include "engine/CM2ModelManager.h"
+#include "CModelManager.h"
 
-#include	"CNetworkModelManager.h"
+#include "CNetworkModelManager.h"
 
 std::list< CNetworkModel* > CNetworkModelManager::m_loadedModels;
 

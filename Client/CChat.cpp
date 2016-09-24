@@ -7,7 +7,7 @@
 *
 ***************************************************************/
 
-#include	"BaseInc.h"
+#include "BaseInc.h"
 #include	<math.h>
 
 #include "CCore.h"
@@ -17,7 +17,7 @@
 #include "CGUICallback.h"
 #include "CGUIEvent.h"
 #include "CGUI.h"
-#include "gui_impl\CGUI_Impl.h"
+#include "gui_impl/CGUI_Impl.h"
 
 #include "CGraphics.h"
 #include "CMainMenu.h"
@@ -32,14 +32,14 @@
 #include "CNetworkModule.h"
 
 #include "BitStream.h"
-#include "../Libraries/RakNet/Source/PacketPriority.h"
-#include "../Shared/CNetworkRPC.h"
+#include "PacketPriority.h"
+#include "Network/NetRPCs.h"
 
 #include "SharedUtility.h"
 
 #include "CClientScriptingManager.h"
 #include "CEvents.h"
-#include "Scripting\CSquirrelArguments.h"
+#include "Scripting/CSquirrelArguments.h"
 
 #include "CM2Camera.h"
 

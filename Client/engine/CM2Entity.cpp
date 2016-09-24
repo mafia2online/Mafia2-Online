@@ -9,7 +9,7 @@
 
 #include "BaseInc.h"
 
-#include "../COffsets.h"
+#include "COffsets.h"
 
 #include "Math/CVector3.h"
 #include "Math/CQuaternion.h"

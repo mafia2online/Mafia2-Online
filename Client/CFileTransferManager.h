@@ -9,16 +9,16 @@
 
 #pragma once
 
-#include	"CCore.h"
+#include "CCore.h"
 
-#include	"CGUI.h"
-#include	"CDownloadProgress.h"
-#include	"CMafia.h"
-#include	"CClientScriptingManager.h"
+#include "CGUI.h"
+#include "CDownloadProgress.h"
+#include "CMafia.h"
+#include "CClientScriptingManager.h"
 
-#include	"../Shared/Threading/CThread.h"
+#include "Threading/CThread.h"
 
-#include	"CFileTransfer.h"
+#include "CFileTransfer.h"
 
 class CFileTransferManager
 {

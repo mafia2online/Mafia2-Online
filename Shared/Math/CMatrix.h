@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include	"CVector3.h"
+#include "CVector3.h"
 
 #ifdef _WIN32
 #include <windows.h>

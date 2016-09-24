@@ -11,6 +11,10 @@
 
 #include "CM2Door.h"
 
+#include "COffsets.h"
+
+#include "CLogFile.h"
+
 void CM2Door::Open( CVector3 * pvPosition )
 {
 	__asm

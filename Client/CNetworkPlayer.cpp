@@ -7,40 +7,42 @@
 *
 ***************************************************************/
 
-#include	"BaseInc.h"
+#include "BaseInc.h"
 
-#include	"CCore.h"
+#include "CCore.h"
 
-#include	"Math\CVector3.h"
-#include	"Math\CQuaternion.h"
-#include	"Math\CMaths.h"
+#include "Math/CVector3.h"
+#include "Math/CQuaternion.h"
+#include "Math/CMaths.h"
 
-#include	"CM2Enums.h"
-#include	"engine\CM2ModelManager.h"
-#include	"engine\CM2Entity.h"
-#include	"engine\CM2Ped.h"
-#include	"engine\CM2Vehicle.h"
-#include	"engine\CM2Navigation.h"
-#include	"CM2SyncObject.h"
+#include "CM2Enums.h"
+#include "engine/CM2ModelManager.h"
+#include "engine/CM2Entity.h"
+#include "engine/CM2Ped.h"
+#include "engine/CM2Vehicle.h"
+#include "engine/CM2Navigation.h"
+#include "CM2SyncObject.h"
 
-#include	"CMafia.h"
-#include	"Game\CGame.h"
+#include "CMafia.h"
+#include "Game/CGame.h"
 
-#include	"CBlip.h"
+#include "CBlip.h"
 
-#include	"CIE.h"
+#include "CIE.h"
 
-#include	"CModelManager.h"
-#include	"CNetworkModelManager.h"
+#include "CModelManager.h"
+#include "CNetworkModelManager.h"
 
-#include	"CNetworkVehicle.h"
+#include "CNetworkVehicle.h"
 
-#include	"CPlayerManager.h"
-#include	"CLocalPlayer.h"
+#include "CPlayerManager.h"
+#include "CLocalPlayer.h"
 
-#include	"SharedUtility.h"
+#include "SharedUtility.h"
 
-#include	"CNetworkPlayer.h"
+#include "CNetworkPlayer.h"
+
+#include "CLogFile.h"
 
 CNetworkPlayer::CNetworkPlayer( bool bLocalPlayer )
 {

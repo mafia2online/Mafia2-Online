@@ -9,9 +9,9 @@
 
 #pragma once
 
-#include	"../Shared/Network/CHttpClient.h"
+#include "Network/CHttpClient.h"
 
-#include	"CRC.h"
+#include "CRC.h"
 
 class CFileTransfer
 {

@@ -7,40 +7,42 @@
 *
 ***************************************************************/
 
-#include	"../BaseInc.h"
+#include "BaseInc.h"
 
-#include	"../CCore.h"
+#include "CCore.h"
 
-#include	"../CGUI.h"
-#include	"../../Shared/CString.h"
-#include	"../../Shared/Math/CVector3.h"
+#include "CLogFile.h"
 
-#include	"../CGUICallback.h"
-#include	"../CGUIEvent.h"
+#include "CGUI.h"
+#include "CString.h"
+#include "Math/CVector3.h"
 
-#include	"CGUIElement_Impl.h"
-#include	"CGUIFont_Impl.h"
-#include	"CGUIButton_Impl.h"
-#include	"CGUICheckBox_Impl.h"
-#include	"CGUIComboBox_Impl.h"
-#include	"CGUIEdit_Impl.h"
-#include	"CGUIGridList_Impl.h"
-#include	"CGUILabel_Impl.h"
-#include	"CGUIListItem_Impl.h"
-#include	"CGUIMessageBox_Impl.h"
-#include	"CGUIProgressBar_Impl.h"
-#include	"CGUIRadioButton_Impl.h"
-#include	"CGUIScrollBar_Impl.h"
-#include	"CGUIScrollPane_Impl.h"
-#include	"CGUIStaticImage_Impl.h"
-#include	"CGUITab_Impl.h"
-#include	"CGUITabPanel_Impl.h"
-#include	"CGUITexture_Impl.h"
-#include	"CGUIWindow_Impl.h"
+#include "CGUICallback.h"
+#include "CGUIEvent.h"
 
-#include	"../../Shared/SharedUtility.h"
+#include "CGUIElement_Impl.h"
+#include "CGUIFont_Impl.h"
+#include "CGUIButton_Impl.h"
+#include "CGUICheckBox_Impl.h"
+#include "CGUIComboBox_Impl.h"
+#include "CGUIEdit_Impl.h"
+#include "CGUIGridList_Impl.h"
+#include "CGUILabel_Impl.h"
+#include "CGUIListItem_Impl.h"
+#include "CGUIMessageBox_Impl.h"
+#include "CGUIProgressBar_Impl.h"
+#include "CGUIRadioButton_Impl.h"
+#include "CGUIScrollBar_Impl.h"
+#include "CGUIScrollPane_Impl.h"
+#include "CGUIStaticImage_Impl.h"
+#include "CGUITab_Impl.h"
+#include "CGUITabPanel_Impl.h"
+#include "CGUITexture_Impl.h"
+#include "CGUIWindow_Impl.h"
 
-#include	"CGUI_Impl.h"
+#include "SharedUtility.h"
+
+#include "CGUI_Impl.h"
 
 CGUI_Impl::CGUI_Impl( IDirect3DDevice9 * pDevice )
 	: m_pDevice(nullptr)

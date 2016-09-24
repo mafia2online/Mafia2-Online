@@ -16,6 +16,8 @@
 
 #include "CLua.h"
 
+#include "CLogFile.h"
+
 CM2HudTimer::CM2HudTimer( M2HudTimer * pHudTimer )
 {
 #ifdef _DEBUG
@@ -115,7 +117,7 @@ bool CM2HudTimer::IsStopped( void )
 	// Is the hud timer instance valid?
 	if( m_pHudTimer )
 		return m_pHudTimer->m_bIsStopped;
-	
+
 	return false;
 }
 
@@ -364,7 +366,7 @@ void CM2Hud::ShowMessage(int position, int showMode, const char * text, float de
 	Pos 1 : bottom left corner
 	Pos 2 : Just beside the radar
 	Pos 3 : Center of the screen
-	
+
 	Mode 0 : Grey
 	Mode 1 : Red/Yellow
 	Mode 2 : Blue
@@ -390,7 +392,7 @@ void CM2Hud::ShowMessage(int position, int showMode, const char * text, float de
 			call dwFunc;
 		}
 
-		
+
 		/*DWORD dwFunc = 0x8CC740;
 
 		__asm

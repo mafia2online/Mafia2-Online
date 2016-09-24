@@ -11,6 +11,8 @@
 
 #include "CM2VideoSettings.h"
 
+#include "CLogFile.h"
+
 bool						CM2VideoSettings::m_bChangeResolution = false;
 bool						CM2VideoSettings::m_bChangeFullScreen = false;
 bool						CM2VideoSettings::m_bChangeVerticalSync = false;
@@ -83,7 +85,7 @@ void CM2VideoSettings::Pulse ( void )
 
 		CLogFile::Print ( "Done!" );
 	}
-	
+
 	if ( m_bChangeVerticalSync )
 	{
 		DWORD FUNC_C_SystemRenderingModule__Singleton = 0xB2CBA0;

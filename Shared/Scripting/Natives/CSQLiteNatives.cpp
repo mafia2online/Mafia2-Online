@@ -7,17 +7,12 @@
 *
 ***************************************************************/
 
-#include	"CSQLiteNatives.h"
-#include	"../../CSQLite.h"
-#include	"../../SharedUtility.h"
+#include "CSQLiteNatives.h"
+#include "CSQLite.h"
+#include "SharedUtility.h"
 
-#ifdef _CLIENT
-#include	"../../../Client/StdInc.h"
-#include	"../../../Client/CCore.h"
-#else
-#include	"../../../Server/StdInc.h"
-#include	"../../../Server/CCore.h"
-#endif
+#include "StdInc.h"
+#include "CCore.h"
 
 _MEMBER_FUNCTION_IMPL(sqlite, constructor);
 _MEMBER_FUNCTION_IMPL(sqlite, query);

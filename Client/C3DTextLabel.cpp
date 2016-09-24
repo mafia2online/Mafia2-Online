@@ -7,14 +7,14 @@
 *
 ***************************************************************/
 
-#include	"BaseInc.h"
+#include "BaseInc.h"
 
-#include	"CCore.h"
+#include "CCore.h"
 
-#include	"CString.h"
-#include	"Math\CVector3.h"
+#include "CString.h"
+#include "Math/CVector3.h"
 
-#include	"C3DTextLabel.h"
+#include "C3DTextLabel.h"
 
 C3DTextLabel::C3DTextLabel(EntityId serverID, float fX, float fY, float fZ, String text, int color, float distance)
 {
@@ -37,7 +37,7 @@ CVector3	* C3DTextLabel::GetPosition(CVector3 * pos)
 	pos->fX = m_fX;
 	pos->fY = m_fY;
 	pos->fZ = m_fZ;
-	
+
 	return (pos);
 }
 

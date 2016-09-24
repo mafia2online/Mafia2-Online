@@ -33,6 +33,8 @@
 
 #include "CM2EntityMessage.h"
 
+#include "CLogFile.h"
+
 sub_410440				CPatches::onGameInit = NULL;
 onGameEvent_t			CPatches::onGameEvent = NULL;
 ProcessEntities_t		CPatches::processEntities = NULL;
@@ -55,7 +57,7 @@ DWORD sub_98B630_edx = 0x0;
 //  0x98BF90 = Passenger exit
 void __declspec( naked ) sub_98B630( void )
 {
-	_asm 
+	_asm
 	{
 		mov eax, [ecx+0A0h]
 		mov pPed, eax
@@ -512,7 +514,7 @@ static bool IsLocalPlayerWeapon ( M2WeaponData * pWeaponData )
 	CLocalPlayer *pLocalPlayer = CLocalPlayer::Instance();
 	if ( !pLocalPlayer )
 		return false;
-	
+
 	CM2Ped *pPed = pLocalPlayer->GetPlayerPed();
 	if ( !pPed )
 		return false;

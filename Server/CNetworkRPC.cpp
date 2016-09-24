@@ -7,8 +7,8 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
-#include	"CCore.h"
+#include "StdInc.h"
+#include "CCore.h"
 
 bool	CNetworkRPC::m_bRegistered = false;
 RakNet::BitStream		bsReject;

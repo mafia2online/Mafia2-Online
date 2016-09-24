@@ -8,8 +8,8 @@
 *
 *****************************************************************************/
 
-#include	"CLogFile.h"
-#include	"SharedUtility.h"
+#include "CLogFile.h"
+#include "SharedUtility.h"
 
 #ifdef _WIN32
 #include	<windows.h>

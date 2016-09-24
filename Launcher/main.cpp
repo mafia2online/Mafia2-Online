@@ -8,12 +8,15 @@
 ***************************************************************/
 
 #include "StdInc.h"
+
+#include "CLogFile.h"
+
 #pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 
 #ifdef _DEBUG
 #define CORE_MODULE	"m2online.dll"
 #else
-#define	CORE_MODULE	"m2online.dll" 
+#define	CORE_MODULE	"m2online.dll"
 #endif
 
 #define BASS_MODULE "bass.dll"

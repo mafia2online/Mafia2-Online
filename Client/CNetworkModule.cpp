@@ -7,30 +7,30 @@
 *
 ***************************************************************/
 
-#include	"BaseInc.h"
+#include "BaseInc.h"
 
-#include	"CCore.h"
+#include "CCore.h"
 
 #include	<RPC4Plugin.h>
-#include	"RakPeerInterface.h"
-#include	"CNetworkRPC.h"
-#include	"CScriptingRPC.h"
+#include "RakPeerInterface.h"
+#include "CNetworkRPC.h"
+#include "CScriptingRPC.h"
 
-#include	"SharedUtility.h"
+#include "SharedUtility.h"
 
-#include	"CChat.h"
+#include "CChat.h"
 
-#include	"CPlayerManager.h"
-#include	"CVehicleManager.h"
+#include "CPlayerManager.h"
+#include "CVehicleManager.h"
 
-#include	"CGUI.h"
-#include	"CServerBrowser.h"
+#include "CGUI.h"
+#include "CServerBrowser.h"
 
-#include	"../Shared/CNetworkRPC.h"
+#include "Network/NetRPCs.h"
 
-#include	"../Libraries/RakNet/Source/MessageIdentifiers.h"
+#include "MessageIdentifiers.h"
 
-#include	"CNetworkModule.h"
+#include "CNetworkModule.h"
 
 RakNet::RPC4			* CNetworkModule::m_pRPC = NULL;
 

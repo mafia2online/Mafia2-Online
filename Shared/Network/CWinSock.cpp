@@ -12,13 +12,13 @@
 #include <winsock.h>
 typedef int socklen_t;
 #else
-#include "../Linux.h"
+#include "Linux.h"
 #include <unistd.h>
 #include <pthread.h>
 #include <string.h>
 #endif
 
-#include "../CString.h"
+#include "CString.h"
 #include "CWinSock.h"
 
 CWinSock::CWinSock( )

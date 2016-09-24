@@ -9,9 +9,9 @@
 
 #pragma once
 
-#include	"CNetworkPlayer.h"
-#include	"CNetworkVehicle.h"
-#include	"CPed.h"
+#include "CNetworkPlayer.h"
+#include "CNetworkVehicle.h"
+#include "CPed.h"
 
 class CBlip
 {

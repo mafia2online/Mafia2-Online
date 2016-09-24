@@ -7,14 +7,14 @@
 *
 ***************************************************************/
 
-#include	"BaseInc.h"
-#include	<iostream>
-#include	<algorithm>
+#include "BaseInc.h"
+#include <iostream>
+#include <algorithm>
 
 #include <map>
 
 #include "CString.h"
-#include "Math\CVector3.h"
+#include "Math/CVector3.h"
 
 #include "CCore.h"
 #include "CGraphics.h"
@@ -32,6 +32,8 @@
 #include "CIE.h"
 
 #include "SharedUtility.h"
+
+#include "CLogFile.h"
 
 const unsigned char g_szPixel [] = { 0x42, 0x4D, 0x3A, 0, 0, 0, 0, 0, 0, 0, 0x36, 0, 0, 0, 0x28, 0, 0,
                                     0, 0x1, 0, 0, 0, 0x1, 0, 0, 0, 0x1, 0, 0x18, 0, 0, 0, 0, 0,

@@ -12,13 +12,13 @@
 #include	<map>
 #include	<list>
 
-#include	"../Libraries/squirrel/squirrel.h"
-#include	"../Libraries/squirrel/sqvm.h"
+#include "squirrel.h"
+#include "sqvm.h"
 
-#include	"../Shared/Scripting/CSquirrel.h"
-#include	"../Shared/Scripting/CSquirrelArguments.h"
-#include	"../Shared/Scripting/CScriptingManager.h"
-#include	"../Shared/Scripting/CSquirrelCommon.h"
+#include "Scripting/CSquirrel.h"
+#include "Scripting/CSquirrelArguments.h"
+#include "Scripting/CScriptingManager.h"
+#include "Scripting/CSquirrelCommon.h"
 
 class CEventHandler
 {
@@ -134,7 +134,7 @@ public:
 		// Was the event found?
 		if( iter != end() )
 		{
-			// 
+			//
 			bool bRemoved = false;
 
 			// Loop all event handlers

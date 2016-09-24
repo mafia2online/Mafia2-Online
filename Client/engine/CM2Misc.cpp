@@ -16,6 +16,8 @@
 
 #include "CM2Misc.h"
 
+#include "CLogFile.h"
+
 typedef C_TrafficModelDescriptor * ( __thiscall * CTrafficModelDesc__constructor_t )( void *, void *, int, char * );
 CTrafficModelDesc__constructor_t CTrafficModelDesc__constructor = ( CTrafficModelDesc__constructor_t )( 0x00A16980 );
 
@@ -43,10 +45,10 @@ C_TrafficModelDescriptor * LoadHumanModel( char * szModelFileName )
 	if( !CTrafficModelDesc__LoadModel( pDescriptor, szModelFileName ) )
 	{
 		CLogFile::Printf( "[ERROR] - CTrafficModelDesc__LoadModel - Failed to load model '%s'.", szModelFileName );
-		
+
 		// Delete the descriptor memory
 		SAFE_DELETE( pDescriptor );
-		
+
 		return NULL;
 	}
 

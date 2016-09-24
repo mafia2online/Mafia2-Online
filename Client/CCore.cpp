@@ -7,84 +7,86 @@
 *
 ***************************************************************/
 
-#include	"BaseInc.h"
-#include	<ShellAPI.h>
+#include "BaseInc.h"
+#include <ShellAPI.h>
 
-#include	"Scripting\CSquirrelArguments.h"
+#include "Scripting/CSquirrelArguments.h"
 
-#include	"CString.h"
+#include "CString.h"
 
-#include	"SharedUtility.h"
+#include "SharedUtility.h"
 
-#include	"CRC.h"
+#include "CRC.h"
 
-#include	"CGameFiles.h"
-#include	"CSettings.h"
+#include "CGameFiles.h"
+#include "CSettings.h"
 
-#include	"CMafia.h"
-#include	"CCommands.h"
-#include	"CEvents.h"
-#include	"CGraphics.h"
-#include	"CStreamer.h"
-#include	"CFPSCounter.h"
-#include	"CLua.h"
-#include	"CModelManager.h"
-#include	"CM2Camera.h"
+#include "CMafia.h"
+#include "CCommands.h"
+#include "CEvents.h"
+#include "CGraphics.h"
+#include "CStreamer.h"
+#include "CFPSCounter.h"
+#include "CLua.h"
+#include "CModelManager.h"
+#include "CM2Camera.h"
 
-#include	"CNetworkModule.h"
-#include	"CIE.h"
-#include	"CM2Hud.h"
+#include "CNetworkModule.h"
+#include "CIE.h"
+#include "CM2Hud.h"
 
-#include	"CLoadingScreen.h"
-#include	"CChat.h"
+#include "CLoadingScreen.h"
+#include "CChat.h"
 
-#include	"CGUI.h"
-#include	"CEGUI.h"
-#include	"CDirect3D9Hook.h"
-#include	"CDirectInput8Hook.h"
-#include	"gui_impl\CGUI_Impl.h"
+#include "CGUI.h"
+#include "CEGUI.h"
+#include "CDirect3D9Hook.h"
+#include "CDirectInput8Hook.h"
+#include "gui_impl/CGUI_Impl.h"
 
-#include	"CMainMenu.h"
-#include	"CServerBrowser.h"
-#include	"CMenuSettings.h"
+#include "CMainMenu.h"
+#include "CServerBrowser.h"
+#include "CMenuSettings.h"
 
-#include	"CAudioManager.h"
+#include "CAudioManager.h"
 
-#include	"CM2VideoSettings.h"
+#include "CM2VideoSettings.h"
 
-#include	"CClientScriptingManager.h"
+#include "CClientScriptingManager.h"
 
-#include	"CVehicleManager.h"
+#include "CVehicleManager.h"
 
-#include	"CPedManager.h"
+#include "CPedManager.h"
 
-#include	"COffsets.h"
-#include	"CPatcher.h"
-#include	"CPatches.h"
+#include "COffsets.h"
+#include "CPatcher.h"
+#include "CPatches.h"
 
-#include	"CScreenShot.h"
+#include "CScreenShot.h"
 
-#include	"CNameTag.h"
-#include	"../Shared/Network/CNetworkStats.h"
+#include "CNameTag.h"
+#include "Network/CNetworkStats.h"
 
-#include	"CPlayerManager.h"
-#include	"CVehicleManager.h"
-#include	"CLocalPlayer.h"
+#include "CPlayerManager.h"
+#include "CVehicleManager.h"
+#include "CLocalPlayer.h"
 
-#include	"engine\CM2Entity.h"
-#include	"engine\CM2Ped.h"
+#include "engine/CM2Entity.h"
+#include "engine/CM2Ped.h"
 
-#include	"Timers\CTimerManager.h"
-#include	"CFileTransferManager.h"
+#include "Timers/CTimerManager.h"
+#include "CFileTransferManager.h"
 
-#include	"C3DTextLabelManager.h"
-#include	"CKeyBinds.h"
-#include	"CModelManager.h"
-#include	"CBlipManager.h"
+#include "C3DTextLabelManager.h"
+#include "CKeyBinds.h"
+#include "CModelManager.h"
+#include "CBlipManager.h"
 
-#include	"CNetworkModelManager.h"
+#include "CNetworkModelManager.h"
 
-#include	"CCore.h"
+#include "CCore.h"
+
+#include "CLogFile.h"
 
 IDirect3DStateBlock9	* pStateBlock = nullptr;
 CSquirrelArguments		pArguments;

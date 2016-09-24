@@ -10,8 +10,8 @@
 #ifndef CAUDIO_H
 #define CAUDIO_H
 
-#include	"CString.h"
-#include	"Math\CVector3.h"
+#include "CString.h"
+#include "Math/CVector3.h"
 
 class String;
 class CVector3;

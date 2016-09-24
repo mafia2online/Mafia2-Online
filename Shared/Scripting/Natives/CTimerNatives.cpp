@@ -7,32 +7,32 @@
 *
 ***************************************************************/
 
-#include	"CTimerNatives.h"
-#include	"../../Timers/CTimerManager.h"
-#include	"../../Timers/CTimer.h"
+#include "CTimerNatives.h"
+#include "Timers/CTimerManager.h"
+#include "Timers/CTimer.h"
 
 #ifdef _CLIENT
-#include	"../../../Client/BaseInc.h"
-#include	"../../../Client/CCore.h"
-#include	"../../../Client/CClientScriptingManager.h"
-#include	"../../../Client/CClientScriptGUIManager.h"
-#include	"../../../Client/CVehicleManager.h"
-#include	"../../../Client/CNetworkVehicle.h"
-#include	"../../../Client/CPlayerManager.h"
-#include	"../../../Client/CNetworkPlayer.h"
+#include "BaseInc.h"
+#include "CCore.h"
+#include "CClientScriptingManager.h"
+#include "CClientScriptGUIManager.h"
+#include "CVehicleManager.h"
+#include "CNetworkVehicle.h"
+#include "CPlayerManager.h"
+#include "CNetworkPlayer.h"
 #else
-#include	"../../../Server/StdInc.h"
+#include "StdInc.h"
 #endif
 
-#include	"../../../Shared/CString.h"
-#include	"../../../Shared/CEvents.h"
-#include	"../../../Shared/CCommands.h"
-#include	"../../../Shared/Scripting/CSquirrelCommon.h"
-#include	"../../../Shared/SharedUtility.h"
+#include "CString.h"
+#include "CEvents.h"
+#include "CCommands.h"
+#include "Scripting/CSquirrelCommon.h"
+#include "SharedUtility.h"
 
-#include	"../../../Shared/Math/CMaths.h"
-#include	"../../../Shared/Math/CVector3.h"
-#include	"../../../Shared/CColor.h"
+#include "Math/CMaths.h"
+#include "Math/CVector3.h"
+#include "CColor.h"
 
 _MEMBER_FUNCTION_IMPL(timer, constructor);
 _MEMBER_FUNCTION_IMPL(timer, IsActive);

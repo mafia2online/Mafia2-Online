@@ -7,9 +7,9 @@
 *
 ***************************************************************/
 
-#include	"CServerNatives.h"
+#include "CServerNatives.h"
 
-#include	"CCore.h"
+#include "CCore.h"
 
 void CServerNatives::Register( CScriptingManager * pScriptingManager )
 {

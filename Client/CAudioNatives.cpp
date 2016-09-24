@@ -7,20 +7,22 @@
 *
 ***************************************************************/
 
-#include	"BaseInc.h"
+#include "BaseInc.h"
 
-#include	"CCore.h"
+#include "CCore.h"
 
-#include	"CAudio.h"
-#include	"CAudioManager.h"
+#include "CAudio.h"
+#include "CAudioManager.h"
 
-#include	"Scripting\CSquirrel.h"
-#include	"Scripting\CSquirrelCommon.h"
-#include	"Scripting\CScriptingManager.h"
+#include "Scripting/CSquirrel.h"
+#include "Scripting/CSquirrelCommon.h"
+#include "Scripting/CScriptingManager.h"
 
-#include	"SharedUtility.h"
+#include "CLogFile.h"
 
-#include	"CAudioNatives.h"
+#include "SharedUtility.h"
+
+#include "CAudioNatives.h"
 _MEMBER_FUNCTION_IMPL(Audio, constructor);
 _MEMBER_FUNCTION_IMPL(Audio, deleteSound);
 _MEMBER_FUNCTION_IMPL(Audio, play);

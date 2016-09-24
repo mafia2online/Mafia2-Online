@@ -7,7 +7,7 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
+#include "StdInc.h"
 
 CModuleManager::CModuleManager( void )
 {

@@ -11,8 +11,8 @@
 
 #include	<thread>
 
-#include	"CServerList.h"
-#include	"Network\CHttpClient.h"
+#include "CServerList.h"
+#include "Network/CHttpClient.h"
 
 enum eRefreshType
 {

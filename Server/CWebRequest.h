@@ -10,7 +10,7 @@
 #pragma once
 
 #include	<thread>
-#include	"../Shared/Network/CHttpClient.h"
+#include "Network/CHttpClient.h"
 
 struct SWebRequest
 {

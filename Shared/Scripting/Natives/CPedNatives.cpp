@@ -7,25 +7,21 @@
 *
 ***************************************************************/
 
-#pragma once
+#include "Scripting/CScriptingManager.h"
 
-#include	"CPedNatives.h"
-#include	"../../Math/CMaths.h"
-#include	"../CSquirrelCommon.h"
+#include "CPedNatives.h"
+#include "Math/CMaths.h"
+#include "Scripting/CSquirrelCommon.h"
 
-#ifdef _CLIENT
-#include	"../../../Client/BaseInc.h"
-#include	"../../../Client/CCore.h"
-#include	"../../../Client/CClientScriptingManager.h"
-#include	"../../../Client/CClientScriptGUIManager.h"
-#include	"../../../Client/CPedManager.h"
-#else
-#include	"../../../Server/StdInc.h"
-#endif
+#include "CLogFile.h"
 
-#include	"../../../Shared/CEvents.h"
-#include	"../../../Shared/CCommands.h"
-#include	"../../../Shared/Scripting/CSquirrelCommon.h"
+#include "BaseInc.h"
+#include "CCore.h"
+
+#include "CPedManager.h"
+
+#include "CEvents.h"
+#include "CCommands.h"
 
 void CPedNatives::Register( CScriptingManager * pScriptingManager )
 {
@@ -175,7 +171,7 @@ SQInteger CPedNatives::GetPedPosition(SQVM *pVM)
 	if (CCore::Instance()->GetPedManager()->IsActive(pedId) && CCore::Instance()->GetPedManager()->Get(pedId) != NULL)
 	{
 		CVector3 pos;
-		
+
 		// Get the position
 		CCore::Instance()->GetPedManager()->Get(pedId)->GetPed()->GetPosition(&pos);
 

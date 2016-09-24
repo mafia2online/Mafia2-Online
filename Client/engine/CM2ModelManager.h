@@ -10,9 +10,9 @@
 
 #pragma once
 
-#include	"../BaseInc.h"
-#include	"CM2Slot.h"
-#include	"CM2SlotManager.h"
+#include "BaseInc.h"
+#include "CM2Slot.h"
+#include "CM2SlotManager.h"
 
 class M2Slot;
 class M2Entity;

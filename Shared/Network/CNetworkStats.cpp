@@ -7,23 +7,19 @@
 *
 ***************************************************************/
 
-#include	"../SharedUtility.h"
-#include	"CNetworkStats.h"
+#include "SharedUtility.h"
+#include "CNetworkStats.h"
 
-#include	"../../Libraries/RakNet/Source/RPC4Plugin.h"
-#include	"../../Libraries/RakNet/Source/RakNetStatistics.h"
-#include	"../../Libraries/RakNet/Source/GetTime.h"
-#include	"../../Libraries/RakNet/Source/RakPeerInterface.h"
+#include "RPC4Plugin.h"
+#include "RakNetStatistics.h"
+#include "GetTime.h"
+#include "RakPeerInterface.h"
 
-#ifdef _CLIENT
-#include	"../../Client/BaseInc.h"
-#include	"../../Client/CCore.h"
-#include	"../../Client/CNetworkModule.h"
-#else
-#include	"../../Client/BaseInc.h"
-#include	"../../Server/CCore.h"
-#include	"../../Server/CNetworkModule.h"
-#endif
+#include "BaseInc.h"
+#include "CCore.h"
+#include "CNetworkModule.h"
+
+#include "CLogFile.h"
 
 #ifdef _CLIENT
 void CNetworkStats::GetStats( CNetStats * netStats )

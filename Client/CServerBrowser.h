@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include	"CServerPassword.h"
+#include "CServerPassword.h"
 #include	<MessageIdentifiers.h>
 
 

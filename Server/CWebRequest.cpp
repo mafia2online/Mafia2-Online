@@ -7,10 +7,10 @@
 *
 ***************************************************************/
 #include	<thread>
-#include	"StdInc.h"
-#include	"CCore.h"
+#include "StdInc.h"
+#include "CCore.h"
 
-#include	"CWebRequest.h"
+#include "CWebRequest.h"
 
 void CWebRequest::WorkerThread()
 {

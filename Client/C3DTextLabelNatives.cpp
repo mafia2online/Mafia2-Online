@@ -7,18 +7,18 @@
 *
 ***************************************************************/
 
-#include	"BaseInc.h"
+#include "BaseInc.h"
 
-#include	"CCore.h"
+#include "CCore.h"
 
-#include	"Math\CVector3.h"
+#include "Math/CVector3.h"
 
-#include	"C3DTextLabel.h"
-#include	"C3DTextLabelManager.h"
+#include "C3DTextLabel.h"
+#include "C3DTextLabelManager.h"
 
-#include	"Scripting\CScriptingManager.h"
+#include "Scripting/CScriptingManager.h"
 
-#include	"C3DTextLabelNatives.h"
+#include "C3DTextLabelNatives.h"
 
 void C3DTextLabelNatives::Register(CScriptingManager * pScriptingManager)
 {

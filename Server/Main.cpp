@@ -12,7 +12,7 @@
 #include	<atomic>
 #include	<iostream>
 
-#include	"StdInc.h"
+#include "StdInc.h"
 
 CCore					* pCore = NULL;
 std::mutex				m_inputMutex;

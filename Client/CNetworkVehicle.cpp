@@ -7,54 +7,56 @@
 *
 ***************************************************************/
 
-#include	"BaseInc.h"
+#include "BaseInc.h"
 
-#include	"CCore.h"
+#include "CCore.h"
 
-#include	"CString.h"
-#include	"Math\CMaths.h"
-#include	"CColor.h"
-#include	"Math\CQuaternion.h"
-#include	"Math\CVector3.h"
+#include "CString.h"
+#include "Math/CMaths.h"
+#include "CColor.h"
+#include "Math/CQuaternion.h"
+#include "Math/CVector3.h"
 
-#include	"Game\CGame.h"
-#include	"CMafia.h"
+#include "Game/CGame.h"
+#include "CMafia.h"
 
-#include	"CSync.h"
+#include "CSync.h"
 
-#include	"CBlip.h"
+#include "CBlip.h"
 
-#include	"engine\CM2Entity.h"
-#include	"engine\CM2Ped.h"
-#include	"engine\CM2Vehicle.h"
+#include "engine/CM2Entity.h"
+#include "engine/CM2Ped.h"
+#include "engine/CM2Vehicle.h"
 
-#include	"CModelManager.h"
-#include	"CNetworkModelManager.h"
-#include	"CIE.h"
+#include "CModelManager.h"
+#include "CNetworkModelManager.h"
+#include "CIE.h"
 
-#include	"CNetworkModule.h"
+#include "CNetworkModule.h"
 
-#include	"../Shared/CNetworkRPC.h"
+#include "Network/NetRPCs.h"
 
-#include	"PacketPriority.h"
+#include "PacketPriority.h"
 
-#include	"SharedUtility.h"
+#include "SharedUtility.h"
 
-#include	"CPlayerManager.h"
-#include	"CLocalPlayer.h"
-#include	"CNetworkPlayer.h"
-#include	"CRemotePlayer.h"
+#include "CPlayerManager.h"
+#include "CLocalPlayer.h"
+#include "CNetworkPlayer.h"
+#include "CRemotePlayer.h"
 
-#include	"CClientScriptGUIManager.h"
-#include	"CClientScriptingManager.h"
+#include "CClientScriptGUIManager.h"
+#include "CClientScriptingManager.h"
 
-#include	"Scripting\CScriptingManager.h"
-#include	"Scripting\CSquirrelArguments.h"
-#include	"CEvents.h"
+#include "Scripting/CScriptingManager.h"
+#include "Scripting/CSquirrelArguments.h"
+#include "CEvents.h"
 
-#include	"CSync.h"
+#include "CSync.h"
 
-#include	"CNetworkVehicle.h"
+#include "CNetworkVehicle.h"
+
+#include "CLogFile.h"
 
 CNetworkVehicle::CNetworkVehicle( void )
 {

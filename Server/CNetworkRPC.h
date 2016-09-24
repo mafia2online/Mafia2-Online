@@ -9,6 +9,9 @@
 
 #pragma once
 
+#include "Network/NetRPCs.h"
+#include "RPC4Plugin.h"
+
 class CNetworkRPC
 {
 

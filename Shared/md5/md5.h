@@ -11,7 +11,7 @@
 #define __CMD5HASHER_H
 
 #include <string.h>
-#include "../CString.h"
+#include "CString.h"
 
 typedef unsigned char MD5 [16];
 

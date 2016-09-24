@@ -7,23 +7,25 @@
 *
 ***************************************************************/
 
-#include	"BaseInc.h"
-#include	<Threading/CThread.h>
-#include	<RakPeerInterface.h>
-#include	<BitStream.h>
-#include	<MessageIdentifiers.h>
-#include	<RPC4Plugin.h>
+#include "BaseInc.h"
+#include "Threading/CThread.h"
+#include "RakPeerInterface.h"
+#include "BitStream.h"
+#include "MessageIdentifiers.h"
+#include "RPC4Plugin.h"
 
-#include	"CCore.h"
+#include "CCore.h"
 
-#include	"CGUI.h"
-#include	"CServerBrowser.h"
-#include	"CServerList.h"
-#include	"CServerQuery.h"
+#include "CGUI.h"
+#include "CServerBrowser.h"
+#include "CServerList.h"
+#include "CServerQuery.h"
 
-#include	"SharedUtility.h"
+#include "SharedUtility.h"
 
-#include	"CServerQuery.h"
+#include "CServerQuery.h"
+
+#include "CLogFile.h"
 
 void CServerQuery::WorkerThread()
 {

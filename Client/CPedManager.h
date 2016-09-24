@@ -9,8 +9,8 @@
 
 #pragma once
 
-#include	"CPed.h"
-#include	"Math\CVector3.h"
+#include "CPed.h"
+#include "Math/CVector3.h"
 
 class CPedManager
 {

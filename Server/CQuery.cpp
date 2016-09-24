@@ -8,11 +8,11 @@
 ***************************************************************/
 #include	<thread>
 
-#include	"StdInc.h"
-#include	"SharedUtility.h"
-#include	"CCore.h"
+#include "StdInc.h"
+#include "SharedUtility.h"
+#include "CCore.h"
 
-#include	"CQuery.h"
+#include "CQuery.h"
 
 void CQuery::WorkerThread ()
 {

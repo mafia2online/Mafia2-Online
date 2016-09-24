@@ -7,11 +7,11 @@
 *
 ***************************************************************/
 
-#include	"BaseInc.h"
+#include "BaseInc.h"
 
-#include	"COffsets.h"
-#include	"CPatcher.h"
-#include	"CPatches.h"
+#include "COffsets.h"
+#include "CPatcher.h"
+#include "CPatches.h"
 
 unsigned int COffsets::FUNC_CIE_CreateObject = 0;
 unsigned int COffsets::FUNC_CIE_Assign_Model = 0;

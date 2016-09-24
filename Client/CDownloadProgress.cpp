@@ -7,16 +7,16 @@
 *
 ***************************************************************/
 
-#include	"BaseInc.h"
+#include "BaseInc.h"
 
-#include	"CCore.h"
-#include	"CGUI.h"
-#include	"gui_impl\CGUI_Impl.h"
-#include	"gui_impl\CGUIWindow_Impl.h"
-#include	"gui_impl\CGUIProgressBar_Impl.h"
+#include "CCore.h"
+#include "CGUI.h"
+#include "gui_impl/CGUI_Impl.h"
+#include "gui_impl/CGUIWindow_Impl.h"
+#include "gui_impl/CGUIProgressBar_Impl.h"
 
-#include	"CString.h"
-#include	"Math\CVector3.h"
+#include "CString.h"
+#include "Math/CVector3.h"
 
 #include "CDownloadProgress.h"
 

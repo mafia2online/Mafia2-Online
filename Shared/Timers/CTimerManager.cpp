@@ -7,7 +7,7 @@
 *
 ***************************************************************/
 
-#include	"CTimerManager.h"
+#include "CTimerManager.h"
 
 void CTimerManager::Pulse( void )
 {

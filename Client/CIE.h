@@ -10,12 +10,12 @@
 
 #pragma once
 
-#include	"CCommon.h"
+#include "CCommon.h"
 
-#include	"engine\CM2Entity.h"
-#include	"engine\CM2Ped.h"
-#include	"engine\CM2ModelManager.h"
-#include	"CM2ScriptMachine.h"
+#include "engine/CM2Entity.h"
+#include "engine/CM2Ped.h"
+#include "engine/CM2ModelManager.h"
+#include "CM2ScriptMachine.h"
 
 class CVector3;
 

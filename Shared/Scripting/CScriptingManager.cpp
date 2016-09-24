@@ -7,51 +7,49 @@
 *
 ***************************************************************/
 
-#include	"../../../Shared/CString.h"
+#include "CString.h"
 
+#include "BaseInc.h"
 #ifdef _CLIENT
-#include	"../../Client/BaseInc.h"
-#include	"../../Client/CCore.h"
-#include	"../../Client/CGUI.h"
-#include	"../../Client/gui_impl/CGUI_Impl.h"
-#include	"../../Client/gui_impl/CGUIElement_Impl.h"
-#include	"../../Client/CClientScriptingManager.h"
-#include	"../../Client/CClientScriptGUIManager.h"
-#else
-#include	"../../Client/BaseInc.h"
+#include "CCore.h"
+#include "CGUI.h"
+#include "gui_impl/CGUI_Impl.h"
+#include "gui_impl/CGUIElement_Impl.h"
+#include "CClientScriptingManager.h"
+#include "CClientScriptGUIManager.h"
 #endif
 
-#include	"../../../Shared/CEvents.h"
+#include "CEvents.h"
 
-#include	"Natives\CAreaNatives.h"
-#include	"Natives\CBlipNatives.h"
-#include	"Natives\CEventNatives.h"
-#include	"Natives\CHashNatives.h"
-#include	"Natives\CPedNatives.h"
-#include	"Natives\CSharedPlayerNatives.h"
-#include	"Natives\CSharedVehicleNatives.h"
-#include	"Natives\CSQLiteNatives.h"
-#include	"Natives\CSystemNatives.h"
-#include	"Natives\CTimerNatives.h"
-#include	"Natives\CUtilNatives.h"
-#include	"Natives\CXMLNatives.h"
+#include "CScriptingManager.h"
+
+#include "Natives/CAreaNatives.h"
+#include "Natives/CBlipNatives.h"
+#include "Natives/CEventNatives.h"
+#include "Natives/CHashNatives.h"
+#include "Natives/CPedNatives.h"
+#include "Natives/CSharedPlayerNatives.h"
+#include "Natives/CSharedVehicleNatives.h"
+#include "Natives/CSQLiteNatives.h"
+#include "Natives/CSystemNatives.h"
+#include "Natives/CTimerNatives.h"
+#include "Natives/CUtilNatives.h"
+#include "Natives/CXMLNatives.h"
 
 #ifdef _CLIENT
-#include	"../../Client/CClientNatives.h"	
-#include	"../../Client/CGUINatives.h"
-#include	"../../Client/CGraphicsNatives.h"
-#include	"../../Client/CGameNatives.h"
-#include	"../../Client/CCameraNatives.h"
-#include	"../../Client/CAudioNatives.h"
-#include	"../../Client/C3DTextLabelNatives.h"
-#include	"../../Client/CPlayerNatives.h"
+#include "CClientNatives.h"
+#include "CGUINatives.h"
+#include "CGraphicsNatives.h"
+#include "CGameNatives.h"
+#include "CCameraNatives.h"
+#include "CAudioNatives.h"
+#include "C3DTextLabelNatives.h"
+#include "CPlayerNatives.h"
 #else
-#include	"../../Server/CServerNatives.h"
+#include "CServerNatives.h"
 #endif
 
-#include	"../Timers/CTimerManager.h"
-
-#include	"CScriptingManager.h"
+#include "Timers/CTimerManager.h"
 
 CScriptingManager::CScriptingManager( void )
 {
@@ -91,7 +89,7 @@ CScriptingManager::CScriptingManager( void )
 #else
 	// Register server natives
 	CServerNatives::Register( this );
-	
+
 	// Register ban natives
 	CBanNatives::Register( this );
 
@@ -145,7 +143,7 @@ CSquirrel * CScriptingManager::Load( String strName, String strPath )
 	CSquirrel * pScript = new CSquirrel( );
 
 	// Failed to load the script?
-	if( !pScript->Load( strName, strPath ) )	
+	if( !pScript->Load( strName, strPath ) )
 	{
 		// Delete the script
 		delete pScript;
@@ -155,7 +153,7 @@ CSquirrel * CScriptingManager::Load( String strName, String strPath )
 
 	// Push the script into the list
 	m_scripts.push_back( pScript );
-	
+
 	// Register the functions
 	if( m_functions.size() > 0 )
 	{
@@ -278,7 +276,7 @@ bool CScriptingManager::Unload( String strName )
 		// Remove the script events
 		CCore::Instance()->GetClientScriptingManager()->GetEvents()->HandleScriptUnload( pScript->GetVM() );
 #endif
-		
+
 		// Handle the script unload with the timer manager
 		CCore::Instance()->GetTimerManager()->HandleScriptUnload( pScript );
 

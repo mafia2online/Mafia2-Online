@@ -13,7 +13,7 @@
 #define M_PI			3.14159265358979323846f
 #endif
 
-#include	"CVector3.h"
+#include "CVector3.h"
 #include	<math.h>
 
 class Quaternion

@@ -7,7 +7,7 @@
 *
 ***************************************************************/
 
-#include	"CSquirrelCommon.h"
+#include "CSquirrelCommon.h"
 
 /*
 void sq_getentity( SQVM * pVM, int idx, EntityId * entity )

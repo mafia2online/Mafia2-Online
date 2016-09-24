@@ -7,18 +7,20 @@
 *
 ***************************************************************/
 
-#include	"BaseInc.h"
+#include "BaseInc.h"
 
-#include	"../CCore.h"
-#include	"../CChat.h"
+#include "CCore.h"
+#include "CChat.h"
 
-#include	"CM2Entity.h"
-#include	"CM2Vehicle.h"
-#include	"engine/CM2Ped.h"
+#include "CM2Entity.h"
+#include "CM2Vehicle.h"
+#include "engine/CM2Ped.h"
 
-#include	"CColor.h"
+#include "CColor.h"
 
-#include	"COffsets.h"
+#include "COffsets.h"
+
+#include "CLogFile.h"
 
 const DWORD C_Car__Spawn = 0x447820;
 void _declspec(naked) M2Vehicle::Spawn(void)

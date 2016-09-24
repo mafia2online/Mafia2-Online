@@ -7,8 +7,8 @@
 *
 ***************************************************************/
 
-#include	"CBanNatives.h"
-#include	"CCore.h"
+#include "CBanNatives.h"
+#include "CCore.h"
 
 void CBanNatives::Register( CScriptingManager * pScriptingManager )
 {

@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include	"CBlip.h"
+#include "CBlip.h"
 
 class CBlipManager : public CMultiplayerBlipManager
 {

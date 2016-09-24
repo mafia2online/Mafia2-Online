@@ -17,7 +17,7 @@
 #include	<renderers/directx9GUIRenderer/d3d9renderer.h>
 #include	<renderers/directx9GUIRenderer/d3d9texture.h>
 
-#include	"CDirectInput8Hook.h"
+#include "CDirectInput8Hook.h"
 
 enum eMouseType
 {

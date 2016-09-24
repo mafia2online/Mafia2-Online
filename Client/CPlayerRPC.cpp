@@ -7,32 +7,34 @@
 *
 ***************************************************************/
 
-#include	"BaseInc.h"
+#include "BaseInc.h"
 
-#include	"CCore.h"
+#include "CCore.h"
 
-#include	"BitStream.h"
+#include "BitStream.h"
 
-#include	"Math\CVector3.h"
-#include	"CColor.h"
-#include	"CString.h"
+#include "Math/CVector3.h"
+#include "CColor.h"
+#include "CString.h"
 
-#include	"CPlayerManager.h"
-#include	"CLocalPlayer.h"
-#include	"CRemotePlayer.h"
+#include "CPlayerManager.h"
+#include "CLocalPlayer.h"
+#include "CRemotePlayer.h"
 
-#include	"CVehicleManager.h"
+#include "CVehicleManager.h"
 
-#include	<RPC4Plugin.h>
-#include	"../Shared/CNetworkRPC.h"
+#include "RPC4Plugin.h"
+#include "Network/NetRPCs.h"
 
-#include	"CM2Hud.h"
+#include "CLogFile.h"
 
-#include	"CMafia.h"
+#include "CM2Hud.h"
 
-#include	"CChat.h"
+#include "CMafia.h"
 
-#include	"CPlayerRPC.h"
+#include "CChat.h"
+
+#include "CPlayerRPC.h"
 
 extern	CCore			* pCore;
 bool	CPlayerRPC::m_bRegistered = false;
@@ -288,38 +290,26 @@ void PlayerPing( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 
 void PutPlayerInVehicle( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 {
-	CLogFile::Print ( "1" );
-
 	// Read the player id
 	EntityId playerId;
 	pBitStream->ReadCompressed ( playerId );
-
-	CLogFile::Print ( "2" );
 
 	// Read the vehicle id
 	EntityId vehicleId;
 	pBitStream->ReadCompressed ( vehicleId );
 
-	CLogFile::Print ( "3" );
-
 	// Read the seat id
 	EntityId seatId;
 	pBitStream->ReadCompressed ( seatId );
 
-	CLogFile::Print ( "4" );
-
 	// Get the player instance
 	CNetworkPlayer * pPlayer = NULL;
-
-	CLogFile::Print ( "5" );
 
 	// Is this the localplayer?
 	if ( playerId == pCore->GetPlayerManager()->GetLocalPlayer()->GetId () )
 		pPlayer = pCore->GetPlayerManager()->GetLocalPlayer();
 	else
 		pPlayer = pCore->GetPlayerManager()->Get ( playerId );
-
-	CLogFile::Printf ( "PutPlayerInVehicle - %d, %d, %d", playerId, vehicleId, seatId );
 
 	// Is the player instance valid?
 	if ( pPlayer )

@@ -16,7 +16,7 @@
 #define SERVER_LIST_BROADCAST_REFRESH       2000
 
 #include	<map>
-#include	"CServerBrowser.h"
+#include "CServerBrowser.h"
 
 class CServerList;
 class CServerListItem

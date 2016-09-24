@@ -7,7 +7,7 @@
 *
 ***************************************************************/
 
-#include	"CSQLite.h"
+#include "CSQLite.h"
 
 CSQLite::CSQLite( void )
 {

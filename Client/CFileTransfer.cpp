@@ -7,19 +7,21 @@
 *
 ***************************************************************/
 
-#include	"BaseInc.h"
+#include "BaseInc.h"
 
-#include	"CCore.h"
+#include "CCore.h"
 
-#include	"CGUI.h"
-#include	"CDownloadProgress.h"
+#include "CGUI.h"
+#include "CDownloadProgress.h"
 
-#include	"CMainMenu.h"
-#include	"CServerBrowser.h"
+#include "CMainMenu.h"
+#include "CServerBrowser.h"
 
-#include	"CRC.h"
+#include "CRC.h"
 
-#include	"CFileTransfer.h"
+#include "CFileTransfer.h"
+
+#include "CLogFile.h"
 
 void CFileTransfer::FileWriteHandler ( unsigned int uiBytesWritten, void * pUserData )
 {

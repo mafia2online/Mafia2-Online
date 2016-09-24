@@ -7,8 +7,8 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
-#include	"CCore.h"
+#include "StdInc.h"
+#include "CCore.h"
 
 CPed::CPed ( int iModel, CVector3 vecPosition, CVector3 vecRotation )
 {

@@ -7,30 +7,30 @@
 *
 ***************************************************************/
 
-#include	"BaseInc.h"
+#include "BaseInc.h"
 
-#include	"CCore.h"
+#include "CCore.h"
 
-#include	"Scripting\CScriptingManager.h"
-#include	"Scripting\CSquirrelCommon.h"
+#include "Scripting/CScriptingManager.h"
+#include "Scripting/CSquirrelCommon.h"
 
-#include	"Math\CVector3.h"
-#include	"CString.h"
+#include "Math/CVector3.h"
+#include "CString.h"
 
-#include	"CClientScriptingManager.h"
+#include "CClientScriptingManager.h"
 
-#include	"engine\CM2Entity.h"
-#include	"engine\CM2Ped.h"
-#include	"CM2Hud.h"
+#include "engine/CM2Entity.h"
+#include "engine/CM2Ped.h"
+#include "CM2Hud.h"
 
-#include	"CPlayerManager.h"
-#include	"CLocalPlayer.h"
-#include	"CNetworkPlayer.h"
-#include	"CRemotePlayer.h"
+#include "CPlayerManager.h"
+#include "CLocalPlayer.h"
+#include "CNetworkPlayer.h"
+#include "CRemotePlayer.h"
 
-#include	"SharedUtility.h"
+#include "SharedUtility.h"
 
-#include	"CPlayerNatives.h"
+#include "CPlayerNatives.h"
 
 void CPlayerNatives::Register( CScriptingManager * pScriptingManager )
 {
@@ -326,7 +326,7 @@ SQInteger CPlayerNatives::GetHealth( SQVM * pVM )
 {
 	SQInteger playerId;
 	sq_getinteger( pVM, -1, &playerId );
-	
+
 	float fHealth = 0.0f;
 
 	// Is this the localplayer?
@@ -347,7 +347,7 @@ SQInteger CPlayerNatives::ToggleControls( SQVM * pVM )
 {
 	SQBool bToggle;
 	sq_getbool( pVM, -1, &bToggle );
-	
+
 	// Is this the localplayer?
 	CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->LockControls( bToggle );
 
@@ -367,7 +367,7 @@ SQInteger CPlayerNatives::IsInVehicle( SQVM * pVM )
 {
 	SQInteger playerId;
 	sq_getinteger( pVM, -1, &playerId );
-	
+
 	bool bInVehicle = false;
 
 	// Is this the localplayer?
@@ -388,7 +388,7 @@ SQInteger CPlayerNatives::GetVehicle( SQVM * pVM )
 {
 	SQInteger playerId;
 	sq_getinteger( pVM, -1, &playerId );
-	
+
 	EntityId vehicleId = INVALID_ENTITY_ID;
 
 	// Is this the localplayer?

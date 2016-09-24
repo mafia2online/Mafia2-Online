@@ -7,19 +7,22 @@
 *
 ***************************************************************/
 
-#include	"BaseInc.h"
+#include "BaseInc.h"
 
-#include	"CCore.h"
+#include "CCore.h"
 
-#include	"gui_impl\CGUI_Impl.h"
-#include	"gui_impl\CGUIElement_Impl.h"
+#include "gui_impl/CGUI_Impl.h"
+#include "gui_impl/CGUIElement_Impl.h"
 
-#include	"Scripting\CSquirrel.h"
+#include "Scripting/CSquirrel.h"
 
-#include	"CClientScriptingManager.h"
-#include	"CEvents.h"
+#include "CClientScriptingManager.h"
+#include "CEvents.h"
 
-#include	"CClientScriptGUIManager.h"
+#include "CClientScriptGUIManager.h"
+
+#include "CLogFile.h"
+
 CClientScriptGUIManager::CClientScriptGUIManager( void )
 {
 	// Flag as not hidden

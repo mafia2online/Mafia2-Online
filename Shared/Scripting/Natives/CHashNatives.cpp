@@ -7,9 +7,12 @@
 *
 ***************************************************************/
 
-#include	"CHashNatives.h"
-#include	"../../md5/md5.h"
-#include	"../../CRC.h"
+#include "Scripting/CScriptingManager.h"
+
+#include "CHashNatives.h"
+
+#include "md5/md5.h"
+#include "CRC.h"
 
 void CHashNatives::Register( CScriptingManager * pScriptingManager )
 {

@@ -7,49 +7,51 @@
 *
 ***************************************************************/
 
-#include	"BaseInc.h"
+#include "BaseInc.h"
 
-#include	"CCore.h"
 
-#include	"Math\CVector3.h"
-#include	"CString.h"
+#include "RPC4Plugin.h"
 
-#include	"BitStream.h"
+#include "CCore.h"
 
-#include	"CPlayerManager.h"
-#include	"CVehicleManager.h"
-#include	"CNetworkVehicle.h"
-#include	"CLocalPlayer.h"
-#include	"CRemotePlayer.h"
-#include	"engine\CM2Ped.h"
+#include "Math/CVector3.h"
+#include "CString.h"
 
-#include	"CBlipManager.h"
+#include "BitStream.h"
 
-#include	"CFileTransferManager.h"
+#include "CPlayerManager.h"
+#include "CVehicleManager.h"
+#include "CNetworkVehicle.h"
+#include "CLocalPlayer.h"
+#include "CRemotePlayer.h"
+#include "engine/CM2Ped.h"
 
-#include	"CMafia.h"
+#include "CBlipManager.h"
 
-#include	"CGUI.h"
-#include	"CServerBrowser.h"
+#include "CFileTransferManager.h"
 
-#include	"CChat.h"
+#include "CMafia.h"
 
-#include	"CSync.h"
+#include "CGUI.h"
+#include "CServerBrowser.h"
 
-#include	"SharedUtility.h"
+#include "CChat.h"
 
-#include	"CClientScriptingManager.h"
+#include "CSync.h"
 
-#include	"CRC.h"
+#include "SharedUtility.h"
 
-#include	"CEvents.h"
-#include	"Scripting\CSquirrelArguments.h"
+#include "CClientScriptingManager.h"
 
-#include	<RPC4Plugin.h>
+#include "CRC.h"
 
-#include	"../Shared/CNetworkRPC.h"
+#include "CEvents.h"
+#include "Scripting/CSquirrelArguments.h"
+#include "Network/NetRPCs.h"
 
-#include	"CNetworkRPC.h"
+#include "CNetworkRPC.h"
+
+#include "CLogFile.h"
 
 bool	CNetworkRPC::m_bRegistered = false;
 

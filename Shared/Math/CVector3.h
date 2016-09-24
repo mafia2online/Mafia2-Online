@@ -14,7 +14,7 @@
 #endif
 
 #include	<limits>
-#include	"../../Libraries/RakNet/Source/BitStream.h"
+#include "BitStream.h"
 
 #ifdef max
 #undef max

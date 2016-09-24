@@ -9,11 +9,11 @@
 
 #pragma once
 
-#include	"../CGUI.h"
-#include	"../CGUICallback.h"
-#include	"../CGUIEvent.h"
+#include "CGUI.h"
+#include "CGUICallback.h"
+#include "CGUIEvent.h"
 
-#include	"../../Shared/CString.h"
+#include "CString.h"
 
 #include <memory>
 

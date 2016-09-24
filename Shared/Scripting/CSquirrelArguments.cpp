@@ -7,20 +7,16 @@
 *
 ***************************************************************/
 
-#ifdef _CLIENT
-#include	"../../Client/BaseInc.h"
-#else
-#include	"../../Server/StdInc.h"
-#endif
+#include "BaseInc.h"
 
-#include	<assert.h>
+#include <assert.h>
 
-#include	"../../Libraries/squirrel/squirrel.h"
-#include	"../../Libraries/squirrel/sqstate.h"
-#include	"../../Libraries/squirrel/sqvm.h"
-#include	"../../Libraries/squirrel/sqstring.h"
+#include "squirrel.h"
+#include "sqstate.h"
+#include "sqvm.h"
+#include "sqstring.h"
 
-#include	"CSquirrelArguments.h"
+#include "CSquirrelArguments.h"
 
 CSquirrelArgument::CSquirrelArgument( CSquirrelArguments array, bool isArray )
 {

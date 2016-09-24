@@ -16,21 +16,21 @@
 #include	<assert.h>
 #include	<stdlib.h>
 #include	<stdarg.h>
-#include	"../../Libraries/squirrel/squirrel.h"
-#include	"../../Libraries/squirrel/sqobject.h"
-#include	"../../Libraries/squirrel/sqstdio.h"
-#include	"../../Libraries/squirrel/sqstdaux.h"
-#include	"../../Libraries/squirrel/sqstdblob.h"
-#include	"../../Libraries/squirrel/sqstdsystem.h"
-#include	"../../Libraries/squirrel/sqstdmath.h"
-#include	"../../Libraries/squirrel/sqstdstring.h"
-#include	"../../Libraries/squirrel/sqstate.h"
-#include	"../../Libraries/squirrel/sqvm.h"
-#include	"CSquirrelArguments.h"
-#include	"../Threading/CMutex.h"
+#include "squirrel.h"
+#include "sqobject.h"
+#include "sqstdio.h"
+#include "sqstdaux.h"
+#include "sqstdblob.h"
+#include "sqstdsystem.h"
+#include "sqstdmath.h"
+#include "sqstdstring.h"
+#include "sqstate.h"
+#include "sqvm.h"
+#include "CSquirrelArguments.h"
+#include "Threading/CMutex.h"
 
 #if defined(_WIN32) && defined(RegisterClass)
-#undef RegisterClass
+#	undef RegisterClass
 #endif
 
 struct ScriptClassMemberDecl

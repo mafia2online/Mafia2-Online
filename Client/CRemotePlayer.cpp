@@ -7,25 +7,27 @@
 *
 ***************************************************************/
 
-#include	"BaseInc.h"
+#include "BaseInc.h"
 
-#include	"CCore.h"
-#include	"CChat.h"
+#include "CCore.h"
+#include "CChat.h"
 
-#include	"Math\CQuaternion.h"
-#include	"Math\CVector3.h"
+#include "Math/CQuaternion.h"
+#include "Math/CVector3.h"
 
-#include	"CPlayerManager.h"
-#include	"CVehicleManager.h"   
-#include	"CLocalPlayer.h"
-#include	"CNetworkPlayer.h"
-#include	"CNetworkVehicle.h"
+#include "CPlayerManager.h"
+#include "CVehicleManager.h"
+#include "CLocalPlayer.h"
+#include "CNetworkPlayer.h"
+#include "CNetworkVehicle.h"
 
-#include	"CSync.h"
+#include "CSync.h"
 
-#include	"SharedUtility.h"
+#include "SharedUtility.h"
 
-#include	 "CRemotePlayer.h"
+#include "CRemotePlayer.h"
+
+#include "CLogFile.h"
 
 CRemotePlayer::CRemotePlayer( void ) : CNetworkPlayer( false )
 {
@@ -166,7 +168,7 @@ void CRemotePlayer::StoreOnFootSync( OnFootSync * onFootSync )
 		// Has the player model changed?
 		if( GetModel() != onFootSync->m_uiModelIndex )
 			SetModel( onFootSync->m_uiModelIndex );
-		
+
 		// Update the handModel
 		if (GetHandModel() != onFootSync->m_iHandModel || GetHandModelHand() != onFootSync->m_iHand)
 			SetHandModel(onFootSync->m_iHand, onFootSync->m_iHandModel);
@@ -240,6 +242,6 @@ bool CRemotePlayer::IsPositionOutOfRange ( CVector3 vecPos )
 	// Don't accept the position if they're out of the map
 	if ( (vecPos.fX > 7000.0f || vecPos.fX < -7000.0f) || (vecPos.fY > 7000.0f || vecPos.fY < -7000.0f) || (vecPos.fZ > 7000.0f || vecPos.fZ < -7000.0f) )
 		return true;
-	
+
 	return false;
 }

@@ -11,16 +11,11 @@
 
 #pragma once
 
-#ifdef _CLIENT
-#include	"../../Client/BaseInc.h"
-#else
-#include	"../../Client/BaseInc.h"
-#endif
-
-#include	"../Scripting/CSquirrel.h"
+#include "BaseInc.h"
+#include "CSquirrel.h"
 
 #ifndef NULL
-#define NULL 0
+#	define NULL 0
 #endif
 
 template< typename T >
@@ -95,13 +90,13 @@ void		sq_getarg( SQVM * pVM, SQInteger idx, CSquirrelArgument * arg );
 		{ NULL, NULL } \
 	}; \
 	struct SquirrelClassDecl __##classname##_decl = \
-		{  #classname, NULL, __##classname##_members }; 
+		{  #classname, NULL, __##classname##_members };
 
 #define _END_CLASS_BASE(classname, baseclassname) \
 		{ NULL, NULL } \
 	}; \
 	struct SquirrelClassDecl __##classname##_decl = \
-{  #classname, #baseclassname, __##classname##_members }; 
+{  #classname, #baseclassname, __##classname##_members };
 
 #define _CLASS_DECL(classname) \
 	__##classname##_decl

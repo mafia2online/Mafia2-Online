@@ -7,7 +7,7 @@
 *
 ***************************************************************/
 
-#include	"CZlib.h"
+#include "CZlib.h"
 #include	<assert.h>
 #include	<zlib.h>
 

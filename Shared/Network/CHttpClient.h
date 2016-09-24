@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include	"../CString.h"
+#include "CString.h"
 #include	<map>
 
 #define DEFAULT_CONTENT_TYPE	"text/plain"

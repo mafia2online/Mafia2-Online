@@ -7,28 +7,28 @@
 *
 ***************************************************************/
 
-#include	"BaseInc.h"
-#include	"CBlipRPC.h"
+#include "BaseInc.h"
+#include "CBlipRPC.h"
 
-#include	"BitStream.h"
+#include "BitStream.h"
 
-#include	"CBlipManager.h"
+#include "CBlipManager.h"
 
-#include	"CPlayerManager.h"
-#include	"CNetworkPlayer.h"
-#include	"CRemotePlayer.h"
-#include	"CLocalPlayer.h"
+#include "CPlayerManager.h"
+#include "CNetworkPlayer.h"
+#include "CRemotePlayer.h"
+#include "CLocalPlayer.h"
 
-#include	"CNetworkVehicle.h"
-#include	"CVehicleManager.h"
+#include "CNetworkVehicle.h"
+#include "CVehicleManager.h"
 
-#include	"CPed.h"
-#include	"CPedManager.h"
+#include "CPed.h"
+#include "CPedManager.h"
 
 #include	<RPC4Plugin.h>
-#include	"../Shared/CNetworkRPC.h"
+#include "Network/NetRPCs.h"
 
-#include	"CCore.h"
+#include "CCore.h"
 
 bool	CBlipRPC::m_bRegistered = false;
 

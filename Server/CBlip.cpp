@@ -7,8 +7,8 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
-#include	"CCore.h"
+#include "StdInc.h"
+#include "CCore.h"
 
 CBlip::CBlip( EntityId blipId, Vector2 vecPosition, int iLibrary, int iIcon )
 {
@@ -22,7 +22,7 @@ CBlip::CBlip( EntityId blipId, Vector2 vecPosition, int iLibrary, int iIcon )
 	m_pAttachedToPlayer = NULL;
 	m_pAttachedToVehicle = NULL;
 	m_pAttachedToPed = NULL;
-	
+
 	m_blipType = eBlipType::BLIP_TYPE_STANDALONE;
 }
 

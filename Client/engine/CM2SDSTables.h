@@ -7,7 +7,7 @@
 *
 ***************************************************************/
 
-#include	"../BaseInc.h"
+#include "BaseInc.h"
 
 class M2SDSPlayersTable
 {

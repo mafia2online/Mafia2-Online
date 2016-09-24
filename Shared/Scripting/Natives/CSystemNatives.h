@@ -9,7 +9,8 @@
 
 #pragma once
 
-#include	"../CScriptingManager.h"
+struct SQVM;
+class CScriptingManager;
 
 class CSystemNatives
 {

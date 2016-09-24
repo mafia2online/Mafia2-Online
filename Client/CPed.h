@@ -9,10 +9,10 @@
 
 #pragma once
 
-#include	"engine\CM2Entity.h"
-#include	"engine\CM2Ped.h"
-#include	"engine\CM2ModelManager.h"
-#include	"CModelManager.h"
+#include "engine/CM2Entity.h"
+#include "engine/CM2Ped.h"
+#include "engine/CM2ModelManager.h"
+#include "CModelManager.h"
 
 class CPed
 {

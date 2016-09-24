@@ -7,21 +7,21 @@
 *
 ***************************************************************/
 
-#include	"BaseInc.h"
+#include "BaseInc.h"
 
-#include	"CCore.h"
+#include "CCore.h"
 
-#include	"CString.h"
-#include	"Math\CVector3.h"
-#include	"Math\CMaths.h"
+#include "CString.h"
+#include "Math/CVector3.h"
+#include "Math/CMaths.h"
 
-#include	"CGraphics.h"
-#include	"CM2Camera.h"
+#include "CGraphics.h"
+#include "CM2Camera.h"
 
-#include	"CPlayerManager.h"
-#include	"CLocalPlayer.h"
+#include "CPlayerManager.h"
+#include "CLocalPlayer.h"
 
-#include	"C3DTextLabelManager.h"
+#include "C3DTextLabelManager.h"
 C3DTextLabelManager::C3DTextLabelManager(void)
 {
 	DEBUG_TRACE("C3DTextLabelManager::C3DTextLabelManager");

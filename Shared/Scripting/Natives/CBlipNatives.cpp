@@ -7,30 +7,24 @@
 *
 ***************************************************************/
 
-#include	"CBlipNatives.h"
+#include "BaseInc.h"
 
+#include "Scripting/CScriptingManager.h"
+
+#include "CCore.h"
+#include "CBlipManager.h"
+#include "CNetworkPlayer.h"
 #ifdef _CLIENT
-#include	"../../../Client/BaseInc.h"
-#include	"../../../Client/CCore.h"
-#include	"../../../Client/CBlipManager.h"
-#include	"../../../Client/CNetworkPlayer.h"
-#include	"../../../Client/CRemotePlayer.h"
-#include	"../../../Client/CNetworkVehicle.h"
-#include	"../../../Client/CPlayerManager.h"
-#include	"../../../Client/CVehicleManager.h"
-#include	"../../../Client/CPed.h"
-#include	"../../../Client/CPedManager.h"
-#else
-#include	"../../../Client/BaseInc.h"
-#include	"../../../Server/CCore.h"
-#include	"../../../Server/CBlipManager.h"
-#include	"../../../Server/CNetworkPlayer.h"
-#include	"../../../Server/CNetworkVehicle.h"
-#include	"../../../Server/CPlayerManager.h"
-#include	"../../../Server/CVehicleManager.h"
-#include	"../../../Server/CPed.h"
-#include	"../../../Server/CPedManager.h"
+#include "CRemotePlayer.h"
 #endif
+
+#include "CNetworkVehicle.h"
+#include "CPlayerManager.h"
+#include "CVehicleManager.h"
+#include "CPed.h"
+#include "CPedManager.h"
+
+#include "CBlipNatives.h"
 
 void CBlipNatives::Register( CScriptingManager * pScriptingManager )
 {

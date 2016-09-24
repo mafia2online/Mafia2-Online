@@ -9,9 +9,8 @@
 
 #pragma once
 
-#include	"../../Shared/CColor.h"
-
-#include	"CM2Ped.h"
+#include "CColor.h"
+#include "CM2Ped.h"
 
 enum eVehiclePartType
 {

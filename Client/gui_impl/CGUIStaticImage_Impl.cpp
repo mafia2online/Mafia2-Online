@@ -7,20 +7,20 @@
 *
 ***************************************************************/
 
-#include	"../BaseInc.h"
-#include	"../CCore.h"
+#include "BaseInc.h"
+#include "CCore.h"
 
-#include	"../../Shared/CString.h"
-#include	"../../Shared/Math/CVector3.h"
+#include "CString.h"
+#include "Math/CVector3.h"
 
-#include	"../CGUI.h"
+#include "CGUI.h"
 
-#include	"../CClientScriptGUIManager.h"
-#include	"../CClientScriptingManager.h"
+#include "CClientScriptGUIManager.h"
+#include "CClientScriptingManager.h"
 
-#include	"CGUI_Impl.h"
-#include	"CGUIWindow_Impl.h"
-#include	"CGUIStaticImage_Impl.h"
+#include "CGUI_Impl.h"
+#include "CGUIWindow_Impl.h"
+#include "CGUIStaticImage_Impl.h"
 
 CGUIStaticImage_Impl::CGUIStaticImage_Impl( CGUI_Impl * pGUI, CGUIElement_Impl * pParent )
 	: CGUIElement_Impl(pGUI)

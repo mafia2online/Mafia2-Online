@@ -7,7 +7,7 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
+#include "StdInc.h"
 
 std::list< SWhoWas > CWhoWas::m_whoList;
 

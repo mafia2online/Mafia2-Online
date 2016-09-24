@@ -7,22 +7,24 @@
 *
 ***************************************************************/
 
-#include	"BaseInc.h"
+#include "BaseInc.h"
 
-#include	"CCore.h"
+#include "CCore.h"
 
-#include	"Scripting\CScriptingManager.h"
-#include	"Scripting\CSquirrelCommon.h"
+#include "Scripting/CScriptingManager.h"
+#include "Scripting/CSquirrelCommon.h"
 
-#include	"../Shared/CNetworkRPC.h"
+#include "Network/NetRPCs.h"
 
-#include	"../Libraries/RakNet/Source/PacketPriority.h"
+#include "PacketPriority.h"
 
-#include	"CKeyBinds.h"
+#include "CKeyBinds.h"
 
-#include	"CNetworkModule.h"
+#include "CNetworkModule.h"
 
-#include	"CClientNatives.h"
+#include "CClientNatives.h"
+
+#include "CLogFile.h"
 
 void CClientNatives::Register( CScriptingManager * pScriptingManager )
 {

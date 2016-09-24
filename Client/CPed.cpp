@@ -7,23 +7,25 @@
 *
 ***************************************************************/
 
-#include	"BaseInc.h"
+#include "BaseInc.h"
 
-#include	"CCore.h"
+#include "CCore.h"
 
-#include	"Math\CVector3.h"
-#include	"Math\CQuaternion.h"
-#include	"CString.h"
+#include "Math/CVector3.h"
+#include "Math/CQuaternion.h"
+#include "CString.h"
 
-#include	"Game\CGame.h"
+#include "Game/CGame.h"
 
-#include	"CNetworkModelManager.h"
+#include "CNetworkModelManager.h"
 
-#include	"engine\CM2Entity.h"
-#include	"engine\CM2Ped.h"
-#include	"CIE.h"
+#include "engine/CM2Entity.h"
+#include "engine/CM2Ped.h"
+#include "CIE.h"
 
-#include	"CPed.h"
+#include "CPed.h"
+
+#include "CLogFile.h"
 
 CPed::CPed( unsigned int uiModelIndex, CVector3 vecPosition, CVector3 vecRotation )
 {

@@ -9,10 +9,10 @@
 
 #include	<thread>
 
-#include	"StdInc.h"
-#include	"CCore.h"
+#include "StdInc.h"
+#include "CCore.h"
 
-#include	"CMasterList.h"
+#include "CMasterList.h"
 
 void CMasterList::WorkerThread ()
 {

@@ -7,7 +7,7 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
+#include "StdInc.h"
 
 CPedManager::CPedManager( void )
 {

@@ -9,14 +9,16 @@
 
 #include "BaseInc.h"
 
-#include	"CCore.h"
+#include "CCore.h"
 
-#include	"Math\CVector3.h"
-#include	"CString.h"
+#include "Math/CVector3.h"
+#include "CString.h"
 
-#include	"CPed.h"
+#include "CPed.h"
 
-#include	"CPedManager.h"
+#include "CPedManager.h"
+
+#include "CLogFile.h"
 
 CPedManager::CPedManager( void )
 {
@@ -88,7 +90,7 @@ EntityId CPedManager::GetCount( void )
 {
 	//
 	EntityId count = 0;
-	
+
 	// Loop over all peds
 	for( EntityId i = 0; i < MAX_PEDS; i++ )
 	{

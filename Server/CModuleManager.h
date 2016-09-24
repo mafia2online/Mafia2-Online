@@ -10,7 +10,7 @@
 #pragma once
 
 #include	<list>
-#include	"CModule.h"
+#include "CModule.h"
 
 class CModuleManager
 {

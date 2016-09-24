@@ -7,18 +7,18 @@
 *
 ***************************************************************/
 
-#include	"BaseInc.h"
+#include "BaseInc.h"
 
-#include	"CCore.h"
+#include "CCore.h"
 
-#include	"CString.h"
+#include "CString.h"
 
-#include	"CEvents.h"
-#include	"CCommands.h"
-#include	"Scripting\CScriptingManager.h"
-#include	"CClientScriptGUIManager.h"
+#include "CEvents.h"
+#include "CCommands.h"
+#include "Scripting/CScriptingManager.h"
+#include "CClientScriptGUIManager.h"
 
-#include	"CClientScriptingManager.h"
+#include "CClientScriptingManager.h"
 
 CClientScriptingManager::CClientScriptingManager( void )
 {

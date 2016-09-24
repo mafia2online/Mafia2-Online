@@ -11,11 +11,11 @@
 
 #include <vector>
 
-#include	"COffsets.h"
-#include	"CString.h"
+#include "COffsets.h"
+#include "CString.h"
 
-#include	"engine\CM2ModelManager.h"
-#include	"engine\CM2Entity.h"
+#include "engine/CM2ModelManager.h"
+#include "engine/CM2Entity.h"
 
 #define MODELMGR_MAX			1000
 #define SDS_LOAD_DIR_ADDR		0x18F6FDC

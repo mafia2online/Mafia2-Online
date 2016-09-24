@@ -7,13 +7,14 @@
 *
 ***************************************************************/
 
-#include	"BaseInc.h"
+#include "BaseInc.h"
 
-#include	"CCore.h"
-#include	"CExceptionHandler.h"
+#include "CCore.h"
 
-#include	"CNetworkModule.h"
-#include	<RakPeerInterface.h>
+#include "CNetworkModule.h"
+#include "RakPeerInterface.h"
+
+#include "CLogFile.h"
 
 CCore*		pCore = NULL;
 HMODULE		g_hModule = NULL;
@@ -26,8 +27,6 @@ BOOL WINAPI DllMain( HMODULE hModule, DWORD dwReason, void * pReserved )
 		{
 			g_hModule = hModule;
 			DisableThreadLibraryCalls( hModule );
-
-			//CExceptionHandler::Install();
 
 			pCore = new CCore;
 			if( !pCore || !pCore->Initialise() )

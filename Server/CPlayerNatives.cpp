@@ -7,8 +7,8 @@
 *
 ***************************************************************/
 
-#include	"CPlayerNatives.h"
-#include	"CCore.h"
+#include "CPlayerNatives.h"
+#include "CCore.h"
 
 void CPlayerNatives::Register( CScriptingManager * pScriptingManager )
 {

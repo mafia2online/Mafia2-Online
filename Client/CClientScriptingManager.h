@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include <list>
+
 class CScriptingManager;
 class CEvents;
 class CCommands;

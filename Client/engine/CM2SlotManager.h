@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include	"CM2Entity.h"
+#include "CM2Entity.h"
 
 class CM2Slot
 {

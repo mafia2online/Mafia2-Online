@@ -7,8 +7,8 @@
 *
 ***************************************************************/
 
-#include	"CVehicleNatives.h"
-#include	"CCore.h"
+#include "CVehicleNatives.h"
+#include "CCore.h"
 
 void CVehicleNatives::Register( CScriptingManager * pScriptingManager )
 {

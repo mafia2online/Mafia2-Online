@@ -8,7 +8,6 @@
 ***************************************************************/
 
 #pragma once
-#include	"../Shared/CLogFile.h"
 
 // Core defines
 
@@ -24,11 +23,6 @@
 #define MASTERLIST_HOST				"mafia2-online.com"
 #define MASTERLIST_NONE_URL_PATH	"/api/v1/server?ordered=true"
 #define MASTERLIST_HOSTED_URL_PATH	"/api/v1/server?ordered=true&hosted=true"
-
-// Crash Reporter
-
-#define CRASHRPT_HOST				"http://mafia2-online.com/crashreport/report.php"
-#define CRASHRPT_POLICY				"http://mafia2-online.com"
 
 // Server stuff
 #define		SERVER_TITLE			MOD_NAME " - " MOD_OS_STRING " Dedicated Server"

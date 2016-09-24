@@ -9,8 +9,8 @@
 
 #pragma once
 
-#include	"../Libraries/sqlite/sqlite3.h"
-#include	"CString.h"
+#include "sqlite3.h"
+#include "CString.h"
 
 class CSQLite
 {

@@ -7,7 +7,7 @@
 *
 ***************************************************************/
 
-#include	"CHttpClient.h"
+#include "CHttpClient.h"
 
 // OS Dependent Defines
 #ifdef _WIN32
@@ -22,8 +22,8 @@
 #include <unistd.h>
 #endif
 
-#include "../SharedUtility.h"
-#include "../CLogFile.h"
+#include "SharedUtility.h"
+#include "CLogFile.h"
 
 // OS Independent Defines
 #define MAX_BUFFER				8192
@@ -242,9 +242,9 @@ bool CHttpClient::Post(bool bHasResponse, String strPath, String strData, String
                         "Content-Length: %d\r\n" \
                         "Connection: close\r\n" \
                         "\r\n" \
-                        "%s", 
-							strPath.Get(), m_strHost.Get(), m_strUserAgent.Get(), 
-							m_strReferer.Get(), strContentType.Get(), strData.GetLength(), 
+                        "%s",
+							strPath.Get(), m_strHost.Get(), m_strUserAgent.Get(),
+							m_strReferer.Get(), strContentType.Get(), strData.GetLength(),
 							strData.Get() );
 
 	// Send the POST command
@@ -266,7 +266,7 @@ bool CHttpClient::Post(bool bHasResponse, String strPath, String strData, String
 		Disconnect();
 	}
 
-	return true;  
+	return true;
 }
 
 bool CHttpClient::ParseHeaders( String& strBuffer, int& iBufferSize )

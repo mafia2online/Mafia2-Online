@@ -7,10 +7,10 @@
 *
 ***************************************************************/
 
-#include	"CXML.h"
-#include	"CString.h"
-#include	"CLogFile.h"
-#include	"SharedUtility.h"
+#include "CXML.h"
+#include "CString.h"
+#include "CLogFile.h"
+#include "SharedUtility.h"
 
 CXML::CXML( const char * szFileName )
 {

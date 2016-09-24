@@ -7,27 +7,29 @@
 *
 ***************************************************************/
 
-#include	"BaseInc.h"
+#include "BaseInc.h"
 
-#include	"CCore.h"
+#include "CCore.h"
 
-#include	"CMafia.h"
+#include "CMafia.h"
 
-#include	"CGUI.h"
+#include "CGUI.h"
 
-#include	"gui_impl\CGUI_Impl.h"
-#include	"CDirectInput8Hook.h"
+#include "gui_impl/CGUI_Impl.h"
+#include "CDirectInput8Hook.h"
 
-#include	"CServerBrowser.h"
-#include	"CMainMenu.h"
-#include	"CDownloadProgress.h"
-#include	"CMenuSettings.h"
+#include "CServerBrowser.h"
+#include "CMainMenu.h"
+#include "CDownloadProgress.h"
+#include "CMenuSettings.h"
 
-#include	"CM2Camera.h"
-#include	"CChat.h"
+#include "CM2Camera.h"
+#include "CChat.h"
 
-#include	"CClientScriptingManager.h" // \/
-#include	"CClientScriptGUIManager.h" // for delete clientscript gui
+#include "CClientScriptingManager.h" // \/
+#include "CClientScriptGUIManager.h" // for delete clientscript gui (???)
+
+#include "CLogFile.h"
 
 CGUI::CGUI( IDirect3DDevice9 * pDevice )
 	: m_pDevice(pDevice)

@@ -7,7 +7,7 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
+#include "StdInc.h"
 
 CCore::CCore( void )
 {
@@ -112,15 +112,6 @@ bool CCore::Initialise( int argc, char * argv[] )
 
 	// Open the log file
 	CLogFile::Open( (char *)strLogFile.Get(), true );
-
-#ifdef _WIN324
-	// Install the crash reporter
-	CrashRpt::InstallMain( MOD_NAME" (Server)", MOD_VERS_STR );
-
-	// Check if restarted after crash
-	if ( strstr( GetCommandLineA(), "/restart_crash_occurred" ) )
-		CLogFile::Print( "WARNING: Server restarted after crash!\n" );
-#endif
 
 	CLogFile::Print( "==============================================================" );
 	CLogFile::Printf("= %s v%s [%s]", MOD_NAME, MOD_VERS_STR, MOD_OS_STRING);

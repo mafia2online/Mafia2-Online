@@ -9,12 +9,12 @@
 
 #pragma once
 
-#include	<thread>
+#include <thread>
 
-#include	<TCPInterface.h>
-#include	<RakSleep.h>
+#include "TCPInterface.h"
+#include "RakSleep.h"
 
-#include	"Threading\CThread.h"
+#include "Threading/CThread.h"
 
 enum eThreadState
 {

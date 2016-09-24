@@ -9,11 +9,11 @@
 
 #pragma once
 
-#include	"../BaseInc.h"
+#include "BaseInc.h"
 
-#include	"CM2Entity.h"
-#include	"../CM2Enums.h"
-#include	"../CM2SyncObject.h"
+#include "CM2Entity.h"
+#include "CM2Enums.h"
+#include "CM2SyncObject.h"
 
 class M2Vehicle;
 class CM2Vehicle;

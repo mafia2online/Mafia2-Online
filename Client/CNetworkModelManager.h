@@ -9,9 +9,9 @@
 
 #pragma once
 
-#include	"CString.h"
-#include	"engine\CM2ModelManager.h"
-#include	"CModelManager.h"
+#include "CString.h"
+#include "engine/CM2ModelManager.h"
+#include "CModelManager.h"
 
 class CNetworkModelManager;
 class CNetworkModel

@@ -7,16 +7,16 @@
 *
 ***************************************************************/
 
-#include	"../BaseInc.h"
+#include "BaseInc.h"
 
-#include	"../../Shared/CString.h"
-#include	"../../Shared/Math/CVector3.h"
+#include "CString.h"
+#include "Math/CVector3.h"
 
-#include	"../CGUI.h"
+#include "CGUI.h"
 
-#include	"CGUI_Impl.h"
-#include	"CGUIElement_Impl.h"
-#include	"CGUICheckBox_Impl.h"
+#include "CGUI_Impl.h"
+#include "CGUIElement_Impl.h"
+#include "CGUICheckBox_Impl.h"
 
 CGUICheckBox_Impl::CGUICheckBox_Impl( CGUI_Impl * pGUI, String strCaption, CGUIElement_Impl * pParent )
 	: CGUIElement_Impl(pGUI)

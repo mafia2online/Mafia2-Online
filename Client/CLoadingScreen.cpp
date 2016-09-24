@@ -7,22 +7,22 @@
 *
 ***************************************************************/
 
-#include	"BaseInc.h"
+#include "BaseInc.h"
 
-#include	"CCore.h"
+#include "CCore.h"
 
-#include	"CGUI.h"
+#include "CGUI.h"
 
-#include	"CGraphics.h"
+#include "CGraphics.h"
 
-#include	"gui_impl\CGUI_Impl.h"
-#include	"gui_impl\CGUIElement_Impl.h"
-#include	"gui_impl\CGUIStaticImage_Impl.h"
+#include "gui_impl/CGUI_Impl.h"
+#include "gui_impl/CGUIElement_Impl.h"
+#include "gui_impl/CGUIStaticImage_Impl.h"
 
-#include	"SharedUtility.h"
-#include	"Math\CVector3.h"
+#include "SharedUtility.h"
+#include "Math/CVector3.h"
 
-#include	"CLoadingScreen.h"
+#include "CLoadingScreen.h"
 
 std::shared_ptr<CGUIStaticImage_Impl> CLoadingScreen::m_pLogo;
 std::shared_ptr<CGUIStaticImage_Impl> CLoadingScreen::m_pLogotypes;

@@ -9,14 +9,11 @@
 
 #pragma once
 
-#include	"../CScriptingManager.h"
-#include	"../CSquirrelCommon.h"
-
+class CScriptingManager;
 class CXMLNatives
 {
 
 public:
 
 	static	void			Register( CScriptingManager * pScriptingManager );
-
 };

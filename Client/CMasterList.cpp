@@ -7,24 +7,26 @@
 *
 ***************************************************************/
 
-#include	"BaseInc.h"
-#include	"CCore.h"
+#include "BaseInc.h"
+#include "CCore.h"
 
-#include	"CString.h"
+#include "CString.h"
 
-#include	"CGUI.h"
-#include	"gui_impl\CGUI_Impl.h"
-#include	"gui_impl\CGUIMessageBox_Impl.h"
-#include	"gui_impl\CGUIWindow_Impl.h"
+#include "CGUI.h"
+#include "gui_impl/CGUI_Impl.h"
+#include "gui_impl/CGUIMessageBox_Impl.h"
+#include "gui_impl/CGUIWindow_Impl.h"
 
-#include	<atomic>
-#include	<thread>
+#include <atomic>
+#include <thread>
 
-#include	"SharedUtility.h"
+#include "SharedUtility.h"
 
-#include	"Network\CHttpClient.h"
+#include "Network/CHttpClient.h"
 
-#include	"CMasterList.h"
+#include "CMasterList.h"
+
+#include "CLogFile.h"
 
 /*static*/ bool DummyReceiveHandler( const char *, unsigned int, void * )
 {

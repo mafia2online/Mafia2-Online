@@ -7,18 +7,18 @@
 *
 ***************************************************************/
 
-#include	"BaseInc.h"
+#include "BaseInc.h"
 
-#include	"CCore.h"
+#include "CCore.h"
 
-#include	"CVehicleManager.h"
-#include	"CNetworkVehicle.h"
-#include	"CPlayerManager.h"
-#include	"CNetworkPlayer.h"
-#include	"CRemotePlayer.h"
-#include	"CPedManager.h"
+#include "CVehicleManager.h"
+#include "CNetworkVehicle.h"
+#include "CPlayerManager.h"
+#include "CNetworkPlayer.h"
+#include "CRemotePlayer.h"
+#include "CPedManager.h"
 
-#include	"CBlipManager.h"
+#include "CBlipManager.h"
 
 CBlipManager::CBlipManager( void )
 {

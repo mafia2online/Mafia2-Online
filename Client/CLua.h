@@ -9,8 +9,8 @@
 
 #pragma once
 
-#include	"../Libraries/lua/lua.h"
-#include	"CString.h"
+#include "lua.h"
+#include "CString.h"
 
 // Typedef stuff
 typedef int				( __cdecl * lua_loadbuffer_t )		( lua_State * L, char * szBuffer, size_t sSize, char * name );

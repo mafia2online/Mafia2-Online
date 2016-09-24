@@ -9,8 +9,8 @@
 
 #pragma once
 
-#include	"../Libraries/mongoose/mongoose.h"
-#include	"../Shared/CRC.h"
+#include "mongoose.h"
+#include "CRC.h"
 
 class CWebServer
 {

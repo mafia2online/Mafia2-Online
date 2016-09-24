@@ -7,22 +7,22 @@
 *
 ***************************************************************/
 
-#include	"BaseInc.h"
+#include "BaseInc.h"
 
-#include	"CCore.h"
+#include "CCore.h"
 
-#include	"BitStream.h"
+#include "BitStream.h"
 
-#include	"Math\CVector3.h"
-#include	"CColor.h"
+#include "Math/CVector3.h"
+#include "CColor.h"
 
-#include	"CVehicleManager.h"
-#include	"CNetworkVehicle.h"
+#include "CVehicleManager.h"
+#include "CNetworkVehicle.h"
 
-#include	<RPC4Plugin.h>
-#include	"../Shared/CNetworkRPC.h"
+#include "RPC4Plugin.h"
+#include "Network/NetRPCs.h"
 
-#include	"CVehicleRPC.h"
+#include "CVehicleRPC.h"
 
 bool	CVehicleRPC::m_bRegistered = false;
 

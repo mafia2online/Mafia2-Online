@@ -24,8 +24,8 @@
 typedef unsigned long DWORD;
 
 #include	<string>
-#include	"CCommon.h"
-#include	"CString.h"
+#include "CCommon.h"
+#include "CString.h"
 
 namespace SharedUtility
 {
@@ -43,7 +43,7 @@ namespace SharedUtility
     {
         return a > b ? a : b;
     }
-	
+
 	bool				StripPath1( char * szString );
 	char *				StripPath2( char * szString );
 
@@ -113,10 +113,6 @@ namespace SharedUtility
 
 	bool				ReadRegistryString( HKEY hKeyLocation, const char * szSubKey, const char * szKey, const char * szDefault, char * szData, DWORD dwSize );
 	bool				WriteRegistryString( HKEY hKeyLocation, const char * szSubKey, const char * szKey, char * szData, DWORD dwSize );
-#endif
-
-#ifndef _LAUNCHER
-	bool				CompileScript( const char * szFile, const char * szFileOut );
 #endif
 
 	const char			* MonthToString( int iMonth );

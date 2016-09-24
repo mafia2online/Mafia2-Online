@@ -9,9 +9,9 @@
 
 #pragma once
 
-#include	"CGUI_Impl.h"
-#include	"CGUIElement_Impl.h"
-#include	"CGUIStaticImage_Impl.h"
+#include "CGUI_Impl.h"
+#include "CGUIElement_Impl.h"
+#include "CGUIStaticImage_Impl.h"
 
 class CGUIListItem_Impl
 {

@@ -7,25 +7,22 @@
 *
 ***************************************************************/
 
-#include	"../../../Shared/CString.h"
+#include "CString.h"
 
+#include "BaseInc.h"
+#include "CCore.h"
+
+#include "CPlayerManager.h"
 #ifdef _CLIENT
-#include	"../../../Client/BaseInc.h"
-#include	"../../../Client/CCore.h"
-#include	"../../../Client/CClientScriptingManager.h"
-#include	"../../../Client/CClientScriptGUIManager.h"
-#include	"../../../Client/CPlayerManager.h"
-#include	"../../../Client/CRemotePlayer.h"
-#include	"../../../Client/CNetworkPlayer.h"
-#else
-#include	"../../../Server/StdInc.h"
+#	include	"CRemotePlayer.h"
 #endif
+#include "CNetworkPlayer.h"
 
-#include	"../../../Shared/CEvents.h"
-#include	"../../../Shared/CCommands.h"
-#include	"../../../Shared/Scripting/CSquirrelCommon.h"
+#include "CEvents.h"
+#include "CCommands.h"
+#include "Scripting/CSquirrelCommon.h"
 
-#include	"CSharedPlayerNatives.h"
+#include "CSharedPlayerNatives.h"
 
 void CSharedPlayerNatives::Register( CScriptingManager * pScriptingManager )
 {

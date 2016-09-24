@@ -7,21 +7,21 @@
 *
 ***************************************************************/
 
-#include	"BaseInc.h"
+#include "BaseInc.h"
 
-#include	"CCore.h"
+#include "CCore.h"
 
-#include	"Math\CVector3.h"
-#include	"CColor.h"
+#include "Math/CVector3.h"
+#include "CColor.h"
 
-#include	"Scripting\CScriptingManager.h"
-#include	"Scripting\CSquirrelCommon.h"
+#include "Scripting/CScriptingManager.h"
+#include "Scripting/CSquirrelCommon.h"
 
-#include	"CFPSCounter.h"
-#include	"CGraphics.h"
-#include	"CChat.h"
+#include "CFPSCounter.h"
+#include "CGraphics.h"
+#include "CChat.h"
 
-#include	"CGraphicsNatives.h"
+#include "CGraphicsNatives.h"
 
 void CGraphicsNatives::Register( CScriptingManager * pScriptingManager )
 {

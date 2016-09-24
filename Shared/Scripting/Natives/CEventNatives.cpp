@@ -7,25 +7,20 @@
 *
 ***************************************************************/
 
-#include	"../../../Shared/CString.h"
+#include "CString.h"
+
+#include "BaseInc.h"
+#include "CCore.h"
+
+#include "CEvents.h"
+#include "CCommands.h"
+#include "Scripting/CScriptingManager.h"
+
+#include "CEventNatives.h"
 
 #ifdef _CLIENT
-#include	"../../../Client/BaseInc.h"
-#include	"../../../Client/CCore.h"
-#include	"../../../Client/CGUI.h"
-#include	"../../../Client/gui_impl/CGUI_Impl.h"
-#include	"../../../Client/gui_impl/CGUIElement_Impl.h"
-#include	"../../../Client/CClientScriptingManager.h"
-#include	"../../../Client/CClientScriptGUIManager.h"
-#else
-#include	"../../../Server/StdInc.h"
+#	include "CClientScriptingManager.h"
 #endif
-
-#include	"../../../Shared/CEvents.h"
-#include	"../../../Shared/CCommands.h"
-#include	"../../../Shared/Scripting/CSquirrelCommon.h"
-
-#include	"CEventNatives.h"
 
 void CEventNatives::Register( CScriptingManager * pScriptingManager )
 {

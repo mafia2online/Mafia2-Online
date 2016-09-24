@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include	"../CScriptingManager.h"
+class CScriptingManager;
 
 class CSharedPlayerNatives
 {

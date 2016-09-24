@@ -7,9 +7,9 @@
 *
 ***************************************************************/
 
-#include	"CPatcher.h"
-#include	"CLogFile.h"
-#include	"../Libraries/Detours/detours.h"
+#include "CPatcher.h"
+#include "CLogFile.h"
+#include "detours.h"
 
 ProtectionInfo CPatcher::Unprotect(DWORD dwAddress, int iSize)
 {

@@ -9,13 +9,13 @@
 
 #pragma once
 
-#include	"ExplicitSingleton.h"
+#include "ExplicitSingleton.h"
 
-#include	"CGUI.h"
-#include	"gui_impl\CGUI_Impl.h"
-#include	"gui_impl\CGUIElement_Impl.h"
+#include "CGUI.h"
+#include "gui_impl/CGUI_Impl.h"
+#include "gui_impl/CGUIElement_Impl.h"
 
-#include	"CColor.h"
+#include "CColor.h"
 
 #define		MAX_MESSAGE_LEN					128
 #define		MAX_CHAT_LINES					12

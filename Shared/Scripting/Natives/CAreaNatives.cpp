@@ -9,9 +9,11 @@
 
 #pragma once
 
-#include	"CAreaNatives.h"
-#include	"../../Math/CMaths.h"
-#include	"../CSquirrelCommon.h"
+#include "Scripting/CSquirrel.h"
+#include "Scripting/CScriptingManager.h"
+
+#include "CAreaNatives.h"
+#include "Math/CMaths.h"
 
 
 void CAreaNatives::Register( CScriptingManager * pScriptingManager )

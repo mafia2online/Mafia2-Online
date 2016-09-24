@@ -7,44 +7,45 @@
 *
 ***************************************************************/
 
-#include	"BaseInc.h"
+#include "BaseInc.h"
 
-#include	"CCore.h"
+#include "CCore.h"
 
-#include	"Scripting\CScriptingManager.h"
-#include	"Scripting\CSquirrelCommon.h"
+#include "Scripting/CScriptingManager.h"
+#include "Scripting/CSquirrelCommon.h"
 
-#include	"Math\CVector3.h"
-#include	"CString.h"
+#include "Math/CVector3.h"
+#include "CString.h"
 
-#include	"CGUITypes.h"
+#include "CGUITypes.h"
 
-#include	"CGraphics.h"
-#include	"CGUI.h"
-#include	"CDownloadProgress.h"
-#include	"CMainMenu.h"
+#include "CGraphics.h"
+#include "CGUI.h"
+#include "CDownloadProgress.h"
+#include "CMainMenu.h"
 
-#include	"gui_impl\CGUI_Impl.h"
-#include	"gui_impl\CGUIElement_Impl.h"
-#include	"gui_impl\CGUIButton_Impl.h"
-#include	"gui_impl\CGUICheckBox_Impl.h"
-#include	"gui_impl\CGUIComboBox_Impl.h"
-#include	"gui_impl\CGUIEdit_Impl.h"
-#include	"gui_impl\CGUILabel_Impl.h"
-#include	"gui_impl\CGUIGridList_Impl.h"
-#include	"gui_impl\CGUIProgressBar_Impl.h"
-#include	"gui_impl\CGUIRadioButton_Impl.h"
-#include	"gui_impl\CGUITabPanel_Impl.h"
-#include	"gui_impl\CGUIStaticImage_Impl.h"
-#include	"gui_impl\CGUIWindow_Impl.h"
+#include "gui_impl/CGUI_Impl.h"
+#include "gui_impl/CGUIElement_Impl.h"
+#include "gui_impl/CGUIButton_Impl.h"
+#include "gui_impl/CGUICheckBox_Impl.h"
+#include "gui_impl/CGUIComboBox_Impl.h"
+#include "gui_impl/CGUIEdit_Impl.h"
+#include "gui_impl/CGUILabel_Impl.h"
+#include "gui_impl/CGUIGridList_Impl.h"
+#include "gui_impl/CGUIProgressBar_Impl.h"
+#include "gui_impl/CGUIRadioButton_Impl.h"
+#include "gui_impl/CGUITabPanel_Impl.h"
+#include "gui_impl/CGUIStaticImage_Impl.h"
+#include "gui_impl/CGUIWindow_Impl.h"
 
-#include	"CClientScriptingManager.h"
-#include	"CClientScriptGUIManager.h"
+#include "CClientScriptingManager.h"
+#include "CClientScriptGUIManager.h"
 
-#include	"SharedUtility.h"
+#include "SharedUtility.h"
 
-#include	"CGUINatives.h"
+#include "CGUINatives.h"
 
+#include "CLogFile.h"
 
 void CGUINatives::Register( CScriptingManager * pScriptingManager )
 {

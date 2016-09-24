@@ -9,8 +9,8 @@
 
 #pragma once
 
-#include	"SharedUtility.h"
-#include	"CString.h"
+#include "SharedUtility.h"
+#include "CString.h"
 
 #define	X86_NOP		0x90
 #define	X86_RETN	0xC3

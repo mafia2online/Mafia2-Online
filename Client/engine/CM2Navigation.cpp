@@ -11,6 +11,8 @@
 
 #include "CM2Navigation.h"
 
+#include "CLogFile.h"
+
 CM2Navigation::CM2Navigation( M2Navigation * pNavigation )
 {
 	// Set the navigation

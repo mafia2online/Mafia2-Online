@@ -9,8 +9,8 @@
 
 #pragma once
 
-#include	"CGUITypes.h"
-#include	"Math\CVector3.h"
+#include "CGUITypes.h"
+#include "Math/CVector3.h"
 
 class CGUIElement_Impl;
 struct CGUIEventArgs

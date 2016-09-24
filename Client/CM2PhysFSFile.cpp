@@ -11,6 +11,8 @@
 
 #include "CM2PhysFSFile.h"
 
+#include "CLogFile.h"
+
 CM2PhysFSFile::CM2PhysFSFile( M2PhysFSFile * pFile )
 {
 	m_pFile = pFile;

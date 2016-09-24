@@ -7,17 +7,19 @@
 *
 ***************************************************************/
 
-#include	"../BaseInc.h"
+#include "BaseInc.h"
 
-#include	"../CCore.h"
+#include "CCore.h"
 
-#include	"../CPlayerManager.h"
-#include	"../CLocalPlayer.h"
+#include "CPlayerManager.h"
+#include "CLocalPlayer.h"
 
-#include	"../../Shared/SharedUtility.h"
+#include "SharedUtility.h"
 
-#include	"CM2Entity.h"
-#include	"CM2Ped.h"
+#include "CM2Entity.h"
+#include "CM2Ped.h"
+
+#include "CLogFile.h"
 
 CM2Ped::CM2Ped(M2Ped * pPed) : CM2Entity(pPed)
 {

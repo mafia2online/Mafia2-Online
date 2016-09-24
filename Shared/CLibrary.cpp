@@ -7,8 +7,8 @@
 *
 ***************************************************************/
 
-#include	"CLogFile.h"
-#include	"CLibrary.h"
+#include "CLogFile.h"
+#include "CLibrary.h"
 
 #ifdef _WIN32
 #include	<windows.h>

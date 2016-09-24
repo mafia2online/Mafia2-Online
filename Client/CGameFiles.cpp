@@ -19,6 +19,8 @@
 
 #include "CGameFiles.h"
 
+#include "CLogFile.h"
+
 String				CGameFiles::m_strError;
 std::list< String >	CGameFiles::m_deleteFiles;
 
@@ -94,7 +96,7 @@ bool CGameFiles::CheckFiles( void )
 			SetLastError( String( "The file '%s' has been modified.", gameFiles[i].szFile ) );
 
 			CLogFile::Printf( "File Error: '%s', expected checksum 0x%p, got 0x%p", gameFiles[i].szFile, gameFiles[i].uiChecksum, pFileChecksum.GetChecksum() );
-			
+
 			return false;
 		}
 
@@ -103,7 +105,7 @@ bool CGameFiles::CheckFiles( void )
 		{
 			// Decompress the file
 			int iResult = CZlib::Decompress( gameFiles[i].szFile, String( "%s\\pc\\%s", pCore->GetGameDirectory().Get(), gameFiles[i].szOutput ) );
-			
+
 			// Did the file fail to decompress?
 			if( iResult != Z_OK )
 			{

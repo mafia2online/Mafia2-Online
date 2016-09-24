@@ -9,8 +9,8 @@
 
 #pragma once
 
-#include	"../Scripting/CSquirrel.h"
-#include	"../Scripting/CSquirrelArguments.h"
+#include "Scripting/CSquirrel.h"
+#include "Scripting/CSquirrelArguments.h"
 
 class CTimer
 {

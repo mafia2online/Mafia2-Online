@@ -8,31 +8,18 @@
 ***************************************************************/
 
 #include "CXMLNatives.h"
-#include "../../CXML.h"
+#include "CXML.h"
+
+#include "BaseInc.h"
+#include "CCore.h"
 
 #ifdef _CLIENT
-#include	"../../../Client/BaseInc.h"
-#include	"../../../Client/CCore.h"
-#include	"../../../Client/CClientScriptingManager.h"
-#include	"../../../Client/CClientScriptGUIManager.h"
-#include	"../../../Client/CVehicleManager.h"
-#include	"../../../Client/CNetworkVehicle.h"
-#include	"../../../Client/CPlayerManager.h"
-#include	"../../../Client/CNetworkPlayer.h"
-#include	"../../../Client/CRemotePlayer.h"
-#else
-#include	"../../../Server/StdInc.h"
+#include "CClientScriptingManager.h"
 #endif
 
-#include	"../../../Shared/CString.h"
-#include	"../../../Shared/CEvents.h"
-#include	"../../../Shared/CCommands.h"
-#include	"../../../Shared/Scripting/CSquirrelCommon.h"
-#include	"../../../Shared/SharedUtility.h"
-
-#include	"../../../Shared/Math/CVector3.h"
-#include	"../../../Shared/CColor.h"
-#include	"../../../Shared/Game/CGame.h"
+#include "Scripting/CSquirrelCommon.h"
+#include "Scripting/CScriptingManager.h"
+#include "SharedUtility.h"
 
 _MEMBER_FUNCTION_IMPL(xml, constructor);
 _MEMBER_FUNCTION_IMPL(xml, save);
@@ -54,7 +41,7 @@ _MEMBER_FUNCTION(xml, createRootNode, 1, "s")			// createRootNode( const char* )
 _MEMBER_FUNCTION(xml, getRootNode, 0, NULL)				// getRootNode();
 _MEMBER_FUNCTION(xml, createNode, 2, "ps")				// createNode( CXMLNode*, const char* );
 _MEMBER_FUNCTION(xml, findNode, 2, "ps")				// findNode( CXMLNode*, const char* );
-_MEMBER_FUNCTION(xml, setNodeName, 2, "ps")				// setNodeName( CXMLNode*, const char* ); 
+_MEMBER_FUNCTION(xml, setNodeName, 2, "ps")				// setNodeName( CXMLNode*, const char* );
 _MEMBER_FUNCTION(xml, getNodeName, 1, "p")				// getNodeName( CXMLNode* );
 _MEMBER_FUNCTION(xml, setNodeValue, 2, "ps")			// setNodeValue( CXMLNode*, const char* );
 _MEMBER_FUNCTION(xml, getNodeValue, 1, "p")				// getNodeValue( CXMLNode* );
@@ -281,7 +268,7 @@ _MEMBER_FUNCTION_IMPL(xml, setNodeName)
 
 			// Set the node name
 			pNode->SetName( szName );
-			
+
 			sq_pushbool( pVM, true );
 			return 1;
 		}
@@ -307,7 +294,7 @@ _MEMBER_FUNCTION_IMPL(xml, getNodeName)
 		{
 			// Get the node name
 			const char * szName = pNode->GetName();
-			
+
 			sq_pushstring( pVM, szName, strlen(szName) );
 			return 1;
 		}
@@ -337,7 +324,7 @@ _MEMBER_FUNCTION_IMPL(xml, setNodeValue)
 
 			// Set the node value
 			pNode->SetValue( szValue );
-			
+
 			sq_pushbool( pVM, true );
 			return 1;
 		}
@@ -363,7 +350,7 @@ _MEMBER_FUNCTION_IMPL(xml, getNodeValue)
 		{
 			// Get the node value
 			const char * szValue = pNode->GetValue();
-			
+
 			sq_pushstring( pVM, szValue, strlen(szValue) );
 			return 1;
 		}
@@ -397,7 +384,7 @@ _MEMBER_FUNCTION_IMPL(xml, setNodeAttribute)
 
 			// Set the node attribute
 			pNode->SetAttribute( szName, szValue );
-			
+
 			sq_pushbool( pVM, true );
 			return 1;
 		}
@@ -424,7 +411,7 @@ _MEMBER_FUNCTION_IMPL(xml, getNodeAttribute)
 			// Get the attribute name
 			const char * szName;
 			sq_getstring( pVM, 3, &szName );
-			
+
 			// Get the attribute value
 			const char * szValue = pNode->GetAttribute( szName );
 

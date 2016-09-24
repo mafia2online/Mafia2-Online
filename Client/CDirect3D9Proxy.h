@@ -9,10 +9,10 @@
 
 #pragma once
 
-#include	"CDirect3D9Proxy.h"
-#include	"CDirect3D9Hook.h"
-#include	"CDirect3DDevice9Proxy.h"
-#include	"CDirectInputDevice8Proxy.h"
+#include "CDirect3D9Proxy.h"
+#include "CDirect3D9Hook.h"
+#include "CDirect3DDevice9Proxy.h"
+#include "CDirectInputDevice8Proxy.h"
 
 class CDirect3D9Proxy : public IDirect3D9
 {

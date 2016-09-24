@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include	"CPed.h"
+#include "CPed.h"
 
 class CPedManager
 {

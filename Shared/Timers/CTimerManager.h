@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include	"CTimer.h"
+#include "CTimer.h"
 #include	<list>
 
 class CTimerManager : public std::list< CTimer *>

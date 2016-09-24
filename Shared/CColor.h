@@ -9,12 +9,6 @@
 
 #pragma once
 
-#ifdef _CLIENT
-#include	"../Client/BaseInc.h"
-#else
-#include	"../Client/BaseInc.h"
-#endif
-
 #define		ToHex(a, r, g, b) ((DWORD)((((a) & 0xFF) << 24) | (((r) & 0xFF) << 16) | (((g) & 0xFF) << 8) | ((b) & 0xFF)))
 
 class CColor

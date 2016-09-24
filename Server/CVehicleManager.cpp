@@ -7,8 +7,8 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
-#include	"CCore.h"
+#include "StdInc.h"
+#include "CCore.h"
 
 CVehicleManager::CVehicleManager( void )
 {

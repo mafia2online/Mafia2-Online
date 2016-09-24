@@ -9,14 +9,10 @@
 
 #pragma once
 
-#include	"../CScriptingManager.h"
-#include	"../CSquirrelCommon.h"
+class CScriptingManager;
 
 class CSQLiteNatives
 {
-
 public:
-
 	static	void			Register( CScriptingManager * pScriptingManager );
-
 };

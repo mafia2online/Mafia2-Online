@@ -7,17 +7,17 @@
 *
 ***************************************************************/
 
-#include	"BaseInc.h"
+#include "BaseInc.h"
 
-#include	"CCore.h"
+#include "CCore.h"
 
-#include	"Math\CVector3.h"
+#include "Math/CVector3.h"
 
-#include	"CM2Camera.h"
+#include "CM2Camera.h"
 
-#include	"Scripting\CScriptingManager.h"
+#include "Scripting/CScriptingManager.h"
 
-#include	"CCameraNatives.h"
+#include "CCameraNatives.h"
 
 void CCameraNatives::Register( CScriptingManager * pScriptingManager )
 {

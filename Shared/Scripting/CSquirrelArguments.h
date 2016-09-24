@@ -9,12 +9,12 @@
 
 #pragma once
 
-#include	"../CString.h"
-#include	"../../Libraries/squirrel/squirrel.h"
+#include "CString.h"
+#include "squirrel.h"
 #include	<list>
 #include	<assert.h>
 
-#include	"../../Libraries/RakNet/Source/BitStream.h"
+#include "BitStream.h"
 
 class CSquirrelArguments;
 class CSquirrelArgument

@@ -7,8 +7,8 @@
 *
 ***************************************************************/
 
-#include	"StdInc.h"
-#include	"CCore.h"
+#include "StdInc.h"
+#include "CCore.h"
 
 void CHttpNatives::Register( CScriptingManager * pScriptingManager )
 {

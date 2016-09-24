@@ -9,14 +9,14 @@
 
 #pragma once
 
-#include	"CSync.h"
+#include "CSync.h"
 
-#include	"Interfaces\CMultiplayerVehicle.h"
-#include	"Interfaces\CMultiplayerPlayer.h"
+#include "Interfaces/CMultiplayerVehicle.h"
+#include "Interfaces/CMultiplayerPlayer.h"
 
 class CNetworkVehicle;
 
-#include	"CNetworkVehicle.h"
+#include "CNetworkVehicle.h"
 
 class CNetworkPlayer : public CMultiplayerPlayer
 {

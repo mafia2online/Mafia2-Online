@@ -7,21 +7,19 @@
 *
 ***************************************************************/
 
+#include "BaseInc.h"
+#include "CCore.h"
+
 #ifdef _CLIENT
-#include	"../Client/BaseInc.h"
-#include	"../Client/CCore.h"
-#include	"CClientScriptingManager.h"
-#else
-#include	"../Client/BaseInc.h"
-#include	"../Server/CCore.h"
+#include "CClientScriptingManager.h"
 #endif
 
-#include	"CString.h"
+#include "CString.h"
 
-#include	"Scripting/CSquirrel.h"
-#include	"Scripting/CScriptingManager.h"
+#include "Scripting/CSquirrel.h"
+#include "Scripting/CScriptingManager.h"
 
-#include	"CEvents.h"
+#include "CEvents.h"
 
 void CSquirrelEventHandler::Call( CSquirrelArguments * pArguments, CSquirrelArgument * pReturn )
 {

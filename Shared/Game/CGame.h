@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include	"../CString.h"
+#include "CString.h"
 
 namespace Game
 {

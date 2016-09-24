@@ -718,5 +718,8 @@
     <ClInclude Include="CCore.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="BaseInc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

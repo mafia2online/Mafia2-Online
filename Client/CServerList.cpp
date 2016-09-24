@@ -7,25 +7,27 @@
 *
 ***************************************************************/
 
-#include	"BaseInc.h"
+#include "BaseInc.h"
 
-#include	<RakPeerInterface.h>
-#include	<BitStream.h>
-#include	<MessageIdentifiers.h>
-#include	<RPC4Plugin.h>
-#include	<errno.h>
+#include "RakPeerInterface.h"
+#include "BitStream.h"
+#include "MessageIdentifiers.h"
+#include "RPC4Plugin.h"
+#include <errno.h>
 
-#include	"CCore.h"
+#include "CCore.h"
 
-#include	"SharedUtility.h"
+#include "SharedUtility.h"
 
-#include	"CGUI.h"
+#include "CGUI.h"
 
-#include	"CServerBrowser.h"
-#include	"CServerList.h"
-#include	"CServerQuery.h"
+#include "CServerBrowser.h"
+#include "CServerList.h"
+#include "CServerQuery.h"
 
-#include	"CServerList.h"
+#include "CServerList.h"
+
+#include "CLogFile.h"
 
 bool ReadString( std::string &strRead, const char * szBuffer, unsigned int &i, unsigned int nLength )
 {
@@ -134,7 +136,7 @@ bool CServerListItem::Parse( const char * szBuffer, unsigned int uiLength )
 
 	// Add this server to the serverbrowser
 	CCore::Instance()->GetGUI()->GetServerBrowser()->AddServer ( m_type, this );
-	
+
 	// Mark as scanned and return
 	return bScanned = true;
 }
@@ -250,7 +252,7 @@ void CServerList::Pulse ( void )
 	{
 		// Pulse the current server in the list
 		String strReply = (*iter)->Pulse ();
-		
+
 		// Reply
 		if ( strReply == "SentQuery" )
 			uiQueriesSent ++;
@@ -277,5 +279,5 @@ void CServerList::Pulse ( void )
 		m_bUpdated = true;
 
 		CLogFile::Printf ( "%d queries sent, %d replied, %d dropped.", m_Servers.size (), m_uiScanned, m_uiSkipped );
-	}	
+	}
 }

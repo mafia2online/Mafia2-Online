@@ -9,17 +9,17 @@
 
 #pragma once
 
-#include	"CString.h"
+#include "CString.h"
 
-#include	"engine\CM2ModelManager.h"
-#include	"engine\CM2Entity.h"
-#include	"engine\CM2Ped.h"
-#include	"engine\CM2Vehicle.h"
+#include "engine/CM2ModelManager.h"
+#include "engine/CM2Entity.h"
+#include "engine/CM2Ped.h"
+#include "engine/CM2Vehicle.h"
 
-#include	"CModelManager.h"
-#include	"CM2SyncObject.h"
+#include "CModelManager.h"
+#include "CM2SyncObject.h"
 
-#include	"CNetworkVehicle.h"
+#include "CNetworkVehicle.h"
 
 #define		TIME_BEFORE_ENTER_VEHICLE_WARP				5000
 

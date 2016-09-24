@@ -11,7 +11,7 @@
 
 #include "CCore.h"
 
-#include "../Libraries/lua/lua.h"
+#include "lua.h"
 #include "CLua.h"
 
 #include "COffsets.h"
@@ -101,7 +101,7 @@ bool CLua::Execute( String strLua )
 
 	// Get the string length
 	int iLength = strLua.GetLength();
-	
+
 	// Get the lua string
 	char * szLua = (char *)strLua.Get();
 

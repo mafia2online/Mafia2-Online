@@ -7,25 +7,25 @@
 *
 ***************************************************************/
 
-#include	"BaseInc.h"
+#include "BaseInc.h"
 
-#include	"CCore.h"
+#include "CCore.h"
 
-#include	"CString.h"
-#include	"Math\CVector3.h"
+#include "CString.h"
+#include "Math/CVector3.h"
 
-#include	"CRemotePlayer.h"
-#include	"CNetworkPlayer.h"
-#include	"CLocalPlayer.h"
+#include "CRemotePlayer.h"
+#include "CNetworkPlayer.h"
+#include "CLocalPlayer.h"
 
-#include	"engine\CM2Ped.h"
+#include "engine/CM2Ped.h"
 
-#include	"Scripting\CSquirrelArguments.h"
+#include "Scripting/CSquirrelArguments.h"
 
-#include	"CClientScriptingManager.h"
-#include	"CEvents.h"
+#include "CClientScriptingManager.h"
+#include "CEvents.h"
 
-#include	"CPlayerManager.h"
+#include "CPlayerManager.h"
 
 CPlayerManager::CPlayerManager( void )
 {

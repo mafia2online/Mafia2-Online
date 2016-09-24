@@ -9,10 +9,10 @@
 
 #pragma once
 
-#include	"Scripting\CSquirrel.h"
-#include	"../../../Client/CGUI.h"
-#include	"../../../Client/gui_impl/CGUI_Impl.h"
-#include	"../../../Client/gui_impl/CGUIElement_Impl.h"
+#include "Scripting/CSquirrel.h"
+#include "CGUI.h"
+#include "gui_impl/CGUI_Impl.h"
+#include "gui_impl/CGUIElement_Impl.h"
 
 struct GUIElement
 {

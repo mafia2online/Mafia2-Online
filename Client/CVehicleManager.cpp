@@ -7,20 +7,22 @@
 *
 ***************************************************************/
 
-#include	"BaseInc.h"
+#include "BaseInc.h"
 
-#include	"CCore.h"
+#include "CCore.h"
 
-#include	"Math\CVector3.h"
+#include "Math/CVector3.h"
 
-#include	"CNetworkVehicle.h"
-#include	"CNetworkPlayer.h"
+#include "CNetworkVehicle.h"
+#include "CNetworkPlayer.h"
 
-#include	"CGraphics.h"
+#include "CGraphics.h"
 
-#include	"CSync.h"
+#include "CSync.h"
 
-#include	"CVehicleManager.h"
+#include "CVehicleManager.h"
+
+#include "CLogFile.h"
 
 CVehicleManager::CVehicleManager( void )
 {

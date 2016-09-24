@@ -15,11 +15,11 @@
 #include <ShlObj.h>
 
 // Shared
-#include <Threading/CThread.h>
-#include <SharedUtility.h>
-#include <CXML.h>
-#include <md5/md5.h>
-#include <Network/CHttpClient.h>
+#include "Threading/CThread.h"
+#include "SharedUtility.h"
+#include "CXML.h"
+#include "md5/md5.h"
+#include "Network/CHttpClient.h"
 
 // Project
-#include "../Shared/CCommon.h"
+#include "CCommon.h"

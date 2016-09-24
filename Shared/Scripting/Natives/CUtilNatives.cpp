@@ -7,32 +7,28 @@
 *
 ***************************************************************/
 
-#include	"CUtilNatives.h"
-#include	"../../Math/CMaths.h"
+#include "Scripting/CScriptingManager.h"
 
+#include "CUtilNatives.h"
+#include "Math/CMaths.h"
+
+#include "BaseInc.h"
+#include "CCore.h"
+#include "CPlayerManager.h"
+#include "CNetworkPlayer.h"
 #ifdef _CLIENT
-#include	"../../../Client/BaseInc.h"
-#include	"../../../Client/CCore.h"
-#include	"../../../Client/CClientScriptingManager.h"
-#include	"../../../Client/CClientScriptGUIManager.h"
-#include	"../../../Client/CVehicleManager.h"
-#include	"../../../Client/CNetworkVehicle.h"
-#include	"../../../Client/CPlayerManager.h"
-#include	"../../../Client/CNetworkPlayer.h"
-#include	"../../../Client/CRemotePlayer.h"
-#else
-#include	"../../../Server/StdInc.h"
+#	include	"CRemotePlayer.h"
 #endif
 
-#include	"../../../Shared/CString.h"
-#include	"../../../Shared/CEvents.h"
-#include	"../../../Shared/CCommands.h"
-#include	"../../../Shared/Scripting/CSquirrelCommon.h"
-#include	"../../../Shared/SharedUtility.h"
+#include "CString.h"
+#include "CEvents.h"
+#include "CCommands.h"
+#include "Scripting/CSquirrelCommon.h"
+#include "SharedUtility.h"
 
-#include	"../../../Shared/Math/CVector3.h"
-#include	"../../../Shared/CColor.h"
-#include	"../../../Shared/Game/CGame.h"
+#include "Math/CVector3.h"
+#include "CColor.h"
+#include "Game/CGame.h"
 
 void CUtilNatives::Register( CScriptingManager * pScriptingManager )
 {

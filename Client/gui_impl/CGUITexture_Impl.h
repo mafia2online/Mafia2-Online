@@ -9,8 +9,8 @@
 
 #pragma once
 
-#include	"../CGUI.h"
-#include	"../CGUITypes.h"
+#include "CGUI.h"
+#include "CGUITypes.h"
 
 class CGUITexture_Impl
 {

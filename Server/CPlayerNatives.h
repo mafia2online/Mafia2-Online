@@ -11,7 +11,7 @@
 
 #pragma once
 
-#include	"StdInc.h"
+#include "StdInc.h"
 
 class CPlayerNatives
 {

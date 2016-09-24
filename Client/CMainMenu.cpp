@@ -7,42 +7,44 @@
 *
 ***************************************************************/
 
-#include	"BaseInc.h"
+#include "BaseInc.h"
 
-#include	"CCore.h"
+#include "CCore.h"
 
-#include	"Math\CVector3.h"
-#include	"CString.h"
+#include "Math/CVector3.h"
+#include "CString.h"
 
-#include	"gui_impl\CGUI_Impl.h"
-#include	"gui_impl\CGUIElement_Impl.h"
-#include	"gui_impl\CGUIStaticImage_Impl.h"
-#include	"gui_impl\CGUIWindow_Impl.h"
-#include	"gui_impl\CGUIGridList_Impl.h"
+#include "gui_impl/CGUI_Impl.h"
+#include "gui_impl/CGUIElement_Impl.h"
+#include "gui_impl/CGUIStaticImage_Impl.h"
+#include "gui_impl/CGUIWindow_Impl.h"
+#include "gui_impl/CGUIGridList_Impl.h"
 
-#include	"CGUI.h"
-#include	"CEGUI.h"
-#include	"CGUICallback.h"
+#include "CGUI.h"
+#include "CEGUI.h"
+#include "CGUICallback.h"
 
-#include	"CGraphics.h"
-#include	"CServerBrowser.h"
+#include "CGraphics.h"
+#include "CServerBrowser.h"
 
-#include	"CSettings.h"
-#include	"CMenuSettings.h"
+#include "CSettings.h"
+#include "CMenuSettings.h"
 
-#include	"CDirect3D9Hook.h"
-#include	"CDirectInput8Hook.h"
+#include "CDirect3D9Hook.h"
+#include "CDirectInput8Hook.h"
 
-#include	"CNetworkModule.h"
-#include	"CPlayerManager.h"
-#include	"CLocalPlayer.h"
+#include "CNetworkModule.h"
+#include "CPlayerManager.h"
+#include "CLocalPlayer.h"
 
-#include	"CClientScriptingManager.h"
-#include	"CClientScriptGUIManager.h"
+#include "CClientScriptingManager.h"
+#include "CClientScriptGUIManager.h"
 
-#include	"CMainMenu.h"
+#include "CMainMenu.h"
 
-#include	"SharedUtility.h"
+#include "SharedUtility.h"
+
+#include "CLogFile.h"
 
 #define	BG_SIZE_X		1920
 #define	BG_SIZE_y		1080

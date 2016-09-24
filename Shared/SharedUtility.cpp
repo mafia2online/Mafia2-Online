@@ -7,9 +7,9 @@
 *
 ***************************************************************/
 
-#include	"SharedUtility.h"
-#include	"CCommon.h"
-#include	"md5/md5.h"
+#include "SharedUtility.h"
+#include "CCommon.h"
+#include "md5/md5.h"
 
 #ifdef _WIN32
 #include	<winsock2.h>
@@ -42,17 +42,7 @@
 #include	<chrono>
 #include	<stdexcept>
 
-#include	"CLogFile.h"
-
-#ifndef _LAUNCHER
-#include	"../Libraries/squirrel/squirrel.h"
-#include	"../Libraries/squirrel/sqstdio.h"
-
-void CompileScript_ErrorHandler( HSQUIRRELVM vm, const SQChar * desc, const SQChar * source, SQInteger line, SQInteger column )
-{
-	CLogFile::Printf( "ERROR: Failed to compile script '%s'. (Line: %d, Column: %d, Error: %s)", source, line, column, desc );
-}
-#endif
+#include "CLogFile.h"
 
 namespace SharedUtility
 {
@@ -111,7 +101,7 @@ namespace SharedUtility
 #else
 		readlink( "/proc/self/exe", szAppPath, MAX_PATH );
 #endif
-	
+
 		StripPath1( szAppPath );
 		return szAppPath;
 	}
@@ -587,7 +577,7 @@ namespace SharedUtility
 		}
 
 		// Close the snapshot handle
-		CloseHandle(hProcessSnapShot); 
+		CloseHandle(hProcessSnapShot);
 		return bReturn;
 	}
 
@@ -657,46 +647,6 @@ namespace SharedUtility
 		}
 
 		return false;
-	}
-#endif
-
-#ifndef _LAUNCHER
-	bool CompileScript( const char * szFile, const char * szFileOut )
-	{
-		// Open a new squirrel vm
-		HSQUIRRELVM vm = sq_open( 1024 );
-
-		// Did the vm fail to open?
-		if( !vm )
-			return false;
-
-		// Set the script compile error handler
-		sq_setcompilererrorhandler( vm, CompileScript_ErrorHandler );
-
-		// Compile the source file
-		bool bFailed = SQ_FAILED( sqstd_loadfile( vm, szFile, SQTrue ) );
-
-		// Did the script fail to compile?
-		if( bFailed )
-		{
-			// Close the vm
-			sq_close( vm );
-			return false;
-		}
-
-		// Write the closure containing the compiled script
-		bFailed = SQ_FAILED( sqstd_writeclosuretofile( vm, szFileOut ) );
-
-		// Did the script fail to write the compiled script?
-		if( bFailed )
-		{
-			// Close the vm
-			sq_close( vm );
-			return false;
-		}
-
-		sq_close( vm );
-		return true;
 	}
 #endif
 

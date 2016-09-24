@@ -8,13 +8,15 @@
 *
 ***************************************************************/
 
-#include	"../BaseInc.h"
+#include "BaseInc.h"
 
-#include	"../CIE.h"
-#include	"../COffsets.h"
+#include "CIE.h"
+#include "COffsets.h"
 
-#include	"../CModelManager.h"
-#include	"CM2ModelManager.h"
+#include "CModelManager.h"
+#include "CM2ModelManager.h"
+
+#include "CLogFile.h"
 
 CM2ModelManager::CM2ModelManager(void)
 {

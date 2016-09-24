@@ -7,8 +7,8 @@
 *
 ***************************************************************/
 
-#include	"CTimer.h"
-#include	"../SharedUtility.h"
+#include "CTimer.h"
+#include "SharedUtility.h"
 
 CTimer::CTimer(CSquirrel * pSquirrel, SQObjectPtr pFunction, int iInterval, int iRepeations, CSquirrelArguments * pArguments)
 {

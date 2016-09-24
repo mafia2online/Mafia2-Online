@@ -11,6 +11,8 @@
 
 #include "CM2PhysFS.h"
 
+#include "CLogFile.h"
+
 CM2PhysFS::CM2PhysFS( M2PhysFS * pFileSystem )
 {
 	SetPhysFS( pFileSystem );

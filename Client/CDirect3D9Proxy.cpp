@@ -7,15 +7,15 @@
 *
 ***************************************************************/
 
-#include	"BaseInc.h"
+#include "BaseInc.h"
 
-#include	"CCore.h"
+#include "CCore.h"
 
-#include	"CDirect3D9Hook.h"
-#include	"CDirect3D9Proxy.h"
-#include	"CDirect3DDevice9Proxy.h"
+#include "CDirect3D9Hook.h"
+#include "CDirect3D9Proxy.h"
+#include "CDirect3DDevice9Proxy.h"
 
-#include	"CWindowSubclass.h"
+#include "CWindowSubclass.h"
 
 CDirect3D9Proxy::CDirect3D9Proxy(IDirect3D9 * pD3D)
 {

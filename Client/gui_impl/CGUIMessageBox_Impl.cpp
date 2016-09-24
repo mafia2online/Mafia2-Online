@@ -7,23 +7,23 @@
 *
 ***************************************************************/
 
-#include	"../BaseInc.h"
-#include	"../CCore.h"
+#include "BaseInc.h"
+#include "CCore.h"
 
-#include	"../../Shared/CString.h"
-#include	"../../Shared/Math/CVector3.h"
+#include "CString.h"
+#include "Math/CVector3.h"
 
-#include	"../CGUI.h"
+#include "CGUI.h"
 
-#include	"../CClientScriptGUIManager.h"
-#include	"../CClientScriptingManager.h"
+#include "CClientScriptGUIManager.h"
+#include "CClientScriptingManager.h"
 
-#include	"CGUI_Impl.h"
-#include	"CGUIWindow_Impl.h"
-#include	"CGUIStaticImage_Impl.h"
-#include	"CGUILabel_Impl.h"
-#include	"CGUIButton_Impl.h"
-#include	"CGUIMessageBox_Impl.h"
+#include "CGUI_Impl.h"
+#include "CGUIWindow_Impl.h"
+#include "CGUIStaticImage_Impl.h"
+#include "CGUILabel_Impl.h"
+#include "CGUIButton_Impl.h"
+#include "CGUIMessageBox_Impl.h"
 
 #define	MESSAGEBOX_WIDTH			400.0f
 #define	MESSAGEBOX_HEIGHT			150.0f

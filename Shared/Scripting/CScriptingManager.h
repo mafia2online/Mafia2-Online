@@ -9,11 +9,11 @@
 
 #pragma once
 
-#include	"../CString.h"
+#include "CString.h"
 #include	<assert.h>
 #include	<list>
-#include	"CSquirrel.h"
-#include	"CSquirrelArguments.h"
+#include "CSquirrel.h"
+#include "CSquirrelArguments.h"
 
 #if defined(_WIN32) && defined(RegisterClass)
 #undef RegisterClass

@@ -7,26 +7,28 @@
 *
 ***************************************************************/
 
-#include	"BaseInc.h"
+#include "BaseInc.h"
 
-#include	"CCore.h"
+#include "CCore.h"
 
-#include	"Math\CVector3.h"
+#include "Math/CVector3.h"
 
-#include	"CMafia.h"
+#include "CMafia.h"
 
-#include	"CPed.h"
-#include	"CNetworkPlayer.h"
-#include	"CNetworkVehicle.h"
-#include	"CVehicleManager.h"
-#include	"CPlayerManager.h"
-#include	"CPedManager.h"
-#include	"CRemotePlayer.h"
+#include "CPed.h"
+#include "CNetworkPlayer.h"
+#include "CNetworkVehicle.h"
+#include "CVehicleManager.h"
+#include "CPlayerManager.h"
+#include "CPedManager.h"
+#include "CRemotePlayer.h"
 
-#include	"engine\CM2Navigation.h"
-#include	"engine\CM2Ped.h"
+#include "engine/CM2Navigation.h"
+#include "engine/CM2Ped.h"
 
-#include	"CBlip.h"
+#include "CBlip.h"
+
+#include "CLogFile.h"
 
 CBlip::CBlip( EntityId blipId, float fX, float fY, int iLibrary, int iIcon )
 {
@@ -162,7 +164,7 @@ void CBlip::Detach ( bool bRecreate )
 		// Get the attached entity
 		EntityId entityId = GetAttachedEntity ();
 		M2Entity * pAttachedEntity = NULL;
-		
+
 		// Find the attached entity
 		if ( m_blipType == eBlipType::BLIP_TYPE_PLAYER )
 			pAttachedEntity = CCore::Instance()->GetPlayerManager()->Get(entityId)->GetPlayerPed()->GetPed();

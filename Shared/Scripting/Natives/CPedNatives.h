@@ -10,7 +10,7 @@
 #pragma once
 #ifdef _CLIENT
 
-#include	"../CScriptingManager.h"
+class CScriptingManager;
 
 class CPedNatives
 {
