@@ -121,6 +121,7 @@ void CNameTag::DrawPlayer(void)
 	static const CColor colContent			( 0, 255, 0, 160 );
 
 	CPlayerManager *pPlayerManager = pCore->GetPlayerManager();
+	assert(pPlayerManager);
 
 	CVector3 localPos;
 	CLocalPlayer *pLocalPlayer = pPlayerManager->GetLocalPlayer();

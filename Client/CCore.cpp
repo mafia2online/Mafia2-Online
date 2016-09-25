@@ -425,7 +425,21 @@ void CCore::DoRender( void )
 		pArguments.clear();
 	}
 
-	CLoadingScreen::Render ();
+	if (!m_bGameLoaded) {
+		CLoadingScreen::Render ();
+	}
+
+	// Draw 3D texts and nametags before any UI element.
+	if (m_pPlayerManager) {
+		CLocalPlayer *pLocalPlayer = m_pPlayerManager->GetLocalPlayer();
+		if (pLocalPlayer) {
+			if (m_pNameTag)
+				m_pNameTag->Draw();
+
+			if (m_p3DTextLabelManager && pLocalPlayer->IsSpawned())
+				m_p3DTextLabelManager->Render();
+		}
+	}
 
 	if ( m_pChat->IsVisible () )
 		m_pChat->Render ();
@@ -441,10 +455,8 @@ void CCore::DoRender( void )
 	if ( IsConnectionProblem () )
 		m_pGraphics->DrawText ( (CCore::Instance()->GetGUI()->GetCEGUI()->GetResolution().fX - CCore::Instance()->GetGraphics()->GetTextWidth("Connection Problem", 1.0f, "tahoma-bold") - 5), 5, D3DCOLOR_ARGB(255, 255, 0, 0), 1.0f, "tahoma-bold", true, "Connection Problem" );
 
-	if( m_pPedManager )
-		m_pPedManager->Pulse();
-
-	if (m_pGame && IsGameLoaded()) {
+	if (m_pGame && IsGameLoaded())
+	{
 #ifdef DEBUG
 		if (m_pPlayerManager && m_pPlayerManager->GetLocalPlayer() && m_pPlayerManager->GetLocalPlayer()->IsSpawned()) {
 			CM2Ped * pPlayerPed = m_pPlayerManager->GetLocalPlayer()->GetPlayerPed();
@@ -487,11 +499,7 @@ void CCore::DoRender( void )
 		{
 			m_pGraphics->DrawText( (m_pGUI->GetCEGUI()->GetResolution().fX - 275), 30, 0xFFFFFFFF, 1.0f, "tahoma-bold", false, DT_NOCLIP, CNetworkStats::GetStats().Get() );
 		}
-		if (m_pNameTag)
-			m_pNameTag->Draw();
-		if (m_p3DTextLabelManager && CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->IsSpawned() == true){
-			m_p3DTextLabelManager->Render();
-		}
+
 		if( m_pClientScriptingManager && !m_pGUI->GetMainMenu()->IsVisible () )
 		{
 			pArguments.push( true );
