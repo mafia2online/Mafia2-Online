@@ -393,20 +393,20 @@ void CPatches::Initialise( void )
 	CPatcher::PatchAddress ( 0xCD00A0, 0xC300B0 ); // mov al, 0; retn
 
 	// Patch the sds main folder address
-	unsigned char guiMain[26] = "/sds/multiplayer/gui-main";
-	CPatcher::PatchAddress( COffsets::VAR_GuiMainSdsFolder, guiMain, sizeof(guiMain) );
+	const char guiMain[] = "/sds/mp/gui-main";
+	CPatcher::PatchAddress( COffsets::VAR_GuiMainSdsFolder, (unsigned char *)guiMain, strlen(guiMain) + 1 );
 
 	// Patch the main sds address
-	unsigned char guiMainSds[30] = "/sds/multiplayer/gui-main.sds";
-	CPatcher::PatchAddress( COffsets::VAR_GuiMainSds, guiMainSds, sizeof(guiMainSds) );
+	const char guiMainSds[21] = "/sds/mp/gui-main.sds";
+	CPatcher::PatchAddress( COffsets::VAR_GuiMainSds, (unsigned char *)guiMainSds, strlen(guiMainSds) + 1 );
 
 	// Patch the ingame gui address
-	unsigned char guiSds[25] = "/sds/multiplayer/gui.sds";
-	CPatcher::PatchAddress( COffsets::VAR_GuiSds, guiSds, sizeof(guiSds) );
+	const char guiSds[] = "/sds/mp/gui.sds";
+	CPatcher::PatchAddress( COffsets::VAR_GuiSds, (unsigned char *)guiSds, strlen(guiSds) + 1 );
 
 	// Patch the main tables address
-	unsigned char tables[28] = "/sds/multiplayer/tables.sds";
-	CPatcher::PatchAddress( COffsets::VAR_TablesSds, tables, sizeof(tables) );
+	const char tables[] = "/sds/mp/tables.sds";
+	CPatcher::PatchAddress( COffsets::VAR_TablesSds, (unsigned char *)tables, strlen(tables) + 1);
 
 	// Patch the stream map binary file
 	unsigned char streamMapa[23] = "/tables/StreamM2MP.bin";
