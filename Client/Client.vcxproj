@@ -69,7 +69,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>legacy_stdio_definitions.lib;winmm.lib;ws2_32.lib;comctl32.lib;d3d9.lib;dxguid.lib;dinput8.lib;DxErr9.lib;detours.lib;dbghelp.lib;bass.lib;freetype265STd.lib;d3dx9.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>../Libraries/CrashRpt;../Libraries/cegui-0.4.0-custom/lib;../Libraries/DXSDK/Lib;../Libraries/Detours;../Libraries/bass;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../Libraries/cegui-0.4.0-custom/lib;../Libraries/DXSDK/Lib;../Libraries/Detours;../Libraries/bass;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreAllDefaultLibraries>
       </IgnoreAllDefaultLibraries>
       <IgnoreSpecificDefaultLibraries>
@@ -115,7 +115,7 @@
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
       <AdditionalDependencies>legacy_stdio_definitions.lib;winmm.lib;ws2_32.lib;comctl32.lib;d3d9.lib;dxguid.lib;dinput8.lib;DxErr9.lib;detours.lib;dbghelp.lib;bass.lib;freetype265ST.lib;d3dx9.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>../Libraries/CrashRpt;../Libraries/cegui-0.4.0-custom/lib;../Libraries/DXSDK/Lib;../Libraries/Detours;../Libraries/bass;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../Libraries/cegui-0.4.0-custom/lib;../Libraries/DXSDK/Lib;../Libraries/Detours;../Libraries/bass;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
       <MinimumRequiredVersion />
     </Link>
