@@ -35,6 +35,8 @@
 
 #include "CLogFile.h"
 
+#include "ExceptionHandler.h"
+
 sub_410440				CPatches::onGameInit = NULL;
 onGameEvent_t			CPatches::onGameEvent = NULL;
 ProcessEntities_t		CPatches::processEntities = NULL;
@@ -279,6 +281,7 @@ void __fastcall Hook_CreateObject(int type)
 		CreateObjectByTypePatch(type);
 }
 
+
 void CPatches::Initialise( void )
 {
 	CLogFile::Printf( "Installing patches..." );
@@ -497,6 +500,8 @@ int __fastcall CPatches::HOOK_CEntMgr__ProcessEntities( void * This, void * _EDX
 
 int CPatches::HOOK_OnGameProcessStart( HINSTANCE hInstance, int a2, int a3, int a4 )
 {
+	ExceptionHandler::ReapplyExceptionFilter();
+
 	return onGameProcessStart( hInstance, a2, a3, a4 );
 }
 

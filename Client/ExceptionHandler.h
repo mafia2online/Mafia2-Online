@@ -15,4 +15,7 @@ public:
 	 * @param path The path where minidump will be saved in case of crash. (max 260 characters)
 	 */
 	static bool Install(const char *const path);
+
+	/** Hacky way of reapplying exception filter to filter out most of the crashes used by client */
+	static void ReapplyExceptionFilter();
 };

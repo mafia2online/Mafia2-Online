@@ -17,7 +17,7 @@ inline LONG GetFilterReturnCode(void)
 	return EXCEPTION_EXECUTE_HANDLER;
 }
 
-static LONG WINAPI ExceptionFilter(PEXCEPTION_POINTERS exceptionInfo)
+LONG WINAPI ExceptionFilter(PEXCEPTION_POINTERS exceptionInfo)
 {
 	const BOOL createFolderResult = CreateDirectory(minidumpsPath, NULL);
 	DWORD lastError = GetLastError();
@@ -78,6 +78,11 @@ bool ExceptionHandler::Install(const char *const path)
 
 	strncpy(minidumpsPath, path, MAX_PATH);
 
-	SetUnhandledExceptionFilter(ExceptionFilter);
+	ReapplyExceptionFilter();
 	return true;
+}
+
+void ExceptionHandler::ReapplyExceptionFilter(void)
+{
+	SetUnhandledExceptionFilter(ExceptionFilter);
 }
