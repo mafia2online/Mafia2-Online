@@ -11,6 +11,7 @@
 
 #include "squirrel.h"
 #include "sqobject.h"
+#undef type
 
 #include <list>
 

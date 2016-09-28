@@ -18,6 +18,7 @@
 #include	<stdarg.h>
 #include "squirrel.h"
 #include "sqobject.h"
+#undef type
 #include "sqstdio.h"
 #include "sqstdaux.h"
 #include "sqstdblob.h"
