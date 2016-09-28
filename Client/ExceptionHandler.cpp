@@ -8,6 +8,18 @@
 
 char minidumpsPath[MAX_PATH + 1] = { 0 };
 
+/**
+ * Should dump contain full memory dump? Use only for memory related debugging.
+ *
+ * Dumps are usually the same size as virtual memory (when tested +/-2GB)
+ */
+#define FULL_MEMORY_DUMP 0
+
+/**
+ * Should dump contain thread info?
+ */
+#define THREAD_INFO_DUMP 0
+
 inline LONG GetFilterReturnCode(void)
 {
 #ifdef _DEBUG
@@ -31,7 +43,7 @@ LONG WINAPI ExceptionFilter(PEXCEPTION_POINTERS exceptionInfo)
 	char dumpFileName[32] = { 0 };
 
 	SYSTEMTIME t;
-	GetSystemTime(&t);
+	GetLocalTime(&t);
 	sprintf(dumpFileName,"M2O_%02u_%02u_%04u_%02u_%02u_%02u", t.wDay, t.wMonth, t.wYear, t.wHour, t.wMinute, t.wSecond);
 
 	char exceptionSavePath[MAX_PATH + 1];
@@ -51,7 +63,16 @@ LONG WINAPI ExceptionFilter(PEXCEPTION_POINTERS exceptionInfo)
 	info.ExceptionPointers = exceptionInfo;
 	info.ClientPointers = FALSE;
 
-	const BOOL miniDumpWriteResult = MiniDumpWriteDump(GetCurrentProcess(), GetCurrentProcessId(), file, MINIDUMP_TYPE(MiniDumpNormal), &info, NULL, NULL);
+	const unsigned minidumpType = MiniDumpNormal
+#if FULL_MEMORY_DUMP
+		| MiniDumpWithFullMemory
+#endif
+#if THREAD_INFO_DUMP
+		| MiniDumpWithThreadInfo
+#endif
+		;
+
+	const BOOL miniDumpWriteResult = MiniDumpWriteDump(GetCurrentProcess(), GetCurrentProcessId(), file, MINIDUMP_TYPE(minidumpType), &info, NULL, NULL);
 	lastError = GetLastError();
 	if (!miniDumpWriteResult) {
 		char message[512] = { 0 };
