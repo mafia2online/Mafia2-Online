@@ -396,6 +396,9 @@ void CCore::OnDevicePreRender( void )
 {
 	m_bRenderInProgress = true;
 
+	if (!m_pGUI)
+		return;
+
 	CMainMenu *pMenu = m_pGUI->GetMainMenu();
 	if( pMenu && m_pClientScriptingManager && !pMenu->IsVisible () )
 		m_pClientScriptingManager->GetEvents()->Call( "onClientFramePreRender" );
