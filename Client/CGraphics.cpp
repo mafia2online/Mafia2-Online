@@ -750,99 +750,94 @@ unsigned int CGraphics::GetFontIndex( const char * szFont )
 	return FONT_INDEX_TAHOMA;
 }
 
-bool CGraphics::GetFrontBufferPixels( unsigned char ** ucData )
+/** "Smart" pointer for surface. */
+struct IDirect3DSurface9Ptr
 {
-	if (!CCore::Instance()->GetCamera())
-		return false;
+private:
+	IDirect3DSurface9 *m_surface;
 
-	// Don't we have a valid data pointer?
-	if( !*ucData )
-		return false;
-
-	// Get the screen display mode
-	D3DDISPLAYMODE displayMode;
-	if( FAILED( m_pDevice->GetDisplayMode( 0, &displayMode ) ) )
-		return false;
-
-	// Create an offscreen plain surface
-	IDirect3DSurface9 * pReadSurface = NULL;
-	if( FAILED( m_pDevice->CreateOffscreenPlainSurface( displayMode.Width, displayMode.Height, D3DFMT_A8R8G8B8, D3DPOOL_SCRATCH, &pReadSurface, NULL ) ) )
+public:
+	IDirect3DSurface9Ptr() : m_surface(nullptr)
 	{
-		return false;
 	}
 
-	// Copy the front buffer data into the read surface
-	if( FAILED( m_pDevice->GetFrontBufferData( 0, pReadSurface ) ) )
+	~IDirect3DSurface9Ptr()
 	{
-		// Release the read surface
-		SAFE_RELEASE( pReadSurface );
-
-		return false;
-	}
-
-	//
-	unsigned int uiWindowWidth = CCore::Instance()->GetCamera()->GetWindowWidth();
-	unsigned int uiWindowHeight = CCore::Instance()->GetCamera()->GetWindowHeight();
-
-	// Build the client rect
-	RECT clientRect;
-	{
-		POINT clientPoint;
-		clientPoint.x = 0;
-		clientPoint.y = 0;
-		ClientToScreen( IE::GetWindow()->m_hWnd, &clientPoint );
-		clientRect.left = clientPoint.x;
-		clientRect.top = clientPoint.y;
-		clientRect.right = (clientRect.left + uiWindowWidth);
-		clientRect.bottom = (clientRect.top + uiWindowHeight);
-	}
-
-	// Get pixels from the read surface
-	D3DLOCKED_RECT lockedRect;
-	if( FAILED( pReadSurface->LockRect( &lockedRect, &clientRect, D3DLOCK_READONLY | D3DLOCK_NOSYSLOCK ) ) )
-	{
-		// Release the read surface
-		SAFE_RELEASE( pReadSurface );
-
-		return false;
-	}
-
-	//
-	unsigned int * dP = (unsigned int *)*ucData;
-	unsigned char * sP = (unsigned char *)lockedRect.pBits;
-
-	// Is the monitor running on 16 bit colours?
-	if( (displayMode.Format == D3DFMT_X8R8G8B8) && (0xFF000000 != (*dP & 0xFF000000)) )
-	{
-		// Copy the data
-		for( unsigned int y = 0; y < uiWindowHeight; y++ )
-		{
-			for( unsigned int x = 0; x < uiWindowWidth; x++ )
-			{
-				*dP = *((unsigned int *)sP) | 0xFF000000;
-				dP++;
-				sP += 4;
-			}
-
-			sP += (lockedRect.Pitch - (4 *  uiWindowWidth));
-		}
-	}
-	else
-	{
-		// Copy the data
-		for( unsigned int y = 0; y < uiWindowHeight; y++ )
-		{
-			memcpy( dP, sP, ( uiWindowWidth * 4) );
-			sP += lockedRect.Pitch;
-			dP += uiWindowWidth;
+		if (m_surface) {
+			m_surface->Release();
+			m_surface = nullptr;
 		}
 	}
 
-	// Unlock the rect
-	pReadSurface->UnlockRect();
+	IDirect3DSurface9 *operator->()
+	{
+		assert(m_surface);
+		return m_surface;
+	}
 
-	// Release the read surface
-	SAFE_RELEASE( pReadSurface );
+	IDirect3DSurface9 *&data()
+	{
+		return m_surface;
+	}
+};
 
+/**
+ * Copy back buffer contents into the pixels buffer.
+ *
+ * @param[out] pixels The unique ptr where the pixels buffer will be stored.
+ * @param[out] width The width of the image in pixels.
+ * @param[out] height The height of image in pixels.
+ * @return @c true if image was copied successfully and can be used @c false otherwise.
+ */
+bool CGraphics::GetImage( std::unique_ptr<uint8_t[]> &pixels, unsigned &width, unsigned &height )
+{
+	IDirect3DSurface9Ptr backBuffer;
+	if (FAILED(m_pDevice->GetBackBuffer(0, 0, D3DBACKBUFFER_TYPE_MONO, &backBuffer.data()))) {
+		return false;
+	}
+
+	D3DSURFACE_DESC desc;
+	if (FAILED(backBuffer->GetDesc(&desc))) {
+		return false;
+	}
+
+	IDirect3DSurface9Ptr copySurface;
+	if (FAILED(m_pDevice->CreateRenderTarget(desc.Width, desc.Height, D3DFMT_A8R8G8B8, D3DMULTISAMPLE_NONE, 0, TRUE, &copySurface.data(), NULL))) {
+		return false;
+	}
+
+	if (FAILED(m_pDevice->StretchRect(backBuffer.data(), NULL, copySurface.data(), NULL, D3DTEXF_POINT))) {
+		return false;
+	}
+
+	D3DLOCKED_RECT lockedRect = { 0 };
+	if (FAILED(copySurface->LockRect(&lockedRect, NULL, D3DLOCK_READONLY | D3DLOCK_NOSYSLOCK))) {
+		return false;
+	}
+
+	pixels = std::make_unique<uint8_t[]>(desc.Width * desc.Height * 4);
+
+	if (!pixels) {
+		return false;
+	}
+
+	width = desc.Width;
+	height = desc.Height;
+
+	uint32_t *const targetBuffer = (uint32_t*)pixels.get();
+	uint32_t *const sourceBuffer = (uint32_t *)(lockedRect.pBits);
+
+	for (unsigned y = 0; y < height; ++y) {
+		for (unsigned x = 0; x < width; ++x) {
+			// Ensure that we always copy with the alpha equal 255 so screenshot has consistent alpha channel.
+			targetBuffer[x * height + y] = sourceBuffer[x * height + y] | 0xFF000000;
+		}
+	}
+
+	if (FAILED(copySurface->UnlockRect())) {
+		pixels.reset();
+		width = height = 0;
+		return false;
+	}
 	return true;
 }

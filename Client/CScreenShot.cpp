@@ -72,7 +72,7 @@ void CScreenShot::FinalizeJob(void)
 	}
 
 
-	delete[] m_imageData;
+	m_imageData.reset();
 	m_fileName.clear();
 	m_jobState = JOB_STATE_IDLE;
 }
@@ -81,13 +81,12 @@ DWORD CScreenShot::WorkerThread()
 {
 	unsigned long ulStartTime = SharedUtility::GetTime();
 
-	unsigned uiRequestDataSize = (m_imageWidth * m_imageHeight * 4);
 	unsigned uiLinePitch = (m_imageWidth * 4);
 
-	unsigned char ** ucPtrs = new png_bytep [ m_imageHeight ];
+	png_bytepp ucPtrs = new png_bytep [ m_imageHeight ];
 
 	for( unsigned int i = 0; i < m_imageHeight; i++ )
-		ucPtrs[i] = (m_imageData + (uiLinePitch * i));
+		ucPtrs[i] = (m_imageData.get() + (uiLinePitch * i));
 
 	FILE * fFile = fopen( m_fileName.Get(), "wb" );
 	if( !fFile )
@@ -129,27 +128,34 @@ const char * CScreenShot::GetValidScreenshotName( void )
 	return RakNet::RakString( "screenshots\\%02d-%02d-%02d %02d-%02d-%02d.png", sysTime.wDay, sysTime.wMonth, sysTime.wYear, sysTime.wHour, sysTime.wMinute, sysTime.wSecond ).C_String();
 }
 
-bool CScreenShot::BeginWrite( unsigned char * ucData )
+static void HandleBeginWriteError(const char *const error)
 {
-	if( !ucData )
-		return false;
+	CCore::Instance()->GetChat()->AddInfoMessage(CColor(255, 0, 0, 255), error);
+	CLogFile::Printf(error);
+}
 
-	if( m_jobState != JOB_STATE_IDLE )
+bool CScreenShot::BeginWrite( std::unique_ptr<uint8_t[]> &pixels, const unsigned width, const unsigned height )
+{
+	if( m_jobState != JOB_STATE_IDLE ) {
+		HandleBeginWriteError("Failed to save screenshot. (Another save operation is in progress)");
 		return false;
+	}
 
 	m_jobState = JOB_STATE_WORKING;
-	m_imageData = ucData;
+	m_imageData = std::move(pixels);
 	m_fileName = GetValidScreenshotName();
 
-	m_imageWidth = CCore::Instance()->GetCamera()->GetWindowWidth();
-	m_imageHeight = CCore::Instance()->GetCamera()->GetWindowHeight();
+	m_imageWidth = width;
+	m_imageHeight = height;
+
+	if (m_thread.joinable()) {
+		m_thread.join();
+	}
 
 	m_thread = std::thread(&CScreenShot::WorkerThread, this);
 
-	if( !m_thread.joinable())
-	{
-		CCore::Instance()->GetChat()->AddInfoMessage(CColor(255, 0, 0, 255), "Failed to save screenshot. (Can't create worker thread)");
-		CLogFile::Printf( "Failed to save screenshot. (Can't create worker thread)" );
+	if( !m_thread.joinable()) {
+		HandleBeginWriteError("Failed to save screenshot. (Can't create worker thread)");
 		return false;
 	}
 	return true;

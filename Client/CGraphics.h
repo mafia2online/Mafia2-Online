@@ -11,6 +11,7 @@
 
 #include <list>
 #include <map>
+#include <memory>
 
 #include "d3d9.h"
 #include "d3dx9.h"
@@ -114,7 +115,7 @@ public:
 	bool							IsUsingAMD( void );
 	bool							IsUsingNVIDIA(void);
 	bool							IsUsingChipset( void );
-	//
-	bool							GetFrontBufferPixels						( unsigned char ** ucData );
+
+	bool							GetImage(std::unique_ptr<uint8_t[]> &pixels, unsigned &width, unsigned &height);
 
 };

@@ -35,7 +35,7 @@ private:
 	unsigned							m_saveTime;
 
 	/** The image data storage */
-	unsigned char					  * m_imageData;
+	std::unique_ptr<uint8_t[]>			m_imageData;
 
 	/** Screenshot file name */
 	String								m_fileName;
@@ -55,7 +55,7 @@ public:
 	CScreenShot();
 	~CScreenShot();
 
-	bool			BeginWrite						( unsigned char * ucData );
+	bool			BeginWrite						( std::unique_ptr<uint8_t[]> &pixels, const unsigned width, const unsigned height );
 	bool			IsSaving						( void );
 
 	void			ProcessRenderThread				( void );

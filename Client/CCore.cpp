@@ -485,16 +485,17 @@ void CCore::DoRender( void )
 		}
 		if (m_bCaptureScreenshot && !m_pScreenshotManager->IsSaving())
 		{
-			unsigned long ulScreenWidth = m_pCamera->GetGameCamera()->m_iWindowWidth;
-			unsigned long ulScreenHeight = m_pCamera->GetGameCamera()->m_iWindowHeight;
-			unsigned char * ucData = new unsigned char [ ulScreenHeight * (ulScreenWidth * 4) ];
+			std::unique_ptr<uint8_t[]> pixels;
+			unsigned imageWidth=0,imageHeight=0;
 
-			if( m_pGraphics->GetFrontBufferPixels( &ucData ) )
+			if( m_pGraphics->GetImage( pixels, imageWidth, imageHeight ) )
 			{
-				if (! m_pScreenshotManager->BeginWrite(ucData)) {
-					delete []ucData;
-					ucData = nullptr;
-				}
+				m_pScreenshotManager->BeginWrite( pixels, imageWidth, imageHeight );
+			}
+			else {
+				const char *const errorMessage = "Failed to capture screenshot. (Image capture failed)";
+				m_pChat->AddInfoMessage(CColor(255, 0, 0, 255), errorMessage);
+				CLogFile::Printf(errorMessage);
 			}
 			m_bCaptureScreenshot = false;
 		}
