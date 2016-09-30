@@ -125,17 +125,11 @@ bool CCore::Initialise( int argc, char * argv[] )
 
 	CLogFile::Printf( "= Server name    : %s", CVAR_GET_STRING( "hostname" ) );
 	CLogFile::Printf( "= Server port    : %d", CVAR_GET_INTEGER( "port" ) );
-	CLogFile::Printf( "= Max players    : %d%s", CVAR_GET_INTEGER( "maxplayers" ), !IsPasswordProtected() ? "\n" : "" );
-
-	// Is the server passworded?
-	if( IsPasswordProtected() )
-	{
-		CLogFile::Printf( "= Password	    : %s\n", SharedUtility::HideCharacters( CVAR_GET_STRING( "password" ) ).Get() );
-	}
-
+	CLogFile::Printf( "= Max players    : %d", CVAR_GET_INTEGER( "maxplayers" ) );
+	CLogFile::Printf( "= Has password   : %s", IsPasswordProtected() ? "Yes" : "No" );
 	CLogFile::Printf( "= Log file       : %s", strLogFile.Get() );
 
-	CLogFile::Print( "==============================================================\n" );
+	CLogFile::Print( "==============================================================" );
 
 	// Do we have a custom host set?
 	if ( strlen ( CVAR_GET_STRING ( "serverip" ) ) > 0 )
