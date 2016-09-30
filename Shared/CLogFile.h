@@ -28,3 +28,14 @@ public:
 	static	void	Close( void );
 	static	void	TimeStamp( bool bEnable );
 };
+
+/**
+ * @def Helper macro to support debug only log message.
+ */
+#ifndef DEBUG_LOG
+#	ifdef _DEBUG
+#		define DEBUG_LOG(message,...) CLogFile::Printf(message, __VA_ARGS__)
+#	else
+#		define DEBUG_LOG(...)
+#	endif
+#endif
