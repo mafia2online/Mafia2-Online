@@ -62,7 +62,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <AdditionalIncludeDirectories>./;../Shared;../Libraries/tinyxml;../Libraries/bass;../Libraries/sqlite;../Libraries/cegui-0.4.0-custom/include;../Libraries/DXSDK/include;../Libraries/squirrel;../Libraries/lua;../Libraries/RakNet/Source;../Libraries/Detours;../Libraries/zlib-1.2.5;../Libraries/lpng142;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_WIN32;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_CLIENT;_DEBUG;CEGUI_STATIC;LOGGER;WIN32_LEAN_AND_MEAN;NO_GARBAGE_COLLECTOR;DEBUG_LOG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WIN32;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_CLIENT;_DEBUG;CEGUI_STATIC;LOGGER;WIN32_LEAN_AND_MEAN;NO_GARBAGE_COLLECTOR;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <DisableSpecificWarnings>4996;4409;4482;4800;4305;4018;4390;4099;4244;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <Optimization>Disabled</Optimization>

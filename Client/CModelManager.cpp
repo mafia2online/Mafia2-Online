@@ -38,7 +38,7 @@ CM2ModelManager * CModelManager::Load(const char * szModelDirectory, const char 
 	// Have we loaded too many models?
 	if (m_modelManagers.size() >= MODELMGR_MAX)
 	{
-		CLogFile::Printf("ERROR - CModelManager::Load - Can't load model because model limit reached! (%d/%d)", m_modelManagers.size(), MODELMGR_MAX);
+		CLogFile::Printf("ERROR - Can't load model because model limit reached! (%d/%d)", m_modelManagers.size(), MODELMGR_MAX);
 		return NULL;
 	}
 
@@ -52,16 +52,15 @@ CM2ModelManager * CModelManager::Load(const char * szModelDirectory, const char 
 	// Did the model fail to load?
 	if (!pModelManager->Load(szModelDirectory, szModelName))
 	{
-		CLogFile::Printf("ERROR - CModelManager::Load - Failed to load model '%s'", szModelName);
+		CLogFile::Printf("ERROR - Failed to load model '%s'", szModelName);
 
 		// Delete the model manager instance
 		SAFE_DELETE(pModelManager);
 		return NULL;
 	}
 
-#ifdef DEBUG
-	CLogFile::Printf("CModelManager::Load ( \"%s\" ) - Model loaded successfully!", szModelName);
-#endif
+	DEBUG_LOG("CModelManager::Load ( \"%s\" ) - Model loaded successfully!", szModelName);
+
 	// Add the current model manager to the list
 	m_modelManagers.push_back(pModelManager);
 
@@ -89,7 +88,7 @@ bool CModelManager::Free(const char * szModelName)
 			// Delete the model manager instance
 			SAFE_DELETE(pModelManager);
 
-			CLogFile::Printf("CModelManager::Free ( \"%s\" ) - Model unloaded successfully! (%d models loaded)", szModelName, m_modelManagers.size());
+			DEBUG_LOG ("CModelManager::Free ( \"%s\" ) - Model unloaded successfully! (%d models loaded)", szModelName, m_modelManagers.size());
 
 			return true;
 		}

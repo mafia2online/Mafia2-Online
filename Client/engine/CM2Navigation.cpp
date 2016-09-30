@@ -18,7 +18,7 @@ CM2Navigation::CM2Navigation( M2Navigation * pNavigation )
 	// Set the navigation
 	SetNavigation( pNavigation );
 
-	CLogFile::Printf ( "0x38: 0x%p", *(DWORD **)(pNavigation + 0x38) );
+	DEBUG_LOG ( "0x38: 0x%p", *(DWORD **)(pNavigation + 0x38) );
 }
 
 CM2Navigation::~CM2Navigation( void )
@@ -65,8 +65,9 @@ int CM2Navigation::RegisterIconPos( const Vector2& vecPosition, int iLibrary, in
 		add esp, 4h;
 	}
 
-	if ( bResult )
-		CLogFile::Printf ( "Icon: 0x%p", pIcon );
+	if ( bResult ) {
+		DEBUG_LOG ( "Icon: 0x%p", pIcon );
+	}
 
 	return iIconId;
 }
@@ -105,7 +106,7 @@ int CM2Navigation::RegisterIconEntity( M2Entity * pEntity, int iLibrary, int iIc
 			mov pIcon, eax;
 		}
 
-		CLogFile::Printf ( "Entity icon: 0x%p", pIcon );
+		DEBUG_LOG ( "Entity icon: 0x%p", pIcon );
 	}
 
 	return iIconId;

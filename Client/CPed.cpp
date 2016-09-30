@@ -44,7 +44,7 @@ CPed::~CPed( void )
 
 void CPed::Create(CVector3 vecPosition, CVector3 vecRotation)
 {
-	CLogFile::Print("Loading ped model manager...");
+	DEBUG_LOG("Loading ped model manager...");
 
 	// Get the model name and directory
 	String strModel, strDirectory;
@@ -53,18 +53,18 @@ void CPed::Create(CVector3 vecPosition, CVector3 vecRotation)
 	// Try load the ped model
 	m_pPedModelManager = CCore::Instance()->GetModelManager()->Load(strDirectory.Get(), strModel.Get());
 
-	CLogFile::Printf("Loaded! 0x%p", m_pPedModelManager);
+	DEBUG_LOG("Loaded! 0x%p", m_pPedModelManager);
 
 	// Create the ped
 	m_pPed = IE::CreateWrapperPed(m_pPedModelManager);
 
 	// Creation succeed ?
-	if (!m_pPed){
+	if (!m_pPed) {
 		CLogFile::Print("Failed to create ped");
 		return;
 	}
 
-	CLogFile::Printf("Ped created. 0x%p", m_pPed);
+	DEBUG_LOG("Ped created. 0x%p", m_pPed);
 
 	// Activate the ped
 	m_pPed->Activate();

@@ -20,9 +20,7 @@
 
 CM2HudTimer::CM2HudTimer( M2HudTimer * pHudTimer )
 {
-#ifdef _DEBUG
-	CLogFile::Printf( "CM2HudTimer::CM2HudTimer( 0x%p )", pHudTimer );
-#endif
+	DEBUG_LOG( "CM2HudTimer::CM2HudTimer( 0x%p )", pHudTimer );
 
 	// Set the hud timer
 	SetHudTimer( pHudTimer );
@@ -123,9 +121,7 @@ bool CM2HudTimer::IsStopped( void )
 
 CM2Hud::CM2Hud( M2Hud * pHud )
 {
-#ifdef _DEBUG
-	CLogFile::Printf( "CM2Hud::CM2Hud( 0x%p )", pHud );
-#endif
+	DEBUG_LOG( "CM2Hud::CM2Hud( 0x%p )", pHud );
 
 	// Set the hud
 	SetHud( pHud );

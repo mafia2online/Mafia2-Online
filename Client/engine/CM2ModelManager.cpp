@@ -40,7 +40,7 @@ CM2ModelManager::CM2ModelManager(void)
 
 CM2ModelManager::~CM2ModelManager(void)
 {
-	CLogFile::Printf("CM2ModelManager::~CM2ModelManager");
+	DEBUG_LOG("CM2ModelManager::~CM2ModelManager");
 
 	// Do we have an allocated model?
 	if (m_pModelManager)

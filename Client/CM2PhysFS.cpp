@@ -66,7 +66,8 @@ CM2PhysFSFile * CM2PhysFS::addToSearchPath( const char * szFileName, int iUnknow
 
 	M2PhysFSFile * pFile = NULL;
 
-	CLogFile::Printf( "Adding file to search path '%s'... (AddToSearchPath: 0x%p)", szFileName, dwFunc );
+	CLogFile::Printf( "Adding file to search path '%s'...", szFileName );
+	DEBUG_LOG("AddToSearchPath: 0x%p", dwFunc);
 
 	// Open the file
 	_asm
@@ -80,7 +81,7 @@ CM2PhysFSFile * CM2PhysFS::addToSearchPath( const char * szFileName, int iUnknow
 
 	m_pOpenFile = new CM2PhysFSFile( pFile );
 
-	CLogFile::Printf( "File opened! (0x%p)", m_pOpenFile->GetPhysFSFile() );
+	DEBUG_LOG( "File opened! (0x%p)", m_pOpenFile->GetPhysFSFile() );
 
 	return m_pOpenFile;
 }
@@ -94,7 +95,7 @@ void CM2PhysFS::close( CM2PhysFSFile * pFile )
 	M2PhysFSFile * pFSFile = pFile->GetPhysFSFile();
 	DWORD dwFunc = pFileSystem->m_pVFTable->Close;
 
-	CLogFile::Printf( "Closing file 0x%p. (Func: 0x%p)", pFSFile, dwFunc );
+	DEBUG_LOG( "Closing file 0x%p. (Func: 0x%p)", pFSFile, dwFunc );
 
 	_asm
 	{
@@ -102,11 +103,11 @@ void CM2PhysFS::close( CM2PhysFSFile * pFile )
 		call dwFunc;
 	}
 
-	CLogFile::Print( "Closed!" );
+	DEBUG_LOG( "Closed!" );
 
 	SAFE_DELETE( m_pOpenFile );
 
-	CLogFile::Print( "Cleaned" );
+	DEBUG_LOG( "Cleaned" );
 }
 
 const char * CM2PhysFS::loadReadAndClose( const char * szDir, const char * szFile )

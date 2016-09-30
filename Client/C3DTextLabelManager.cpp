@@ -22,9 +22,12 @@
 #include "CLocalPlayer.h"
 
 #include "C3DTextLabelManager.h"
+
+#include "CLogFile.h"
+
 C3DTextLabelManager::C3DTextLabelManager(void)
 {
-	DEBUG_TRACE("C3DTextLabelManager::C3DTextLabelManager");
+	DEBUG_LOG("C3DTextLabelManager::C3DTextLabelManager");
 
 	// Reset pointers
 	for (EntityId textId = 0; textId < MAX_3DTEXTS; textId++)
@@ -36,7 +39,7 @@ C3DTextLabelManager::C3DTextLabelManager(void)
 
 C3DTextLabelManager::~C3DTextLabelManager(void)
 {
-	DEBUG_TRACE("C3DTextLabelManager::~C3DTextLabelManager");
+	DEBUG_LOG("C3DTextLabelManager::~C3DTextLabelManager");
 
 	// Loop and delete all active 3DTextLabel
 	for (EntityId textId = 0; textId < MAX_3DTEXTS; textId++)

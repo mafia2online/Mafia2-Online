@@ -51,7 +51,7 @@ SQInteger CPedNatives::CreatePed( SQVM * pVM )
 	sq_getfloat( pVM, -2, &vecRotation.fY );
 	sq_getfloat( pVM, -1, &vecRotation.fZ );
 
-	CLogFile::Printf( "Model: %d, Pos: %f, %f, %f, Rot: %f, %f, %f", iModelIndex, vecPosition.fX, vecPosition.fY, vecPosition.fZ, vecRotation.fX, vecRotation.fY, vecRotation.fZ );
+	DEBUG_LOG ( "Model: %d, Pos: %f, %f, %f, Rot: %f, %f, %f", iModelIndex, vecPosition.fX, vecPosition.fY, vecPosition.fZ, vecRotation.fX, vecRotation.fY, vecRotation.fZ );
 
 	// Add the ped to the manager
 	sq_pushinteger( pVM, CCore::Instance()->GetPedManager()->Add( iModelIndex, vecPosition, vecRotation ) );

@@ -60,7 +60,7 @@
 
 CNetworkVehicle::CNetworkVehicle( void )
 {
-	DEBUG_TRACE("CNetworkVehicle::CNetworkVehicle");
+	DEBUG_LOG("CNetworkVehicle::CNetworkVehicle");
 
 	// Reset variables
 	m_vehicleId = INVALID_ENTITY_ID;
@@ -88,7 +88,7 @@ CNetworkVehicle::CNetworkVehicle( void )
 
 CNetworkVehicle::~CNetworkVehicle( void )
 {
-	DEBUG_TRACE("CNetworkVehicle::~CNetworkVehicle");
+	DEBUG_LOG("CNetworkVehicle::~CNetworkVehicle");
 
 	// Handle this destroy with the localplayer
 	//CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->StopSyncVehicle( this );
@@ -99,7 +99,7 @@ CNetworkVehicle::~CNetworkVehicle( void )
 
 void CNetworkVehicle::SetModel( unsigned int uiModelIndex, bool bRebuild )
 {
-	DEBUG_TRACE("CNetworkVehicle::SetModel");
+	DEBUG_LOG("CNetworkVehicle::SetModel");
 
 	// Set the model index
 	m_uiModelIndex = uiModelIndex;
@@ -113,7 +113,7 @@ void CNetworkVehicle::SetModel( unsigned int uiModelIndex, bool bRebuild )
 
 void CNetworkVehicle::Create( void )
 {
-	DEBUG_TRACE("CNetworkVehicle::Create");
+	DEBUG_LOG("CNetworkVehicle::Create");
 
 	// Destroy the vehicle if it's already created
 	if( m_pVehicle )
@@ -123,9 +123,7 @@ void CNetworkVehicle::Create( void )
 	String strModel;
 	Game::GetVehicleModelFromId( m_uiModelIndex, &strModel );
 
-#ifdef DEBUG
-	CLogFile::Printf( "CNetworkVehicle< %d >::Create( %d ) - Building vehicle with model '%s'...", m_vehicleId, m_uiModelIndex, strModel.Get() );
-#endif
+	DEBUG_LOG ( "CNetworkVehicle< %d >::Create( %d ) - Building vehicle with model '%s'...", m_vehicleId, m_uiModelIndex, strModel.Get() );
 
 	// Try load the player model
 	m_pVehicleModelManager = CNetworkModelManager::Load( SDS_LOAD_DIR_CARS, strModel.Get() );
@@ -137,31 +135,23 @@ void CNetworkVehicle::Create( void )
 	// Create the vehicle instance
 	m_pVehicle = IE::CreateWrapperVehicle(m_pVehicleModelManager);
 
-#ifdef DEBUG
-	CLogFile::Printf ( "CNetworkVehicle< %d >::Create( ) - Wrapper Vehicle: 0x%p, Engine vehicle: 0x%p", m_vehicleId, m_pVehicle, (m_pVehicle ? m_pVehicle->GetVehicle () : NULL) );
-#endif
+	DEBUG_LOG ( "CNetworkVehicle< %d >::Create( ) - Wrapper Vehicle: 0x%p, Engine vehicle: 0x%p", m_vehicleId, m_pVehicle, (m_pVehicle ? m_pVehicle->GetVehicle () : NULL) );
 
 	// Get the spawn colour
 	GetColour ( &m_primarySpawnColour, &m_secondarySpawnColour );
 
-#ifdef DEBUG
-	CLogFile::Printf ( "CNetworkVehicle< %d >::Create( ) - 1", m_vehicleId );
-#endif
+	DEBUG_LOG ( "CNetworkVehicle< %d >::Create( ) - 1", m_vehicleId );
 
 	// Reset interpolation
 	ResetInterpolation();
 
-#ifdef DEBUG
-	CLogFile::Printf ( "CNetworkVehicle< %d >::Create( ) - 2", m_vehicleId );
-#endif
+	DEBUG_LOG ( "CNetworkVehicle< %d >::Create( ) - 2", m_vehicleId );
 
 	// Set the spawned time
 	m_ulSpawnTime = SharedUtility::GetTime();
 	m_bSpawnProcessed = true;
 
-#ifdef DEBUG
-	CLogFile::Printf ( "CNetworkVehicle< %d >::Create( ) - Done", m_vehicleId );
-#endif
+	DEBUG_LOG ( "CNetworkVehicle< %d >::Create( ) - Done", m_vehicleId );
 
 	// Do we have a blip attached to this vehicle which hasn't been created?
 	if ( m_pAttachedBlip && !m_bBlipAttached )
@@ -176,7 +166,7 @@ void CNetworkVehicle::Create( void )
 
 void CNetworkVehicle::Destroy( void )
 {
-	DEBUG_TRACE("CNetworkVehicle::Destroy");
+	DEBUG_LOG("CNetworkVehicle::Destroy");
 
 	// Is the vehicle instance invalid?
 	if( !m_pVehicle )
@@ -233,7 +223,7 @@ void CNetworkVehicle::Destroy( void )
 
 void CNetworkVehicle::Respawn( void )
 {
-	DEBUG_TRACE("CNetworkVehicle::Respawn");
+	DEBUG_LOG("CNetworkVehicle::Respawn");
 
 	// Is the vehicle valid?
 	if( m_pVehicle )
@@ -251,7 +241,7 @@ void CNetworkVehicle::Respawn( void )
 
 void CNetworkVehicle::HandleRespawn( void )
 {
-	DEBUG_TRACE("CNetworkVehicle::HandleRespawn");
+	DEBUG_LOG("CNetworkVehicle::HandleRespawn");
 
 	// Is the vehicle valid?
 	if( m_pVehicle )
@@ -320,7 +310,7 @@ void CNetworkVehicle::HandleRespawn( void )
 
 void CNetworkVehicle::StoreVehicleSync( const InVehicleSync &vehicleSync, bool bInterpolate, bool bSpawn )
 {
-	DEBUG_TRACE("CNetworkVehicle::StoreVehicleSync");
+	DEBUG_LOG("CNetworkVehicle::StoreVehicleSync");
 
 	m_lastSyncData = vehicleSync;
 
@@ -358,7 +348,7 @@ void CNetworkVehicle::StoreVehicleSync( const InVehicleSync &vehicleSync, bool b
 			// Set the rotation
 			SetRotation( m_lastSyncData.m_vecRotation );
 
-			CLogFile::Printf ( "Not using interpolation this frame for vehicle %d.", m_vehicleId );
+			DEBUG_LOG ( "Not using interpolation this frame for vehicle %d.", m_vehicleId );
 		}
 
 		// Has the vehicle dirt level changed?
@@ -452,7 +442,7 @@ void CNetworkVehicle::StoreVehicleSync( const InVehicleSync &vehicleSync, bool b
 
 void CNetworkVehicle::Pulse( void )
 {
-	DEBUG_TRACE("CNetworkVehicle::Pulse");
+	DEBUG_LOG("CNetworkVehicle::Pulse");
 
 	// Is the localplayer not spawned?
 	if( !CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->IsSpawned() )
@@ -577,7 +567,7 @@ void CNetworkVehicle::Pulse( void )
 
 void CNetworkVehicle::SetPosition( CVector3 vecPosition )
 {
-	DEBUG_TRACE("CNetworkVehicle::SetPosition");
+	DEBUG_LOG("CNetworkVehicle::SetPosition");
 
 	// Is the vehicle instance valid?
 	if( m_pVehicle )
@@ -586,7 +576,7 @@ void CNetworkVehicle::SetPosition( CVector3 vecPosition )
 
 void CNetworkVehicle::GetPosition( CVector3 * vecPosition )
 {
-	DEBUG_TRACE("CNetworkVehicle::GetPosition");
+	DEBUG_LOG("CNetworkVehicle::GetPosition");
 
 	// Is the vehicle instance valid?
 	if( m_pVehicle )
@@ -595,7 +585,7 @@ void CNetworkVehicle::GetPosition( CVector3 * vecPosition )
 
 void CNetworkVehicle::SetRotation( CVector3 vecRotation )
 {
-	DEBUG_TRACE("CNetworkVehicle::SetRotation");
+	DEBUG_LOG("CNetworkVehicle::SetRotation");
 
 	// Is the vehicle instance valid?
 	if( m_pVehicle )
@@ -610,7 +600,7 @@ void CNetworkVehicle::SetRotation( CVector3 vecRotation )
 
 void CNetworkVehicle::GetRotation( CVector3 * vecRotation )
 {
-	DEBUG_TRACE("CNetworkVehicle::GetRotation");
+	DEBUG_LOG("CNetworkVehicle::GetRotation");
 
 	// Is the vehicle instance valid?
 	if( m_pVehicle )
@@ -939,7 +929,7 @@ bool CNetworkVehicle::GetLightState ( void )
 
 void CNetworkVehicle::HandlePlayerEnter( CNetworkPlayer * pNetworkPlayer, EntityId seatId )
 {
-	DEBUG_TRACE("CNetworkVehicle::HandlePlayerEnter");
+	DEBUG_LOG("CNetworkVehicle::HandlePlayerEnter");
 
 	// Is this player the driver?
 	if( seatId == 0 )
@@ -962,7 +952,7 @@ void CNetworkVehicle::HandlePlayerEnter( CNetworkPlayer * pNetworkPlayer, Entity
 
 void CNetworkVehicle::HandlePlayerExit( CNetworkPlayer * pNetworkPlayer, EntityId seatId, bool bResetInterpolation )
 {
-	DEBUG_TRACE("CNetworkVehicle::HandlePlayerExit");
+	DEBUG_LOG("CNetworkVehicle::HandlePlayerExit");
 
 	// Is this player the driver?
 	if( seatId == 0 )
@@ -989,7 +979,7 @@ void CNetworkVehicle::HandlePlayerExit( CNetworkPlayer * pNetworkPlayer, EntityI
 
 void CNetworkVehicle::ResetInterpolation( void )
 {
-	DEBUG_TRACE("CNetworkVehicle::ResetInterpolation");
+	DEBUG_LOG("CNetworkVehicle::ResetInterpolation");
 
 	// Are we spawned?
 	if ( IsSpawned() )
@@ -1042,7 +1032,7 @@ void CNetworkVehicle::ResetInterpolation( void )
 
 void CNetworkVehicle::Interpolate( void )
 {
-	DEBUG_TRACE("CNetworkVehicle::Interpolate");
+	DEBUG_LOG("CNetworkVehicle::Interpolate");
 
 	// Do we have a driver and he is not the localplayer?
 	if( m_pDriver && m_pDriver != CCore::Instance()->GetPlayerManager()->GetLocalPlayer () )
@@ -1412,7 +1402,7 @@ void CNetworkVehicle::AttachBlip ( CBlip * pBlip )
 		// Is the blip created?
 		m_bBlipAttached = pBlip->IsCreated ();
 
-		CLogFile::Printf ( "CNetworkVehicle::AttachBlip () - 0x%p, %s", m_pAttachedBlip, (m_bBlipAttached ? "true" : "false") );
+		DEBUG_LOG ( "CNetworkVehicle::AttachBlip () - 0x%p, %s", m_pAttachedBlip, (m_bBlipAttached ? "true" : "false") );
 	}
 }
 
@@ -1430,6 +1420,6 @@ void CNetworkVehicle::DetachBlip ( void )
 		// Mark as blip not attached
 		m_bBlipAttached = false;
 
-		CLogFile::Printf ( "CNetworkVehicle::DetachBlip ()" );
+		DEBUG_LOG ( "CNetworkVehicle::DetachBlip ()" );
 	}
 }

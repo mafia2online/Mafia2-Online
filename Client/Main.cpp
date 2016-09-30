@@ -36,13 +36,13 @@ BOOL WINAPI DllMain( HMODULE hModule, DWORD dwReason, void * pReserved )
 
 	case DLL_PROCESS_DETACH:
 		{
-			CLogFile::Print( "DLL_PROCESS_DETACH" );
+			DEBUG_LOG ( "DLL_PROCESS_DETACH" );
 			if (pCore && CCore::Instance()->GetNetworkModule() && CCore::Instance()->GetNetworkModule()->GetRakPeer())
 			{
-				CLogFile::Print( "Shutting down the network..." );
+				DEBUG_LOG ( "Shutting down the network..." );
 				CCore::Instance()->GetNetworkModule()->GetRakPeer()->Shutdown( 500 );
 			}
-			CLogFile::Print( "Terminating process" );
+			DEBUG_LOG ( "Terminating process" );
 			TerminateProcess( GetCurrentProcess(), 0 );
 
 			break;

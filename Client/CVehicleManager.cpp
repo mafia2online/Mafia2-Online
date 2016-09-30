@@ -74,7 +74,7 @@ void CVehicleManager::Remove( EntityId vehicleId )
 
 void CVehicleManager::Pulse( void )
 {
-	DEBUG_TRACE("CVehicleManager::Pulse");
+	DEBUG_LOG("CVehicleManager::Pulse");
 	for( EntityId i = 0; i < MAX_VEHICLES; i++ )
 	{
 		if( IsActive(i) )
@@ -84,7 +84,7 @@ void CVehicleManager::Pulse( void )
 
 CNetworkVehicle * CVehicleManager::GetFromGameGUID( DWORD dwGuid )
 {
-	DEBUG_TRACE("CVehicleManager::GetFromGameGUID");
+	DEBUG_LOG("CVehicleManager::GetFromGameGUID");
 
 	// Loop through all vehicles
 	for( EntityId i = 0; i < MAX_VEHICLES; i++ )
@@ -118,8 +118,7 @@ EntityId CVehicleManager::GetCount( void )
 
 void CVehicleManager::RespawnAll( void )
 {
-	DEBUG_TRACE("CVehicleManager::RespawnAll");
-	CLogFile::Printf ( "CVehicleManager::RespawnAll" );
+	DEBUG_LOG("CVehicleManager::RespawnAll");
 
 	// Loop through all vehicles
 	for( EntityId i = 0; i < MAX_VEHICLES; i++ )

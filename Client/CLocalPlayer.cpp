@@ -883,7 +883,7 @@ void CLocalPlayer::HandlePassengerKey( void )
 		// Get the closest vehicle in range
 		GetClosestVehicle( &pVehicle, &seat );
 
-		CLogFile::Printf( "CLocalPlayer::HandlePassengerKey() - Vehicle: 0x%p, Seat: %d", pVehicle, seat );
+		DEBUG_LOG( "CLocalPlayer::HandlePassengerKey() - Vehicle: 0x%p, Seat: %d", pVehicle, seat );
 
 		// Did we get a closest vehicle and a seat?
 		if( pVehicle && seat )
@@ -894,7 +894,7 @@ void CLocalPlayer::HandlePassengerKey( void )
 			// Get the old camera lock state
 			bOldCameraState = CCore::Instance()->GetCamera()->IsLocked();
 
-			CLogFile::Printf( "CLocalPlayer::HandlePassengerKey() - bOldControlState: %s, bOldCameraState: %s", (bOldControlState ? "true" : "false"), (bOldCameraState ? "true" : "false") );
+			DEBUG_LOG( "CLocalPlayer::HandlePassengerKey() - bOldControlState: %s, bOldCameraState: %s", (bOldControlState ? "true" : "false"), (bOldCameraState ? "true" : "false") );
 
 			// Lock the player controls
 			LockControls( true );
@@ -902,12 +902,12 @@ void CLocalPlayer::HandlePassengerKey( void )
 			// Set the player state
 			SetState( PLAYERSTATE_PASSENGER );
 
-			CLogFile::Printf( "CLocalPlayer::HandlePassengerKey() - Putting player in passenger seat..." );
+			DEBUG_LOG( "CLocalPlayer::HandlePassengerKey() - Putting player in passenger seat..." );
 
 			// Get in the vehicle
 			PutInVehicle( pVehicle, seat );
 
-			CLogFile::Printf( "CLocalPlayer::HandlePassengerKey() - Done!" );
+			DEBUG_LOG( "CLocalPlayer::HandlePassengerKey() - Done!" );
 
 			// Unlock camera control
 			if( !bOldCameraState ) // checking this because after we put in vehicle, it locks control :(

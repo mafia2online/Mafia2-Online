@@ -44,7 +44,7 @@ C_TrafficModelDescriptor * LoadHumanModel( char * szModelFileName )
 	// Try and load the model
 	if( !CTrafficModelDesc__LoadModel( pDescriptor, szModelFileName ) )
 	{
-		CLogFile::Printf( "[ERROR] - CTrafficModelDesc__LoadModel - Failed to load model '%s'.", szModelFileName );
+		CLogFile::Printf( "[ERROR] Failed to load model '%s'.", szModelFileName );
 
 		// Delete the descriptor memory
 		SAFE_DELETE( pDescriptor );
@@ -52,7 +52,7 @@ C_TrafficModelDescriptor * LoadHumanModel( char * szModelFileName )
 		return NULL;
 	}
 
-	CLogFile::Printf( "[ERROR] - CTrafficModelDesc__LoadModel - Loaded model '%s'.", szModelFileName );
+	DEBUG_LOG( "[ERROR] Loaded model '%s'.", szModelFileName );
 	return pDescriptor;
 }
 

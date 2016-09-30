@@ -54,7 +54,7 @@ void CM2VideoSettings::Pulse ( void )
 	{
 		m_bChangeResolution = false;
 
-		CLogFile::Printf ( "Changing res to %d...", m_iResolutionIndex );
+		DEBUG_LOG ( "Changing res to %d...", m_iResolutionIndex );
 
 		int iResolutionIndex = m_iResolutionIndex;
 
@@ -64,14 +64,14 @@ void CM2VideoSettings::Pulse ( void )
 			call FUNC_SetScreenResolution;
 		}
 
-		CLogFile::Printf ( "Done!" );
+		DEBUG_LOG ( "Done!" );
 	}
 
 	if ( m_bChangeFullScreen )
 	{
 		m_bChangeFullScreen = false;
 
-		CLogFile::Print ( "Setting fullscreen" );
+		DEBUG_LOG ( "Setting fullscreen" );
 
 		DWORD FUNC_C_SystemRenderingModule__Singleton = 0xB2CBA0;
 		bool bFullScreenEnabled = m_bFullScreenEnabled;
@@ -83,7 +83,7 @@ void CM2VideoSettings::Pulse ( void )
 			call FUNC_C_SystemRenderingModule__SetFullScreenEnabled;
 		}
 
-		CLogFile::Print ( "Done!" );
+		DEBUG_LOG ( "Done!" );
 	}
 
 	if ( m_bChangeVerticalSync )

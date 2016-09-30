@@ -46,7 +46,7 @@ bool CAudioManager::Initialize()
 	}
 	else
 	{
-		CLogFile::Printf("Init error : %d", BASS_ErrorGetCode());
+		CLogFile::Printf("BASS Init error: %d", BASS_ErrorGetCode());
 		return false;
 	}
 }

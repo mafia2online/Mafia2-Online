@@ -511,6 +511,7 @@ void CChat::AddInfoMessage(CColor colour, const char * szInfo, ...)
 
 void CChat::AddDebugMessage(const char * szDebug, ...)
 {
+#ifdef _DEBUG
 	// Push all the messages up
 	PushUp();
 
@@ -526,6 +527,7 @@ void CChat::AddDebugMessage(const char * szDebug, ...)
 	m_chatLine[0].fNameExtent = 0.0f;
 	m_chatLine[0].szTimeSend.Format("[%s] ", SharedUtility::GetTimeString());
 	m_chatLine[0].fTimeSendExtent = CCore::Instance()->GetGraphics()->GetTextWidth(m_chatLine[0].szTimeSend, 1.0f, "tahoma-bold");
+#endif
 }
 
 bool CChat::HandleMouseWheel( CGUIMouseEventArgs mouseArgs )

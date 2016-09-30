@@ -241,13 +241,13 @@ void CM2Vehicle::SetSpeedLimited( bool bSpeedLimited )
 			call COffsets::FUNC_CVehicle__SetSpeedLimited;
 		}
 
-		CLogFile::Printf( "CM2Vehicle::SetSpeedLimited - Setting unknown flags..." );
+		DEBUG_LOG( "CM2Vehicle::SetSpeedLimited - Setting unknown flags..." );
 
 		// Set unk flags
 		BYTE byteUnknown = pVehicle->m_pUnknown->m_pUnknown->m_byteUnknown;
 		pVehicle->m_pUnknown->m_pUnknown->m_byteUnknown ^= (byteUnknown ^ 32 * bSpeedLimited) & 0x20;
 
-		CLogFile::Printf( "Unknown flags set!" );
+		DEBUG_LOG( "Unknown flags set!" );
 	}
 }
 

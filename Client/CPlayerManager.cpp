@@ -27,9 +27,11 @@
 
 #include "CPlayerManager.h"
 
+#include "CLogFile.h"
+
 CPlayerManager::CPlayerManager( void )
 {
-	DEBUG_TRACE("CPlayerManager::CPlayerManager");
+	DEBUG_LOG("CPlayerManager::CPlayerManager");
 
 	// Create the localplayer instance
 	m_pLocalPlayer = new CLocalPlayer;
@@ -40,7 +42,7 @@ CPlayerManager::CPlayerManager( void )
 
 CPlayerManager::~CPlayerManager( void )
 {
-	DEBUG_TRACE("CPlayerManager::~CPlayerManager");
+	DEBUG_LOG("CPlayerManager::~CPlayerManager");
 
 	// Delete the localplayer instance
 	SAFE_DELETE( m_pLocalPlayer );
@@ -59,7 +61,7 @@ CPlayerManager::~CPlayerManager( void )
 
 bool CPlayerManager::Add( EntityId playerId, String strNick, unsigned int uiColour )
 {
-	DEBUG_TRACE("CPlayerManager::Add");
+	DEBUG_LOG("CPlayerManager::Add");
 
 	// Is the current player already active?
 	if( IsActive(playerId) )
@@ -98,7 +100,7 @@ bool CPlayerManager::Add( EntityId playerId, String strNick, unsigned int uiColo
 
 void CPlayerManager::Remove( EntityId playerId )
 {
-	DEBUG_TRACE("CPlayerManager::Remove");
+	DEBUG_LOG("CPlayerManager::Remove");
 
 	// Is the player not active?
 	if( !IsActive(playerId) )
@@ -133,7 +135,7 @@ void CPlayerManager::Pulse( void )
 
 CRemotePlayer * CPlayerManager::GetFromGameGUID( DWORD dwGUID )
 {
-	DEBUG_TRACE("CPlayerManager::GetFromGameGUID");
+	DEBUG_LOG("CPlayerManager::GetFromGameGUID");
 
 	// Is this the localplayer?
 	if( dwGUID == m_pLocalPlayer->GetPlayerPed()->GetGUID() )
@@ -156,7 +158,7 @@ CRemotePlayer * CPlayerManager::GetFromGameGUID( DWORD dwGUID )
 
 EntityId CPlayerManager::GetIdFromGameGUID( DWORD dwGUID )
 {
-	DEBUG_TRACE("CPlayerManager::GetIdFromGameGUID");
+	DEBUG_LOG("CPlayerManager::GetIdFromGameGUID");
 
 	// Is the guid invalid?
 	if( dwGUID == 0 )
@@ -174,7 +176,7 @@ EntityId CPlayerManager::GetIdFromGameGUID( DWORD dwGUID )
 
 void CPlayerManager::RespawnAll( void )
 {
-	DEBUG_TRACE("CPlayerManager::RespawnAll");
+	DEBUG_LOG("CPlayerManager::RespawnAll");
 
 	// Loop through all entities
 	for( EntityId i = 0; i < MAX_PLAYERS; i++ )
@@ -190,7 +192,7 @@ void CPlayerManager::RespawnAll( void )
 
 void CPlayerManager::HandleLocalDeath( void )
 {
-	DEBUG_TRACE("CPlayerManager::HandleLocalDeath");
+	DEBUG_LOG("CPlayerManager::HandleLocalDeath");
 }
 
 EntityId CPlayerManager::GetCount( void )
@@ -213,7 +215,7 @@ EntityId CPlayerManager::GetCount( void )
 
 bool CPlayerManager::IsHumanInventoryLocalPlayer( DWORD dwHumanInventory )
 {
-	DEBUG_TRACE("CPlayerManager::IsHumanInventoryLocalPlayer");
+	DEBUG_LOG("CPlayerManager::IsHumanInventoryLocalPlayer");
 
 	// Is the localplayer not valid?
 	if( !m_pLocalPlayer )

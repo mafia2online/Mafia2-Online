@@ -333,7 +333,7 @@ void RemovePlayerFromVehicle( RakNet::BitStream * pBitStream, RakNet::Packet * p
 	else
 		pPlayer = pCore->GetPlayerManager()->Get ( playerId );
 
-	CLogFile::Printf ( "RemovePlayerFromVehicle - %d", playerId );
+	DEBUG_LOG ( "RemovePlayerFromVehicle - %d", playerId );
 
 	// Is the player instance valid?
 	if ( pPlayer )

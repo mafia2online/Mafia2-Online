@@ -46,7 +46,7 @@
 
 CNetworkPlayer::CNetworkPlayer( bool bLocalPlayer )
 {
-	DEBUG_TRACE("CNetworkPlayer::CNetworkPlayer");
+	DEBUG_LOG("CNetworkPlayer::CNetworkPlayer");
 
 	// Reset variables
 	m_bLocalPlayer = bLocalPlayer;
@@ -103,7 +103,7 @@ CNetworkPlayer::CNetworkPlayer( bool bLocalPlayer )
 
 CNetworkPlayer::~CNetworkPlayer( void )
 {
-	DEBUG_TRACE("CNetworkPlayer::~CNetworkPlayer");
+	DEBUG_LOG("CNetworkPlayer::~CNetworkPlayer");
 
 	// Is this not the localplayer?
 	if ( !IsLocalPlayer() )
@@ -115,7 +115,7 @@ CNetworkPlayer::~CNetworkPlayer( void )
 
 void CNetworkPlayer::Create( void )
 {
-	DEBUG_TRACE("CNetworkPlayer::Create");
+	DEBUG_LOG("CNetworkPlayer::Create");
 
 	// Is the ped already created?
 	if( m_pPlayerPed )
@@ -125,9 +125,7 @@ void CNetworkPlayer::Create( void )
 	String strModel, strDirectory;
 	Game::GetPlayerModelFromId( m_uiModelIndex, &strModel, &strDirectory );
 
-#ifdef DEBUG
-	CLogFile::Printf( "CNetworkPlayer< %d >::Create( %d ) - Building ped with model '%s' (%s)...", m_playerId, m_uiModelIndex, strModel.Get(), strDirectory.Get() );
-#endif
+	DEBUG_LOG( "CNetworkPlayer< %d >::Create( %d ) - Building ped with model '%s' (%s)...", m_playerId, m_uiModelIndex, strModel.Get(), strDirectory.Get() );
 
 	// Try load the player model
 	m_pPlayerModelManager = CNetworkModelManager::Load( strDirectory.Get(), strModel.Get() );
@@ -188,7 +186,7 @@ void CNetworkPlayer::Create( void )
 
 void CNetworkPlayer::Destroy( void )
 {
-	DEBUG_TRACE("CNetworkPlayer::Destroy");
+	DEBUG_LOG("CNetworkPlayer::Destroy");
 
 	// Is the playerped not created?
 	if( !m_pPlayerPed )
@@ -225,7 +223,7 @@ void CNetworkPlayer::Destroy( void )
 
 void CNetworkPlayer::Respawn( void )
 {
-	DEBUG_TRACE("CNetworkPlayer::Respawn");
+	DEBUG_LOG("CNetworkPlayer::Respawn");
 
 	// Is the localplayer not spawned?
 	if (!CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->IsSpawned())
@@ -259,7 +257,7 @@ void CNetworkPlayer::Respawn( void )
 
 void CNetworkPlayer::SetModel( unsigned int uiModelIndex, bool bRebuild )
 {
-	DEBUG_TRACE("CNetworkPlayer::SetModel");
+	DEBUG_LOG("CNetworkPlayer::SetModel");
 
 	// Store the model index
 	m_uiModelIndex = uiModelIndex;
@@ -308,7 +306,7 @@ void CNetworkPlayer::SetModel( unsigned int uiModelIndex, bool bRebuild )
 
 void CNetworkPlayer::ProcessVehicle( void )
 {
-	DEBUG_TRACE("CNetworkPlayer::ProcessVehicle");
+	DEBUG_LOG("CNetworkPlayer::ProcessVehicle");
 
 	// Are we in a vehicle?
 	if( m_pVehicle )
@@ -320,7 +318,7 @@ void CNetworkPlayer::ProcessVehicle( void )
 
 void CNetworkPlayer::HandlePlayerDeath( void )
 {
-	DEBUG_TRACE("CNetworkPlayer::HandlePlayerDeath");
+	DEBUG_LOG("CNetworkPlayer::HandlePlayerDeath");
 
 	// Is the localplayer not spawned?
 	if( !CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->IsSpawned() )
@@ -355,7 +353,7 @@ void CNetworkPlayer::HandlePlayerDeath( void )
 
 void CNetworkPlayer::SetPosition( CVector3 vecPosition, BYTE bMoveStyle, CVector3 vecEndDir )
 {
-	DEBUG_TRACE("CNetworkPlayer::SetPosition");
+	DEBUG_LOG("CNetworkPlayer::SetPosition");
 
 	// Store the position
 	m_vecPosition = vecPosition;
@@ -363,8 +361,6 @@ void CNetworkPlayer::SetPosition( CVector3 vecPosition, BYTE bMoveStyle, CVector
 	// Is this the localplayer?
 	if( m_bLocalPlayer )
 		return Teleport( vecPosition );
-
-	CLogFile::Printf("[%u] SetPosition({%f,%f,%f}, %u, {%f,%f,%f})", m_playerId, vecPosition.fX, vecPosition.fY, vecPosition.fZ, bMoveStyle, vecEndDir.fX, vecEndDir.fY, vecEndDir.fZ);
 
 	// Is the player ped valid?
 	if( m_pPlayerPed && IsSpawned() )
@@ -375,11 +371,8 @@ void CNetworkPlayer::SetPosition( CVector3 vecPosition, BYTE bMoveStyle, CVector
 
 		// Teleport to the position if it's too far away
 		if( (vecPosition - vecCurrentPosition).Length() > 10.0f ) {
-			CLogFile::Printf("[%u] Wrap to new position", m_playerId);
 			return Teleport( vecPosition );
 		}
-
-		CLogFile::Printf("[%u] Smoth movement.", m_playerId);
 
 		// Find the move style from the control flags
 		M2Enums::eMoveType moveType = M2Enums::eMoveType::E_SPRINT;
@@ -407,14 +400,11 @@ void CNetworkPlayer::SetPosition( CVector3 vecPosition, BYTE bMoveStyle, CVector
 		// Move the playerped
 		m_pMoveObject = new CM2SyncObject( m_pPlayerPed->MoveVec( vecPosition, moveType, vecEndDir ) );
 	}
-	else {
-		CLogFile::Printf("[%u] Player is not spawned.", m_playerId);
-	}
 }
 
 void CNetworkPlayer::Teleport( CVector3 vecPosition )
 {
-	DEBUG_TRACE("CNetworkPlayer::Teleport");
+	DEBUG_LOG("CNetworkPlayer::Teleport");
 
 	// Is the player ped valid?
 	if( m_pPlayerPed && IsSpawned() )
@@ -423,7 +413,7 @@ void CNetworkPlayer::Teleport( CVector3 vecPosition )
 
 void CNetworkPlayer::GetPosition( CVector3 * vecPosition )
 {
-	DEBUG_TRACE("CNetworkPlayer::GetPosition");
+	DEBUG_LOG("CNetworkPlayer::GetPosition");
 
 	// Is the player ped valid?
 	if( m_pPlayerPed && IsSpawned() )
@@ -432,7 +422,7 @@ void CNetworkPlayer::GetPosition( CVector3 * vecPosition )
 
 void CNetworkPlayer::SetRotation( CVector3 vecRotation )
 {
-	DEBUG_TRACE("CNetworkPlayer::SetRotation");
+	DEBUG_LOG("CNetworkPlayer::SetRotation");
 
 	// Is the player ped valid?
 	if( m_pPlayerPed && IsSpawned() )
@@ -447,7 +437,7 @@ void CNetworkPlayer::SetRotation( CVector3 vecRotation )
 
 void CNetworkPlayer::GetRotation( CVector3 * vecRotation )
 {
-	DEBUG_TRACE("CNetworkPlayer::GetRotation");
+	DEBUG_LOG("CNetworkPlayer::GetRotation");
 
 	// Is the player ped valid?
 	if( m_pPlayerPed && IsSpawned() )
@@ -466,7 +456,7 @@ void CNetworkPlayer::GetRotation( CVector3 * vecRotation )
 
 void CNetworkPlayer::SetHealth( float fHealth )
 {
-	DEBUG_TRACE("CNetworkPlayer::SetHealth");
+	DEBUG_LOG("CNetworkPlayer::SetHealth");
 
 	// Is the player ped valid?
 	if( m_pPlayerPed && IsSpawned() )
@@ -488,7 +478,7 @@ void CNetworkPlayer::SetHealth( float fHealth )
 
 float CNetworkPlayer::GetHealth( void )
 {
-	DEBUG_TRACE("CNetworkPlayer::GetHealth");
+	DEBUG_LOG("CNetworkPlayer::GetHealth");
 
 	// Is the player ped valid?
 	if( m_pPlayerPed && IsSpawned() )
@@ -499,7 +489,7 @@ float CNetworkPlayer::GetHealth( void )
 
 void CNetworkPlayer::SetSelectedWeapon( DWORD dwWeapon, bool bUseAnimation )
 {
-	DEBUG_TRACE("CNetworkPlayer::SetSelectedWeapon");
+	DEBUG_LOG("CNetworkPlayer::SetSelectedWeapon");
 
 	// Is the player ped valid?
 	if( m_pPlayerPed && IsSpawned() )
@@ -522,7 +512,7 @@ void CNetworkPlayer::SetSelectedWeapon( DWORD dwWeapon, bool bUseAnimation )
 
 DWORD CNetworkPlayer::GetSelectedWeapon( void )
 {
-	DEBUG_TRACE("CNetworkPlayer::GetSelectedWeapon");
+	DEBUG_LOG("CNetworkPlayer::GetSelectedWeapon");
 
 	// Is the player ped valid?
 	if( m_pPlayerPed && IsSpawned() )
@@ -542,7 +532,7 @@ bool CNetworkPlayer::HasWeapon( DWORD dwWeapon )
 
 void CNetworkPlayer::GiveWeapon( DWORD dwWeapon, DWORD dwAmmo )
 {
-	DEBUG_TRACE("CNetworkPlayer::GiveWeapon");
+	DEBUG_LOG("CNetworkPlayer::GiveWeapon");
 
 	// Is the player ped valid?
 	if( m_pPlayerPed && IsSpawned() )
@@ -554,7 +544,7 @@ void CNetworkPlayer::GiveWeapon( DWORD dwWeapon, DWORD dwAmmo )
 
 void CNetworkPlayer::RemoveWeapon( DWORD dwWeapon, DWORD dwAmmo )
 {
-	DEBUG_TRACE("CNetworkPlayer::RemoveWeapon");
+	DEBUG_LOG("CNetworkPlayer::RemoveWeapon");
 
 	// Is the player ped valid?
 	if( m_pPlayerPed && IsSpawned() )
@@ -588,7 +578,7 @@ void CNetworkPlayer::SetCrouching(bool bCrouching)
 
 void CNetworkPlayer::UpdateAim( bool bAiming )
 {
-	DEBUG_TRACE("CNetworkPlayer::UpdateAim");
+	DEBUG_LOG("CNetworkPlayer::UpdateAim");
 
 	// Is the playerped not valid?
 	if( !m_pPlayerPed )
@@ -642,7 +632,7 @@ void CNetworkPlayer::UpdateAim( bool bAiming )
 
 void CNetworkPlayer::UpdateShot( bool bShooting )
 {
-	DEBUG_TRACE("CNetworkPlayer::UpdateShot");
+	DEBUG_LOG("CNetworkPlayer::UpdateShot");
 
 	// Is the playerped not valid?
 	if( !m_pPlayerPed )
@@ -742,7 +732,7 @@ void CNetworkPlayer::SetLookAt( CVector3 vecLookAt )
 
 void CNetworkPlayer::TerminateSyncObjects( void )
 {
-	DEBUG_TRACE("CNetworkPlayer::TerminateSyncObjects");
+	DEBUG_LOG("CNetworkPlayer::TerminateSyncObjects");
 
 	// Terminate the move object if it's valid
 	if ( m_pMoveObject )
@@ -797,7 +787,7 @@ M2Enums::eEntityState CNetworkPlayer::GetEntityState( bool bLatest )
 
 void CNetworkPlayer::EnterVehicle( CNetworkVehicle * pVehicle, M2Enums::eVehicleSeat seat, bool bEnter )
 {
-	DEBUG_TRACE("CNetworkPlayer::EnterVehicle");
+	DEBUG_LOG("CNetworkPlayer::EnterVehicle");
 
 	// Are we already entering?
 	if ( IsEnteringVehicle() )
@@ -834,19 +824,19 @@ void CNetworkPlayer::EnterVehicle( CNetworkVehicle * pVehicle, M2Enums::eVehicle
 			if( Math::GetDistanceBetweenPoints( vecPosition, vecVehiclePos ) > 4.0f ) // 2.68 = max distance
 				bForced = true;
 
-			CLogFile::Printf ( "EnterVehicle - Forced: %s", (bForced ? "Yes" : "No") );
+			DEBUG_LOG ( "EnterVehicle - Forced: %s", (bForced ? "Yes" : "No") );
 
 			// Is the vehicle invalid?
 			if ( !pVehicle->GetVehicle() || !pVehicle->GetVehicle()->GetVehicle() )
 			{
-				CLogFile::Printf ( "EnterVehicle - Invalid game vehicle, skipping to prevent crash!" );
+				DEBUG_LOG ( "EnterVehicle - Invalid game vehicle, skipping to prevent crash!" );
 				return;
 			}
 
 			// Enter the vehicle
 			m_VehicleEnter.m_pEnterAICommand = new CM2SyncObject( m_pPlayerPed->GetInOutVehicle( pVehicle->GetVehicle()->GetVehicle(), seat, true, bForced ) );
 
-			CLogFile::Printf ( "Done!" );
+			DEBUG_LOG ( "Done!" );
 
 			// Don't finish this sync object when we delete it
 			m_VehicleEnter.m_pEnterAICommand->SetDoneOnDelete ( false );
@@ -871,7 +861,7 @@ void CNetworkPlayer::EnterVehicle( CNetworkVehicle * pVehicle, M2Enums::eVehicle
 
 void CNetworkPlayer::EnterVehicleDone( void )
 {
-	DEBUG_TRACE("CNetworkPlayer::EnterVehicleDone");
+	DEBUG_LOG("CNetworkPlayer::EnterVehicleDone");
 
 	// Is the playerped valid and entering a vehicle?
 	if( m_pPlayerPed && IsEnteringVehicle() )
@@ -889,7 +879,7 @@ void CNetworkPlayer::EnterVehicleDone( void )
 
 void CNetworkPlayer::ExitVehicle( bool bExit, bool bQuickly )
 {
-	DEBUG_TRACE("CNetworkPlayer::ExitVehicle");
+	DEBUG_LOG("CNetworkPlayer::ExitVehicle");
 
 	// Are we not in a vehicle?
 	if( !m_pVehicle )
@@ -911,9 +901,7 @@ void CNetworkPlayer::ExitVehicle( bool bExit, bool bQuickly )
 			// Are we in a vehicle?
 			if( InternalIsInVehicle() )
 			{
-#ifdef DEBUG
-				CLogFile::Printf( "CPlayer::ExitVehicle - Quickly? %s", (bQuickly ? "true" : "false") );
-#endif
+				DEBUG_LOG( "CPlayer::ExitVehicle - Quickly? %s", (bQuickly ? "true" : "false") );
 
 				// Reset the target data
 				SetEnteringVehicle( NULL, INVALID_ENTITY_ID );
@@ -922,9 +910,7 @@ void CNetworkPlayer::ExitVehicle( bool bExit, bool bQuickly )
 				// Remove from vehicle
 				C_SyncObject * pSyncObject = m_pPlayerPed->GetInOutVehicle( m_pPlayerPed->GetCurrentVehicle(), m_seat, bQuickly );
 
-#ifdef DEBUG
-				CLogFile::Printf ( "Exit vehicle sync object: 0x%p", pSyncObject );
-#endif
+				DEBUG_LOG( "Exit vehicle sync object: 0x%p", pSyncObject );
 
 				// Are we not quickly exiting?
 				if( !bQuickly )
@@ -935,16 +921,12 @@ void CNetworkPlayer::ExitVehicle( bool bExit, bool bQuickly )
 				}
 			}
 
-#ifdef DEBUG
-			CLogFile::Print ( "Handling with vehicle..." );
-#endif
+			DEBUG_LOG ( "Handling with vehicle..." );
 
 			// Handle this enter with the network vehicle
 			m_pVehicle->HandlePlayerExit( this, (m_seat - 1) );
 
-#ifdef DEBUG
-			CLogFile::Print ( "Done!" );
-#endif
+			DEBUG_LOG ( "Done!" );
 		}
 
 		// Reset the vehicle
@@ -960,7 +942,7 @@ void CNetworkPlayer::ExitVehicle( bool bExit, bool bQuickly )
 
 bool CNetworkPlayer::InternalIsInVehicle( void )
 {
-	DEBUG_TRACE("CNetworkPlayer::InternalIsInVehicle");
+	DEBUG_LOG("CNetworkPlayer::InternalIsInVehicle");
 
 	// Is the player ped active?
 	if( m_pPlayerPed && IsSpawned() )
@@ -980,7 +962,7 @@ bool CNetworkPlayer::InternalIsInVehicle ( CM2Vehicle * pVehicle )
 
 void CNetworkPlayer::PutInVehicle( CNetworkVehicle * pVehicle, EntityId seatId )
 {
-	DEBUG_TRACE("CNetworkPlayer::PutInVehicle");
+	DEBUG_LOG("CNetworkPlayer::PutInVehicle");
 
 	// Is the player spawned and the vehicle valid?
 	if( m_pPlayerPed && pVehicle && IsSpawned() && pVehicle->IsSpawned() )
@@ -1001,8 +983,8 @@ void CNetworkPlayer::PutInVehicle( CNetworkVehicle * pVehicle, EntityId seatId )
 		if ( pVehicle->GetDriver() )
 		{
 			// Todo: some checks to check the last sync time from the driver. If he's timed out of not even connected anymore, reset the driver and put this player in the vehicle
-			CLogFile::Printf ( "WARNING: Got tasked to put a player (%d) in vehicle (%d), but there's already a driver (%d) in that vehicle!", m_playerId, pVehicle->GetId(), pVehicle->GetDriver()->GetId() );
-			CLogFile::Printf ( "Internal driver ped pointer: 0x%p, Internal driver ped vehicle pointer: 0x%p", pVehicle->GetDriver()->GetPlayerPed()->GetPed(), pVehicle->GetDriver()->GetPlayerPed()->GetPed()->m_pCurrentVehicle );
+			DEBUG_LOG ( "WARNING: Got tasked to put a player (%d) in vehicle (%d), but there's already a driver (%d) in that vehicle!", m_playerId, pVehicle->GetId(), pVehicle->GetDriver()->GetId() );
+			DEBUG_LOG ( "Internal driver ped pointer: 0x%p, Internal driver ped vehicle pointer: 0x%p", pVehicle->GetDriver()->GetPlayerPed()->GetPed(), pVehicle->GetDriver()->GetPlayerPed()->GetPed()->m_pCurrentVehicle );
 
 			// Is the driver still in the vehicle?
 			if ( pVehicle->GetDriver()->InternalIsInVehicle ( pVehicle->GetVehicle() ) )
@@ -1011,7 +993,7 @@ void CNetworkPlayer::PutInVehicle( CNetworkVehicle * pVehicle, EntityId seatId )
 			// Clean the network vehicle data
 			pVehicle->HandlePlayerExit ( pVehicle->GetDriver (), 0 );
 
-			CLogFile::Printf ( "We still have a driver set, but he's no longer inside the vehicle. Cleaned network vehicle driver pointer and continuing code.." );
+			DEBUG_LOG ( "We still have a driver set, but he's no longer inside the vehicle. Cleaned network vehicle driver pointer and continuing code.." );
 		}
 
 		// Terminate any sync objects if this is not the localplayer
@@ -1047,7 +1029,7 @@ void CNetworkPlayer::PutInVehicle( CNetworkVehicle * pVehicle, EntityId seatId )
 
 void CNetworkPlayer::RemoveFromVehicle( CNetworkVehicle * pVehicle )
 {
-	DEBUG_TRACE("CNetworkPlayer::RemoveFromVehicle");
+	DEBUG_LOG("CNetworkPlayer::RemoveFromVehicle");
 
 	// Is the player and vehicle valid?
 	if( m_pPlayerPed && pVehicle && IsSpawned() )
@@ -1080,7 +1062,7 @@ void CNetworkPlayer::RemoveFromVehicle( CNetworkVehicle * pVehicle )
 
 void CNetworkPlayer::SetEnteringVehicle( CNetworkVehicle * pNetworkVehicle, EntityId seat )
 {
-	DEBUG_TRACE("CNetworkPlayer::SetEnteringVehicle");
+	DEBUG_LOG("CNetworkPlayer::SetEnteringVehicle");
 
 	// Are we spawned?
 	if( IsSpawned() )

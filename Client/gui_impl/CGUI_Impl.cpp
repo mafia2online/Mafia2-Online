@@ -246,7 +246,7 @@ void CGUI_Impl::OnDeviceRestore( void )
 	// Set the current directory to the gui folder
 	SetCurrentDirectory( String( "%s\\data\\gui\\", CCore::Instance()->GetModDirectory().Get() ).Get() );
 
-	CLogFile::Printf( "[Graphics] Restoring CEGUI render device..." );
+	CLogFile::Printf( "[GFX] Restoring CEGUI render device..." );
 
 	try
 	{
@@ -258,7 +258,7 @@ void CGUI_Impl::OnDeviceRestore( void )
 		TerminateProcess ( GetCurrentProcess(), 0 );
 	}
 
-	CLogFile::Printf( "[Graphics] Done!" );
+	CLogFile::Printf( "[GFX] Done!" );
 
 	// Reset the current directory
 	SetCurrentDirectory( CCore::Instance()->GetModDirectory().Get() );

@@ -118,7 +118,7 @@ void CBlip::AttachToVehicle ( CNetworkVehicle * pVehicle )
 		// Create the blip attached to the player entity
 		m_internalId = CCore::Instance()->GetGame()->GetNavigation()->RegisterIconEntity(pVehicle->GetVehicle()->GetEntity(), m_iLibrary, m_iIcon);
 
-		CLogFile::Printf ( "CBlip::AttachToVehicle() - Blip attached! (Internal id: %d, Lib: %d, Icon: %d)", m_internalId, m_iLibrary, m_iIcon );
+		DEBUG_LOG ( "CBlip::AttachToVehicle() - Blip attached! (Internal id: %d, Lib: %d, Icon: %d)", m_internalId, m_iLibrary, m_iIcon );
 
 		// Mark as created
 		m_bCreated = true;

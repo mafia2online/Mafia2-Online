@@ -33,17 +33,17 @@ CRemotePlayer::CRemotePlayer( void )
 	: CNetworkPlayer( false )
 	, m_onFootSync()
 {
-	DEBUG_TRACE("CRemotePlayer::CRemotePlayer");
+	DEBUG_LOG("CRemotePlayer::CRemotePlayer");
 }
 
 CRemotePlayer::~CRemotePlayer( void )
 {
-	DEBUG_TRACE("CRemotePlayer::~CRemotePlayer");
+	DEBUG_LOG("CRemotePlayer::~CRemotePlayer");
 }
 
 void CRemotePlayer::Pulse( void )
 {
-	DEBUG_TRACE("CRemotePlayer::Pulse");
+	DEBUG_LOG("CRemotePlayer::Pulse");
 
 	// Are we spawned?
 	if ( IsSpawned() )
@@ -60,7 +60,7 @@ void CRemotePlayer::Pulse( void )
 					// Is the enter command not finished?
 					if( !m_VehicleEnter.m_pEnterAICommand->IsDone() )
 					{
-						CLogFile::Print ( "Warping player into vehicle..." );
+						DEBUG_LOG ( "Warping player into vehicle..." );
 
 						// Delete the AI command
 						SAFE_DELETE( m_VehicleEnter.m_pEnterAICommand );
@@ -71,7 +71,7 @@ void CRemotePlayer::Pulse( void )
 						// Mark as not entering vehicle
 						SetEnteringVehicle( NULL, INVALID_ENTITY_ID );
 
-						CLogFile::Print ( "Done!" );
+						DEBUG_LOG ( "Done!" );
 
 #ifdef _DEBUG
 						CCore::Instance()->GetChat()->AddDebugMessage( "CRemotePlayer::Pulse - The enter vehicle AI command took too long. Warped the player into the vehicle." );
@@ -85,7 +85,7 @@ void CRemotePlayer::Pulse( void )
 
 void CRemotePlayer::StoreOnFootSync( const OnFootSync &onFootSync )
 {
-	DEBUG_TRACE("CRemotePlayer::StoreOnFootSync");
+	DEBUG_LOG("CRemotePlayer::StoreOnFootSync");
 
 	// Is the playerped instance invalid ?
 	if( !m_pPlayerPed )
@@ -102,12 +102,12 @@ void CRemotePlayer::StoreOnFootSync( const OnFootSync &onFootSync )
 	// Is the player in a vehicle and not exiting?
 	if( InternalIsInVehicle() && !m_VehicleExit.m_bIsExiting )
 	{
-		CLogFile::Printf ( "Player %d is in vehicle, but we're getting on-foot sync, removing from vehicle (quickly)", m_playerId );
+		DEBUG_LOG ( "Player %d is in vehicle, but we're getting on-foot sync, removing from vehicle (quickly)", m_playerId );
 
 		// Remove the player from the vehicle, quickly
 		RemoveFromVehicle( m_pVehicle );
 
-		CLogFile::Print ( "Done!" );
+		DEBUG_LOG ( "Done!" );
 	}
 
 	// Get the localplayer position
@@ -187,7 +187,7 @@ void CRemotePlayer::StoreOnFootSync( const OnFootSync &onFootSync )
 
 void CRemotePlayer::StoreInVehicleSync( EntityId vehicleId, const InVehicleSync &inVehicleSync )
 {
-	DEBUG_TRACE("CRemotePlayer::StoreInVehicleSync");
+	DEBUG_LOG("CRemotePlayer::StoreInVehicleSync");
 
 	// Is the playerped instance invalid ?
 	if( !m_pPlayerPed )
@@ -206,12 +206,12 @@ void CRemotePlayer::StoreInVehicleSync( EntityId vehicleId, const InVehicleSync 
 		// Is the player not in a vehicle and not entering?
 		if( !InternalIsInVehicle () && !IsEnteringVehicle () )
 		{
-			CLogFile::Printf ( "CRemotePlayer< %d, 0x%p >::StoreInVehicleSync - Player isn't in vehicle and has not been told to get in. Warping into vehicle %d (Current driver: 0x%p)...", m_playerId, this, pVehicle->GetId (), pVehicle->GetDriver () );
+			DEBUG_LOG ( "CRemotePlayer< %d, 0x%p >::StoreInVehicleSync - Player isn't in vehicle and has not been told to get in. Warping into vehicle %d (Current driver: 0x%p)...", m_playerId, this, pVehicle->GetId (), pVehicle->GetDriver () );
 
 			// Put the player into the vehicle
 			PutInVehicle( pVehicle, 1 );
 
-			CLogFile::Printf ( "CRemotePlayer< %d, 0x%p >::StoreInVehicleSync - Done!", m_playerId, this );
+			DEBUG_LOG ( "CRemotePlayer< %d, 0x%p >::StoreInVehicleSync - Done!", m_playerId, this );
 		}
 
 		// Store the vehicle sync
@@ -221,7 +221,7 @@ void CRemotePlayer::StoreInVehicleSync( EntityId vehicleId, const InVehicleSync 
 
 void CRemotePlayer::StorePassengerSync( const InPassengerSync &passengerSync )
 {
-	DEBUG_TRACE("CRemotePlayer::StorePassengerSync");
+	DEBUG_LOG("CRemotePlayer::StorePassengerSync");
 
 	// Is the playerped instance invalid ?
 	if( !m_pPlayerPed )

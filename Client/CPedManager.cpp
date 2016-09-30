@@ -45,12 +45,12 @@ EntityId CPedManager::Add( unsigned int iModelIndex, CVector3 vecPosition, CVect
 	if( pedId == INVALID_ENTITY_ID )
 		return INVALID_ENTITY_ID;
 
-	CLogFile::Printf( "Creating ped with id %d...", pedId );
+	DEBUG_LOG( "Creating ped with id %d...", pedId );
 
 	// Create a new ped
 	m_pPed[ pedId ] = new CPed( iModelIndex, vecPosition, vecRotation );
 
-	CLogFile::Printf( "Ped created! 0x%p", m_pPed[ pedId ] );
+	DEBUG_LOG( "Ped created! 0x%p", m_pPed[ pedId ] );
 
 	// Is the ped invalid?
 	if( !m_pPed[ pedId ] )

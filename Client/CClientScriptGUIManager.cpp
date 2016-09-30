@@ -131,9 +131,7 @@ void CClientScriptGUIManager::Show( void )
 			// Restore the current elements visibility state
 			(*iter)->pElement->SetVisible( (*iter)->bState );
 
-#ifdef _DEBUG
-			CLogFile::Printf( "Restored element 0x%p visibility.", (*iter)->pElement );
-#endif
+			DEBUG_LOG ( "Restored element 0x%p visibility.", (*iter)->pElement );
 		}
 
 		// Flag as not hidden
@@ -159,9 +157,7 @@ void CClientScriptGUIManager::Hide( void )
 			// Hide the current element
 			(*iter)->pElement->SetVisible( false );
 
-#ifdef _DEBUG
-			CLogFile::Printf( "Stored element 0x%p visibility. (%s)", (*iter)->pElement, ((*iter)->bState ? "true" : "false") );
-#endif
+			DEBUG_LOG ( "Stored element 0x%p visibility. (%s)", (*iter)->pElement, ((*iter)->bState ? "true" : "false") );
 		}
 
 		// Flag as hidden

@@ -49,7 +49,7 @@ int CM2PhysFSFile::write( const char * szBuffer )
 	M2PhysFSFile * pFile = m_pFile;
 	DWORD dwFunc = pFile->m_pVFTable->Write;
 
-	CLogFile::Printf( "FileHandle: 0x%p, Func: 0x%p", pFile, dwFunc );
+	DEBUG_LOG( "FileHandle: 0x%p, Func: 0x%p", pFile, dwFunc );
 
 	_asm
 	{
@@ -60,7 +60,7 @@ int CM2PhysFSFile::write( const char * szBuffer )
 		mov iObjWrittenCount, eax;
 	}
 
-	CLogFile::Printf( "Written %d bytes!", iObjWrittenCount );
+	DEBUG_LOG( "Written %d bytes!", iObjWrittenCount );
 
 	return iObjWrittenCount;
 }

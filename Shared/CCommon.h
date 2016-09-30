@@ -61,22 +61,6 @@ const unsigned DEFAULT_PORT			= 27015;
 #define IS_BIT_SET(a, b) ((a & b) != 0)
 #define UNSET_BIT(a, b) a &= ~(b)
 
-#ifdef DEBUG_LOG
-#undef DEBUG_LOG
-#endif
-
-// Debug
-static void	OutputDebugLog ( char * szText )
-{
-#ifdef DEBUG_LOG
-	CLogFile::Open( "logs\\debug.log", true );
-	CLogFile::Print( szText );
-	CLogFile::Close();
-	CLogFile::Open( "logs\\core.log", true );
-#endif
-}
-#define	DEBUG_TRACE(szText)				OutputDebugLog(szText);
-
 // Defines
 #define	UNBAN_NEVER						-1
 

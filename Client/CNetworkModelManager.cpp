@@ -16,6 +16,8 @@
 
 #include "CNetworkModelManager.h"
 
+#include "CLogFile.h"
+
 std::list< CNetworkModel* > CNetworkModelManager::m_loadedModels;
 
 CNetworkModel::CNetworkModel( CM2ModelManager * pModelMgr, const char * szModel )
@@ -28,9 +30,7 @@ CNetworkModel::CNetworkModel( CM2ModelManager * pModelMgr, const char * szModel 
 
 CNetworkModel::~CNetworkModel( void )
 {
-#ifdef DEBUG
-	CLogFile::Printf( "CNetworkModel::~CNetworkModel - M2ModelMgr: 0x%p", m_pModelMgr );
-#endif
+	DEBUG_LOG ( "CNetworkModel::~CNetworkModel - M2ModelMgr: 0x%p", m_pModelMgr );
 
 	// Free the model
 	if ( m_pModelMgr )
@@ -54,16 +54,14 @@ CM2ModelManager * CNetworkModelManager::Load(const char * szDir, const char * sz
 		// Is the model not loaded?
 		if( CCore::Instance()->GetModelManager() && !pModelMgr )
 		{
-#ifdef DEBUG
-			CLogFile::Printf( "CNetworkModelManager::Load() - Loading model '%s' (%s)", szModel, szDir );
-#endif
+			DEBUG_LOG ( "CNetworkModelManager::Load() - Loading model '%s' (%s)", szModel, szDir );
+
 			// Load the model
 			pModelMgr = CCore::Instance()->GetModelManager()->Load( szDir, szModel );
 		}
 
-#ifdef DEBUG
-		CLogFile::Printf( "CNetworkModelManager::Load() - Done! 0x%p", pModelMgr );
-#endif
+
+		DEBUG_LOG ( "CNetworkModelManager::Load() - Done! 0x%p", pModelMgr );
 
 		// Create the network model instance
 		pNetModel = new CNetworkModel ( pModelMgr, szModel );
@@ -75,9 +73,7 @@ CM2ModelManager * CNetworkModelManager::Load(const char * szDir, const char * sz
 	// Increase the ref count on the model
 	pNetModel->m_dwRefCount ++;
 
-#ifdef DEBUG
-	CLogFile::Printf( "CNetworkModelManager::Load - Loaded model! 0x%p (RefCount: %d)", pNetModel->m_pModelMgr, pNetModel->m_dwRefCount );
-#endif
+	DEBUG_LOG ( "CNetworkModelManager::Load - Loaded model! 0x%p (RefCount: %d)", pNetModel->m_pModelMgr, pNetModel->m_dwRefCount );
 	return pNetModel->m_pModelMgr;
 }
 
@@ -93,9 +89,7 @@ void CNetworkModelManager::Unload(CM2ModelManager * pModelMgr)
 	// Decrease the ref count on the model
 	pNetModel->m_dwRefCount --;
 
-#ifdef DEBUG
-	CLogFile::Printf( "CNetworkModelManager::Unload - RefCount: %d", pNetModel->m_dwRefCount );
-#endif
+	DEBUG_LOG( "CNetworkModelManager::Unload - RefCount: %d", pNetModel->m_dwRefCount );
 
 	// Are we done with the model?
 	if( pNetModel->m_dwRefCount == 0 )
@@ -106,9 +100,7 @@ void CNetworkModelManager::Unload(CM2ModelManager * pModelMgr)
 		// Delete the network model
 		SAFE_DELETE( pNetModel );
 
-#ifdef DEBUG
-		CLogFile::Printf( "CNetworkModelManager::Unload - Unloaded model!" );
-#endif
+		DEBUG_LOG( "CNetworkModelManager::Unload - Unloaded model!" );
 	}
 }
 

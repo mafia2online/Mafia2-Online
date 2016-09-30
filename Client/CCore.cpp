@@ -169,9 +169,7 @@ CCore::CCore( void )
 
 CCore::~CCore( void )
 {
-#ifdef _DEBUG
-	CLogFile::Printf( "CCore::~CCore" );
-#endif
+	DEBUG_LOG ( "CCore::~CCore" );
 
 	// Destroy all entity managers.
 	SAFE_DELETE(m_pVehicleManager);
@@ -270,13 +268,13 @@ bool CCore::Initialise( void )
 
 	if (m_pGraphics->IsUsingChipset()){
 		MessageBox(NULL, "Your game is currently starting on graphic chipset\n\nYou may encounter graphical problems thats not belong to M2-Online", "Mafia2-Online - Warning", MB_OK | MB_ICONWARNING);
-		CLogFile::Print("[GRAPHIC] : Using chipset");
+		CLogFile::Print("[GFX] Using Intel chipset");
 	} else if (m_pGraphics->IsUsingAMD()){
-		CLogFile::Print("[GRAPHIC] : Using AMD");
+		CLogFile::Print("[GFX] Using AMD");
 	} else if (m_pGraphics->IsUsingNVIDIA()){
-		CLogFile::Print("[GRAPHIC] : Using NVIDIA");
+		CLogFile::Print("[GFX] Using NVIDIA");
 	} else {
-		CLogFile::Print("[RAPHIC] : Unknow graphic card");
+		CLogFile::Print("[GFX] Unknow graphic card");
 	}
 
 	return true;
@@ -289,9 +287,7 @@ void CCore::Shutdown( void )
 
 void CCore::OnGameLoad( void )
 {
-#ifdef _DEBUG
-	CLogFile::Printf ( "CCore::OnGameLoad" );
-#endif
+	DEBUG_LOG ( "CCore::OnGameLoad" );
 
 	if( IsGameLoaded() )
 		return;
@@ -302,9 +298,7 @@ void CCore::OnGameLoad( void )
 	CCore::Instance()->SetHud( new CM2Hud( *(M2Hud **)COffsets::VAR_CHud ) );
 	CCore::Instance()->GetGame()->LoadPointers ();
 
-#ifdef DEBUG
-	CLogFile::Printf ( "LocalPed: 0x%p", IE::GetGame()->m_pLocalPed);
-#endif
+	DEBUG_LOG ( "LocalPed: 0x%p", IE::GetGame()->m_pLocalPed);
 
 	// Disable the game over writting the localplayer model manager pointer
 	// Don't move this into CPatches or else the localplayer model manager won't be set!
@@ -351,9 +345,7 @@ void CCore::OnDeviceCreate( IDirect3DDevice9 * pDevice, D3DPRESENT_PARAMETERS * 
 	if (m_pAudioManager)
 		m_pAudioManager->Initialize();
 
-#ifdef _DEBUG
-	CLogFile::Printf ( "CCore::OnDeviceCreate - Done" );
-#endif
+	DEBUG_LOG ( "CCore::OnDeviceCreate - Done" );
 }
 
 void CCore::OnDeviceLost( IDirect3DDevice9 * pDevice )
@@ -590,7 +582,7 @@ void CCore::OnDeviceRender( void )
 
 void CCore::HandleAntiCheatEvent( DWORD dwMessage, unsigned int uiBaseAddress, size_t nSize )
 {
-	CLogFile::Printf( "HandleAntiCheatEvent - %d, 0x%p, %d", dwMessage, uiBaseAddress, nSize );
+	DEBUG_LOG( "HandleAntiCheatEvent - %d, 0x%p, %d", dwMessage, uiBaseAddress, nSize );
 	Shutdown();
 }
 
@@ -599,7 +591,7 @@ void CCore::StartMultiplayer( void )
 	if( IsMultiplayerStarted() )
 		return;
 
-	CLogFile::Printf( "CCore::StartMultiplayer" );
+	DEBUG_LOG( "CCore::StartMultiplayer" );
 
 	m_pChat->SetVisible( false );
 	m_pHud->FadeOut( 0 );
@@ -621,7 +613,7 @@ void CCore::StartMultiplayer( void )
 
 	SetMultiplayerStarted( true );
 
-	CLogFile::Printf( "CCore::StartMultiplayer - Multiplayer started!" );
+	DEBUG_LOG( "CCore::StartMultiplayer - Multiplayer started!" );
 }
 
 void CCore::StopMultiplayer( void )
@@ -629,7 +621,7 @@ void CCore::StopMultiplayer( void )
 	if( !IsMultiplayerStarted() )
 		return;
 
-	CLogFile::Printf( "CCore::StopMultiplayer" );
+	DEBUG_LOG( "CCore::StopMultiplayer" );
 
 	SetConnectionProblem ( false );
 	m_pChat->SetVisible( false );
@@ -639,9 +631,9 @@ void CCore::StopMultiplayer( void )
 	m_pChat->Clear();
 	m_pChat->ClearHistory();
 
-	CCore::Instance()->GetAudioManager()->RemoveAll();
+	m_pAudioManager->RemoveAll();
 
-	CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->LockControls( true );
+	m_pPlayerManager->GetLocalPlayer()->LockControls( true );
 
 	SAFE_DELETE( m_pKeyBinds );
 	SAFE_DELETE( m_pClientScriptingManager );
@@ -656,7 +648,7 @@ void CCore::StopMultiplayer( void )
 	CNetworkModelManager::Cleanup ();
 
 	SetMultiplayerStarted( false );
-	CLogFile::Printf( "CCore::StopMultiplayer - Multiplayer stopped!" );
+	DEBUG_LOG( "CCore::StopMultiplayer - Multiplayer stopped!" );
 }
 
 void CCore::TakeScreenshot( void )

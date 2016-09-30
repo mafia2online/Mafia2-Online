@@ -121,8 +121,7 @@ void CMasterList::OnRefreshSuccess( String *serverListData )
 	// Split the servers
 	std::vector<String> servers = serverListData->split( "<br />" );
 
-	CLogFile::Printf( "Discovered %d servers. (%s)",
-		servers.size(), SharedUtility::BytesToString(serverListData->GetLength()).Get() );
+	CLogFile::Printf( "Discovered %d servers. (%s)", servers.size(), SharedUtility::BytesToString(serverListData->GetLength()).Get() );
 
 	// Call our query handler
 	if( m_queryHandler )

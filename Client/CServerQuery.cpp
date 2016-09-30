@@ -39,7 +39,7 @@ void CServerQuery::WorkerThread()
 				CServerListItem * pServerQueryItem = *iter;
 				if ( (SharedUtility::GetTime () - pServerQueryItem->ulQueryStart) > 10000 )
 				{
-					CLogFile::Printf ( "Deleting stale query." );
+					DEBUG_LOG ( "Deleting stale query." );
 					delete pServerQueryItem;
 					pServerQuery->Remove ( pServerQueryItem );
 				}
@@ -110,7 +110,7 @@ bool CServerQuery::Query ( CServerListItem * pServerItem )
 		pServerItem->ulQueryStart = SharedUtility::GetTime ();
 		m_queryQueue.push_back ( pServerItem );
 
-		CLogFile::Printf ( "CServerQuery::Query () - Queue size: %d", m_queryQueue.size () );
+		DEBUG_LOG ( "CServerQuery::Query () - Queue size: %d", m_queryQueue.size () );
 
 		if ( !m_thread.joinable() )
 		{
@@ -134,7 +134,7 @@ void CServerQuery::Remove ( CServerListItem * pServerItem )
 		}
 	}
 
-	CLogFile::Printf ( "CServerQuery::Remove () - Queue size: %d", m_queryQueue.size () );
+	DEBUG_LOG ( "CServerQuery::Remove () - Queue size: %d", m_queryQueue.size () );
 
 	if ( !m_queryQueue.size () )
 	{

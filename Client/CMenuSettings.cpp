@@ -580,7 +580,7 @@ void CMenuSettings::SaveSettings( void )
 	// Did we select a resolution?
 	if ( m_pResolutionCombo->GetSelectedItem() )
 	{
-		CLogFile::Printf ( "Updating res: %d", (int)m_pResolutionCombo->GetSelectedItem()->GetData () );
+		DEBUG_LOG ( "Updating res: %d", (int)m_pResolutionCombo->GetSelectedItem()->GetData () );
 
 		// Update the current resolution index
 		CM2VideoSettings::SetResolutionIndex ( (int)m_pResolutionCombo->GetSelectedItem()->GetData (), true );

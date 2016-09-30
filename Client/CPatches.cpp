@@ -109,13 +109,13 @@ void __declspec ( naked ) HOOK_CDoor__OnUse ( void )
 	if( CLocalPlayer::Instance() && CLocalPlayer::Instance()->IsSpawned() )
 	{
 
-		CLogFile::Printf ( "HOOK_CDoor__OnUse ( 0x%p )", HOOK_CDoor__OnUse__ECX );
+		DEBUG_LOG ( "HOOK_CDoor__OnUse ( 0x%p )", HOOK_CDoor__OnUse__ECX );
 		CChat::Instance()->AddDebugMessage ( "HOOK_CDoor__OnUse ( 0x%p )", HOOK_CDoor__OnUse__ECX );
 		CM2Door * pDoor = *(CM2Door **) HOOK_CDoor__OnUse__ECX;
 
 		if ( pDoor )
 		{
-			CLogFile::Printf ( "Is door closed? %s", (pDoor->IsClosed () ? "Yes" : "No") );
+			DEBUG_LOG ( "Is door closed? %s", (pDoor->IsClosed () ? "Yes" : "No") );
 			CChat::Instance()->AddDebugMessage ( "Is door closed? %s", (pDoor->IsClosed () ? "Yes" : "No") );
 			pDoor->GetHash ();
 		}
@@ -147,7 +147,7 @@ void __declspec ( naked ) HOOK_C_SDSManager__ActivateStreamMapLine ( void )
 	_asm pop ebp;
 	_asm pushad;
 
-	CLogFile::Printf ( "HOOK_C_SDSManager__ActivateStreamMapLine < 0x%p > () - Requested to load '%s'", _this_ebx, szStreamMapLine );
+	DEBUG_LOG ( "HOOK_C_SDSManager__ActivateStreamMapLine < 0x%p > () - Requested to load '%s'", _this_ebx, szStreamMapLine );
 
 	/*if(!end)
 	{
@@ -284,7 +284,7 @@ void __fastcall Hook_CreateObject(int type)
 
 void CPatches::Initialise( void )
 {
-	CLogFile::Printf( "Installing patches..." );
+	DEBUG_LOG( "Installing patches..." );
 
 	// Unprotect the .text segment
 	CPatcher::Unprotect( (CCore::Instance()->GetBaseAddress() + 0x400000 + 0x1000), 0x94C000 );
@@ -419,7 +419,7 @@ void CPatches::Initialise( void )
 	unsigned char sdsConf[20] = "/sdsconfig_m2mp.bin";
 	CPatcher::PatchAddress( 0x18F76A4, sdsConf, sizeof(sdsConf) );
 
-	CLogFile::Printf( "Patches installed." );
+	DEBUG_LOG( "Patches installed." );
 }
 
 int CPatches::HOOK_CGame__OnGameInit( lua_State * a1, signed int a2, const PCHAR a3 )

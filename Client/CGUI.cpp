@@ -109,9 +109,7 @@ bool CGUI::DeleteAllClientScriptGUI( void )
 		CCore::Instance()->GetClientScriptingManager()->GetScriptGUIManager()->Hide();
 		//CCore::Instance()->GetClientScriptingManager()->GetScriptGUIManager()->DeleteAll(); // todo
 
-#ifdef _DEBUG
-		CLogFile::Print("CGUI::HideAllClientScriptGUI > Hide all scriptGUI elements.");
-#endif
+		DEBUG_LOG("CGUI::HideAllClientScriptGUI > Hide all scriptGUI elements.");
 		return true;
 	}
 

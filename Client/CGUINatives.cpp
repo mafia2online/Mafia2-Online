@@ -453,7 +453,7 @@ SQInteger CGUINatives::GuiSetPosition( SQVM * pVM )
 		sq_getbool( pVM, -1, &bRelative );
 	}
 
-	CLogFile::Printf( "guiSetPosition - element: 0x%p (%f, %f, %s)", pElement, vecPosition.fX, vecPosition.fY, bRelative );
+	DEBUG_LOG ( "guiSetPosition - element: 0x%p (%f, %f, %s)", pElement, vecPosition.fX, vecPosition.fY, bRelative );
 
 	// Is the element valid?
 	if( pElement )

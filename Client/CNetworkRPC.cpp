@@ -84,7 +84,7 @@ void InitialData( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 	// Set the season
 	CCore::Instance()->SetSummer ( pBitStream->ReadBit() );
 
-	CLogFile::Printf ( "Season: %s", (CCore::Instance()->IsSummer () ? "Summer" : "Winter") );
+	DEBUG_LOG ( "Season: %s", (CCore::Instance()->IsSummer () ? "Summer" : "Winter") );
 
 	// Read the weather
 	RakNet::RakString strWeather;
@@ -124,7 +124,8 @@ void InitialData( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 
 void ConnectionRejected( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 {
-	CLogFile::Printf("ConnectionRejected");
+	DEBUG_LOG("ConnectionRejected");
+
 	// Read the rejection reason
 	BYTE byteReason;
 	pBitStream->Read( byteReason );
@@ -144,7 +145,7 @@ void ConnectionRejected( RakNet::BitStream * pBitStream, RakNet::Packet * pPacke
 	}
 
 	// Disconnected due to reject ?
-	CLogFile::Printf("Disconnect due to reason : %s", strReason.Get());
+	CLogFile::Printf("Disconnect due to reason: %s", strReason.Get());
 	CCore::Instance()->GetGUI()->GetServerBrowser()->SetDisconnectReason(true, strReason.Get());
 }
 
@@ -295,16 +296,12 @@ void PlayerSpawn( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 
 void KickPlayer( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 {
-#ifdef DEBUG
-	CLogFile::Printf ( "KickPlayer packet!" );
-#endif
+	DEBUG_LOG ( "KickPlayer packet!" );
 
 	// Handle this with the serverbrowser
 	CCore::Instance()->GetGUI()->GetServerBrowser()->SetDisconnectReason(true, "YOU'VE BEEN KICKED FROM THE SERVER");
 
-#ifdef DEBUG
-	CLogFile::Printf ( "KickPlayer done!" );
-#endif
+	DEBUG_LOG ( "KickPlayer done!" );
 }
 
 void PlayerSyncVehicle( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
@@ -372,9 +369,7 @@ void NewBlip( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 	EntityId entityId;
 	pBitStream->ReadCompressed( entityId );
 
-#ifdef DEBUG
-	CLogFile::Printf ( "NewBlip - %d, BlipType: %d, Attached to: %d", blipId, blipType, entityId );
-#endif
+	DEBUG_LOG ( "NewBlip - %d, BlipType: %d, Attached to: %d", blipId, blipType, entityId );
 
 	// Add the blip into the blip manager
 	CCore::Instance()->GetBlipManager()->AddServerBlip(blipId, fX, fY, iLibrary, iIcon, (eBlipType)blipType, entityId);
@@ -679,9 +674,7 @@ void SpawnVehicle( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 			int iTotalOccupants;
 			pBitStream->Read( iTotalOccupants );
 
-#ifdef DEBUG
-			CLogFile::Printf( "(SpawnVehicle) Total occupants: %d", iTotalOccupants );
-#endif
+			DEBUG_LOG ( "(SpawnVehicle) Total occupants: %d", iTotalOccupants );
 
 			// Loop over the total occupants
 			EntityId occupantId = INVALID_ENTITY_ID;
@@ -695,9 +688,7 @@ void SpawnVehicle( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 				// Read the current occupant seat
 				pBitStream->Read( iSeat );
 
-#ifdef DEBUG
-				CLogFile::Printf( "SpawnVehicle - Read occupant %d in seat %d.", occupantId, iSeat );
-#endif
+				DEBUG_LOG( "SpawnVehicle - Read occupant %d in seat %d.", occupantId, iSeat );
 
 				// Is the read data valid?
 				if( occupantId != INVALID_ENTITY_ID )
@@ -717,16 +708,11 @@ void SpawnVehicle( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 						// Set the vehicle passenger
 						pNetworkVehicle->SetOccupant( iSeat, pOccupant );
 
-#ifdef DEBUG
-						CLogFile::Printf( "Put occupant %d into vehicle %d (%d)", occupantId, pNetworkVehicle->GetId(), (iSeat + 1) );
-#endif
+						DEBUG_LOG ( "Put occupant %d into vehicle %d (%d)", occupantId, pNetworkVehicle->GetId(), (iSeat + 1) );
 					}
 				}
 			}
-
-#ifdef DEBUG
-			CLogFile::Print ( "SpawnVehicle RPC done!" );
-#endif
+			DEBUG_LOG ( "SpawnVehicle RPC done!" );
 		}
 	}
 }
@@ -772,7 +758,6 @@ void MoveToDriver( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 	EntityId occupantId;
 	pBitStream->ReadCompressed ( occupantId );
 
-	CLogFile::Printf ( "CNetworkRPC::MoveToDriver ( Vehicle: %d, Occupant: %d )", vehicleId, occupantId );
 	CCore::Instance()->GetChat()->AddDebugMessage("CNetworkRPC::MoveToDriver ( Vehicle: %d, Occupant: %d )", vehicleId, occupantId);
 
 	// Is the vehicle and player valid?
