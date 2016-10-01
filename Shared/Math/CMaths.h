@@ -94,6 +94,20 @@ namespace Math
 		return GetDistanceBetweenPoints( vecPos.fX, vecPos.fY, vecPos.fZ, vecPos2.fX, vecPos2.fY, vecPos2.fZ );
 	}
 
+	static bool IsDistanceBetweenPointsLessThen(float fX, float fY, float fZ, float fXX, float fYY, float fZZ, float radius)
+	{
+		float newx = (fXX - fX);
+		float newy = (fYY - fY);
+		float newz = (fZZ - fZ);
+
+		return (newx * newx + newy * newy + newz * newz) < (radius * radius);
+	}
+
+	static bool IsDistanceBetweenPointsLessThen( CVector3 vecPos, CVector3 vecPos2, float radius )
+	{
+		return IsDistanceBetweenPointsLessThen( vecPos.fX, vecPos.fY, vecPos.fZ, vecPos2.fX, vecPos2.fY, vecPos2.fZ, radius );
+	}
+
 	static bool	IsPointInArea( CVector3 vecArea, CVector3 vecArea2, CVector3 vecPoint )
 	{
 		if( (vecPoint.fX >= vecArea.fX && vecPoint.fX <= vecArea2.fX) && (vecPoint.fY >= vecArea.fY && vecPoint.fY <= vecArea2.fY) && (vecPoint.fZ >= vecArea.fX && vecPoint.fZ <= vecArea2.fZ) )

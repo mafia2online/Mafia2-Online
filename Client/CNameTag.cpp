@@ -95,10 +95,10 @@ void CNameTag::DrawPed(void)
 
 		CVector3 pedPos;
 		pGamePed->GetPosition ( &pedPos );
-		float fDistance = Math::GetDistanceBetweenPoints ( localPos, pedPos );
-
-		if ( fDistance > RENDER_DISTANCE_PED )
+	
+		if (!Math::IsDistanceBetweenPointsLessThen(localPos, pedPos, RENDER_DISTANCE_PED)) {
 			continue;
+		}
 
 		String text ( "%s", pPed->GetNick().Get() );
 
@@ -148,10 +148,10 @@ void CNameTag::DrawPlayer(void)
 
 		CVector3 playerPos;
 		pRemotePlayer->GetPosition ( &playerPos );
-		float fDistance = Math::GetDistanceBetweenPoints ( localPos, playerPos );
-
-		if ( fDistance > RENDER_DISTANCE_PLAYER )
+		
+		if (!Math::IsDistanceBetweenPointsLessThen(localPos, playerPos, RENDER_DISTANCE_PLAYER)) {
 			continue;
+		}
 
 		String text ( "%s (%d)", pRemotePlayer->GetNick().Get(), i );
 
