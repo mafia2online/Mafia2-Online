@@ -177,13 +177,13 @@ SQInteger CPlayerNatives::GetColour( SQVM * pVM )
 		// Is the player active?
 		if( CCore::Instance()->GetPlayerManager()->Get(playerId) )
 		{
-			sq_pushinteger( pVM, ((CCore::Instance()->GetPlayerManager()->Get(playerId)->GetColour() >> 8) | 0xFF000000) );
+			sq_pushinteger( pVM, CCore::Instance()->GetPlayerManager()->Get(playerId)->GetColour() );
 			return 1;
 		}
 	}
 	else
 	{
-		sq_pushinteger( pVM, ((CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetColour() >> 8) | 0xFF000000) );
+		sq_pushinteger( pVM, CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetColour() );
 		return 1;
 	}
 

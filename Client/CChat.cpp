@@ -467,7 +467,7 @@ void CChat::AddChatMessage(CNetworkPlayer * pNetworkPlayer, const char * szMessa
 	PushUp();
 
 	// Get the player colour
-	CColor colour(pNetworkPlayer->GetColour(), true);
+	CColor colour(pNetworkPlayer->GetColour(), false);
 
 	// Set the chat line data
 	strcpy_s(m_chatLine[0].szMessage, (MAX_MESSAGE_LEN + 1), szMessageToSet);

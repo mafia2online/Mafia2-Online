@@ -165,7 +165,7 @@ void CNameTag::DrawPlayer(void)
 		CVector3 vecScreen;
 		pCore->GetGraphics()->WorldToScreen ( playerPos, &vecScreen );
 
-		pGraphics->DrawText((vecScreen.fX - dimensionWidth / 2) + 1, vecScreen.fY + 1, ((pRemotePlayer->GetColour() >> 8) | 0xFF000000), NAMETAG_SCALE, "tahoma-bold", false, text.Get());
+		pGraphics->DrawText((vecScreen.fX - dimensionWidth / 2) + 1, vecScreen.fY + 1, pRemotePlayer->GetColour(), NAMETAG_SCALE, "tahoma-bold", false, text.Get());
 
 		pGraphics->DrawBox ( (vecScreen.fX - (BOX_WIDTH / 2)), (vecScreen.fY + 16.0), BOX_WIDTH, BOX_HEIGHT, colBackground.ToUint() );
 		pGraphics->DrawBox ( (vecScreen.fX - (BOX_WIDTH / 2) + 2.0), (vecScreen.fY + 18.0), (BOX_WIDTH - 4.0), (BOX_HEIGHT - 4.0), colInnerBackground.ToUint() );
