@@ -9,6 +9,7 @@ Objs/
 # Debug/Release binaries folders.
 Binary/[Dd]ebug
 Binary/[Rr]elease
+Binary/m2mp-svr
 
 # VS related stuff.
 .vs
