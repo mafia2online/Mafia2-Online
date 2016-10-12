@@ -36,6 +36,9 @@ private:
 	static SQInteger		SetWantedLevel(SQVM *pVM);
 	static SQInteger		GetWantedLevel(SQVM *pVM);
 
+	static SQInteger		SetRenderNametags(SQVM *pVM);
+	static SQInteger		SetRenderHealthbar(SQVM *pVM);
+
 	static SQInteger		GetMoveState(SQVM *pVM);
 
 public:

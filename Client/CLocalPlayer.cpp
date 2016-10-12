@@ -66,6 +66,8 @@ CLocalPlayer::CLocalPlayer( void ) : CNetworkPlayer( true )
 	m_ulLastFullSyncTime = 0;
 	m_ulLastPingTime = 0;
 	m_oldMoveState = -1;
+	m_bRenderNametags = true;
+	m_bRenderHealthbar = true;
 }
 
 CLocalPlayer::~CLocalPlayer( void )

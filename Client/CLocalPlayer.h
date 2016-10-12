@@ -34,6 +34,9 @@ private:
 	CVector3						m_vecLastGoodPosition;
 	CVector3						m_vecLastGoodRotation;
 
+	bool							m_bRenderNametags;
+	bool							m_bRenderHealthbar;
+
 	unsigned long					m_ulLastPingTime;
 
 	int								m_oldMoveState;
@@ -80,6 +83,11 @@ public:
 	unsigned long					GetDeathTime							( void ) { return m_ulDeathTime; }
 
 	bool							IsFullSyncNeeded						( void );
+
+	void							SetRenderNametags						( bool isRendering ) { m_bRenderNametags = isRendering; }
+	void							SetRenderHealthbar						( bool isRendering ) { m_bRenderHealthbar = isRendering; }
+	bool							IsRenderingNametags						( void ) { return m_bRenderNametags; }
+	bool							IsRenderingHealthbar						( void ) { return m_bRenderHealthbar; }
 
 	void							SetRemoveForcefully						( bool bForcefully ) { m_bIsBeingForcefullyRemoved = bForcefully; }
 	bool							IsBeingRemovedForcefully				( void ) { return m_bIsBeingForcefullyRemoved; }

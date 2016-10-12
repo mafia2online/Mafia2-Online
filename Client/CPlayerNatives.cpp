@@ -56,6 +56,10 @@ void CPlayerNatives::Register( CScriptingManager * pScriptingManager )
 	pScriptingManager->RegisterFunction( "getPlayerWantedLevel", GetWantedLevel, 0, NULL);
 	pScriptingManager->RegisterFunction( "getPlayerMoveState", GetMoveState, 1, "i" );
 
+	// rendering settings
+	pScriptingManager->RegisterFunction("setRenderNametags", SetRenderNametags, 1, "b");
+	pScriptingManager->RegisterFunction("setRenderHealthbar", SetRenderHealthbar, 1, "b");
+
 	// Constants
 	pScriptingManager->RegisterConstant("MOVE_STATE_WALK", ePlayerMovementState::E_WALK);
 	pScriptingManager->RegisterConstant("MOVE_STATE_JOGGING", ePlayerMovementState::E_JOG);
@@ -468,4 +472,50 @@ SQInteger CPlayerNatives::GetWantedLevel(SQVM *pVM)
 	// Return the value
 	sq_pushinteger(pVM, CCore::Instance()->GetHud()->GetWantedLevel());
 	return (1);
+}
+
+/**
+ * Enables or disables rendering of nametags
+ * on local player environment
+ *
+ * Syntax: setRenderNametags( isRendering );
+ * @param bool isRendering
+ * @return bool
+ *
+ * By default nametags rendering is set to: true
+ * to disable: setRenderNametags(false);
+ */
+SQInteger CPlayerNatives::SetRenderNametags(SQVM * pVM)
+{
+	SQBool bToggle;
+	sq_getbool(pVM, -1, &bToggle);
+
+	// Is this the localplayer?
+	CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->SetRenderNametags(bToggle);
+
+	sq_pushbool(pVM, true);
+	return 1;
+}
+
+/**
+* Enables or disables rendering of healthbar
+* on local player environment
+*
+* Syntax: setRenderHealthbar( isRendering );
+* @param bool isRendering
+* @return bool
+*
+* By default healthbar rendering is set to: true
+* to disable: setRenderHealthbar(false);
+*/
+SQInteger CPlayerNatives::SetRenderHealthbar(SQVM * pVM)
+{
+	SQBool bToggle;
+	sq_getbool(pVM, -1, &bToggle);
+
+	// Is this the localplayer?
+	CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->SetRenderHealthbar(bToggle);
+
+	sq_pushbool(pVM, true);
+	return 1;
 }

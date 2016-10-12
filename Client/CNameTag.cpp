@@ -95,7 +95,7 @@ void CNameTag::DrawPed(void)
 
 		CVector3 pedPos;
 		pGamePed->GetPosition ( &pedPos );
-	
+
 		if (!Math::IsDistanceBetweenPointsLessThen(localPos, pedPos, RENDER_DISTANCE_PED)) {
 			continue;
 		}
@@ -128,6 +128,10 @@ void CNameTag::DrawPlayer(void)
 	if (! pLocalPlayer)
 		return;
 
+	if (!pLocalPlayer->IsRenderingNametags() && !pLocalPlayer->IsRenderingHealthbar()) {
+		return;
+	}
+
 	pLocalPlayer->GetPosition ( &localPos );
 
 	CGraphics *pGraphics = pCore->GetGraphics();
@@ -148,7 +152,7 @@ void CNameTag::DrawPlayer(void)
 
 		CVector3 playerPos;
 		pRemotePlayer->GetPosition ( &playerPos );
-		
+
 		if (!Math::IsDistanceBetweenPointsLessThen(localPos, playerPos, RENDER_DISTANCE_PLAYER)) {
 			continue;
 		}
@@ -165,10 +169,13 @@ void CNameTag::DrawPlayer(void)
 		CVector3 vecScreen;
 		pCore->GetGraphics()->WorldToScreen ( playerPos, &vecScreen );
 
-		pGraphics->DrawText((vecScreen.fX - dimensionWidth / 2) + 1, vecScreen.fY + 1, pRemotePlayer->GetColour(), NAMETAG_SCALE, "tahoma-bold", false, text.Get());
+		if (pLocalPlayer->IsRenderingNametags())
+			pGraphics->DrawText((vecScreen.fX - dimensionWidth / 2) + 1, vecScreen.fY + 1, pRemotePlayer->GetColour(), NAMETAG_SCALE, "tahoma-bold", false, text.Get());
 
-		pGraphics->DrawBox ( (vecScreen.fX - (BOX_WIDTH / 2)), (vecScreen.fY + 16.0), BOX_WIDTH, BOX_HEIGHT, colBackground.ToUint() );
-		pGraphics->DrawBox ( (vecScreen.fX - (BOX_WIDTH / 2) + 2.0), (vecScreen.fY + 18.0), (BOX_WIDTH - 4.0), (BOX_HEIGHT - 4.0), colInnerBackground.ToUint() );
-		pGraphics->DrawBox ( (vecScreen.fX - (BOX_WIDTH / 2) + 2.0), (vecScreen.fY + 18.0), healthWidth, (BOX_HEIGHT - 4.0), colContent.ToUint() );
+		if (pLocalPlayer->IsRenderingHealthbar()) {
+			pGraphics->DrawBox ( (vecScreen.fX - (BOX_WIDTH / 2)), (vecScreen.fY + 16.0), BOX_WIDTH, BOX_HEIGHT, colBackground.ToUint() );
+			pGraphics->DrawBox ( (vecScreen.fX - (BOX_WIDTH / 2) + 2.0), (vecScreen.fY + 18.0), (BOX_WIDTH - 4.0), (BOX_HEIGHT - 4.0), colInnerBackground.ToUint() );
+			pGraphics->DrawBox ( (vecScreen.fX - (BOX_WIDTH / 2) + 2.0), (vecScreen.fY + 18.0), healthWidth, (BOX_HEIGHT - 4.0), colContent.ToUint() );
+		}
 	}
 }
