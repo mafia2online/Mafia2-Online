@@ -41,8 +41,7 @@ int CM2Navigation::RegisterIconPos( const Vector2& vecPosition, int iLibrary, in
 			push 0;
 			push iIcon;
 			push iLibrary;
-			lea ecx, vecPosition;
-			push ecx;
+			push vecPosition
 			mov ecx, pNavigation;
 			call COffsets::FUNC_CNavigation__RegisterIconPos;
 			mov iIconId, eax;
