@@ -37,8 +37,8 @@ void CSystemNatives::Register( CScriptingManager * pScriptingManager )
 	pScriptingManager->RegisterFunction( "getPlayerCount", PlayerCount, 0, NULL );
 	pScriptingManager->RegisterFunction( "getMaxPlayers", MaxPlayers, 0, NULL );
 	pScriptingManager->RegisterFunction( "getServerName", ServerName, 0, NULL );
-	pScriptingManager->RegisterFunction( "str_rand", StrRand, 1, "i" );
-	pScriptingManager->RegisterFunction( "int_concat", IntConcat, 2, "ii" );
+	pScriptingManager->RegisterFunction( "strRand", StrRand, 1, "i");
+	pScriptingManager->RegisterFunction( "intConcat", IntConcat, 2, "ii");
 	pScriptingManager->RegisterFunction( "getDateTime", GetDateTime, 0, NULL);
 }
 
