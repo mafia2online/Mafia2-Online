@@ -988,3 +988,21 @@ void CM2Vehicle::ToggleGarageEnter(bool bToggle)
 		m_pVehicle->m_byteFlags5 = byteFlags;
 	}
 }
+
+void CM2Vehicle::SetIndicatorLightsOn(bool left, bool right)
+{
+	if (!m_pVehicle)
+		return;
+
+	M2Vehicle * pVehicle = m_pVehicle;
+	DWORD dwVehicleData = (DWORD)(pVehicle)+0xA8;
+	DWORD dwFunc = 0x1203D80;
+
+	__asm
+	{
+		push right;
+		push left;
+		mov ecx, dwVehicleData;
+		call dwFunc;
+	}
+}

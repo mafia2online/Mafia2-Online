@@ -358,4 +358,6 @@ public:
 	void					SetPainting						(const char *paint);
 
 	void					ToggleGarageEnter				(bool bToggle);
+
+	void					SetIndicatorLightsOn			(bool left, bool right);
 };

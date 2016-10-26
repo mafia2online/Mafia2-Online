@@ -550,7 +550,7 @@ void CCore::OnGameProcess( void )
 
 	// DEBUG
 #ifdef DEBUG
-	static C_SyncObject *_test = NULL;
+	/*static C_SyncObject *_test = NULL;
 	if( GetAsyncKeyState( VK_F7 ) & 0x1 )
 	{
 		CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->LockControls(true);
@@ -561,11 +561,30 @@ void CCore::OnGameProcess( void )
 	{
 		CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetPlayerPed()->AnimEffectStop(_test);
 		CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->LockControls(false);
+	}*/
+
+	// Trigger off the right indicator
+	if (GetAsyncKeyState(VK_F8) & 0x1)
+	{
+		CCore::Instance()->GetVehicleManager()->Get(CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetVehicle()->GetId())->GetVehicle()->SetIndicatorLightsOn(false, false);
 	}
 
+	// Trigger on the left indicator
+	if (GetAsyncKeyState(VK_F7) & 0x1)
+	{
+		CCore::Instance()->GetVehicleManager()->Get(CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetVehicle()->GetId())->GetVehicle()->SetIndicatorLightsOn(true, true);
+	}
+
+	//Trigger on the right indicator
 	if (GetAsyncKeyState(VK_F6) & 0x1)
 	{
-		CCore::Instance()->GetChat()->AddDebugMessage("IsStealthMoving : %s", (CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetPlayerPed()->IsStealthMoving()) ? "Oui" : "Non");
+		CCore::Instance()->GetVehicleManager()->Get(CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetVehicle()->GetId())->GetVehicle()->SetIndicatorLightsOn(true, false);
+	}
+
+	// Trigger off the left indicator
+	if (GetAsyncKeyState(VK_F5) & 0x1)
+	{
+		CCore::Instance()->GetVehicleManager()->Get(CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetVehicle()->GetId())->GetVehicle()->SetIndicatorLightsOn(false, true);
 	}
 #endif
 
