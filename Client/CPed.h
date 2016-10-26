@@ -33,7 +33,7 @@ public:
 									~CPed					( void );
 
 	void							Create					( CVector3 position, CVector3 rotation );
-	void							Destroy					( void );
+	void							Destroy					( bool del );
 
 	void							SetId					( EntityId pedId ) { m_pedId = pedId; }
 	EntityId						GetId					( void ) { return m_pedId; }

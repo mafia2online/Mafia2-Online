@@ -29,36 +29,29 @@
 
 CPed::CPed( unsigned int uiModelIndex, CVector3 vecPosition, CVector3 vecRotation )
 {
-	// Store the model
 	m_uiModelIndex = uiModelIndex;
 
-	// Create ped
 	Create(vecPosition, vecRotation);
 }
 
 CPed::~CPed( void )
 {
-	// Destroy ped
-	Destroy();
+	Destroy(true);
 }
 
 void CPed::Create(CVector3 vecPosition, CVector3 vecRotation)
 {
 	DEBUG_LOG("Loading ped model manager...");
 
-	// Get the model name and directory
 	String strModel, strDirectory;
 	Game::GetPlayerModelFromId(m_uiModelIndex, &strModel, &strDirectory);
 
-	// Try load the ped model
 	m_pPedModelManager = CCore::Instance()->GetModelManager()->Load(strDirectory.Get(), strModel.Get());
 
 	DEBUG_LOG("Loaded! 0x%p", m_pPedModelManager);
 
-	// Create the ped
 	m_pPed = IE::CreateWrapperPed(m_pPedModelManager);
 
-	// Creation succeed ?
 	if (!m_pPed) {
 		CLogFile::Print("Failed to create ped");
 		return;
@@ -66,57 +59,47 @@ void CPed::Create(CVector3 vecPosition, CVector3 vecRotation)
 
 	DEBUG_LOG("Ped created. 0x%p", m_pPed);
 
-	// Activate the ped
 	m_pPed->Activate();
 
-	// Set position and rotation
 	m_pPed->SetPosition(vecPosition);
 	m_pPed->SetRotation(vecRotation);
 }
 
-void CPed::Destroy()
+void CPed::Destroy(bool del = true)
 {
 	if (m_pPed){
-		// Deactivate the entity
 		m_pPed->Deactivate();
 	}
-	// Free the model
+
 	CCore::Instance()->GetModelManager()->Free(m_pPedModelManager);
 
-	// Destroy the ped
-	SAFE_DELETE(m_pPed);
+	if (del) {
+		SAFE_DELETE(m_pPed);
+	}
 }
 
 void CPed::SetModel( unsigned int uiModelIndex )
 {
-	// Store the model
-	m_uiModelIndex = uiModelIndex;
-
-	// Get the model name and directory
-	String strModel, strDirectory;
-	Game::GetPlayerModelFromId(m_uiModelIndex, &strModel, &strDirectory);
-
 	CVector3	pos;
 	Quaternion	rot;
 	CVector3	tempRot;
 
-	// Save position
 	m_pPed->GetPosition(&pos);
 	m_pPed->GetRotation(&rot);
 
-	// Store temp rotation
 	tempRot.fX = rot.fX;
 	tempRot.fY = rot.fY;
 	tempRot.fZ = rot.fZ;
 
-	// Set model by resetting instance - BUGGED
-	//Create(pos, tempRot);
+	Destroy(false);
 
+	m_uiModelIndex = uiModelIndex;
+
+	Create(pos, tempRot);
 }
 
 void CPed::SetNick(const char *szNick)
 {
-	// Store the nick
 	if (strlen(szNick) > 0)
 		m_pNick.Set(szNick);
 }
