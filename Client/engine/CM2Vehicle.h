@@ -359,5 +359,5 @@ public:
 
 	void					ToggleGarageEnter				(bool bToggle);
 
-	void					SetIndicatorLightsOn			(bool left, bool right);
+	void					SetIndicatorLightsOn			(int indicator, int toggle);
 };

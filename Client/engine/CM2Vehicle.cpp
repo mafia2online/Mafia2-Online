@@ -989,7 +989,7 @@ void CM2Vehicle::ToggleGarageEnter(bool bToggle)
 	}
 }
 
-void CM2Vehicle::SetIndicatorLightsOn(bool left, bool right)
+void CM2Vehicle::SetIndicatorLightsOn(int indicator, int toggle)
 {
 	if (!m_pVehicle)
 		return;
@@ -1000,8 +1000,8 @@ void CM2Vehicle::SetIndicatorLightsOn(bool left, bool right)
 
 	__asm
 	{
-		push right;
-		push left;
+		push indicator;
+		push toggle;
 		mov ecx, dwVehicleData;
 		call dwFunc;
 	}

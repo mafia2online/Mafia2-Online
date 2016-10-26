@@ -566,25 +566,25 @@ void CCore::OnGameProcess( void )
 	// Trigger off the right indicator
 	if (GetAsyncKeyState(VK_F8) & 0x1)
 	{
-		CCore::Instance()->GetVehicleManager()->Get(CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetVehicle()->GetId())->GetVehicle()->SetIndicatorLightsOn(false, false);
+		CCore::Instance()->GetVehicleManager()->Get(CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetVehicle()->GetId())->GetVehicle()->SetIndicatorLightsOn(0, 0);
 	}
 
 	// Trigger on the left indicator
 	if (GetAsyncKeyState(VK_F7) & 0x1)
 	{
-		CCore::Instance()->GetVehicleManager()->Get(CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetVehicle()->GetId())->GetVehicle()->SetIndicatorLightsOn(true, true);
+		CCore::Instance()->GetVehicleManager()->Get(CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetVehicle()->GetId())->GetVehicle()->SetIndicatorLightsOn(0, 1);
 	}
 
-	//Trigger on the right indicator
+	//Trigger off the right indicator
 	if (GetAsyncKeyState(VK_F6) & 0x1)
 	{
-		CCore::Instance()->GetVehicleManager()->Get(CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetVehicle()->GetId())->GetVehicle()->SetIndicatorLightsOn(true, false);
+		CCore::Instance()->GetVehicleManager()->Get(CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetVehicle()->GetId())->GetVehicle()->SetIndicatorLightsOn(1, 0);
 	}
 
-	// Trigger off the left indicator
+	// Trigger on the right indicator
 	if (GetAsyncKeyState(VK_F5) & 0x1)
 	{
-		CCore::Instance()->GetVehicleManager()->Get(CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetVehicle()->GetId())->GetVehicle()->SetIndicatorLightsOn(false, true);
+		CCore::Instance()->GetVehicleManager()->Get(CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetVehicle()->GetId())->GetVehicle()->SetIndicatorLightsOn(1, 1);
 	}
 #endif
 
