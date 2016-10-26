@@ -243,6 +243,8 @@ public:
 	float GetMotorDamage(void) const;
 
 	long double GetDamage(void) const;
+
+	void SetTransparency(float transparency);
 };
 
 class CM2Vehicle : public CM2Entity
@@ -364,4 +366,6 @@ public:
 	void					SetIndicatorLightsOn			(int indicator, int toggle);
 
 	long double				GetDamage						(void);
+
+	void					SetTransparency					(float transparency);
 };

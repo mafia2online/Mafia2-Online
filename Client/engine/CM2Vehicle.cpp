@@ -44,6 +44,12 @@ long double _declspec(naked) M2Vehicle::GetDamage(void) const
 	_asm jmp C_Car__GetDamage;
 }
 
+const DWORD C_Car__SetTransparency = 0x09BC2F0;
+void _declspec(naked) M2Vehicle::SetTransparency(float transparency)
+{
+	_asm jmp C_Car__SetTransparency;
+}
+
 CM2Vehicle::CM2Vehicle( M2Vehicle * pVehicle ) : CM2Entity( pVehicle )
 {
 	SetVehicle( pVehicle );
@@ -1019,4 +1025,10 @@ void CM2Vehicle::SetIndicatorLightsOn(int indicator, int toggle)
 		mov ecx, dwVehicleData;
 		call dwFunc;
 	}
+}
+
+void CM2Vehicle::SetTransparency(float trans)
+{
+	if (m_pVehicle)
+		m_pVehicle->SetTransparency(trans);
 }
