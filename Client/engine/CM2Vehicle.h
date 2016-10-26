@@ -241,6 +241,8 @@ public:
 
 	void SetMotorDamage(float damage);
 	float GetMotorDamage(void) const;
+
+	long double GetDamage(void) const;
 };
 
 class CM2Vehicle : public CM2Entity
@@ -360,4 +362,6 @@ public:
 	void					ToggleGarageEnter				(bool bToggle);
 
 	void					SetIndicatorLightsOn			(int indicator, int toggle);
+
+	long double				GetDamage						(void);
 };

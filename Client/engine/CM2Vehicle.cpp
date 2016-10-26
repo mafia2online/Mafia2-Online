@@ -38,6 +38,12 @@ float _declspec(naked) M2Vehicle::GetMotorDamage(void) const
 	_asm jmp COffsets::FUNC_CVehicle__GetEngineDamage;
 }
 
+const DWORD C_Car__GetDamage = 0x09A9A70;
+long double _declspec(naked) M2Vehicle::GetDamage(void) const
+{
+	_asm jmp C_Car__GetDamage;
+}
+
 CM2Vehicle::CM2Vehicle( M2Vehicle * pVehicle ) : CM2Entity( pVehicle )
 {
 	SetVehicle( pVehicle );
@@ -155,6 +161,14 @@ float CM2Vehicle::GetEngineDamage( void )
 		return m_pVehicle->GetMotorDamage();
 
 	return (0.0f);
+}
+
+long double CM2Vehicle::GetDamage(void)
+{
+	if (m_pVehicle)
+		return m_pVehicle->GetDamage();
+
+	return (0.0);
 }
 
 void CM2Vehicle::SetSpeed( float fSpeed )
