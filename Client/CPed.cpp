@@ -68,6 +68,10 @@ void CPed::Create(CVector3 vecPosition, CVector3 vecRotation)
 
 	// Activate the ped
 	m_pPed->Activate();
+
+	// Set position and rotation
+	m_pPed->SetPosition(vecPosition);
+	m_pPed->SetRotation(vecRotation);
 }
 
 void CPed::Destroy()
