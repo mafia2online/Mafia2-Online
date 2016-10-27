@@ -1032,3 +1032,19 @@ void CM2Vehicle::SetTransparency(float trans)
 	if (m_pVehicle)
 		m_pVehicle->SetTransparency(trans);
 }
+
+void CM2Vehicle::OpenDoors(bool open)
+{
+	if (!m_pVehicle)
+		return;
+
+	M2Vehicle * pVehicle = m_pVehicle;
+	DWORD dwFunc = 0x09AAD10;
+
+	__asm
+	{
+		push open;
+		mov ecx, pVehicle;
+		call dwFunc;
+	}
+}
