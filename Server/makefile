@@ -4,7 +4,6 @@ SOURCES = $(wildcard *.cpp)
 SOURCES += ../Shared/CEvents.cpp ../Shared/CCommands.cpp ../Shared/CLibrary.cpp ../Shared/CSQLite.cpp ../Shared/CXML.cpp
 SOURCES += $(wildcard ../Shared/Timers/*.cpp)
 SOURCES += $(wildcard ../Shared/Threading/*.cpp)
-SOURCES += $(wildcard ../Libraries/RakNet/Source/*.cpp)
 SOURCES += ../Shared/Scripting/CSquirrelCommon.cpp
 SOURCES += $(wildcard ../Shared/Game/*.cpp)
 SOURCES += ../Shared/Scripting/Natives/CAreaNatives.cpp ../Shared/Scripting/Natives/CBlipNatives.cpp ../Shared/Scripting/Natives/CEventNatives.cpp ../Shared/Scripting/Natives/CSharedPlayerNatives.cpp ../Shared/Scripting/Natives/CSharedVehicleNatives.cpp ../Shared/Scripting/Natives/CSQLiteNatives.cpp ../Shared/Scripting/Natives/CSystemNatives.cpp ../Shared/Scripting/Natives/CTimerNatives.cpp ../Shared/Scripting/Natives/CUtilNatives.cpp ../Shared/Scripting/Natives/CXMLNatives.cpp ../Shared/Scripting/Natives/CHashNatives.cpp
@@ -12,7 +11,7 @@ SOURCES += ../Shared/Scripting/CScriptingManager.cpp ../Shared/SharedUtility.cpp
 SOURCES += $(wildcard ../Shared/Network/*.cpp) ../Shared/CString.cpp ../Shared/CLogFile.cpp
 SOURCES += $(wildcard ../Shared/md5/*.cpp) ../Shared/CSettings.cpp ../Shared/Linux.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
-LIBS = ../Libraries/lib/libsqlite.a ../Libraries/lib/libtinyxml.a ../Libraries/lib/libsquirrel.a
+LIBS = ../Libraries/lib/libsqlite.a ../Libraries/lib/libtinyxml.a ../Libraries/lib/libsquirrel.a ../Libraries/lib/libraknet.a
 EXECUTABLE = ../Binary/m2mp-svr
 
 all: prepare $(SOURCES) $(EXECUTABLE)

@@ -8,5 +8,7 @@
     <resources>
         <resource>default</resource>
     </resources>
-    <modules></modules>
+    <modules />
+    <serverip></serverip>
+    <serverkey></serverkey>
 </settings>

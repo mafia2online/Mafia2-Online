@@ -7,7 +7,7 @@ SRCS=	$(shell find -type f -iname "*.cpp")
 OBJS=	$(SRCS:.cpp=.o)
 
 all: $(OBJS)
-	g++ -c $(OBJS) -Wwrite-strings
+	g++ -c -m32 $(OBJS) -lpthread -Wwrite-strings
 	ar rc $(OUT) *.o
 	rm *.o
 
