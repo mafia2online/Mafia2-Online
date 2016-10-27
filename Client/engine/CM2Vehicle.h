@@ -368,4 +368,6 @@ public:
 	long double				GetDamage						(void);
 
 	void					SetTransparency					(float transparency);
+
+	void					OpenDoors						(bool open);
 };
