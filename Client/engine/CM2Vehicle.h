@@ -371,4 +371,5 @@ public:
 
 	void					OpenDoors						(bool open);
 	void					OpenDoor						(int door, bool open);
+	void					SetDoorFree						(int door, bool freed);
 };
