@@ -26,19 +26,15 @@
 
 CVehicleManager::CVehicleManager( void )
 {
-	// Reset all vehicle pointers
 	memset( m_pNetworkVehicle, NULL, sizeof(m_pNetworkVehicle) );
 }
 
 CVehicleManager::~CVehicleManager( void )
 {
-	// Loop through all vehicles
 	for( EntityId i = 0; i < MAX_VEHICLES; i++ )
 	{
-		// Is the current vehicle active?
 		if( IsActive( i ) )
 		{
-			// Delete the network vehicle instance
 			SAFE_DELETE( m_pNetworkVehicle[i] );
 		}
 	}
@@ -46,7 +42,6 @@ CVehicleManager::~CVehicleManager( void )
 
 bool CVehicleManager::Add( EntityId vehicleId, int iModel, CVector3 vecPosition, CVector3 vecRotation )
 {
-	// Is the vehicle already active?
 	if( IsActive( vehicleId ) )
 		return false;
 
@@ -64,11 +59,9 @@ bool CVehicleManager::Add( EntityId vehicleId, int iModel, CVector3 vecPosition,
 
 void CVehicleManager::Remove( EntityId vehicleId )
 {
-	// Is the vehicle not active?
 	if( !IsActive( vehicleId ) )
 		return;
 
-	// Destroy the network vehicle instance
 	SAFE_DELETE( m_pNetworkVehicle[vehicleId] );
 }
 
@@ -86,7 +79,6 @@ CNetworkVehicle * CVehicleManager::GetFromGameGUID( DWORD dwGuid )
 {
 	DEBUG_LOG("CVehicleManager::GetFromGameGUID");
 
-	// Loop through all vehicles
 	for( EntityId i = 0; i < MAX_VEHICLES; i++ )
 	{
 		CNetworkVehicle *pVehicle = m_pNetworkVehicle[i];
@@ -102,13 +94,10 @@ EntityId CVehicleManager::GetCount( void )
 {
 	EntityId count = 0;
 
-	// Loop through all vehicles
 	for( EntityId i = 0; i < MAX_VEHICLES; i++ )
 	{
-		// Is the current vehicle active?
 		if( IsActive( i ) )
 		{
-			// Increase the vehicle count
 			count++;
 		}
 	}
@@ -120,17 +109,12 @@ void CVehicleManager::RespawnAll( void )
 {
 	DEBUG_LOG("CVehicleManager::RespawnAll");
 
-	// Loop through all vehicles
 	for( EntityId i = 0; i < MAX_VEHICLES; i++ )
 	{
-		// Is the current vehicle active and spawned?
 		if( IsActive ( i ) && m_pNetworkVehicle[ i ]->IsSpawned () )
 		{
-			// Get the last sync data
 			InVehicleSync vehicleSync;
 			m_pNetworkVehicle[ i ]->GetSyncData ( &vehicleSync );
-
-			// Process the last sync data
 			m_pNetworkVehicle[ i ]->StoreVehicleSync ( vehicleSync, false, true );
 		}
 	}
