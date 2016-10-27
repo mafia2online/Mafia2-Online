@@ -1066,3 +1066,21 @@ void CM2Vehicle::OpenDoor(int door, bool open)
 		call dwFunc;
 	}
 }
+
+void CM2Vehicle::SetDoorFree(int door, bool freed)
+{
+	if (!m_pVehicle)
+		return;
+
+	M2Vehicle * pVehicle = m_pVehicle;
+	DWORD dwVehicleData = (DWORD)(pVehicle)+0xA8;
+	DWORD dwFunc = 0x1258630;
+
+	__asm
+	{
+		push freed;
+		push door;
+		mov ecx, dwVehicleData;
+		call dwFunc;
+	}
+}
