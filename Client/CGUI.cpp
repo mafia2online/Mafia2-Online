@@ -69,21 +69,21 @@ void CGUI::SetupGUI( void )
 	m_pSettings = new CMenuSettings( m_pGUI );
 }
 
-void CGUI::SetCursorVisible( bool bVisible )
+void CGUI::SetCursorVisible(bool bVisible)
 {
-	// Toggle the cursor
-	m_pGUI->SetCursorEnabled( bVisible );
-
 	CCore *pCore = CCore::Instance();
 	CM2Camera *pGameCamera = pCore->GetCamera();
-	if( pGameCamera )
+	if (pGameCamera)
 	{
-		if( bVisible )
+		if (bVisible)
 		{
+			if (IsCursorVisible())
+			{
+				return;
+			}
+
 			m_bPreviousCameraState = pGameCamera->IsLocked();
-
 			pGameCamera->LockControl(true);
-
 			CMafia *pGame = pCore->GetGame();
 
 			if (pGame->IsMapOpen())
@@ -95,9 +95,11 @@ void CGUI::SetCursorVisible( bool bVisible )
 			m_bPreviousCameraState = false;
 		}
 	}
+
+	m_pGUI->SetCursorEnabled(bVisible);
 }
 
-bool CGUI::IsCursorVisible( void )
+bool CGUI::IsCursorVisible( void ) const
 {
 	return m_pGUI->IsCursorEnabled();
 }
