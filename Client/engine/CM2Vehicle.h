@@ -370,4 +370,5 @@ public:
 	void					SetTransparency					(float transparency);
 
 	void					OpenDoors						(bool open);
+	void					OpenDoor						(int door, bool open);
 };
