@@ -10,6 +10,7 @@
 #include "BaseInc.h"
 
 #include <assert.h>
+#include <stdlib.h>
 
 #include "squirrel.h"
 #include "sqstate.h"

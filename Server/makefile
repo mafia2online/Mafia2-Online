@@ -1,24 +1,25 @@
-CFLAGS = -m32 -c -g -std=c++0x -Wno-write-strings -D_SERVER -D_LINUX -D_NO_GARBAGE_COLLECT -I../Shared -I../Libraries/squirrel -I../Libraries/ -I.
+CFLAGS = -c -m32 -g -std=c++0x -Wno-write-strings -D_SERVER -D_LINUX -D_NO_GARBAGE_COLLECT -I../Libraries/mongoose -I../Libraries/tinyxml -I../Libraries/sqlite -I../Libraries/RakNet/Source -I../Shared -I../Libraries/squirrel -I../Libraries/ -I.
 LDFLAGS = -m32 -lpthread -ldl
 SOURCES = $(wildcard *.cpp)
-SOURCES += $(wildcard ../Libraries/tinyxml/*.cpp)
 SOURCES += ../Shared/CEvents.cpp ../Shared/CCommands.cpp ../Shared/CLibrary.cpp ../Shared/CSQLite.cpp ../Shared/CXML.cpp
 SOURCES += $(wildcard ../Shared/Timers/*.cpp)
 SOURCES += $(wildcard ../Shared/Threading/*.cpp)
+SOURCES += $(wildcard ../Libraries/RakNet/Source/*.cpp)
 SOURCES += ../Shared/Scripting/CSquirrelCommon.cpp
-SOURCES += $(wildcard ../Shared/Scripting/Natives/*.cpp)
+SOURCES += $(wildcard ../Shared/Game/*.cpp)
+SOURCES += ../Shared/Scripting/Natives/CAreaNatives.cpp ../Shared/Scripting/Natives/CBlipNatives.cpp ../Shared/Scripting/Natives/CEventNatives.cpp ../Shared/Scripting/Natives/CSharedPlayerNatives.cpp ../Shared/Scripting/Natives/CSharedVehicleNatives.cpp ../Shared/Scripting/Natives/CSQLiteNatives.cpp ../Shared/Scripting/Natives/CSystemNatives.cpp ../Shared/Scripting/Natives/CTimerNatives.cpp ../Shared/Scripting/Natives/CUtilNatives.cpp ../Shared/Scripting/Natives/CXMLNatives.cpp ../Shared/Scripting/Natives/CHashNatives.cpp
 SOURCES += ../Shared/Scripting/CScriptingManager.cpp ../Shared/SharedUtility.cpp ../Shared/Scripting/CSquirrel.cpp ../Shared/Scripting/CSquirrelArguments.cpp
 SOURCES += $(wildcard ../Shared/Network/*.cpp) ../Shared/CString.cpp ../Shared/CLogFile.cpp
 SOURCES += $(wildcard ../Shared/md5/*.cpp) ../Shared/CSettings.cpp ../Shared/Linux.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
+LIBS = ../Libraries/lib/libsqlite.a ../Libraries/lib/libtinyxml.a ../Libraries/lib/libsquirrel.a
 EXECUTABLE = ../Binary/m2mp-svr
-LIBS = ../Libraries/sqlite/libsqlite.a ../Libraries/squirrel/libsquirrel.a ../Libraries/RakNet/Source/libraknet.a
 
 all: prepare $(SOURCES) $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJECTS)
 	gcc $(CFLAGS) ../Libraries/mongoose/mongoose.c -o mongoose.o
-	g++ $(OBJECTS) mongoose.o $(LDFLAGS) $(LIBS) -o $@
+	g++ $(LDFLAGS) $(OBJECTS) mongoose.o $(LIBS) -o $@
 
 .cpp.o:
 	g++ $(CFLAGS) $< -o $@
@@ -27,4 +28,4 @@ clean:
 	rm -Rf $(OBJECTS) $(EXECUTABLE)
 
 prepare:
-	g++ -c StdInc.h -o StdInc.h.gch
+	g++ $(CFLAGS) StdInc.h -o StdInc.h.gch

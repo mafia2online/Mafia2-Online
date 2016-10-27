@@ -9,6 +9,9 @@
 
 #pragma once
 
+// NOTE(zaklaus): Even though it sounds forced, Linux.h contains condition for non-win32 system.
+#include "Linux.h"
+
 #include "CColor.h"
 #include "Math/CVector3.h"
 #include "RakString.h"

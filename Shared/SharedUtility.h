@@ -122,8 +122,6 @@ namespace SharedUtility
 	int					int_concat ( int a, int b );
 	bool				IsValidIP ( const char * szIpAddress );
 
-	bool				GetHTTPHeaderAndData(String host, String page, String post, String *header, String *data);
-
 	bool				IsEXESignatureAllowed(unsigned int signature);
 
 	const char *		GetIPFromSocketAddress(int af, const void * src, char * dst, int cnt);
