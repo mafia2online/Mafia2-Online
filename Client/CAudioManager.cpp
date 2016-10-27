@@ -105,8 +105,12 @@ void CAudioManager::Process()
 String CAudioManager::GetYoutubeStreamURL(const String& link)
 {
 	String idBuffer;
-	if (SharedUtility::GetHTTPHeaderAndData("kingofmetin.com", String("/yt.php?url=%s", link.Get()).Get(), "", NULL, &idBuffer))
-		return idBuffer;
+
+	// NOTE(zaklaus): Seriously, why?
+	/*
+	 *if (SharedUtility::GetHTTPHeaderAndData("kingofmetin.com", String("/yt.php?url=%s", link.Get()).Get(), "", NULL, &idBuffer))
+		//return idBuffer;
+*	 */
 
 	return String("");
 }
