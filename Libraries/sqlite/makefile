@@ -7,7 +7,7 @@ EXECUTABLE=libsqlite.a
 all: $(SOURCES) $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJECTS)
-	ar -rv $@ $(OBJECTS)
+	ar -rv ../lib/$@ $(OBJECTS)
 
 .cpp.o:
 	gcc $(CFLAGS) $< -o $@

@@ -7,7 +7,8 @@
 *
 ***************************************************************/
 
-#pragma once
+#if !defined(CVEHICLE_NATIVES)
+#define CVEHICLE_NATIVES 1
 
 #include "StdInc.h"
 
@@ -29,3 +30,5 @@ public:
 	static	void			Register( CScriptingManager * pScriptingManager );
 
 };
+
+#endif
