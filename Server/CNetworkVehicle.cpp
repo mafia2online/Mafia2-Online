@@ -73,6 +73,9 @@ CNetworkVehicle::CNetworkVehicle( void )
 	memcpy( &m_lastSyncData.m_secondaryColour, &predefinedColours[ rand() % ARRAY_LENGTH(predefinedColours) ], sizeof(CColor) );
 	strcpy( m_lastSyncData.m_szPlateText, String("EB%d", m_vehicleId).Get() );
 	m_lastSyncData.m_bLightState = false;
+	m_lastSyncData.m_bTaxiLight = false;
+	m_lastSyncData.m_bLeftIndicator = false;
+	m_lastSyncData.m_bRightIndicator = false;
 }
 
 CNetworkVehicle::~CNetworkVehicle( void )

@@ -94,6 +94,9 @@ struct InVehicleSync
 	bool			m_bLightState;
 	bool			m_bPartState_Hood;
 	bool			m_bPartState_Trunk;
+	bool			m_bLeftIndicator;
+	bool			m_bRightIndicator;
+	bool			m_bTaxiLight;
 };
 
 struct InPassengerSync
