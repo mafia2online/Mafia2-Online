@@ -364,6 +364,7 @@ public:
 	void					ToggleGarageEnter				(bool bToggle);
 
 	void					SetIndicatorLightsOn			(int indicator, int toggle);
+	bool					IsIndicatorLightsOn				(int indicator);
 
 	long double				GetDamage						(void);
 
@@ -374,4 +375,5 @@ public:
 	void					SetDoorFree						(int door, bool freed);
 
 	void					SetTaxiLightOn					(bool toggle);
+	bool					IsTaxiLightOn					(void);
 };

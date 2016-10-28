@@ -1027,6 +1027,20 @@ void CM2Vehicle::SetIndicatorLightsOn(int indicator, int toggle)
 	}
 }
 
+bool CM2Vehicle::IsIndicatorLightsOn(int indicator)
+{
+	if (!m_pVehicle)
+		return (false);
+
+	M2Vehicle * pVehicle = m_pVehicle;
+	DWORD dwVehicleData = (DWORD)(pVehicle)+0xA8;
+
+	int result = 8 * (indicator == 0) + 8;
+	DWORD retn = (*(DWORD *)(dwVehicleData + 0x6F0) & result);
+
+	return (retn);
+}
+
 void CM2Vehicle::SetTaxiLightOn(bool toggle)
 {
 	if (!m_pVehicle)
@@ -1042,6 +1056,16 @@ void CM2Vehicle::SetTaxiLightOn(bool toggle)
 		mov ecx, dwVehicleData;
 		call dwFunc;
 	}
+}
+
+bool CM2Vehicle::IsTaxiLightOn(void)
+{
+	if (!m_pVehicle)
+		return (false);
+
+	DWORD dwVehicleData = (DWORD)(m_pVehicle)+0xA8;
+	DWORD retn = (*(DWORD *)(dwVehicleData + 0x6F0) & 0x80);
+	return (retn);
 }
 
 void CM2Vehicle::SetTransparency(float trans)
