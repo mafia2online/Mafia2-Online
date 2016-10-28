@@ -15,6 +15,21 @@
 
 #include "CLogFile.h"
 
+M2Model * CM2Door::GetModel(void)
+{
+	return *(M2Model **)((DWORD)(this) + 0x60);
+}
+
+bool CM2Door::IsClosed(void)
+{
+	return (*(DWORD *)((DWORD)(this) + 0x320) == 1);
+}
+
+bool CM2Door::IsLocked(void)
+{
+	return ((*(DWORD *)((DWORD)(this) + 0x2F4) == 0) == 0);
+}
+
 void CM2Door::Open( CVector3 * pvPosition )
 {
 	__asm
