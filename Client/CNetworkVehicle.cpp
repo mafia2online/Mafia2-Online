@@ -299,6 +299,12 @@ void CNetworkVehicle::StoreVehicleSync( const InVehicleSync &vehicleSync, bool b
 			m_pVehicle->SetHandbrake ( m_lastSyncData.m_bHandbrake );
 		if ( m_pVehicle->GetLightState () != m_lastSyncData.m_bLightState )
 			m_pVehicle->SetLightState ( m_lastSyncData.m_bLightState );
+		if (m_pVehicle->IsTaxiLightOn() != m_lastSyncData.m_bTaxiLight)
+			m_pVehicle->SetTaxiLightOn(m_lastSyncData.m_bTaxiLight);
+		if (m_pVehicle->IsIndicatorLightsOn(0) != m_lastSyncData.m_bLeftIndicator)
+			m_pVehicle->SetIndicatorLightsOn(0, m_lastSyncData.m_bLeftIndicator);
+		if (m_pVehicle->IsIndicatorLightsOn(1) != m_lastSyncData.m_bRightIndicator)
+			m_pVehicle->SetIndicatorLightsOn(1, m_lastSyncData.m_bRightIndicator);
 	}
 	else
 	{
@@ -342,7 +348,7 @@ void CNetworkVehicle::Pulse( void )
 
 		if( !m_pDriver )
 		{
-			if( vecPosition.fZ <= -150.0f )
+			if( vecPosition.fZ <= -50.0f )
 			{
 				m_pVehicle->Deactivate();
 
@@ -703,6 +709,41 @@ bool CNetworkVehicle::GetLightState ( void )
 {
 	if ( m_pVehicle )
 		return m_pVehicle->GetLightState ();
+
+	return false;
+}
+
+void CNetworkVehicle::SetTaxiLightState(bool state)
+{
+	if (m_pVehicle)
+		m_pVehicle->SetTaxiLightOn(state);
+
+	m_lastSyncData.m_bTaxiLight = state;
+}
+
+bool CNetworkVehicle::GetTaxiLightState(void)
+{
+	if (m_pVehicle)
+		return m_pVehicle->IsTaxiLightOn();
+
+	return false;
+}
+
+void CNetworkVehicle::SetIndicatorLightState(int indicator, bool state)
+{
+	if (m_pVehicle)
+		m_pVehicle->SetIndicatorLightsOn(indicator, state);
+
+	if (indicator == 0)
+		m_lastSyncData.m_bLeftIndicator = state;
+	else if (indicator == 1)
+		m_lastSyncData.m_bRightIndicator = state;
+}
+
+bool CNetworkVehicle::GetIndicatorLightState(int indicator)
+{
+	if (m_pVehicle)
+		return m_pVehicle->IsIndicatorLightsOn(indicator);
 
 	return false;
 }

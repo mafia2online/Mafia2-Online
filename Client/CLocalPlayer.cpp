@@ -374,6 +374,13 @@ void CLocalPlayer::SendInVehicleSync( void )
 	// Get the light state
 	inVehicleSync.m_bLightState = pVehicle->GetVehicle()->GetLightState ();
 
+	// Get the indicator state
+	inVehicleSync.m_bLeftIndicator = pVehicle->GetVehicle()->IsIndicatorLightsOn(0);
+	inVehicleSync.m_bRightIndicator = pVehicle->GetVehicle()->IsIndicatorLightsOn(1);
+
+	// Get the taxi light state
+	inVehicleSync.m_bTaxiLight = pVehicle->GetVehicle()->IsTaxiLightOn();
+
 	// Write the sync structure into the bitstream
 	pBitStream.Write( (char *)&inVehicleSync, sizeof(InVehicleSync) );
 

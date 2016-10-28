@@ -190,6 +190,12 @@ public:
 	void							SetLightState						( bool bState );
 	bool							GetLightState						( void );
 
+	void							SetIndicatorLightState				(int indicator, bool state);
+	bool							GetIndicatorLightState				(int indicator);
+
+	void							SetTaxiLightState					(bool state);
+	bool							GetTaxiLightState					(void);
+
 	void							HandlePlayerEnter					( CNetworkPlayer * pNetworkPlayer, EntityId seatId );
 	void							HandlePlayerExit					( CNetworkPlayer * pNetworkPlayer, EntityId seatId, bool bResetInterpolation = true );
 
