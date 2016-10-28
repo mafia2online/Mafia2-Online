@@ -1027,6 +1027,23 @@ void CM2Vehicle::SetIndicatorLightsOn(int indicator, int toggle)
 	}
 }
 
+void CM2Vehicle::SetTaxiLightOn(bool toggle)
+{
+	if (!m_pVehicle)
+		return;
+
+	M2Vehicle * pVehicle = m_pVehicle;
+	DWORD dwVehicleData = (DWORD)(pVehicle)+0xA8;
+	DWORD dwFunc = 0x1203DF0;
+
+	__asm
+	{
+		push toggle;
+		mov ecx, dwVehicleData;
+		call dwFunc;
+	}
+}
+
 void CM2Vehicle::SetTransparency(float trans)
 {
 	if (m_pVehicle)
