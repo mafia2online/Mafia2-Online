@@ -180,7 +180,7 @@ SQInteger CGraphicsNatives::SendMessage( SQVM * pVM )
 		sq_getinteger( pVM, -2, &r );
 		sq_getinteger( pVM, -1, &g );
 	}
-	else if( iTop == 3 )
+	else if( iTop == 4 )
 	{
 		CHECK_TYPE( "sendMessage", 1, -4, OT_STRING );
 		CHECK_TYPE( "sendMessage", 2, -3, OT_INTEGER );
@@ -192,13 +192,16 @@ SQInteger CGraphicsNatives::SendMessage( SQVM * pVM )
 		sq_getinteger( pVM, -1, &b );
 	}
 
-	if( CCore::Instance()->GetChat() )
+	if (szMessage != NULL && strlen(szMessage) > 0)
 	{
-		// Output message to the chat window
-		CCore::Instance()->GetChat()->AddInfoMessage( CColor( r, g, b, 255 ), szMessage );
+		if (CCore::Instance()->GetChat())
+		{
+			// Output message to the chat window
+			CCore::Instance()->GetChat()->AddInfoMessage(CColor(r, g, b, 255), szMessage);
 
-		sq_pushbool( pVM, true );
-		return 1;
+			sq_pushbool(pVM, true);
+			return 1;
+		}
 	}
 
 	sq_pushbool( pVM, false );
