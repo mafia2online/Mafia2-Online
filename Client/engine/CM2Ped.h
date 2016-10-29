@@ -131,7 +131,8 @@ public:
 	M2PedUnk001 * m_pUnknown;								// 00A8 - 00AC
 
 	int PlayAnim(C_SyncObject **syncObject, const char *const animName, const bool unknown, int, int, float, float, float);
-	int AnimPlayEffect(C_SyncObject **syncObject, const char *const effectName, const bool unknow, int);
+	int AnimPlayEffect(C_SyncObject **syncObject, const char *const effectName, const bool repeat, int);
+	void AnimEffectStop();
 
 	C_SyncObject *ScrMoveV(C_SyncObject **syncObject, const CVector3 &begin, const E_HumanMoveMode moveMode, const CVector3 &target, const bool smoothStop = true);
 };
