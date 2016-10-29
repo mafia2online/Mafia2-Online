@@ -661,11 +661,20 @@ bool CM2Ped::IsAnimFinished()
 	return bReturn;
 }
 
-int _declspec(naked) C_HumanScript::AnimPlayEffect(C_SyncObject **syncObject, const char *const effectName, const bool unknow, int)
+int _declspec(naked) C_HumanScript::AnimPlayEffect(C_SyncObject **syncObject, const char *const effectName, const bool repeat, int)
 {
 	__asm
 	{
 		mov eax, 0x0951700
+		jmp eax
+	}
+}
+
+void _declspec(naked) C_HumanScript::AnimEffectStop()
+{
+	__asm
+	{
+		mov eax, 0x0985220
 		jmp eax
 	}
 }
@@ -690,16 +699,16 @@ void CM2Ped::AnimEffectStop(C_SyncObject *obj)
 	if (!m_pPed || !m_pPed->m_pHumanScript)
 		return;
 
-	DWORD dwFunc = 0x0D65F60;
 	M2Ped *ped = m_pPed;
-
+	C_HumanScript *pHumanScript = m_pPed->m_pHumanScript;
+	pHumanScript->AnimEffectStop();
 }
 
 /* End of animation system */
 
 void CM2Ped::ModelToHand(int iHand, int iModel)
 {
-	if (iHand != 1 && iHand != 2) // 1 : right hand & 2 : left hand
+	if (iHand < 1 || iHand > 3) // 1 : right hand & 2 : left hand & 3 : both hand
 		return;
 
 	if (iModel < 0 || iModel > 120)
@@ -712,11 +721,29 @@ void CM2Ped::ModelToHand(int iHand, int iModel)
 
 	DWORD func = COffsets::FUNC_CHuman__SetModelToHand;
 
+	int leftModel = 0;
+	int rightModel = 0;
+	if (iHand == 1)
+	{
+		leftModel = 0;
+		rightModel = iModel;
+	}
+	else if (iHand == 2)
+	{
+		leftModel = iModel;
+		rightModel = 0;
+	}
+	else if (iHand == 3)
+	{
+		leftModel = iModel;
+		rightModel = iModel;
+	}
+
 	_asm
 	{
-		push 1; // Hand or unk
-		push iModel; // Model
-		push iHand; // Unk or hand
+		push rightModel;
+		push leftModel;
+		push 0;
 		mov ecx, pHumanScript;
 		call func;
 	}
