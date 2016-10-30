@@ -49,7 +49,7 @@ bool CM2EntityMessage::HandleEntityEvent( M2EntityMessage * pMessage )
 			
 		case M2Enums::ON_USE_DOOR:
 			{
-#ifdef DEBUG
+#ifdef _DEBUG
 				CCore::Instance()->GetChat()->AddDebugMessage( "DOOR_OPEN (0x%p, %d, %d, %d, %d)", pMessage, pMessage->m_dwSenderGUID, pMessage->m_dwReceiveGUID, pMessage->m_dwUnknown1, pMessage->m_dwUnknown2 );
 #endif
 				break;
@@ -57,7 +57,7 @@ bool CM2EntityMessage::HandleEntityEvent( M2EntityMessage * pMessage )
 
 		case M2Enums::ON_DOOR_KICK:
 			{
-#ifdef DEBUG
+#ifdef _DEBUG
 				CCore::Instance()->GetChat()->AddDebugMessage( "DOOR_KICK (0x%p, %d, %d)", pMessage, pMessage->m_dwSenderGUID, pMessage->m_dwReceiveGUID );
 #endif
 				break;
@@ -68,7 +68,7 @@ bool CM2EntityMessage::HandleEntityEvent( M2EntityMessage * pMessage )
 				int selectedWeapon = CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetSelectedWeapon();
 				if (selectedWeapon != 0 && selectedWeapon != 1)
 				{
-#ifdef DEBUG
+#ifdef _DEBUG
 					CCore::Instance()->GetChat()->AddDebugMessage("ON_SHOOT (0x%p, %d, %d)", pMessage, pMessage->m_dwSenderGUID, pMessage->m_dwReceiveGUID);
 #endif	
 					CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->SetTimeStartShooting( SharedUtility::GetTime() );
@@ -79,7 +79,7 @@ bool CM2EntityMessage::HandleEntityEvent( M2EntityMessage * pMessage )
 
 		case M2Enums::ON_SHOT_HIT_ENTITY:
 			{
-#ifdef DEBUG
+#ifdef _DEBUG
 				CCore::Instance()->GetChat()->AddDebugMessage("ON_SHOT_HIT_ENTITY (0x%p, %d, %d)", pMessage, pMessage->m_dwSenderGUID, pMessage->m_dwReceiveGUID);
 #endif
 				break;
@@ -87,7 +87,7 @@ bool CM2EntityMessage::HandleEntityEvent( M2EntityMessage * pMessage )
 
 		case M2Enums::ON_DAMAGE:
 			{
-#ifdef DEBUG
+#ifdef _DEBUG
 				CCore::Instance()->GetChat()->AddDebugMessage("ON_DAMAGE (0x%p, %d, %d)", pMessage, pMessage->m_dwSenderGUID, pMessage->m_dwReceiveGUID);
 #endif
 				break;
@@ -98,7 +98,7 @@ bool CM2EntityMessage::HandleEntityEvent( M2EntityMessage * pMessage )
 				int selectedWeapon = CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetSelectedWeapon();
 				if (selectedWeapon != 0 && selectedWeapon != 1)
 				{
-#ifdef DEBUG
+#ifdef _DEBUG
 					CCore::Instance()->GetChat()->AddDebugMessage("ON_AIM_ENTER (0x%p, %d, %d)", pMessage, pMessage->m_dwSenderGUID, pMessage->m_dwReceiveGUID);
 #endif
 					CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->SetAiming(true);
@@ -111,7 +111,7 @@ bool CM2EntityMessage::HandleEntityEvent( M2EntityMessage * pMessage )
 				int selectedWeapon = CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetSelectedWeapon();
 				if (selectedWeapon != 0 && selectedWeapon != 1)
 				{
-#ifdef DEBUG
+#ifdef _DEBUG
 					CCore::Instance()->GetChat()->AddDebugMessage("ON_AIM_LEAVE (0x%p, %d, %d)", pMessage, pMessage->m_dwSenderGUID, pMessage->m_dwReceiveGUID);
 #endif
 					CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->SetAiming(false);
@@ -121,7 +121,7 @@ bool CM2EntityMessage::HandleEntityEvent( M2EntityMessage * pMessage )
 
 		case M2Enums::CAR_BREAK_IN:
 			{
-#ifdef DEBUG
+#ifdef _DEBUG
 				CCore::Instance()->GetChat()->AddDebugMessage("CAR_BREAK_IN (0x%p, %d, %d)", pMessage, pMessage->m_dwSenderGUID, pMessage->m_dwReceiveGUID);
 #endif
 				break;
@@ -129,7 +129,7 @@ bool CM2EntityMessage::HandleEntityEvent( M2EntityMessage * pMessage )
 
 		case M2Enums::ON_ACTION:
 			{
-#ifdef DEBUG
+#ifdef _DEBUG
 				CCore::Instance()->GetChat()->AddDebugMessage("ON_ACTION (0x%p, %d, %d)", pMessage, pMessage->m_dwSenderGUID, pMessage->m_dwReceiveGUID);
 #endif
 				break;
@@ -168,7 +168,7 @@ bool CM2EntityMessage::HandleEntityEvent( M2EntityMessage * pMessage )
 
 		default:
 			{
-#ifdef DEBUG
+#ifdef _DEBUG
 				CCore::Instance()->GetChat()->AddDebugMessage("Unhandled entity message %d", pMessage->m_dwMessage);
 #endif
 				break;
