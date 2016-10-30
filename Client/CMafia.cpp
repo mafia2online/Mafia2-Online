@@ -183,6 +183,7 @@ void CMafia::Spawn( bool bFade )
 	SetSummerRadio ( bIsSummer );
 	CLocalPlayer::Instance()->LockControls( false );
 	CCore::Instance()->GetCamera()->LockControl( false );
+	CCore::Instance()->GetHud()->StopGPS();
 
 	// Don't reload game after death
 	*(BYTE *)0x1BB057D = 1;
