@@ -20,12 +20,12 @@ M2Model * CM2Door::GetModel(void)
 	return *(M2Model **)((DWORD)(this) + 0x60);
 }
 
-bool CM2Door::IsClosed(void)
+const bool CM2Door::IsClosed(void) const
 {
 	return (*(DWORD *)((DWORD)(this) + 0x320) == 1);
 }
 
-bool CM2Door::IsLocked(void)
+const bool CM2Door::IsLocked(void) const
 {
 	return ((*(DWORD *)((DWORD)(this) + 0x2F4) == 0) == 0);
 }
