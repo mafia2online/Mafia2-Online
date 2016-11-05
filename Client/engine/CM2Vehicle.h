@@ -85,6 +85,26 @@ public:
 
 	int			SetVehicleColor		(const C_Vector &primary, const C_Vector &secondary);
 	int			GetVehicleColor		(C_Vector *const primary, C_Vector *const secondary);
+
+	void		SetDoorFree			(int door, bool freed);
+	void		OpenDoor			(int door, bool open);
+
+	void		SetTaxiLightOn		(bool toggle);
+	void		SetIndicatorLightOn	(int toggle, int indicator);
+
+	void		SetPainting			(const char *paint);
+	void		MarkForSale			(bool bSale);
+
+	void		SetHandbrake		(int unk, int unk2);
+	void		SetBrake			(float brake);
+
+	void		SetPower			(float power);
+
+	void		AddSteer			(float steer);
+
+	void		SetBeaconLightOn	(bool on);
+
+	void		SetEngineOn			(bool bEngine, bool bRevOnStart);
 };
 
 class M2FuelTank
@@ -233,18 +253,15 @@ public:
 	// 0x4A0 = float m_fMaxTurnAngle
 	// 0x4A4 = float m_fTurnAngle
 
-	void UnlockPlayerEntryPoints(void);
+	void		Spawn(void);
 
-	void sub_468EB0(void);
-
-	void Spawn(void);
-
-	void SetMotorDamage(float damage);
-	float GetMotorDamage(void) const;
-
+	void		SetMotorDamage(float damage);
+	float		GetMotorDamage(void) const;
 	long double GetDamage(void) const;
 
-	void SetTransparency(float transparency);
+	void		SetTransparency(float transparency);
+
+	void		OpenDoors(bool open);
 };
 
 class CM2Vehicle : public CM2Entity
