@@ -52,6 +52,10 @@ private:
 	static	SQInteger		GetFuel( SQVM * pVM );
 	static	SQInteger		SetLightState ( SQVM * pVM );
 	static	SQInteger		GetLightState ( SQVM * pVM );
+	static	SQInteger		SetIndicatorLightState( SQVM * pVM );
+	static	SQInteger		GetIndicatorLightState( SQVM * pVM );
+	static	SQInteger		SetTaxiLightState(SQVM * pVM);
+	static	SQInteger		GetTaxiLightState(SQVM * pVM);
 
 public:
 

@@ -65,6 +65,13 @@ void CSharedVehicleNatives::Register( CScriptingManager * pScriptingManager )
 	pScriptingManager->RegisterFunction( "getVehicleFuel", GetFuel, 1, "i" );
 	pScriptingManager->RegisterFunction( "setVehicleLightState", SetLightState, 2, "ib" );
 	pScriptingManager->RegisterFunction( "getVehicleLightState", GetLightState, 1, "i" );
+	pScriptingManager->RegisterFunction( "setIndicatorLightState", SetIndicatorLightState, 3, "iib");
+	pScriptingManager->RegisterFunction( "getIndicatorLightState", GetIndicatorLightState, 2, "ii");
+	pScriptingManager->RegisterFunction( "setTaxiLightState", SetTaxiLightState, 2, "ib");
+	pScriptingManager->RegisterFunction( "getTaxiLightState", GetTaxiLightState, 1, "i");
+
+	pScriptingManager->RegisterConstant( "INDICATOR_LEFT", 1);
+	pScriptingManager->RegisterConstant( "INDICATOR_RIGHT", 0);
 }
 
 SQInteger CSharedVehicleNatives::SetPosition( SQVM * pVM )
@@ -923,5 +930,81 @@ SQInteger CSharedVehicleNatives::GetLightState( SQVM * pVM )
 	}
 
 	sq_pushbool( pVM, false );
+	return 1;
+}
+
+SQInteger CSharedVehicleNatives::SetIndicatorLightState(SQVM * pVM)
+{
+	SQInteger vehicleId;
+	sq_getinteger(pVM, -3, &vehicleId);
+
+	SQInteger indicator;
+	sq_getinteger(pVM, -2, &indicator);
+
+	SQBool bLightState;
+	sq_getbool(pVM, -1, &bLightState);
+
+	if (CCore::Instance()->GetVehicleManager()->IsActive(vehicleId))
+	{
+		CCore::Instance()->GetVehicleManager()->Get(vehicleId)->SetIndicatorLightState(indicator, bLightState);
+
+		sq_pushbool(pVM, true);
+		return 1;
+	}
+
+	sq_pushbool(pVM, false);
+	return 1;
+}
+
+SQInteger CSharedVehicleNatives::GetIndicatorLightState(SQVM * pVM)
+{
+	SQInteger vehicleId;
+	sq_getinteger(pVM, -2, &vehicleId);
+
+	SQInteger indicator;
+	sq_getinteger(pVM, -1, &indicator);
+
+	if (CCore::Instance()->GetVehicleManager()->IsActive(vehicleId))
+	{
+		sq_pushbool(pVM, CCore::Instance()->GetVehicleManager()->Get(vehicleId)->GetIndicatorLightState(indicator));
+		return 1;
+	}
+
+	sq_pushbool(pVM, false);
+	return 1;
+}
+
+SQInteger CSharedVehicleNatives::SetTaxiLightState(SQVM * pVM)
+{
+	SQInteger vehicleId;
+	sq_getinteger(pVM, -2, &vehicleId);
+
+	SQBool bLightState;
+	sq_getbool(pVM, -1, &bLightState);
+
+	if (CCore::Instance()->GetVehicleManager()->IsActive(vehicleId))
+	{
+		CCore::Instance()->GetVehicleManager()->Get(vehicleId)->SetTaxiLightState(bLightState);
+
+		sq_pushbool(pVM, true);
+		return 1;
+	}
+
+	sq_pushbool(pVM, false);
+	return 1;
+}
+
+SQInteger CSharedVehicleNatives::GetTaxiLightState(SQVM * pVM)
+{
+	SQInteger vehicleId;
+	sq_getinteger(pVM, -1, &vehicleId);
+
+	if (CCore::Instance()->GetVehicleManager()->IsActive(vehicleId))
+	{
+		sq_pushbool(pVM, CCore::Instance()->GetVehicleManager()->Get(vehicleId)->GetTaxiLightState());
+		return 1;
+	}
+
+	sq_pushbool(pVM, false);
 	return 1;
 }

@@ -721,6 +721,42 @@ bool CNetworkVehicle::GetLightState ()
 	return m_lastSyncData.m_bLightState;
 }
 
+void CNetworkVehicle::SetIndicatorLightState(int indicator, bool bLightState)
+{
+	RakNet::BitStream pBitStream;
+
+	pBitStream.WriteCompressed(m_vehicleId);
+	pBitStream.WriteCompressed(indicator);
+
+	bLightState ? pBitStream.Write1() : pBitStream.Write0();
+
+	CCore::Instance()->GetNetworkModule()->Call(RPC_SETVEHICLEINDICATORLIGHTSTATE, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, INVALID_ENTITY_ID, true);
+}
+
+bool CNetworkVehicle::GetIndicatorLightState(int indicator)
+{
+	if (indicator == 0)
+		return m_lastSyncData.m_bLeftIndicator;
+	else if (indicator == 1)
+		return m_lastSyncData.m_bRightIndicator;
+}
+
+void CNetworkVehicle::SetTaxiLightState(bool bLightState)
+{
+	RakNet::BitStream pBitStream;
+
+	pBitStream.WriteCompressed(m_vehicleId);
+
+	bLightState ? pBitStream.Write1() : pBitStream.Write0();
+
+	CCore::Instance()->GetNetworkModule()->Call(RPC_SETVEHICLETAXILIGHTSTATE, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, INVALID_ENTITY_ID, true);
+}
+
+bool CNetworkVehicle::GetTaxiLightState(void)
+{
+	return m_lastSyncData.m_bTaxiLight;
+}
+
 void CNetworkVehicle::SetModel(int iModel)
 {
 	// Store the model id

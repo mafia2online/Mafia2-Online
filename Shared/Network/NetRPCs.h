@@ -93,6 +93,8 @@
 #define		RPC_SETVEHICLESPEED			"RPC_Script_SetVehicleSpeed"
 #define		RPC_SETVEHICLEFUEL			"RPC_Script_SetVehicleFuel"
 #define		RPC_SETVEHICLELIGHTSTATE	"RPC_Script_SetVehicleLightState"
+#define		RPC_SETVEHICLEINDICATORLIGHTSTATE	"RPC_Script_SetVehicleIndicatorLightState"
+#define		RPC_SETVEHICLETAXILIGHTSTATE		"RPC_Script_SetVehicleTaxiLightState"
 
 // Blip scripting RPC's
 #define		RPC_ATTACHBLIPTOPLAYER		"RPC_Script_AttachBlipToPlayer"
