@@ -118,6 +118,12 @@ public:
 	void							SetLightState						( bool bLightState );
 	bool							GetLightState						( void );
 
+	void							SetIndicatorLightState				(int indicator, bool lightState);
+	bool							GetIndicatorLightState				(int indicator);
+
+	void							SetTaxiLightState					(bool lightState);
+	bool							GetTaxiLightState					(void);
+
 	void							SetLastSyncer						( CNetworkPlayer * pLastSyncer ) { m_pLastSyncer = pLastSyncer; }
 	CNetworkPlayer					* GetLastSyncer						( void ) { return m_pLastSyncer; }
 
