@@ -16,23 +16,23 @@ class M2Model;
 class CM2Door
 {
 public:
-	void		Open			( CVector3 * pvPosition );
-	void		Kick			( CVector3 * pvPosition );
-	void		Close			( void );
+	void		Open			(CVector3 * pvPosition);
+	void		Kick			(CVector3 * pvPosition);
+	void		Close			(void);
 
-	void		Lock			( void );
-	void		Unlock			( void );
+	void		Lock			(void);
+	void		Unlock			(void);
 
-	void		EnableAction	( void );
-	void		DisableAction	( void );
+	void		EnableAction	(void);
+	void		DisableAction	(void);
 
-	void		RealLock		( void );
-	void		RealUnlock		( void );
+	void		RealLock		(void);
+	void		RealUnlock		(void);
 
-	__int64		GetHash			( void );
+	__int64		GetHash			(void);
 
-	bool		IsClosed		(void);
-	bool		IsLocked		(void);
+	const bool	IsClosed		(void) const;
+	const bool	IsLocked		(void) const;
 
 	M2Model *	GetModel		(void);
 };
