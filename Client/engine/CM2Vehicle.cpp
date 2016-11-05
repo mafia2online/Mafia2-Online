@@ -22,10 +22,9 @@
 
 #include "CLogFile.h"
 
-const DWORD C_Car__Spawn = 0x447820;
 void _declspec(naked) M2Vehicle::Spawn(void)
 {
-	_asm jmp C_Car__Spawn;
+	_asm jmp COffsets::FUNC_CCar__Spawn;
 }
 
 void _declspec(naked) M2Vehicle::SetMotorDamage(float health)
@@ -38,16 +37,14 @@ float _declspec(naked) M2Vehicle::GetMotorDamage(void) const
 	_asm jmp COffsets::FUNC_CVehicle__GetEngineDamage;
 }
 
-const DWORD C_Car__GetDamage = 0x09A9A70;
 long double _declspec(naked) M2Vehicle::GetDamage(void) const
 {
-	_asm jmp C_Car__GetDamage;
+	_asm jmp COffsets::FUNC_CCar__GetDamage;
 }
 
-const DWORD C_Car__SetTransparency = 0x09BC2F0;
 void _declspec(naked) M2Vehicle::SetTransparency(float transparency)
 {
-	_asm jmp C_Car__SetTransparency;
+	_asm jmp COffsets::FUNC_CCar__SetTransparency;
 }
 
 CM2Vehicle::CM2Vehicle( M2Vehicle * pVehicle ) : CM2Entity( pVehicle )
@@ -66,26 +63,10 @@ CM2Vehicle::~CM2Vehicle( void )
 {
 }
 
-void CM2Vehicle::Spawn ( void )
+void CM2Vehicle::Spawn(void)
 {
-	if ( m_pVehicle )
+	if (m_pVehicle)
 		m_pVehicle->Spawn();
-}
-
-void CM2Vehicle::SetEngineOn( bool bEngine, bool bRevOnStart )
-{
-	if( m_pVehicle )
-	{
-		DWORD dwVehicleData = (DWORD)(m_pVehicle) + 0xA8;
-
-		_asm
-		{
-			push bRevOnStart;
-			push bEngine;
-			mov ecx, dwVehicleData;
-			call COffsets::FUNC_CVehicle__SetEngineOn;
-		}
-	}
 }
 
 bool CM2Vehicle::IsEngineOn( void )
@@ -204,7 +185,6 @@ void CM2Vehicle::SetMoveSpeed ( CVector3 vecMoveSpeed )
 {
 	if ( m_pVehicle )
 	{
-		DWORD FUNC_C_Vehicle__SetSpeedVec = 0x120E910;
 		DWORD dwVehicleData = (DWORD)(m_pVehicle) + 0xA8;
 
 		_asm
@@ -213,7 +193,7 @@ void CM2Vehicle::SetMoveSpeed ( CVector3 vecMoveSpeed )
 			lea ecx, vecMoveSpeed;
 			push ecx;
 			mov ecx, dwVehicleData;
-			call FUNC_C_Vehicle__SetSpeedVec;
+			call COffsets::FUNC_CVehicle__SetSpeedVec;
 		}
 	}
 }
@@ -454,22 +434,6 @@ void CM2Vehicle::SetSirenOn( bool bSirenOn )
 	}
 }
 
-void CM2Vehicle::SetBeaconLightOn(bool bOn)
-{
-	if (m_pVehicle)
-	{
-		DWORD dwVehicleData = (DWORD)(m_pVehicle)+0xA8;
-
-		DWORD C_Vehicle__SetBeaconLightOn = 0x1203DD0;
-		_asm
-		{
-			push bOn;
-			mov ecx, dwVehicleData;
-			call C_Vehicle__SetBeaconLightOn;
-		}
-	}
-}
-
 bool CM2Vehicle::IsSirenOn( void )
 {
 	if( m_pVehicle )
@@ -479,18 +443,6 @@ bool CM2Vehicle::IsSirenOn( void )
 	}
 
 	return false;
-}
-
-bool CM2Vehicle::IsBeaconLightOn(void)
-{
-	if (m_pVehicle)
-	{
-		DWORD dwVehicleData = (DWORD)(m_pVehicle)  + 0xA8;
-		DWORD retn = (*(DWORD *)(dwVehicleData + 0x6F0 - 1) & 0x40);
-		return (retn);
-	}
-
-	return (false);
 }
 
 void CM2Vehicle::SetPlateText( const char * szText )
@@ -580,39 +532,6 @@ void CM2Vehicle::Explode( void )
 	}
 }
 
-void CM2Vehicle::AddSteer( float fSteer )
-{
-	if( m_pVehicle )
-	{
-		DWORD dwFunc = 0x11FB4E0;
-		DWORD dwVehicleData = (DWORD)(m_pVehicle) + 0xA8;
-		float steer = (fSteer / m_pVehicle->m_fMaxSteerAngle);
-
-		_asm
-		{
-			push steer;
-			mov ecx, dwVehicleData;
-			call dwFunc;
-		}
-	}
-}
-
-float CM2Vehicle::GetAddedSteer( void )
-{
-	if( m_pVehicle )
-		return (m_pVehicle->m_fAddedSteer);
-
-	return (0.0f);
-}
-
-float CM2Vehicle::GetSteer( void )
-{
-	if( m_pVehicle )
-		return (m_pVehicle->m_fSteer);
-
-	return (0.0f);
-}
-
 void CM2Vehicle::SetSpentMoney( float fSpentMoney )
 {
 	if( m_pVehicle )
@@ -625,64 +544,6 @@ float CM2Vehicle::GetSpentMoney( void )
 		return (m_pVehicle->m_fSpentMoney);
 
 	return (0.0f);
-}
-
-void CM2Vehicle::SetPower( bool bPower )
-{
-	if( m_pVehicle )
-	{
-		DWORD C_Vehicle__SetPower = 0x120E720;
-		DWORD dwVehicleData = (DWORD)(m_pVehicle) + 0xA8;
-
-		float fPower = 0.0f;
-
-		if( bPower )
-			fPower = 1.0f;
-
-		_asm
-		{
-			push fPower;
-			mov ecx, dwVehicleData;
-			call C_Vehicle__SetPower;
-		}
-	}
-}
-
-bool CM2Vehicle::GetPower( void )
-{
-	if( m_pVehicle )
-		return (m_pVehicle->m_fPower == 1.0f);
-
-	return (false);
-}
-
-void CM2Vehicle::SetBrake( bool bBrake )
-{
-	if( m_pVehicle )
-	{
-		DWORD C_Vehicle__SetBrake = 0x120E7D0;
-		DWORD dwVehicleData = (DWORD)(m_pVehicle) + 0xA8;
-
-		float fBrake = 0.0f;
-
-		if( bBrake )
-			fBrake = 1.0f;
-
-		_asm
-		{
-			push fBrake;
-			mov ecx, dwVehicleData;
-			call C_Vehicle__SetBrake;
-		}
-	}
-}
-
-bool CM2Vehicle::GetBrake( void )
-{
-	if( m_pVehicle )
-		return (m_pVehicle->m_fBrake == 1.0f);
-
-	return (false);
 }
 
 void CM2Vehicle::SetWheelsProtected( bool bProtected )
@@ -717,14 +578,13 @@ void CM2Vehicle::FixPosition( bool bFix )
 {
 	if( m_pVehicle )
 	{
-		DWORD C_Vehicle__FixCarPos = 0x480580;
 		M2Vehicle * pVehicle = m_pVehicle;
 
 		_asm
 		{
 			push bFix;
 			mov ecx, pVehicle;
-			call C_Vehicle__FixCarPos;
+			call COffsets::FUNC_CVehicle__FixCarPos;
 		}
 	}
 }
@@ -735,29 +595,6 @@ bool CM2Vehicle::IsPositionFixed( void )
 		return (*(DWORD *)(m_pVehicle + 0xD98) != NULL);
 
 	return (false);
-}
-
-void CM2Vehicle::SetHandbrake ( bool bHandbrake )
-{
-	if( m_pVehicle )
-	{
-		DWORD C_Vehicle__SetHandbrake = 0x11FB6D0;
-		DWORD dwVehicleData = (DWORD)(m_pVehicle) + 0xA8;
-
-		_asm
-		{
-			push 0;
-			push 0;
-			mov ecx, dwVehicleData;
-			call C_Vehicle__SetHandbrake;
-		}
-	}
-}
-
-bool CM2Vehicle::IsHandbrakeOn ( void )
-{
-	// todo
-	return false;
 }
 
 int CM2Vehicle::GetTotalSeats( void )
@@ -804,10 +641,7 @@ M2Ped * CM2Vehicle::GetSeatOccupant( int iSeat )
 {
 	if( m_pVehicle && m_pVehicle->m_pSeats )
 	{
-		// Fix the seat index
 		iSeat--;
-
-		// Did we fuck the seat index?
 		if( iSeat < 0 )
 			iSeat = 0;
 
@@ -867,7 +701,6 @@ void CM2Vehicle::SetWheelTexture ( int iWheelIndex, const char * szTexture )
 {
 	if( m_pVehicle )
 	{
-		DWORD C_Vehicle__SetWheelMatrixAtIndex = 0x9BE450;
 		M2Vehicle * pVehicle = m_pVehicle;
 
 		_asm
@@ -875,7 +708,7 @@ void CM2Vehicle::SetWheelTexture ( int iWheelIndex, const char * szTexture )
 			push szTexture;
 			push iWheelIndex;
 			mov ecx, pVehicle;
-			call C_Vehicle__SetWheelMatrixAtIndex;
+			call COffsets::FUNC_CVehicle__SetWheelMatrixAtIndex;
 		}
 	}
 }
@@ -884,7 +717,6 @@ const char * CM2Vehicle::GetWheelTexture ( int iWheelIndex )
 {
 	if( m_pVehicle )
 	{
-		DWORD C_Vehicle__GetWheelsMaterial = 0x990CF0;
 		M2Vehicle * pVehicle = m_pVehicle;
 		const char * szMaterial;
 
@@ -899,7 +731,7 @@ const char * CM2Vehicle::GetWheelTexture ( int iWheelIndex )
 		{
 			push iWheelIndex;
 			mov ecx, pVehicle;
-			call C_Vehicle__GetWheelsMaterial;
+			call COffsets::FUNC_CVehicle__GetWheelsMaterial;
 			mov szMaterial, eax;
 		}
 		return (szMaterial);
@@ -914,7 +746,6 @@ void CM2Vehicle::SetLightState ( bool bLightState )
 	{
 		M2Vehicle * pVehicle = m_pVehicle;
 		DWORD dwVehicleData = (DWORD)(pVehicle) + 0xA8;
-		DWORD C_Vehicle__SetLightState = 0x11EED00;
 		int iLightState = (int)bLightState;
 
 		// Unlock light state
@@ -925,12 +756,12 @@ void CM2Vehicle::SetLightState ( bool bLightState )
 			push 0;										front lights
 			push iLightState;
 			mov ecx, dwVehicleData;
-			call C_Vehicle__SetLightState;
+			call COffsets::FUNC_CVehicle__SetLightState;
 
 			push 1;										license plate light
 			push iLightState;
 			mov ecx, dwVehicleData;
-			call C_Vehicle__SetLightState;
+			call COffsets::FUNC_CVehicle__SetLightState;
 		}
 	}
 }
@@ -946,23 +777,6 @@ bool CM2Vehicle::GetLightState ( void )
 	return (false);
 }
 
-void CM2Vehicle::MarkForSale(bool bSale)
-{
-	if (m_pVehicle)
-	{
-		DWORD func = 0x0D649E0;
-		M2Vehicle * pVehicle = m_pVehicle;
-		DWORD dwVehicleData = (DWORD)(pVehicle)+0xA8;
-
-		_asm
-		{
-			push bSale;
-			mov ecx, dwVehicleData;
-			call func;
-		}
-	}
-}
-
 bool CM2Vehicle::IsMarkedForSale()
 {
 	if (m_pVehicle)
@@ -971,23 +785,6 @@ bool CM2Vehicle::IsMarkedForSale()
 		return (*(DWORD *)(dwVehicleData + 0xCAC) & 20);
 	}
 	return (false);
-}
-
-void CM2Vehicle::SetPainting(const char *paint)
-{
-	if (m_pVehicle)
-	{
-		DWORD dwFunc = 0x0446B70;
-		M2Vehicle *pVeh = m_pVehicle;
-		DWORD dwVeh = (DWORD)(pVeh) + 0xA8;
-
-		__asm
-		{
-			push paint;
-			mov ecx, dwVeh;
-			call dwFunc;
-		}
-	}
 }
 
 void CM2Vehicle::ToggleGarageEnter(bool bToggle)
@@ -1009,24 +806,6 @@ void CM2Vehicle::ToggleGarageEnter(bool bToggle)
 	}
 }
 
-void CM2Vehicle::SetIndicatorLightsOn(int indicator, int toggle)
-{
-	if (!m_pVehicle)
-		return;
-
-	M2Vehicle * pVehicle = m_pVehicle;
-	DWORD dwVehicleData = (DWORD)(pVehicle)+0xA8;
-	DWORD dwFunc = 0x1203D80;
-
-	__asm
-	{
-		push indicator;
-		push toggle;
-		mov ecx, dwVehicleData;
-		call dwFunc;
-	}
-}
-
 bool CM2Vehicle::IsIndicatorLightsOn(int indicator)
 {
 	if (!m_pVehicle)
@@ -1039,23 +818,6 @@ bool CM2Vehicle::IsIndicatorLightsOn(int indicator)
 	DWORD retn = (*(DWORD *)(dwVehicleData + 0x6F0) & result);
 
 	return (retn);
-}
-
-void CM2Vehicle::SetTaxiLightOn(bool toggle)
-{
-	if (!m_pVehicle)
-		return;
-
-	M2Vehicle * pVehicle = m_pVehicle;
-	DWORD dwVehicleData = (DWORD)(pVehicle)+0xA8;
-	DWORD dwFunc = 0x1203DF0;
-
-	__asm
-	{
-		push toggle;
-		mov ecx, dwVehicleData;
-		call dwFunc;
-	}
 }
 
 bool CM2Vehicle::IsTaxiLightOn(void)
@@ -1074,20 +836,219 @@ void CM2Vehicle::SetTransparency(float trans)
 		m_pVehicle->SetTransparency(trans);
 }
 
+void _declspec(naked) C_Vehicle::SetEngineOn(bool bEngine, bool bRevOnStart)
+{
+	_asm jmp COffsets::FUNC_CVehicle__SetEngineOn;
+}
+
+void _declspec(naked) C_Vehicle::SetBeaconLightOn(bool on)
+{
+	_asm jmp COffsets::FUNC_CVehicle__SetBeaconLightOn;
+}
+
+void _declspec(naked) C_Vehicle::AddSteer(float steer)
+{
+	_asm jmp COffsets::FUNC_CVehicle__AddSteer;
+}
+
+void _declspec(naked) C_Vehicle::SetPower(float power)
+{
+	_asm jmp COffsets::FUNC_CVehicle__SetPower;
+}
+
+void _declspec(naked) C_Vehicle::SetBrake(float brake)
+{
+	_asm jmp COffsets::FUNC_CVehicle__SetBrake;
+}
+
+void _declspec(naked) C_Vehicle::SetHandbrake(int unk, int unk2)
+{
+	_asm jmp COffsets::FUNC_CVehicle__SetHandbrake;
+}
+
+void _declspec(naked) C_Vehicle::MarkForSale(bool bSale)
+{
+	_asm jmp COffsets::FUNC_CVehicle__MarkForSale;
+}
+
+void _declspec(naked) C_Vehicle::SetPainting(const char *paint)
+{
+	_asm jmp COffsets::FUNC_CVehicle__SetPainting;
+}
+
+void _declspec(naked) C_Vehicle::SetIndicatorLightOn(int toggle, int indicator)
+{
+	_asm jmp COffsets::FUNC_CVehicle__SetIndicatorLightOn;
+}
+
+void _declspec(naked) C_Vehicle::SetTaxiLightOn(bool toggle)
+{
+	_asm jmp COffsets::FUNC_CVehicle__SetTaxiLightOn;
+}
+
+void _declspec(naked) M2Vehicle::OpenDoors(bool open)
+{
+	_asm jmp COffsets::FUNC_CCar__OpenDoors;
+}
+
+void _declspec(naked) C_Vehicle::OpenDoor(int door, bool open)
+{
+	_asm jmp COffsets::FUNC_CVehicle__OpenDoor;
+}
+
+void _declspec(naked) C_Vehicle::SetDoorFree(int door, bool freed)
+{
+	_asm jmp COffsets::FUNC_CVehicle__SetDoorFree;
+}
+
+void CM2Vehicle::SetEngineOn(bool bEngine, bool bRevOnStart)
+{
+	if (!m_pVehicle)
+		return;
+
+	m_pVehicle->m_vehicleData.SetEngineOn(bEngine, bRevOnStart);
+}
+
+void CM2Vehicle::SetBeaconLightOn(bool bOn)
+{
+	if (!m_pVehicle)
+		return;
+
+	m_pVehicle->m_vehicleData.SetBeaconLightOn(bOn);
+}
+
+bool CM2Vehicle::IsBeaconLightOn(void)
+{
+	if (m_pVehicle)
+	{
+		DWORD dwVehicleData = (DWORD)(m_pVehicle)+0xA8;
+		DWORD retn = (*(DWORD *)(dwVehicleData + 0x6F0 - 1) & 0x40);
+		return (retn);
+	}
+
+	return (false);
+}
+
+void CM2Vehicle::AddSteer(float fSteer)
+{
+	if (!m_pVehicle)
+		return;
+
+	float steer = (fSteer / m_pVehicle->m_fMaxSteerAngle);
+
+	m_pVehicle->m_vehicleData.AddSteer(steer);
+}
+
+float CM2Vehicle::GetAddedSteer(void)
+{
+	if (m_pVehicle)
+		return (m_pVehicle->m_fAddedSteer);
+
+	return (0.0f);
+}
+
+float CM2Vehicle::GetSteer(void)
+{
+	if (m_pVehicle)
+		return (m_pVehicle->m_fSteer);
+
+	return (0.0f);
+}
+
+void CM2Vehicle::SetPower(bool bPower)
+{
+	if (m_pVehicle)
+		return;
+
+	float fPower = 0.0f;
+
+	if (bPower)
+		fPower = 1.0f;
+
+	m_pVehicle->m_vehicleData.SetPower(fPower);
+}
+
+bool CM2Vehicle::GetPower(void)
+{
+	if (m_pVehicle)
+		return (m_pVehicle->m_fPower == 1.0f);
+
+	return (false);
+}
+
+void CM2Vehicle::SetBrake(bool bBrake)
+{
+	if (!m_pVehicle)
+		return;
+
+	float fBrake = 0.0f;
+
+	if (bBrake)
+		fBrake = 1.0f;
+
+	m_pVehicle->m_vehicleData.SetBrake(fBrake);
+}
+
+bool CM2Vehicle::GetBrake(void)
+{
+	if (m_pVehicle)
+		return (m_pVehicle->m_fBrake == 1.0f);
+
+	return (false);
+}
+
+void CM2Vehicle::SetHandbrake(bool bHandbrake)
+{
+	if (!m_pVehicle)
+		return;
+
+	m_pVehicle->m_vehicleData.SetHandbrake(0, 0);//Todo: Finish to reverse this
+}
+
+bool CM2Vehicle::IsHandbrakeOn(void)
+{
+	// todo
+	return false;
+}
+
+void CM2Vehicle::MarkForSale(bool bSale)
+{
+	if (!m_pVehicle)
+		return;
+
+	m_pVehicle->m_vehicleData.MarkForSale(bSale);
+}
+
+void CM2Vehicle::SetPainting(const char *paint)
+{
+	if (!m_pVehicle)
+		return;
+
+	m_pVehicle->m_vehicleData.SetPainting(paint);
+}
+
+void CM2Vehicle::SetIndicatorLightsOn(int indicator, int toggle)
+{
+	if (!m_pVehicle)
+		return;
+
+	m_pVehicle->m_vehicleData.SetIndicatorLightOn(toggle, indicator);
+}
+
+void CM2Vehicle::SetTaxiLightOn(bool toggle)
+{
+	if (!m_pVehicle)
+		return;
+
+	m_pVehicle->m_vehicleData.SetTaxiLightOn(toggle);
+}
+
 void CM2Vehicle::OpenDoors(bool open)
 {
 	if (!m_pVehicle)
 		return;
 
-	M2Vehicle * pVehicle = m_pVehicle;
-	DWORD dwFunc = 0x09AAD10;
-
-	__asm
-	{
-		push open;
-		mov ecx, pVehicle;
-		call dwFunc;
-	}
+	m_pVehicle->OpenDoors(open);
 }
 
 void CM2Vehicle::OpenDoor(int door, bool open)
@@ -1095,17 +1056,7 @@ void CM2Vehicle::OpenDoor(int door, bool open)
 	if (!m_pVehicle)
 		return;
 
-	M2Vehicle * pVehicle = m_pVehicle;
-	DWORD dwVehicleData = (DWORD)(pVehicle)+0xA8;
-	DWORD dwFunc = 0x1258050;
-
-	__asm
-	{
-		push open;
-		push door;
-		mov ecx, dwVehicleData;
-		call dwFunc;
-	}
+	m_pVehicle->m_vehicleData.OpenDoor(door, open);
 }
 
 void CM2Vehicle::SetDoorFree(int door, bool freed)
@@ -1113,15 +1064,5 @@ void CM2Vehicle::SetDoorFree(int door, bool freed)
 	if (!m_pVehicle)
 		return;
 
-	M2Vehicle * pVehicle = m_pVehicle;
-	DWORD dwVehicleData = (DWORD)(pVehicle)+0xA8;
-	DWORD dwFunc = 0x1258630;
-
-	__asm
-	{
-		push freed;
-		push door;
-		mov ecx, dwVehicleData;
-		call dwFunc;
-	}
+	m_pVehicle->m_vehicleData.SetDoorFree(door, freed);
 }

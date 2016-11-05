@@ -170,6 +170,17 @@ unsigned int COffsets::FUNC_CVehicle__GetWheelsMaterial = 0;
 unsigned int COffsets::FUNC_CVehicle__SetLightState = 0;
 unsigned int COffsets::FUNC_CVehicle__PlayerStartEnter = 0;
 
+unsigned int COffsets::FUNC_CVehicle__MarkForSale = 0;
+unsigned int COffsets::FUNC_CVehicle__SetIndicatorLightOn = 0;
+unsigned int COffsets::FUNC_CVehicle__SetTaxiLightOn = 0;
+unsigned int COffsets::FUNC_CVehicle__OpenDoor = 0;
+unsigned int COffsets::FUNC_CVehicle__SetDoorFree = 0;
+
+unsigned int COffsets::FUNC_CCar__Spawn = 0;
+unsigned int COffsets::FUNC_CCar__GetDamage = 0;
+unsigned int COffsets::FUNC_CCar__SetTransparency = 0;
+unsigned int COffsets::FUNC_CCar__OpenDoors = 0;
+
 
 unsigned int COffsets::FUNC_CSyncObject__Reactivate = 0;
 
@@ -430,6 +441,17 @@ void COffsets::CommonInitialise(unsigned int uiBase)
 	FUNC_CVehicle__GetWheelsMaterial = (uiBase + 0x990CF0);
 	FUNC_CVehicle__SetLightState = (uiBase + 0x11EED00);
 	FUNC_CVehicle__PlayerStartEnter = (uiBase + 0x953B20);
+
+	FUNC_CVehicle__MarkForSale = (uiBase + 0x0D649E0);
+	FUNC_CVehicle__SetIndicatorLightOn = (uiBase + 0x1203D80);
+	FUNC_CVehicle__SetTaxiLightOn = (uiBase + 0x1203DF0);
+	FUNC_CVehicle__OpenDoor = (uiBase + 0x1258050);
+	FUNC_CVehicle__SetDoorFree = (uiBase + 0x1258630);
+
+	FUNC_CCar__Spawn = (uiBase + 0x447820);
+	FUNC_CCar__GetDamage = (uiBase + 0x09A9A70);
+	FUNC_CCar__SetTransparency = (uiBase + 0x09BC2F0);
+	FUNC_CCar__OpenDoors = (uiBase + 0x09AAD10);
 
 	// Sync Objects
 	FUNC_CSyncObject__Reactivate = (uiBase + 0x11DE7D0);

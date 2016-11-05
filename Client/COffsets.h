@@ -194,6 +194,17 @@ public:
 	static	unsigned int		FUNC_CVehicle__SetLightState;
 	static	unsigned int		FUNC_CVehicle__PlayerStartEnter;
 
+	static	unsigned int		FUNC_CVehicle__MarkForSale;
+	static	unsigned int		FUNC_CVehicle__SetIndicatorLightOn;
+	static	unsigned int		FUNC_CVehicle__SetTaxiLightOn;
+	static	unsigned int		FUNC_CVehicle__OpenDoor;
+	static	unsigned int		FUNC_CVehicle__SetDoorFree;
+
+	static	unsigned int		FUNC_CCar__Spawn;
+	static	unsigned int		FUNC_CCar__GetDamage;
+	static	unsigned int		FUNC_CCar__SetTransparency;
+	static	unsigned int		FUNC_CCar__OpenDoors;
+
 	// Sync Objects
 	static	unsigned int		FUNC_CSyncObject__Reactivate;
 
