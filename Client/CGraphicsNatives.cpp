@@ -27,7 +27,7 @@ void CGraphicsNatives::Register( CScriptingManager * pScriptingManager )
 {
 	pScriptingManager->RegisterFunction( "getFPS", GetFPS, 0, NULL );
 	pScriptingManager->RegisterFunction( "getScreenSize", GetScreenSize, 0, NULL );
-	pScriptingManager->RegisterFunction("getMousePos", GetMousePosition, 0, NULL);
+	pScriptingManager->RegisterFunction( "getMousePosition", GetMousePosition, 0, NULL );
 	pScriptingManager->RegisterFunction( "getScreenFromWorld", WorldToScreen, 3, "fff" );
 	pScriptingManager->RegisterFunction( "getWorldFromScreen", ScreenToWorld, 3, "fff" );
 	pScriptingManager->RegisterFunction( "showChat", ShowChat, 1, "b" );
@@ -61,6 +61,7 @@ SQInteger CGraphicsNatives::GetScreenSize( SQVM * pVM )
 	return 1;
 }
 
+// getMousePos();
 SQInteger CGraphicsNatives::GetMousePosition(SQVM * pVM)
 {
 	POINT cursorPos;
