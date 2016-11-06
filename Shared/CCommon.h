@@ -16,7 +16,7 @@
 #else
 #define		MOD_NAME				"Mafia2-Online"
 #endif
-#define		MOD_VERS_STR			"0.1 RC2"
+#define		MOD_VERS_STR			"0.1 RC3"
 
 // MasterList stuff
 
@@ -44,7 +44,7 @@
 
 // Network
 #define		NETWORK_TIMEOUT			3000
-#define		NETWORK_VERSION			0x1B2
+#define		NETWORK_VERSION			0x1B3
 #define		NETWORK_TICKRATE		100
 
 /** The default server listen port */
