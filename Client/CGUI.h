@@ -74,9 +74,9 @@ public:
 	void									SetupGUI( void );
 
 	void									SetCursorVisible( bool bVisible );
-	bool									IsCursorVisible( void );
+	bool									IsCursorVisible( void ) const;
 
-	bool									DeleteAllClientScriptGUI( void );
+	static bool									DeleteAllClientScriptGUI( void );
 
 	void									Render( void );
 	void									ProcessMouse( IDirectInputDevice8 *pMouseDevice );
