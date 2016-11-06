@@ -16,6 +16,7 @@ private:
 
 	static	SQInteger		GetFPS( SQVM * pVM );
 	static	SQInteger		GetScreenSize( SQVM * pVM );
+	static	SQInteger		GetMousePosition( SQVM * pVM );
 	static	SQInteger		WorldToScreen( SQVM * pVM );
 	static	SQInteger		ScreenToWorld( SQVM * pVM );
 	static	SQInteger		ShowChat( SQVM * pVM );
