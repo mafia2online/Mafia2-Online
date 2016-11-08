@@ -11,6 +11,7 @@
 
 #include <Windows.h>
 #include <atomic>
+#include <memory>
 
 #include "d3d9.h"
 #include "d3dx9.h"
@@ -19,10 +20,11 @@
 
 #include "CString.h"
 
+#include "GUI/ChatBox.h"
+
 class CMafia;
 class CNetworkModule;
 class CGraphics;
-class CChat;
 class CPlayerManager;
 class CFPSCounter;
 class CBlipManager;
@@ -66,7 +68,7 @@ private:
 	CMafia							* m_pGame;
 	CNetworkModule					* m_pNetworkModule;
 	CGraphics						* m_pGraphics;
-	CChat							* m_pChat;
+	std::unique_ptr<ChatBox>		m_chatBox;
 	CPlayerManager					* m_pPlayerManager;
 	CFPSCounter						* m_pFPSCounter;
 	CBlipManager					* m_pBlipManager;
@@ -135,7 +137,6 @@ public:
 	CMafia							* GetGame					( void ) { return m_pGame; }
 	CNetworkModule					* GetNetworkModule			( void ) { return m_pNetworkModule; }
 	CGraphics						* GetGraphics				( void ) { return m_pGraphics; }
-	CChat							* GetChat					( void ) { return m_pChat; }
 	CPlayerManager					* GetPlayerManager			( void ) { return m_pPlayerManager; }
 	CFPSCounter						* GetFPSCounter				( void ) { return m_pFPSCounter; }
 	CBlipManager					* GetBlipManager			( void ) { return m_pBlipManager; }

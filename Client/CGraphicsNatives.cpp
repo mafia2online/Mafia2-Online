@@ -19,7 +19,7 @@
 
 #include "CFPSCounter.h"
 #include "CGraphics.h"
-#include "CChat.h"
+#include "GUI/ChatBox.h"
 
 #include "CGraphicsNatives.h"
 
@@ -140,7 +140,7 @@ SQInteger CGraphicsNatives::ShowChat( SQVM * pVM )
 	SQBool bToggle;
 	sq_getbool( pVM, -1, &bToggle );
 
-	CCore::Instance()->GetChat()->SetVisible( (bool)bToggle );
+	ChatBox::Instance()->SetVisible( !! bToggle );
 
 	sq_pushbool( pVM, true );
 	return 1;
@@ -149,14 +149,14 @@ SQInteger CGraphicsNatives::ShowChat( SQVM * pVM )
 // isChatVisible( );
 SQInteger CGraphicsNatives::IsChatVisible( SQVM * pVM )
 {
-	sq_pushbool( pVM, (SQBool)CCore::Instance()->GetChat()->IsVisible() );
+	sq_pushbool( pVM, (SQBool)ChatBox::Instance()->IsVisible() );
 	return 1;
 }
 
 // isInputVisible( );
 SQInteger CGraphicsNatives::IsInputVisible( SQVM * pVM )
 {
-	sq_pushbool( pVM, (SQBool)CCore::Instance()->GetChat()->IsInputVisible() );
+	sq_pushbool( pVM, (SQBool)/*ChatBox::Instance()->IsInputVisible()*/0 );
 	return 1;
 }
 
@@ -210,14 +210,9 @@ SQInteger CGraphicsNatives::SendMessage( SQVM * pVM )
 
 	if (szMessage != NULL && strlen(szMessage) > 0)
 	{
-		if (CCore::Instance()->GetChat())
-		{
-			// Output message to the chat window
-			CCore::Instance()->GetChat()->AddInfoMessage(CColor(r, g, b, 255), szMessage);
-
-			sq_pushbool(pVM, true);
-			return 1;
-		}
+		ChatBox::Instance()->Output(CColor(r, g, b, 255), szMessage);
+		sq_pushbool(pVM, true);
+		return 1;
 	}
 
 	sq_pushbool( pVM, false );

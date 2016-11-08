@@ -19,7 +19,6 @@
 
 #include "CGraphics.h"
 
-#include "CChat.h"
 #include "CCore.h"
 
 #include "COffsets.h"
