@@ -9,24 +9,6 @@
 
 #include "BaseInc.h"
 
-#include "CMafia.h"
-#include "Scripting/CSquirrel.h"
-#include "CClientScriptingManager.h"
-#include "CEvents.h"
-
-#include "CAudioManager.h"
-
-#include "CMainMenu.h"
-#include "CChat.h"
-#include "gui_impl/CGUI_Impl.h"
-#include "CGUI.h"
-
-#include "CNetworkModule.h"
-
-#include "CLocalPlayer.h"
-
-#include "CKeyBinds.h"
-
 #include "CCore.h"
 
 #include "CWindowSubclass.h"
@@ -58,8 +40,17 @@ void CWindowSubclass::Subclass( HWND hWnd )
 {
 	if( !m_bSubclassed )
 	{
+		// Set the window text
+		SetWindowText(hWnd, "Mafia 2 Online");
+
 		m_wWndProc = SubclassWindow( hWnd, WndProc_Hook );
 		m_bSubclassed = true;
+
+		// Hacky: Enable Unicode (UTF-16) characters in WM_CHAR messages.
+		SetWindowLongW(hWnd, GWL_WNDPROC, GetWindowLong(hWnd, GWL_WNDPROC));
+
 		CCore::Instance()->SetGameHwnd( hWnd );
+
+		SetFocus(hWnd);
 	}
 }
