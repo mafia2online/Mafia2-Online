@@ -31,11 +31,16 @@ public:
 
 	float				GetCharacterWidth			( int iChar, float fScale = 1.0f );
 	float				GetFontHeight				( float fScale = 1.0f );
-	float				GetTextExtent				( const char * szText, float fScale = 1.0f );
+	float				GetTextExtent				( const char * szText, float fScale = 1.0f, const bool removeColorCodes = false );
 
 	void				DrawString					( const char * szText, CEGUI::Rect area, float fZ, CEGUI::Rect clip, CEGUI::TextFormatting format, unsigned long ulColour, CEGUI::Size scale );
 	void				DrawString					( const char * szText, Vector2 vecPosition, CEGUI::TextFormatting, unsigned long ulColour, float fScale = 1.0f );
 
+	void				DrawColoredString			( const char * szText, const Vector2 &vecPosition, CEGUI::TextFormatting, unsigned long ulColour, float fScale = 1.0f );
+
 	CEGUI::Font			* GetFont					( void ) { return m_pFont; }
 
 };
+
+class CColor;
+bool ParseColor(CColor &color, const char *const text);
