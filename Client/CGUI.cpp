@@ -24,12 +24,13 @@
 #include "CMenuSettings.h"
 
 #include "CM2Camera.h"
-#include "CChat.h"
 
 #include "CClientScriptingManager.h" // \/
 #include "CClientScriptGUIManager.h" // for delete clientscript gui (???)
 
 #include "CLogFile.h"
+
+#include "Strings/Unicode.h"
 
 CGUI::CGUI( IDirect3DDevice9 * pDevice )
 	: m_pDevice(pDevice)
@@ -136,12 +137,12 @@ void CGUI::ProcessMouse( IDirectInputDevice8 *pMouseDevice )
 	// Process the mouse
 	if( CCore::Instance()->GetGame()->Focused() && m_pGUI->IsCursorEnabled() )
 	{
-
 		// If we've lose the input device, re-aquire it
 		if( pMouseDevice->GetDeviceState( sizeof(m_MouseState), (LPVOID)&m_MouseState ) == DIERR_INPUTLOST )
 		{
 			// Acquire the input device
 			pMouseDevice->Acquire();
+			return;
 		}
 
 		// Handle mouse position changes
@@ -237,9 +238,9 @@ bool CGUI::InputGoesToGUI( void )
 	return (CCore::Instance()->GetGame()->Focused() || !ChatBox::Instance()->IsInputActive());
 }
 
-unsigned long CGUI::TranslateFromScanCode( DWORD dwCharacter )
+unsigned long CGUI::TranslateFromScanCode( DWORD dwKey )
 {
-	switch( dwCharacter )
+	switch( dwKey )
 	{
 	case VK_HOME:       return DIK_HOME;
     case VK_END:        return DIK_END;
@@ -275,8 +276,7 @@ bool CGUI::ProcessInput( UINT uMsg, WPARAM wParam, LPARAM lParam )
 
 			// Process the key with the gui if it's valid
             if( dwKey > 0 )
-				if( m_pGUI->ProcessKeyboardInput( dwKey, true ) )
-					return true;
+				m_pGUI->ProcessKeyboardInput( dwKey, true );
 
 			break;
 		}
@@ -295,14 +295,7 @@ bool CGUI::ProcessInput( UINT uMsg, WPARAM wParam, LPARAM lParam )
 
 	case WM_CHAR:
 		{
-			char buf = wParam;
-			wchar_t wbuf;
-			MultiByteToWideChar(CP_ACP, 0, &buf, sizeof(char), &wbuf, 1);
-
-			// Inject the character input into cegui
-			if ( CEGUI::System::getSingleton().injectChar ( static_cast<CEGUI::utf32>(wbuf) ) )
-				return true;
-
+			CEGUI::System::getSingleton().injectChar ( Unicode::UTF16CharacterToUTF32(static_cast<unsigned>(wParam)) );
 			break;
 		}
 	}
