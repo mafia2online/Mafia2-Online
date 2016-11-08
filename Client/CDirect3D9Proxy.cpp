@@ -15,7 +15,6 @@
 #include "CDirect3D9Proxy.h"
 #include "CDirect3DDevice9Proxy.h"
 
-#include "CWindowSubclass.h"
 
 CDirect3D9Proxy::CDirect3D9Proxy(IDirect3D9 * pD3D)
 {
@@ -110,14 +109,8 @@ HMONITOR STDMETHODCALLTYPE CDirect3D9Proxy::GetAdapterMonitor(UINT Adapter)
 
 HRESULT STDMETHODCALLTYPE CDirect3D9Proxy::CreateDevice(UINT Adapter, D3DDEVTYPE DeviceType, HWND hFocusWindow, DWORD BehaviorFlags, D3DPRESENT_PARAMETERS * pPresentationParameters, IDirect3DDevice9 ** ppReturnedDeviceInterface)
 {
-	// Set the window text
-	SetWindowText( hFocusWindow, MOD_NAME " " MOD_VERS_STR );
-
 	// Create the d3d device
 	HRESULT hr = m_pD3D->CreateDevice( Adapter, DeviceType, hFocusWindow, BehaviorFlags, pPresentationParameters, ppReturnedDeviceInterface );
-
-	// Subclass the games window
-	CWindowSubclass::Subclass( hFocusWindow );
 
 	// If creation of the d3d device succeeded call the create device client event and create the proxy device
 	if(SUCCEEDED(hr))
