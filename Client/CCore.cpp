@@ -157,7 +157,7 @@ CCore::CCore( void )
 	String gameDirectory(SharedUtility::GetExePath());
 
 	// Cut the pc\\ from the path.
-	gameDirectory.Substitute("\\pc\\", "");
+	gameDirectory.Substitute("pc\\", "");
 
 	SetGameDirectory( gameDirectory );
 

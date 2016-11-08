@@ -242,11 +242,9 @@ namespace SharedUtility
 
 	String GetClientScriptFolder( String strHost, unsigned long ulPort )
 	{
-		String out;
 		String serverIpAndPort;
 		serverIpAndPort.Format( "%s:%d", strHost.Get(), ulPort );
-		out.Format( "cache/%s/", md5( serverIpAndPort ).ToUpper().Get() );
-		return out;
+		return GetAbsolutePath ( "cache/%s/", md5( serverIpAndPort ).ToUpper().Get() );
 	}
 #endif
 

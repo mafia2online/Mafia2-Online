@@ -65,16 +65,17 @@ bool CGameFiles::CheckFiles( void )
 	// Loop through all files that need checking
 	for( int i = 0; i < ARRAY_LENGTH( gameFiles ); i++ )
 	{
+		String filePath;
 		// Set the working directory
 		if( gameFiles[i].type == TYPE_GAME )
-			SetCurrentDirectory( pCore->GetGameDirectory().Get() );
+			filePath.Format( "%s%s", pCore->GetGameDirectory().Get(), gameFiles[i].szFile );
 		else
-			SetCurrentDirectory( pCore->GetModDirectory().Get() );
+			filePath.Format( "%s%s", pCore->GetModDirectory().Get(), gameFiles[i].szFile );
 
 		// Does the file not exist?
-		if( !SharedUtility::Exists( gameFiles[i].szFile ) )
+		if( !SharedUtility::Exists( filePath ) )
 		{
-			CLogFile::Printf( "Can't find the file '%s\\%s'!", (gameFiles[i].type == TYPE_GAME ? pCore->GetGameDirectory().Get() : pCore->GetModDirectory().Get()), gameFiles[i].szFile );
+			CLogFile::Printf( "Can't find the file '%s'!", filePath.Get() );
 
 			// Set the last error
 			String error;
@@ -88,9 +89,9 @@ bool CGameFiles::CheckFiles( void )
 		CFileChecksum pFileChecksum;
 
 		// Calculate the current file checksum
-		pFileChecksum.Calculate( gameFiles[i].szFile );
+		pFileChecksum.Calculate( filePath );
 
-		CLogFile::Printf( "File checksum: '%s': 0x%p", gameFiles[i].szFile, pFileChecksum.GetChecksum() );
+		CLogFile::Printf( "File checksum: '%s': 0x%p", filePath.Get(), pFileChecksum.GetChecksum() );
 
 		// Does the file checksum not match?
 		if( pFileChecksum.GetChecksum() != gameFiles[i].uiChecksum )
@@ -100,7 +101,7 @@ bool CGameFiles::CheckFiles( void )
 			error.Format( "The file '%s' has been modified.", gameFiles[i].szFile );
 			SetLastError( error );
 
-			CLogFile::Printf( "File Error: '%s', expected checksum 0x%p, got 0x%p", gameFiles[i].szFile, gameFiles[i].uiChecksum, pFileChecksum.GetChecksum() );
+			CLogFile::Printf( "File Error: '%s', expected checksum 0x%p, got 0x%p", filePath.Get(), gameFiles[i].uiChecksum, pFileChecksum.GetChecksum() );
 
 			return false;
 		}
@@ -110,8 +111,8 @@ bool CGameFiles::CheckFiles( void )
 		{
 			// Decompress the file
 			String path;
-			path.Format( "%s\\pc\\%s", pCore->GetGameDirectory().Get(), gameFiles[i].szOutput );
-			int iResult = CZlib::Decompress( gameFiles[i].szFile, path );
+			path.Format( "%spc\\%s", pCore->GetGameDirectory().Get(), gameFiles[i].szOutput );
+			int iResult = CZlib::Decompress( filePath, path );
 
 			// Did the file fail to decompress?
 			if( iResult != Z_OK )
@@ -128,7 +129,7 @@ bool CGameFiles::CheckFiles( void )
 			if( gameFiles[i].bDeleteAfterDecompress )
 			{
 				// Push the file onto the delete queue
-				m_deleteFiles.push_back( gameFiles[i].szOutput );
+				m_deleteFiles.push_back( path );
 			}
 		}
 	}
@@ -146,9 +147,6 @@ void CGameFiles::CleanFiles( void )
 
 	// Clear the queue
 	m_deleteFiles.clear( );
-
-	// Reset the current directory
-	SetCurrentDirectory( CCore::Instance()->GetModDirectory().Get() );
 }
 
 void CGameFiles::SetLastError( String strError )
