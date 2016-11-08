@@ -438,8 +438,8 @@ void CPatches::Initialise( void )
 	CPatcher::PatchAddress( COffsets::VAR_TablesSds, (unsigned char *)tables, strlen(tables) + 1);
 
 	// Patch the stream map binary file
-	unsigned char streamMapa[23] = "/tables/StreamM2MP.bin";
-	CPatcher::PatchAddress( COffsets::VAR_StreamBin, streamMapa, sizeof(streamMapa) );
+	const char streamMapa[] = "/tables/StreamM2MP.bin";
+	CPatcher::PatchAddress( COffsets::VAR_StreamBin, (unsigned char *)streamMapa, strlen(streamMapa) + 1);
 
 	// Patch the SDS config file
 	unsigned char sdsConf[20] = "/sdsconfig_m2mp.bin";
