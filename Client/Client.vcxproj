@@ -191,6 +191,7 @@
     <ClInclude Include="..\Shared\Scripting\Natives\CXMLNatives.h" />
     <ClInclude Include="..\Shared\SharedUtility.h" />
     <ClInclude Include="..\Shared\Strings\Unicode.h" />
+    <ClInclude Include="..\Shared\Strings\UnicodeRanges.h" />
     <ClInclude Include="..\Shared\Threading\CMutex.h" />
     <ClInclude Include="..\Shared\Threading\CThread.h" />
     <ClInclude Include="..\Shared\Timers\CTimer.h" />
