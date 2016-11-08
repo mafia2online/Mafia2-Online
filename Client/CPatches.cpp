@@ -17,8 +17,6 @@
 #include "engine/CM2Entity.h"
 #include "engine/CM2Ped.h"
 
-#include "CChat.h"
-
 #include "engine/CM2Door.h"
 
 #include "CLocalPlayer.h"
@@ -82,7 +80,6 @@ void __declspec( naked ) sub_98B630( void )
 
 			// Handle the water enter with the localplayer
 			CLocalPlayer::Instance()->OnEnterWater();
-			CChat::Instance()->AddDebugMessage("Entered water !");
 		}
 	}
 
@@ -110,13 +107,11 @@ void __declspec ( naked ) HOOK_CDoor__OnUse ( void )
 	{
 
 		DEBUG_LOG ( "HOOK_CDoor__OnUse ( 0x%p )", HOOK_CDoor__OnUse__ECX );
-		CChat::Instance()->AddDebugMessage ( "HOOK_CDoor__OnUse ( 0x%p )", HOOK_CDoor__OnUse__ECX );
 		CM2Door * pDoor = *(CM2Door **) HOOK_CDoor__OnUse__ECX;
 
 		if ( pDoor )
 		{
 			DEBUG_LOG ( "Is door closed? %s", (pDoor->IsClosed () ? "Yes" : "No") );
-			CChat::Instance()->AddDebugMessage ( "Is door closed? %s", (pDoor->IsClosed () ? "Yes" : "No") );
 			pDoor->GetHash ();
 		}
 
@@ -172,7 +167,6 @@ void __declspec ( naked ) HOOK_C_SDSManager__ActivateStreamMapLine ( void )
 
 void C_Vehicle__OnFuelTankShot ( void )
 {
-	CChat::Instance()->AddDebugMessage ( "BRO U SHOT THE FUEL TANK!" );
 }
 
 int iiTargetSeat;
@@ -186,9 +180,6 @@ void __declspec(naked) C_Vehicle__PlayerStartEnter ( void )
 	_asm pop ebp;
 	_asm pushad;
 
-#ifdef DEBUG
-	pCore->GetChat()->AddDebugMessage ( "C_Vehicle__PlayerStartEnter - Seat: %d", iiTargetSeat );
-#endif
 
 	_asm popad;
 	_asm sub esp, 1Ch;
@@ -276,7 +267,6 @@ void __fastcall HOOK_C_Player__ProcessKeyboard ( M2Entity * pEntity, void * _EDX
 
 void __fastcall Hook_CreateObject(int type)
 {
-		CCore::Instance()->GetChat()->AddDebugMessage("Request create object of type : %d | %04x", type, type);
 		CLogFile::Printf("Request create object of type : %d | %04x", type, type);
 		CreateObjectByTypePatch(type);
 }
@@ -570,10 +560,6 @@ void __declspec( naked ) CPatches::HOOK_CHumanInventory__DoReload( void )
 	{
 		// Handle the reload
 		CLocalPlayer::Instance()->OnReloadWeapon();
-
-#ifdef _DEBUG
-		CChat::Instance()->AddDebugMessage( "HOOK_CHumanInventory__DoReload( LocalPlayer )" );
-#endif
 	}
 
 	_asm popad;

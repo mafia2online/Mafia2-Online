@@ -10,7 +10,6 @@
 #include "BaseInc.h"
 
 #include "CCore.h"
-#include "CChat.h"
 
 #include "Math/CQuaternion.h"
 #include "Math/CVector3.h"
@@ -72,10 +71,6 @@ void CRemotePlayer::Pulse( void )
 						SetEnteringVehicle( NULL, INVALID_ENTITY_ID );
 
 						DEBUG_LOG ( "Done!" );
-
-#ifdef _DEBUG
-						CCore::Instance()->GetChat()->AddDebugMessage( "CRemotePlayer::Pulse - The enter vehicle AI command took too long. Warped the player into the vehicle." );
-#endif
 					}
 				}
 			}

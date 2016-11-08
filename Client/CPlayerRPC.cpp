@@ -32,7 +32,7 @@
 
 #include "CMafia.h"
 
-#include "CChat.h"
+#include "GUI/ChatBox.h"
 
 #include "CPlayerRPC.h"
 
@@ -86,7 +86,7 @@ void SendPlayerMessage( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket
 	pBitStream->ReadCompressed( blue );
 
 	// Output the message
-	CCore::Instance()->GetChat()->AddInfoMessage(CColor(red, green, blue, 255), strMessage.C_String());
+	ChatBox::Instance()->Output(CColor(red, green, blue, 255), strMessage.C_String());
 }
 
 void SetPlayerHealth( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )

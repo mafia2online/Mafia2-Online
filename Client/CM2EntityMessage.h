@@ -10,6 +10,8 @@
 
 #pragma once
 
+#include "Math/CVector3.h"
+
 class M2EntityMessage
 {
 public:

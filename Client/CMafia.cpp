@@ -33,7 +33,7 @@
 
 #include "CM2Camera.h"
 
-#include "CChat.h"
+#include "GUI/ChatBox.h"
 
 #include "CEvents.h"
 
@@ -299,23 +299,20 @@ bool CMafia::OpenMap ( bool bOpen )
 {
 	CCore *pCore = CCore::Instance();
 
-
+	ChatBox *const chatBox = ChatBox::Instance();
 	if ( bOpen )
 	{
-
 		// Trigger the script event
 		if ( CEvents::Instance()->Call( "onClientOpenMap" ).GetInteger () == 1 )
 		{
-			CChat *pChat = pCore->GetChat();
-
 			// Open the map
 			CLua::Execute ( "game.gui:OpenMap(1)" );
 
 			// Get the chat window visibility
-			bOldChatWindowState = pChat->IsVisible ();
+			bOldChatWindowState = chatBox->IsVisible ();
 
 			// Hide the chat window
-			pCore->GetChat()->SetVisible ( false );
+			chatBox->SetVisible ( false );
 
 			// Mark as opened
 			m_bMapOpen = true;
@@ -325,10 +322,8 @@ bool CMafia::OpenMap ( bool bOpen )
 	}
 	else
 	{
-		CChat *pChat = pCore->GetChat();
-
 		// Restore the chat window visibility
-		pChat->SetVisible ( bOldChatWindowState );
+		chatBox->SetVisible ( bOldChatWindowState );
 
 		// Call the script event
 		CEvents::Instance()->Call( "onClientCloseMap" );

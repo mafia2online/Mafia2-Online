@@ -10,7 +10,6 @@
 #include "BaseInc.h"
 
 #include "CCore.h"
-#include "CChat.h"
 
 #include "CM2Entity.h"
 #include "CM2Vehicle.h"

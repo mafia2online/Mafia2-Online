@@ -16,7 +16,6 @@
 
 #include "SharedUtility.h"
 
-#include "CChat.h"
 #include "CM2Camera.h"
 
 #include "CColor.h"
@@ -63,11 +62,12 @@ void CScreenShot::FinalizeJob(void)
 		CSquirrelArguments pArguments;
 		pArguments.push( m_fileName );
 		pArguments.push( (int)m_saveTime );
-		if (CCore::Instance()->GetClientScriptingManager() && CCore::Instance()->GetClientScriptingManager()->GetEvents() && CCore::Instance()->GetClientScriptingManager()->GetEvents()->Call("onClientScreenshot", &pArguments).GetInteger() == 1)
-			CCore::Instance()->GetChat()->AddInfoMessage("Screenshot taken: %s (Took %d seconds)", m_fileName.Get(), m_saveTime);
+		CClientScriptingManager *const clientScriptingManager = CCore::Instance()->GetClientScriptingManager();
+		if (clientScriptingManager && clientScriptingManager->GetEvents() && clientScriptingManager->GetEvents()->Call("onClientScreenshot", &pArguments).GetInteger() == 1)
+			ChatBox::Instance()->OutputF(ChatBox::INFO_MESSAGE_COLOR, "Screenshot taken: %s (Took %d seconds)", m_fileName.Get(), m_saveTime);
 	}
 	else if (m_jobState == JOB_STATE_FAILED_FILE_OPEN) {
-		CCore::Instance()->GetChat()->AddInfoMessage(CColor(255, 0, 0, 255), "Failed to save screenshot. (Can't open target file)");
+		ChatBox::Instance()->Output(ChatBox::ERROR_MESSAGE_COLOR, "Failed to save screenshot. (Can't open target file)");
 		CLogFile::Printf( "Failed to save screenshot. (Can't open target file)" );
 	}
 
@@ -130,7 +130,7 @@ const char * CScreenShot::GetValidScreenshotName( void )
 
 static void HandleBeginWriteError(const char *const error)
 {
-	CCore::Instance()->GetChat()->AddInfoMessage(CColor(255, 0, 0, 255), error);
+	ChatBox::Instance()->Output(ChatBox::ERROR_MESSAGE_COLOR, error);
 	CLogFile::Printf(error);
 }
 

@@ -234,7 +234,7 @@ bool CGUI::InputGoesToGUI( void )
 		return false;
 
 	// Check if input should be going to gui
-	return (CCore::Instance()->GetGame()->Focused() || !CCore::Instance()->GetChat()->IsInputVisible());
+	return (CCore::Instance()->GetGame()->Focused() || !ChatBox::Instance()->IsInputActive());
 }
 
 unsigned long CGUI::TranslateFromScanCode( DWORD dwCharacter )

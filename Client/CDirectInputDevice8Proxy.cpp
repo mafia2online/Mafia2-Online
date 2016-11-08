@@ -10,7 +10,6 @@
 #include "BaseInc.h"
 
 #include "CGUI.h"
-#include "CChat.h"
 #include "CCore.h"
 
 #include "CDirectInput8Hook.h"
@@ -80,7 +79,7 @@ HRESULT STDMETHODCALLTYPE CDirectInputDevice8Proxy::GetDeviceState(DWORD p0, LPV
 
 	if( bGameLoaded )
 	{
-		if ( pCore->GetGUI()->IsCursorVisible() || pCore->GetChat()->IsInputVisible() )
+		if ( pCore->GetGUI()->IsCursorVisible() || ChatBox::Instance()->IsInputActive() )
 		{
 			if ( m_DeviceType == DIDEVICE_TYPE_MOUSE )
 			{
@@ -114,7 +113,7 @@ HRESULT STDMETHODCALLTYPE CDirectInputDevice8Proxy::GetDeviceState(DWORD p0, LPV
 #define DISABLE_PASSENGER_SUPPORT
 #ifndef DISABLE_PASSENGER_SUPPORT
 			// Is the F key down?
-			if( (keyBuffer[ DIK_F ] & 0x80) && pCore->GetPlayerManager()->GetLocalPlayer()->IsSpawned () && !pCore->GetChat()->IsInputVisible () )
+			if( (keyBuffer[ DIK_F ] & 0x80) && pCore->GetPlayerManager()->GetLocalPlayer()->IsSpawned () && !ChatBox::Instance()->IsInputActive () )
 			{
 				//
 				CNetworkVehicle * pVehicle = NULL;

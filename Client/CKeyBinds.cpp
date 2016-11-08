@@ -17,7 +17,7 @@
 
 #include "CKeyBinds.h"
 
-#include "CChat.h"
+#include "GUI/ChatBox.h"
 
 #include "CCore.h"
 
@@ -229,7 +229,7 @@ String GetKeyNameByCode( DWORD dwCode )
 void CKeyBinds::ProcessInput( UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
 	// Is the chat window input active?
-	if( CChat::Instance()->IsInputVisible() )
+	if( ChatBox::Instance()->IsInputActive() )
 		return;
 
 	// Do we not have any keybinds?
