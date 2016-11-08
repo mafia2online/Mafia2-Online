@@ -197,6 +197,7 @@
     <ClInclude Include="..\Shared\Threading\CThread.h" />
     <ClInclude Include="..\Shared\Timers\CTimer.h" />
     <ClInclude Include="..\Shared\Timers\CTimerManager.h" />
+    <ClInclude Include="..\Shared\Types.h" />
     <ClInclude Include="BaseInc.h" />
     <ClInclude Include="C3DTextLabel.h" />
     <ClInclude Include="C3DTextLabelManager.h" />
