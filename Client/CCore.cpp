@@ -716,9 +716,6 @@ bool CCore::HandleMessage( UINT uMsg, DWORD wParam, DWORD lParam )
 				return true;
 			}
 
-			if( CLocalPlayer::Instance()->ProcessControls( uMsg, wParam ) )
-				return true;
-
 			m_pKeyBinds->ProcessInput( uMsg, wParam, lParam );
 		}
 	}
