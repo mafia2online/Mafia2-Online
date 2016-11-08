@@ -37,69 +37,19 @@ WNDPROC CWindowSubclass::m_wWndProc;
 // Original wndproc at 0xAB5FD0
 LRESULT APIENTRY CWindowSubclass::WndProc_Hook( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
-	bool bFocus = (GetForegroundWindow() == hWnd);
-
 	if( uMsg == WM_KILLFOCUS || (uMsg == WM_ACTIVATE && LOWORD(wParam) == WA_INACTIVE) )
 		return true;
 
 	CCore *pCore = CCore::Instance();
-	if( uMsg == WM_QUIT )
-	{
-		// TODO: Investigation why we are removing the core here..
+	if( uMsg == WM_QUIT ) {
+		// TODO: Investigation why we are removing the core here.
 		delete pCore;
 
 		return CallWindowProc( m_wWndProc, hWnd, uMsg, wParam, lParam );
 	}
 
-	CMafia *pMafia = pCore->GetGame();
-	if (pMafia) {
-		if( bFocus && !pMafia->Focused() )
-		{
-			pMafia->SetFocus( true );
-
-			if( pCore->GetClientScriptingManager() )
-			{
-				CSquirrelArguments args;
-				args.push( false );
-				pCore->GetClientScriptingManager()->GetEvents()->Call( "onClientFocusChange", &args );
-			}
-
-			pCore->GetAudioManager()->UnmuteAll();
-		}
-		else if( !bFocus && pMafia->Focused() )
-		{
-			pMafia->SetFocus( false );
-
-			ReleaseCapture();
-
-			if( pCore->GetClientScriptingManager() )
-			{
-				CSquirrelArguments args;
-				args.push( true );
-				pCore->GetClientScriptingManager()->GetEvents()->Call( "onClientFocusChange", &args );
-			}
-
-			pCore->GetAudioManager()->MuteAll();
-		}
-
-		if( bFocus && pCore->IsGameLoaded() )
-		{
-			pCore->GetGUI()->ProcessInput( uMsg, wParam, lParam );
-
-			if( (pCore->GetNetworkModule() && pCore->GetNetworkModule()->IsConnected()) && !pCore->GetChat()->IsInputVisible() && !pCore->GetGUI()->GetCEGUI()->IsInputEnabled() )
-			{
-				if( uMsg == WM_KEYDOWN && (DWORD)wParam == VK_ESCAPE )
-				{
-					pCore->GetGUI()->GetMainMenu()->SetVisible( !pCore->GetGUI()->GetMainMenu()->IsVisible() );
-					return true;
-				}
-
-				if( CLocalPlayer::Instance()->ProcessControls( uMsg, wParam ) )
-					return true;
-
-				pCore->GetKeyBinds()->ProcessInput( uMsg, wParam, lParam );
-			}
-		}
+	if (pCore && pCore->HandleMessage(uMsg, wParam, lParam)) {
+		return 1;
 	}
 	return CallWindowProc( m_wWndProc, hWnd, uMsg, wParam, lParam );
 }
