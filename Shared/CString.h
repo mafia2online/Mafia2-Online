@@ -48,6 +48,7 @@ public:
 	void				Set(const char * szString, unsigned int uiLength);
 	void				SetChar(size_t sOffset, unsigned char cChar);
 	void				Format(const char * szFormat, ...);
+	void				VAFormat(const char * szFormat, va_list args);
 
 	bool				LimitTruncate();
 
@@ -154,7 +155,7 @@ public:
                 case 'a':
                     value += 10 * (1 << (a * 4));
                     break;
-                    
+
                 case 'B':
                 case 'b':
                     value += 11 * (1 << (a * 4));
@@ -164,17 +165,17 @@ public:
                 case 'c':
                     value += 12 * (1 << (a * 4));
                     break;
-                    
+
                 case 'D':
                 case 'd':
                     value += 13 * (1 << (a * 4));
                     break;
-                    
+
                 case 'E':
                 case 'e':
                     value += 14 * (1 << (a * 4));
                     break;
-                    
+
                 case 'F':
                 case 'f':
                     value += 15 * (1 << (a * 4));
@@ -182,7 +183,7 @@ public:
 				}
 			}
 		}
-					
+
 		return value;
 	}
 
