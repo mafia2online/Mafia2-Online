@@ -190,6 +190,7 @@
     <ClInclude Include="..\Shared\Scripting\Natives\CUtilNatives.h" />
     <ClInclude Include="..\Shared\Scripting\Natives\CXMLNatives.h" />
     <ClInclude Include="..\Shared\SharedUtility.h" />
+    <ClInclude Include="..\Shared\Strings\Unicode.h" />
     <ClInclude Include="..\Shared\Threading\CMutex.h" />
     <ClInclude Include="..\Shared\Threading\CThread.h" />
     <ClInclude Include="..\Shared\Timers\CTimer.h" />
@@ -362,6 +363,7 @@
     <ClCompile Include="..\Shared\Scripting\Natives\CUtilNatives.cpp" />
     <ClCompile Include="..\Shared\Scripting\Natives\CXMLNatives.cpp" />
     <ClCompile Include="..\Shared\SharedUtility.cpp" />
+    <ClCompile Include="..\Shared\Strings\Unicode.cpp" />
     <ClCompile Include="..\Shared\Threading\CMutex.cpp" />
     <ClCompile Include="..\Shared\Threading\CThread.cpp" />
     <ClCompile Include="..\Shared\Timers\CTimer.cpp" />

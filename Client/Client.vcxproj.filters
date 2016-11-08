@@ -216,6 +216,12 @@
     <Filter Include="Header Files\Shared\Game">
       <UniqueIdentifier>{25cd4e6d-842a-4fc0-9877-5014b1331048}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Shared\Strings">
+      <UniqueIdentifier>{6588bb9f-806f-43c6-8d25-cfb5d5a71e12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Shared\Strings">
+      <UniqueIdentifier>{b96d8543-21f5-47ce-bd13-4c70af7dd266}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Shared\CRC.h">
@@ -788,6 +794,9 @@
     <ClInclude Include="GUI\ChatBox.h">
       <Filter>Header Files\GUI</Filter>
     </ClInclude>
+    <ClInclude Include="..\Shared\Strings\Unicode.h">
+      <Filter>Header Files\Shared\Strings</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -1272,6 +1281,9 @@
     </ClCompile>
     <ClCompile Include="GUI\ChatBox.cpp">
       <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Shared\Strings\Unicode.cpp">
+      <Filter>Source Files\Shared\Strings</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
