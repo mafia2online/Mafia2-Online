@@ -10,6 +10,7 @@
 #pragma once
 
 #ifdef _WIN32
+#define		NOMINMAX
 #include	<Windows.h>
 #include	<windowsx.h>
 #endif
