@@ -35,6 +35,8 @@
 
 #include "ExceptionHandler.h"
 
+#include "CWindowSubclass.h"
+
 sub_410440				CPatches::onGameInit = NULL;
 onGameEvent_t			CPatches::onGameEvent = NULL;
 ProcessEntities_t		CPatches::processEntities = NULL;
@@ -271,13 +273,44 @@ void __fastcall Hook_CreateObject(int type)
 		CreateObjectByTypePatch(type);
 }
 
+HWND hwGameWindow = 0;
+unsigned OnMainWindowCreateHookRetn = 0;
+void _declspec(naked) OnMainWindowCreateHook()
+{
+	_asm
+	{
+		pushad
+
+		mov hwGameWindow, esi
+	}
+
+	// Subclass the games window
+	CWindowSubclass::Subclass( hwGameWindow );
+
+	_asm
+	{
+		popad
+		pop     ebx
+		pop     edi
+		pop     esi
+		mov     al, 1
+		pop     ebp
+		add     esp, 108h
+		retn
+	}
+}
 
 void CPatches::Initialise( void )
 {
 	DEBUG_LOG( "Installing patches..." );
 
+	const unsigned uBaseAddress = CCore::Instance()->GetBaseAddress();
+
 	// Unprotect the .text segment
-	CPatcher::Unprotect( (CCore::Instance()->GetBaseAddress() + 0x400000 + 0x1000), 0x94C000 );
+	CPatcher::Unprotect( (uBaseAddress + 0x400000 + 0x1000), 0x94C000 );
+
+	// Hook inside C_InitDone::Init_MainWindow called right after creating the window.
+	CPatcher::InstallJmpPatch(uBaseAddress + 0x0049F8A1, (DWORD)OnMainWindowCreateHook);
 
 	// Hook C_Game__OnGameInit
 	onGameInit = (sub_410440) CPatcher::InstallJmpPatch( COffsets::FUNC_CGame__OnGameInit, (DWORD)HOOK_CGame__OnGameInit );
