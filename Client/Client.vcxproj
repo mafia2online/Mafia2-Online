@@ -205,7 +205,6 @@
     <ClInclude Include="CBlipManager.h" />
     <ClInclude Include="CBlipRPC.h" />
     <ClInclude Include="CCameraNatives.h" />
-    <ClInclude Include="CChat.h" />
     <ClInclude Include="CClientNatives.h" />
     <ClInclude Include="CClientScriptGUIManager.h" />
     <ClInclude Include="CClientScriptingManager.h" />
@@ -376,7 +375,6 @@
     <ClCompile Include="CBlipManager.cpp" />
     <ClCompile Include="CBlipRPC.cpp" />
     <ClCompile Include="CCameraNatives.cpp" />
-    <ClCompile Include="CChat.cpp" />
     <ClCompile Include="CClientNatives.cpp" />
     <ClCompile Include="CClientScriptGUIManager.cpp" />
     <ClCompile Include="CClientScriptingManager.cpp" />
