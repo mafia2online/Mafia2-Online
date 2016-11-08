@@ -36,7 +36,6 @@
 #include "CM2Hud.h"
 
 #include "CLoadingScreen.h"
-#include "CChat.h"
 
 #include "CGUI.h"
 #include "CEGUI.h"
@@ -118,7 +117,7 @@ CCore::CCore( void )
 	, m_pGame(nullptr)
 	, m_pNetworkModule(nullptr)
 	, m_pGraphics(nullptr)
-	, m_pChat(nullptr)
+	, m_chatBox()
 	, m_pPlayerManager(nullptr)
 	, m_pFPSCounter(nullptr)
 	, m_pBlipManager(nullptr)
@@ -179,7 +178,7 @@ CCore::~CCore( void )
 
 	SAFE_DELETE(m_pPedManager);
 	SAFE_DELETE(m_pGraphics);
-	SAFE_DELETE(m_pChat);
+	m_chatBox.reset();
 	SAFE_DELETE(m_pFPSCounter);
 	SAFE_DELETE(m_pBlipManager);
 	SAFE_DELETE(m_pGUI);
@@ -326,7 +325,7 @@ void CCore::OnGamePreLoad( void )
 
 	m_pNetworkModule = new CNetworkModule;
 
-	m_pChat->SetVisible( false );
+	m_chatBox->SetVisible( false );
 	m_pGUI->GetMainMenu()->SetVisible( true );
 	m_pGUI->GetSettings()->LoadSettings ();
 }
@@ -340,8 +339,8 @@ void CCore::OnDeviceCreate( IDirect3DDevice9 * pDevice, D3DPRESENT_PARAMETERS * 
 	m_pGUI->SetupGUI();
 	CLoadingScreen::Start();
 
-	m_pChat = new CChat( m_pGUI->GetCEGUI(), 30.0f, 25.0f );
-	m_pChat->AddInfoMessage( "%s %s started.", MOD_NAME, MOD_VERS_STR );
+	m_chatBox = std::make_unique<ChatBox>( m_pGUI );
+	m_chatBox->OutputF(ChatBox::INFO_MESSAGE_COLOR, "%s %s started.", MOD_NAME, MOD_VERS_STR);
 
 	m_pGUI->GetServerBrowser()->Refresh ();
 
@@ -440,8 +439,7 @@ void CCore::DoRender( void )
 		}
 	}
 
-	if ( m_pChat->IsVisible () )
-		m_pChat->Render ();
+	m_chatBox->Draw();
 
 	if ( m_pGUI->GetMainMenu () && m_pGUI->GetMainMenu()->IsVisible () )
 		m_pGUI->GetMainMenu()->Render ();
@@ -465,10 +463,10 @@ void CCore::DoRender( void )
 		}
 #endif
 
-		if ( GetAsyncKeyState ( VK_F10 ) & 0x1 && m_pHud && m_pChat && m_pPlayerManager )
+		if ( GetAsyncKeyState ( VK_F10 ) & 0x1 && m_pHud && m_chatBox && m_pPlayerManager )
 		{
 			m_pHud->Show ( !m_pHud->IsShowing () );
-			m_pChat->SetVisible ( !m_pChat->IsVisible () );
+			m_chatBox->SetVisible ( !m_chatBox->IsVisible () );
 			m_pPlayerManager->GetLocalPlayer()->GetPlayerPed()->ShowModel ( !m_pPlayerManager->GetLocalPlayer()->GetPlayerPed()->IsModelShowing () );
 		}
 		if( GetAsyncKeyState( VK_F11 ) & 0x1 )
@@ -490,7 +488,7 @@ void CCore::DoRender( void )
 			}
 			else {
 				const char *const errorMessage = "Failed to capture screenshot. (Image capture failed)";
-				m_pChat->AddInfoMessage(CColor(255, 0, 0, 255), errorMessage);
+				m_chatBox->Output(CColor(255, 0, 0, 255), errorMessage);
 				CLogFile::Printf(errorMessage);
 			}
 			m_bCaptureScreenshot = false;
@@ -552,46 +550,6 @@ void CCore::OnGameProcess( void )
 
 	CM2VideoSettings::Pulse ();
 
-	// DEBUG
-#ifdef DEBUG
-	/*static C_SyncObject *_test = NULL;
-	if( GetAsyncKeyState( VK_F7 ) & 0x1 )
-	{
-		CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->LockControls(true);
-		_test = CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetPlayerPed()->PlayAnimEffect("00-WALK-A", true);
-	}
-
-	if (GetAsyncKeyState(VK_F8) & 0x1)
-	{
-		CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetPlayerPed()->AnimEffectStop(_test);
-		CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->LockControls(false);
-	}*/
-
-	// Trigger off the right indicator
-	if (GetAsyncKeyState(VK_F8) & 0x1)
-	{
-		CCore::Instance()->GetVehicleManager()->Get(CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetVehicle()->GetId())->GetVehicle()->SetIndicatorLightsOn(0, 0);
-	}
-
-	// Trigger on the left indicator
-	if (GetAsyncKeyState(VK_F7) & 0x1)
-	{
-		CCore::Instance()->GetVehicleManager()->Get(CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetVehicle()->GetId())->GetVehicle()->SetIndicatorLightsOn(0, 1);
-	}
-
-	//Trigger off the right indicator
-	if (GetAsyncKeyState(VK_F6) & 0x1)
-	{
-		CCore::Instance()->GetVehicleManager()->Get(CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetVehicle()->GetId())->GetVehicle()->SetIndicatorLightsOn(1, 0);
-	}
-
-	// Trigger on the right indicator
-	if (GetAsyncKeyState(VK_F5) & 0x1)
-	{
-		CCore::Instance()->GetVehicleManager()->Get(CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetVehicle()->GetId())->GetVehicle()->SetIndicatorLightsOn(1, 1);
-	}
-#endif
-
 	if( m_pClientScriptingManager )
 		m_pClientScriptingManager->GetEvents()->Call( "onClientProcess" );
 }
@@ -616,7 +574,7 @@ void CCore::StartMultiplayer( void )
 
 	DEBUG_LOG( "CCore::StartMultiplayer" );
 
-	m_pChat->SetVisible( false );
+	m_chatBox->SetVisible( true );
 	m_pHud->FadeOut( 0 );
 	m_pGame->FadeSound( true, 0 );
 
@@ -647,12 +605,12 @@ void CCore::StopMultiplayer( void )
 	DEBUG_LOG( "CCore::StopMultiplayer" );
 
 	SetConnectionProblem ( false );
-	m_pChat->SetVisible( false );
+	m_chatBox->SetVisible( false );
 	m_pHud->FadeOut( 0 );
 	m_pGame->FadeSound( true, 0 );
 
-	m_pChat->Clear();
-	m_pChat->ClearHistory();
+	//m_chatBox->Clear();
+	//m_chatBox->ClearHistory();
 
 	m_pAudioManager->RemoveAll();
 
@@ -696,7 +654,9 @@ void CCore::OnFocusChange( bool bFocus )
 			m_pClientScriptingManager->GetEvents()->Call( "onClientFocusChange", &args );
 		}
 
-		m_pAudioManager->UnmuteAll();
+		if (m_pAudioManager) {
+			m_pAudioManager->UnmuteAll();
+		}
 	}
 	else {
 		if( m_pClientScriptingManager )
@@ -706,7 +666,9 @@ void CCore::OnFocusChange( bool bFocus )
 			m_pClientScriptingManager->GetEvents()->Call( "onClientFocusChange", &args );
 		}
 
-		m_pAudioManager->MuteAll();
+		if (m_pAudioManager) {
+			m_pAudioManager->MuteAll();
+		}
 	}
 }
 
@@ -726,6 +688,9 @@ bool CCore::HandleMessage( UINT uMsg, DWORD wParam, DWORD lParam )
 		if (! bFocus) {
 			ReleaseCapture();
 		}
+		else {
+			SetCapture(m_gameHwnd);
+		}
 
 		OnFocusChange(bFocus);
 
@@ -734,9 +699,15 @@ bool CCore::HandleMessage( UINT uMsg, DWORD wParam, DWORD lParam )
 
 	if( bFocus && m_bGameLoaded )
 	{
-		m_pGUI->ProcessInput( uMsg, wParam, lParam );
+		if (m_chatBox->HandleMessage(uMsg, wParam, lParam)) {
+			return true;
+		}
 
-		if( (m_pNetworkModule && m_pNetworkModule->IsConnected()) && !m_pChat->IsInputVisible() && !m_pGUI->GetCEGUI()->IsInputEnabled() )
+		if (m_pGUI->ProcessInput( uMsg, wParam, lParam )) {
+			return true;
+		}
+
+		if( (m_pNetworkModule && m_pNetworkModule->IsConnected()) && !m_pGUI->GetCEGUI()->IsInputEnabled() )
 		{
 			if( uMsg == WM_KEYDOWN && (DWORD)wParam == VK_ESCAPE )
 			{

@@ -18,8 +18,6 @@
 
 #include "SharedUtility.h"
 
-#include "CChat.h"
-
 #include "CPlayerManager.h"
 #include "CVehicleManager.h"
 
@@ -207,10 +205,7 @@ void CNetworkModule::DoDisconnect( bool bRestart )
 		CCore::Instance()->SetServerMaxPlayers( 0 );
 
 		// Clear the chat
-		CCore::Instance()->GetChat()->Clear ();
-		CCore::Instance()->GetChat()->ClearHistory ();
-		CCore::Instance()->GetChat()->ClearSelectText();
-		CCore::Instance()->GetChat()->ClearInputText();
+		ChatBox::Instance()->Clear ();
 
 		// Reset player model
 		//pCore->GetPlayerManager()->GetLocalPlayer()->SetModel ( 10 );

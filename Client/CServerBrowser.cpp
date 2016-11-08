@@ -38,8 +38,6 @@
 
 #include "CNetworkModule.h"
 
-#include "CChat.h"
-
 #include "MessageIdentifiers.h"
 
 #include "SharedUtility.h"
@@ -843,7 +841,7 @@ void CServerBrowser::ProcessNetworkPacket( DefaultMessageIDTypes packet )
 		CCore::Instance()->GetGUI()->SetCursorVisible(false);
 
 		// Show the chat
-		CCore::Instance()->GetChat()->SetVisible(true);
+		ChatBox::Instance()->SetVisible(true);
 
 		// Hide the message box
 		m_pMessageBox->SetVisible ( false );
@@ -891,10 +889,10 @@ void CServerBrowser::SetDisconnectReason( bool bDisconnect, const char * szReaso
 	}
 
 	// Get the arguments
-	char szBuffer[ MAX_MESSAGE_LEN ];
+	char szBuffer[ 128 ];
 	va_list args;
 	va_start( args, szReason );
-	vsnprintf( szBuffer, MAX_MESSAGE_LEN, szReason, args );
+	vsnprintf( szBuffer, 128, szReason, args );
 	va_end( args );
 
 	// Show the message box

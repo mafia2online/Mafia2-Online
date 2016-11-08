@@ -26,7 +26,6 @@
 
 #include "CMafia.h"
 #include "Game/CGame.h"
-#include "CChat.h"
 
 #include "CPlayerManager.h"
 #include "CVehicleManager.h"
@@ -214,7 +213,7 @@ void CLocalPlayer::Pulse( void )
 	}
 
 	// Are we spawned, in a vehicle and typing?
-	if (IsSpawned() && IsInVehicle() && CCore::Instance()->GetChat()->IsInputVisible())
+	if (IsSpawned() && IsInVehicle())
 	{
 		// Reset the vehicle steering (prevent car turning to sides)
 		if( m_pVehicle->GetVehicle() )
@@ -484,13 +483,6 @@ void CLocalPlayer::OnEnterVehicle( void )
 	// Is the vehicle instance valid?
 	if( pNetworkVehicle )
 	{
-#ifdef _DEBUG
-		M2Vehicle * pVehicle = pNetworkVehicle->GetVehicle()->GetVehicle();
-		DWORD dwVehicleData = (DWORD)(pVehicle) + 0xA8;
-
-		CCore::Instance()->GetChat()->AddDebugMessage ( "Vehicle: 0x%p, VehicleData: 0x%p", pVehicle, dwVehicleData );
-#endif
-
 		// Set the initial seat as the driver
 		EntityId seat = 0;
 
@@ -508,10 +500,6 @@ void CLocalPlayer::OnEnterVehicle( void )
 		else
 			SetState( PLAYERSTATE_PASSENGER );
 
-#ifdef _DEBUG
-		CCore::Instance()->GetChat()->AddDebugMessage( "Seat: %d, Driver: 0x%p, State: %d", seat, pNetworkVehicle->GetDriver (), GetState () );
-#endif
-
 		// Construct a new bitstream
 		RakNet::BitStream pBitStream;
 
@@ -523,10 +511,6 @@ void CLocalPlayer::OnEnterVehicle( void )
 
 		// Send to the server
 		CCore::Instance()->GetNetworkModule()->Call( RPC_ENTER_VEHICLE, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, true );
-
-#ifdef _DEBUG
-		CCore::Instance()->GetChat()->AddDebugMessage( "CLocalPlayer::OnEnterVehicle( %d, %d )", pNetworkVehicle->GetId(), seat );
-#endif
 
 		// Handle this enter with the network vehicle
 		pNetworkVehicle->HandlePlayerEnter( this, seat );
@@ -552,10 +536,6 @@ void CLocalPlayer::OnEnterVehicleDone( void )
 
 		// Mark as not entering vehicle
 		SetEnteringVehicle( NULL, INVALID_ENTITY_ID );
-
-#ifdef _DEBUG
-		CCore::Instance()->GetChat()->AddDebugMessage( "CLocalPlayer::OnEnterVehicleDone( %d, %d )", GetVehicle()->GetId(), GetSeat() );
-#endif
 	}
 }
 
@@ -584,10 +564,6 @@ void CLocalPlayer::OnLeaveVehicle( void )
 
 		// Send to the server
 		CCore::Instance()->GetNetworkModule()->Call( RPC_EXIT_VEHICLE, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, true );
-
-#ifdef DEBUG
-		CCore::Instance()->GetChat()->AddDebugMessage( "CLocalPlayer::OnExitVehicle( %d, %d ) - Forcefully: %s", m_pVehicle->GetId(), seat, (IsBeingRemovedForcefully () ? "Yes" : "No") );
-#endif
 
 		// Are we not being removed forcefully?
 		if ( !IsBeingRemovedForcefully () )
@@ -766,10 +742,6 @@ void CLocalPlayer::OnReloadWeapon( void )
 	{
 		// Send RPC to server
 		//CCore::Instance()->GetNetworkModule()->Call( RPC_PLAYER_RELOAD_WEAPON, NULL, HIGH_PRIORITY, RELIABLE, true );
-
-#ifdef DEBUG
-		CCore::Instance()->GetChat()->AddDebugMessage( "CLocalPlayer::OnReloadWeapon()" );
-#endif
 	}
 }
 
@@ -1044,10 +1016,6 @@ void CLocalPlayer::StartSyncVehicle( CNetworkVehicle * pNetworkVehicle )
 
 	// Set the vehicle last syncer
 	pNetworkVehicle->SetLastSyncer( this );
-
-#ifdef _DEBUG
-	CCore::Instance()->GetChat()->AddDebugMessage( "CLocalPlayer::StartSyncVehicle - Server commanded us to start syncing vehicle %d", pNetworkVehicle->GetId() );
-#endif
 }
 
 void CLocalPlayer::StopSyncVehicle( CNetworkVehicle * pNetworkVehicle )
@@ -1062,10 +1030,6 @@ void CLocalPlayer::StopSyncVehicle( CNetworkVehicle * pNetworkVehicle )
 
 	// Remove this vehicle from our syncing
 	m_syncingVehicles.remove( pNetworkVehicle );
-
-#ifdef _DEBUG
-	CCore::Instance()->GetChat()->AddDebugMessage( "CLocalPlayer::StopSyncVehicle - Server commanded us to stop syncing vehicle %d", pNetworkVehicle->GetId() );
-#endif
 }
 
 bool CLocalPlayer::IsSyncingVehicle( CNetworkVehicle * pNetworkVehicle )

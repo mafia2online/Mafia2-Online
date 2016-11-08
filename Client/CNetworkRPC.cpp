@@ -35,7 +35,7 @@
 #include "CGUI.h"
 #include "CServerBrowser.h"
 
-#include "CChat.h"
+#include "GUI/ChatBox.h"
 
 #include "CSync.h"
 
@@ -106,7 +106,7 @@ void InitialData( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 	CCore::Instance()->GetFileTransferManager()->SetServerInformation( strHttpServer.IsEmpty() ? CCore::Instance()->GetHost() : strHttpServer.C_String(), iPort );
 
 	// Print success message
-	CCore::Instance()->GetChat()->AddInfoMessage( "Successfully connected to %s.", strServerName.C_String() );
+	ChatBox::Instance()->OutputF(ChatBox::INFO_MESSAGE_COLOR, "Successfully connected to %s.", strServerName.C_String());
 
 	// Get the server folder string
 	String strServerFolder = SharedUtility::GetAbsolutePath( SharedUtility::GetClientScriptFolder( CCore::Instance()->GetHost(), CCore::Instance()->GetPort() ) );
@@ -195,19 +195,9 @@ void PlayerChat( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 	RakNet::RakString strInput;
 	pBitStream->Read( strInput );
 
-	// Is the player active?
-	if( CCore::Instance()->GetPlayerManager()->IsActive( playerId ) )
-	{
-		// Get the player pointer
-		CRemotePlayer * pNetworkPlayer = CCore::Instance()->GetPlayerManager()->Get(playerId);
-
-		// Is the player pointer valid?
-		if( pNetworkPlayer )
-		{
-			// Output the message
-			CCore::Instance()->GetChat()->AddChatMessage(pNetworkPlayer, strInput.C_String());
-		}
-	}
+	CRemotePlayer * pNetworkPlayer = CCore::Instance()->GetPlayerManager()->Get(playerId);
+	if( pNetworkPlayer )
+		ChatBox::Instance()->OutputPlayerMessage(pNetworkPlayer, strInput.C_String());
 }
 
 void PlayerSync( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
@@ -437,8 +427,6 @@ void EnterVehicle( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 	// Get the network vehicle instance
 	CNetworkVehicle * pVehicle = CCore::Instance()->GetVehicleManager()->Get(vehicleId);
 
-	CCore::Instance()->GetChat()->AddDebugMessage("CServerPacket::EnterVehicle ( %s, %d, %d, %d )", (bSuccess ? "true" : "false"), playerId, vehicleId, seat);
-
 	// Is the network vehicle instance valid?
 	if( pVehicle )
 	{
@@ -494,11 +482,7 @@ void EnterVehicle( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 						// Force the real driver back into the vehicle
 						pRealDriver->PutInVehicle ( pCurrentVehicle, 0 );
 					}
-
-					CCore::Instance()->GetChat()->AddDebugMessage("Real Driver: %d (0x%p), Vehicle: 0x%p, InternalVehicle: 0x%p", pRealDriver->GetId(), pRealDriver, pRealDriver->GetVehicle(), pRealDriver->GetPlayerPed()->GetCurrentVehicle());
 				}
-
-				CCore::Instance()->GetChat()->AddDebugMessage("HandleVehicleEnter failed. There's already a driver! Restored driver context for player %d", pRealDriver->GetId());
 			}
 		}
 	}
@@ -757,8 +741,6 @@ void MoveToDriver( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 	// Read the occupant id
 	EntityId occupantId;
 	pBitStream->ReadCompressed ( occupantId );
-
-	CCore::Instance()->GetChat()->AddDebugMessage("CNetworkRPC::MoveToDriver ( Vehicle: %d, Occupant: %d )", vehicleId, occupantId);
 
 	// Is the vehicle and player valid?
 	if (CCore::Instance()->GetVehicleManager()->IsActive(vehicleId) && CCore::Instance()->GetPlayerManager()->IsActive(occupantId))
