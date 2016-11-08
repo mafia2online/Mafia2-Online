@@ -65,7 +65,6 @@ public:
 	void							OnEnterWater							( void );
 	bool							OnTakeDamage							( void );
 
-	bool							ProcessControls							( unsigned int uMsg, WPARAM wParam );
 	void							HandlePassengerKey						( void );
 	void							GetClosestVehicle						( CNetworkVehicle ** pNetworkVehicle, EntityId * seatId );
 
