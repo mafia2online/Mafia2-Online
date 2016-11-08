@@ -130,13 +130,21 @@ void String::SetChar(size_t sOffset, unsigned char cChar)
 
 void String::Format(const char * szFormat, ...)
 {
-	char szString[BUFFER_SIZE];
 	va_list vaArgs;
 	va_start(vaArgs, szFormat);
-	vsprintf(szString, szFormat, vaArgs);
+	VAFormat(szFormat, vaArgs);
 	va_end(vaArgs);
-	Set(szString);
 }
+
+void String::VAFormat(const char * szFormat, va_list args)
+{
+	const size_t length = static_cast<size_t>(vsnprintf(NULL, 0, szFormat, args));
+	char *buffer = new char[length+1];
+	vsprintf(buffer, szFormat, args);
+	Set(buffer);
+	delete []buffer;
+}
+
 
 const char * String::Get() const
 {
@@ -292,7 +300,7 @@ void String::AppendF( const char * szFormat, ... )
 		// Append the string
 		m_strString.append( szString );
 
-		// Ensure we haven't passed the string limit 
+		// Ensure we haven't passed the string limit
 		LimitTruncate( );
 	}
 }
