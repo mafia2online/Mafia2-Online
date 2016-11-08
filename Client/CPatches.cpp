@@ -376,7 +376,7 @@ void CPatches::Initialise( void )
 	CPatcher::PatchAddress( 0x8B9140, 0xC300B0 ); // mov al, 0; retn // Steam: 0x08CA820
 
 	// Disable CityShops
-	CPatcher::InstallNopPatch(0x04F7800, 0x3c9);
+	CPatcher::PatchAddress(0x46EE90, 0x0004C2);
 
 	// Disable save games
 	CPatcher::InstallNopPatch ( 0xB3A850, 0x27C ); // Steam: 0x0B40570
