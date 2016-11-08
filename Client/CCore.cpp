@@ -676,3 +676,76 @@ void CCore::TakeScreenshot( void )
 		return;
 	m_bCaptureScreenshot = true;
 }
+
+/**
+ * Called when focus change is detected.
+ *
+ * @param bFocus @c true if game window is now focused @c false if focus was lost.
+ */
+void CCore::OnFocusChange( bool bFocus )
+{
+	if ( bFocus ) {
+		if( m_pClientScriptingManager )
+		{
+			CSquirrelArguments args;
+			args.push( false );
+			m_pClientScriptingManager->GetEvents()->Call( "onClientFocusChange", &args );
+		}
+
+		m_pAudioManager->UnmuteAll();
+	}
+	else {
+		if( m_pClientScriptingManager )
+		{
+			CSquirrelArguments args;
+			args.push( true );
+			m_pClientScriptingManager->GetEvents()->Call( "onClientFocusChange", &args );
+		}
+
+		m_pAudioManager->MuteAll();
+	}
+}
+
+/**
+ * Handle the main game window WINAPI message.
+ *
+ * @param uMsg    The message to handle.
+ * @param wParam  Additional message-specific information.
+ * @param lParam  Additional message-specific information.
+ * @return @c true if message has been processed @c false otherwise.
+ */
+bool CCore::HandleMessage( UINT uMsg, DWORD wParam, DWORD lParam )
+{
+	const bool bFocus = (GetForegroundWindow() == m_gameHwnd);
+
+	if (bFocus != m_pGame->Focused()) {
+		if (! bFocus) {
+			ReleaseCapture();
+		}
+
+		OnFocusChange(bFocus);
+
+		m_pGame->SetFocus(bFocus);
+	}
+
+	if( bFocus && m_bGameLoaded )
+	{
+		m_pGUI->ProcessInput( uMsg, wParam, lParam );
+
+		if( (m_pNetworkModule && m_pNetworkModule->IsConnected()) && !m_pChat->IsInputVisible() && !m_pGUI->GetCEGUI()->IsInputEnabled() )
+		{
+			if( uMsg == WM_KEYDOWN && (DWORD)wParam == VK_ESCAPE )
+			{
+				CMainMenu *const pMainMenu = m_pGUI->GetMainMenu();
+				pMainMenu->SetVisible( !pMainMenu->IsVisible() );
+				return true;
+			}
+
+			if( CLocalPlayer::Instance()->ProcessControls( uMsg, wParam ) )
+				return true;
+
+			m_pKeyBinds->ProcessInput( uMsg, wParam, lParam );
+		}
+	}
+	return false;
+}

@@ -196,4 +196,8 @@ public:
 
 	void							SetConnectionProblem		( bool bConnectionProblem ) { m_bConnectionProblem = bConnectionProblem; }
 	bool							IsConnectionProblem			( void ) { return m_bConnectionProblem; }
+
+	void							OnFocusChange				( bool bFocus );
+
+	bool							HandleMessage				( UINT uMsg, DWORD wParam, DWORD lParam );
 };
