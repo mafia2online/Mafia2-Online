@@ -797,6 +797,9 @@
     <ClInclude Include="..\Shared\Strings\Unicode.h">
       <Filter>Header Files\Shared\Strings</Filter>
     </ClInclude>
+    <ClInclude Include="..\Shared\Nil.h">
+      <Filter>Header Files\Shared</Filter>
+    </ClInclude>
     <ClInclude Include="..\Shared\Strings\UnicodeRanges.h">
       <Filter>Header Files\Shared\Strings</Filter>
     </ClInclude>
