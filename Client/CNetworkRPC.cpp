@@ -195,9 +195,18 @@ void PlayerChat( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 	RakNet::RakString strInput;
 	pBitStream->Read( strInput );
 
-	CRemotePlayer * pNetworkPlayer = CCore::Instance()->GetPlayerManager()->Get(playerId);
-	if( pNetworkPlayer )
-		ChatBox::Instance()->OutputPlayerMessage(pNetworkPlayer, strInput.C_String());
+	CPlayerManager *const playerManager = CCore::Instance()->GetPlayerManager();
+	CLocalPlayer *const localPlayer = playerManager->GetLocalPlayer();
+
+	CNetworkPlayer *netPlayer = nullptr;
+	if (localPlayer->GetId() == playerId) {
+		netPlayer = localPlayer;
+	}
+	else {
+		netPlayer = playerManager->Get(playerId);
+	}
+	if ( netPlayer )
+		ChatBox::Instance()->OutputPlayerMessage(netPlayer, strInput.C_String());
 }
 
 void PlayerSync( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
