@@ -521,7 +521,7 @@ namespace SharedUtility
 		}
 
 		// Free the allocated block of memory inside the target process
-		VirtualFreeEx(hProcess, pRemoteLibraryPath, sizeof(pRemoteLibraryPath), MEM_RELEASE);
+		VirtualFreeEx(hProcess, pRemoteLibraryPath, 0, MEM_RELEASE);
 		return result;
 	}
 
