@@ -199,7 +199,7 @@ void PlayerChat( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 					RakNet::BitStream bitStream;
 					bitStream.WriteCompressed( playerId );
 					bitStream.Write( strInput );
-					CCore::Instance()->GetNetworkModule()->Call( RPC_PLAYER_CHAT, &bitStream, HIGH_PRIORITY, RELIABLE_ORDERED, playerId, true );
+					CCore::Instance()->GetNetworkModule()->Call( RPC_PLAYER_CHAT, &bitStream, HIGH_PRIORITY, RELIABLE_ORDERED, INVALID_ENTITY_ID, true );
 				}
 			}
 			else
