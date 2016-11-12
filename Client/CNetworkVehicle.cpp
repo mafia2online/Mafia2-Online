@@ -196,6 +196,8 @@ void CNetworkVehicle::HandleRespawn( void )
 
 	if( m_pVehicle )
 	{
+		SetSpawned(false);
+
 		m_pVehicle->Deactivate();
 		m_pVehicle->Activate();
 
@@ -217,6 +219,8 @@ void CNetworkVehicle::HandleRespawn( void )
 		SetPosition( m_vecSpawnPosition );
 		SetRotation( m_vecSpawnRotation );
 		m_pVehicle->SetLightState ( false );
+
+		SetSpawned(true);
 
 		if( CCore::Instance()->GetClientScriptingManager() && CCore::Instance()->GetClientScriptingManager()->GetEvents() )
 		{
