@@ -623,14 +623,6 @@ void UnoccupiedVehicleSync( RakNet::BitStream * pBitStream, RakNet::Packet * pPa
 	}
 }
 
-void PutInVehicle( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
-{
-}
-
-void RemoveFromVehicle( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
-{
-}
-
 void SpawnVehicle( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 {
 	// Read the vehicle id
