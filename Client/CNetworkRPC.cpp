@@ -860,8 +860,6 @@ void CNetworkRPC::Register( RakNet::RPC4 * pRPC )
 	pRPC->RegisterFunction( RPC_ENTER_VEHICLE_DONE, EnterVehicleDone );
 	pRPC->RegisterFunction( RPC_PASSENGER_SYNC, PassengerSync );
 	pRPC->RegisterFunction( RPC_UNOCCUPIED_SYNC, UnoccupiedVehicleSync );
-	pRPC->RegisterFunction( RPC_PUTINVEHICLE, PutInVehicle );
-	pRPC->RegisterFunction( RPC_REMOVEFROMVEHICLE, RemoveFromVehicle );
 	pRPC->RegisterFunction( RPC_SPAWNVEHICLE, SpawnVehicle );
 	pRPC->RegisterFunction( RPC_RESPAWNVEHICLE, RespawnVehicle );
 	pRPC->RegisterFunction( RPC_MOVETODRIVER, MoveToDriver );
@@ -900,8 +898,6 @@ void CNetworkRPC::Unregister( RakNet::RPC4 * pRPC )
 	pRPC->UnregisterFunction( RPC_ENTER_VEHICLE_DONE );
 	pRPC->UnregisterFunction( RPC_PASSENGER_SYNC );
 	pRPC->UnregisterFunction( RPC_UNOCCUPIED_SYNC );
-	pRPC->UnregisterFunction( RPC_PUTINVEHICLE );
-	pRPC->UnregisterFunction( RPC_REMOVEFROMVEHICLE );
 	pRPC->UnregisterFunction( RPC_SPAWNVEHICLE );
 	pRPC->UnregisterFunction( RPC_RESPAWNVEHICLE );
 	pRPC->UnregisterFunction( RPC_MOVETODRIVER );
