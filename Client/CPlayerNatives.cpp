@@ -55,7 +55,7 @@ void CPlayerNatives::Register( CScriptingManager * pScriptingManager )
 	pScriptingManager->RegisterFunction( "setPlayerDrunkLevel", SetDrunkLevel, 1, "i");
 	pScriptingManager->RegisterFunction( "getPlayerDrunkLevel", GetDrunkLevel, 0, NULL);
 	pScriptingManager->RegisterFunction( "resetPlayerDrunkLevel", ResetDrunkLevel, 0, NULL);
-	pScriptingManager->RegisterFunction( "setPlayerWantedLevel", SetWantedLevel, 1, "i");
+	pScriptingManager->RegisterFunction( "setPlayerWantedLevel", SetWantedLevel, 2, "ii");
 	pScriptingManager->RegisterFunction( "getPlayerWantedLevel", GetWantedLevel, 0, NULL);
 	pScriptingManager->RegisterFunction( "getPlayerMoveState", GetMoveState, 1, "i" );
 
