@@ -476,7 +476,6 @@ bool CNetworkVehicle::GetEngineState( void )
 
 void CNetworkVehicle::SetPartOpen( int iPart, bool bOpen )
 {
-	CLogFile::Printf("[1] : Part : %d|Open : %d", iPart, bOpen);
 	// Construct a new bitstream
 	RakNet::BitStream pBitStream;
 
