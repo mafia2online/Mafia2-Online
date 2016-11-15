@@ -346,11 +346,6 @@ void CGraphics::DrawBox( CVector3 vecPosition, float fWidth, float fHeight, floa
 	DrawBox( (vecScreen.fX - (fWidth / 2)), (vecScreen.fY - (fHeight / 2)), fWidth, fHeight, dwBoxColour );
 }
 
-void CGraphics::DrawLine( float fLeft, float fTop, float fRight, float fBottom, float fWidth, DWORD dwColour )
-{
-	// TODO
-}
-
 void CGraphics::OnLostDevice( IDirect3DDevice9 * pDevice )
 {
 	std::list< CFont* >::iterator iter;
@@ -559,6 +554,22 @@ void CGraphics::DrawBox( float fLeft, float fTop, float fWidth, float fHeight, D
 	m_pDevice->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, &rect, sizeof(Vertex2D));
 }
 
+void CGraphics::DrawLine( float fLeft, float fTop, float fRight, float fBottom, DWORD dwColour )
+{
+	const Vertex2D line[] = {
+		{ fLeft,	   fTop,	0.0f, 1.0f,	dwColour },
+		{ fRight,	fBottom,	0.0f, 1.0f,	dwColour },
+	};
+
+	m_pDevice->SetFVF(D3DFVF_XYZRHW | D3DFVF_DIFFUSE);
+	m_pDevice->SetPixelShader(NULL);
+	m_pDevice->SetVertexShader(NULL);
+	m_pDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
+	m_pDevice->SetTexture(0, NULL);
+
+	m_pDevice->DrawPrimitiveUP(D3DPT_LINELIST, 1, &line, sizeof(Vertex2D));
+}
+
 IDirect3DTexture9 * CGraphics::CreateTexture( DWORD * dwBitMap, unsigned int uiWidth, unsigned int uiHeight )
 {
 	// Create the texture
@@ -599,8 +610,11 @@ IDirect3DTexture9 * CGraphics::LoadTexture( const char * szFile )
 	IDirect3DTexture9 * pTexture = NULL;
 
 	// Attempt to create the texture
-	if ( FAILED ( D3DXCreateTextureFromFile( m_pDevice, szFile, &pTexture ) ) )
+	if ( FAILED ( D3DXCreateTextureFromFile( m_pDevice, szFile, &pTexture ) ) ) {
 		CLogFile::Printf ( "ERROR - %s - Unable to create texture! (Error: %d)", szFile, GetLastError() );
+	} else {
+		CLogFile::Printf ( "Loaded texture '%s'.", szFile );
+	}
 
 	return pTexture;
 }

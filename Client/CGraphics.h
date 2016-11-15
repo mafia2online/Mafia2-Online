@@ -74,7 +74,7 @@ public:
 	void							DrawText( float uiLeft, float uiTop, unsigned long ulColor, float fScale, String strFont, bool bShadow, const char * szText, ... );
 	void							DrawText( float uiLeft, float uiTop, unsigned long ulColor, float fScale, String strFont, bool bShadow, unsigned long ulFormat, const char * szText, ... );
 	void							DrawBox( float fLeft, float fTop, float fWidth, float fHeight, DWORD dwColorBox );
-	void							DrawLine( float fLeft, float fTop, float fRight, float fBottom, float fWidth, DWORD dwColour );
+	void							DrawLine( float fLeft, float fTop, float fRight, float fBottom, DWORD dwColour );
 
 	// Drawing 3d
 	void							DrawText( CVector3 vecPosition, float fDistance, unsigned long ulColor, float fScale, String strFont, bool bShadow, String strText );
