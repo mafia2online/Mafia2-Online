@@ -52,7 +52,7 @@ void CGUINatives::Register( CScriptingManager * pScriptingManager )
 	pScriptingManager->RegisterFunction( "dxCreateFont", NewFont, 3, "sib" );
 	pScriptingManager->RegisterFunction( "dxDrawText", DrawText, -1, NULL );
 	pScriptingManager->RegisterFunction( "dxDrawRectangle", DrawRectangle, 5, "ffffi" );
-	pScriptingManager->RegisterFunction( "dxDrawLine", DrawLine, 6, "fffffi" );
+	pScriptingManager->RegisterFunction( "dxDrawLine", DrawLine, 5, "ffffi" );
 	pScriptingManager->RegisterFunction( "dxGetTextDimensions", GetTextDimensions, 3, "sfs" );
 	pScriptingManager->RegisterFunction( "isTransferBoxShowing", IsTransferBoxShowing, 0, NULL );
 	pScriptingManager->RegisterFunction( "showCursor", ShowCursor, 1, "b" );
@@ -191,18 +191,17 @@ SQInteger CGUINatives::DrawRectangle( SQVM * pVM )
 // dxDrawLine( float x, float y, float end_x, float end_y, float width, int colour );
 SQInteger CGUINatives::DrawLine( SQVM * pVM )
 {
-	float fX, fY, fEndX, fEndY, fWidth;
+	float fX, fY, fEndX, fEndY;
 	SQInteger iColour;
 
-	sq_getfloat( pVM, -6, &fX );
-	sq_getfloat( pVM, -5, &fY );
-	sq_getfloat( pVM, -4, &fEndX );
-	sq_getfloat( pVM, -3, &fEndY );
-	sq_getfloat( pVM, -2, &fWidth );
+	sq_getfloat( pVM, -5, &fX );
+	sq_getfloat( pVM, -4, &fY );
+	sq_getfloat( pVM, -3, &fEndX );
+	sq_getfloat( pVM, -2, &fEndY );
 	sq_getinteger( pVM, -1, &iColour );
 
 	// Draw the line
-	CCore::Instance()->GetGraphics()->DrawLine( fX, fY, fEndX, fEndY, fWidth, (DWORD)iColour );
+	CCore::Instance()->GetGraphics()->DrawLine( fX, fY, fEndX, fEndY, (DWORD)iColour );
 
 	sq_pushbool( pVM, true );
 	return 1;
@@ -406,9 +405,6 @@ SQInteger CGUINatives::DestroyElement ( SQVM * pVM )
 
 		// Delete the element
 		SAFE_DELETE ( pElement );
-
-		// Reset the pointer instance
-		sq_pushpointer ( pVM, NULL );
 
 		sq_pushbool ( pVM, true );
 		return 1;
