@@ -88,6 +88,12 @@ public:
 	void* m_pUnknown;
 };
 
+class M2WrapperList
+{
+public:
+	static M2WrapperList * GetInstance(void);
+};
+
 class M2Game
 {
 public:
@@ -136,6 +142,23 @@ public:
 
 		return pReturn;
 	}
+
+	M2Entity * GetEntityByname(const char *name)
+	{
+		M2Entity * pReturn = nullptr;
+		M2WrapperList *wrap = M2WrapperList::GetInstance();
+		DWORD dwFunc = 0x0D8E3B0;
+
+		_asm
+		{
+			push name;
+			mov ecx, wrap;
+			call dwFunc;
+			mov pReturn, eax;
+		}
+
+		return pReturn;
+	}
 };
 
 class M2ScriptEngine
@@ -145,12 +168,6 @@ public:
 	M2ScriptHandler * m_pScriptHandler;			// 0004 - 0008
 
 	static M2ScriptEngine * GetInstance(void);
-};
-
-class M2WrapperList
-{
-public:
-	static M2WrapperList * GetInstance(void);
 };
 
 namespace IE
@@ -174,4 +191,7 @@ namespace IE
 
 	CM2Ped				* CreateWrapperPed(CM2ModelManager * pModelManager);
 	CM2Vehicle			* CreateWrapperVehicle(CM2ModelManager * pModelManager);
+
+	M2Entity			* GetEngineEntityByIndex(int i);
+	M2Entity			* GetEngineEntityByname(const char *name);
 };
