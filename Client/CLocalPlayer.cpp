@@ -275,7 +275,7 @@ void CLocalPlayer::SendOnFootSync( void )
 	onFootSync.m_bCrouching = CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->IsCrouching();
 
 	// Write the model index
-	onFootSync.m_uiModelIndex = Game::GetIdFromPlayerModel ( m_pPlayerModelManager->GetModelName() );
+	onFootSync.m_uiModelIndex = GetModel();
 
 	// Write the hand
 	onFootSync.m_iHand = CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetHandModelHand();
