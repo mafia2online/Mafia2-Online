@@ -73,6 +73,7 @@ private:
 	static	SQInteger		GuiIsAlwaysOnTop					( SQVM * pVM );
 	static	SQInteger		GuiSetInputMasked					( SQVM * pVM );
 	static	SQInteger		GuiIsInputMasked					( SQVM * pVM );
+	static	SQInteger		GuiChangeImage						( SQVM * pVM );
 
 public:
 
