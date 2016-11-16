@@ -202,6 +202,7 @@ public:
 
 	static	unsigned int		FUNC_CCar__Spawn;
 	static	unsigned int		FUNC_CCar__GetDamage;
+	static	unsigned int		FUNC_CCar__SetCarDamage;
 	static	unsigned int		FUNC_CCar__SetTransparency;
 	static	unsigned int		FUNC_CCar__OpenDoors;
 

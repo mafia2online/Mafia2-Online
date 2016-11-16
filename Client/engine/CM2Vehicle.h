@@ -105,6 +105,8 @@ public:
 	void		SetBeaconLightOn	(bool on);
 
 	void		SetEngineOn			(bool bEngine, bool bRevOnStart);
+
+	void		SetCarDamage		(long double damage);
 };
 
 class M2FuelTank
@@ -197,6 +199,7 @@ public:
 	}
 };
 
+/* Should be named C_Car */
 class M2Vehicle : public M2Entity
 {
 public:
@@ -384,6 +387,7 @@ public:
 	bool					IsIndicatorLightsOn				(int indicator);
 
 	long double				GetDamage						(void);
+	void					SetCarDamage					(long double damage);
 
 	void					SetTransparency					(float transparency);
 
