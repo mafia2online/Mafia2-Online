@@ -35,6 +35,8 @@ public:
 	Matrix43 m_viewMatrix;					// 00AC - 00DC
 	D3DXMATRIX m_projectionMatrix;			// 00DC - 011C
 	D3DXMATRIX m_worldViewProjection;		// 011C - 015C
+
+	void ModeChange(int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8, int a9, int a10);
 };
 
 class M2CameraUnk001
@@ -69,6 +71,9 @@ public:
 	//  + 0x4 = BYTE
 	//  + 0x8 = BYTE (flags)
 	//	+ 0x5C = BYTE
+
+	void LockLookAt(const char *unk1, const char *unk2, double unk3);
+	void RotationTowards(CVector3 vec);
 };
 
 class M2Camera
@@ -123,4 +128,7 @@ public:
 	bool						IsOnScreen( const CVector3 & vecPosition );
 
 	void						SimpleShake(float speed, float strength, float duration);
+
+	void						LockLookAt(const char *unk1, const char *unk2, double unk3);
+	void						SetRotation(CVector3 vec);
 };

@@ -67,9 +67,9 @@ void CM2Camera::LockControl( bool bLock )
 	// TODO: Move to COffsets
 	// Set the camera state
 	if ( bLock )
-		*(BYTE *)0x1BAF07C = 2;
+		*(BYTE *)COffsets::VAR_CCamera__State = 2;
 	else
-		*(BYTE *)0x1BAF07C = 0;
+		*(BYTE *)COffsets::VAR_CCamera__State = 0;
 
 	// Set the sensitivity multiplier
 	//if( bLock )
@@ -81,7 +81,7 @@ void CM2Camera::LockControl( bool bLock )
 bool CM2Camera::IsLocked( void )
 {
 	// TODO: Move to COffsets and make the method const.
-	return (*(int *)0x1BAF07C != 0);
+	return (*(int *)COffsets::VAR_CCamera__State != 0);
 }
 
 float CM2Camera::GetNearClip( void )
@@ -258,4 +258,38 @@ void CM2Camera::SimpleShake(float speed, float strength, float duration)
 {
 	// TODO: Reverse.
 	CLua::Executef("game.cameramanager:GetPlayerMainCamera(0):SimpleShake(%f,%f,%f)", speed, strength, duration);
+}
+
+DWORD CCamera_Look = 0x0B37BF0;
+void _declspec(naked) M2GameCamera::LockLookAt(const char *unk1, const char *unk2, double unk3)
+{
+	_asm jmp CCamera_Look;
+}
+
+DWORD CCamera_Rotation = 0x0B4FE70;
+void _declspec(naked) M2GameCamera::RotationTowards(CVector3 vec)
+{
+	_asm jmp CCamera_Rotation;
+}
+
+DWORD CCamera_ModeChange = 0x107BB70;
+void _declspec(naked) M2CameraData::ModeChange(int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8, int a9, int a10)
+{
+	_asm jmp CCamera_ModeChange;
+}
+
+void CM2Camera::LockLookAt(const char *unk1, const char *unk2, double unk3)
+{
+	if (!m_pGameCamera)
+		return;
+
+	m_pGameCamera->LockLookAt(unk1, unk2, unk3);
+}
+
+void CM2Camera::SetRotation(CVector3 vec)
+{
+	if (!m_pGameCamera)
+		return;
+
+	m_pGameCamera->RotationTowards(vec);
 }
