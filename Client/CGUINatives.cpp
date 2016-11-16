@@ -81,6 +81,7 @@ void CGUINatives::Register( CScriptingManager * pScriptingManager )
 	pScriptingManager->RegisterFunction( "guiIsAlwaysOnTop", GuiIsAlwaysOnTop, 1, "p" );
 	pScriptingManager->RegisterFunction( "guiSetInputMasked", GuiSetInputMasked, 2, "pb" );
 	pScriptingManager->RegisterFunction( "guiIsInputMasked", GuiIsInputMasked, 1, "p" );
+	pScriptingManager->RegisterFunction( "guiChangeImage", GuiChangeImage, 2, "ps");
 
 	// Register GUI constact
 	pScriptingManager->RegisterConstant ( "ELEMENT_TYPE_WINDOW", GUI_WINDOW );
@@ -856,6 +857,30 @@ SQInteger CGUINatives::GuiSetAlwaysOnTop( SQVM * pVM )
 	return 1;
 }
 
+SQInteger CGUINatives::GuiChangeImage(SQVM * pVM)
+{
+	CGUIElement_Impl * pElement = sq_getpointer< CGUIElement_Impl* >(pVM, -2);
+
+	const SQChar * newImage;
+	sq_getstring(pVM, -1, &newImage);
+
+	// Is the element valid?
+	if (pElement)
+	{
+		((CGUIStaticImage_Impl *)pElement)->Clear();
+		if (((CGUIStaticImage_Impl *)pElement)->LoadFromFile(newImage, SharedUtility::GetFileNameForScriptFile("", "", CCore::Instance()->GetHost(), CCore::Instance()->GetPort()))) {
+			sq_pushbool(pVM, true);
+			return 1;
+		}
+		else {
+			sq_pushbool(pVM, false);
+			return 1;
+		}
+	}
+
+	sq_pushbool(pVM, false);
+	return 1;
+}
 // guiIsAlwaysOnTop( element );
 SQInteger CGUINatives::GuiIsAlwaysOnTop( SQVM * pVM )
 {
