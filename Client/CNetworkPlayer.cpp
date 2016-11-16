@@ -156,9 +156,6 @@ void CNetworkPlayer::Create( void )
 	// Set the max health
 	// todo
 
-	// Create the player map icon
-	m_iBlipId = CCore::Instance()->GetGame()->GetNavigation()->RegisterIconEntity( m_pPlayerPed->GetEntity(), 0, 1 );
-
 	// Mark as not dead
 	SetDead( false );
 
