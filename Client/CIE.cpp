@@ -419,4 +419,14 @@ namespace IE
 		SAFE_DELETE(pEngineVehicle);
 		return NULL;
 	}
+
+	M2Entity * GetEngineEntityByIndex(int i)
+	{
+		return (M2Game::GetInstance()->GetEntityFromIndex(i));
+	}
+
+	M2Entity * GetEngineEntityByname(const char *name)
+	{
+		return (M2Game::GetInstance()->GetEntityByname(name));
+	}
 };
