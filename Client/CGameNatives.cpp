@@ -37,6 +37,7 @@ void CGameNatives::Register( CScriptingManager * pScriptingManager )
 	pScriptingManager->RegisterFunction( "isMapOpen", IsMapOpen, 0, NULL );
 	pScriptingManager->RegisterFunction( "setGPSTarget", SetGPSTarget, 2, "ff" );
 	pScriptingManager->RegisterFunction( "removeGPSTarget", RemoveGPSTarget, 0, NULL );
+	pScriptingManager->RegisterFunction( "disableTranslocator", DisableTranslocator, 1, "b");
 }
 
 // setWeather( string weather );
@@ -260,11 +261,22 @@ SQInteger	CGameNatives::SetGPSTarget(SQVM * pVM)
 	return (1);
 }
 
-
 // removeGPSTarget();
 SQInteger	CGameNatives::RemoveGPSTarget(SQVM * pVM)
 {
 	CCore::Instance()->GetHud()->StopGPS();
 	sq_pushbool(pVM, true);
 	return (1);
+}
+
+// disableTranslocator(bool disable);
+SQInteger	CGameNatives::DisableTranslocator(SQVM *pVM)
+{
+	SQBool bToggle;
+	sq_getbool(pVM, -1, &bToggle);
+
+	CCore::Instance()->GetGame()->DisableTranslocator(bToggle);
+
+	sq_pushbool(pVM, true);
+	return 1;
 }

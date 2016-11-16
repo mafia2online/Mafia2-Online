@@ -30,6 +30,7 @@ private:
 	static	SQInteger		IsMapOpen ( SQVM * pVM );
 	static	SQInteger		SetGPSTarget( SQVM * pVM );
 	static	SQInteger		RemoveGPSTarget( SQVM * pVM );
+	static	SQInteger		DisableTranslocator(SQVM * pVM);
 
 public:
 
