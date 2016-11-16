@@ -69,6 +69,8 @@ public:
 	bool			OpenMap					( bool bOpen );
 	bool			IsMapOpen				( void ) { return m_bMapOpen; }
 
+	void			DisableTranslocator		(bool disable);
+
 	// Main Menu
 	void			OnGameStart				( void );
 

@@ -345,3 +345,8 @@ void CMafia::OnGameStart( void )
 
 	FadeSound( true, 0 );
 }
+
+void CMafia::DisableTranslocator(bool disable)
+{
+	CLua::Executef("game.game:DisableTranslocator(%b)", disable);
+}
