@@ -900,6 +900,11 @@ void _declspec(naked) C_Vehicle::SetDoorFree(int door, bool freed)
 	_asm jmp COffsets::FUNC_CVehicle__SetDoorFree;
 }
 
+void _declspec(naked) C_Vehicle::SetCarDamage(long double damage)
+{
+	_asm jmp COffsets::FUNC_CCar__SetCarDamage;
+}
+
 void CM2Vehicle::SetEngineOn(bool bEngine, bool bRevOnStart)
 {
 	if (!m_pVehicle)
@@ -1064,4 +1069,12 @@ void CM2Vehicle::SetDoorFree(int door, bool freed)
 		return;
 
 	m_pVehicle->m_vehicleData.SetDoorFree(door, freed);
+}
+
+void CM2Vehicle::SetCarDamage(long double damage)
+{
+	if (!m_pVehicle)
+		return;
+
+	m_pVehicle->m_vehicleData.SetCarDamage(damage);
 }
