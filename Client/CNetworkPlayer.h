@@ -38,7 +38,6 @@ private:
 	unsigned int					m_uiColour;
 	int								m_iControlStyle;
 	unsigned short					m_usPing;
-	EntityId						m_iBlipId;
 
 	CM2Ped							* m_pPlayerPed;
 	CNetworkVehicle					* m_pVehicle;
