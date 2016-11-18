@@ -43,7 +43,7 @@ public:
 	D3DXMATRIX m_projectionMatrix;			// 00DC - 011C
 	D3DXMATRIX m_worldViewProjection;		// 011C - 015C
 
-	void ModeChange(int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8, int a9, int a10);
+	void ModeChange(int a2, void *a3, int a4, int modeID, int a6, int a7, int a8, int a9, int a10);
 	void BroadcastCommand(int command, void *data, void *unknow);
 };
 
