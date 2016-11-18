@@ -28,7 +28,7 @@ public:
 	static const unsigned int nPos;
 
 	String();
-	String(const char * szFormat, ...);
+	String(const char *const string);
 	~String();
 
 	operator const char * () const;
@@ -112,14 +112,17 @@ public:
 
 	static String		DecimalToString( unsigned int uiDecimal )
 	{
-		String strReturn( "%p", uiDecimal );
+		String strReturn;
+		strReturn.Format("%p", uiDecimal);
 		strReturn.Erase( (strReturn.GetLength() - 2), 2 );
 		return strReturn;
 	}
 
 	static String		DecimalToStringNoErase( unsigned int uiDecimal )
 	{
-		return String( "%p", uiDecimal );
+		String out;
+		out.Format( "%p", uiDecimal );
+		return out;
 	}
 
 	static unsigned long	HexToInt( String hex )
