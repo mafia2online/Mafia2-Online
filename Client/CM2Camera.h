@@ -13,6 +13,13 @@
 
 #include "Math/CMatrix.h"
 
+struct ShakeCommandData
+{
+	float speed;
+	float strength;
+	float duration;
+};
+
 class C_RenderCamera // size: 0x1E8
 {
 public:
@@ -37,6 +44,7 @@ public:
 	D3DXMATRIX m_worldViewProjection;		// 011C - 015C
 
 	void ModeChange(int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8, int a9, int a10);
+	void BroadcastCommand(int command, void *data, void *unknow);
 };
 
 class M2CameraUnk001
@@ -72,6 +80,7 @@ public:
 	//  + 0x8 = BYTE (flags)
 	//	+ 0x5C = BYTE
 
+
 	void LockLookAt(const char *unk1, const char *unk2, double unk3);
 	void RotationTowards(CVector3 vec);
 };
@@ -82,6 +91,8 @@ public:
 	PAD(M2Camera, pad0, 0x8);				// 0000 - 0008
 	M2GameCamera * pCamera1;				// 0008 - 000C
 	M2GameCamera * pCamera2;				// 000C - 0010
+
+	M2GameCamera * GetCamera(int index);
 };
 
 class CM2Camera
@@ -107,7 +118,7 @@ public:
 	M2GameCamera				* GetGameCamera( void ) { return m_pGameCamera; }
 
 	void						LockControl( bool bLocked );
-	bool						IsLocked( void );
+	bool						IsLocked( void ) const;
 
 	float						GetNearClip( void );
 	float						GetFarClip( void );
