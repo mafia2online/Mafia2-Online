@@ -72,25 +72,27 @@ String CNetworkStats::GetStats( void )
 	String bytesInResendBuffer = SharedUtility::BytesToString ( netStats.ulBytesInResendBuffer );
 
 #ifdef _CLIENT
-	return String( "Data Receive Rate: %s/s\n"
-				"Data Send Rate: %s/s\n"
-				"Total Data Received: %s\n"
-				"Total Data Sent: %s\n"
-				"Current Packet Loss: %.02f\n"
-				"Total Packet Loss: %.02f\n"
-				"Connection Time: %ds\n"
-				"Is Limited By Congestion Control: %s\n"
-				"Is Limited By Outgoing Bandwidth Limit: %s\n"
-				"Congestion Control BPS Limit: %s/s\n"
-				"Outgoing Bandwidth BPS Limit: %s/s\n"
-				"Messages In Resend Buffer: %d (%s)\n"
-				"Netcode Version: %s (%d)",
-				bytesReceived.Get(), bytesSent.Get(), totalBytesReceived.Get(), totalBytesSent.Get(),
-				netStats.fPacketLossLastSecond, netStats.fTotalPacketLoss, netStats.connectionTime,
-				(netStats.bIsLimitedByCongestionControl ? "Yes" : "No"), (netStats.bIsLimitedByOutgoingBandwidthLimit ? "Yes" : "No"),
-				BPSLimitedByCongestionControl.Get(), BPSLImitedByOutgoingBandwidth.Get(),
-				netStats.uiMessagesInResendBuffer, bytesInResendBuffer.Get(),
-				MOD_VERS_STR, NETWORK_VERSION );
+	String stats;
+	stats.Format( "Data Receive Rate: %s/s\n"
+		"Data Send Rate: %s/s\n"
+		"Total Data Received: %s\n"
+		"Total Data Sent: %s\n"
+		"Current Packet Loss: %.02f\n"
+		"Total Packet Loss: %.02f\n"
+		"Connection Time: %ds\n"
+		"Is Limited By Congestion Control: %s\n"
+		"Is Limited By Outgoing Bandwidth Limit: %s\n"
+		"Congestion Control BPS Limit: %s/s\n"
+		"Outgoing Bandwidth BPS Limit: %s/s\n"
+		"Messages In Resend Buffer: %d (%s)\n"
+		"Netcode Version: %s (%d)",
+		bytesReceived.Get(), bytesSent.Get(), totalBytesReceived.Get(), totalBytesSent.Get(),
+		netStats.fPacketLossLastSecond, netStats.fTotalPacketLoss, netStats.connectionTime,
+		(netStats.bIsLimitedByCongestionControl ? "Yes" : "No"), (netStats.bIsLimitedByOutgoingBandwidthLimit ? "Yes" : "No"),
+		BPSLimitedByCongestionControl.Get(), BPSLImitedByOutgoingBandwidth.Get(),
+		netStats.uiMessagesInResendBuffer, bytesInResendBuffer.Get(),
+		MOD_VERS_STR, NETWORK_VERSION );
+	return stats;
 #else
 	CLogFile::Printf( "= Data Receive Rate: %s/s", bytesReceived.Get() );
 	CLogFile::Printf( "= Data Send Rate: %s/s", bytesSent.Get() );

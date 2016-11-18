@@ -74,7 +74,7 @@ CFileTransfer::CFileTransfer ( String strFileName, CFileChecksum fileChecksum, b
 	}
 
 	// Build the target file string
-	m_strTargetFile = String ( "%s%s", strTargetFolder.Get (), strFileName.Get () );
+	m_strTargetFile.Format("%s%s", strTargetFolder.Get(), strFileName.Get());
 
 	// Set the file transfer handler
 	m_httpClient.SetFileWriteHandler ( FileWriteHandler, this );
@@ -119,7 +119,9 @@ void CFileTransfer::Pulse ( String strHost, unsigned short usHttpPort )
 	}
 
 	// Request the file from the http server
-	if ( !m_httpClient.Get ( String ( "/%s", m_strFileName.Get () ) ) )
+	String filePath;
+	filePath.Format("/%s", m_strFileName.Get ());
+	if ( !m_httpClient.Get ( filePath ) )
 		CLogFile::Printf ( "Failed to start http download! (%s)", m_httpClient.GetLastErrorString ().Get () );
 
 	// Show the download progress bar

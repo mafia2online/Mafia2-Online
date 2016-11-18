@@ -71,7 +71,16 @@ CNetworkVehicle::CNetworkVehicle( void )
 	m_lastSyncData.m_model = 0;
 	memcpy( &m_lastSyncData.m_primaryColour, &predefinedColours[ rand() % ARRAY_LENGTH(predefinedColours) ], sizeof(CColor) );
 	memcpy( &m_lastSyncData.m_secondaryColour, &predefinedColours[ rand() % ARRAY_LENGTH(predefinedColours) ], sizeof(CColor) );
-	strcpy( m_lastSyncData.m_szPlateText, String("EB%d", m_vehicleId).Get() );
+
+	// @fixme Possible buffer overflow.
+	// Maximum plate text length = 6 + null terminator
+	// Maximum possible plate length generated this way:
+	// EB4294967295	= 12 + null terminator = 13 characters
+	// As long as there is not much vehicles it is fine anyways it has to be fixed one day.
+	String licensePlate;
+	licensePlate.Format("EB%d", m_vehicleId);
+	strcpy( m_lastSyncData.m_szPlateText, licensePlate );
+
 	m_lastSyncData.m_bLightState = false;
 	m_lastSyncData.m_bTaxiLight = false;
 	m_lastSyncData.m_bLeftIndicator = false;

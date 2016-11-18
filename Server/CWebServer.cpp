@@ -60,7 +60,9 @@ CWebServer::CWebServer( void )
 
 		// Set the options
 		strcpy( options[0], "listening_ports" );
-		strcpy( options[1], String( "%d", (CVAR_GET_INTEGER ( "port" ) + 1) ).Get() );
+		String httpPort;
+		httpPort.Format( "%d", (CVAR_GET_INTEGER ( "port" ) + 1) );
+		strcpy( options[1], httpPort );
 		strcpy( options[2], "document_root" );
 		strcpy( options[3], SharedUtility::GetAbsolutePath( "webserver" ).Get() );
 		strcpy( options[4], "num_threads" );
@@ -139,7 +141,8 @@ bool CompileScript( const char * szFile, const char * szFileOut )
 bool CWebServer::FileCopy( String strDirectory, String strFileName, CFileChecksum * pChecksum, bool bIsScript )
 {
 	// Get the file location
-	String strFile( "%s/%s", strDirectory.Get(), strFileName.Get() );
+	String strFile;
+	strFile.Format( "%s/%s", strDirectory.Get(), strFileName.Get() );
 
 	//
 	String strWebServerFilePath = strFile;
@@ -152,7 +155,7 @@ bool CWebServer::FileCopy( String strDirectory, String strFileName, CFileChecksu
 			return false;
 
 		// Get the path to copy to
-		strWebServerFilePath = String( "webserver/%s", strFileName.Get() );
+		strWebServerFilePath.Format( "webserver/%s", strFileName.Get() );
 
 		// Does the webserver path not exist?
 		if( !SharedUtility::Exists( "webserver" ) )

@@ -50,7 +50,9 @@ bool CDownloadProgress::IsVisible( void )
 
 void CDownloadProgress::SetFileName( String strName )
 {
-	m_pWindow->SetText( String( "Download Progress - File: %s", strName.Get() ).Get() );
+	String progress;
+	progress.Format("Download Progress - File: %s", strName.Get());
+	m_pWindow->SetText(progress);
 }
 
 void CDownloadProgress::SetProgress( float fProgress )

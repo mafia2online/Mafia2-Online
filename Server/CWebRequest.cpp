@@ -31,13 +31,13 @@ void CWebRequest::WorkerThread()
 				{
 				case HTTP_TYPE_GET:
 					{
-						m_pHttpClient->Get ( String( "%s", pCurrent->strPost.Get () ) );
+						m_pHttpClient->Get ( pCurrent->strPost );
 						break;
 					}
 
 				case HTTP_TYPE_POST:
 					{
-						m_pHttpClient->Post ( false, String( "%s", pCurrent->strPost.Get () ) );
+						m_pHttpClient->Post ( false, pCurrent->strPost );
 						break;
 					}
 				}

@@ -100,16 +100,15 @@ void CNameTag::DrawPed(void)
 			continue;
 		}
 
-		String text ( "%s", pPed->GetNick().Get() );
-
-		float dimensionWidth = pCore->GetGraphics()->GetTextWidth ( text, NAMETAG_SCALE, "tahoma-bold" );
+		const String &nick = pPed->GetNick();
+		float dimensionWidth = pCore->GetGraphics()->GetTextWidth ( nick, NAMETAG_SCALE, "tahoma-bold" );
 
 		pedPos.fZ += PED_NAMETAG_Z_OFFSET;
 
 		CVector3 vecScreen;
 		pCore->GetGraphics()->WorldToScreen(pedPos, &vecScreen);
 
-		pCore->GetGraphics()->DrawText ( (vecScreen.fX - dimensionWidth / 2) + 1, vecScreen.fY + 1, (DWORD)0xFFFFFFFF, NAMETAG_SCALE, "tahoma-bold", false, text.Get() );
+		pCore->GetGraphics()->DrawText ( (vecScreen.fX - dimensionWidth / 2) + 1, vecScreen.fY + 1, (DWORD)0xFFFFFFFF, NAMETAG_SCALE, "tahoma-bold", false, nick );
 	}
 }
 
@@ -157,7 +156,8 @@ void CNameTag::DrawPlayer(void)
 			continue;
 		}
 
-		String text ( "%s (%d)", pRemotePlayer->GetNick().Get(), i );
+		String text;
+		text.Format ( "%s (%d)", pRemotePlayer->GetNick().Get(), i );
 
 		float dimensionWidth = pGraphics->GetTextWidth ( text, NAMETAG_SCALE, "tahoma-bold" );
 

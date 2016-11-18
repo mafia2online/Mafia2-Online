@@ -126,7 +126,7 @@ void CWinSock::Pulse( )
 	if( iResult > 4 && szBuffer[0] == '5' && szBuffer[1] == '-' && szBuffer[2] == 'M' && szBuffer[3] == 'P' )
 	{
 		// Move the buffer into a new string
-		String strBuffer( "%s", szBuffer );
+		String strBuffer(szBuffer);
 
 		// Delete the query identifier from the string
 		strBuffer.Erase( 0, 5 );

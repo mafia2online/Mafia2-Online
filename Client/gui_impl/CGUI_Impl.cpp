@@ -44,6 +44,20 @@
 
 #include "CGUI_Impl.h"
 
+/**
+ * Helper used to set current app dir as gui.
+ *
+ * @fixme This is SUPER UNSAFE as different thread may try to read some file and expect
+ *        the current directory to be game working directory.
+ *        The correct way will be to set CEGUI Resource paths to this directory.
+ */
+void SetCurrentDirAsGui(void)
+{
+	String guiDir;
+	guiDir.Format ( "%s\\data\\gui\\", CCore::Instance()->GetModDirectory().Get() );
+	SetCurrentDirectory( guiDir );
+}
+
 CGUI_Impl::CGUI_Impl( IDirect3DDevice9 * pDevice )
 	: m_pDevice(nullptr)
 	, m_pRenderer()
@@ -103,7 +117,7 @@ CGUI_Impl::CGUI_Impl( IDirect3DDevice9 * pDevice )
 	CEGUI::Logger::getSingleton().setLogFilename( "logs\\gui.log" );
 
 	// Set the current directory to the gui folder
-	SetCurrentDirectory( String( "%s\\data\\gui\\", CCore::Instance()->GetModDirectory().Get() ).Get() );
+	SetCurrentDirAsGui();
 
 	try
 	{
@@ -243,8 +257,7 @@ void CGUI_Impl::OnDeviceLost( void )
 
 void CGUI_Impl::OnDeviceRestore( void )
 {
-	// Set the current directory to the gui folder
-	SetCurrentDirectory( String( "%s\\data\\gui\\", CCore::Instance()->GetModDirectory().Get() ).Get() );
+	SetCurrentDirAsGui();
 
 	CLogFile::Printf( "[GFX] Restoring CEGUI render device..." );
 
@@ -369,7 +382,8 @@ bool CGUI_Impl::IsInputEnabled( void )
 
 String CGUI_Impl::GetUniqueName( void )
 {
-	String strName( "window_%d", m_uiUnique );
+	String strName;
+	strName.Format ("window_%d", m_uiUnique );
 
 	m_uiUnique++;
 	return strName;

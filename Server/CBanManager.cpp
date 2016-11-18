@@ -147,8 +147,12 @@ bool CBanManager::Add( const char * szSerial, const char * szBanner, unsigned lo
 		// Create a new node
 		CXMLNode * pBanNode = m_pRootNode->CreateSubNode( "ban" );
 		pBanNode->SetAttribute( "banner", szBanner );
-		pBanNode->SetAttribute( "time", String( "%i", ulBanTime ).Get() );
-		pBanNode->SetAttribute( "unban", String( "%i", ulUnbanTime ).Get() );
+		String banTime;
+		banTime.Format ( "%i", ulBanTime );
+		pBanNode->SetAttribute( "time", banTime );
+		String unbanTime;
+		unbanTime.Format( "%i", ulUnbanTime );
+		pBanNode->SetAttribute( "unban", unbanTime );
 		pBanNode->SetAttribute( "reason", szReason );
 		pBanNode->SetValue( szSerial );
 

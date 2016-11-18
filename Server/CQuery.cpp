@@ -99,11 +99,13 @@ std::string CQuery::QueryLight( void )
 	reply << ( unsigned char )( strlen( CVAR_GET_STRING( "hostname" ) ) + 1 );
 	reply << CVAR_GET_STRING( "hostname" );
 
-	String strPlayers( "%d", CCore::Instance()->GetPlayerManager()->GetCount() );
+	String strPlayers;
+	strPlayers.Format( "%d", CCore::Instance()->GetPlayerManager()->GetCount() );
 	reply << ( unsigned char )( strPlayers.GetLength() + 1 );
 	reply << strPlayers.Get();
 
-	String strMaxPlayers( "%d", CVAR_GET_INTEGER( "maxplayers" ) );
+	String strMaxPlayers;
+	strMaxPlayers.Format( "%d", CVAR_GET_INTEGER( "maxplayers" ) );
 	reply << ( unsigned char )( strMaxPlayers.GetLength() + 1 );
 	reply << strMaxPlayers.Get();
 

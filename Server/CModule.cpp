@@ -146,7 +146,8 @@ CModule::CModule( String strName )
 	SharedUtility::RemoveIllegalCharacters( strName );
 
 	// Get the module path string
-	String strModulePath( "modules\\%s%s", strName.Get(), LIB_EXTENSION );
+	String strModulePath;
+	strModulePath.Format( "modules\\%s%s", strName.Get(), LIB_EXTENSION );
 
 	// Does the module not exists?
 	if( !SharedUtility::Exists( strModulePath.Get() ) )

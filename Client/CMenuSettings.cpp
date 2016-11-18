@@ -423,7 +423,9 @@ void CMenuSettings::LoadSettings( void )
 	bool bVerticalSyncEnabled = *(bool *)0x1BAE8E4;
 
 	// Update the resolution combo text
-	m_pResolutionCombo->SetText ( String ( "%d x %d", m_iLoadedWidth, m_iLoadedHeight ) );
+	String resolution;
+	resolution.Format ( "%d x %d", m_iLoadedWidth, m_iLoadedHeight );
+	m_pResolutionCombo->SetText ( resolution );
 
 	// Loop over all available resolutions
 	for( int i = 0; i < ARRAY_LENGTH( resolutions ); i++ )
@@ -494,21 +496,27 @@ void CMenuSettings::LoadSettings( void )
 		}
 	}
 
+	String volume;
+
 	// Update the sfx volume
 	m_pSFXVolume->SetScrollPosition ( ((float)iSFXVolume / 100.0f) );
-	m_pSFXVolumeValue->SetText ( String ( "%d%%", iSFXVolume ) );
+	volume.Format( "%d%%", iSFXVolume );
+	m_pSFXVolumeValue->SetText ( volume );
 
 	// Update the voices volume
 	m_pVoicesVolume->SetScrollPosition ( ((float)iVoicesVolume / 100.0f) );
-	m_pVoicesVolumeValue->SetText ( String ( "%d%%", iVoicesVolume ) );
+	volume.Format( "%d%%", iVoicesVolume );
+	m_pVoicesVolumeValue->SetText ( volume );
 
 	// Update the music volume
 	m_pMusicVolume->SetScrollPosition ( ((float)iMusicVolume / 100.0f) );
-	m_pMusicVolumeValue->SetText ( String ( "%d%%", iMusicVolume ) );
+	volume.Format ( "%d%%", iMusicVolume );
+	m_pMusicVolumeValue->SetText ( volume );
 
 	// Update the radio volume
 	m_pRadioVolume->SetScrollPosition ( ((float)iRadioVolume / 100.0f) );
-	m_pRadioVolumeValue->SetText ( String ( "%d%%", iRadioVolume ) );
+	volume.Format ( "%d%%", iRadioVolume );
+	m_pRadioVolumeValue->SetText ( volume );
 
 	// Update the video settings
 	CM2VideoSettings::SetFullScreenEnabled ( bFullScreenEnabled, false );
@@ -635,7 +643,9 @@ bool CMenuSettings::Event_OnSFXScroll ( CGUIElement_Impl * pElement )
 	float fVolume = (m_pSFXVolume->GetScrollPosition() * 100.0f);
 
 	// Update the volume value label
-	m_pSFXVolumeValue->SetText ( String ( "%d%%", (int)fVolume ) );
+	String volume;
+	volume.Format ( "%.0f%%", fVolume );
+	m_pSFXVolumeValue->SetText ( volume );
 
 	// Update the SFX volume
 	CM2VideoSettings::SetSFXVolume ( (int)fVolume );
@@ -648,7 +658,9 @@ bool CMenuSettings::Event_OnVoicesScroll ( CGUIElement_Impl * pElement )
 	float fVolume = (m_pVoicesVolume->GetScrollPosition() * 100.0f);
 
 	// Update the volume value label
-	m_pVoicesVolumeValue->SetText ( String ( "%d%%", (int)fVolume ) );
+	String volume;
+	volume.Format ( "%.0f%%", fVolume );
+	m_pVoicesVolumeValue->SetText ( volume );
 
 	// Update the voices volume
 	CM2VideoSettings::SetVoiceVolume ( (int)fVolume );
@@ -661,7 +673,9 @@ bool CMenuSettings::Event_OnMusicScroll ( CGUIElement_Impl * pElement )
 	float fVolume = (m_pMusicVolume->GetScrollPosition() * 100.0f);
 
 	// Update the volume value label
-	m_pMusicVolumeValue->SetText ( String ( "%d%%", (int)fVolume ) );
+	String volume;
+	volume.Format ( "%.0f%%", fVolume );
+	m_pMusicVolumeValue->SetText ( volume );
 
 	// Update the music volume
 	CM2VideoSettings::SetMusicVolume ( (int)fVolume );
@@ -674,7 +688,9 @@ bool CMenuSettings::Event_OnRadioScroll ( CGUIElement_Impl * pElement )
 	float fVolume = (m_pRadioVolume->GetScrollPosition() * 100.0f);
 
 	// Update the volume value label
-	m_pRadioVolumeValue->SetText ( String ( "%d%%", (int)fVolume ) );
+	String volume;
+	volume.Format ( "%.0f%%", fVolume );
+	m_pRadioVolumeValue->SetText ( volume );
 
 	// Update the radio volume
 	CM2VideoSettings::SetRadioVolume ( (int)fVolume );

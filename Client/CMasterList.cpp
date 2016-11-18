@@ -87,8 +87,9 @@ void CMasterList::WorkerThread()
 				// Was there an error?
 				if ( m_pHttpClient->GetLastError() != HTTP_ERROR_NONE )
 				{
-					OnRefreshFailed( String( "Failed to get masterlist from server!\nError: %s (%d)",
-						m_pHttpClient->GetLastErrorString().Get(), m_pHttpClient->GetLastError() ).Get() );
+					String error;
+					error.Format( "Failed to get masterlist from server!\nError: %s (%d)", m_pHttpClient->GetLastErrorString().Get(), m_pHttpClient->GetLastError() );
+					OnRefreshFailed( error );
 				}
 			}
 		}

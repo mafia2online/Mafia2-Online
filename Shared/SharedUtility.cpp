@@ -151,7 +151,9 @@ namespace SharedUtility
 		va_start(args, szFormat);
 		vsnprintf(szBuffer, sizeof(szBuffer), szFormat, args);
 		va_end(args);
-		return String("%s%s", GetAppPath(), szBuffer);
+		String out;
+		out.Format("%s%s", GetAppPath(), szBuffer);
+		return out;
 	}
 
 	String DiconnectReasonToString( unsigned int uiReason )
@@ -175,8 +177,9 @@ namespace SharedUtility
 		// Strip illegal characters from the name
 		String strName = RemoveIllegalCharacters( String( szName ) );
 
-		//
-		return String( "%s%s", GetClientScriptFolder( szHost, ulPort ).Get(), strName.Get() ).Get();
+		String out;
+		out.Format( "%s%s", GetClientScriptFolder( szHost, ulPort ).Get(), strName.Get() );
+		return out;
 #else
 		// Strip illegal characters from the name
 		String sName( szName );
@@ -186,13 +189,16 @@ namespace SharedUtility
 		std::vector< String > data = String( szScriptPath ).split( '/' );
 
 		// Get the absolute path to the the resource script files
-		String strScriptFiles( "resources/%s/scriptfiles", data[1].Get() );
+		String strScriptFiles;
+		strScriptFiles.Format( "resources/%s/scriptfiles", data[1].Get() );
 
 		// Create the script files path if it doesn't exist
 		if( !SharedUtility::Exists( strScriptFiles.Get() ) )
 			SharedUtility::CreateDirectory( strScriptFiles.Get() );
 
-		return String ( "%s/%s", strScriptFiles.Get(), strName.Get() );
+		String out;
+		out.Format( "%s/%s", strScriptFiles.Get(), strName.Get() );
+		return out;
 #endif
 	}
 
@@ -229,12 +235,18 @@ namespace SharedUtility
 			dwSerial >>= 4;
 		}
 
-		return String( "%s", md5( szSerialMask ).Get() ).ToUpper();
+		String out;
+		out.Format( "%s", md5( szSerialMask ).Get() );
+		return out.ToUpper();
 	}
 
 	String GetClientScriptFolder( String strHost, unsigned long ulPort )
 	{
-		return String( "cache/%s/", md5( String( "%s:%d", strHost.Get(), ulPort ) ).ToUpper().Get() );
+		String out;
+		String serverIpAndPort;
+		serverIpAndPort.Format( "%s:%d", strHost.Get(), ulPort );
+		out.Format( "cache/%s/", md5( serverIpAndPort ).ToUpper().Get() );
+		return out;
 	}
 #endif
 
@@ -381,7 +393,10 @@ namespace SharedUtility
 		int iHours         = (iHoursPassed % 60);
 		int iDaysPassed    = (iHoursPassed / 24);
 		int iDays          = (iDaysPassed % 24);
-		return String( "%d day(s), %d hour(s), %d minute(s) and %d second(s)", iDays, iHours, iMinutes, iSeconds );
+
+		String out;
+		out.Format ( "%d day(s), %d hour(s), %d minute(s) and %d second(s)", iDays, iHours, iMinutes, iSeconds );
+		return out;
 	}
 
 #ifdef _WIN32
@@ -698,7 +713,8 @@ namespace SharedUtility
 		// 1125899906842624 = PB
 
 		// If all else fails
-		String strResult( "%d B", uiBytes );
+		String strResult;
+		strResult.Format ( "%d B", uiBytes );
 
 		// Convert the bytes to a float (for decimal place)
 		float fBytes = (float)uiBytes;
