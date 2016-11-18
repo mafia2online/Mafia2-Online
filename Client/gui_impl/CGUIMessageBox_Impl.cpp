@@ -63,18 +63,6 @@ CGUIMessageBox_Impl::CGUIMessageBox_Impl( CGUI_Impl * pGUI, const char * szTitle
 	m_pIcon->SetSize( Vector2( ICON_SIZE, ICON_SIZE ) );
 	m_pIcon->SetVisible( true );
 
-	/* todo ?
-	// Load the icon image
-	if( uiFlags & MB_ICON_INFO )
-		m_pIcon->LoadFromFile( "info.png", SharedUtility::GetAbsolutePath( "data\\gui\\images" ) );
-	else if( uiFlags & MB_ICON_QUESTION )
-		m_pIcon->LoadFromFile( "question.png", SharedUtility::GetAbsolutePath( "data\\gui\\images" ) );
-	else if( uiFlags & MB_ICON_WARNING )
-		m_pIcon->LoadFromFile( "warning.png", SharedUtility::GetAbsolutePath( "data\\gui\\images" ) );
-	else if( uiFlags & MB_ICON_ERROR )
-		m_pIcon->LoadFromFile( "error.png", SharedUtility::GetAbsolutePath( "data\\gui\\images" ) );
-	*/
-
 	// Create the caption
 	m_pCaption = pGUI->CreateLabel ( szCaption, NULL, m_pWindow.get() );
 	m_pCaption->SetHorizontalAlignment ( CEGUI::HorizontalAlignment::HA_LEFT );

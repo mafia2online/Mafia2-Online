@@ -81,7 +81,7 @@ CMainMenu::CMainMenu( CGUI_Impl * pGUI )
 
 	// Create the logo
 	m_pLogo = pGUI->CreateStaticImage();
-	m_pLogo->LoadFromFile( "logo.png", SharedUtility::GetAbsolutePath( "data\\gui\\images" ) );
+	m_pLogo->LoadFromFile( "images/logo.png" );
 	m_pLogo->SetProperty( "InheritsAlpha", "False" );
 	m_pLogo->SendToBack();
 	m_pLogo->SetPosition( Vector2( 40.0f, 40.0f ) );
@@ -99,27 +99,27 @@ CMainMenu::CMainMenu( CGUI_Impl * pGUI )
 	float renderX = (fX - 40.0f);
 
 	// Create the quit button
-	m_pQuit = CreateItem( "quit.png", Vector2( (renderX - 46), 61.5f ), false, Vector2( 46, 23 ), GUI_CALLBACK( &CMainMenu::OnQuitClick, this ) );
+	m_pQuit = CreateItem( "images/quit.png", Vector2( (renderX - 46), 61.5f ), false, Vector2( 46, 23 ), GUI_CALLBACK( &CMainMenu::OnQuitClick, this ) );
 	renderX -= 86;
 
 	// Create the settings button
-	m_pSettings = CreateItem( "settings.png", Vector2( (renderX - 94), 61.5f ), false, Vector2( 94, 21 ), GUI_CALLBACK( &CMainMenu::OnSettingsClick, this ) );
+	m_pSettings = CreateItem( "images/settings.png", Vector2( (renderX - 94), 61.5f ), false, Vector2( 94, 21 ), GUI_CALLBACK( &CMainMenu::OnSettingsClick, this ) );
 	renderX -= 134;
 
 	// Create the refresh button
-	m_pRefresh = CreateItem( "refresh.png", Vector2( (renderX - 87), 61.5f ), false, Vector2( 87, 21 ), GUI_CALLBACK( &CMainMenu::OnRefreshClick, this ) );
+	m_pRefresh = CreateItem( "images/refresh.png", Vector2( (renderX - 87), 61.5f ), false, Vector2( 87, 21 ), GUI_CALLBACK( &CMainMenu::OnRefreshClick, this ) );
 	renderX -= 127;
 
 	// Create the connect button
-	m_pConnect = CreateItem( "connect.png", Vector2( (renderX - 90), 61.5f ), false, Vector2( 90, 21 ), GUI_CALLBACK( &CMainMenu::OnConnectClick, this ) );
+	m_pConnect = CreateItem( "images/connect.png", Vector2( (renderX - 90), 61.5f ), false, Vector2( 90, 21 ), GUI_CALLBACK( &CMainMenu::OnConnectClick, this ) );
 	renderX -= 130;
 
 	// Create the disconnect button
-	m_pDisconnect = CreateItem( "disconnect.png", Vector2( (renderX - 125), 61.5f ), false, Vector2( 125, 21 ), GUI_CALLBACK( &CMainMenu::OnDisconnectClick, this ) );
+	m_pDisconnect = CreateItem( "images/disconnect.png", Vector2( (renderX - 125), 61.5f ), false, Vector2( 125, 21 ), GUI_CALLBACK( &CMainMenu::OnDisconnectClick, this ) );
 	renderX -= 165;
 
 	// Create the quick connect button
-	m_pQuickConnect = CreateItem ( "quick_connect.png", Vector2( (renderX - 26), 61.5f ), false, Vector2( 26, 22 ), GUI_CALLBACK( &CMainMenu::OnQuickConnectClick, this ) );
+	m_pQuickConnect = CreateItem ( "images/quick_connect.png", Vector2( (renderX - 26), 61.5f ), false, Vector2( 26, 22 ), GUI_CALLBACK( &CMainMenu::OnQuickConnectClick, this ) );
 
 	// Setup the serverbrowser UI
 	CCore::Instance()->GetGUI()->GetServerBrowser()->SetupUI(40, 160, (fX - 80), (fY - 240));
@@ -154,7 +154,7 @@ std::shared_ptr<CGUIStaticImage_Impl> CMainMenu::CreateItem( String strLocation,
 	pItem->SetProperty( "InheritsAlpha", "False" );
 
 	// Set the image
-	pItem->LoadFromFile( strLocation, SharedUtility::GetAbsolutePath( "data\\gui\\images" ) );
+	pItem->LoadFromFile( strLocation );
 
 	// Set the handlers
 	pItem->SetMouseEnterHandler( GUI_CALLBACK( &CMainMenu::OnItemEnter, this ) );
@@ -463,10 +463,10 @@ void CMainMenu::OnDeviceLost ( void )
 void CMainMenu::LoadBackgroundImages ( float fWidth, float fHeight )
 {
 	// Load all the background sprites
-	D3DXCreateTextureFromFileEx ( CCore::Instance()->GetGraphics()->GetDevice(), "data\\gui\\images\\1.jpg", fWidth, fHeight, NULL, NULL, D3DFMT_A8R8G8B8, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, colourKey, &SrcInfo, NULL, &pBackgroundTexture[0] );
-	D3DXCreateTextureFromFileEx ( CCore::Instance()->GetGraphics()->GetDevice(), "data\\gui\\images\\2.jpg", fWidth, fHeight, NULL, NULL, D3DFMT_A8R8G8B8, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, colourKey, &SrcInfo, NULL, &pBackgroundTexture[1] );
-	D3DXCreateTextureFromFileEx ( CCore::Instance()->GetGraphics()->GetDevice(), "data\\gui\\images\\3.jpg", fWidth, fHeight, NULL, NULL, D3DFMT_A8R8G8B8, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, colourKey, &SrcInfo, NULL, &pBackgroundTexture[2] );
-	D3DXCreateTextureFromFileEx ( CCore::Instance()->GetGraphics()->GetDevice(), "data\\gui\\images\\4.jpg", fWidth, fHeight, NULL, NULL, D3DFMT_A8R8G8B8, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, colourKey, &SrcInfo, NULL, &pBackgroundTexture[3] );
+	D3DXCreateTextureFromFileEx ( CCore::Instance()->GetGraphics()->GetDevice(), SharedUtility::GetAbsolutePath("data\\gui\\images\\1.jpg"), fWidth, fHeight, NULL, NULL, D3DFMT_A8R8G8B8, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, colourKey, &SrcInfo, NULL, &pBackgroundTexture[0] );
+	D3DXCreateTextureFromFileEx ( CCore::Instance()->GetGraphics()->GetDevice(), SharedUtility::GetAbsolutePath("data\\gui\\images\\2.jpg"), fWidth, fHeight, NULL, NULL, D3DFMT_A8R8G8B8, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, colourKey, &SrcInfo, NULL, &pBackgroundTexture[1] );
+	D3DXCreateTextureFromFileEx ( CCore::Instance()->GetGraphics()->GetDevice(), SharedUtility::GetAbsolutePath("data\\gui\\images\\3.jpg"), fWidth, fHeight, NULL, NULL, D3DFMT_A8R8G8B8, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, colourKey, &SrcInfo, NULL, &pBackgroundTexture[2] );
+	D3DXCreateTextureFromFileEx ( CCore::Instance()->GetGraphics()->GetDevice(), SharedUtility::GetAbsolutePath("data\\gui\\images\\4.jpg"), fWidth, fHeight, NULL, NULL, D3DFMT_A8R8G8B8, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, colourKey, &SrcInfo, NULL, &pBackgroundTexture[3] );
 }
 
 void CMainMenu::ReleaseBackgroundImages ( void )

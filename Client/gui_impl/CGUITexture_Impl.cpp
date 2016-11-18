@@ -24,6 +24,8 @@
 #include "CGUIWindow_Impl.h"
 #include "CGUITexture_Impl.h"
 
+#include "CLogFile.h"
+
 CGUITexture_Impl::CGUITexture_Impl( CGUI_Impl * pGUI )
 {
 	// Save the renderer
@@ -42,10 +44,6 @@ CGUITexture_Impl::~CGUITexture_Impl( void )
 
 bool CGUITexture_Impl::LoadFromFile(String strFile)
 {
-	// Does the file not exist?
-	if( !SharedUtility::Exists( strFile.Get() ) )
-		return false;
-
 	// Try and load the file
 	try
 	{
@@ -53,6 +51,7 @@ bool CGUITexture_Impl::LoadFromFile(String strFile)
 	}
 	catch( CEGUI::Exception )
 	{
+		CLogFile::Printf("Failed to load texture - %s", strFile.Get());
 		return false;
 	}
 

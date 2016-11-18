@@ -44,23 +44,10 @@
 
 #include "CGUI_Impl.h"
 
-/**
- * Helper used to set current app dir as gui.
- *
- * @fixme This is SUPER UNSAFE as different thread may try to read some file and expect
- *        the current directory to be game working directory.
- *        The correct way will be to set CEGUI Resource paths to this directory.
- */
-void SetCurrentDirAsGui(void)
-{
-	String guiDir;
-	guiDir.Format ( "%s\\data\\gui\\", CCore::Instance()->GetModDirectory().Get() );
-	SetCurrentDirectory( guiDir );
-}
-
 CGUI_Impl::CGUI_Impl( IDirect3DDevice9 * pDevice )
 	: m_pDevice(nullptr)
 	, m_pRenderer()
+	, m_resourceProvider()
 	, m_pSystem()
 	, m_pFontManager(nullptr)
 	, m_pImageSetManager(nullptr)
@@ -92,15 +79,17 @@ CGUI_Impl::CGUI_Impl( IDirect3DDevice9 * pDevice )
 	, m_FocusGainedHandler()
 	, m_FocusLostHandler()
 {
-	// Set the current directory to the mod folder
-	SetCurrentDirectory( CCore::Instance()->GetModDirectory().Get() );
-
 	// Store the d3d9 device
 	m_pDevice = pDevice;
 
 	// Create the gui renderer and system
 	m_pRenderer = std::make_unique<CEGUI::DirectX9Renderer>( pDevice, 0 );
-	m_pSystem = std::make_unique<CEGUI::System>( m_pRenderer.get() );
+
+	m_resourceProvider = std::make_unique<M2OCEGUIResProvider>();
+
+	String path;
+	path.Format("%s\\logs\\gui.log", CCore::Instance()->GetModDirectory().Get());
+	m_pSystem = std::make_unique<CEGUI::System>( m_pRenderer.get(), m_resourceProvider.get(), (CEGUI::utf8*)path.Get() );
 
 	// Get pointers to the cegui singletons
 	m_pFontManager = CEGUI::FontManager::getSingletonPtr();
@@ -114,10 +103,6 @@ CGUI_Impl::CGUI_Impl( IDirect3DDevice9 * pDevice )
 #else
 	CEGUI::Logger::getSingleton().setLoggingLevel( CEGUI::Standard );
 #endif
-	CEGUI::Logger::getSingleton().setLogFilename( "logs\\gui.log" );
-
-	// Set the current directory to the gui folder
-	SetCurrentDirAsGui();
 
 	try
 	{
@@ -137,14 +122,6 @@ CGUI_Impl::CGUI_Impl( IDirect3DDevice9 * pDevice )
 
 	// Create the gui root
 	m_pDefaultWindow = (CEGUI::DefaultWindow *)m_pWindowManager->createWindow( "DefaultWindow", "guiroot" );
-
-	// Set the available chars (english and cyrillic support)
-	CEGUI::String tmp;
-	for (CEGUI::utf32 cp = 0x20; cp <= 0x7E; ++cp)
-		tmp += cp;
-	for (CEGUI::utf32 cp = 0x400; cp <= 0x4FF; ++cp)
-		tmp += cp;
-	m_pDefaultFont->GetFont()->defineFontGlyphs(tmp);
 
 	// Set the default gui sheet
 	m_pSystem->setGUISheet( m_pDefaultWindow );
@@ -180,9 +157,6 @@ CGUI_Impl::CGUI_Impl( IDirect3DDevice9 * pDevice )
 	pEvents->subscribeEvent( "Window/" + CEGUI::Window::EventMouseMove, CEGUI::Event::Subscriber( &CGUI_Impl::Event_MouseMove, this ) );
 	pEvents->subscribeEvent( "Window/" + CEGUI::Window::EventMouseEnters, CEGUI::Event::Subscriber( &CGUI_Impl::Event_MouseEnter, this ) );
 	pEvents->subscribeEvent( "Window/" + CEGUI::Window::EventMouseLeaves, CEGUI::Event::Subscriber( &CGUI_Impl::Event_MouseLeave, this ) );
-
-	// Reset the current directory
-	SetCurrentDirectory( CCore::Instance()->GetModDirectory().Get() );
 }
 
 CGUI_Impl::~CGUI_Impl( void )
@@ -257,8 +231,6 @@ void CGUI_Impl::OnDeviceLost( void )
 
 void CGUI_Impl::OnDeviceRestore( void )
 {
-	SetCurrentDirAsGui();
-
 	CLogFile::Printf( "[GFX] Restoring CEGUI render device..." );
 
 	try
@@ -272,9 +244,6 @@ void CGUI_Impl::OnDeviceRestore( void )
 	}
 
 	CLogFile::Printf( "[GFX] Done!" );
-
-	// Reset the current directory
-	SetCurrentDirectory( CCore::Instance()->GetModDirectory().Get() );
 }
 
 void CGUI_Impl::ProcessMouseInput( eMouseType type, float fX, float fY, int iButton )
@@ -1073,4 +1042,47 @@ std::shared_ptr<CGUIScrollPane_Impl> CGUI_Impl::CreateScrollPane( CGUIElement_Im
 std::shared_ptr<CGUIMessageBox_Impl> CGUI_Impl::CreateMessageBox( const char * szTitle, const char * szCaption, const char * szButton1, const char * szButton2 )
 {
 	return std::make_shared<CGUIMessageBox_Impl>( this, szTitle, szCaption, szButton1, szButton2 );
+}
+
+
+void M2OCEGUIResProvider::loadRawDataContainer(const CEGUI::String& filename, CEGUI::RawDataContainer& output, const CEGUI::String& resourceGroup)
+{
+    if (filename.empty() || (filename == (CEGUI::utf8*)""))
+	{
+		throw CEGUI::InvalidRequestException((CEGUI::utf8*)
+			"M2OCEGUIResProvider::load - Filename supplied for data loading must be valid");
+	}
+
+	CEGUI::String path;
+
+	// Test if the path is absolute.
+	if (filename.find_first_of(':') != 1) {
+		path += CCore::Instance()->GetModDirectory();
+		path += "data/gui/";
+	}
+
+	path += filename;
+
+	std::ifstream dataFile(path.c_str(), std::ios::binary|std::ios::ate);
+	if( dataFile.fail())
+	{
+		throw CEGUI::InvalidRequestException((CEGUI::utf8*)"M2OCEGUIResourceProvider::load - " + filename + " does not exist");
+	}
+	std::streampos size = dataFile.tellg();
+	dataFile.seekg (0, std::ios::beg);
+
+	unsigned char* buffer = new unsigned char [size];
+
+	try {
+		dataFile.read(reinterpret_cast<char*>(buffer), size);
+	}
+	catch(std::ifstream::failure e) {
+		delete [] buffer;
+		throw CEGUI::GenericException((CEGUI::utf8*)"M2OCEGUIResourceProvider::loadRawDataContainer - Problem reading " + filename);
+	}
+
+	dataFile.close();
+
+	output.setData(buffer);
+	output.setSize(size);
 }

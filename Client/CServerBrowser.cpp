@@ -286,7 +286,7 @@ void CServerBrowser::SetupUI( float fX, float fY, float fWidth, float fHeight )
 	// Create the locked image
 	m_pLockedImage = m_pGUI->CreateStaticImage();
 	m_pLockedImage->SetVisible( false );
-	m_pLockedImage->LoadFromFile( "locked.png", SharedUtility::GetAbsolutePath( "data//gui//images" ) );
+	m_pLockedImage->LoadFromFile( "images/locked.png" );
 	m_pLockedImage->SetSize ( Vector2 ( 12, 12 ) );
 
 	// Create the tabs

@@ -40,13 +40,13 @@ void CLoadingScreen::Start( void )
 	m_pLogotypes = CCore::Instance()->GetGUI()->GetCEGUI()->CreateStaticImage();
 
 	// Logo Mafia2-Online
-	m_pLogo->LoadFromFile("loadingscreen.png", SharedUtility::GetAbsolutePath("data\\gui\\images"));
+	m_pLogo->LoadFromFile("images/loadingscreen.png");
 	m_pLogo->SetPosition(Vector2((fXhalf - 512), (fYhalf - 256)));
 	m_pLogo->SetSize(Vector2(1024, 512));
 	m_pLogo->SetAlwaysOnTop(true);
 
 	// Other logo
-	m_pLogotypes->LoadFromFile("loadingscreen_logos.png", SharedUtility::GetAbsolutePath("data\\gui\\images"));
+	m_pLogotypes->LoadFromFile("images/loadingscreen_logos.png");
 	m_pLogotypes->SetPosition(Vector2((fX - 493 - fPadding[0]), (fY - 85 - fPadding[1])));
 	m_pLogotypes->SetSize(Vector2(493, 85));
 	m_pLogotypes->SetAlwaysOnTop(true);

@@ -375,7 +375,9 @@ SQInteger CGUINatives::CreateElement( SQVM * pVM )
 		if ( type == GUI_IMAGE )
 		{
 			// Load the image file
-			((CGUIStaticImage_Impl *)pElement.get())->LoadFromFile ( szCaption, SharedUtility::GetFileNameForScriptFile ( "", "", CCore::Instance()->GetHost (), CCore::Instance()->GetPort () ) );
+			String path;
+			path.Format("%s\\%s", SharedUtility::GetFileNameForScriptFile ( "", "", CCore::Instance()->GetHost (), CCore::Instance()->GetPort () ).Get(), szCaption );
+			((CGUIStaticImage_Impl *)pElement.get())->LoadFromFile ( path );
 		}
 
 		// Get the script pointer from the script vm

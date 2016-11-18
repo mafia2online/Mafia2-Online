@@ -29,7 +29,7 @@ public:
 						CGUIStaticImage_Impl		( class CGUI_Impl * pGUI, CGUIElement_Impl * pParent = NULL );
 						~CGUIStaticImage_Impl		( void );
 
-	bool				LoadFromFile				( String strFile, String strDirectory );
+	bool				LoadFromFile				( String strFile );
 	bool				LoadFromTexture				( CGUITexture_Impl * pTexture );
 	void				Clear						( void );
 

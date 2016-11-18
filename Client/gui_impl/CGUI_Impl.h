@@ -45,6 +45,15 @@ class CGUIScrollBar_Impl;
 class CGUIScrollPane_Impl;
 class CGUIMessageBox_Impl;
 
+class M2OCEGUIResProvider : public CEGUI::ResourceProvider
+{
+public:
+	M2OCEGUIResProvider() {}
+	~M2OCEGUIResProvider(void) {}
+
+    void loadRawDataContainer(const CEGUI::String& filename, CEGUI::RawDataContainer& output, const CEGUI::String& resourceGroup);
+};
+
 class CGUI_Impl
 {
 
@@ -52,6 +61,7 @@ protected:
 
 	IDirect3DDevice9										* m_pDevice;
 	std::unique_ptr<CEGUI::DirectX9Renderer>				m_pRenderer;
+	std::unique_ptr<M2OCEGUIResProvider>					m_resourceProvider;
 	std::unique_ptr<CEGUI::System>							m_pSystem;
 	CEGUI::FontManager										* m_pFontManager;
 	CEGUI::ImagesetManager									* m_pImageSetManager;
