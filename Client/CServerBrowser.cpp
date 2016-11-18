@@ -326,7 +326,9 @@ void CServerBrowser::SetupUI( float fX, float fY, float fWidth, float fHeight )
 	m_pQuickConnectAddress->SetClickHandler ( GUI_CALLBACK ( &CServerBrowser::Event_QuickConnectInputFocus, this ) );
 
 	// Create the quick connect port input
-	m_pQuickConnectPort = m_pGUI->CreateEdit ( String ( "%d", bRestoreInformation ? CVAR_GET_INTEGER ( "last-server-port" ) : DEFAULT_PORT ), m_pQuickConnectWindow.get() );
+	String port;
+	port.Format ( "%d", bRestoreInformation ? CVAR_GET_INTEGER ( "last-server-port" ) : DEFAULT_PORT );
+	m_pQuickConnectPort = m_pGUI->CreateEdit ( port, m_pQuickConnectWindow.get() );
 	m_pQuickConnectPort->SetSize ( Vector2( 55, 24 ) );
 	m_pQuickConnectPort->SetPosition ( Vector2 ( 183, 50 ) );
 	m_pQuickConnectPort->SetClickHandler ( GUI_CALLBACK ( &CServerBrowser::Event_QuickConnectInputFocus, this ) );
@@ -405,11 +407,17 @@ void CServerBrowser::AddServer( ServerBrowserType type, CServerListItem * pServe
 
 	// Set the server information
 	iRow = m_pServerGridList[ type ]->SetItemText( iRow, 2, pServer->strHostname );
-	iRow = m_pServerGridList[ type ]->SetItemText( iRow, 3, String( "%d/%d", pServer->usPlayers, pServer->usMaxPlayers ), true );
+	String players;
+	players.Format( "%d/%d", pServer->usPlayers, pServer->usMaxPlayers );
+	iRow = m_pServerGridList[ type ]->SetItemText( iRow, 3, players, true );
 	iRow = m_pServerGridList[ type ]->SetItemText( iRow, 4, pServer->strGamemode );
-	iRow = m_pServerGridList[ type ]->SetItemText( iRow, 5, String( "%d", pServer->usPing ), true );
+	String ping;
+	ping.Format( "%d", pServer->usPing );
+	iRow = m_pServerGridList[ type ]->SetItemText( iRow, 5, ping, true );
 	iRow = m_pServerGridList[ type ]->SetItemText( iRow, 6, pServer->strHost );
-	iRow = m_pServerGridList[ type ]->SetItemText( iRow, 7, String( "%d", pServer->usGamePort ), true );
+	String port;
+	port.Format( "%d", pServer->usGamePort );
+	iRow = m_pServerGridList[ type ]->SetItemText( iRow, 7, port, true );
 
 	// Increase totals
 	m_iTotalServers++;
@@ -417,7 +425,9 @@ void CServerBrowser::AddServer( ServerBrowserType type, CServerListItem * pServe
 	m_iAvailableSlots += (pServer->usMaxPlayers - pServer->usPlayers);
 
 	// Update status label
-	m_pStatusLabel->SetText ( String ( "%d players playing on %d servers. (%d slots available)", m_iTotalPlayers, m_iTotalServers, m_iAvailableSlots ) );
+	String status;
+	status.Format ( "%d players playing on %d servers. (%d slots available)", m_iTotalPlayers, m_iTotalServers, m_iAvailableSlots );
+	m_pStatusLabel->SetText ( status );
 }
 
 void CServerBrowser::ConnectToSelectedServer( void )
@@ -682,7 +692,9 @@ void CServerBrowser::OnClick( CGUIElement_Impl * pElement )
 					// Add a new row in the players grid
 					int iRow =  m_pPlayersGridList->AddRow();
 					iRow = m_pPlayersGridList->SetItemText ( iRow, 1, (*iter2).first.c_str () );
-					iRow = m_pPlayersGridList->SetItemText ( iRow, 2, String ( "%u", (*iter2).second ), true );
+					String ping;
+					ping.Format ( "%u", (*iter2).second );
+					iRow = m_pPlayersGridList->SetItemText ( iRow, 2, ping, true );
 				}
 			}
 		}
@@ -786,7 +798,9 @@ void CServerBrowser::RefreshFromFile( const char * szFile )
 				continue;
 
 			// Append the node value to our main string
-			strBuffer += String( "%s|", pCurrentNode->GetValue() );
+			String nodeVal;
+			nodeVal.Format ( "%s|", pCurrentNode->GetValue() );
+			strBuffer += nodeVal;
 		}
 
 		// Process the buffer with the masterlist handler

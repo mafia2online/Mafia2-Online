@@ -202,14 +202,15 @@ bool CHttpClient::Get(String strPath)
     m_strData.clear();
 
     // Prepare the GET command
-	String strGet( "GET %s HTTP/1.0\r\n"
-						"Host: %s\r\n"
-						"User-Agent: %s\r\n"
-						"Referer: %s\r\n"
-						"Connection: close\r\n"
-						"\r\n",
-						strPath.Get(), m_strHost.Get(), m_strUserAgent.Get(),
-						m_strReferer.Get() );
+	String strGet;
+	strGet.Format ( "GET %s HTTP/1.0\r\n"
+					"Host: %s\r\n"
+					"User-Agent: %s\r\n"
+					"Referer: %s\r\n"
+					"Connection: close\r\n"
+					"\r\n",
+					strPath.Get(), m_strHost.Get(), m_strUserAgent.Get(),
+					m_strReferer.Get() );
 
     // Send the GET command
 	if( !Write( strGet.Get(), strGet.GetLength() ) )
@@ -234,18 +235,19 @@ bool CHttpClient::Post(bool bHasResponse, String strPath, String strData, String
     m_strData.clear();
 
     // Prepare the POST command
-	String strPost(	"POST %s HTTP/1.0\r\n" \
-						"Host: %s\r\n" \
-                        "User-Agent: %s\r\n\r\n" \
-                        "Referer: %s\r\n" \
-                        "Content-Type: %s\r\n" \
-                        "Content-Length: %d\r\n" \
-                        "Connection: close\r\n" \
-                        "\r\n" \
-                        "%s",
-							strPath.Get(), m_strHost.Get(), m_strUserAgent.Get(),
-							m_strReferer.Get(), strContentType.Get(), strData.GetLength(),
-							strData.Get() );
+	String strPost;
+	strPost.Format ("POST %s HTTP/1.0\r\n" \
+					"Host: %s\r\n" \
+                    "User-Agent: %s\r\n\r\n" \
+                    "Referer: %s\r\n" \
+                    "Content-Type: %s\r\n" \
+                    "Content-Length: %d\r\n" \
+                    "Connection: close\r\n" \
+                    "\r\n" \
+                    "%s",
+					strPath.Get(), m_strHost.Get(), m_strUserAgent.Get(),
+					m_strReferer.Get(), strContentType.Get(), strData.GetLength(),
+					strData.Get() );
 
 	// Send the POST command
     if( !Write( strPost.Get(), strPost.GetLength() ) )

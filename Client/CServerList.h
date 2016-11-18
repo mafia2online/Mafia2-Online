@@ -23,7 +23,7 @@ class CServerListItem
 {
 
 public:
-	
+
 	ServerBrowserType			m_type;
 
 	// Server info
@@ -59,7 +59,7 @@ public:
 		bSkipped = false;
 		bScanned = false;
 		iRow = 0;
-		strHostname = String( "%s:%d", strHost.Get(), usGamePort );
+		strHostname.Format( "%s:%d", strHost.Get(), usGamePort );
 		ulQueryStart = 0;
 
 		// Setup the socket
@@ -77,7 +77,7 @@ public:
 	void				CloseSocket ( void )
 	{
 		// Is the socket open?
-		if ( m_iSocket != INVALID_SOCKET ) 
+		if ( m_iSocket != INVALID_SOCKET )
 		{
 			// Close the socket
 			closesocket ( m_iSocket );

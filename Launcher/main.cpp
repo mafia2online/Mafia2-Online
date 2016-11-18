@@ -69,8 +69,10 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 		}
 	}
 
-	String strLaunchPath( "%s\\pc", szInstallDirectory );
-	String strApplicationPath( "%s\\Mafia2.exe", strLaunchPath.Get() );
+	String strLaunchPath;
+	strLaunchPath.Format( "%s\\pc", szInstallDirectory );
+	String strApplicationPath;
+	strApplicationPath.Format( "%s\\Mafia2.exe", strLaunchPath.Get() );
 
 	if( !SharedUtility::Exists( strApplicationPath.Get() ) )
 	{
@@ -81,8 +83,9 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	if( bFoundCustomDirectory )
 		SharedUtility::WriteRegistryString( HKEY_LOCAL_MACHINE, "Software\\Wow6432Node\\Mafia2-Online", "GameDir", szInstallDirectory, sizeof(szInstallDirectory) );
 
-	String strModulePath( "%s%s", SharedUtility::GetAppPath(), CORE_MODULE );
-	CLogFile::Printf("M2Online : %s", strModulePath.Get());
+	String strModulePath;
+	strModulePath.Format( "%s%s", SharedUtility::GetAppPath(), CORE_MODULE );
+	CLogFile::Printf("M2Online: %s", strModulePath.Get());
 
 	if( !SharedUtility::Exists( strModulePath.Get() ) )
 	{
@@ -90,8 +93,9 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 		return 1;
 	}
 
-	String strBassPath("%s\\%s", SharedUtility::GetAppPath(), BASS_MODULE);
-	CLogFile::Printf("Bass : %s", strBassPath.Get());
+	String strBassPath;
+	strBassPath.Format("%s%s", SharedUtility::GetAppPath(), BASS_MODULE);
+	CLogFile::Printf("Bass: %s", strBassPath.Get());
 
 	if (!SharedUtility::Exists(strBassPath.Get()))
 	{
@@ -126,8 +130,9 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 
 	if ( moduleInjectResult != SharedUtility::INJECT_LIBRARY_RESULT_OK || bassInjectResult != SharedUtility::INJECT_LIBRARY_RESULT_OK )
 	{
-		String strError( "Failed to inject modules into game process.\nCore: %s (%i)\nBass:  %s (%i)", SharedUtility::InjectLibraryResultToString(moduleInjectResult), moduleInjectResult, SharedUtility::InjectLibraryResultToString(bassInjectResult), bassInjectResult);
-		ShowMessageBox( strError.Get() );
+		String strError;
+		strError.Format( "Failed to inject modules into game process.\nCore: %s (%i)\nBass:  %s (%i)", SharedUtility::InjectLibraryResultToString(moduleInjectResult), moduleInjectResult, SharedUtility::InjectLibraryResultToString(bassInjectResult), bassInjectResult);
+		ShowMessageBox( strError );
 
 		TerminateProcess( piProcessInfo.hProcess, 0 );
 		return 1;

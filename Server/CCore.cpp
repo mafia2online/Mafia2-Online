@@ -100,15 +100,19 @@ bool CCore::Initialise( int argc, char * argv[] )
 	const char * szDateStr = SharedUtility::DateToString();
 
 	// Create the folder if needed for the current date
-	if( !SharedUtility::Exists( String( "logs/%s", szDateStr ).Get() ) )
-		SharedUtility::CreateDirectory( String( "logs/%s", szDateStr ).Get() );
+	String logFolder;
+	logFolder.Format( "logs/%s", szDateStr );
+
+	if( !SharedUtility::Exists( logFolder ) )
+		SharedUtility::CreateDirectory( logFolder );
 
 	// Get the current time
 	time_t t = time( NULL );
 	const struct tm * tm = localtime( &t );
 
 	// Get the log file path and name
-	String strLogFile( "logs/%s/m2online-server-%d-%d-%d.log", szDateStr, tm->tm_mday, (tm->tm_mon + 1), (1900 + tm->tm_year) );
+	String strLogFile;
+	strLogFile.Format( "logs/%s/m2online-server-%d-%d-%d.log", szDateStr, tm->tm_mday, (tm->tm_mon + 1), (1900 + tm->tm_year) );
 
 	// Open the log file
 	CLogFile::Open( (char *)strLogFile.Get(), true );

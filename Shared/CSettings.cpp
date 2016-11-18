@@ -197,22 +197,30 @@ void CSettings::Set( const char * szName, const char * szValue )
 
 void CSettings::Set( const char * szName, bool bValue )
 {
-	Set( szName, String( "%d", (int)bValue ).Get() );
+	String strValue;
+	strValue.Format("%d", (int)bValue);
+	Set( szName, strValue );
 }
 
 void CSettings::Set( const char * szName, int iValue )
 {
-	Set( szName, String( "%i", iValue ).Get() );
+	String strValue;
+	strValue.Format( "%i", iValue );
+	Set( szName, strValue );
 }
 
 void CSettings::Set( const char * szName, unsigned int uiValue )
 {
-	Set( szName, String( "%u", uiValue ).Get() );
+	String strValue;
+	strValue.Format( "%u", uiValue );
+	Set( szName, strValue );
 }
 
 void CSettings::Set( const char * szName, float fValue )
 {
-	Set( szName, String( "%f", fValue ).Get() );
+	String strValue;
+	strValue.Format( "%f", fValue );
+	Set( szName, strValue );
 }
 
 void CSettings::Set( const char * szNode, const char * szSubNode, std::list< const char* > list )

@@ -69,7 +69,7 @@ CGUIStaticImage_Impl::~CGUIStaticImage_Impl( void )
 bool CGUIStaticImage_Impl::LoadFromFile( String strFile, String strDirectory )
 {
 	// Modifiy the file name
-	strFile = String( "%s\\%s", strDirectory.Get(), strFile.Get() );
+	strFile.Format( "%s\\%s", strDirectory.Get(), strFile.Get() );
 
 	// Is the texture not already created?
 	if( !m_pTexture )

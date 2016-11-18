@@ -202,7 +202,9 @@ void CNetworkVehicle::HandleRespawn( void )
 		m_pVehicle->Repair();
 
 		m_pVehicle->SetColour( m_primarySpawnColour, m_secondarySpawnColour );
-		m_pVehicle->SetPlateText(String("EB%d", m_vehicleId).Get());
+		String plate;
+		plate.Format("EB%d", m_vehicleId);
+		m_pVehicle->SetPlateText( plate );
 		m_pVehicle->SetSpeed( 0.0f );
 		m_pVehicle->SetHornOn( false );
 		m_pVehicle->SetSirenOn( false );

@@ -43,7 +43,8 @@ bool CResourceManager::StartResource( const char * szResource )
 	}
 
 	// Get the resource path
-	String strPath( "resources/%s", szResource );
+	String strPath;
+	strPath.Format( "resources/%s", szResource );
 
 	// Does the path not exist?
 	if( !SharedUtility::Exists( strPath.Get() ) )
@@ -53,7 +54,8 @@ bool CResourceManager::StartResource( const char * szResource )
 	}
 
 	// Get the meta file
-	String strMeta( "%s/meta.xml", strPath.Get() );
+	String strMeta;
+	strMeta.Format( "%s/meta.xml", strPath.Get() );
 
 	// Does the file not exist?
 	if( !SharedUtility::Exists( strMeta.Get() ) )
@@ -136,7 +138,9 @@ bool CResourceManager::StartResource( const char * szResource )
 				else if( !strcmp( szScriptType, "server" ) )
 				{
 					// Load the script
-					CSquirrel * pScript = CCore::Instance()->GetScriptingManager()->Load( szNodeData, String( "%s/%s", strPath.Get(), szNodeData ) );
+					String path;
+					path.Format( "%s/%s", strPath.Get(), szNodeData );
+					CSquirrel * pScript = CCore::Instance()->GetScriptingManager()->Load( szNodeData, path );
 
 					// Did the script fail to load?
 					if( !pScript )

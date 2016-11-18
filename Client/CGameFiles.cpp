@@ -52,7 +52,8 @@ bool CGameFiles::CheckFiles( void )
 	CCore *pCore = CCore::Instance();
 
 	// Generate the multilpayer path
-	String strMultiplayerPath( "%s\\pc\\sds\\mp", pCore->GetGameDirectory().Get() );
+	String strMultiplayerPath;
+	strMultiplayerPath.Format( "%s\\pc\\sds\\mp", pCore->GetGameDirectory().Get() );
 
 	// Does the multiplayer folder not exist?
 	if( !SharedUtility::Exists( strMultiplayerPath.Get() ) )
@@ -76,7 +77,9 @@ bool CGameFiles::CheckFiles( void )
 			CLogFile::Printf( "Can't find the file '%s\\%s'!", (gameFiles[i].type == TYPE_GAME ? pCore->GetGameDirectory().Get() : pCore->GetModDirectory().Get()), gameFiles[i].szFile );
 
 			// Set the last error
-			SetLastError( String( "Can't find the file '%s'.", gameFiles[i].szFile ) );
+			String error;
+			error.Format( "Can't find the file '%s'.", gameFiles[i].szFile );
+			SetLastError( error );
 
 			return false;
 		}
@@ -93,7 +96,9 @@ bool CGameFiles::CheckFiles( void )
 		if( pFileChecksum.GetChecksum() != gameFiles[i].uiChecksum )
 		{
 			// Set the last error
-			SetLastError( String( "The file '%s' has been modified.", gameFiles[i].szFile ) );
+			String error;
+			error.Format( "The file '%s' has been modified.", gameFiles[i].szFile );
+			SetLastError( error );
 
 			CLogFile::Printf( "File Error: '%s', expected checksum 0x%p, got 0x%p", gameFiles[i].szFile, gameFiles[i].uiChecksum, pFileChecksum.GetChecksum() );
 
@@ -104,13 +109,17 @@ bool CGameFiles::CheckFiles( void )
 		if( gameFiles[i].bCompressed )
 		{
 			// Decompress the file
-			int iResult = CZlib::Decompress( gameFiles[i].szFile, String( "%s\\pc\\%s", pCore->GetGameDirectory().Get(), gameFiles[i].szOutput ) );
+			String path;
+			path.Format( "%s\\pc\\%s", pCore->GetGameDirectory().Get(), gameFiles[i].szOutput );
+			int iResult = CZlib::Decompress( gameFiles[i].szFile, path );
 
 			// Did the file fail to decompress?
 			if( iResult != Z_OK )
 			{
 				// Set the last error
-				SetLastError( String( "Failed to decompress the file '%s'. (Error: %d)", gameFiles[i].szFile, iResult ) );
+				String error;
+				error.Format( "Failed to decompress the file '%s'. (Error: %d)", gameFiles[i].szFile, iResult );
+				SetLastError( error );
 
 				return false;
 			}
@@ -123,7 +132,6 @@ bool CGameFiles::CheckFiles( void )
 			}
 		}
 	}
-
 	return true;
 }
 

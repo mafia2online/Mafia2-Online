@@ -219,7 +219,8 @@ void CScriptingManager::LoadAll( std::list< String > scripts )
 	for( std::list< String >::iterator iter = scripts.begin(); iter != scripts.end(); iter++ )
 	{
 		// Get the script path
-		String strPath( "scripts/%s", (*iter).Get() );
+		String strPath;
+		strPath.Format ( "scripts/%s", (*iter).Get() );
 
 		// Try and load the script
 		if( Load( (*iter).Get(), strPath ) )

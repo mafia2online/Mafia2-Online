@@ -223,10 +223,12 @@ bool CCore::Initialise( void )
 	CLogFile::Open( SharedUtility::GetAbsolutePath( "logs\\core.log" ).Get() );
 
 	CFileChecksum pChecksum;
-	const String strExePath("%s\\pc\\Mafia2.exe", m_strGameDirectory.Get());
+	String strExePath;
+	strExePath.Format("%s\\pc\\Mafia2.exe", m_strGameDirectory.Get());
 	if (!pChecksum.Calculate(strExePath))
 	{
-		String strErrorMessage("Failed to calculate checksum of the Mafia2 executable.\nPath: %s", strExePath.Get());
+		String strErrorMessage;
+		strErrorMessage.Format("Failed to calculate checksum of the Mafia2 executable.\nPath: %s", strExePath.Get());
 		MessageBox(NULL, strErrorMessage, "Mafia2-Online - Fatal error", MB_ICONERROR);
 		return false;
 	}
@@ -243,7 +245,9 @@ bool CCore::Initialise( void )
 
 	if( !CGameFiles::CheckFiles() )
 	{
-		MessageBox( NULL, String( "%s\n\nPlease reinstall Mafia 2 or Mafia2-Online", CGameFiles::GetLastError().Get() ).Get(), "Mafia2-ONline - Error", MB_OK|MB_ICONERROR );
+		String errorMessage;
+		errorMessage.Format( "%s\n\nPlease reinstall Mafia 2 or Mafia2-Online", CGameFiles::GetLastError().Get() );
+		MessageBox( NULL, errorMessage, "Mafia2-Online - Error", MB_OK|MB_ICONERROR );
 		return false;
 	}
 
