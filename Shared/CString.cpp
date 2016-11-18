@@ -34,20 +34,12 @@ String::String()
 	Initialise();
 }
 
-String::String(const char * szFormat, ...)
+String::String(const char *const string)
 {
 	Initialise();
-
-	if( szFormat )
-	{
-		char szString[BUFFER_SIZE];
-		va_list vaArgs;
-		va_start(vaArgs, szFormat);
-		vsnprintf(szString, sizeof(szString), szFormat, vaArgs);
-		va_end(vaArgs);
-		Set(szString);
-	}
+	Set(string);
 }
+
 
 String::~String()
 {
