@@ -35,19 +35,9 @@ CM2Camera::CM2Camera( void )
 CM2Camera::CM2Camera( M2Camera * pCamera )
 	: CM2Camera()
 {
-	// Set the camera
 	SetCamera( pCamera );
 
-	// Get the game camera
-	M2GameCamera * pGameCamera = NULL;
-	_asm
-	{
-		push		1
-		mov			ecx, pCamera
-		call		COffsets::FUNC_CCamera__GetGameCameraFromIndex
-		mov			pGameCamera, eax
-	}
-
+	M2GameCamera * pGameCamera = pCamera->GetCamera(1);
 	SetGameCamera( pGameCamera );
 
 	// Build the projection matrix
@@ -64,8 +54,6 @@ void CM2Camera::LockControl( bool bLock )
 	//if( bLock )
 	//	m_fLastSensitivityMultiplier = pCore->GetGame()->GetMouseSensitivityMultiplier();
 
-	// TODO: Move to COffsets
-	// Set the camera state
 	if ( bLock )
 		*(BYTE *)COffsets::VAR_CCamera__State = 2;
 	else
@@ -78,9 +66,8 @@ void CM2Camera::LockControl( bool bLock )
 	//	pCore->GetGame()->SetMouseSensitivityMultiplier( m_fLastSensitivityMultiplier );
 }
 
-bool CM2Camera::IsLocked( void )
+bool CM2Camera::IsLocked( void ) const
 {
-	// TODO: Move to COffsets and make the method const.
 	return (*(int *)COffsets::VAR_CCamera__State != 0);
 }
 
@@ -254,10 +241,9 @@ void CM2Camera::GetLookAt( CVector3 * vecLookAt )
 	}
 }
 
-void CM2Camera::SimpleShake(float speed, float strength, float duration)
+M2GameCamera _declspec(naked) * M2Camera::GetCamera(int index)
 {
-	// TODO: Reverse.
-	CLua::Executef("game.cameramanager:GetPlayerMainCamera(0):SimpleShake(%f,%f,%f)", speed, strength, duration);
+	_asm jmp COffsets::FUNC_CCamera__GetGameCameraFromIndex
 }
 
 DWORD CCamera_Look = 0x0B37BF0;
@@ -278,6 +264,12 @@ void _declspec(naked) M2CameraData::ModeChange(int a1, int a2, int a3, int a4, i
 	_asm jmp CCamera_ModeChange;
 }
 
+DWORD CCamera_BroadcastCommand = 0x107A010;
+void _declspec(naked) M2CameraData::BroadcastCommand(int command, void *data, void *unknow)
+{
+	_asm jmp CCamera_BroadcastCommand;
+}
+
 void CM2Camera::LockLookAt(const char *unk1, const char *unk2, double unk3)
 {
 	if (!m_pGameCamera)
@@ -292,4 +284,22 @@ void CM2Camera::SetRotation(CVector3 vec)
 		return;
 
 	m_pGameCamera->RotationTowards(vec);
+}
+
+void CM2Camera::SimpleShake(float speed, float strength, float duration)
+{
+	//WIP
+	/*if (!m_pGameCamera)
+		return;
+
+	if (!m_pGameCamera->pCameraData)
+		return;
+
+	ShakeCommandData data;
+	data.speed = speed;
+	data.strength = strength;
+	data.duration = duration;
+
+	m_pGameCamera->pCameraData->BroadcastCommand(1399349587, &data, 0);*/
+	CLua::Executef("game.cameramanager:GetPlayerMainCamera(0):SimpleShake(%f,%f,%f)", speed, strength, duration);
 }
