@@ -259,7 +259,7 @@ void _declspec(naked) M2GameCamera::RotationTowards(CVector3 vec)
 }
 
 DWORD CCamera_ModeChange = 0x107BB70;
-void _declspec(naked) M2CameraData::ModeChange(int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8, int a9, int a10)
+void _declspec(naked) M2CameraData::ModeChange(int a2, void *a3, int a4, int modeID, int a6, int a7, int a8, int a9, int a10)
 {
 	_asm jmp CCamera_ModeChange;
 }
