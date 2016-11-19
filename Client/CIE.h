@@ -92,6 +92,8 @@ class M2WrapperList
 {
 public:
 	static M2WrapperList * GetInstance(void);
+
+	M2Entity * GetEntityByName(const char *name);
 };
 
 class M2Game
@@ -143,21 +145,17 @@ public:
 		return pReturn;
 	}
 
+	/**
+	* Get an entity by it's name
+	*
+	* @param name HashName of the entity we want to fetch
+	* @return @c entity if succeed to fetch, @c NULL if fail. 
+	* @other Can fail because the entity is not yet loaded (async M2 game loading)
+	*
+	*/
 	M2Entity * GetEntityByname(const char *name)
 	{
-		M2Entity * pReturn = nullptr;
-		M2WrapperList *wrap = M2WrapperList::GetInstance();
-		DWORD dwFunc = 0x0D8E3B0;
-
-		_asm
-		{
-			push name;
-			mov ecx, wrap;
-			call dwFunc;
-			mov pReturn, eax;
-		}
-
-		return pReturn;
+		return (M2WrapperList::GetInstance()->GetEntityByName(name));
 	}
 };
 
