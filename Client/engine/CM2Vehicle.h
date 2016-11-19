@@ -164,7 +164,7 @@ public:
 	char m_szWheelTexture[11];					// 0010 - 001B
 };
 
-class M2Door // definitely not C_Door :-)
+class M2CarDoor
 {
 public:
 	unsigned vtable;
@@ -205,7 +205,7 @@ class M2Vehicle : public M2Entity
 public:
 												// 0000 - 0064
 	PAD(M2Vehicle, pad0, 0x8);					// 0064 - 006C
-	T_Array<M2Door*> m_Doors;					// 006C - 0074
+	T_Array<M2CarDoor*> m_Doors;					// 006C - 0074
 	PAD(M2Vehicle, pad0_1, 0x4);				// 0074 - 0078
 	int m_nSlotSDS;								// 0078 - 007C
 	PAD(M2Vehicle, pad1, 0xC);					// 007C - 0088

@@ -9,11 +9,14 @@
 
 #include "BaseInc.h"
 
-#include "CM2Door.h"
+#include "CM2BaseEntity.h"
+#include "CM2Entity.h"
 
 #include "COffsets.h"
 
 #include "CLogFile.h"
+
+#include "CM2Door.h"
 
 M2Model * CM2Door::GetModel(void)
 {
@@ -30,90 +33,126 @@ const bool CM2Door::IsLocked(void) const
 	return ((*(DWORD *)((DWORD)(this) + 0x2F4) == 0) == 0);
 }
 
-void CM2Door::Open( CVector3 * pvPosition )
+void _declspec(naked) M2Door::Open(CVector3 *position, bool sound, int unk)
 {
-	__asm
-	{
-		push 0
-		push 1
-		push pvPosition
-		mov ecx, this
-		call COffsets::FUNC_CDoor__Open
-	}
+	_asm jmp COffsets::FUNC_CDoor__Open;
+}
+
+void _declspec(naked) M2Door::Close()
+{
+	_asm jmp COffsets::FUNC_CDoor__Close;
+}
+
+void _declspec(naked) M2Door::Lock()
+{
+	_asm jmp COffsets::FUNC_CDoor__Lock;
+}
+
+void _declspec(naked) M2Door::Unlock()
+{
+	_asm jmp COffsets::FUNC_CDoor__Unlock;
+}
+
+void _declspec(naked) M2Door::EnableAction()
+{
+	_asm jmp COffsets::FUNC_CDoor__EnableAction;
+}
+
+void _declspec(naked) M2Door::DisableAction()
+{
+	_asm jmp COffsets::FUNC_CDoor__DisableAction;
+}
+
+void _declspec(naked) M2Door::Kick(const CVector3 *vec)
+{
+	_asm jmp COffsets::FUNC_CDoor__Kick;
+}
+
+CM2Door::CM2Door(M2Door *door) : CM2Entity(door)
+{
+	SetDoor(door);
+
+	if (!m_pDoor)
+		return;
+}
+
+CM2Door::~CM2Door()
+{
+}
+
+void CM2Door::Open(CVector3 * pvPosition, bool sound)
+{
+	if (!m_pDoor)
+		return;
+
+	m_pDoor->Open(pvPosition, sound, 0);
 }
 
 void CM2Door::Kick( CVector3 * pvPosition )
 {
-	__asm
-	{
-		push pvPosition
-		mov ecx, this
-		call COffsets::FUNC_CDoor__Kick
-	}
+	if (!m_pDoor)
+		return;
+
+	m_pDoor->Kick(pvPosition);
 }
 
-void CM2Door::Close( void )
+void CM2Door::Close(void)
 {
-	__asm
-	{
-		mov ecx, this
-		call COffsets::FUNC_CDoor__Close
-	}
+	if (!m_pDoor)
+		return;
+
+	m_pDoor->Close();
 }
 
 void CM2Door::Lock( void )
 {
-	__asm
-	{
-		mov ecx, this
-		call COffsets::FUNC_CDoor__Lock
-	}
+	if (!m_pDoor)
+		return;
+
+	m_pDoor->Lock();
 }
 
 void CM2Door::Unlock( void )
 {
-	__asm
-	{
-		mov ecx, this
-		call COffsets::FUNC_CDoor__Unlock
-	}
+	if (!m_pDoor)
+		return;
+
+	m_pDoor->Unlock();
 }
 
 void CM2Door::EnableAction( void )
 {
-	__asm
-	{
-		mov ecx, this
-		call COffsets::FUNC_CDoor__EnableAction
-	}
+	if (!m_pDoor)
+		return;
+
+	m_pDoor->EnableAction();
 }
 
 void CM2Door::DisableAction( void )
 {
-	__asm
-	{
-		mov ecx, this
-		call COffsets::FUNC_CDoor__DisableAction
-	}
+	if (!m_pDoor)
+		return;
+
+	m_pDoor->DisableAction();
 }
 
 void CM2Door::RealLock( void )
 {
-	if ( !IsClosed( ) )
-		this->Close( );
+	if (!IsClosed())
+		this->Close();
 
-	if ( !IsLocked( ) )
-		this->Lock( );
+	if (!IsLocked())
+		this->Lock();
 
-	DisableAction( );
+	DisableAction();
 }
 
 void CM2Door::RealUnlock( void )
 {
-	if ( IsLocked( ) )
-		this->Unlock( );
+	if (IsLocked())
+		this->Unlock();
 
-	EnableAction( );
+	EnableAction();
 }
 
 __int64 CM2Door::GetHash( void )

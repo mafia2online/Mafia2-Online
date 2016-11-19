@@ -13,12 +13,38 @@
 
 class M2Model;
 
-class CM2Door
+class M2Door : public M2Entity
 {
 public:
-	void		Open			(CVector3 * pvPosition);
-	void		Kick			(CVector3 * pvPosition);
+	void Open(CVector3 *position, bool sound, int unk);
+	void Close();
+
+	void Lock();
+	void Unlock();
+
+	void EnableAction();
+	void DisableAction();
+	
+	void Kick(const CVector3 *);
+};
+
+class CM2Door : public CM2Entity
+{
+
+private:
+	M2Door		* m_pDoor;
+
+public:
+	CM2Door(M2Door *);
+	~CM2Door();
+
+	void		SetDoor			(M2Door *door){ m_pDoor = door; }
+	M2Door		*GetDoor		(void){ return m_pDoor; }
+
+	void		Open			(CVector3 * pvPosition, bool sound);
 	void		Close			(void);
+
+	void		Kick(CVector3 * pvPosition);
 
 	void		Lock			(void);
 	void		Unlock			(void);
