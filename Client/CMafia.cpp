@@ -171,7 +171,7 @@ void CMafia::Spawn( bool bFade )
 	CLua::Execute( "game.garage:CheatAbandonCars()" );
 	CLua::Execute( "game.garage:SetMaxGaragePlaces( 0 )" );
 
-	CLua::Execute( "game.shop:SetAllShopExplored()" );
+	//CLua::Execute( "game.shop:SetAllShopExplored()" );
 
 	pHud->Show( true );
 	CCore::Instance()->GetHud()->ShowLowHealthFX( false );
