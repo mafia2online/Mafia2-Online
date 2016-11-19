@@ -114,10 +114,16 @@ M2WrapperList * M2WrapperList::GetInstance(void)
 	return pWrapperList;
 }
 
-DWORD CWrappersList__GetEntityByname = 0x0D8E3B0;
+DWORD CWrappersList__GetEntityByName = 0x0D8E3B0;
 M2Entity _declspec(naked) * M2WrapperList::GetEntityByName(const char *name)
 {
-	_asm jmp CWrappersList__GetEntityByname;
+	_asm jmp CWrappersList__GetEntityByName;
+}
+
+DWORD CWrappersList__GetEntityByGUID = 0x0D8E260;
+M2Entity _declspec(naked) * M2WrapperList::GetEntityByGUID(unsigned int guid)
+{
+	_asm jmp CWrappersList__GetEntityByGUID;
 }
 
 namespace IE
@@ -431,8 +437,13 @@ namespace IE
 		return (M2Game::GetInstance()->GetEntityFromIndex(i));
 	}
 
-	M2Entity * GetEngineEntityByname(const char *name)
+	M2Entity * GetEngineEntityByName(const char *name)
 	{
 		return (M2Game::GetInstance()->GetEntityByname(name));
+	}
+
+	M2Entity * GetEngineEntityByGUID(unsigned int guid)
+	{
+		return (M2Game::GetInstance()->GetEntityByGUID(guid));
 	}
 };
