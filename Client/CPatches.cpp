@@ -375,7 +375,7 @@ void CPatches::Initialise( void )
 	// Disable loading screens
 	CPatcher::PatchAddress( 0x8B9140, 0xC300B0 ); // mov al, 0; retn // Steam: 0x08CA820
 
-	// Disable CityShops
+	// Disable CityShops script loading
 	CPatcher::PatchAddress(0x46EE90, 0x0004C2);
 
 	// Disable save games
