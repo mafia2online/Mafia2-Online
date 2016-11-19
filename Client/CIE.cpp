@@ -114,6 +114,12 @@ M2WrapperList * M2WrapperList::GetInstance(void)
 	return pWrapperList;
 }
 
+DWORD CWrappersList__GetEntityByname = 0x0D8E3B0;
+M2Entity _declspec(naked) * M2WrapperList::GetEntityByName(const char *name)
+{
+	_asm jmp CWrappersList__GetEntityByname;
+}
+
 namespace IE
 {
 	M2Game * pGame = NULL;
