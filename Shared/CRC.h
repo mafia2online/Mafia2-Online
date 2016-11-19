@@ -104,12 +104,12 @@ public:
 	{
 		return (m_uiChecksum == checksum.m_uiChecksum);
 	}
-	
+
 	bool operator != (CChecksum checksum)
 	{
 		return (m_uiChecksum != checksum.m_uiChecksum);
 	}
-	
+
 	void Reset( void )
 	{
 		m_uiChecksum = ~0;
@@ -163,14 +163,14 @@ public:
 
 		// Open the file
 		FILE * fFile = fopen( strFile.Get(), "rb" );
-		
+
 		// Did the file fail to open?
 		if( !fFile )
 			return false;
 
 		// Read the file data in 512 byte blocks
 		unsigned int uiBytesRead = 0;
-		unsigned char ucData[512];
+		unsigned char ucData[512] = { 0 };
 
 		while( (uiBytesRead = fread(ucData, 1, sizeof(ucData), fFile)) > 0 )
 		{
