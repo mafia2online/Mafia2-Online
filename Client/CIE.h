@@ -94,6 +94,7 @@ public:
 	static M2WrapperList * GetInstance(void);
 
 	M2Entity * GetEntityByName(const char *name);
+	M2Entity * GetEntityByGUID(unsigned int guid);
 };
 
 class M2Game
@@ -134,13 +135,15 @@ public:
 	{
 		M2Entity * pReturn = NULL;
 
-		// Get the function address
 		DWORD dwFunc = m_pVFTable->GetEntityFromIndex;
 
-		_asm push iIndex;
-		_asm mov ecx, this;
-		_asm call dwFunc;
-		_asm mov pReturn, eax;
+		__asm
+		{
+			push iIndex;
+			mov ecx, this;
+			call dwFunc;
+			mov pReturn, eax;
+		}
 
 		return pReturn;
 	}
@@ -156,6 +159,19 @@ public:
 	M2Entity * GetEntityByname(const char *name)
 	{
 		return (M2WrapperList::GetInstance()->GetEntityByName(name));
+	}
+
+	/**
+	* Get an entity by it's GUID
+	*
+	* @param guid GUIG of the entity we want to fetch
+	* @return @c entity if succeed to fetch, @c NULL if fail.
+	* @other Can fail because the entity is not yet loaded (async M2 game loading)
+	*
+	*/
+	M2Entity * GetEntityByGUID(unsigned int guid)
+	{
+		return (M2WrapperList::GetInstance()->GetEntityByGUID(guid));
 	}
 };
 
@@ -191,5 +207,6 @@ namespace IE
 	CM2Vehicle			* CreateWrapperVehicle(CM2ModelManager * pModelManager);
 
 	M2Entity			* GetEngineEntityByIndex(int i);
-	M2Entity			* GetEngineEntityByname(const char *name);
+	M2Entity			* GetEngineEntityByName(const char *name);
+	M2Entity			* GetEngineEntityByGUID(unsigned int guid);
 };
