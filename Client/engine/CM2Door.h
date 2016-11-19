@@ -16,6 +16,9 @@ class M2Model;
 class M2Door : public M2Entity
 {
 public:
+	PAD(M2Door, pad0, 0x320);		// 0000 - 0320
+	int status;						// 0320 - ??
+
 	void Open(CVector3 *position, bool sound, int unk);
 	void Close();
 
