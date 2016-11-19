@@ -166,7 +166,7 @@ Section "Install"
 	File ..\Binary\gamefiles\freeraid_m2mp.sds
 
 	SetOutPath "$GAMEDIR\edit"
-	File ..\Binary\gamefiles\sdsconfig_m2mp.bin
+	File ..\Binary\gamefiles\sdsmpconf.bin
 
 	SetOutPath "$GAMEDIR\edit\tables"
 	File ..\Binary\gamefiles\StreamM2MP.bin

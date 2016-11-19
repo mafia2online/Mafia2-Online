@@ -442,8 +442,8 @@ void CPatches::Initialise( void )
 	CPatcher::PatchAddress( COffsets::VAR_StreamBin, (unsigned char *)streamMapa, strlen(streamMapa) + 1);
 
 	// Patch the SDS config file
-	unsigned char sdsConf[20] = "/sdsconfig_m2mp.bin";
-	CPatcher::PatchAddress( 0x18F76A4, sdsConf, sizeof(sdsConf) );
+	const char sdsConf[] = "/sdsmpconf.bin";
+	CPatcher::PatchAddress( 0x18F76A4, (unsigned char *)sdsConf, strlen(sdsConf) + 1 );
 
 	DEBUG_LOG( "Patches installed." );
 }
