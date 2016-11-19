@@ -119,7 +119,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	memset( &piProcessInfo, 0, sizeof(piProcessInfo) );
 	siStartupInfo.cb = sizeof(siStartupInfo);
 
-	if( !CreateProcess( strApplicationPath.Get(), NULL, NULL, NULL, TRUE, CREATE_SUSPENDED, NULL, SharedUtility::GetAppPath(), &siStartupInfo, &piProcessInfo ) )
+	if( !CreateProcess( strApplicationPath.Get(), NULL, NULL, NULL, TRUE, CREATE_SUSPENDED, NULL, strLaunchPath, &siStartupInfo, &piProcessInfo ) )
 	{
 		ShowMessageBox( "Failed to start Mafia2.exe. Can't launch." );
 		return 1;
