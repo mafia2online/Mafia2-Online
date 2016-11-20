@@ -27,6 +27,9 @@ private:
 	static	SQInteger		ClearWhoWas( SQVM * pVM );
 	static	SQInteger		GetWhoWasCount( SQVM * pVM );
 	static	SQInteger		Shutdown( SQVM * pVM );
+	static	SQInteger		StartResource( SQVM * pVM );
+	static	SQInteger		StopResource( SQVM * pVM );
+	static	SQInteger		RestartResource( SQVM * pVM );
 
 public:
 
