@@ -42,8 +42,11 @@ void CPlayerNatives::Register( CScriptingManager * pScriptingManager )
 	pScriptingManager->RegisterFunction( "isPlayerConnected", IsPlayerConnected, 1, "i" );
 	pScriptingManager->RegisterFunction( "isPlayerOnScreen", IsOnScreen, 1, "i" );
 	pScriptingManager->RegisterFunction( "isPlayerSpawned", IsSpawned, 1, "i" );
+	pScriptingManager->RegisterFunction( "setPlayerPosition", SetPosition, 4, "ifff" );
 	pScriptingManager->RegisterFunction( "getPlayerPosition", GetPosition, 1, "i" );
+	pScriptingManager->RegisterFunction( "setPlayerRotation", SetRotation, 4, "ifff" );
 	pScriptingManager->RegisterFunction( "getPlayerRotation", GetRotation, 1, "i" );
+	pScriptingManager->RegisterFunction( "setPlayerHealth", SetHealth, 2, "if" );
 	pScriptingManager->RegisterFunction( "getPlayerHealth", GetHealth, 1, "i" );
 	pScriptingManager->RegisterFunction( "togglePlayerControls", ToggleControls, 1, "b" );
 	pScriptingManager->RegisterFunction( "isTogglePlayerControls", IsToggleControls, 0, NULL );
@@ -261,6 +264,38 @@ SQInteger CPlayerNatives::IsSpawned( SQVM * pVM )
 	return 1;
 }
 
+/**
+ * bool setPlayerPosition( int playerid, float x, float y, float z )
+ *
+ * If playerid is local player - sets current local player position to specified position
+ * If playerid is remote player - teleports playerped assossiated with remote player to specified position
+ * (local ped warping override, can be used to make local player setPlayerPosition faster and smother)
+ *
+ * @return true
+ */
+SQInteger CPlayerNatives::SetPosition( SQVM * pVM )
+{
+	SQInteger playerId;
+	sq_getinteger( pVM, -4, &playerId );
+
+	CVector3 vecPosition;
+	sq_getfloat( pVM, -1, &vecPosition.fZ );
+	sq_getfloat( pVM, -2, &vecPosition.fY );
+	sq_getfloat( pVM, -3, &vecPosition.fX );
+
+	// Is this the localplayer?
+	if( playerId == CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetId() )
+		CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->Teleport( vecPosition );
+	else
+	{
+		if( CCore::Instance()->GetPlayerManager()->IsActive(playerId) )
+			CCore::Instance()->GetPlayerManager()->Get(playerId)->Teleport( vecPosition );
+	}
+
+	sq_pushbool( pVM, true );
+	return 1;
+}
+
 // getPlayerPosition( playerid );
 SQInteger CPlayerNatives::GetPosition( SQVM * pVM )
 {
@@ -293,6 +328,30 @@ SQInteger CPlayerNatives::GetPosition( SQVM * pVM )
 	return 1;
 }
 
+// setPlayerRotation( playerId, x, y, z );
+SQInteger CPlayerNatives::SetRotation( SQVM * pVM )
+{
+	SQInteger playerId;
+	sq_getinteger( pVM, -4, &playerId );
+
+	CVector3 vecRot;
+	sq_getfloat( pVM, -1, &vecRot.fZ );
+	sq_getfloat( pVM, -2, &vecRot.fY );
+	sq_getfloat( pVM, -3, &vecRot.fX );
+
+	// Is this the localplayer?
+	if( playerId == CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetId() )
+		CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->SetRotation( vecRot );
+	else
+	{
+		if( CCore::Instance()->GetPlayerManager()->IsActive(playerId) )
+			CCore::Instance()->GetPlayerManager()->Get(playerId)->SetRotation( vecRot );
+	}
+
+	sq_pushbool( pVM, true );
+	return 1;
+}
+
 // getPlayerRotation( playerid );
 SQInteger CPlayerNatives::GetRotation( SQVM * pVM )
 {
@@ -322,6 +381,28 @@ SQInteger CPlayerNatives::GetRotation( SQVM * pVM )
 	sq_arrayappend( pVM, -2 );
 
 	sq_push( pVM, -1 );
+	return 1;
+}
+
+// setPlayerHealth( playerId, health );
+SQInteger CPlayerNatives::SetHealth( SQVM * pVM )
+{
+	SQInteger playerId;
+	sq_getinteger( pVM, -2, &playerId );
+
+	SQFloat fHealth;
+	sq_getfloat( pVM, -1, &fHealth );
+
+	// Is this the localplayer?
+	if( playerId == CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetId() )
+		CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->SetHealth(fHealth);
+	else
+	{
+		if (CCore::Instance()->GetPlayerManager()->IsActive(playerId) )
+		    CCore::Instance()->GetPlayerManager()->Get(playerId)->SetHealth(fHealth);
+	}
+
+	sq_pushbool( pVM, true );
 	return 1;
 }
 
