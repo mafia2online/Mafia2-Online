@@ -21,8 +21,11 @@ private:
 	static	SQInteger		IsPlayerConnected( SQVM * pVM );
 	static	SQInteger		IsOnScreen( SQVM * pVM );
 	static	SQInteger		IsSpawned( SQVM * pVM );
+	static	SQInteger		SetPosition( SQVM * pVM );
 	static	SQInteger		GetPosition( SQVM * pVM );
+	static	SQInteger		SetRotation( SQVM * pVM );
 	static	SQInteger		GetRotation( SQVM * pVM );
+	static	SQInteger		SetHealth( SQVM * pVM );
 	static	SQInteger		GetHealth( SQVM * pVM );
 	static	SQInteger		ToggleControls( SQVM * pVM );
 	static	SQInteger		IsToggleControls( SQVM * pVM );
