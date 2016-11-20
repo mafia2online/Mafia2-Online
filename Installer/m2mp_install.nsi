@@ -139,10 +139,11 @@ Section "Install"
 	File ..\Binary\guifiles\aurora-bold-condensed-bt.ttf
 
 	SetOutPath "$MODDIR\data\gui\images"
-	File ..\Binary\guifiles\1.jpg
-	File ..\Binary\guifiles\2.jpg
-	File ..\Binary\guifiles\3.jpg
-	File ..\Binary\guifiles\4.jpg
+	File ..\Binary\guifiles\1.png
+	File ..\Binary\guifiles\2.png
+	File ..\Binary\guifiles\3.png
+	File ..\Binary\guifiles\4.png
+	File ..\Binary\guifiles\5.png
 	File ..\Binary\guifiles\loadingscreen.png
 	File ..\Binary\guifiles\loadingscreen_logos.png
 	File ..\Binary\guifiles\logo.png
