@@ -46,8 +46,10 @@ private:
 	static	SQInteger		DrawText							( SQVM * pVM );
 	static	SQInteger		DrawRectangle						( SQVM * pVM );
 	static	SQInteger		DrawLine							( SQVM * pVM );
-	static	SQInteger		DrawImage							( SQVM * pVM );
 	static	SQInteger		GetTextDimensions					( SQVM * pVM );
+	static	SQInteger		LoadTexture							( SQVM * pVM );
+	static	SQInteger		DrawTexture							( SQVM * pVM );
+	static	SQInteger		DestroyTexture						( SQVM * pVM );
 	static	SQInteger		IsTransferBoxShowing				( SQVM * pVM );
 	static	SQInteger		ShowCursor							( SQVM * pVM );
 	static	SQInteger		IsCursorShowing						( SQVM * pVM );

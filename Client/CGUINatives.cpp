@@ -54,6 +54,9 @@ void CGUINatives::Register( CScriptingManager * pScriptingManager )
 	pScriptingManager->RegisterFunction( "dxDrawRectangle", DrawRectangle, 5, "ffffi" );
 	pScriptingManager->RegisterFunction( "dxDrawLine", DrawLine, 5, "ffffi" );
 	pScriptingManager->RegisterFunction( "dxGetTextDimensions", GetTextDimensions, 3, "sfs" );
+	pScriptingManager->RegisterFunction( "dxLoadTexture", LoadTexture, 1, "s" );
+	pScriptingManager->RegisterFunction( "dxDrawTexture", DrawTexture, -1, NULL );
+	pScriptingManager->RegisterFunction( "dxDestroyTexture", DestroyTexture, -1, NULL );
 	pScriptingManager->RegisterFunction( "isTransferBoxShowing", IsTransferBoxShowing, 0, NULL );
 	pScriptingManager->RegisterFunction( "showCursor", ShowCursor, 1, "b" );
 	pScriptingManager->RegisterFunction( "isCursorShowing", IsCursorShowing, 0, NULL );
@@ -204,6 +207,76 @@ SQInteger CGUINatives::DrawLine( SQVM * pVM )
 	CCore::Instance()->GetGraphics()->DrawLine( fX, fY, fEndX, fEndY, (DWORD)iColour );
 
 	sq_pushbool( pVM, true );
+	return 1;
+}
+
+// dxLoadTexture( string fileName );
+SQInteger CGUINatives::LoadTexture( SQVM * pVM )
+{
+	const SQChar * szTextureFilename;
+	IDirect3DTexture9 * pTexture;
+
+	sq_getstring( pVM, -1, &szTextureFilename);
+
+	pTexture = CCore::Instance()->GetGraphics()->LoadTexture(
+		SharedUtility::GetFileNameForScriptFile ( szTextureFilename, "", CCore::Instance()->GetHost (), CCore::Instance()->GetPort () )
+	);
+
+	if (pTexture) {
+		sq_pushpointer< IDirect3DTexture9* >( pVM, pTexture );
+		return 1;
+	}
+
+	sq_pushbool( pVM, false );
+	return 1;
+}
+
+// dxDrawTexture( instance texture, float x, float y, float scaleX, float scaleY, centerX, centerY, float rotation, int alpha);
+SQInteger CGUINatives::DrawTexture( SQVM * pVM )
+{
+	IDirect3DTexture9 * pTexture = sq_getpointer< IDirect3DTexture9 * >( pVM, -9 );
+
+	if (pTexture) {
+		float posX, posY, scaleX, scaleY, rotation, centerX, centerY;
+		SQInteger alpha;
+
+		sq_getfloat( pVM, -8, &posX );
+		sq_getfloat( pVM, -7, &posY );
+		sq_getfloat( pVM, -6, &scaleX );
+		sq_getfloat( pVM, -5, &scaleY );
+		sq_getfloat( pVM, -4, &centerX );
+		sq_getfloat( pVM, -3, &centerY );
+		sq_getfloat( pVM, -2, &rotation );
+		sq_getinteger( pVM, -1, &alpha );
+
+		// validate range for alpha 0 < alpha < 255
+		alpha = (alpha > 255) ? 255 : (alpha < 0) ? 0 : alpha;
+
+		CCore::Instance()->GetGraphics()->DrawTexture(pTexture, posX, posY, scaleX, scaleY, rotation, centerX, centerY, alpha);
+
+		sq_pushbool( pVM, true );
+		return 1;
+	}
+
+	sq_pushbool( pVM, false );
+	return 1;
+}
+
+// dxDrawLoadedTexture( instance texture );
+SQInteger CGUINatives::DestroyTexture( SQVM * pVM )
+{
+	IDirect3DTexture9 * pTexture = sq_getpointer< IDirect3DTexture9 * >( pVM, -9 );
+
+	if (pTexture) {
+
+		SAFE_RELEASE(pTexture);
+		SAFE_DELETE(pTexture);
+
+		sq_pushbool( pVM, true );
+		return 1;
+	}
+
+	sq_pushbool( pVM, false );
 	return 1;
 }
 
