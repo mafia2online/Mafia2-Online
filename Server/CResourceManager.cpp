@@ -247,3 +247,100 @@ void CResourceManager::GetRunningResources( void )
 		CLogFile::Printf( "= %s (%d scripts, %d files)", (*iter).strName.Get(), (*iter).iScripts, (*iter).iFiles );
 	}
 }
+
+/**
+ * Try to mark specified name of the resource
+ * as one that should be started by closest onPulse operation
+ *
+ * @param  szResource
+ * @return bool (false - if resource already running, true otherwise)
+ */
+bool CResourceManager::MarkForStarting(const char * szResource)
+{
+	if (IsResourceRunning(szResource)) {
+		return false;
+	}
+
+	SResourceMark mark;
+
+	mark.type = E_RES_MARK_START;
+	mark.name = String(szResource);
+
+	m_resourceMarks.push(mark);
+
+	return true;
+}
+
+/**
+ * Try to mark specified name of the resource
+ * as one that should be stopped by closest onPulse operation
+ *
+ * @param  szResource
+ * @return bool (false - if resource not running, true otherwise)
+ */
+bool CResourceManager::MarkForStopping(const char * szResource)
+{
+	if (!IsResourceRunning(szResource)) {
+		return false;
+	}
+
+	SResourceMark mark;
+
+	mark.type = E_RES_MARK_STOP;
+	mark.name = String(szResource);
+
+	m_resourceMarks.push(mark);
+
+	return true;
+}
+
+/**
+ * Try to mark specified name of the resource
+ * as one that should be restarted by closest onPulse operation
+ *
+ * @param  szResource
+ * @return bool (false - if resource not running, true otherwise)
+ */
+bool CResourceManager::MarkForRestarting(const char * szResource)
+{
+	if (!IsResourceRunning(szResource)) {
+		return false;
+	}
+
+	SResourceMark mark;
+
+	mark.type = E_RES_MARK_RESTART;
+	mark.name = String(szResource);
+
+	m_resourceMarks.push(mark);
+
+	return true;
+}
+
+void CResourceManager::Pulse()
+{
+	if (m_resourceMarks.empty()) {
+		return;
+	}
+
+	SResourceMark mark = m_resourceMarks.front();
+
+	switch (mark.type)
+	{
+		case E_RES_MARK_START:
+			StartResource(mark.name);
+			break;
+		case E_RES_MARK_STOP:
+			StopResource(mark.name);
+			break;
+		case E_RES_MARK_RESTART:
+			if (StopResource(mark.name)) {
+				StartResource(mark.name);
+			}
+			break;
+	}
+
+	m_resourceMarks.pop();
+
+	return;
+}

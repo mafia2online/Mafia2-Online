@@ -22,6 +22,9 @@ void CServerNatives::Register( CScriptingManager * pScriptingManager )
 	pScriptingManager->RegisterFunction( "clearWhoWas", ClearWhoWas, 0, NULL );
 	pScriptingManager->RegisterFunction( "getWhoWasCount", GetWhoWasCount, 0, NULL );
 	pScriptingManager->RegisterFunction( "shutdown", Shutdown, 0, NULL );
+	pScriptingManager->RegisterFunction( "startResource", StartResource, 1, "s" );
+	pScriptingManager->RegisterFunction( "stopResource", StopResource, 1, "s" );
+	pScriptingManager->RegisterFunction( "restartResource", RestartResource, 1, "s" );
 }
 
 SQInteger CServerNatives::SetGameModeText( SQVM * pVM )
@@ -195,3 +198,52 @@ SQInteger CServerNatives::Shutdown( SQVM * pVM )
 	CCore::Instance()->SetActive ( false );
 	return 1;
 }
+
+// bool startResource( string name )
+SQInteger CServerNatives::StartResource( SQVM * pVM )
+{
+	// Get the gamemode text
+	const SQChar * szResource;
+	sq_getstring( pVM, -1, &szResource );
+
+	if (CCore::Instance()->GetResourceManager()->MarkForStarting( szResource )) {
+		sq_pushbool( pVM, true );
+		return 1;
+	}
+
+	sq_pushbool( pVM, false );
+	return 1;
+}
+
+// bool stopResource( string name )
+SQInteger CServerNatives::StopResource( SQVM * pVM )
+{
+	// Get the gamemode text
+	const SQChar * szResource;
+	sq_getstring( pVM, -1, &szResource );
+
+	if (CCore::Instance()->GetResourceManager()->MarkForStopping( szResource )) {
+		sq_pushbool(pVM, true);
+		return 1;
+	}
+
+	sq_pushbool( pVM, false );
+	return 1;
+}
+
+// bool restartResource( string name )
+SQInteger CServerNatives::RestartResource( SQVM * pVM )
+{
+	// Get the gamemode text
+	const SQChar * szResource;
+	sq_getstring( pVM, -1, &szResource );
+
+	if (CCore::Instance()->GetResourceManager()->MarkForRestarting( szResource )) {
+		sq_pushbool(pVM, true);
+		return 1;
+	}
+
+	sq_pushbool( pVM, false );
+	return 1;
+}
+

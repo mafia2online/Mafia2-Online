@@ -258,5 +258,8 @@ void CCore::Pulse( void )
 		// Call the pulse event
 		if (m_pEvents)
 			m_pEvents->Call("onServerPulse");
+
+		if (m_pResourceManager)
+			m_pResourceManager->Pulse();
 	}
 }
