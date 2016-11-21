@@ -765,6 +765,22 @@ bool CNetworkVehicle::GetTaxiLightState(void)
 	return m_lastSyncData.m_bTaxiLight;
 }
 
+void CNetworkVehicle::SetHandbrake(bool bHandbrake)
+{
+	RakNet::BitStream pBitStream;
+
+	pBitStream.WriteCompressed(m_vehicleId);
+
+	bHandbrake ? pBitStream.Write1() : pBitStream.Write0();
+
+	CCore::Instance()->GetNetworkModule()->Call(RPC_SETVEHICLEHANDBRAKE, &pBitStream, HIGH_PRIORITY, RELIABLE_ORDERED, INVALID_ENTITY_ID, true);
+}
+
+bool CNetworkVehicle::GetHandbrake(void)
+{
+	return m_lastSyncData.m_bHandbrake;
+}
+
 void CNetworkVehicle::SetModel(int iModel)
 {
 	// Store the model id

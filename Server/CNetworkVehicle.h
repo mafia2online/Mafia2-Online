@@ -124,6 +124,9 @@ public:
 	void							SetTaxiLightState					(bool lightState);
 	bool							GetTaxiLightState					(void);
 
+	bool							GetHandbrake						(void);
+	void							SetHandbrake						(bool handbrake);
+
 	void							SetLastSyncer						( CNetworkPlayer * pLastSyncer ) { m_pLastSyncer = pLastSyncer; }
 	CNetworkPlayer					* GetLastSyncer						( void ) { return m_pLastSyncer; }
 

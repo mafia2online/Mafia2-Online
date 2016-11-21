@@ -196,6 +196,9 @@ public:
 	void							SetTaxiLightState					(bool state);
 	bool							GetTaxiLightState					(void);
 
+	bool							GetHandbrake						(void);
+	void							SetHandbrake						(bool bHandbrake);
+
 	void							HandlePlayerEnter					( CNetworkPlayer * pNetworkPlayer, EntityId seatId );
 	void							HandlePlayerExit					( CNetworkPlayer * pNetworkPlayer, EntityId seatId, bool bResetInterpolation = true );
 

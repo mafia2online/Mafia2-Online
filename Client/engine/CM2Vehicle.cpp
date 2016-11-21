@@ -1006,7 +1006,13 @@ void CM2Vehicle::SetHandbrake(bool bHandbrake)
 	if (!m_pVehicle)
 		return;
 
-	m_pVehicle->m_vehicleData.SetHandbrake(0, 0);//Todo: Finish to reverse this
+	/* This not working yet */
+	if (bHandbrake) {
+		m_pVehicle->m_vehicleData.SetHandbrake(1, 1);
+	}
+	else {
+		m_pVehicle->m_vehicleData.SetHandbrake(0, 0);
+	}
 }
 
 bool CM2Vehicle::IsHandbrakeOn(void)
