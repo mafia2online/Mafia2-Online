@@ -744,6 +744,19 @@ bool CNetworkVehicle::GetIndicatorLightState(int indicator)
 	return false;
 }
 
+void CNetworkVehicle::SetHandbrake(bool bHandbrake)
+{
+	if (m_pVehicle)
+		m_pVehicle->SetHandbrake(bHandbrake);
+
+	m_lastSyncData.m_bHandbrake = bHandbrake;
+}
+
+bool CNetworkVehicle::GetHandbrake(void)
+{
+	return m_lastSyncData.m_bHandbrake;
+}
+
 void CNetworkVehicle::HandlePlayerEnter( CNetworkPlayer * pNetworkPlayer, EntityId seatId )
 {
 	if( seatId == 0 )

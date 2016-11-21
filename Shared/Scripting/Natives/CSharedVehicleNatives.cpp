@@ -69,6 +69,8 @@ void CSharedVehicleNatives::Register( CScriptingManager * pScriptingManager )
 	pScriptingManager->RegisterFunction( "getIndicatorLightState", GetIndicatorLightState, 2, "ii");
 	pScriptingManager->RegisterFunction( "setTaxiLightState", SetTaxiLightState, 2, "ib");
 	pScriptingManager->RegisterFunction( "getTaxiLightState", GetTaxiLightState, 1, "i");
+	pScriptingManager->RegisterFunction( "getVehicleHandbrake", GetVehicleHandbrake, 1, "i");
+	pScriptingManager->RegisterFunction( "setVehicleHandbrake", SetVehicleHandbrake, 2, "ib");
 
 	pScriptingManager->RegisterConstant( "INDICATOR_LEFT", 1);
 	pScriptingManager->RegisterConstant( "INDICATOR_RIGHT", 0);
@@ -1002,6 +1004,41 @@ SQInteger CSharedVehicleNatives::GetTaxiLightState(SQVM * pVM)
 	if (CCore::Instance()->GetVehicleManager()->IsActive(vehicleId))
 	{
 		sq_pushbool(pVM, CCore::Instance()->GetVehicleManager()->Get(vehicleId)->GetTaxiLightState());
+		return 1;
+	}
+
+	sq_pushbool(pVM, false);
+	return 1;
+}
+
+SQInteger CSharedVehicleNatives::SetVehicleHandbrake(SQVM *pVM)
+{
+	SQInteger vehicleId;
+	sq_getinteger(pVM, -2, &vehicleId);
+
+	SQBool bHandbrake;
+	sq_getbool(pVM, -1, &bHandbrake);
+
+	if (CCore::Instance()->GetVehicleManager()->IsActive(vehicleId))
+	{
+		CCore::Instance()->GetVehicleManager()->Get(vehicleId)->SetHandbrake(bHandbrake);
+
+		sq_pushbool(pVM, true);
+		return 1;
+	}
+
+	sq_pushbool(pVM, false);
+	return 1;
+}
+
+SQInteger CSharedVehicleNatives::GetVehicleHandbrake(SQVM *pVM)
+{
+	SQInteger vehicleId;
+	sq_getinteger(pVM, -1, &vehicleId);
+
+	if (CCore::Instance()->GetVehicleManager()->IsActive(vehicleId))
+	{
+		sq_pushbool(pVM, CCore::Instance()->GetVehicleManager()->Get(vehicleId)->GetHandbrake());
 		return 1;
 	}
 
