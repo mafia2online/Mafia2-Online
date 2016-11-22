@@ -409,6 +409,14 @@ void CPatches::Initialise( void )
 	CPatcher::InstallNopPatch ( 0xCF6EC0, 0x65 ); // Steam: 0x0CFDDA0
 	CPatcher::InstallNopPatch ( 0x4473E3, 0x16 ); // Steam: 0x0447B13
 	CPatcher::InstallNopPatch ( 0x447418, 0x16 ); // Steam: 00447B48
+	CPatcher::InstallNopPatch ( 0x468C4D, 0xB );
+	CPatcher::InstallNopPatch ( 0x468C7F, 0xB );
+
+	// Stop game from changing vehicle indicator light state
+	CPatcher::InstallNopPatch( 0xCF6F7D, 0x1D);
+
+	// Prevent vehicle starting animation and engine starting when entering
+	// CPatcher::InstallNopPatch(0x98A771, 0x8F); // This disable the whole system (you enter in vehicle but no door opening an you can't leave, no auto engine starting and no auto radio triggering)
 
 #ifndef _DEBUG
 	// Disable pause when game is minimized or sent to background
