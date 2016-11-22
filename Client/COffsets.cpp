@@ -181,6 +181,7 @@ unsigned int COffsets::FUNC_CCar__GetDamage = 0;
 unsigned int COffsets::FUNC_CCar__SetCarDamage = 0;
 unsigned int COffsets::FUNC_CCar__SetTransparency = 0;
 unsigned int COffsets::FUNC_CCar__OpenDoors = 0;
+unsigned int COffsets::FUNC_CCar__LockThrowFromCar = 0;
 
 
 unsigned int COffsets::FUNC_CSyncObject__Reactivate = 0;
@@ -454,6 +455,7 @@ void COffsets::CommonInitialise(unsigned int uiBase)
 	FUNC_CCar__SetCarDamage = (uiBase + 0x1264790);
 	FUNC_CCar__SetTransparency = (uiBase + 0x09BC2F0);
 	FUNC_CCar__OpenDoors = (uiBase + 0x09AAD10);
+	FUNC_CCar__LockThrowFromCar = (uiBase + 0x990BA0);
 
 	// Sync Objects
 	FUNC_CSyncObject__Reactivate = (uiBase + 0x11DE7D0);

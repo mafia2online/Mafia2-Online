@@ -905,6 +905,11 @@ void _declspec(naked) C_Vehicle::SetCarDamage(long double damage)
 	_asm jmp COffsets::FUNC_CCar__SetCarDamage;
 }
 
+void _declspec(naked) M2Vehicle::LockThrowFromCar(int a2, bool lock)
+{
+	_asm jmp COffsets::FUNC_CCar__LockThrowFromCar;
+}
+
 void CM2Vehicle::SetEngineOn(bool bEngine, bool bRevOnStart)
 {
 	if (!m_pVehicle)
@@ -1008,7 +1013,7 @@ void CM2Vehicle::SetHandbrake(bool bHandbrake)
 
 	/* This not working yet */
 	if (bHandbrake) {
-		m_pVehicle->m_vehicleData.SetHandbrake(1, 1);
+		m_pVehicle->m_vehicleData.SetHandbrake(1, 0);
 	}
 	else {
 		m_pVehicle->m_vehicleData.SetHandbrake(0, 0);
@@ -1083,4 +1088,12 @@ void CM2Vehicle::SetCarDamage(long double damage)
 		return;
 
 	m_pVehicle->m_vehicleData.SetCarDamage(damage);
+}
+
+void CM2Vehicle::LockThrowFromCar(int unk, bool lock)
+{
+	if (!m_pVehicle)
+		return;
+
+	m_pVehicle->LockThrowFromCar(unk, lock);
 }
