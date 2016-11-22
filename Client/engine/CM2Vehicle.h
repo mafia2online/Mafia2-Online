@@ -265,6 +265,8 @@ public:
 	void		SetTransparency(float transparency);
 
 	void		OpenDoors(bool open);
+
+	void		LockThrowFromCar(int a2, bool lock);
 };
 
 class CM2Vehicle : public CM2Entity
@@ -397,4 +399,6 @@ public:
 
 	void					SetTaxiLightOn					(bool toggle);
 	bool					IsTaxiLightOn					(void);
+
+	void					LockThrowFromCar				(int unk, bool lock);
 };
