@@ -56,12 +56,6 @@ void CFileTransferManager::Add(String strFileName, String strFileType, CFileChec
 	m_transferListMutex.Unlock();
 }
 
-// todo: Remove this?
-bool CFileTransferManager::Remove(String strFileName)
-{
-	return false;
-}
-
 void CFileTransferManager::Reset(bool bKillThread)
 {
 	if (bKillThread && m_workerThread.IsRunning())
@@ -115,6 +109,14 @@ void CFileTransferManager::SetServerInformation(const char * szHost, unsigned sh
 {
 	m_strHost.Set(szHost);
 	m_usHttpPort = usHttpPort;
+
+	if (m_transferList.size() == 0)
+	{
+		CCore::Instance()->GetGUI()->GetDownloadProgress()->SetVisible(false);
+		CCore::Instance()->GetGame()->Spawn();
+		return;
+	}
+
 	if (!m_workerThread.IsRunning())
 	{
 		m_workerThread.Start(WorkerThread);
