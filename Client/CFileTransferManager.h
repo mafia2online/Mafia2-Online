@@ -40,7 +40,6 @@ public:
 	~CFileTransferManager(void);
 
 	void							Add(String strFileName, String strFilePath, CFileChecksum fileChecksum, bool bIsScript);
-	bool							Remove(String strFileName);
 
 	void							Reset(bool bKillThread);
 	void							Pulse(void);
