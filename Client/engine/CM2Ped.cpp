@@ -35,8 +35,6 @@ CM2Ped::~CM2Ped(void)
 
 BYTE CM2Ped::GetControlState(void)
 {
-	DEBUG_LOG("CM2Ped::GetControlStyle");
-
 	if (m_pPed)
 		return (BYTE)m_pPed->m_playerControls.m_playerMovementState;
 
@@ -45,8 +43,6 @@ BYTE CM2Ped::GetControlState(void)
 
 DWORD CM2Ped::GetState(void)
 {
-	DEBUG_LOG("CM2Ped::GetState");
-
 	if (m_pPed)
 		return 0; //return m_pPed->m_dwState;
 
@@ -95,8 +91,6 @@ void CM2Ped::SetSelectedWeapon(DWORD dwWeapon, bool bUseAnimation)
 
 DWORD CM2Ped::GetSelectedWeapon(void)
 {
-	DEBUG_LOG("CM2Ped::GetSelectedWeapon");
-
 	if (m_pPed && m_pPed->m_pInventory)
 		return m_pPed->m_pInventory->m_dwSelectedWeapon;
 
@@ -105,8 +99,6 @@ DWORD CM2Ped::GetSelectedWeapon(void)
 
 bool CM2Ped::IsAiming(void)
 {
-	DEBUG_LOG("CM2Ped::IsAiming");
-
 	if (m_pPed)
 		return (m_pPed->m_playerControls.m_bIsAiming);
 
@@ -115,8 +107,6 @@ bool CM2Ped::IsAiming(void)
 
 bool CM2Ped::IsShooting(void)
 {
-	DEBUG_LOG("CM2Ped::IsShooting");
-
 	if (m_pPed)
 		return (m_pPed->m_playerControls.m_bIsShooting);
 
@@ -125,8 +115,6 @@ bool CM2Ped::IsShooting(void)
 
 void CM2Ped::SetHealth(float fHealth)
 {
-	DEBUG_LOG("CM2Ped::SetHealth");
-
 	if (m_pPed && m_pPed->m_pHumanScript)
 	{
 		void* pEntityData = m_pPed->m_pHumanScript;
@@ -142,8 +130,6 @@ void CM2Ped::SetHealth(float fHealth)
 
 float CM2Ped::GetHealth(void)
 {
-	DEBUG_LOG("CM2Ped::GetHealth");
-
 	if (m_pPed)
 		return m_pPed->m_fHealth;
 
@@ -368,8 +354,6 @@ C_SyncObject * CM2Ped::GetInOutVehicle(M2Vehicle * pVehicle, int iSeat, bool bEn
 
 M2Vehicle * CM2Ped::GetCurrentVehicle(void)
 {
-	DEBUG_LOG("CM2Ped::GetCurrentVehicle");
-
 	if (m_pPed)
 		return m_pPed->m_pCurrentVehicle;
 
@@ -453,8 +437,6 @@ C_SyncObject _declspec(naked) *C_HumanScript::ScrMoveV(C_SyncObject **syncObject
 
 C_SyncObject * CM2Ped::MoveVec(const CVector3 &vecPosition, M2Enums::eMoveType moveType, CVector3 vecEndDir)
 {
-	DEBUG_LOG("CM2Ped::MoveVec");
-
 	if (m_pPed && m_pPed->m_pHumanScript)
 	{
 		C_SyncObject * pSyncObject = nullptr;
@@ -469,8 +451,6 @@ C_SyncObject * CM2Ped::MoveVec(const CVector3 &vecPosition, M2Enums::eMoveType m
 
 C_SyncObject * CM2Ped::AimAt(CVector3 vecPosition)
 {
-	DEBUG_LOG("CM2Ped::AimAt");
-
 	if (m_pPed && m_pPed->m_pHumanScript)
 	{
 		C_SyncObject * pSyncObject;
@@ -503,8 +483,6 @@ C_SyncObject * CM2Ped::AimAt(CVector3 vecPosition)
 
 C_SyncObject * CM2Ped::ShootAt(CVector3 vecPosition)
 {
-	DEBUG_LOG("CM2Ped::ShootAt");
-
 	if (m_pPed && m_pPed->m_pHumanScript)
 	{
 		C_SyncObject * pSyncObject;
@@ -535,8 +513,6 @@ C_SyncObject * CM2Ped::ShootAt(CVector3 vecPosition)
 
 C_SyncObject * CM2Ped::LookAt(CVector3 vecPosition)
 {
-	DEBUG_LOG("CM2Ped::LookAt");
-
 	if (m_pPed && m_pPed->m_pHumanScript)
 	{
 		C_SyncObject * pSyncObject;

@@ -353,8 +353,6 @@ void CNetworkPlayer::HandlePlayerDeath( void )
 
 void CNetworkPlayer::SetPosition( CVector3 vecPosition, BYTE bMoveStyle, CVector3 vecEndDir )
 {
-	DEBUG_LOG("CNetworkPlayer::SetPosition");
-
 	// Store the position
 	m_vecPosition = vecPosition;
 
@@ -404,8 +402,6 @@ void CNetworkPlayer::SetPosition( CVector3 vecPosition, BYTE bMoveStyle, CVector
 
 void CNetworkPlayer::Teleport( CVector3 vecPosition )
 {
-	DEBUG_LOG("CNetworkPlayer::Teleport");
-
 	// Is the player ped valid?
 	if( m_pPlayerPed && IsSpawned() )
 		m_pPlayerPed->SetPosition( vecPosition );
@@ -413,8 +409,6 @@ void CNetworkPlayer::Teleport( CVector3 vecPosition )
 
 void CNetworkPlayer::GetPosition( CVector3 * vecPosition )
 {
-	DEBUG_LOG("CNetworkPlayer::GetPosition");
-
 	// Is the player ped valid?
 	if( m_pPlayerPed && IsSpawned() )
 		m_pPlayerPed->GetPosition( vecPosition, true );
@@ -422,8 +416,6 @@ void CNetworkPlayer::GetPosition( CVector3 * vecPosition )
 
 void CNetworkPlayer::SetRotation( CVector3 vecRotation )
 {
-	DEBUG_LOG("CNetworkPlayer::SetRotation");
-
 	// Is the player ped valid?
 	if( m_pPlayerPed && IsSpawned() )
 	{
@@ -437,8 +429,6 @@ void CNetworkPlayer::SetRotation( CVector3 vecRotation )
 
 void CNetworkPlayer::GetRotation( CVector3 * vecRotation )
 {
-	DEBUG_LOG("CNetworkPlayer::GetRotation");
-
 	// Is the player ped valid?
 	if( m_pPlayerPed && IsSpawned() )
 	{
@@ -456,8 +446,6 @@ void CNetworkPlayer::GetRotation( CVector3 * vecRotation )
 
 void CNetworkPlayer::SetHealth( float fHealth )
 {
-	DEBUG_LOG("CNetworkPlayer::SetHealth");
-
 	// Is the player ped valid?
 	if( m_pPlayerPed && IsSpawned() )
 	{
@@ -478,8 +466,6 @@ void CNetworkPlayer::SetHealth( float fHealth )
 
 float CNetworkPlayer::GetHealth( void )
 {
-	DEBUG_LOG("CNetworkPlayer::GetHealth");
-
 	// Is the player ped valid?
 	if( m_pPlayerPed && IsSpawned() )
 		return m_pPlayerPed->GetHealth();
@@ -489,8 +475,6 @@ float CNetworkPlayer::GetHealth( void )
 
 void CNetworkPlayer::SetSelectedWeapon( DWORD dwWeapon, bool bUseAnimation )
 {
-	DEBUG_LOG("CNetworkPlayer::SetSelectedWeapon");
-
 	// Is the player ped valid?
 	if( m_pPlayerPed && IsSpawned() )
 	{
@@ -512,8 +496,6 @@ void CNetworkPlayer::SetSelectedWeapon( DWORD dwWeapon, bool bUseAnimation )
 
 DWORD CNetworkPlayer::GetSelectedWeapon( void )
 {
-	DEBUG_LOG("CNetworkPlayer::GetSelectedWeapon");
-
 	// Is the player ped valid?
 	if( m_pPlayerPed && IsSpawned() )
 		return m_pPlayerPed->GetSelectedWeapon();
@@ -578,8 +560,6 @@ void CNetworkPlayer::SetCrouching(bool bCrouching)
 
 void CNetworkPlayer::UpdateAim( bool bAiming )
 {
-	DEBUG_LOG("CNetworkPlayer::UpdateAim");
-
 	// Is the playerped not valid?
 	if( !m_pPlayerPed )
 		return;
@@ -632,8 +612,6 @@ void CNetworkPlayer::UpdateAim( bool bAiming )
 
 void CNetworkPlayer::UpdateShot( bool bShooting )
 {
-	DEBUG_LOG("CNetworkPlayer::UpdateShot");
-
 	// Is the playerped not valid?
 	if( !m_pPlayerPed )
 		return;
@@ -942,8 +920,6 @@ void CNetworkPlayer::ExitVehicle( bool bExit, bool bQuickly )
 
 bool CNetworkPlayer::InternalIsInVehicle( void )
 {
-	DEBUG_LOG("CNetworkPlayer::InternalIsInVehicle");
-
 	// Is the player ped active?
 	if( m_pPlayerPed && IsSpawned() )
 		return (m_pPlayerPed->GetCurrentVehicle() != NULL);

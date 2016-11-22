@@ -67,7 +67,6 @@ void CVehicleManager::Remove( EntityId vehicleId )
 
 void CVehicleManager::Pulse( void )
 {
-	DEBUG_LOG("CVehicleManager::Pulse");
 	for( EntityId i = 0; i < MAX_VEHICLES; i++ )
 	{
 		if( IsActive(i) )
@@ -77,8 +76,6 @@ void CVehicleManager::Pulse( void )
 
 CNetworkVehicle * CVehicleManager::GetFromGameGUID( DWORD dwGuid )
 {
-	DEBUG_LOG("CVehicleManager::GetFromGameGUID");
-
 	for( EntityId i = 0; i < MAX_VEHICLES; i++ )
 	{
 		CNetworkVehicle *pVehicle = m_pNetworkVehicle[i];
