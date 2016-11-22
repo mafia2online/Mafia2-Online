@@ -317,8 +317,6 @@ void CNetworkVehicle::StoreVehicleSync( const InVehicleSync &vehicleSync, bool b
 
 void CNetworkVehicle::Pulse( void )
 {
-	DEBUG_LOG("CNetworkVehicle::Pulse");
-
 	if( !CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->IsSpawned() )
 		return;
 
@@ -397,24 +395,18 @@ void CNetworkVehicle::Pulse( void )
 
 void CNetworkVehicle::SetPosition( CVector3 vecPosition )
 {
-	DEBUG_LOG("CNetworkVehicle::SetPosition");
-
 	if( m_pVehicle )
 		m_pVehicle->SetPosition( vecPosition );
 }
 
 void CNetworkVehicle::GetPosition( CVector3 * vecPosition )
 {
-	DEBUG_LOG("CNetworkVehicle::GetPosition");
-
 	if( m_pVehicle )
 		m_pVehicle->GetPosition( vecPosition );
 }
 
 void CNetworkVehicle::SetRotation( CVector3 vecRotation )
 {
-	DEBUG_LOG("CNetworkVehicle::SetRotation");
-
 	if( m_pVehicle )
 	{
 		vecRotation.ToRadians();
@@ -424,8 +416,6 @@ void CNetworkVehicle::SetRotation( CVector3 vecRotation )
 
 void CNetworkVehicle::GetRotation( CVector3 * vecRotation )
 {
-	DEBUG_LOG("CNetworkVehicle::GetRotation");
-
 	if( m_pVehicle )
 	{
 		Quaternion quatRotation;
@@ -752,8 +742,6 @@ bool CNetworkVehicle::GetIndicatorLightState(int indicator)
 
 void CNetworkVehicle::HandlePlayerEnter( CNetworkPlayer * pNetworkPlayer, EntityId seatId )
 {
-	DEBUG_LOG("CNetworkVehicle::HandlePlayerEnter");
-
 	if( seatId == 0 )
 	{
 		m_pDriver = pNetworkPlayer;
@@ -786,8 +774,6 @@ void CNetworkVehicle::HandlePlayerExit( CNetworkPlayer * pNetworkPlayer, EntityI
 
 void CNetworkVehicle::ResetInterpolation( void )
 {
-	DEBUG_LOG("CNetworkVehicle::ResetInterpolation");
-
 	if ( IsSpawned() )
 	{
 		if( HasTargetPosition () )
@@ -830,8 +816,6 @@ void CNetworkVehicle::ResetInterpolation( void )
 
 void CNetworkVehicle::Interpolate( void )
 {
-	DEBUG_LOG("CNetworkVehicle::Interpolate");
-
 	if( m_pDriver && m_pDriver != CCore::Instance()->GetPlayerManager()->GetLocalPlayer () )
 	{
 		UpdateTargetPosition ();
