@@ -260,4 +260,13 @@ public:
 
 	// Player
 	static	unsigned int		FUNC_CPlayer_ProcessKeyboard;
+
+	// Text Datbase
+	static	unsigned int		VAR_CTextDatabase;
+	static	unsigned int		FUNC_CTextDatabase__Clear;
+	static	unsigned int		FUNC_CTextDatabase__Done;
+	static	unsigned int		FUNC_CTextDatabase__GetString;
+	static	unsigned int		FUNC_CTextDatabase__Init;
+	static	unsigned int		FUNC_CTextDatabase__LoadIconsMap;
+	static	unsigned int		FUNC_CTextDatabase__ResetHistory;
 };

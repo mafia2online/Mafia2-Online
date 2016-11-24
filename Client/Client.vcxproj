@@ -291,6 +291,7 @@
     <ClInclude Include="engine\CM2Ped.h" />
     <ClInclude Include="engine\CM2PlayerPed.h" />
     <ClInclude Include="engine\CM2SDSTables.h" />
+    <ClInclude Include="engine\CM2TextDatabase.h" />
     <ClInclude Include="engine\CM2Vehicle.h" />
     <ClInclude Include="engine\CM2SlotManager.h" />
     <ClInclude Include="ExceptionHandler.h" />
@@ -454,6 +455,7 @@
     <ClCompile Include="engine\CM2Navigation.cpp" />
     <ClCompile Include="engine\CM2ObjectTable.cpp" />
     <ClCompile Include="engine\CM2Ped.cpp" />
+    <ClCompile Include="engine\CM2TextDatabase.cpp" />
     <ClCompile Include="engine\CM2Vehicle.cpp" />
     <ClCompile Include="engine\CM2SlotManager.cpp" />
     <ClCompile Include="ExceptionHandler.cpp" />

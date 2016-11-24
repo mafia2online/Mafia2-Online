@@ -234,6 +234,15 @@ unsigned int COffsets::FUNC_SetRadioVolume = 0;
 // Player
 unsigned int COffsets::FUNC_CPlayer_ProcessKeyboard = 0;
 
+// Text database
+unsigned int COffsets::VAR_CTextDatabase = 0;
+unsigned int COffsets::FUNC_CTextDatabase__Clear = 0;
+unsigned int COffsets::FUNC_CTextDatabase__Done = 0;
+unsigned int COffsets::FUNC_CTextDatabase__GetString = 0;
+unsigned int COffsets::FUNC_CTextDatabase__Init = 0;
+unsigned int COffsets::FUNC_CTextDatabase__LoadIconsMap = 0;
+unsigned int COffsets::FUNC_CTextDatabase__ResetHistory = 0;
+
 void COffsets::Initialise(BYTE byteVersion, unsigned int uiBase)
 {
 	switch (byteVersion)
@@ -249,6 +258,7 @@ void COffsets::Initialise(BYTE byteVersion, unsigned int uiBase)
 		VAR_VehiclePool = (uiBase + 0x1AA29C0);
 		VAR_CSDSManager = (uiBase + 0x1AACD9C);
 		VAR_LocalPlayer = (uiBase + 0x1AACDAC);
+		VAR_CTextDatabase = (uiBase + 0x1AADC18);
 
 		// 0x1AACD70 = VAR_CMiniMap
 
@@ -512,6 +522,14 @@ void COffsets::CommonInitialise(unsigned int uiBase)
 
 	// Player
 	FUNC_CPlayer_ProcessKeyboard = 0x42A9E0;
+
+	// TextDatabase
+	FUNC_CTextDatabase__Clear = (uiBase + 0x11E5700);
+	FUNC_CTextDatabase__Done = (uiBase + 0x11E7950);
+	FUNC_CTextDatabase__GetString = (uiBase + 0x11E6AD0);
+	FUNC_CTextDatabase__Init = (uiBase + 0x11E0F10);
+	FUNC_CTextDatabase__LoadIconsMap = (uiBase + 0x11E6950);
+	FUNC_CTextDatabase__ResetHistory = (uiBase + 0x11E7310);
 }
 
 void COffsets::CommonInitialise__Steam(unsigned int uiBase)

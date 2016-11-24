@@ -72,6 +72,7 @@
 
 #include "engine/CM2Entity.h"
 #include "engine/CM2Ped.h"
+#include "engine/CM2TextDatabase.h"
 
 #include "Timers/CTimerManager.h"
 #include "CFileTransferManager.h"
@@ -299,6 +300,7 @@ void CCore::OnGameLoad( void )
 
 	CCore::Instance()->SetCamera( new CM2Camera( *(M2Camera **)COffsets::VAR_CCamera ) );
 	CCore::Instance()->SetHud( new CM2Hud( *(M2Hud **)COffsets::VAR_CHud ) );
+	CCore::Instance()->SetTextDatabase( new CM2TextDatabase( *(M2TextDatabase **)COffsets::VAR_CTextDatabase));
 	CCore::Instance()->GetGame()->LoadPointers ();
 
 	DEBUG_LOG ( "LocalPed: 0x%p", IE::GetGame()->m_pLocalPed);
