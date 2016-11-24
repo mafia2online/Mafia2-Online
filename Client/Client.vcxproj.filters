@@ -806,6 +806,9 @@
     <ClInclude Include="..\Shared\Strings\UnicodeRanges.h">
       <Filter>Header Files\Shared\Strings</Filter>
     </ClInclude>
+    <ClInclude Include="engine\CM2TextDatabase.h">
+      <Filter>Header Files\Game\Engine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -1293,6 +1296,9 @@
     </ClCompile>
     <ClCompile Include="..\Shared\Strings\Unicode.cpp">
       <Filter>Source Files\Shared\Strings</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\CM2TextDatabase.cpp">
+      <Filter>Source Files\Game\Engine</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -45,6 +45,7 @@ class CTimerManager;
 class CFileTransferManager;
 class String;
 class CScreenShot;
+class CM2TextDatabase;
 
 class CCore : public ExplicitSingleton<CCore>
 {
@@ -88,6 +89,7 @@ private:
 
 	CM2Camera						* m_pCamera;
 	CM2Hud							* m_pHud;
+	CM2TextDatabase					* m_pTextDatabase;
 
 	HWND							m_gameHwnd;
 
@@ -158,6 +160,9 @@ public:
 
 	void							SetHud						( CM2Hud * pHud ) { m_pHud = pHud; }
 	CM2Hud							* GetHud					( void ) { return m_pHud; }
+
+	void							SetTextDatabase				(CM2TextDatabase *pTextDB){ m_pTextDatabase = pTextDB; }
+	CM2TextDatabase					* GetTextDatabase			(){ return m_pTextDatabase; }
 
 	void							SetNick						( String strNick ) { m_strNick = strNick; }
 	String							GetNick						( void ) { return m_strNick; }
