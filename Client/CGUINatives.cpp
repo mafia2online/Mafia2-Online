@@ -471,6 +471,9 @@ SQInteger CGUINatives::DestroyElement ( SQVM * pVM )
 		// Delete the element
 		SAFE_DELETE ( pElement );
 
+		// Reset the pointer instance
+		sq_pushpointer ( pVM, NULL );
+
 		sq_pushbool ( pVM, true );
 		return 1;
 	}
