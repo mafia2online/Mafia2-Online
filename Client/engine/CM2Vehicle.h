@@ -267,6 +267,9 @@ public:
 	void		OpenDoors(bool open);
 
 	void		LockThrowFromCar(int a2, bool lock);
+
+	void		LockTrunks();
+	void		UnlockTrunks();
 };
 
 class CM2Vehicle : public CM2Entity
@@ -401,4 +404,7 @@ public:
 	bool					IsTaxiLightOn					(void);
 
 	void					LockThrowFromCar				(int unk, bool lock);
+
+	void					LockTrunks						();
+	void					UnlockTrunks					();
 };

@@ -206,6 +206,8 @@ public:
 	static	unsigned int		FUNC_CCar__SetTransparency;
 	static	unsigned int		FUNC_CCar__OpenDoors;
 	static	unsigned int		FUNC_CCar__LockThrowFromCar;
+	static	unsigned int		FUNC_CCar__LockTrunks;
+	static	unsigned int		FUNC_CCar__UnlockTrunks;
 
 	// Sync Objects
 	static	unsigned int		FUNC_CSyncObject__Reactivate;
