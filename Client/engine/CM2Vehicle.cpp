@@ -910,6 +910,16 @@ void _declspec(naked) M2Vehicle::LockThrowFromCar(int a2, bool lock)
 	_asm jmp COffsets::FUNC_CCar__LockThrowFromCar;
 }
 
+void _declspec(naked) M2Vehicle::LockTrunks()
+{
+	_asm jmp COffsets::FUNC_CCar__LockTrunks;
+}
+
+void _declspec(naked) M2Vehicle::UnlockTrunks()
+{
+	_asm jmp COffsets::FUNC_CCar__UnlockTrunks;
+}
+
 void CM2Vehicle::SetEngineOn(bool bEngine, bool bRevOnStart)
 {
 	if (!m_pVehicle)
@@ -1096,4 +1106,20 @@ void CM2Vehicle::LockThrowFromCar(int unk, bool lock)
 		return;
 
 	m_pVehicle->LockThrowFromCar(unk, lock);
+}
+
+void CM2Vehicle::LockTrunks()
+{
+	if (!m_pVehicle)
+		return;
+
+	m_pVehicle->LockTrunks();
+}
+
+void CM2Vehicle::UnlockTrunks()
+{
+	if (!m_pVehicle)
+		return;
+
+	m_pVehicle->UnlockTrunks();
 }

@@ -183,6 +183,8 @@ unsigned int COffsets::FUNC_CCar__SetTransparency = 0;
 unsigned int COffsets::FUNC_CCar__OpenDoors = 0;
 unsigned int COffsets::FUNC_CCar__LockThrowFromCar = 0;
 
+unsigned int COffsets::FUNC_CCar__LockTrunks = 0;
+unsigned int COffsets::FUNC_CCar__UnlockTrunks = 0;
 
 unsigned int COffsets::FUNC_CSyncObject__Reactivate = 0;
 
@@ -466,6 +468,8 @@ void COffsets::CommonInitialise(unsigned int uiBase)
 	FUNC_CCar__SetTransparency = (uiBase + 0x09BC2F0);
 	FUNC_CCar__OpenDoors = (uiBase + 0x09AAD10);
 	FUNC_CCar__LockThrowFromCar = (uiBase + 0x990BA0);
+	FUNC_CCar__LockTrunks = (uiBase + 0x0D63EB0);
+	FUNC_CCar__UnlockTrunks = (uiBase + 0x09BE550);
 
 	// Sync Objects
 	FUNC_CSyncObject__Reactivate = (uiBase + 0x11DE7D0);
