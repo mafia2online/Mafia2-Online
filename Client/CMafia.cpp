@@ -31,6 +31,9 @@
 #include "CNetworkPlayer.h"
 #include "CLocalPlayer.h"
 
+#include "CPlayerManager.h"
+#include "CLocalPlayer.h"
+
 #include "CM2Camera.h"
 
 #include "GUI/ChatBox.h"
@@ -184,6 +187,12 @@ void CMafia::Spawn( bool bFade )
 	CLocalPlayer::Instance()->LockControls( false );
 	CCore::Instance()->GetCamera()->LockControl( false );
 	CCore::Instance()->GetHud()->StopGPS();
+
+	CM2Ped *ped = CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetPlayerPed();
+	if (ped) {
+		ped->RemoveAllWeapons();
+		ped->SetSelectedWeapon(1);
+	}
 
 	// Don't reload game after death
 	*(BYTE *)0x1BB057D = 1;
