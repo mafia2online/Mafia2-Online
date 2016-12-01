@@ -500,6 +500,14 @@ DWORD CNetworkPlayer::GetSelectedWeapon( void )
 	return 0;
 }
 
+int CNetworkPlayer::GetSelectedWeaponBullet(void)
+{
+	if (m_pPlayerPed && IsSpawned())
+		return m_pPlayerPed->GetSelectedWeaponBullet();
+
+	return 0;
+}
+
 bool CNetworkPlayer::HasWeapon( DWORD dwWeapon )
 {
 	// Is the player ped valid?

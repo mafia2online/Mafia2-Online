@@ -25,6 +25,7 @@ struct OnFootSync
 	CVector3		m_vecDirection;
 	float			m_fHealth;
 	DWORD			m_dwSelectedWeapon;
+	int				m_iSelectedWeaponBullet;
 	BYTE			m_bControlState;
 	bool			m_bAiming;
 	bool			m_bShooting;
@@ -40,6 +41,7 @@ struct OnFootSync
 		, m_vecDirection()
 		, m_fHealth(720.0f)
 		, m_dwSelectedWeapon(1)
+		, m_iSelectedWeaponBullet(0)
 		, m_bControlState(0)
 		, m_bAiming(false)
 		, m_bShooting(false)
@@ -58,6 +60,7 @@ struct OnFootSync
 		m_vecDirection = rhs.m_vecDirection;
 		m_fHealth = rhs.m_fHealth;
 		m_dwSelectedWeapon = rhs.m_dwSelectedWeapon;
+		m_iSelectedWeaponBullet = rhs.m_iSelectedWeaponBullet;
 		m_bControlState = rhs.m_bControlState;
 		m_bAiming = rhs.m_bAiming;
 		m_bShooting = rhs.m_bShooting;
@@ -106,6 +109,7 @@ struct InPassengerSync
 {
 	float			m_fHealth;
 	DWORD			m_dwSelectedWeapon;
+	int				m_iSelectedWeaponBullet;
 };
 
 struct UnoccupiedVehicleSync

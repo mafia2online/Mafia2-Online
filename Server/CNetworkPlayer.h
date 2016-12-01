@@ -83,6 +83,7 @@ public:
 	void							GiveWeapon					( int iWeapon, int iAmmo );
 	void							RemoveWeapon				( int iWeapon, int iAmmo );
 	int								GetWeapon					( void );
+	int								GetWeaponBullet				(void);
 
 	void							SetPosition					( CVector3 vecPosition );
 	void							GetPosition					( CVector3 * vecPosition );

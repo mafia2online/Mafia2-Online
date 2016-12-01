@@ -129,6 +129,7 @@ public:
 	static	unsigned int		FUNC_CHuman__InventorySelect;
 	static	unsigned int		FUNC_CHuman__InventoryAddWeapon;
 	static  unsigned int		FUNC_CHuman__InventoryRemoveWeapon;
+	static	unsigned int		FUNC_CHuman__InventoryTellAmmoInSelectedWeapon;
 	static	unsigned int		FUNC_CHuman__ToggleStealthKill;
 	static	unsigned int		FUNC_CHuman__EnablePushByPlayer;
 	static	unsigned int		FUNC_CHuman__SetReactions;

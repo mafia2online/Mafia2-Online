@@ -159,6 +159,7 @@ public:
 
 	void							SetSelectedWeapon( DWORD dwWeapon, bool bUseAnimation );
 	DWORD							GetSelectedWeapon( void );
+	int								GetSelectedWeaponBullet(void);
 	bool							HasWeapon( DWORD dwWeapon );
 	void							GiveWeapon( DWORD dwWeapon, DWORD dwAmmo );
 	void							RemoveWeapon( DWORD dwWeapon, DWORD dwAmmo = 0 );

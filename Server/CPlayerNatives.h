@@ -30,6 +30,7 @@ private:
 	static	SQInteger		GetHealth( SQVM * pVM );
 	static	SQInteger		GiveWeapon( SQVM * pVM );
 	static	SQInteger		GetWeapon( SQVM * pVM );
+	static	SQInteger		GetWeaponBullet(SQVM * pVM);
 	static	SQInteger		RemoveWeapon( SQVM * pVM );
 	static	SQInteger		OutputMessage( SQVM * pVM );
 	static	SQInteger		OutputMessageToAll( SQVM * pVM );

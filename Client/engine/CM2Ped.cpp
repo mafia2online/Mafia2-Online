@@ -97,6 +97,24 @@ DWORD CM2Ped::GetSelectedWeapon(void)
 	return 0;
 }
 
+int CM2Ped::GetSelectedWeaponBullet(void)
+{
+	int bullets = 0;
+
+	if (!m_pPed || !m_pPed->m_pWeaponData)
+		return (bullets);
+
+	void * pHumanInventory = m_pPed->m_pWeaponData;
+	__asm
+	{
+		mov ecx, pHumanInventory;
+		call COffsets::FUNC_CHuman__InventoryTellAmmoInSelectedWeapon;
+		mov bullets, eax;
+	}
+
+	return (bullets);
+}
+
 bool CM2Ped::IsAiming(void)
 {
 	if (m_pPed)

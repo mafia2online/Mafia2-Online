@@ -259,6 +259,9 @@ void CLocalPlayer::SendOnFootSync( void )
 	// Get the player selected weapon
 	onFootSync.m_dwSelectedWeapon = GetSelectedWeapon ();
 
+	// Get the player selected weapon bullet
+	onFootSync.m_iSelectedWeaponBullet = GetSelectedWeaponBullet();
+
 	// Get the player control state
     onFootSync.m_bControlState = m_pPlayerPed->GetControlState ();
 
@@ -417,6 +420,9 @@ void CLocalPlayer::SendPassengerSync( void )
 
 	// Get the player selected weapon
 	passengerSync.m_dwSelectedWeapon = GetSelectedWeapon ();
+
+	// Get the player selected weapon bullet
+	passengerSync.m_iSelectedWeaponBullet = GetSelectedWeaponBullet();
 
 	// Write the sync structure to the bitstream
 	pBitStream.Write( (char *)&passengerSync, sizeof(InPassengerSync) );

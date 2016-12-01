@@ -106,6 +106,7 @@ unsigned int COffsets::FUNC_CHumanInventory__DoReload = 0;
 unsigned int COffsets::FUNC_CHuman__InventorySelect = 0;
 unsigned int COffsets::FUNC_CHuman__InventoryAddWeapon = 0;
 unsigned int COffsets::FUNC_CHuman__InventoryRemoveWeapon = 0;
+unsigned int COffsets::FUNC_CHuman__InventoryTellAmmoInSelectedWeapon = 0;
 unsigned int COffsets::FUNC_CHuman__ToggleStealthKill = 0;
 unsigned int COffsets::FUNC_CHuman__EnablePushByPlayer = 0;
 unsigned int COffsets::FUNC_CHuman__SetReactions = 0;
@@ -396,6 +397,7 @@ void COffsets::CommonInitialise(unsigned int uiBase)
 	FUNC_CHuman__InventorySelect = (uiBase + 0x983A30); // Steam: 0x9953A0
 	FUNC_CHuman__InventoryAddWeapon = (uiBase + 0x949C50); // Steam: 0x95B030
 	FUNC_CHuman__InventoryRemoveWeapon = (uiBase + 0x925960); // Steam: 0x936D90
+	FUNC_CHuman__InventoryTellAmmoInSelectedWeapon = (uiBase + 0x0931950);
 	FUNC_CHuman__ToggleStealthKill = (uiBase + 0x92A640); // Steam: 0x93BA80
 	FUNC_CHuman__EnablePushByPlayer = (uiBase + 0x92A6C0); // Steam: 0x93BB00
 	FUNC_CHuman__MoveVec = (uiBase + 0x97F740); // Steam: 0x9910B0
