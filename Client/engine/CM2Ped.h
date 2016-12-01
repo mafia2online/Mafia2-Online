@@ -200,6 +200,7 @@ public:
 
 	void					SetSelectedWeapon(DWORD dwWeapon, bool bUseAnimation = false);
 	DWORD					GetSelectedWeapon(void);
+	int						GetSelectedWeaponBullet(void);
 
 	bool					IsAiming(void);
 	bool					IsShooting(void);

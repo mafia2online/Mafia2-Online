@@ -302,6 +302,11 @@ int CNetworkPlayer::GetWeapon( void )
 	return (int)m_onFootSync.m_dwSelectedWeapon;
 }
 
+int CNetworkPlayer::GetWeaponBullet(void)
+{
+	return m_onFootSync.m_iSelectedWeaponBullet;
+}
+
 void CNetworkPlayer::SetPosition ( CVector3 vecPosition )
 {
 	// Construct new bitstream

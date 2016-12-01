@@ -26,6 +26,7 @@ void CPlayerNatives::Register( CScriptingManager * pScriptingManager )
 	pScriptingManager->RegisterFunction( "getPlayerHealth", GetHealth, 1, "i" );
 	pScriptingManager->RegisterFunction( "givePlayerWeapon", GiveWeapon, 3, "iii" );
 	pScriptingManager->RegisterFunction( "getPlayerWeapon", GetWeapon, 1, "i" );
+	pScriptingManager->RegisterFunction( "getPlayerWeaponBullet", GetWeaponBullet, 1, "i");
 	pScriptingManager->RegisterFunction( "removePlayerWeapon", RemoveWeapon, -1, NULL );
 	pScriptingManager->RegisterFunction( "setPlayerColour", SetColour, 2, "ii" );
 	pScriptingManager->RegisterFunction( "getPlayerColour", GetColour, 1, "i" );
@@ -474,15 +475,29 @@ SQInteger CPlayerNatives::GetWeapon( SQVM * pVM )
 	SQInteger playerId;
 	sq_getinteger( pVM, -1, &playerId );
 
-	// Is the player active?
 	if( CCore::Instance()->GetPlayerManager()->IsActive( playerId ) )
 	{
-		// Get the player weapon
 		sq_pushinteger( pVM, CCore::Instance()->GetPlayerManager()->Get( playerId )->GetWeapon() );
 		return 1;
 	}
 
 	sq_pushbool( pVM, false );
+	return 1;
+}
+
+// getPlayerWeaponBullet(playerId);
+SQInteger CPlayerNatives::GetWeaponBullet(SQVM * pVM)
+{
+	SQInteger playerId;
+	sq_getinteger(pVM, -1, &playerId);
+
+	if (CCore::Instance()->GetPlayerManager()->IsActive(playerId))
+	{
+		sq_pushinteger(pVM, CCore::Instance()->GetPlayerManager()->Get(playerId)->GetWeaponBullet());
+		return 1;
+	}
+
+	sq_pushbool(pVM, false);
 	return 1;
 }
 
