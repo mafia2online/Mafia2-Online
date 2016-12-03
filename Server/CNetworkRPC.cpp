@@ -299,9 +299,6 @@ void PlayerSpawn( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 
 		CLogFile::Printf("[spawn] %s has spawned.", pNetworkPlayer->GetNick());
 
-		// Here we delay a bit the next loading in order to prevent "flying bus/flying ped" syndrome
-		Sleep(1000);
-
 		CCore::Instance()->GetVehicleManager()->HandlePlayerSpawn( playerId );
 	}
 }
