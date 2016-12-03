@@ -23,6 +23,12 @@ enum eVehiclePartType
 	PART_TYPE_TYRE					= 14
 };
 
+enum eGearBoxstate
+{
+	GEARBOX_HALF_AUTO				= 1,
+	GEARBOX_AUTO					= 2
+};
+
 class C_VehicleVFTable
 {
 public:
@@ -107,6 +113,9 @@ public:
 	void		SetEngineOn			(bool bEngine, bool bRevOnStart);
 
 	void		SetCarDamage		(long double damage);
+
+	void		SetGear				(int gear);
+	void		SetGearBoxAutomat	(eGearBoxstate state);
 };
 
 class M2FuelTank
@@ -407,4 +416,7 @@ public:
 
 	void					LockTrunks						();
 	void					UnlockTrunks					();
+
+	void					SetGearBoxAutomat				(eGearBoxstate state);
+	void					SetGear							(int gear);
 };

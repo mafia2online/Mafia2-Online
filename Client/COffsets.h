@@ -209,6 +209,8 @@ public:
 	static	unsigned int		FUNC_CCar__LockThrowFromCar;
 	static	unsigned int		FUNC_CCar__LockTrunks;
 	static	unsigned int		FUNC_CCar__UnlockTrunks;
+	static	unsigned int		FUNC_CCar__SetGear;
+	static	unsigned int		FUNC_CCar__SetGearBoxAutomat;
 
 	// Sync Objects
 	static	unsigned int		FUNC_CSyncObject__Reactivate;
