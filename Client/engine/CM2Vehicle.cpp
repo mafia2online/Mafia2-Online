@@ -941,7 +941,7 @@ bool CM2Vehicle::IsBeaconLightOn(void)
 	if (m_pVehicle)
 	{
 		DWORD dwVehicleData = (DWORD)(m_pVehicle)+0xA8;
-		DWORD retn = (*(DWORD *)(dwVehicleData + 0x6F0 - 1) & 0x40);
+		DWORD retn = (*(DWORD *)(dwVehicleData + 0x6F0 ^ 0) & 0x40);
 		return (retn);
 	}
 

@@ -343,6 +343,9 @@ void CLocalPlayer::SendInVehicleSync( void )
 	// Get the vehicle siren state
 	inVehicleSync.m_bSirenState = pVehicle->GetVehicle()->IsSirenOn();
 
+	// Get the vehicle beacon light state
+	inVehicleSync.m_bBeaconLightState = pVehicle->GetVehicle()->IsBeaconLightOn();
+
 	// Get the vehicle fuel
 	inVehicleSync.m_fFuel = pVehicle->GetVehicle()->GetFuel();
 
