@@ -97,6 +97,7 @@ public:
 
 	void		SetTaxiLightOn		(bool toggle);
 	void		SetIndicatorLightOn	(int toggle, int indicator);
+	void		SetLightState		(bool lightState, int lightId);
 
 	void		SetPainting			(const char *paint);
 	void		MarkForSale			(bool bSale);
