@@ -112,6 +112,7 @@ unsigned int COffsets::FUNC_CHuman__EnablePushByPlayer = 0;
 unsigned int COffsets::FUNC_CHuman__SetReactions = 0;
 unsigned int COffsets::FUNC_CHuman__MoveVec = 0;
 unsigned int COffsets::FUNC_CHuman__ShootAt = 0;
+unsigned int COffsets::FUNC_CHuman__ShootAtEffect = 0;
 unsigned int COffsets::FUNC_CHuman__AimAt = 0;
 unsigned int COffsets::FUNC_CHuman__LookAt = 0;
 unsigned int COffsets::FUNC_CHuman__ShowHat = 0;
@@ -403,7 +404,8 @@ void COffsets::CommonInitialise(unsigned int uiBase)
 	FUNC_CHuman__ToggleStealthKill = (uiBase + 0x92A640); // Steam: 0x93BA80
 	FUNC_CHuman__EnablePushByPlayer = (uiBase + 0x92A6C0); // Steam: 0x93BB00
 	FUNC_CHuman__MoveVec = (uiBase + 0x97F740); // Steam: 0x9910B0
-	FUNC_CHuman__ShootAt = (uiBase + 0x982420); // Steam: 0x993C30
+	FUNC_CHuman__ShootAt = (uiBase + 0x09822C0); // Steam: 0x993C30
+	FUNC_CHuman__ShootAtEffect = (uiBase + 0x982420); // Steam: 0x993C30
 	FUNC_CHuman__AimAt = (uiBase + 0x982190); // Steam: 0x993B00
 	FUNC_CHuman__LookAt = (uiBase + 0x981860); // Steam: 0x9931D0
 	FUNC_CHuman__LockControls = (uiBase + 0x94B9C0); // Steam: 0x095CD80
