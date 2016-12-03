@@ -240,7 +240,6 @@ void CM2Vehicle::SetSpeedLimited( bool bSpeedLimited )
 			call COffsets::FUNC_CVehicle__SetSpeedLimited;
 		}
 
-		// Set unk flags
 		BYTE byteUnknown = pVehicle->m_pUnknown->m_pUnknown->m_byteUnknown;
 		pVehicle->m_pUnknown->m_pUnknown->m_byteUnknown ^= (byteUnknown ^ 32 * bSpeedLimited) & 0x20;
 	}
@@ -259,7 +258,6 @@ void CM2Vehicle::SetSpeedLimiterSpeed( float fSpeed )
 {
 	if( m_pVehicle )
 	{
-		// Update the speed limiter speed
 		m_pVehicle->m_fSpeedLimiterSpeed = (fSpeed / 3.599999904632568);
 
 		if( IsSpeedLimited() )
@@ -267,8 +265,6 @@ void CM2Vehicle::SetSpeedLimiterSpeed( float fSpeed )
 			// Update the speed limiter gui
 			*(float *)(m_pVehicle + 0x5B8) = m_pVehicle->m_fSpeedLimiterSpeed;
 		}
-
-		// Update unk flags
 		m_pVehicle->m_pUnknown->m_pUnknown->m_byteUnknown |= 0x20u;
 	}
 }
@@ -361,13 +357,8 @@ void CM2Vehicle::SetFuel( float fFuel )
 {
 	if( m_pVehicle && m_pVehicle->m_pFuelUnk )
 	{
-		// Get the fuel tank capacity
-		//float fCapacity = GetFuelTankCapacity(); // It doesn't always give the correct value
-
-		// Calculate the new fuel
+		//float fCapacity = GetFuelTankCapacity();
 		//fFuel -= fCapacity;
-
-		// Set the fuel amount
 		m_pVehicle->m_pFuelUnk->m_pUnknown->m_pFuelTank->m_fFuel = fFuel;
 	}
 }
@@ -485,7 +476,6 @@ bool CM2Vehicle::GetVehiclePart( int iPart )
 {
 	if( m_pVehicle )
 	{
-		// Get a pointer to the vehicle part
 		DWORD dwVehicleParts = (DWORD)m_pVehicle->m_vehicleData.m_pVehicleParts;
 		M2VehiclePart * pPart = (M2VehiclePart *)(*(DWORD *)(dwVehicleParts + (iPart * 4)));
 
@@ -545,7 +535,6 @@ void CM2Vehicle::SetWheelsProtected( bool bProtected )
 {
 	if( m_pVehicle )
 	{
-		// Are we protecting the wheels?
 		if( bProtected )
 		{
 			BYTE byteFlags = (m_pVehicle->m_byteFlags5);
@@ -739,25 +728,8 @@ void CM2Vehicle::SetLightState ( bool bLightState )
 {
 	if ( m_pVehicle )
 	{
-		M2Vehicle * pVehicle = m_pVehicle;
-		DWORD dwVehicleData = (DWORD)(pVehicle) + 0xA8;
-		int iLightState = (int)bLightState;
-
-		// Unlock light state
-		*(BYTE *)(dwVehicleData + 0x6F3) = 0;
-
-		// Toggle the lights
-		_asm {
-			push 0;										front lights
-			push iLightState;
-			mov ecx, dwVehicleData;
-			call COffsets::FUNC_CVehicle__SetLightState;
-
-			push 1;										license plate light
-			push iLightState;
-			mov ecx, dwVehicleData;
-			call COffsets::FUNC_CVehicle__SetLightState;
-		}
+		m_pVehicle->m_vehicleData.SetLightState(bLightState, 0); //Front
+		m_pVehicle->m_vehicleData.SetLightState(bLightState, 1); //License plate
 	}
 }
 
@@ -909,6 +881,11 @@ void _declspec(naked) C_Vehicle::SetGear(int gear)
 void _declspec(naked) C_Vehicle::SetGearBoxAutomat(eGearBoxstate state)
 {
 	_asm jmp COffsets::FUNC_CCar__SetGearBoxAutomat;
+}
+
+void _declspec(naked) C_Vehicle::SetLightState(bool lightState, int lightId)
+{
+	_asm jmp COffsets::FUNC_CVehicle__SetLightState;
 }
 
 void _declspec(naked) M2Vehicle::LockThrowFromCar(int a2, bool lock)
