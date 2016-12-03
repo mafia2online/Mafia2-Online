@@ -424,8 +424,6 @@ void CM2Ped::RemoveMoney(int iDollars, int iCents)
 
 float CM2Ped::GetMoney(void)
 {
-	DEBUG_LOG("CM2Ped::GetMoney");
-
 	float fMoney = 0.0f;
 
 	if (m_pPed)
@@ -441,14 +439,11 @@ float CM2Ped::GetMoney(void)
 			call C_Human__InventoryGetMoney;
 			mov money, eax;
 		}
-
-		DEBUG_LOG ("CASH: %d (%f)", money, (double)money);
 	}
-
 	return fMoney;
 }
 
-C_SyncObject _declspec(naked) *C_HumanScript::ScrMoveV(C_SyncObject **syncObject, const CVector3 &begin, const E_HumanMoveMode moveMode, const CVector3 &target, const bool smoothStop/* = true*/)
+C_SyncObject _declspec(naked) *C_HumanScript::ScrMoveV(C_SyncObject **syncObject, const CVector3 &begin, const E_HumanMoveMode moveMode, const CVector3 &target, const bool smoothStop)
 {
 	_asm jmp COffsets::FUNC_CHuman__MoveVec;
 }
@@ -464,99 +459,82 @@ C_SyncObject * CM2Ped::MoveVec(const CVector3 &vecPosition, M2Enums::eMoveType m
 		return pSyncObject;
 	}
 
-	return NULL;
+	return nullptr;
+}
+
+C_SyncObject _declspec(naked) *C_HumanScript::ScrAimAt(C_SyncObject **syncObject, M2Entity *ent, CVector3 const &pos, const bool smooth)
+{
+	_asm jmp COffsets::FUNC_CHuman__AimAt;
 }
 
 C_SyncObject * CM2Ped::AimAt(CVector3 vecPosition)
 {
 	if (m_pPed && m_pPed->m_pHumanScript)
 	{
-		C_SyncObject * pSyncObject;
-		void* pEntityData = m_pPed->m_pHumanScript;
+		C_SyncObject * pSyncObject = nullptr;
+		C_HumanScript * pHumanScript = m_pPed->m_pHumanScript;
 
-		M2Entity * pEnt = NULL;
+		M2Entity * pEnt = nullptr;
 
-		// Get the localplayer entity
 		CLocalPlayer *pLocalPlayer = CLocalPlayer::Instance();
 		if (pLocalPlayer && pLocalPlayer->IsSpawned())
 			pEnt = pLocalPlayer->GetPlayerPed()->GetPed();
 
-		_asm
-		{
-			push 1;
-			lea ecx, vecPosition;
-			push ecx;
-			push pEnt;
-			lea ecx, pSyncObject;
-			push ecx;
-			mov ecx, pEntityData;
-			call COffsets::FUNC_CHuman__AimAt;
-		}
+		pHumanScript->ScrAimAt(&pSyncObject, pEnt, vecPosition, true);
 
 		return pSyncObject;
 	}
+	return nullptr;
+}
 
-	return NULL;
+C_SyncObject _declspec(naked) *C_HumanScript::ScrShootAt(C_SyncObject **syncObject, M2Entity *entity, CVector3 const &dir, const bool smooth)
+{
+	_asm jmp COffsets::FUNC_CHuman__ShootAt;
+}
+
+C_SyncObject _declspec(naked) *C_HumanScript::ScrShootAtEffect(C_SyncObject **syncObject, CVector3 const &dir, CVector3 const &unk1, CVector3 const &unk2, int unk, bool smooth)
+{
+	_asm jmp COffsets::FUNC_CHuman__ShootAtEffect;
 }
 
 C_SyncObject * CM2Ped::ShootAt(CVector3 vecPosition)
 {
 	if (m_pPed && m_pPed->m_pHumanScript)
 	{
-		C_SyncObject * pSyncObject;
-		void* pEntityData = m_pPed->m_pHumanScript;
+		C_SyncObject * pSyncObject = nullptr;
+		C_HumanScript * pHumanScript = m_pPed->m_pHumanScript;
 		CVector3 vecUnknown(0.0f, 0.0f, 0.0f);
-
-		_asm
-		{
-			push 1;
-			push 50;
-			lea ecx, vecUnknown;
-			push ecx;
-			lea ecx, vecUnknown;
-			push ecx;
-			lea ecx, vecPosition;
-			push ecx;
-			lea ecx, pSyncObject;
-			push ecx;
-			mov ecx, pEntityData;
-			call COffsets::FUNC_CHuman__ShootAt;
-		}
+		
+		pHumanScript->ScrShootAtEffect(&pSyncObject, vecPosition, vecUnknown, vecUnknown, 50, true);
 
 		return pSyncObject;
 	}
+	return nullptr;
+}
 
-	return NULL;
+C_SyncObject _declspec(naked) *C_HumanScript::ScrLookAt(C_SyncObject **syncObject, M2Entity *entity, CVector3 const &dir, const bool smooth)
+{
+	_asm jmp COffsets::FUNC_CHuman__LookAt;
 }
 
 C_SyncObject * CM2Ped::LookAt(CVector3 vecPosition)
 {
 	if (m_pPed && m_pPed->m_pHumanScript)
 	{
-		C_SyncObject * pSyncObject;
-		void* pEntityData = m_pPed->m_pHumanScript;
+		C_SyncObject * pSyncObject = nullptr;
+		C_HumanScript * pHumanScript = m_pPed->m_pHumanScript;
 
-		M2Entity * pEnt = NULL;
+		M2Entity * pEnt = nullptr;
 
 		CLocalPlayer *pLocalPlayer = CLocalPlayer::Instance();
 		if (pLocalPlayer && pLocalPlayer->IsSpawned())
 			pEnt = pLocalPlayer->GetPlayerPed()->GetPed();
-		_asm
-		{
-			push 1;
-			lea ecx, vecPosition;
-			push ecx;
-			push pEnt;
-			lea ecx, pSyncObject;
-			push ecx;
-			mov ecx, pEntityData;
-			call COffsets::FUNC_CHuman__LookAt;
-		}
+		
+		pHumanScript->ScrLookAt(&pSyncObject, pEnt, vecPosition, true);
 
 		return pSyncObject;
 	}
-
-	return NULL;
+	return nullptr;
 }
 
 /*

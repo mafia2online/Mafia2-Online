@@ -135,6 +135,7 @@ public:
 	static	unsigned int		FUNC_CHuman__SetReactions;
 	static	unsigned int		FUNC_CHuman__MoveVec;
 	static	unsigned int		FUNC_CHuman__ShootAt;
+	static	unsigned int		FUNC_CHuman__ShootAtEffect;
 	static	unsigned int		FUNC_CHuman__AimAt;
 	static	unsigned int		FUNC_CHuman__LookAt;
 	static	unsigned int		FUNC_CHuman__ShowHat;

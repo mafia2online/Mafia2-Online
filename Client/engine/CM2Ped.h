@@ -135,6 +135,10 @@ public:
 	void AnimEffectStop();
 
 	C_SyncObject *ScrMoveV(C_SyncObject **syncObject, const CVector3 &begin, const E_HumanMoveMode moveMode, const CVector3 &target, const bool smoothStop = true);
+	C_SyncObject *ScrAimAt(C_SyncObject **syncObject, M2Entity *entity, CVector3 const &dir, const bool smooth);
+	C_SyncObject *ScrShootAt(C_SyncObject **syncObject, M2Entity *entity, CVector3 const &dir, const bool smooth);
+	C_SyncObject *ScrShootAtEffect(C_SyncObject **syncObject, CVector3 const &dir, CVector3 const &unk1, CVector3 const &unk2, int unk, bool smooth);
+	C_SyncObject *ScrLookAt(C_SyncObject **syncobject, M2Entity *entity, CVector3 const &dir, const bool smooth);
 };
 
 class M2Ped : public M2Entity
