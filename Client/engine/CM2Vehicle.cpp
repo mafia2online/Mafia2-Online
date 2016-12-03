@@ -240,13 +240,9 @@ void CM2Vehicle::SetSpeedLimited( bool bSpeedLimited )
 			call COffsets::FUNC_CVehicle__SetSpeedLimited;
 		}
 
-		DEBUG_LOG( "CM2Vehicle::SetSpeedLimited - Setting unknown flags..." );
-
 		// Set unk flags
 		BYTE byteUnknown = pVehicle->m_pUnknown->m_pUnknown->m_byteUnknown;
 		pVehicle->m_pUnknown->m_pUnknown->m_byteUnknown ^= (byteUnknown ^ 32 * bSpeedLimited) & 0x20;
-
-		DEBUG_LOG( "Unknown flags set!" );
 	}
 }
 
@@ -905,6 +901,16 @@ void _declspec(naked) C_Vehicle::SetCarDamage(long double damage)
 	_asm jmp COffsets::FUNC_CCar__SetCarDamage;
 }
 
+void _declspec(naked) C_Vehicle::SetGear(int gear)
+{
+	_asm jmp COffsets::FUNC_CCar__SetGear;
+}
+
+void _declspec(naked) C_Vehicle::SetGearBoxAutomat(eGearBoxstate state)
+{
+	_asm jmp COffsets::FUNC_CCar__SetGearBoxAutomat;
+}
+
 void _declspec(naked) M2Vehicle::LockThrowFromCar(int a2, bool lock)
 {
 	_asm jmp COffsets::FUNC_CCar__LockThrowFromCar;
@@ -1122,4 +1128,20 @@ void CM2Vehicle::UnlockTrunks()
 		return;
 
 	m_pVehicle->UnlockTrunks();
+}
+
+void CM2Vehicle::SetGear(int gear)
+{
+	if (!m_pVehicle)
+		return;
+
+	m_pVehicle->m_vehicleData.SetGear(gear);
+}
+
+void CM2Vehicle::SetGearBoxAutomat(eGearBoxstate state)
+{
+	if (!m_pVehicle)
+		return;
+
+	m_pVehicle->m_vehicleData.SetGearBoxAutomat(state);
 }
