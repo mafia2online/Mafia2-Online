@@ -284,30 +284,25 @@ void PlayerDeath( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 
 void PlayerSpawn( RakNet::BitStream * pBitStream, RakNet::Packet * pPacket )
 {
-	// Get the player id
 	EntityId playerId = (EntityId)pPacket->guid.systemIndex;
 
-	// Get a pointer to the player
 	CNetworkPlayer * pNetworkPlayer = CCore::Instance()->GetPlayerManager()->Get( playerId );
 
-	// Is the player pointer valid?
 	if( pNetworkPlayer )
 	{
-		// Spawn the player
 		pNetworkPlayer->SpawnForWorld();
-
-		// Spawn everyone else connected for this player
 		CCore::Instance()->GetPlayerManager()->HandlePlayerSpawn( playerId );
 
-		// Spawn all vehicles for this player
-		CCore::Instance()->GetVehicleManager()->HandlePlayerSpawn( playerId );
-
-		CLogFile::Printf( "[spawn] %s has spawned.", pNetworkPlayer->GetNick() );
-
-		// Call the event
 		CSquirrelArguments pArguments;
-		pArguments.push( playerId );
-		CCore::Instance()->GetEvents()->Call( "onPlayerSpawn", &pArguments );
+		pArguments.push(playerId);
+		CCore::Instance()->GetEvents()->Call("onPlayerSpawn", &pArguments);
+
+		CLogFile::Printf("[spawn] %s has spawned.", pNetworkPlayer->GetNick());
+
+		// Here we delay a bit the next loading in order to prevent "flying bus/flying ped" syndrome
+		Sleep(1000);
+
+		CCore::Instance()->GetVehicleManager()->HandlePlayerSpawn( playerId );
 	}
 }
 
