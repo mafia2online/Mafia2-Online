@@ -35,7 +35,6 @@ ULONG STDMETHODCALLTYPE CDirect3D9Proxy::Release()
 {
 	ULONG uRet = m_pD3D->Release();
 
-	// If the reference count is 0 delete ourselves
 	if(uRet == 0)
 		delete this;
 
@@ -109,10 +108,8 @@ HMONITOR STDMETHODCALLTYPE CDirect3D9Proxy::GetAdapterMonitor(UINT Adapter)
 
 HRESULT STDMETHODCALLTYPE CDirect3D9Proxy::CreateDevice(UINT Adapter, D3DDEVTYPE DeviceType, HWND hFocusWindow, DWORD BehaviorFlags, D3DPRESENT_PARAMETERS * pPresentationParameters, IDirect3DDevice9 ** ppReturnedDeviceInterface)
 {
-	// Create the d3d device
 	HRESULT hr = m_pD3D->CreateDevice( Adapter, DeviceType, hFocusWindow, BehaviorFlags, pPresentationParameters, ppReturnedDeviceInterface );
 
-	// If creation of the d3d device succeeded call the create device client event and create the proxy device
 	if(SUCCEEDED(hr))
 	{
 		CCore::Instance()->OnDeviceCreate( *ppReturnedDeviceInterface, pPresentationParameters );
