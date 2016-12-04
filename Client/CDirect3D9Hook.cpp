@@ -28,7 +28,6 @@ IDirect3D9 * WINAPI CDirect3D9Hook::Direct3DCreate9_Hook( UINT SDKVersion )
 		return new CDirect3D9Proxy( pD3D );
 	}
 
-	// Something bad happend inform user about that and and close application.
 	MessageBox ( NULL, "Unable to create Direct3D9 interface.", "Fatal error", MB_ICONERROR );
 	TerminateProcess( GetCurrentProcess(), 0 );
 
@@ -39,11 +38,9 @@ bool CDirect3D9Hook::Install( void )
 {
 	if( !m_bInstalled )
 	{
-		m_pfnDirect3DCreate9 = ( Direct3DCreate9_t ) CPatcher::InstallDetourPatch( "d3d9.dll", "Direct3DCreate9", (DWORD)Direct3DCreate9_Hook );
-
+		m_pfnDirect3DCreate9 = reinterpret_cast<Direct3DCreate9_t>(CPatcher::InstallDetourPatch( "d3d9.dll", "Direct3DCreate9", (DWORD)Direct3DCreate9_Hook ));
 		return m_bInstalled = true;
 	}
-
 	return false;
 }
 

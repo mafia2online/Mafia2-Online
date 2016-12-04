@@ -33,7 +33,6 @@ ULONG STDMETHODCALLTYPE CDirect3DDevice9Proxy::Release()
 {
 	ULONG uRet = m_pD3DDevice->Release();
 
-	// If the reference count is 0 delete ourselves
 	if(uRet == 0)
 		delete this;
 
@@ -59,7 +58,6 @@ HRESULT STDMETHODCALLTYPE CDirect3DDevice9Proxy::GetDirect3D(IDirect3D9 ** ppD3D
 {
 	HRESULT hr = m_pD3DDevice->GetDirect3D(ppD3D9);
 
-	// If the call succeeded return the device pointer
 	if(SUCCEEDED(hr))
 		*ppD3D9 = m_pD3D;
 
@@ -115,15 +113,12 @@ HRESULT STDMETHODCALLTYPE CDirect3DDevice9Proxy::Reset(D3DPRESENT_PARAMETERS * p
 {
 	CCore *pCore = CCore::Instance();
 
-	// Call the lost device core event
 	pCore->OnDeviceLost( m_pD3DDevice );
 
-	// Reset the device
 	HRESULT hResult = m_pD3DDevice->Reset( pPresentationParameters );
 
 	if( SUCCEEDED( hResult ) )
 	{
-		// Call the reset device core event
 		pCore->OnDeviceReset( m_pD3DDevice );
 	}
 
@@ -252,10 +247,22 @@ HRESULT STDMETHODCALLTYPE CDirect3DDevice9Proxy::GetDepthStencilSurface(IDirect3
 
 HRESULT STDMETHODCALLTYPE CDirect3DDevice9Proxy::BeginScene( )
 {
-	// Call the core pre render function
+	// Call our real handler
+	HRESULT hr = m_pD3DDevice->BeginScene();
+
+	// Possible fix for missing textures on some chipsets
+	m_pD3DDevice->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_MODULATE);
+	m_pD3DDevice->SetTextureStageState(0, D3DTSS_COLORARG1, D3DTA_TEXTURE);
+	m_pD3DDevice->SetTextureStageState(0, D3DTSS_COLORARG2, D3DTA_DIFFUSE);
+	m_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
+	m_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
+	m_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE);
+	m_pD3DDevice->SetTextureStageState(1, D3DTSS_COLOROP, D3DTOP_DISABLE);
+	m_pD3DDevice->SetTextureStageState(1, D3DTSS_ALPHAOP, D3DTOP_DISABLE);
+
 	CCore::Instance()->OnDevicePreRender( );
 
-	return m_pD3DDevice->BeginScene();
+	return hr;
 }
 
 HRESULT STDMETHODCALLTYPE CDirect3DDevice9Proxy::EndScene( )
