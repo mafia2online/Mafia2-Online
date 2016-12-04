@@ -20,6 +20,13 @@ struct ShakeCommandData
 	float duration;
 };
 
+enum eCameraCommand
+{
+	CAMCOMMAND_LOCKC = 1282368363, //Lock control
+	CAMCOMMAND_GOVER = 1381191748, //Start game over sequence
+	CAMCOMMAND_SHAKE = 1399349587, //Shake the screen
+};
+
 class C_RenderCamera // size: 0x1E8
 {
 public:
@@ -42,9 +49,6 @@ public:
 	Matrix43 m_viewMatrix;					// 00AC - 00DC
 	D3DXMATRIX m_projectionMatrix;			// 00DC - 011C
 	D3DXMATRIX m_worldViewProjection;		// 011C - 015C
-
-	void ModeChange(int a2, void *a3, int a4, int modeID, int a6, int a7, int a8, int a9, int a10);
-	void BroadcastCommand(int command, void *data, void *unknow);
 };
 
 class M2CameraUnk001
@@ -81,7 +85,10 @@ public:
 	//	+ 0x5C = BYTE
 
 
+	void BroadcastCommand(eCameraCommand command, void *data, void *unknow);
 	void LockLookAt(const char *unk1, const char *unk2, double unk3);
+	void ModeChange(int a2, void *a3, int a4, int modeID, int a6, int a7, int a8, int a9, int a10);
+	void ModePop(int unk1, int unk2);
 	void RotationTowards(CVector3 vec);
 };
 
@@ -142,4 +149,6 @@ public:
 
 	void						LockLookAt(const char *unk1, const char *unk2, double unk3);
 	void						SetRotation(CVector3 vec);
+
+	void						EnableFPV(bool enable);
 };
