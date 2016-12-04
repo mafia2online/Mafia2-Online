@@ -204,7 +204,7 @@ void CGUI_Impl::Draw( void )
 
 void CGUI_Impl::DrawMouseCursor( void )
 {
-	m_pCursor->draw();
+	CEGUI::MouseCursor::getSingleton().draw();
 }
 
 void CGUI_Impl::OnDeviceLost( void )
@@ -293,14 +293,14 @@ void CGUI_Impl::CleanDeadPool( void )
 void CGUI_Impl::SetCursorEnabled( bool bCursorEnabled )
 {
 	if( bCursorEnabled )
-		m_pCursor->show();
+		CEGUI::MouseCursor::getSingleton().show();
 	else
-		m_pCursor->hide();
+		CEGUI::MouseCursor::getSingleton().hide();
 }
 
 bool CGUI_Impl::IsCursorEnabled( void )
 {
-	return m_pCursor->isVisible();
+	return CEGUI::MouseCursor::getSingleton().isVisible();
 }
 
 bool CGUI_Impl::IsInputEnabled( void )
@@ -312,12 +312,12 @@ bool CGUI_Impl::IsInputEnabled( void )
 
 	if( pWindow->getType() == "CGUI/Editbox" )
 	{
-		CEGUI::Editbox * pEditBox = (CEGUI::Editbox *)pWindow;
+		CEGUI::Editbox * pEditBox = reinterpret_cast<CEGUI::Editbox *>(pWindow);
 		return ( !pEditBox->isReadOnly() && pEditBox->hasInputFocus() );
 	}
 	else if( pWindow->getType() == "CGUI/MultiLineEditbox" )
 	{
-		CEGUI::MultiLineEditbox * pMultiLineEditBox = (CEGUI::MultiLineEditbox *)pWindow;
+		CEGUI::MultiLineEditbox * pMultiLineEditBox = reinterpret_cast<CEGUI::MultiLineEditbox *>(pWindow);
 		return ( !pMultiLineEditBox->isReadOnly() && pMultiLineEditBox->hasInputFocus() );
 	}
 	return false;
@@ -345,8 +345,6 @@ void CGUI_Impl::AddToRedrawQueue( CGUIElement_Impl * pElement )
 		std::list< CGUIElement_Impl* >::const_iterator iter = m_redrawQueue.begin();
 		for( ; iter != m_redrawQueue.end(); ++iter )
 		{
-			if (m_redrawQueue.empty()) break;
-
 			if( pElement->GetParent() == *iter )
 				return;
 			else if( (*iter)->GetParent() == pElement )
@@ -385,7 +383,7 @@ CEGUI::String CGUI_Impl::GetUTFString( const String &strInput )
 bool CGUI_Impl::Event_RedrawRequest( const CEGUI::EventArgs &e )
 {
 	const CEGUI::WindowEventArgs &arg = (CEGUI::WindowEventArgs&)e;
-	CGUIElement_Impl * pElement = (CGUIElement_Impl *)arg.window->getUserData();
+	CGUIElement_Impl * pElement = reinterpret_cast<CGUIElement_Impl *>(arg.window->getUserData());
 
 	if( pElement )
 		AddToRedrawQueue( pElement );
@@ -397,7 +395,7 @@ bool CGUI_Impl::Event_RedrawRequest( const CEGUI::EventArgs &e )
 
 bool CGUI_Impl::Event_OnKeyDown( const CEGUI::EventArgs &e )
 {
-	const CEGUI::KeyEventArgs &keyArgs = (const CEGUI::KeyEventArgs &)e;
+	const CEGUI::KeyEventArgs &keyArgs = reinterpret_cast<const CEGUI::KeyEventArgs &>(e);
 	switch( keyArgs.scancode )
 	{
 	case CEGUI::Key::Scan::C:
@@ -406,27 +404,30 @@ bool CGUI_Impl::Event_OnKeyDown( const CEGUI::EventArgs &e )
 			if( keyArgs.sysKeys & CEGUI::Control )
 			{
 				CEGUI::String strTemp;
-				CEGUI::Window * pWindow = (CEGUI::Window *)keyArgs.window;
+				CEGUI::Window * pWindow = reinterpret_cast<CEGUI::Window *>(keyArgs.window);
 				if( pWindow->getType() == "CGUI/Editbox" )
 				{
-					CEGUI::Editbox * pEditBox = (CEGUI::Editbox *)pWindow;
-					size_t sSelectionStart = pEditBox->getSelectionStartIndex();
-					size_t sSelectionEnd = pEditBox->getSelectionLength();
-					strTemp = pEditBox->getText().substr( sSelectionStart, sSelectionEnd );
-
-					if( keyArgs.scancode == CEGUI::Key::Scan::X )
+					CEGUI::Editbox * pEditBox = reinterpret_cast<CEGUI::Editbox *>(pWindow);
+					if (!pEditBox->isTextMasked())
 					{
-						if( !pEditBox->isReadOnly() )
+						size_t sSelectionStart = pEditBox->getSelectionStartIndex();
+						size_t sSelectionEnd = pEditBox->getSelectionLength();
+						strTemp = pEditBox->getText().substr(sSelectionStart, sSelectionEnd);
+
+						if (keyArgs.scancode == CEGUI::Key::Scan::X)
 						{
-							CEGUI::String strTemp2 = pEditBox->getText();
-							strTemp2.replace( sSelectionStart, sSelectionEnd, "", 0 );
-							pEditBox->setText( strTemp2 );
+							if (!pEditBox->isReadOnly())
+							{
+								CEGUI::String strTemp2 = pEditBox->getText();
+								strTemp2.replace(sSelectionStart, sSelectionEnd, "", 0);
+								pEditBox->setText(strTemp2);
+							}
 						}
 					}
 				}
 				else if( pWindow->getType() == "CGUI/MultiLineEditBox" )
 				{
-					CEGUI::MultiLineEditbox * pEditBox = (CEGUI::MultiLineEditbox *)pWindow;
+					CEGUI::MultiLineEditbox * pEditBox = reinterpret_cast<CEGUI::MultiLineEditbox *>(pWindow);
 					size_t sSelectionStart = pEditBox->getSelectionStartIndex();
 					size_t sSelectionEnd = pEditBox->getSelectionLength();
 					strTemp = pEditBox->getText().substr( sSelectionStart, sSelectionEnd );
@@ -454,10 +455,10 @@ bool CGUI_Impl::Event_OnKeyDown( const CEGUI::EventArgs &e )
 		{
 			if( keyArgs.sysKeys & CEGUI::Control )
 			{
-				CEGUI::Window * pWindow = (CEGUI::Window *)keyArgs.window;
+				CEGUI::Window * pWindow = reinterpret_cast<CEGUI::Window *>(keyArgs.window);
 				if( pWindow->getType() == "CGUI/Editbox" )
 				{
-					CEGUI::Editbox * pEditBox = (CEGUI::Editbox *)pWindow;
+					CEGUI::Editbox * pEditBox = reinterpret_cast<CEGUI::Editbox *>(pWindow);
 					const char * szClipboard = SharedUtility::GetClipboardText();
 
 					if( szClipboard )
@@ -516,16 +517,16 @@ bool CGUI_Impl::Event_OnKeyDown( const CEGUI::EventArgs &e )
 		{
 			if( keyArgs.sysKeys & CEGUI::Control )
 			{
-				CEGUI::Window * pWindow = (CEGUI::Window *)keyArgs.window;
+				CEGUI::Window * pWindow = reinterpret_cast<CEGUI::Window *>(keyArgs.window);
 
 				if( pWindow->getType() == "CGUI/Editbox" )
 				{
-					CEGUI::Editbox * pEditBox = (CEGUI::Editbox *)pWindow;
+					CEGUI::Editbox * pEditBox = reinterpret_cast<CEGUI::Editbox *>(pWindow);
 					pEditBox->setSelection( 0, pEditBox->getText().size() );
 				}
 				else if( pWindow->getType() == "CGUI/MultiLineEditBox" )
 				{
-					CEGUI::MultiLineEditbox * pMultiLineEditBox = (CEGUI::MultiLineEditbox *)pWindow;
+					CEGUI::MultiLineEditbox * pMultiLineEditBox = reinterpret_cast<CEGUI::MultiLineEditbox *>(pWindow);
 					pMultiLineEditBox->setSelection( 0, pMultiLineEditBox->getText().size() );
 				}
 			}
@@ -536,9 +537,9 @@ bool CGUI_Impl::Event_OnKeyDown( const CEGUI::EventArgs &e )
 	{
 		CGUIKeyEventArgs args;
 		args.codepoint = keyArgs.codepoint;
-		args.scancode = (CGUIKeys::Scan)keyArgs.scancode;
+		args.scancode = static_cast<CGUIKeys::Scan>(keyArgs.scancode);
 		args.sysKeys = keyArgs.sysKeys;
-		args.pWindow = (CGUIElement_Impl *)keyArgs.window->getUserData();
+		args.pWindow = reinterpret_cast<CGUIElement_Impl *>(keyArgs.window->getUserData());
 
 		m_KeyDownHandler( args );
 	}
@@ -554,9 +555,9 @@ bool CGUI_Impl::Event_CharacterKey( const CEGUI::EventArgs &e )
 
 		CGUIKeyEventArgs args;
 		args.codepoint = keyArgs.codepoint;
-		args.scancode = (CGUIKeys::Scan)keyArgs.scancode;
+		args.scancode = static_cast<CGUIKeys::Scan>(keyArgs.scancode);
 		args.sysKeys = keyArgs.sysKeys;
-		args.pWindow = (CGUIElement_Impl *)keyArgs.window->getUserData();
+		args.pWindow = reinterpret_cast<CGUIElement_Impl *>(keyArgs.window->getUserData());
 
 		m_CharacterKeyHandler( args );
 	}
@@ -568,19 +569,19 @@ bool CGUI_Impl::Event_MouseClick( const CEGUI::EventArgs &e )
 {
 	if( m_MouseClickHandler )
 	{
-		const CEGUI::MouseEventArgs &mouseArgs = (const CEGUI::MouseEventArgs &)e;
+		const CEGUI::MouseEventArgs &mouseArgs = reinterpret_cast<const CEGUI::MouseEventArgs &>(e);
 		CEGUI::Window * pWindow = mouseArgs.window;
 
 		if( pWindow->testClassName( CEGUI::Titlebar::EventNamespace ) || pWindow->testClassName( CEGUI::Scrollbar::EventNamespace ) )
 			pWindow = pWindow->getParent();
 
 		CGUIMouseEventArgs args;
-		args.button = (CGUIMouse::MouseButton)mouseArgs.button;
+		args.button = static_cast<CGUIMouse::MouseButton>(mouseArgs.button);
 		args.position = Vector2( mouseArgs.position.d_x, mouseArgs.position.d_y );
 		args.moveDelta = Vector2( mouseArgs.moveDelta.d_x, mouseArgs.moveDelta.d_y );
 		args.sysKeys = mouseArgs.sysKeys;
 		args.wheelChange = mouseArgs.wheelChange;
-		args.pWindow = (CGUIElement_Impl *)pWindow->getUserData();
+		args.pWindow = reinterpret_cast<CGUIElement_Impl *>(pWindow->getUserData());
 
 		m_MouseClickHandler( args );
 	}
@@ -592,7 +593,7 @@ bool CGUI_Impl::Event_MouseDoubleClick( const CEGUI::EventArgs &e )
 {
 	if( m_MouseDoubleClickHandler )
 	{
-		const CEGUI::MouseEventArgs &mouseArgs = (const CEGUI::MouseEventArgs &)e;
+		const CEGUI::MouseEventArgs &mouseArgs = reinterpret_cast<const CEGUI::MouseEventArgs &>(e);
 
 		CEGUI::Window * pWindow = mouseArgs.window;
 
@@ -600,12 +601,12 @@ bool CGUI_Impl::Event_MouseDoubleClick( const CEGUI::EventArgs &e )
 			pWindow = pWindow->getParent();
 
 		CGUIMouseEventArgs args;
-		args.button = (CGUIMouse::MouseButton)mouseArgs.button;
+		args.button = static_cast<CGUIMouse::MouseButton>(mouseArgs.button);
 		args.position = Vector2( mouseArgs.position.d_x, mouseArgs.position.d_y );
 		args.moveDelta = Vector2( mouseArgs.moveDelta.d_x, mouseArgs.moveDelta.d_y );
 		args.sysKeys = mouseArgs.sysKeys;
 		args.wheelChange = mouseArgs.wheelChange;
-		args.pWindow = (CGUIElement_Impl *)pWindow->getUserData();
+		args.pWindow = reinterpret_cast<CGUIElement_Impl *>(pWindow->getUserData());
 
 		m_MouseDoubleClickHandler( args );
 	}
@@ -617,19 +618,19 @@ bool CGUI_Impl::Event_MouseButtonDown( const CEGUI::EventArgs &e )
 {
 	if( m_MouseButtonDownHandler )
 	{
-		const CEGUI::MouseEventArgs &mouseArgs = (const CEGUI::MouseEventArgs &)e;
+		const CEGUI::MouseEventArgs &mouseArgs = reinterpret_cast<const CEGUI::MouseEventArgs &>(e);
 		CEGUI::Window * pWindow = mouseArgs.window;
 
 		if( pWindow->testClassName( CEGUI::Titlebar::EventNamespace ) || pWindow->testClassName( CEGUI::Scrollbar::EventNamespace ) )
 			pWindow = pWindow->getParent();
 
 		CGUIMouseEventArgs args;
-		args.button = (CGUIMouse::MouseButton)mouseArgs.button;
+		args.button = static_cast<CGUIMouse::MouseButton>(mouseArgs.button);
 		args.position = Vector2( mouseArgs.position.d_x, mouseArgs.position.d_y );
 		args.moveDelta = Vector2( mouseArgs.moveDelta.d_x, mouseArgs.moveDelta.d_y );
 		args.sysKeys = mouseArgs.sysKeys;
 		args.wheelChange = mouseArgs.wheelChange;
-		args.pWindow = (CGUIElement_Impl *)pWindow->getUserData();
+		args.pWindow = reinterpret_cast<CGUIElement_Impl *>(pWindow->getUserData());
 
 		m_MouseButtonDownHandler( args );
 	}
@@ -641,19 +642,19 @@ bool CGUI_Impl::Event_MouseButtonUp( const CEGUI::EventArgs &e )
 {
 	if( m_MouseButtonUpHandler )
 	{
-		const CEGUI::MouseEventArgs &mouseArgs = (const CEGUI::MouseEventArgs &)e;
+		const CEGUI::MouseEventArgs &mouseArgs = reinterpret_cast<const CEGUI::MouseEventArgs &>(e);
 		CEGUI::Window * pWindow = mouseArgs.window;
 
 		if( pWindow->testClassName( CEGUI::Titlebar::EventNamespace ) || pWindow->testClassName( CEGUI::Scrollbar::EventNamespace ) )
 			pWindow = pWindow->getParent();
 
 		CGUIMouseEventArgs args;
-		args.button = (CGUIMouse::MouseButton)mouseArgs.button;
+		args.button = static_cast<CGUIMouse::MouseButton>(mouseArgs.button);
 		args.position = Vector2( mouseArgs.position.d_x, mouseArgs.position.d_y );
 		args.moveDelta = Vector2( mouseArgs.moveDelta.d_x, mouseArgs.moveDelta.d_y );
 		args.sysKeys = mouseArgs.sysKeys;
 		args.wheelChange = mouseArgs.wheelChange;
-		args.pWindow = (CGUIElement_Impl *)pWindow->getUserData();
+		args.pWindow = reinterpret_cast<CGUIElement_Impl *>(pWindow->getUserData());
 
 		m_MouseButtonUpHandler( args );
 	}
@@ -665,7 +666,7 @@ bool CGUI_Impl::Event_MouseWheel( const CEGUI::EventArgs &e )
 {
 	if( m_MouseWheelHandler )
 	{
-		const CEGUI::MouseEventArgs &mouseArgs = (const CEGUI::MouseEventArgs &)e;
+		const CEGUI::MouseEventArgs &mouseArgs = reinterpret_cast<const CEGUI::MouseEventArgs &>(e);
 
 		CEGUI::Window * pWindow = mouseArgs.window;
 
@@ -673,12 +674,12 @@ bool CGUI_Impl::Event_MouseWheel( const CEGUI::EventArgs &e )
 			pWindow = pWindow->getParent();
 
 		CGUIMouseEventArgs args;
-		args.button = (CGUIMouse::MouseButton)mouseArgs.button;
+		args.button = static_cast<CGUIMouse::MouseButton>(mouseArgs.button);
 		args.position = Vector2( mouseArgs.position.d_x, mouseArgs.position.d_y );
 		args.moveDelta = Vector2( mouseArgs.moveDelta.d_x, mouseArgs.moveDelta.d_y );
 		args.sysKeys = mouseArgs.sysKeys;
 		args.wheelChange = mouseArgs.wheelChange;
-		args.pWindow = (CGUIElement_Impl *)pWindow->getUserData();
+		args.pWindow = reinterpret_cast<CGUIElement_Impl *>(pWindow->getUserData());
 
 		m_MouseWheelHandler( args );
 	}
@@ -690,7 +691,7 @@ bool CGUI_Impl::Event_MouseMove( const CEGUI::EventArgs &e )
 {
 	if( m_MouseMoveHandler )
 	{
-		const CEGUI::MouseEventArgs &mouseArgs = (const CEGUI::MouseEventArgs &)e;
+		const CEGUI::MouseEventArgs &mouseArgs = reinterpret_cast<const CEGUI::MouseEventArgs &>(e);
 
 		CEGUI::Window * pWindow = mouseArgs.window;
 
@@ -698,12 +699,12 @@ bool CGUI_Impl::Event_MouseMove( const CEGUI::EventArgs &e )
 			pWindow = pWindow->getParent();
 
 		CGUIMouseEventArgs args;
-		args.button = (CGUIMouse::MouseButton)mouseArgs.button;
+		args.button = static_cast<CGUIMouse::MouseButton>(mouseArgs.button);
 		args.position = Vector2( mouseArgs.position.d_x, mouseArgs.position.d_y );
 		args.moveDelta = Vector2( mouseArgs.moveDelta.d_x, mouseArgs.moveDelta.d_y );
 		args.sysKeys = mouseArgs.sysKeys;
 		args.wheelChange = mouseArgs.wheelChange;
-		args.pWindow = (CGUIElement_Impl *)pWindow->getUserData();
+		args.pWindow = reinterpret_cast<CGUIElement_Impl *>(pWindow->getUserData());
 
 		m_MouseMoveHandler( args );
 	}
@@ -715,19 +716,19 @@ bool CGUI_Impl::Event_MouseEnter( const CEGUI::EventArgs &e )
 {
 	if( m_MouseEnterHandler )
 	{
-		const CEGUI::MouseEventArgs &mouseArgs = (const CEGUI::MouseEventArgs &)e;
+		const CEGUI::MouseEventArgs &mouseArgs = reinterpret_cast<const CEGUI::MouseEventArgs &>(e);
 		CEGUI::Window * pWindow = mouseArgs.window;
 
 		if( pWindow->testClassName( CEGUI::Titlebar::EventNamespace ) || pWindow->testClassName( CEGUI::Scrollbar::EventNamespace ) )
 			pWindow = pWindow->getParent();
 
 		CGUIMouseEventArgs args;
-		args.button = (CGUIMouse::MouseButton)mouseArgs.button;
+		args.button = static_cast<CGUIMouse::MouseButton>(mouseArgs.button);
 		args.position = Vector2( mouseArgs.position.d_x, mouseArgs.position.d_y );
 		args.moveDelta = Vector2( mouseArgs.moveDelta.d_x, mouseArgs.moveDelta.d_y );
 		args.sysKeys = mouseArgs.sysKeys;
 		args.wheelChange = mouseArgs.wheelChange;
-		args.pWindow = (CGUIElement_Impl *)pWindow->getUserData();
+		args.pWindow = reinterpret_cast<CGUIElement_Impl *>(pWindow->getUserData());
 
 		m_MouseEnterHandler( args );
 	}
@@ -739,7 +740,7 @@ bool CGUI_Impl::Event_MouseLeave( const CEGUI::EventArgs &e )
 {
 	if( m_MouseLeaveHandler )
 	{
-		const CEGUI::MouseEventArgs &mouseArgs = (const CEGUI::MouseEventArgs &)e;
+		const CEGUI::MouseEventArgs &mouseArgs = reinterpret_cast<const CEGUI::MouseEventArgs &>(e);
 
 		CEGUI::Window * pWindow = mouseArgs.window;
 
@@ -747,12 +748,12 @@ bool CGUI_Impl::Event_MouseLeave( const CEGUI::EventArgs &e )
 			pWindow = pWindow->getParent();
 
 		CGUIMouseEventArgs args;
-		args.button = (CGUIMouse::MouseButton)mouseArgs.button;
+		args.button = static_cast<CGUIMouse::MouseButton>(mouseArgs.button);
 		args.position = Vector2( mouseArgs.position.d_x, mouseArgs.position.d_y );
 		args.moveDelta = Vector2( mouseArgs.moveDelta.d_x, mouseArgs.moveDelta.d_y );
 		args.sysKeys = mouseArgs.sysKeys;
 		args.wheelChange = mouseArgs.wheelChange;
-		args.pWindow = (CGUIElement_Impl *)pWindow->getUserData();
+		args.pWindow = reinterpret_cast<CGUIElement_Impl *>(pWindow->getUserData());
 
 		m_MouseLeaveHandler( args );
 	}
@@ -764,14 +765,14 @@ bool CGUI_Impl::Event_FocusGained( const CEGUI::EventArgs &e )
 {
 	if( m_FocusGainedHandler )
 	{
-		const CEGUI::ActivationEventArgs &activationArgs = (const CEGUI::ActivationEventArgs &)e;
+		const CEGUI::ActivationEventArgs &activationArgs = reinterpret_cast<const CEGUI::ActivationEventArgs &>(e);
 
 		CGUIFocusEventArgs args;
-		args.pDeactivatedWindow = (CGUIElement_Impl *)activationArgs.window->getUserData();
+		args.pDeactivatedWindow = reinterpret_cast<CGUIElement_Impl *>(activationArgs.window->getUserData());
 		args.pActivatedWindow = NULL;
 
 		if( activationArgs.otherWindow )
-			args.pActivatedWindow = (CGUIElement_Impl *)activationArgs.otherWindow->getUserData();
+			args.pActivatedWindow = reinterpret_cast<CGUIElement_Impl *>(activationArgs.otherWindow->getUserData());
 
 		m_FocusGainedHandler( args );
 	}
@@ -783,14 +784,14 @@ bool CGUI_Impl::Event_FocusLost( const CEGUI::EventArgs &e )
 {
 	if( m_FocusGainedHandler )
 	{
-		const CEGUI::ActivationEventArgs &activationArgs = (const CEGUI::ActivationEventArgs &)e;
+		const CEGUI::ActivationEventArgs &activationArgs = reinterpret_cast<const CEGUI::ActivationEventArgs &>(e);
 
 		CGUIFocusEventArgs args;
-		args.pDeactivatedWindow = (CGUIElement_Impl *)activationArgs.window->getUserData();
+		args.pDeactivatedWindow = reinterpret_cast<CGUIElement_Impl *>(activationArgs.window->getUserData());
 		args.pActivatedWindow = NULL;
 
 		if( activationArgs.otherWindow )
-			args.pActivatedWindow = (CGUIElement_Impl *)activationArgs.otherWindow->getUserData();
+			args.pActivatedWindow = reinterpret_cast<CGUIElement_Impl *>(activationArgs.otherWindow->getUserData());
 
 		m_FocusLostHandler( args );
 	}

@@ -29,9 +29,8 @@
 
 CGUIElement_Impl::CGUIElement_Impl( CGUI_Impl *gui )
 {
-	// Reset
-	m_pWindow = NULL;
-	m_pParent = NULL;
+	m_pWindow = nullptr;
+	m_pParent = nullptr;
 	m_pManager = gui;
 
 	m_pManager->NotifyElementCreate(this);
@@ -45,7 +44,6 @@ CGUIElement_Impl::~CGUIElement_Impl( void )
 
 void CGUIElement_Impl::AddEvents( void )
 {
-	// Register default events
 	m_pWindow->subscribeEvent( CEGUI::Window::EventMouseClick, CEGUI::Event::Subscriber( &CGUIElement_Impl::Event_OnClick, this ) );
 	m_pWindow->subscribeEvent( CEGUI::Window::EventMouseDoubleClick, CEGUI::Event::Subscriber( &CGUIElement_Impl::Event_OnDoubleClick, this));
 	m_pWindow->subscribeEvent( CEGUI::Window::EventMoved, CEGUI::Event::Subscriber( &CGUIElement_Impl::Event_OnMove, this ) );
@@ -56,19 +54,13 @@ void CGUIElement_Impl::AddEvents( void )
 
 void CGUIElement_Impl::DestroyElement( void )
 {
-	// Remove the element from the redraw queue
-	m_pManager->RemoveFromRedrawQueue( (CGUIElement_Impl *)m_pWindow->getUserData() );
-
-	// Reset the user data
+	m_pManager->RemoveFromRedrawQueue( reinterpret_cast<CGUIElement_Impl *>(m_pWindow->getUserData()) );
 	m_pWindow->setUserData ( NULL );
-
-	// Destroy the control
 	m_pManager->GetWindowManager()->destroyWindow( m_pWindow );
 }
 
 void CGUIElement_Impl::SetVisible( bool bVisible )
 {
-	// Toggle the element visibility
 	m_pWindow->setVisible( bVisible );
 }
 
@@ -79,7 +71,6 @@ bool CGUIElement_Impl::IsVisible( void )
 
 void CGUIElement_Impl::SetEnabled( bool bEnabled )
 {
-	// Toggle the element
 	m_pWindow->setEnabled( bEnabled );
 }
 
@@ -90,7 +81,6 @@ bool CGUIElement_Impl::IsEnabled( void )
 
 void CGUIElement_Impl::SetZOrderingEnabled( bool bZOrderingEnabled )
 {
-	// Toggle the element z-ordering
 	m_pWindow->setZOrderingEnabled( bZOrderingEnabled );
 }
 
@@ -101,29 +91,27 @@ bool CGUIElement_Impl::IsZOrderingEnabled( void )
 
 void CGUIElement_Impl::BringToFront( void )
 {
-	// Bring the element to the front
     m_pWindow->moveToFront();
 }
 
 void CGUIElement_Impl::SendToBack( void )
 {
-	// Send the element to the back
     m_pWindow->moveToBack();
 }
 
 void CGUIElement_Impl::SetParent( CGUIElement_Impl * pParent )
 {
-	// Is the parent instance valid?
-	if( pParent )
-		((CGUIElement_Impl *)pParent)->m_pWindow->addChildWindow( m_pWindow );
-
-	// Store the parent
+	if (pParent)
+	{
+		CGUIElement_Impl* pElement = dynamic_cast < CGUIElement_Impl* > (pParent);
+		if (pElement)
+			pElement->m_pWindow->addChildWindow(m_pWindow);
+	}
 	m_pParent = pParent;
 }
 
 void CGUIElement_Impl::SetText( String strText )
 {
-	// Set the text
 	m_pWindow->setText( CGUI_Impl::GetUTFString( strText ) );
 }
 
@@ -144,16 +132,13 @@ String CGUIElement_Impl::GetProperty( String strProperty )
 
 void CGUIElement_Impl::SetPosition( Vector2 vecPosition, bool bRelative )
 {
-	// Convert the position to a cegui point
 	CEGUI::Point position( vecPosition.fX, vecPosition.fY );
 
-	// Set the element position
 	if( bRelative )
 		m_pWindow->setPosition( CEGUI::Relative, position );
 	else
 		m_pWindow->setPosition( CEGUI::Absolute, position );
 
-	// Correct the element edges
 	CorrectEdges();
 }
 
@@ -161,28 +146,23 @@ Vector2 CGUIElement_Impl::GetPosition( bool bRelative )
 {
 	CEGUI::Point position;
 
-	// Get the element position
 	if( bRelative )
 		position = m_pWindow->getPosition( CEGUI::Relative );
 	else
 		position = m_pWindow->getPosition( CEGUI::Absolute );
 
-	// Return the position as a Vector2 class
 	return Vector2( position.d_x, position.d_y );
 }
 
 void CGUIElement_Impl::SetSize( Vector2 vecSize, bool bRelative )
 {
-	// Convert the size to a cegui size
 	CEGUI::Size size( vecSize.fX, vecSize.fY );
 
-	// Set the element size
 	if( bRelative )
 		m_pWindow->setSize( CEGUI::Relative, size );
 	else
 		m_pWindow->setSize( CEGUI::Absolute, size );
 
-	// Correct the element edges
 	CorrectEdges();
 }
 
@@ -190,51 +170,40 @@ Vector2 CGUIElement_Impl::GetSize( bool bRelative )
 {
 	CEGUI::Size size;
 
-	// Get the element position
 	if( bRelative )
 		size = m_pWindow->getSize( CEGUI::Relative );
 	else
 		size = m_pWindow->getSize( CEGUI::Absolute );
 
-	// Return the size as a Vector2 class
 	return Vector2( size.d_width, size.d_height );
 }
 
 void CGUIElement_Impl::SetMinimumSize( Vector2 vecSize )
 {
-	// Set the element metrics mode
 	m_pWindow->setMetricsMode( CEGUI::Absolute );
-
-	// Set the element minimum size
 	m_pWindow->setMinimumSize( CEGUI::Size( vecSize.fX, vecSize.fY ) );
 }
 
 Vector2 CGUIElement_Impl::GetMinimumSize( void )
 {
-	// Get the element minimum size
 	CEGUI::Size minSize = m_pWindow->getMinimumSize();
 	return Vector2( minSize.d_width, minSize.d_height );
 }
 
 void CGUIElement_Impl::SetMaximumSize( Vector2 vecSize )
 {
-	// Set the element metrics mode
 	m_pWindow->setMetricsMode( CEGUI::Absolute );
-
-	// Set the element maximum size
 	m_pWindow->setMaximumSize( CEGUI::Size( vecSize.fX, vecSize.fY ) );
 }
 
 Vector2 CGUIElement_Impl::GetMaximumSize( void )
 {
-	// Get the element minimum size
 	CEGUI::Size maxSize = m_pWindow->getMaximumSize();
 	return Vector2( maxSize.d_width, maxSize.d_height );
 }
 
 void CGUIElement_Impl::SetAlpha( float fAlpha )
 {
-	// Set the elment alpha
 	m_pWindow->setAlpha( fAlpha );
 }
 
@@ -245,7 +214,6 @@ float CGUIElement_Impl::GetAlpha( void )
 
 void CGUIElement_Impl::SetInheritsAlpha( bool bInheritsAlpha )
 {
-	// Toggle inherits alpha
 	m_pWindow->setInheritsAlpha( bInheritsAlpha );
 }
 
@@ -256,7 +224,6 @@ bool CGUIElement_Impl::InheritsAlpha( void )
 
 void CGUIElement_Impl::SetAlwaysOnTop( bool bAlwaysOnTop )
 {
-	// Toggle always on top
 	m_pWindow->setAlwaysOnTop( bAlwaysOnTop );
 }
 
@@ -267,13 +234,11 @@ bool CGUIElement_Impl::IsAlwaysOnTop( void )
 
 void CGUIElement_Impl::Activate( void )
 {
-	// Activate the window
 	m_pWindow->activate();
 }
 
 void CGUIElement_Impl::Deactivate( void )
 {
-	// Deactivate the window
 	m_pWindow->deactivate();
 }
 
@@ -284,23 +249,16 @@ bool CGUIElement_Impl::IsActive( void )
 
 void CGUIElement_Impl::ForceRedraw( void )
 {
-	// Force the element to redraw
 	m_pWindow->forceRedraw();
 }
 
 void CGUIElement_Impl::CorrectEdges( void )
 {
-	// Is this not a framewindow?
-	if( m_pWindow->getType() != "CGUI/FrameWindow" )
+	if( m_pWindow->getType() != "CGUI/FrameWindow" || m_pWindow->getType() == "CGUI/StaticText")
 		return;
 
-	// Get the element position
 	CEGUI::Point currentPoint = m_pWindow->getPosition( CEGUI::Absolute );
-
-	// Get the element size
 	CEGUI::Size currentSize = m_pWindow->getSize( CEGUI::Absolute );
-
-	// Get the parent size
 	CEGUI::Size parentSize = m_pWindow->getParent()->getSize( CEGUI::Absolute );
 
 	// Ajust the left size
@@ -319,7 +277,6 @@ void CGUIElement_Impl::CorrectEdges( void )
 	if( (currentSize.d_height + currentPoint.d_y) > (parentSize.d_height - CGUI_NODRAW_BOTTOM) )
 		currentSize.d_height -= ((currentSize.d_height + currentPoint.d_y) - (parentSize.d_height - CGUI_NODRAW_BOTTOM));
 
-	// Update the element position and size
 	m_pWindow->setPosition( CEGUI::Absolute, currentPoint );
 	m_pWindow->setSize( CEGUI::Absolute, currentSize );
 }
@@ -328,7 +285,6 @@ void CGUIElement_Impl::SetFont( const char * szFontName )
 {
 	try
 	{
-		// Set the font
 		m_pWindow->setFont( CEGUI::String( szFontName ) );
 	}
 	catch ( CEGUI::Exception ) {}
@@ -347,11 +303,9 @@ const char * CGUIElement_Impl::GetFont( void )
 
 bool CGUIElement_Impl::Event_OnClick( const CEGUI::EventArgs &e )
 {
-	// Call the click handler
 	if( m_pfnClickHandler )
-		m_pfnClickHandler( this );
+		m_pfnClickHandler(this);
 
-	// Pass the event to the client gui manager
 	if( CCore::Instance()->GetClientScriptingManager() && CCore::Instance()->GetClientScriptingManager()->GetScriptGUIManager() )
 		CCore::Instance()->GetClientScriptingManager()->GetScriptGUIManager()->HandleEvent( "onGuiElementClick", this );
 
@@ -360,11 +314,9 @@ bool CGUIElement_Impl::Event_OnClick( const CEGUI::EventArgs &e )
 
 bool CGUIElement_Impl::Event_OnDoubleClick(const CEGUI::EventArgs &e)
 {
-	// Call the click handler
 	if (m_pfnDoubleClickHandler)
 		m_pfnDoubleClickHandler(this);
 
-	// Pass the event to the client gui manager
 	if (CCore::Instance()->GetClientScriptingManager() && CCore::Instance()->GetClientScriptingManager()->GetScriptGUIManager())
 		CCore::Instance()->GetClientScriptingManager()->GetScriptGUIManager()->HandleEvent("onGuiElementDoubleClick", this);
 
@@ -373,11 +325,9 @@ bool CGUIElement_Impl::Event_OnDoubleClick(const CEGUI::EventArgs &e)
 
 bool CGUIElement_Impl::Event_OnMove( const CEGUI::EventArgs &e )
 {
-	// Call the move handler
 	if( m_pfnMoveHandler )
 		m_pfnMoveHandler( this );
 
-	// Pass the event to the client gui manager
 	if( CCore::Instance()->GetClientScriptingManager() && CCore::Instance()->GetClientScriptingManager()->GetScriptGUIManager() )
 		CCore::Instance()->GetClientScriptingManager()->GetScriptGUIManager()->HandleEvent( "onGuiElementMove", this );
 
@@ -386,11 +336,9 @@ bool CGUIElement_Impl::Event_OnMove( const CEGUI::EventArgs &e )
 
 bool CGUIElement_Impl::Event_OnResize( const CEGUI::EventArgs &e )
 {
-	// Call the resize handler
 	if( m_pfnResizeHandler )
 		m_pfnResizeHandler( this );
 
-	// Pass the event to the client gui manager
 	if( CCore::Instance()->GetClientScriptingManager() && CCore::Instance()->GetClientScriptingManager()->GetScriptGUIManager() )
 		CCore::Instance()->GetClientScriptingManager()->GetScriptGUIManager()->HandleEvent( "onGuiElementResize", this );
 
@@ -399,11 +347,9 @@ bool CGUIElement_Impl::Event_OnResize( const CEGUI::EventArgs &e )
 
 bool CGUIElement_Impl::Event_OnMouseEnter( const CEGUI::EventArgs &e )
 {
-	// Call the mouse enter handler
 	if( m_pfnMouseEnterHandler )
 		m_pfnMouseEnterHandler( this );
 
-	// Pass the event to the client gui manager
 	if( CCore::Instance()->GetClientScriptingManager() && CCore::Instance()->GetClientScriptingManager()->GetScriptGUIManager() )
 		CCore::Instance()->GetClientScriptingManager()->GetScriptGUIManager()->HandleEvent( "onGuiElementMouseEnter", this );
 
@@ -412,11 +358,9 @@ bool CGUIElement_Impl::Event_OnMouseEnter( const CEGUI::EventArgs &e )
 
 bool CGUIElement_Impl::Event_OnMouseLeave( const CEGUI::EventArgs &e )
 {
-	// Call the mouse leave handler
 	if( m_pfnMouseLeaveHandler )
 		m_pfnMouseLeaveHandler( this );
 
-	// Pass the event to the client gui manager
 	if( CCore::Instance()->GetClientScriptingManager() && CCore::Instance()->GetClientScriptingManager()->GetScriptGUIManager() )
 		CCore::Instance()->GetClientScriptingManager()->GetScriptGUIManager()->HandleEvent( "onGuiElementMouseLeave", this );
 
