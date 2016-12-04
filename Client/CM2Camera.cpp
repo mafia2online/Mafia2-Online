@@ -259,15 +259,21 @@ void _declspec(naked) M2GameCamera::RotationTowards(CVector3 vec)
 }
 
 DWORD CCamera_ModeChange = 0x107BB70;
-void _declspec(naked) M2CameraData::ModeChange(int a2, void *a3, int a4, int modeID, int a6, int a7, int a8, int a9, int a10)
+void _declspec(naked) M2GameCamera::ModeChange(int a2, void *a3, int a4, int modeID, int a6, int a7, int a8, int a9, int a10)
 {
 	_asm jmp CCamera_ModeChange;
 }
 
 DWORD CCamera_BroadcastCommand = 0x107A010;
-void _declspec(naked) M2CameraData::BroadcastCommand(int command, void *data, void *unknow)
+void _declspec(naked) M2GameCamera::BroadcastCommand(eCameraCommand command, void *data, void *unknow)
 {
 	_asm jmp CCamera_BroadcastCommand;
+}
+
+DWORD CCamera_ModePop = 0x107A5B0;
+void _declspec(naked) M2GameCamera::ModePop(int unk1, int unk2)
+{
+	_asm jmp CCamera_ModePop;
 }
 
 void CM2Camera::LockLookAt(const char *unk1, const char *unk2, double unk3)
@@ -288,11 +294,7 @@ void CM2Camera::SetRotation(CVector3 vec)
 
 void CM2Camera::SimpleShake(float speed, float strength, float duration)
 {
-	//WIP
-	/*if (!m_pGameCamera)
-		return;
-
-	if (!m_pGameCamera->pCameraData)
+	if (!m_pGameCamera)
 		return;
 
 	ShakeCommandData data;
@@ -300,6 +302,20 @@ void CM2Camera::SimpleShake(float speed, float strength, float duration)
 	data.strength = strength;
 	data.duration = duration;
 
-	m_pGameCamera->pCameraData->BroadcastCommand(1399349587, &data, 0);*/
-	CLua::Executef("game.cameramanager:GetPlayerMainCamera(0):SimpleShake(%f,%f,%f)", speed, strength, duration);
+	m_pGameCamera->BroadcastCommand(CAMCOMMAND_SHAKE, &data, 0);
+}
+
+void CM2Camera::EnableFPV(bool enable)
+{
+	if (!m_pGameCamera)
+		return;
+
+	if (enable)
+	{
+		CLua::Execute("game.cameramanager:GetPlayerMainCamera(0):EnableFPV(game.game:GetActivePlayer(), true)");
+	}
+	else
+	{
+		m_pGameCamera->ModePop(1, 1);
+	}
 }
