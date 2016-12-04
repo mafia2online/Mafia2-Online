@@ -26,15 +26,12 @@
 
 CGUIFont_Impl::CGUIFont_Impl( CGUI_Impl * pManager, String strFontName, String strFile, unsigned int uiSize, unsigned int uFlags, bool bAutoScale )
 {
-	// Store the font manager
 	m_pFontManager = pManager->GetFontManager();
 
 	try
 	{
-		// Create the font
 		m_pFont = m_pFontManager->createFont( strFontName.Get(), strFile.Get(), uiSize, uFlags );
 
-		// Generate glyphs for the codepoints we support.
 		CEGUI::String codepoints;
 
 		for (size_t i = 0; i < ARRAYSIZE(unicodeRanges); ++i) {
@@ -50,20 +47,17 @@ CGUIFont_Impl::CGUIFont_Impl( CGUI_Impl * pManager, String strFontName, String s
 		MessageBox(NULL, "Failed to create GUI font!", "Fatal error", MB_ICONERROR);
 	}
 
-	// Set default attributes
 	SetNativeResolution( 1024, 768 );
 	SetAutoScalingEnabled( bAutoScale );
 }
 
 CGUIFont_Impl::~CGUIFont_Impl( void )
 {
-	// Destroy the font
 	m_pFontManager->destroyFont( m_pFont );
 }
 
 void CGUIFont_Impl::SetAntiAliasingEnabled( bool bAntiAliasingEnabled )
 {
-	// Set the font anti-aliased
 	m_pFont->setAntiAliased( bAntiAliasingEnabled );
 }
 
@@ -74,7 +68,6 @@ bool CGUIFont_Impl::IsAntiAliasingEnabled( void )
 
 void CGUIFont_Impl::SetAutoScalingEnabled( bool bAutoScalingEnabled )
 {
-	// Set the font auto-scaled
 	m_pFont->setAutoScalingEnabled( bAutoScalingEnabled );
 }
 
@@ -85,7 +78,6 @@ bool CGUIFont_Impl::IsAutoScalingEnabled( void )
 
 void CGUIFont_Impl::SetNativeResolution( unsigned int uiWidth, unsigned int uiHeight )
 {
-	// Set the font native resolution
 	m_pFont->setNativeResolution( CEGUI::Size( (float)uiWidth, (float)uiHeight) );
 }
 

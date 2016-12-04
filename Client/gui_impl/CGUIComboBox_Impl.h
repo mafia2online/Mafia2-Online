@@ -18,6 +18,10 @@ private:
 	std::map< CEGUI::ListboxItem*, CGUIListItem_Impl* > m_Items;
 	CGUIListItem_Impl	* GetListItem				( CEGUI::ListboxItem * pItem );
 
+protected:
+	GUI_CALLBACK		m_onSelectChange;
+	GUI_CALLBACK		m_onDropListRemoved;
+
 public:
 
 						CGUIComboBox_Impl			( class CGUI_Impl * pGUI, const char * szCaption = "", CGUIElement_Impl * pParent = NULL );
@@ -31,4 +35,6 @@ public:
 
 	eGUIType			GetType						( void ) { return GUI_COMBOBOX; }
 
+	bool				Event_OnSelectionAccepted	(const CEGUI::EventArgs & e);
+	bool				Event_OnDropListRemoved		(const CEGUI::EventArgs& e);
 };

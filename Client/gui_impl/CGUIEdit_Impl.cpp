@@ -27,33 +27,22 @@
 CGUIEdit_Impl::CGUIEdit_Impl( CGUI_Impl * pGUI, String strText, CGUIElement_Impl * pParent )
 	: CGUIElement_Impl(pGUI)
 {
-	// Get a unique name for cegui
 	String strName = pGUI->GetUniqueName();
 
-	// Create the window and set default settings
 	m_pWindow = pGUI->GetWindowManager()->createWindow( "CGUI/Editbox", strName.Get() );
 	m_pWindow->setDestroyedByParent( false );
 	m_pWindow->setVisible( true );
-
-	// Store the pointer to this element
 	m_pWindow->setUserData( (void *)this );
+	m_pWindow->setRect(CEGUI::Absolute, CEGUI::Rect(0.00f, 0.00f, 0.128f, 0.24f));
+	SetText(strText);
 
-	// Set default variables
-	SetSize( Vector2( 128, 24 ) );
-
-	// Set default text
-	SetText( strText );
-
-	// Register our events
 	m_pWindow->subscribeEvent( CEGUI::Editbox::EventKeyDown, CEGUI::Event::Subscriber( &CGUIEdit_Impl::Event_OnKeyDown, this ) );
 	m_pWindow->subscribeEvent( CEGUI::Editbox::EventTextChanged, CEGUI::Event::Subscriber( &CGUIEdit_Impl::Event_OnTextChanged, this ) );
+	
 	AddEvents();
-
-	// If a parent is set, add it to it's childs list, if not add it as a child to the gui manager
 	if( pParent )
 	{
 		SetParent( pParent );
-		// tab lists
 	}
 	else
 	{
@@ -64,84 +53,76 @@ CGUIEdit_Impl::CGUIEdit_Impl( CGUI_Impl * pGUI, String strText, CGUIElement_Impl
 
 CGUIEdit_Impl::~CGUIEdit_Impl( void )
 {
-	// Destroy the element
 	DestroyElement();
 }
 
 void CGUIEdit_Impl::SetReadOnly( bool bReadOnly )
 {
-	((CEGUI::Editbox *)m_pWindow)->setReadOnly( bReadOnly );
+	reinterpret_cast<CEGUI::Editbox*>(m_pWindow)->setReadOnly(bReadOnly);
 }
 
 bool CGUIEdit_Impl::IsReadOnly( void )
 {
-	return ((CEGUI::Editbox *)m_pWindow)->isReadOnly();
+	return reinterpret_cast<CEGUI::Editbox*>(m_pWindow)->isReadOnly();
 }
 
 void CGUIEdit_Impl::SetMasked( bool bMasked )
 {
-	((CEGUI::Editbox *)m_pWindow)->setTextMasked( bMasked );
+	reinterpret_cast<CEGUI::Editbox*>(m_pWindow)->setTextMasked(bMasked);
 }
 
 bool CGUIEdit_Impl::IsMasked( void )
 {
-	return ((CEGUI::Editbox *)m_pWindow)->isTextMasked();
+	return reinterpret_cast<CEGUI::Editbox*>(m_pWindow)->isTextMasked();
 }
 
 void CGUIEdit_Impl::SetMaxLength( unsigned int uiMaxLength )
 {
-	((CEGUI::Editbox *)m_pWindow)->setMaxTextLength( uiMaxLength );
+	reinterpret_cast<CEGUI::Editbox*>(m_pWindow)->setMaxTextLength(uiMaxLength);
 }
 
 unsigned int CGUIEdit_Impl::GetMaxLength( void )
 {
-	return ((CEGUI::Editbox *)m_pWindow)->getMaxTextLength();
+	return static_cast<unsigned int>(reinterpret_cast<CEGUI::Editbox*>(m_pWindow)->getMaxTextLength());
 }
 
 void CGUIEdit_Impl::SetSelection( unsigned int uiStart, unsigned int uiEnd )
 {
-	((CEGUI::Editbox *)m_pWindow)->setSelection( uiStart, uiEnd );
+	reinterpret_cast<CEGUI::Editbox*>(m_pWindow)->setSelection(uiStart, uiEnd);
 }
 
-unsigned int CGUIEdit_Impl::GetSelectionStart( void )
+unsigned int CGUIEdit_Impl::GetSelectionStart(void)
 {
-	return (unsigned int)((CEGUI::Editbox *)m_pWindow)->getSelectionStartIndex();
+	return static_cast<unsigned int>(reinterpret_cast<CEGUI::Editbox*>(m_pWindow)->getSelectionStartIndex());
 }
 
-unsigned int CGUIEdit_Impl::GetSelectionEnd( void )
+unsigned int CGUIEdit_Impl::GetSelectionEnd(void)
 {
-	return (unsigned int)((CEGUI::Editbox *)m_pWindow)->getSelectionEndIndex();
+	return static_cast<unsigned int>(reinterpret_cast<CEGUI::Editbox*>(m_pWindow)->getSelectionEndIndex());
 }
 
-unsigned int CGUIEdit_Impl::GetSelectionLength( void )
+unsigned int CGUIEdit_Impl::GetSelectionLength(void)
 {
-	return (unsigned int)((CEGUI::Editbox *)m_pWindow)->getSelectionLength();
+	return static_cast<unsigned int>(reinterpret_cast<CEGUI::Editbox*>(m_pWindow)->getSelectionLength());
 }
 
 bool CGUIEdit_Impl::ActivateOnTab( void )
 {
-	// Only set this active if it's visible and writable
 	if( IsVisible() && !IsReadOnly() )
 	{
-		// Activate the input
 		Activate();
-
-		// Set the carat index
 		((CEGUI::Editbox *)GetWindow())->setCaratIndex( GetText().GetLength() );
 
 		return true;
 	}
-
 	return false;
 }
 
 bool CGUIEdit_Impl::Event_OnTextChanged( const CEGUI::EventArgs &e )
 {
-	// Call the text changed handler
 	if( m_pfnOnTextChanged )
-		m_pfnOnTextChanged( this );
+		m_pfnOnTextChanged(reinterpret_cast<CGUIElement_Impl*>(this));
 
-	// Pass the event to the client gui manager
 	if( CCore::Instance()->GetClientScriptingManager() && CCore::Instance()->GetClientScriptingManager()->GetScriptGUIManager() )
 		CCore::Instance()->GetClientScriptingManager()->GetScriptGUIManager()->HandleEvent( "onGuiElementTextChange", this );
 
@@ -150,25 +131,15 @@ bool CGUIEdit_Impl::Event_OnTextChanged( const CEGUI::EventArgs &e )
 
 bool CGUIEdit_Impl::Event_OnKeyDown( const CEGUI::EventArgs &e )
 {
-	const CEGUI::KeyEventArgs &keyEvent = (const CEGUI::KeyEventArgs &)e;
+	const CEGUI::KeyEventArgs& keyEvent = reinterpret_cast<const CEGUI::KeyEventArgs&>(e);
 
-	// Was this a tab key?
-	if( keyEvent.scancode == CEGUI::Key::Tab )
+	if( keyEvent.scancode == CEGUI::Key::Return || keyEvent.scancode == CEGUI::Key::NumpadEnter )
 	{
-		// Switch to the next element
-		//if( m_pParent == NULL )
-		//	m_pManager->SelectNext();
-	}
-	else if( keyEvent.scancode == CEGUI::Key::Return || keyEvent.scancode == CEGUI::Key::NumpadEnter )
-	{
-		// Call the text accepted handler
 		if( m_pfnOnTextAccepted )
-			m_pfnOnTextAccepted( this );
+			m_pfnOnTextAccepted(reinterpret_cast<CGUIElement_Impl*>(this));
 
-		// Pass the event to the client gui manager
 		if( CCore::Instance()->GetClientScriptingManager() && CCore::Instance()->GetClientScriptingManager()->GetScriptGUIManager() )
 			CCore::Instance()->GetClientScriptingManager()->GetScriptGUIManager()->HandleEvent( "onGuiElementTextAccept", this );
 	}
-
 	return true;
 }
