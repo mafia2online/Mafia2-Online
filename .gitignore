@@ -10,6 +10,7 @@ Objs/
 Binary/[Dd]ebug
 Binary/[Rr]elease
 Binary/m2mp-svr
+Binary/logs
 
 # VS related stuff.
 .vs
