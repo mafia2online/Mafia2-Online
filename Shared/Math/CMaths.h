@@ -27,13 +27,13 @@ namespace Math
 	}
 
 	template<typename T>
-	static T Lerp( const T& start, float fAlpha, const T& end )
+	T Lerp( const T& start, float fAlpha, const T& end )
 	{
 		return (end - start) * fAlpha + start;
 	}
 
 	template<class T>
-	static T Clamp( const T& min, const T& a, const T& max )
+	T Clamp( const T& min, const T& a, const T& max )
 	{
 		if( a < min )
 			return min;
@@ -149,7 +149,7 @@ namespace Math
 	}
 
 	template < typename T >
-	static bool IsInifity ( const T &value )
+	bool IsInifity ( const T &value )
 	{
 		T max_value = std::numeric_limits < T >::max ();
 		T min_value = - max_value;
@@ -157,7 +157,7 @@ namespace Math
 	}
 
 	template < typename T >
-	static bool IsNAN ( const T &value )
+	bool IsNAN ( const T &value )
 	{
 		return (value != value);
 	}
