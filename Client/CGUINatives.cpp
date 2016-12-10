@@ -68,7 +68,7 @@ void CGUINatives::Register( CScriptingManager * pScriptingManager )
 	pScriptingManager->RegisterFunction( "guiSetPosition", GuiSetPosition, -1, NULL );
 	pScriptingManager->RegisterFunction( "guiGetPosition", GuiGetPosition, -1, NULL );
 	pScriptingManager->RegisterFunction( "guiSetSize", GuiSetSize, -1, NULL );
-	pScriptingManager->RegisterFunction( "guiGetSize", GuiGetPosition, -1, NULL );
+	pScriptingManager->RegisterFunction( "guiGetSize", GuiGetSize, -1, NULL );
 	pScriptingManager->RegisterFunction( "guiSetVisible", GuiSetVisible, 2, "pb" );
 	pScriptingManager->RegisterFunction( "guiIsVisible", GuiIsVisible, 1, "p" );
 	pScriptingManager->RegisterFunction( "guiSetText", GuiSetText, 2, "ps" );
