@@ -182,7 +182,6 @@ CCore::~CCore( void )
 	m_chatBox.reset();
 	SAFE_DELETE(m_pFPSCounter);
 	SAFE_DELETE(m_pBlipManager);
-	SAFE_DELETE(m_pGUI);
 	SAFE_DELETE(m_pKeyBinds);
 	SAFE_DELETE(m_pStreamer);
 	SAFE_DELETE(m_pModelManager);
@@ -193,6 +192,10 @@ CCore::~CCore( void )
 	SAFE_DELETE(m_pClientScriptingManager);
 	SAFE_DELETE(m_pTimerManager);
 	SAFE_DELETE(m_pFileTransferManager);
+
+	// Clean gui first before deleting pointer
+	CCore::Instance()->GetGUI()->DeleteAllClientScriptGUI();
+	SAFE_DELETE(m_pGUI);
 
 	SAFE_DELETE(m_pGame);
 	SAFE_DELETE(m_pNetworkModule);
