@@ -82,8 +82,10 @@ void CGUINatives::Register( CScriptingManager * pScriptingManager )
 	pScriptingManager->RegisterFunction( "guiSetInputMasked", GuiSetInputMasked, 2, "pb" );
 	pScriptingManager->RegisterFunction( "guiIsInputMasked", GuiIsInputMasked, 1, "p" );
 	pScriptingManager->RegisterFunction( "guiChangeImage", GuiChangeImage, 2, "ps");
+	pScriptingManager->RegisterFunction( "guiSetSizable", GuiSetSizable, 2, "pb");
+	pScriptingManager->RegisterFunction( "guiSetMovable", GuiSetMovable, 2, "pb");
 
-	// Register GUI constact
+	// Register GUI constants
 	pScriptingManager->RegisterConstant ( "ELEMENT_TYPE_WINDOW", GUI_WINDOW );
 	pScriptingManager->RegisterConstant ( "ELEMENT_TYPE_EDIT", GUI_EDIT );
 	pScriptingManager->RegisterConstant ( "ELEMENT_TYPE_CHECKBOX", GUI_CHECKBOX );
@@ -867,7 +869,6 @@ SQInteger CGUINatives::GuiChangeImage(SQVM * pVM)
 	const SQChar * newImage;
 	sq_getstring(pVM, -1, &newImage);
 
-	// Is the element valid?
 	if (pElement)
 	{
 		((CGUIStaticImage_Impl *)pElement)->Clear();
@@ -884,7 +885,40 @@ SQInteger CGUINatives::GuiChangeImage(SQVM * pVM)
 	sq_pushbool(pVM, false);
 	return 1;
 }
-// guiIsAlwaysOnTop( element );
+
+SQInteger CGUINatives::GuiSetSizable(SQVM * pVM)
+{
+	CGUIElement_Impl * pElement = sq_getpointer< CGUIElement_Impl* >(pVM, -2);
+	SQBool bEnabled;
+	sq_getbool(pVM, -1, &bEnabled);
+
+	if (pElement)
+	{
+		static_cast<CGUIWindow_Impl *>(pElement)->SetSizingEnabled(bEnabled);
+		sq_pushbool(pVM, true);
+		return 1;
+	}
+
+	sq_pushbool(pVM, false);
+	return 1;
+}
+
+SQInteger CGUINatives::GuiSetMovable(SQVM * pVM)
+{
+	CGUIElement_Impl * pElement = sq_getpointer< CGUIElement_Impl* >(pVM, -2);
+	SQBool bEnabled;
+	sq_getbool(pVM, -1, &bEnabled);
+
+	if (pElement)
+	{
+		static_cast<CGUIWindow_Impl *>(pElement)->SetMovable(bEnabled);
+		sq_pushbool(pVM, true);
+		return 1;
+	}
+
+	sq_pushbool(pVM, false);
+	return 1;
+}// guiIsAlwaysOnTop( element );
 SQInteger CGUINatives::GuiIsAlwaysOnTop( SQVM * pVM )
 {
 	CGUIElement_Impl * pElement = sq_getpointer< CGUIElement_Impl* >( pVM, -1 );

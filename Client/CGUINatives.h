@@ -74,6 +74,8 @@ private:
 	static	SQInteger		GuiSetInputMasked					( SQVM * pVM );
 	static	SQInteger		GuiIsInputMasked					( SQVM * pVM );
 	static	SQInteger		GuiChangeImage						( SQVM * pVM );
+	static	SQInteger		GuiSetSizable						( SQVM * pVM );
+	static	SQInteger		GuiSetMovable						( SQVM * pVM );
 
 public:
 
