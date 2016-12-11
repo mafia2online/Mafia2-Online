@@ -249,8 +249,7 @@ SQInteger CGUINatives::DrawTexture( SQVM * pVM )
 		sq_getfloat( pVM, -2, &rotation );
 		sq_getinteger( pVM, -1, &alpha );
 
-		// validate range for alpha 0 < alpha < 255
-		alpha = (alpha > 255) ? 255 : (alpha < 0) ? 0 : alpha;
+		alpha = Clamp_<float>(0.f, alpha, 255.f);
 
 		CCore::Instance()->GetGraphics()->DrawTexture(pTexture, posX, posY, scaleX, scaleY, rotation, centerX, centerY, alpha);
 
@@ -267,16 +266,8 @@ SQInteger CGUINatives::DestroyTexture( SQVM * pVM )
 {
 	IDirect3DTexture9 * pTexture = sq_getpointer< IDirect3DTexture9 * >( pVM, -9 );
 
-	if (pTexture) {
-
-		SAFE_RELEASE(pTexture);
-		SAFE_DELETE(pTexture);
-
-		sq_pushbool( pVM, true );
-		return 1;
-	}
-
-	sq_pushbool( pVM, false );
+	// TODO(zaklaus): This has to be checked!
+	sq_pushbool(pVM, !pTexture->Release());
 	return 1;
 }
 

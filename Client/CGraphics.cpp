@@ -610,10 +610,8 @@ IDirect3DTexture9 * CGraphics::LoadTexture( const char * szFile )
 	IDirect3DTexture9 * pTexture = NULL;
 
 	// Attempt to create the texture
-	if ( FAILED ( D3DXCreateTextureFromFile( m_pDevice, szFile, &pTexture ) ) ) {
-		CLogFile::Printf ( "ERROR - %s - Unable to create texture! (Error: %d)", szFile, GetLastError() );
-	} else {
-		CLogFile::Printf ( "Loaded texture '%s'.", szFile );
+	if (FAILED(D3DXCreateTextureFromFile(m_pDevice, szFile, &pTexture))) {
+		CLogFile::Printf("ERROR - %s - Unable to create texture! (Error: %d)", szFile, GetLastError());
 	}
 
 	return pTexture;
