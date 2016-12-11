@@ -262,8 +262,8 @@ void CMafia::SetSummerRadio( bool bSummerRadio )
 	if( bSummerRadio )
 	{
 		SetRadioContent( "Empire", "Empire_07010" );
-		SetRadioContent( "Classic", "Empire_07010" );
-		SetRadioContent( "Delta", "Empire_07010" );
+		SetRadioContent( "Classic", "Classic_07010" );
+		SetRadioContent( "Delta", "Delta_07010" );
 	}
 	else
 	{
