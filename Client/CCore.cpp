@@ -332,6 +332,8 @@ void CCore::OnGamePreLoad( void )
 
 	m_chatBox->SetVisible( false );
 	m_pGUI->GetMainMenu()->SetVisible( true );
+	m_pGUI->SetCursorVisible(true);
+	m_pCamera->LockControl(false);
 	m_pGUI->GetSettings()->LoadSettings ();
 }
 
