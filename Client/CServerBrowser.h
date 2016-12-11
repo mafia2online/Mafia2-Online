@@ -23,7 +23,6 @@ class CGUITab_Impl;
 enum ServerBrowserType
 {
 	INTERNET,
-	HOSTED,
 	LAN,
 	FAVOURITES,
 	HISTORY,
