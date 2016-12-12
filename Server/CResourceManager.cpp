@@ -249,11 +249,14 @@ void CResourceManager::GetRunningResources( void )
 }
 
 /**
- * Try to mark specified name of the resource
- * as one that should be started by closest onPulse operation
+ * Tries to mark the resource for starting. 
  *
- * @param  szResource
- * @return bool (false - if resource already running, true otherwise)
+ * Try to mark specified name of the resource
+ * as one that should be started by the closest onPulse operation
+ *
+ * @param  Name of the resource to be marked.
+ * @retval FALSE if already running
+ * @retval TRUE  bool  resource could be marked.
  */
 bool CResourceManager::MarkForStarting(const char * szResource)
 {
@@ -272,11 +275,14 @@ bool CResourceManager::MarkForStarting(const char * szResource)
 }
 
 /**
- * Try to mark specified name of the resource
- * as one that should be stopped by closest onPulse operation
+ * Tries to mark the resource for stopping.
  *
- * @param  szResource
- * @return bool (false - if resource not running, true otherwise)
+ * Try to mark specified name of the resource
+ * as one that should be stopped by the closest onPulse operation
+ *
+ * @param  Name of the resource to be marked.
+ * @retval FALSE if already running
+ * @retval TRUE  bool  resource could be marked.
  */
 bool CResourceManager::MarkForStopping(const char * szResource)
 {
@@ -295,12 +301,15 @@ bool CResourceManager::MarkForStopping(const char * szResource)
 }
 
 /**
- * Try to mark specified name of the resource
- * as one that should be restarted by closest onPulse operation
- *
- * @param  szResource
- * @return bool (false - if resource not running, true otherwise)
- */
+* Tries to mark the resource for stopping.
+*
+* Try to mark specified name of the resource
+* as one that should be restarted by the closest onPulse operation
+*
+* @param  Name of the resource to be marked.
+* @retval FALSE if already running
+* @retval TRUE  bool  resource could be marked.
+*/
 bool CResourceManager::MarkForRestarting(const char * szResource)
 {
 	if (!IsResourceRunning(szResource)) {
