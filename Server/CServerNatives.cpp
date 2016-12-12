@@ -206,12 +206,7 @@ SQInteger CServerNatives::StartResource( SQVM * pVM )
 	const SQChar * szResource;
 	sq_getstring( pVM, -1, &szResource );
 
-	if (CCore::Instance()->GetResourceManager()->MarkForStarting( szResource )) {
-		sq_pushbool( pVM, true );
-		return 1;
-	}
-
-	sq_pushbool( pVM, false );
+	sq_pushbool(pVM, CCore::Instance()->GetResourceManager()->MarkForStarting(szResource));
 	return 1;
 }
 
@@ -222,12 +217,7 @@ SQInteger CServerNatives::StopResource( SQVM * pVM )
 	const SQChar * szResource;
 	sq_getstring( pVM, -1, &szResource );
 
-	if (CCore::Instance()->GetResourceManager()->MarkForStopping( szResource )) {
-		sq_pushbool(pVM, true);
-		return 1;
-	}
-
-	sq_pushbool( pVM, false );
+	sq_pushbool(pVM, CCore::Instance()->GetResourceManager()->MarkForStopping(szResource));
 	return 1;
 }
 
@@ -238,12 +228,7 @@ SQInteger CServerNatives::RestartResource( SQVM * pVM )
 	const SQChar * szResource;
 	sq_getstring( pVM, -1, &szResource );
 
-	if (CCore::Instance()->GetResourceManager()->MarkForRestarting( szResource )) {
-		sq_pushbool(pVM, true);
-		return 1;
-	}
-
-	sq_pushbool( pVM, false );
+	sq_pushbool(pVM, CCore::Instance()->GetResourceManager()->MarkForRestarting(szResource));
 	return 1;
 }
 
