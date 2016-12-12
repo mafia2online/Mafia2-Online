@@ -265,11 +265,14 @@ SQInteger CPlayerNatives::IsSpawned( SQVM * pVM )
 }
 
 /**
- * bool setPlayerPosition( int playerid, float x, float y, float z )
+ * Sets player position.
  *
- * If playerid is local player - sets current local player position to specified position
- * If playerid is remote player - teleports playerped assossiated with remote player to specified position
+ * Sets specified position for current local player to a specified position if ID is local player's.
+ * Teleports remote player to specified destination if otherwise.
  * (local ped warping override, can be used to make local player setPlayerPosition faster and smother)
+ * 
+ * @param playerid Player's ID
+ * @param X,Y,Z position of the 3D vector.
  *
  * @return true
  */
