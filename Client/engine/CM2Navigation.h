@@ -19,6 +19,18 @@ class M2Navigation
 {
 public:
 	PAD(M2Navigation, pad0, 0x4);
+	
+	void *GetIconFromEntity(M2Entity *pEntity);
+	void *GetIconFromId(int iconId);
+
+	int RegisterIconEntity(M2Entity *pEntity, int icon, int library, int unk1, int unk2, int unk3);
+	int RegisterIconPos(const Vector2& vecPosition, int lib, int icon, int unk1, int unk2, int unk3);
+
+	void UnregisterIconEntity(M2Entity * pEntity, int unk);
+	void UnregisterIconPos(int icon, int unk);
+
+	void SetForegroundColor(int iIconId, int iColor);
+	void SetBackgroundColor(int iIconId, int iColor);
 };
 
 class CM2Navigation

@@ -9,8 +9,6 @@
 
 #include "BaseInc.h"
 
-#include "CM2Hud.h"
-
 #include "COffsets.h"
 #include "CPatcher.h"
 
@@ -18,22 +16,23 @@
 
 #include "CLogFile.h"
 
-CM2HudTimer::CM2HudTimer( M2HudTimer * pHudTimer )
-{
-	DEBUG_LOG( "CM2HudTimer::CM2HudTimer( 0x%p )", pHudTimer );
+#include "CCore.h"
 
-	// Set the hud timer
-	SetHudTimer( pHudTimer );
+#include "CM2Camera.h"
+
+#include "CM2Hud.h"
+
+CM2HudTimer::CM2HudTimer( M2HudTimer * pHudTimer ):
+	m_pHudTimer(pHudTimer)
+{
 }
 
 CM2HudTimer::~CM2HudTimer( void )
 {
-
 }
 
 void CM2HudTimer::Toggle( bool bToggle )
 {
-	// Get the hud component
 	void * pHudComponent = m_pHudTimer->m_pHudComponent;
 
 	_asm
@@ -46,20 +45,15 @@ void CM2HudTimer::Toggle( bool bToggle )
 
 void CM2HudTimer::SetTime( float fTime )
 {
-	// Is the hud timer instance valid?
 	if( m_pHudTimer )
 	{
-		// Set the timer time
 		m_pHudTimer->m_fTime = fTime;
-
-		// Set the timer remaining time
 		m_pHudTimer->m_fRemainingTime = fTime;
 	}
 }
 
 float CM2HudTimer::GetTime( void )
 {
-	// Is the hud timer instance valid?
 	if( m_pHudTimer )
 		return m_pHudTimer->m_fTime;
 
@@ -68,7 +62,6 @@ float CM2HudTimer::GetTime( void )
 
 float CM2HudTimer::GetRemainingTime( void )
 {
-	// Is the hud timer instance valid?
 	if( m_pHudTimer )
 		return m_pHudTimer->m_fRemainingTime;
 
@@ -77,33 +70,24 @@ float CM2HudTimer::GetRemainingTime( void )
 
 void CM2HudTimer::Start( void )
 {
-	// Is the hud timer instance valid?
 	if( m_pHudTimer )
 	{
-		// Mark the timer as running
 		m_pHudTimer->m_bIsRunning = true;
-
-		// Mark the timer as not stopped
 		m_pHudTimer->m_bIsStopped = false;
 	}
 }
 
 void CM2HudTimer::Stop( void )
 {
-	// Is the hud timer instance valid?
 	if( m_pHudTimer )
 	{
-		// Mark the timer as not running
 		m_pHudTimer->m_bIsRunning = false;
-
-		// Mark the timer as stopped
 		m_pHudTimer->m_bIsStopped = true;
 	}
 }
 
 bool CM2HudTimer::IsRunning( void )
 {
-	// Is the hud timer instance valid?
 	if( m_pHudTimer )
 		return m_pHudTimer->m_bIsRunning;
 
@@ -112,27 +96,18 @@ bool CM2HudTimer::IsRunning( void )
 
 bool CM2HudTimer::IsStopped( void )
 {
-	// Is the hud timer instance valid?
 	if( m_pHudTimer )
 		return m_pHudTimer->m_bIsStopped;
 
 	return false;
 }
 
-CM2Hud::CM2Hud( M2Hud * pHud )
+CM2Hud::CM2Hud( M2Hud * pHud ):
+	m_pHud(pHud)
 {
-	DEBUG_LOG( "CM2Hud::CM2Hud( 0x%p )", pHud );
-
-	// Set the hud
-	SetHud( pHud );
-
-	// Set the hud timer
 	SetHudTimer( new CM2HudTimer( pHud->m_pTimer ) );
-
-	// Set the hud fader
 	SetHudFader( *(M2HudFader **)COffsets::VAR_CHudFader );
 
-	// Reset
 	m_bShowing = true;
 	m_drunkLevel = 0;
 	m_wantedLevel = 0;
@@ -141,12 +116,7 @@ CM2Hud::CM2Hud( M2Hud * pHud )
 
 CM2Hud::~CM2Hud( void )
 {
-	// Is the hud timer instance valid?
-	if( m_pHudTimer )
-	{
-		// Delete the hud timer instance
-		SAFE_DELETE( m_pHudTimer );
-	}
+	SAFE_DELETE( m_pHudTimer );
 }
 
 void CM2Hud::FadeIn( float fTime )
@@ -202,156 +172,131 @@ void CM2Hud::FadeOut( float fTime )
 
 void CM2Hud::Show( bool bShow )
 {
-	// Toggle the radar
 	RadarShow( bShow );
-
-	// Toggle the subtitles
 	SubtitlesShow( bShow );
-
-	// Toggle the speedo
 	SpeedoShow( bShow );
-
-	// Toggle the action buttons
 	ActionButtonsShow( bShow );
-
-	// Toggle the message area
 	MessageAreaShow( bShow );
-
-	// Toggle the info area
 	InfoAreaShow( bShow );
 
-	// Save the state
 	m_bShowing = bShow;
 }
 
 void CM2Hud::RadarShow( bool bShow )
 {
-	// Is the hud instance valid?
-	if( m_pHud )
-	{
-		// Toggle the radar
-		void* pRadar = m_pHud->m_pRadar;
+	if (!m_pHud)
+		return;
 
-		_asm
-		{
-			push bShow;
-			mov ecx, pRadar;
-			call COffsets::FUNC_CHud__RadarShow;
-		}
+	void* pRadar = m_pHud->m_pRadar;
+	_asm
+	{
+		push bShow;
+		mov ecx, pRadar;
+		call COffsets::FUNC_CHud__RadarShow;
 	}
 }
 
 void CM2Hud::ScoreShow( bool bShow )
 {
-	// Is the hud valid?
-	if( m_pHud )
-	{
-		void* pScore = m_pHud->m_pScore;
+	if (!m_pHud)
+		return;
 
-		_asm
-		{
-			push bShow;
-			mov ecx, pScore;
-			call COffsets::FUNC_CHud__ScoreShow;
-		}
+	void* pScore = m_pHud->m_pScore;
+
+	_asm
+	{
+		push bShow;
+		mov ecx, pScore;
+		call COffsets::FUNC_CHud__ScoreShow;
 	}
 }
 
 void CM2Hud::SubtitlesShow( bool bShow )
 {
-	// Is the hud valid?
-	if( m_pHud )
-	{
-		void* pSubtitles = m_pHud->m_pSubtitles;
-		bool bFix = !bShow;
+	if (!m_pHud)
+		return;
 
-		_asm
-		{
-			push bFix;
-			mov ecx, pSubtitles;
-			call COffsets::FUNC_CHud__SubtitlesShow;
-		}
+	void* pSubtitles = m_pHud->m_pSubtitles;
+	bool bFix = !bShow;
+
+	_asm
+	{
+		push bFix;
+		mov ecx, pSubtitles;
+		call COffsets::FUNC_CHud__SubtitlesShow;
 	}
 }
 
 void CM2Hud::ActionButtonsShow( bool bShow )
 {
-	// Is the hud valid?
-	if( m_pHud )
-	{
-		void* pActionButtons = m_pHud->m_pMessageArea->m_pActionButtons;
+	if (!m_pHud)
+		return;
 
-		_asm
-		{
-			push bShow;
-			mov ecx, pActionButtons;
-			call COffsets::FUNC_CHudComponent__Show;
-		}
+	void* pActionButtons = m_pHud->m_pMessageArea->m_pActionButtons;
+	_asm
+	{
+		push bShow;
+		mov ecx, pActionButtons;
+		call COffsets::FUNC_CHudComponent__Show;
 	}
 }
 
 void CM2Hud::MessageAreaShow( bool bShow )
 {
-	// Is the hud valid?
-	if( m_pHud )
+	if (!m_pHud)
+		return;
+
+	void* pMessageArea = m_pHud->m_pMessageArea->m_pMessageArea;
+	void* pMessageArea2 = m_pHud->m_pMessageArea->m_pMessageArea2;
+
+	_asm
 	{
-		void* pMessageArea = m_pHud->m_pMessageArea->m_pMessageArea;
-		void* pMessageArea2 = m_pHud->m_pMessageArea->m_pMessageArea2;
+		push bShow;
+		mov ecx, pMessageArea;
+		call COffsets::FUNC_CHudComponent__Show;
+	}
 
-		_asm
-		{
-			push bShow;
-			mov ecx, pMessageArea;
-			call COffsets::FUNC_CHudComponent__Show;
-		}
-
-		_asm
-		{
-			push bShow;
-			mov ecx, pMessageArea2;
-			call COffsets::FUNC_CHudComponent__Show;
-		}
+	_asm
+	{
+		push bShow;
+		mov ecx, pMessageArea2;
+		call COffsets::FUNC_CHudComponent__Show;
 	}
 }
 
 void CM2Hud::InfoAreaShow( bool bShow )
 {
-	// Is the hud valid?
-	if( m_pHud )
-	{
-		void* pInfoArea = m_pHud->m_pMessageArea->m_pInfoArea;
+	if (!m_pHud)
+		return;
 
-		_asm
-		{
-			push bShow;
-			mov ecx, pInfoArea;
-			call COffsets::FUNC_CHudComponent__Show;
-		}
+	void* pInfoArea = m_pHud->m_pMessageArea->m_pInfoArea;
+	_asm
+	{
+		push bShow;
+		mov ecx, pInfoArea;
+		call COffsets::FUNC_CHudComponent__Show;
 	}
 }
 
 void CM2Hud::ShowLowHealthFX( bool bShow )
 {
-	// Is the hud valid?
 	if( m_pHud )
 		m_pHud->m_pHealthFX->m_bShow = bShow;
 }
 
 void CM2Hud::SpeedoShow ( bool bShow )
 {
-	// Is the hud valid?
-	if ( m_pHud )
-	{
-		// C_HudSpeedo::Show
-		DWORD C_HudSpeedo__Show = 0x8818D0;
-		M2HudSpeedo * pSpeedo = m_pHud->m_pSpeedo;
+	if (!m_pHud)
+		return;
 
-		_asm
-		{
-			push bShow;
-			mov ecx, pSpeedo;
-			call C_HudSpeedo__Show;
-		}
+	DWORD C_HudSpeedo__Show = 0x8818D0;
+	M2HudSpeedo * pSpeedo = m_pHud->m_pSpeedo;
+
+	_asm
+	{
+		push bShow;
+		mov ecx, pSpeedo;
+		call C_HudSpeedo__Show;
 	}
 }
 
@@ -368,40 +313,40 @@ void CM2Hud::ShowMessage(int position, int showMode, const char * text, float de
 	Mode 2 : Blue
 	Mode 3 : Fluo blue/green
 	*/
-	if (m_pHud)
+	if (!m_pHud)
+		return;
+
+	/*
+	This workig with textId
+	*/
+	DWORD dwFunc = 0x08EAB80;
+	__asm
 	{
-		/*
-		This workig with textId
-		*/
-		DWORD dwFunc = 0x08EAB80;
-		__asm
-		{
-			push 0;
-			push delay;
-			push showMode;
-			push 0;
-			push 0;
-			push 0;
-			push 0;
-			push text;
-			push position;
-			call dwFunc;
-		}
-
-
-		/*DWORD dwFunc = 0x8CC740;
-
-		__asm
-		{
-			push 0;
-			push 0;
-			push delay;
-			push showMode; // Showmode
-			push text;
-			push position; // Position
-			call dwFunc;
-		};*/
+		push 0;
+		push delay;
+		push showMode;
+		push 0;
+		push 0;
+		push 0;
+		push 0;
+		push text;
+		push position;
+		call dwFunc;
 	}
+
+
+	/*DWORD dwFunc = 0x8CC740;
+
+	__asm
+	{
+		push 0;
+		push 0;
+		push delay;
+		push showMode; // Showmode
+		push text;
+		push position; // Position
+		call dwFunc;
+	};*/
 }
 
 void CM2Hud::SetDrunkLevel(int level)
@@ -417,20 +362,20 @@ void CM2Hud::SetDrunkLevel(int level)
 void CM2Hud::SetWantedLevel(int level, float size)
 {
 	/* Works but quickly reset */
-	if (m_pHud)
+	if (!m_pHud)
+		return;
+
+	DWORD dwFunc = 0x883860;
+	void * wanted = m_pHud->m_pWantedLevel;
+	float value = 1.0f; // Still unknow
+	float value2 = 1.0f; // Size of the pic
+	_asm
 	{
-		DWORD dwFunc = 0x883860;
-		void * wanted = m_pHud->m_pWantedLevel;
-		float value = 1.0f; // Still unknow
-		float value2 = 1.0f; // Size of the pic
-		_asm
-		{
-			push value2;
-			push value;
-			push level;
-			mov ecx, wanted;
-			call dwFunc;
-		}
+		push value2;
+		push value;
+		push level;
+		mov ecx, wanted;
+		call dwFunc;
 	}
 }
 
@@ -463,10 +408,5 @@ void CM2Hud::StopGPS()
 
 void CM2Hud::EnableFPV(bool bEnable)
 {
-	if (bEnable){
-		CLua::Execute("game.cameramanager:GetPlayerMainCamera(0):EnableFPV(game.game:GetActivePlayer(),true)");
-	}
-	else {
-		CLua::Execute("game.cameramanager:GetPlayerMainCamera(0):EnableFPV(game.game:GetActivePlayer(),false)");
-	}
+	CCore::Instance()->GetCamera()->EnableFPV(bEnable);
 }

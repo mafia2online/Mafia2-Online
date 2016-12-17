@@ -76,6 +76,10 @@ public:
 	DWORD m_dwFlags;							// 0020 - 0024
 	PAD(M2Entity, pad2, 0x3C);					// 0024 - 0060
 	M2Model * m_pModel;							// 0060 - 0064
+
+	void Activate();
+	void Deactivate();
+	void Delete();
 };
 
 class CM2Entity

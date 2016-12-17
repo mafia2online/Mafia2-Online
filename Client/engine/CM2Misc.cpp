@@ -31,25 +31,17 @@ C_TrafficActorCache * GetTrafficActorCache( void )
 
 C_TrafficModelDescriptor * LoadHumanModel( char * szModelFileName )
 {
-	// Allocate memory
 	C_TrafficModelDescriptor * pDescriptor = (C_TrafficModelDescriptor *)CCore::Instance()->GetGame()->allocate( 0x1C );
 
-	// Did we fail to allocate enough memory?
 	if( !pDescriptor )
-		return NULL;
+		return nullptr;
 
-	// Call the traffic model descriptor constructor
-	CTrafficModelDesc__constructor( pDescriptor, NULL, 2, "NORMAL_CHARACTER" );
-
-	// Try and load the model
+	CTrafficModelDesc__constructor( pDescriptor, nullptr, 2, "NORMAL_CHARACTER" );
 	if( !CTrafficModelDesc__LoadModel( pDescriptor, szModelFileName ) )
 	{
 		CLogFile::Printf( "[ERROR] Failed to load model '%s'.", szModelFileName );
-
-		// Delete the descriptor memory
 		SAFE_DELETE( pDescriptor );
-
-		return NULL;
+		return nullptr;
 	}
 
 	DEBUG_LOG( "[ERROR] Loaded model '%s'.", szModelFileName );
@@ -61,18 +53,16 @@ C_TrafficCacheCharacter * GetCacheObjectByModelName( const char * pszInputModelN
 	C_TrafficActorCache * pActorCache = GetTrafficActorCache( );
 
 	if ( !pActorCache )
-		return NULL;
+		return nullptr;
 
 	for ( int I = 0; I < pActorCache->GetActorCacheSize(); I++ )
 	{
 		C_TrafficCacheObject * pCacheObject = pActorCache->GetActorCache( I );
-
 		if ( pCacheObject->GetModelDescriptor( ) )
 		{
 			if ( pCacheObject->GetActorType( ) == OBJTYPE_Human )
 			{
 				const char * pszModelName = pCacheObject->GetModelDescriptor()->GetUnkData()->GetModelFilePath();
-
 				char szModelFilePath[255] = { 0 };
 				sprintf( szModelFilePath, "/sds/Traffic/%s.sds", pszInputModelName );
 
@@ -82,7 +72,7 @@ C_TrafficCacheCharacter * GetCacheObjectByModelName( const char * pszInputModelN
 		}
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 C_TrafficCacheObject * GetCacheCarObjectByModelName( const char * pszInputModelName )
@@ -90,7 +80,7 @@ C_TrafficCacheObject * GetCacheCarObjectByModelName( const char * pszInputModelN
 	C_TrafficActorCache * pActorCache = GetTrafficActorCache( );
 
 	if ( !pActorCache )
-		return NULL;
+		return nullptr;
 
 	for ( int I = 0; I < pActorCache->GetActorCacheSize(); I++ )
 	{
@@ -103,7 +93,6 @@ C_TrafficCacheObject * GetCacheCarObjectByModelName( const char * pszInputModelN
 				C_TrafficCarModelDescriptor * pModelDesc = ( C_TrafficCarModelDescriptor *)pCacheObject->GetModelDescriptor( );
 
 				const char * pszModelName = pModelDesc->GetUnkData()->GetModelFilePath();
-
 				char szModelFilePath[255] = { 0 };
 				sprintf( szModelFilePath, "%s", pszInputModelName ); // /sds/Cars/%s.sds
 
@@ -113,5 +102,5 @@ C_TrafficCacheObject * GetCacheCarObjectByModelName( const char * pszInputModelN
 		}
 	}
 
-	return NULL;
+	return nullptr;
 }

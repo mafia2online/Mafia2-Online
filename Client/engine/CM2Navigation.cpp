@@ -13,59 +13,74 @@
 
 #include "CLogFile.h"
 
-CM2Navigation::CM2Navigation( M2Navigation * pNavigation )
+void _declspec(naked) *M2Navigation::GetIconFromEntity(M2Entity *pEntity)
 {
-	// Set the navigation
-	SetNavigation( pNavigation );
+	_asm {
+		mov eax, 0x4965C0;
+		jmp eax;
+	}
+}
 
-	DEBUG_LOG ( "0x38: 0x%p", *(DWORD **)(pNavigation + 0x38) );
+void _declspec(naked) *M2Navigation::GetIconFromId(int iconId)
+{
+	_asm {
+		mov eax, 0x4963E0;
+		jmp eax;
+	}
+}
+
+int _declspec(naked) M2Navigation::RegisterIconEntity(M2Entity *pEntity, int icon, int library, int unk1, int unk2, int unk3)
+{
+	_asm jmp COffsets::FUNC_CNavigation__RegisterIconEntity;
+}
+
+void _declspec(naked) M2Navigation::SetForegroundColor(int icon, int color)
+{
+	_asm {
+		mov eax, 0x083B740;
+		jmp eax;
+	}
+}
+
+void _declspec(naked) M2Navigation::SetBackgroundColor(int icon, int color)
+{
+	_asm {
+		mov eax, 0x083B6F0;
+		jmp eax;
+	}
+}
+
+void _declspec(naked) M2Navigation::UnregisterIconEntity(M2Entity * pEntity, int unk)
+{
+	_asm jmp COffsets::FUNC_CNavigation__UnregisterIconEntity;
+}
+
+int _declspec(naked) M2Navigation::RegisterIconPos(const Vector2& vecPosition, int lib, int icon, int unk1, int unk2, int unk3)
+{
+	_asm jmp COffsets::FUNC_CNavigation__RegisterIconPos;
+}
+
+void _declspec(naked) M2Navigation::UnregisterIconPos(int icon, int unk)
+{
+	_asm jmp COffsets::FUNC_CNavigation__UnregisterIconPos;
+}
+
+CM2Navigation::CM2Navigation( M2Navigation * pNavigation ) :
+	m_pNavigation(pNavigation)
+{
 }
 
 CM2Navigation::~CM2Navigation( void )
 {
 }
 
-int CM2Navigation::RegisterIconPos( const Vector2& vecPosition, int iLibrary, int iIcon )
+int CM2Navigation::RegisterIconPos(const Vector2& vecPosition, int iLibrary, int iIcon)
 {
 	int iIconId = 0;
 
-	// Is the navigation valid?
-	if( m_pNavigation )
+	if (m_pNavigation)
 	{
-		M2Navigation * pNavigation = m_pNavigation;
-
-		_asm
-		{
-			push 0;
-			push 0;
-			push 0;
-			push iIcon;
-			push iLibrary;
-			push vecPosition
-			mov ecx, pNavigation;
-			call COffsets::FUNC_CNavigation__RegisterIconPos;
-			mov iIconId, eax;
-		}
-	}
-
-	void* pIcon = NULL;
-	bool bResult = false;
-	DWORD C_Navigation__GetIconFromId = 0x4963E0;
-	M2Navigation * pNavigation = m_pNavigation;
-
-	_asm
-	{
-		lea ecx, pIcon;
-		push ecx;
-		push iIconId;
-		mov ecx, pNavigation;
-		call C_Navigation__GetIconFromId;
-		mov bResult, al;
-		add esp, 4h;
-	}
-
-	if ( bResult ) {
-		DEBUG_LOG ( "Icon: 0x%p", pIcon );
+		iIconId = m_pNavigation->RegisterIconPos(vecPosition, iLibrary, iIcon, 0, 0, 0);
 	}
 
 	return iIconId;
@@ -75,37 +90,9 @@ int CM2Navigation::RegisterIconEntity( M2Entity * pEntity, int iLibrary, int iIc
 {
 	int iIconId = 0;
 
-	// Is the navigation valid?
 	if( m_pNavigation )
 	{
-		M2Navigation * pNavigation = m_pNavigation;
-
-		_asm
-		{
-			push 0;
-			push 0;
-			push 0;
-			push iIcon;
-			push iLibrary;
-			push pEntity;
-			mov ecx, pNavigation;
-			call COffsets::FUNC_CNavigation__RegisterIconEntity;
-			mov iIconId, eax;
-		}
-
-
-		DWORD dwFunc = 0x4965C0; // C_Navigation::GetIconFromEntity
-		void * pIcon = NULL;
-
-		_asm
-		{
-			push pEntity;
-			mov ecx, pNavigation;
-			call dwFunc;
-			mov pIcon, eax;
-		}
-
-		DEBUG_LOG ( "Entity icon: 0x%p", pIcon );
+		iIconId = m_pNavigation->RegisterIconEntity(pEntity, iLibrary, iIcon, 0, 0, 0);
 	}
 
 	return iIconId;
@@ -113,35 +100,17 @@ int CM2Navigation::RegisterIconEntity( M2Entity * pEntity, int iLibrary, int iIc
 
 void CM2Navigation::UnregisterIconPos( int iIconId )
 {
-	// Is the navigation valid?
 	if( m_pNavigation )
 	{
-		M2Navigation * pNavigation = m_pNavigation;
-
-		_asm
-		{
-			push 1;
-			push iIconId;
-			mov ecx, pNavigation;
-			call COffsets::FUNC_CNavigation__UnregisterIconPos;
-		}
+		m_pNavigation->UnregisterIconPos(iIconId, 1);
 	}
 }
 
 void CM2Navigation::UnregisterIconEntity( M2Entity * pEntity )
 {
-	// Is the navigation valid?
 	if( m_pNavigation )
 	{
-		M2Navigation * pNavigation = m_pNavigation;
-
-		_asm
-		{
-			push 1;
-			push pEntity;
-			mov ecx, pNavigation;
-			call COffsets::FUNC_CNavigation__UnregisterIconEntity;
-		}
+		m_pNavigation->UnregisterIconEntity(pEntity, 1);
 	}
 }
 
@@ -149,16 +118,7 @@ void CM2Navigation::SetForegroundColor(int iIconId, int iColor)
 {
 	if (m_pNavigation)
 	{
-		M2Navigation *pNavigation = m_pNavigation;
-
-		DWORD dwFunc = 0x083B740;
-		__asm
-		{
-			push iColor;
-			push iIconId;
-			mov ecx, pNavigation;
-			call dwFunc;
-		}
+		m_pNavigation->SetForegroundColor(iIconId, iColor);
 	}
 }
 
@@ -166,15 +126,6 @@ void CM2Navigation::SetBackgroundColor(int iIconId, int iColor)
 {
 	if (m_pNavigation)
 	{
-		M2Navigation *pNavigation = m_pNavigation;
-
-		DWORD dwFunc = 0x083B6F0;
-		__asm
-		{
-			push iColor;
-			push iIconId;
-			mov ecx, pNavigation;
-			call dwFunc;
-		}
+		m_pNavigation->SetBackgroundColor(iIconId, iColor);
 	}
 }
