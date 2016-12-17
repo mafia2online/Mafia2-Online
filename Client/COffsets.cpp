@@ -171,6 +171,12 @@ unsigned int COffsets::FUNC_CVehicle__SetWheelMatrixAtIndex = 0;
 unsigned int COffsets::FUNC_CVehicle__GetWheelsMaterial = 0;
 unsigned int COffsets::FUNC_CVehicle__SetLightState = 0;
 unsigned int COffsets::FUNC_CVehicle__PlayerStartEnter = 0;
+unsigned int COffsets::FUNC_CVehicle__StopAllSounds = 0;
+unsigned int COffsets::FUNC_CVehicle__SetVehicleColor = 0;
+unsigned int COffsets::FUNC_CVehicle__GetVehicleColor = 0;
+unsigned int COffsets::FUNC_CVehicle__SetDynamic = 0;
+unsigned int COffsets::FUNC_CVehicle__AddVehicleFlags = 0;
+unsigned int COffsets::FUNC_CVehicle__ClearVehicleFlags = 0;
 
 unsigned int COffsets::FUNC_CVehicle__MarkForSale = 0;
 unsigned int COffsets::FUNC_CVehicle__SetIndicatorLightOn = 0;
@@ -186,6 +192,7 @@ unsigned int COffsets::FUNC_CCar__OpenDoors = 0;
 unsigned int COffsets::FUNC_CCar__LockThrowFromCar = 0;
 unsigned int COffsets::FUNC_CCar__SetGear = 0;
 unsigned int COffsets::FUNC_CCar__SetGearBoxAutomat = 0;
+unsigned int COffsets::FUNC_CCar__ResetRigidBody = 0;
 
 unsigned int COffsets::FUNC_CCar__LockTrunks = 0;
 unsigned int COffsets::FUNC_CCar__UnlockTrunks = 0;
@@ -467,6 +474,12 @@ void COffsets::CommonInitialise(unsigned int uiBase)
 	FUNC_CVehicle__SetTaxiLightOn = (uiBase + 0x1203DF0);
 	FUNC_CVehicle__OpenDoor = (uiBase + 0x1258050);
 	FUNC_CVehicle__SetDoorFree = (uiBase + 0x1258630);
+	FUNC_CVehicle__SetVehicleColor = (uiBase + 0x11EE9A0);
+	FUNC_CVehicle__GetVehicleColor = (uiBase + 0x11EEA00);
+	FUNC_CVehicle__SetDynamic = (uiBase + 0x0120DBB0);
+	FUNC_CVehicle__StopAllSounds = (uiBase + 0x0122B690);
+	FUNC_CVehicle__AddVehicleFlags = (uiBase + 0x01259F40);
+	FUNC_CVehicle__ClearVehicleFlags = (uiBase + 0x0120E340);
 
 	FUNC_CCar__Spawn = (uiBase + 0x447820);
 	FUNC_CCar__GetDamage = (uiBase + 0x09A9A70);
@@ -478,6 +491,7 @@ void COffsets::CommonInitialise(unsigned int uiBase)
 	FUNC_CCar__UnlockTrunks = (uiBase + 0x09BE550);
 	FUNC_CCar__SetGear = (uiBase + 0x11EA5D0);
 	FUNC_CCar__SetGearBoxAutomat = (uiBase + 0x125A180);
+	FUNC_CCar__ResetRigidBody = (uiBase + 0x00468EB0);
 
 	// Sync Objects
 	FUNC_CSyncObject__Reactivate = (uiBase + 0x11DE7D0);

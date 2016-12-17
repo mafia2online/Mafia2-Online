@@ -29,6 +29,11 @@ enum eGearBoxstate
 	GEARBOX_AUTO					= 2
 };
 
+enum eVehicleFlags : uint64_t
+{
+	VEHICLEFLAGS_DOORS_LOCKED = 0x80000000u
+};
+
 class C_VehicleVFTable
 {
 public:
@@ -117,6 +122,13 @@ public:
 
 	void		SetGear				(int gear);
 	void		SetGearBoxAutomat	(eGearBoxstate state);
+
+	bool		SetDynamic			(const bool enable, const int unk);
+
+	void		StopAllSounds		();
+
+	void		AddVehicleFlags		(const uint64_t flags);
+	void		ClearVehicleFlags	(const uint64_t flags);
 };
 
 class M2FuelTank
@@ -280,6 +292,8 @@ public:
 
 	void		LockTrunks();
 	void		UnlockTrunks();
+
+	int			ResetRigidBody();
 };
 
 class CM2Vehicle : public CM2Entity
@@ -420,4 +434,7 @@ public:
 
 	void					SetGearBoxAutomat				(eGearBoxstate state);
 	void					SetGear							(int gear);
+
+	void					Lock							();
+	void					Unlock							();
 };

@@ -46,6 +46,11 @@ void _declspec(naked) M2Vehicle::SetTransparency(float transparency)
 	_asm jmp COffsets::FUNC_CCar__SetTransparency;
 }
 
+int _declspec(naked) M2Vehicle::ResetRigidBody()
+{
+	_asm jmp COffsets::FUNC_CCar__ResetRigidBody;
+}
+
 CM2Vehicle::CM2Vehicle( M2Vehicle * pVehicle ) : CM2Entity( pVehicle )
 {
 	SetVehicle( pVehicle );
@@ -56,6 +61,8 @@ CM2Vehicle::CM2Vehicle( M2Vehicle * pVehicle ) : CM2Entity( pVehicle )
 	ToggleGarageEnter(false);
 
 	Spawn();
+
+	Unlock();
 }
 
 CM2Vehicle::~CM2Vehicle( void )
@@ -302,18 +309,12 @@ int CM2Vehicle::GetTuningTable( void )
 
 int _declspec(naked) C_Vehicle::SetVehicleColor(const C_Vector &primary, const C_Vector &secondary)
 {
-	_asm {
-		mov eax, 0x11EE9A0
-		jmp eax
-	}
+	_asm jmp COffsets::FUNC_CVehicle__SetVehicleColor;
 }
 
 int _declspec(naked) C_Vehicle::GetVehicleColor(C_Vector *const primary, C_Vector *const secondary)
 {
-	_asm {
-		mov eax, 0x11EEA00
-		jmp eax
-	}
+	_asm jmp COffsets::FUNC_CVehicle__GetVehicleColor;
 }
 
 const float MAGIC_COLOR_MULTIPLIER = 0.00390625f; // 1/255
@@ -888,6 +889,26 @@ void _declspec(naked) C_Vehicle::SetLightState(bool lightState, int lightId)
 	_asm jmp COffsets::FUNC_CVehicle__SetLightState;
 }
 
+bool _declspec(naked) C_Vehicle::SetDynamic(const bool enable, const int unk = -1)
+{
+	_asm jmp COffsets::FUNC_CVehicle__SetDynamic;
+}
+
+void _declspec(naked) C_Vehicle::StopAllSounds()
+{
+	_asm jmp COffsets::FUNC_CVehicle__StopAllSounds;
+}
+
+void _declspec(naked) C_Vehicle::AddVehicleFlags(const uint64_t flags)
+{
+	_asm jmp COffsets::FUNC_CVehicle__AddVehicleFlags;
+}
+
+void _declspec(naked) C_Vehicle::ClearVehicleFlags(const uint64_t flags)
+{
+	_asm jmp COffsets::FUNC_CVehicle__ClearVehicleFlags;
+}
+
 void _declspec(naked) M2Vehicle::LockThrowFromCar(int a2, bool lock)
 {
 	_asm jmp COffsets::FUNC_CCar__LockThrowFromCar;
@@ -1121,4 +1142,26 @@ void CM2Vehicle::SetGearBoxAutomat(eGearBoxstate state)
 		return;
 
 	m_pVehicle->m_vehicleData.SetGearBoxAutomat(state);
+}
+
+void CM2Vehicle::Lock()
+{
+	if (!m_pVehicle)
+		return;
+
+	SetSpeed(0.0f);
+	m_pVehicle->m_vehicleData.SetDynamic(false);
+	m_pVehicle->m_vehicleData.AddVehicleFlags(VEHICLEFLAGS_DOORS_LOCKED);
+	m_pVehicle->m_vehicleData.StopAllSounds();
+}
+
+void CM2Vehicle::Unlock()
+{
+	if (!m_pVehicle)
+		return;
+
+	SetSpeed(0.0f);
+	m_pVehicle->m_vehicleData.SetDynamic(true);
+	m_pVehicle->m_vehicleData.ClearVehicleFlags(VEHICLEFLAGS_DOORS_LOCKED);
+	m_pVehicle->ResetRigidBody();
 }
