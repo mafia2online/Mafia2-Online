@@ -201,6 +201,12 @@ public:
 	static	unsigned int		FUNC_CVehicle__SetTaxiLightOn;
 	static	unsigned int		FUNC_CVehicle__OpenDoor;
 	static	unsigned int		FUNC_CVehicle__SetDoorFree;
+	static	unsigned int		FUNC_CVehicle__SetVehicleColor;
+	static	unsigned int		FUNC_CVehicle__GetVehicleColor;
+	static	unsigned int		FUNC_CVehicle__SetDynamic;
+	static	unsigned int		FUNC_CVehicle__StopAllSounds;
+	static	unsigned int		FUNC_CVehicle__AddVehicleFlags;
+	static	unsigned int		FUNC_CVehicle__ClearVehicleFlags;
 
 	static	unsigned int		FUNC_CCar__Spawn;
 	static	unsigned int		FUNC_CCar__GetDamage;
@@ -212,6 +218,7 @@ public:
 	static	unsigned int		FUNC_CCar__UnlockTrunks;
 	static	unsigned int		FUNC_CCar__SetGear;
 	static	unsigned int		FUNC_CCar__SetGearBoxAutomat;
+	static	unsigned int		FUNC_CCar__ResetRigidBody;
 
 	// Sync Objects
 	static	unsigned int		FUNC_CSyncObject__Reactivate;
