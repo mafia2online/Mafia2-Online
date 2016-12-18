@@ -4,9 +4,9 @@
 !define MUI_ABORTWARNING
 
 !define MOD_NAME	"Mafia2-Online"
-!define	MOD_VERS	"v0.1 RC2 "
+!define	MOD_VERS	"v0.1 RC4 "
 !define MOD_NAME_S	"M2Online"
-!define MOD_OUTPUT	"m2online-01-rc2.exe"
+!define MOD_OUTPUT	"m2online-01-rc4.exe"
 !define REG_NODE	"SOFTWARE\Wow6432Node\${MOD_NAME}"
 !define MOD_DIR 	"$PROGRAMFILES\${MOD_NAME}"
 
