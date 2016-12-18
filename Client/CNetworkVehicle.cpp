@@ -244,7 +244,7 @@ void CNetworkVehicle::StoreVehicleSync( const InVehicleSync &vehicleSync, bool b
 		m_vecLastGoodRotation = m_vecSpawnRotation;
 	}
 
-	if( bSpawn || Math::GetDistanceBetweenPoints( vecLocalPos, m_lastSyncData.m_vecPosition ) < 300.0f )
+	if( bSpawn || Math::IsDistanceBetweenPointsLessThen(vecLocalPos, m_lastSyncData.m_vecPosition, 300.0f) )
 	{
 		CVector3 vecVelocity;
 		GetSpeedVec(&vecVelocity);
@@ -310,8 +310,8 @@ void CNetworkVehicle::StoreVehicleSync( const InVehicleSync &vehicleSync, bool b
 	}
 	else
 	{
-		SetTargetPosition( m_lastSyncData.m_vecPosition );
-		SetTargetRotation( m_lastSyncData.m_vecRotation );
+		SetPosition( m_lastSyncData.m_vecPosition );
+		SetRotation( m_lastSyncData.m_vecRotation );
 	}
 }
 
@@ -860,7 +860,11 @@ void CNetworkVehicle::UpdateTargetPosition( void )
 		if ( fAlpha == 1.5f )
 			m_Interpolation.position.ulFinishTime = 0;
 
-		SetPosition ( (vecCurrentPosition + vecErrorCompensation) );
+		CVector3 vecTarget = (vecCurrentPosition + vecErrorCompensation);
+
+		vecTarget.fZ = m_Interpolation.position.vecTarget.fZ;
+
+		SetPosition ( vecTarget );
 	}
 }
 
