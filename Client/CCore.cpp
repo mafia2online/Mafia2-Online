@@ -437,11 +437,11 @@ void CCore::DoRender( void )
 	// Draw 3D texts and nametags before any UI element.
 	if (m_pPlayerManager) {
 		CLocalPlayer *pLocalPlayer = m_pPlayerManager->GetLocalPlayer();
-		if (pLocalPlayer) {
+		if (pLocalPlayer && pLocalPlayer->IsSpawned()) {
 			if (m_pNameTag)
 				m_pNameTag->Draw();
 
-			if (m_p3DTextLabelManager && pLocalPlayer->IsSpawned())
+			if (m_p3DTextLabelManager)
 				m_p3DTextLabelManager->Render();
 		}
 	}
