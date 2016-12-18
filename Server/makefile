@@ -1,5 +1,5 @@
-CFLAGS = -c -m32 -g -std=c++0x -Wall -Wno-unused-function -Wno-unknown-pragmas -Wno-misleading-indentation -Wno-write-strings -D_SERVER -D_LINUX -D_NO_GARBAGE_COLLECT -I../Libraries/mongoose -I../Libraries/tinyxml -I../Libraries/sqlite -I../Libraries/RakNet/Source -I../Shared -I../Libraries/squirrel -I../Libraries/ -I.
-LDFLAGS = -m32 -lpthread -ldl
+CFLAGS = -c -g -std=c++0x -Wall -Wno-unused-function -Wno-unknown-pragmas -Wno-misleading-indentation -Wno-write-strings -D_SERVER -D_LINUX -D_NO_GARBAGE_COLLECT -I../Libraries/mongoose -I../Libraries/tinyxml -I../Libraries/sqlite -I../Libraries/RakNet/Source -I../Shared -I../Libraries/squirrel -I../Libraries/ -I.
+LDFLAGS = -pthread -Wl,--no-as-needed -ldl
 SOURCES = $(wildcard *.cpp)
 SOURCES += ../Shared/CEvents.cpp ../Shared/CCommands.cpp ../Shared/CLibrary.cpp ../Shared/CSQLite.cpp ../Shared/CXML.cpp
 SOURCES += $(wildcard ../Shared/Timers/*.cpp)
