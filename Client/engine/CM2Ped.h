@@ -40,6 +40,17 @@ class M2WeaponData
 public:
 	PAD(M2WeaponData, pad0, 0xE8);							// 0000 - 00E8
 	bool m_bInifiniteAmmo;									// 00E8 - 00E9
+
+	void	AddWeapon(DWORD weapon, DWORD ammo);
+
+	void	AddMoney(int money, int unk);
+	float	GetMoney();
+	void	RemoveMoney(int money, int unk);
+
+	bool	HasItem(DWORD item);
+
+	void	ReloadWeapon(int index, int unk);
+	void	RemoveWeapon(DWORD weapon);
 };
 
 class M2Inventory
@@ -84,11 +95,14 @@ bool m_bIsCrouching;									// 0340 - 0341
 };
 */
 
-class M2ProjectileInventory
+class M2Ped;
+class C_HumanWeaponController
 {
 public:
-	PAD(M2ProjectileInventory, pad0, 0x1A0);				// 0000 - 01A0
+	PAD(C_HumanWeaponController, pad0, 0x1A0);				// 0000 - 01A0
 	void* m_pUnknown;										// 01A0 - 01A4 (wierd, IsUsingFists says this is a bool)
+
+	bool HaveThrowingWeaponInHand();
 };
 
 class M2PedUnk001
@@ -120,7 +134,6 @@ enum E_HumanMoveMode
 	HUMAN_MOVE_MODE_END = 5
 };
 
-class M2Ped;
 class C_HumanScript
 {
 public:
@@ -130,15 +143,30 @@ public:
 	PAD(C_HumanScript, pad1, 0x88);							// 0020 - 00A8
 	M2PedUnk001 * m_pUnknown;								// 00A8 - 00AC
 
-	int PlayAnim(C_SyncObject **syncObject, const char *const animName, const bool unknown, int, int, float, float, float);
-	int AnimPlayEffect(C_SyncObject **syncObject, const char *const effectName, const bool repeat, int);
-	void AnimEffectStop();
+	int				PlayAnim(C_SyncObject **syncObject, const char *const animName, const bool unknown, int, int, float, float, float);
+	int				AnimPlayEffect(C_SyncObject **syncObject, const char *const effectName, const bool repeat, int);
+	void			AnimEffectStop();
 
-	C_SyncObject *ScrMoveV(C_SyncObject **syncObject, const CVector3 &begin, const E_HumanMoveMode moveMode, const CVector3 &target, const bool smoothStop = true);
-	C_SyncObject *ScrAimAt(C_SyncObject **syncObject, M2Entity *entity, CVector3 const &dir, const bool smooth);
-	C_SyncObject *ScrShootAt(C_SyncObject **syncObject, M2Entity *entity, CVector3 const &dir, const bool smooth);
-	C_SyncObject *ScrShootAtEffect(C_SyncObject **syncObject, CVector3 const &dir, CVector3 const &unk1, CVector3 const &unk2, int unk, bool smooth);
-	C_SyncObject *ScrLookAt(C_SyncObject **syncobject, M2Entity *entity, CVector3 const &dir, const bool smooth);
+	void			ModelToHand(int unk, int leftModel, int rightModel);
+	void			ModelToMouth(int model);
+
+	void			SetAnimStyle(const char *dir, const char *set);
+
+	ePhysState		GetPhysState();
+	void			SetPhysState(ePhysState state);
+
+	void			SetSelectedWeapon(DWORD dwWeapon, bool bUseAnimation, int unk);
+
+	void			SetStealthMove(bool enable);
+
+	float			GetRealHealth();
+
+	C_SyncObject	*GetInOutCar(C_SyncObject **syncObject, M2Vehicle *pVehicle, int enter, int seat, bool forced, int unk, int unk2);
+	C_SyncObject	*ScrMoveV(C_SyncObject **syncObject, const CVector3 &begin, const E_HumanMoveMode moveMode, const CVector3 &target, const bool smoothStop = true);
+	C_SyncObject	*ScrAimAt(C_SyncObject **syncObject, M2Entity *entity, CVector3 const &dir, const bool smooth);
+	C_SyncObject	*ScrShootAt(C_SyncObject **syncObject, M2Entity *entity, CVector3 const &dir, const bool smooth);
+	C_SyncObject	*ScrShootAtEffect(C_SyncObject **syncObject, CVector3 const &dir, CVector3 const &unk1, CVector3 const &unk2, int unk, bool smooth);
+	C_SyncObject	*ScrLookAt(C_SyncObject **syncobject, M2Entity *entity, CVector3 const &dir, const bool smooth);
 };
 
 class M2Ped : public M2Entity
@@ -153,7 +181,7 @@ public:
 	C_HumanScript * m_pHumanScript;							// 00A4 - 00A8
 	PAD(M2Ped, pad2, 0x4);									// 00A8 - 00AC
 	M2Inventory * m_pInventory;								// 00AC - 00B0
-	M2ProjectileInventory * m_pProjectileInventory;			// 00B0 - 00B4
+	C_HumanWeaponController * m_pWeaponController;			// 00B0 - 00B4
 	PAD(M2Ped, pad3, 0x1C);									// 00B4 - 00D0
 	float m_fHealth;										// 00D0 - 00D4
 	float m_fHealthMax;										// 00D4 - 00D8
@@ -249,6 +277,8 @@ public:
 
 	void					ModelToMouth(int iModel);
 	void					ModelToHand(int iHand, int iModel);
+	void					ActorItemToHand(int hand, int model);
+
 	void					SetAnimStyle(const char *dir, const char *set);
 
 	void					SetPhysState(ePhysState state);

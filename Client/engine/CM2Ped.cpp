@@ -21,16 +21,161 @@
 
 #include "CLogFile.h"
 
-CM2Ped::CM2Ped(M2Ped * pPed) : CM2Entity(pPed)
+int _declspec(naked) C_HumanScript::AnimPlayEffect(C_SyncObject **syncObject, const char *const effectName, const bool repeat, int)
 {
-	DEBUG_LOG("CM2Ped::CM2Ped");
+	__asm
+	{
+		mov eax, 0x0951700
+		jmp eax
+	}
+}
 
-	SetPed(pPed);
+void _declspec(naked) C_HumanScript::AnimEffectStop()
+{
+	__asm
+	{
+		mov eax, 0x0985220
+		jmp eax
+	}
+}
+
+ePhysState C_HumanScript::GetPhysState()
+{
+	_asm {
+		mov eax, 0x090CA8;
+		jmp eax;
+	}
+}
+
+void _declspec(naked) C_HumanScript::ModelToHand(int unk, int leftModel, int rightModel)
+{
+	_asm jmp COffsets::FUNC_CHuman__SetModelToHand;
+}
+
+void _declspec(naked) C_HumanScript::ModelToMouth(int model)
+{
+	_asm jmp COffsets::FUNC_CHuman__SetModelToMouth;
+}
+
+void _declspec(naked) C_HumanScript::SetAnimStyle(const char *dir, const char *set)
+{
+	_asm jmp COffsets::FUNC_CHuman__SetAnimStyle;
+}
+
+void _declspec(naked) C_HumanScript::SetPhysState(ePhysState state)
+{
+	_asm jmp  COffsets::FUNC_CHuman__SetPhysState;
+}
+
+void _declspec(naked) C_HumanScript::SetStealthMove(bool enable)
+{
+	_asm jmp COffsets::FUNC_CHuman__SetStealthMove;
+}
+
+C_SyncObject _declspec(naked) *C_HumanScript::GetInOutCar(C_SyncObject **syncObject, M2Vehicle *pVehicle, int enter, int seat, bool forced, int unk, int unk2)
+{
+	_asm jmp COffsets::FUNC_CHuman__GetInOutCar;
+}
+
+int _declspec(naked) C_HumanScript::PlayAnim(C_SyncObject **syncObject, const char *const animName, const bool repeat, int, int, float, float, float)
+{
+	_asm {
+		mov eax, 0x0982CC0
+		jmp eax
+	}
+}
+
+C_SyncObject _declspec(naked) *C_HumanScript::ScrAimAt(C_SyncObject **syncObject, M2Entity *ent, CVector3 const &pos, const bool smooth)
+{
+	_asm jmp COffsets::FUNC_CHuman__AimAt;
+}
+
+C_SyncObject _declspec(naked) *C_HumanScript::ScrLookAt(C_SyncObject **syncObject, M2Entity *entity, CVector3 const &dir, const bool smooth)
+{
+	_asm jmp COffsets::FUNC_CHuman__LookAt;
+}
+
+C_SyncObject _declspec(naked) *C_HumanScript::ScrMoveV(C_SyncObject **syncObject, const CVector3 &begin, const E_HumanMoveMode moveMode, const CVector3 &target, const bool smoothStop)
+{
+	_asm jmp COffsets::FUNC_CHuman__MoveVec;
+}
+
+C_SyncObject _declspec(naked) *C_HumanScript::ScrShootAt(C_SyncObject **syncObject, M2Entity *entity, CVector3 const &dir, const bool smooth)
+{
+	_asm jmp COffsets::FUNC_CHuman__ShootAt;
+}
+
+C_SyncObject _declspec(naked) *C_HumanScript::ScrShootAtEffect(C_SyncObject **syncObject, CVector3 const &dir, CVector3 const &unk1, CVector3 const &unk2, int unk, bool smooth)
+{
+	_asm jmp COffsets::FUNC_CHuman__ShootAtEffect;
+}
+
+void _declspec(naked) C_HumanScript::SetSelectedWeapon(DWORD dwWeapon, bool bUseAnimation, int unk)
+{
+	_asm jmp COffsets::FUNC_CHuman__InventorySelect;
+}
+
+float _declspec(naked) C_HumanScript::GetRealHealth()
+{
+	_asm jmp COffsets::FUNC_CHuman__GetRealHealth;
+}
+
+void _declspec(naked) M2WeaponData::AddWeapon(DWORD weapon, DWORD ammo)
+{
+	_asm jmp COffsets::FUNC_CHuman__InventoryAddWeapon;
+}
+
+void _declspec(naked) M2WeaponData::AddMoney(int money, int unk)
+{
+	_asm {
+		mov eax, 0x949C80;
+		jmp eax;
+	}
+}
+
+float _declspec(naked) M2WeaponData::GetMoney()
+{
+	_asm {
+		mov eax, 0x931B80;
+		jmp eax;
+	}
+}
+
+void _declspec(naked) M2WeaponData::RemoveMoney(int money, int unk)
+{
+	_asm {
+		mov eax, 0x93BE60;
+		jmp eax;
+	}
+}
+
+void _declspec(naked) M2WeaponData::RemoveWeapon(DWORD weapon)
+{
+	_asm jmp COffsets::FUNC_CHuman__InventoryRemoveWeapon;
+}
+
+void _declspec(naked) M2WeaponData::ReloadWeapon(int index, int unk)
+{
+	_asm jmp COffsets::FUNC_CHuman__InventoryDoReload;
+}
+
+bool _declspec(naked) M2WeaponData::HasItem(DWORD item)
+{
+	_asm jmp COffsets::FUNC_CHuman__InventoryHaveItem;
+}
+
+bool _declspec(naked) C_HumanWeaponController::HaveThrowingWeaponInHand()
+{
+	_asm jmp COffsets::FUNC_CHuman__HaveThrowingWeaponInHand
+}
+
+CM2Ped::CM2Ped(M2Ped * pPed) : CM2Entity(pPed),
+	m_pPed(pPed)
+{
 }
 
 CM2Ped::~CM2Ped(void)
 {
-	DEBUG_LOG("CM2Ped::~CM2Ped");
 }
 
 BYTE CM2Ped::GetControlState(void)
@@ -51,16 +196,12 @@ DWORD CM2Ped::GetState(void)
 
 void CM2Ped::SetInfiniteAmmo(bool bInfiniteAmmo)
 {
-	DEBUG_LOG("CM2Ped::SetInifiniteAmmo");
-
 	if (m_pPed && m_pPed->m_pWeaponData)
 		m_pPed->m_pWeaponData->m_bInifiniteAmmo = bInfiniteAmmo;
 }
 
 bool CM2Ped::HasInfiniteAmmo(void)
 {
-	DEBUG_LOG("CM2Ped::HasInifiniteAmmo");
-
 	if (m_pPed && m_pPed->m_pWeaponData)
 		return m_pPed->m_pWeaponData->m_bInifiniteAmmo;
 
@@ -69,23 +210,12 @@ bool CM2Ped::HasInfiniteAmmo(void)
 
 void CM2Ped::SetSelectedWeapon(DWORD dwWeapon, bool bUseAnimation)
 {
-	DEBUG_LOG("CM2Ped::SetSelectedWeapon");
-
 	if (m_pPed && m_pPed->m_pHumanScript)
 	{
 		if (dwWeapon < 0 || dwWeapon > 21)
 			return;
 
-		void* pEntityData = m_pPed->m_pHumanScript;
-
-		_asm
-		{
-			push 0;
-			push bUseAnimation;
-			push dwWeapon;
-			mov ecx, pEntityData;
-			call COffsets::FUNC_CHuman__InventorySelect;
-		}
+		m_pPed->m_pHumanScript->SetSelectedWeapon(dwWeapon, bUseAnimation, 0);
 	}
 }
 
@@ -156,8 +286,6 @@ float CM2Ped::GetHealth(void)
 
 float CM2Ped::GetHealthMax(void)
 {
-	DEBUG_LOG("CM2Ped::GetHealthMax");
-
 	if (m_pPed)
 		return m_pPed->m_fHealthMax;
 
@@ -166,20 +294,11 @@ float CM2Ped::GetHealthMax(void)
 
 float CM2Ped::GetRealHealth(void)
 {
-	DEBUG_LOG("CM2Ped::GetRealHealth");
-
 	float fRealHealth = 0.0f;
 
 	if (m_pPed && m_pPed->m_pHumanScript)
 	{
-		void* pEntityData = m_pPed->m_pHumanScript;
-
-		_asm
-		{
-			mov ecx, pEntityData;
-			call COffsets::FUNC_CHuman__GetRealHealth;
-			mov fRealHealth, eax;
-		}
+		fRealHealth = m_pPed->m_pHumanScript->GetRealHealth();
 	}
 
 	return fRealHealth;
@@ -187,7 +306,6 @@ float CM2Ped::GetRealHealth(void)
 
 void CM2Ped::SetInvulnerable(bool bInvulnerable)
 {
-	DEBUG_LOG("CM2Ped::SetInvulnerable");
 
 	if (m_pPed)
 		m_pPed->m_bInvulnerable = bInvulnerable;
@@ -195,8 +313,6 @@ void CM2Ped::SetInvulnerable(bool bInvulnerable)
 
 bool CM2Ped::IsInvulnerable(void)
 {
-	DEBUG_LOG("CM2Ped::IsInvulnerable");
-
 	if (m_pPed)
 		return m_pPed->m_bInvulnerable;
 
@@ -205,42 +321,22 @@ bool CM2Ped::IsInvulnerable(void)
 
 void CM2Ped::GiveWeapon(DWORD dwWeapon, DWORD dwAmmo)
 {
-	DEBUG_LOG("CM2Ped::GiveWeapon");
-
 	if (m_pPed && m_pPed->m_pWeaponData)
 	{
 		if (dwWeapon <= 0 || dwWeapon > 21)
 			return;
 
-		M2WeaponData * pWeaponData = m_pPed->m_pWeaponData;
-
-		_asm
-		{
-			push dwAmmo;
-			push dwWeapon;
-			mov ecx, pWeaponData;
-			call COffsets::FUNC_CHuman__InventoryAddWeapon;
-		}
+		m_pPed->m_pWeaponData->AddWeapon(dwWeapon, dwAmmo);
 	}
 }
 
 void CM2Ped::RemoveWeapon(DWORD dwWeapon, DWORD dwAmmo)
 {
-	DEBUG_LOG("CM2Ped::RemoveWeapon");
-
 	if (m_pPed && m_pPed->m_pWeaponData)
 	{
-		M2WeaponData * pWeaponData = m_pPed->m_pWeaponData;
-
-		// Are we completely removing the weapon?
 		if (dwAmmo == 0)
 		{
-			_asm
-			{
-				push dwWeapon;
-				mov ecx, pWeaponData;
-				call COffsets::FUNC_CHuman__InventoryRemoveWeapon;
-			}
+			m_pPed->m_pWeaponData->RemoveWeapon(dwWeapon);
 		}
 		else
 		{
@@ -262,46 +358,22 @@ void CM2Ped::RemoveAllWeapons(void)
 
 void CM2Ped::ReloadWeapon(void)
 {
-	DEBUG_LOG("CM2Ped::ReloadWeapon");
-
 	if (m_pPed && m_pPed->m_pWeaponData)
 	{
-		M2WeaponData * pWeaponData = m_pPed->m_pWeaponData;
-
-		_asm
-		{
-			push - 1;						// unknown (something with model reload?)
-			push 0;						// weapon inventory index
-			mov ecx, pWeaponData;
-			call COffsets::FUNC_CHuman__InventoryDoReload;
-		}
+		m_pPed->m_pWeaponData->ReloadWeapon(0, -1);
 	}
 }
 
 bool CM2Ped::HaveThrowingWeaponInHand(void)
 {
-	DEBUG_LOG("CM2Ped::HaveThrowingWeaponInHand");
-
 	bool bHaveThrowingWeaponInHand = false;
 
-	if (m_pPed && m_pPed->m_pProjectileInventory)
+	if (m_pPed && m_pPed->m_pWeaponController)
 	{
-		void* pProjectileInventory = m_pPed->m_pProjectileInventory;
-
-		_asm
-		{
-			mov ecx, pProjectileInventory;
-			call COffsets::FUNC_CHuman__HaveThrowingWeaponInHand;
-			mov bHaveThrowingWeaponInHand, al;
-		}
+		bHaveThrowingWeaponInHand = m_pPed->m_pWeaponController->HaveThrowingWeaponInHand();
 	}
 
 	return bHaveThrowingWeaponInHand;
-
-	//if( m_pPed )
-	//	return (((*(DWORD *)m_pPed->m_pProjectileInventory->m_pUnknown + 0x24) >> 21) & 1);
-
-	//return false;
 }
 
 bool CM2Ped::HasItem(DWORD dwItem)
@@ -310,15 +382,7 @@ bool CM2Ped::HasItem(DWORD dwItem)
 
 	if (m_pPed && m_pPed->m_pWeaponData)
 	{
-		M2WeaponData * pWeaponData = m_pPed->m_pWeaponData;
-
-		_asm
-		{
-			push dwItem;
-			mov ecx, pWeaponData;
-			call COffsets::FUNC_CHuman__InventoryHaveItem;
-			mov bHasItem, al;
-		}
+		bHasItem = m_pPed->m_pWeaponData->HasItem(dwItem);
 	}
 
 	return bHasItem;
@@ -326,9 +390,7 @@ bool CM2Ped::HasItem(DWORD dwItem)
 
 C_SyncObject * CM2Ped::GetInOutVehicle(M2Vehicle * pVehicle, int iSeat, bool bEnter, bool bForced)
 {
-	DEBUG_LOG("CM2Ped::GetInOutVehicle");
-
-	C_SyncObject * pReturnObj = NULL;
+	C_SyncObject * pReturnObj = nullptr;
 
 	if (m_pPed && m_pPed->m_pHumanScript)
 	{
@@ -348,23 +410,7 @@ C_SyncObject * CM2Ped::GetInOutVehicle(M2Vehicle * pVehicle, int iSeat, bool bEn
 		if (m_pPed->m_dwGUID == 9232)
 			bForced = true;
 
-		DEBUG_LOG ("pVehicle: 0x%p, iSeat: %d, Forced: %s", pVehicle, iSeat, (bForced ? "yes" : "no"));
-
-		_asm
-		{
-			push 2;
-			push 0;
-			push bForced;
-			push iSeat;
-			push iEnter;
-			push pVehicle;
-			lea ecx, pReturnObj;
-			push ecx;
-			mov ecx, pHumanScript;
-			call COffsets::FUNC_CHuman__GetInOutCar;
-		}
-
-		DEBUG_LOG ("call done!");
+		m_pPed->m_pHumanScript->GetInOutCar(&pReturnObj, pVehicle, iEnter, iSeat, bForced, 0, 2);
 	}
 
 	return pReturnObj;
@@ -380,45 +426,20 @@ M2Vehicle * CM2Ped::GetCurrentVehicle(void)
 
 void CM2Ped::AddMoney(int iDollars, int iCents)
 {
-	DEBUG_LOG("CM2Ped::AddMoney");
-
 	if (m_pPed)
 	{
 		// If we want to disable hud OR sound
 		//CPatcher::InstallNopPatch( 0x949CFA , 0x9 ); // stop hud showing
 		//CPatcher::InstallNopPatch( 0x949CB6 , 0x15 ); // stop sound playing
-
-		DWORD C_Human__InventoryAddMoney = 0x949C80;
-		int iMoney = SharedUtility::int_concat(iDollars, iCents);
-		void * pHumanInventory = m_pPed->m_pWeaponData;
-
-		_asm
-		{
-			push 0;
-			push iMoney;
-			mov ecx, pHumanInventory;
-			call C_Human__InventoryAddMoney;
-		}
+		m_pPed->m_pWeaponData->AddMoney(SharedUtility::int_concat(iDollars, iCents), 0);
 	}
 }
 
 void CM2Ped::RemoveMoney(int iDollars, int iCents)
 {
-	DEBUG_LOG("CM2Ped::RemoveMoney");
-
 	if (m_pPed)
 	{
-		DWORD C_Human__InventoryRemoveMoney = 0x93BE60;
-		int iMoney = SharedUtility::int_concat(iDollars, iCents);
-		void * pHumanInventory = m_pPed->m_pWeaponData;
-
-		_asm
-		{
-			push 0;
-			push iMoney;
-			mov ecx, pHumanInventory;
-			call C_Human__InventoryRemoveMoney;
-		}
+		m_pPed->m_pWeaponData->RemoveMoney(SharedUtility::int_concat(iDollars, iCents), 0);
 	}
 }
 
@@ -428,24 +449,9 @@ float CM2Ped::GetMoney(void)
 
 	if (m_pPed)
 	{
-		DWORD C_Human__InventoryGetMoney = 0x931B80;
-		void * pInventoryData = m_pPed->m_pWeaponData;
-
-		int money;
-
-		_asm
-		{
-			mov ecx, pInventoryData;
-			call C_Human__InventoryGetMoney;
-			mov money, eax;
-		}
+		fMoney = m_pPed->m_pWeaponData->GetMoney();
 	}
 	return fMoney;
-}
-
-C_SyncObject _declspec(naked) *C_HumanScript::ScrMoveV(C_SyncObject **syncObject, const CVector3 &begin, const E_HumanMoveMode moveMode, const CVector3 &target, const bool smoothStop)
-{
-	_asm jmp COffsets::FUNC_CHuman__MoveVec;
 }
 
 C_SyncObject * CM2Ped::MoveVec(const CVector3 &vecPosition, M2Enums::eMoveType moveType, CVector3 vecEndDir)
@@ -460,11 +466,6 @@ C_SyncObject * CM2Ped::MoveVec(const CVector3 &vecPosition, M2Enums::eMoveType m
 	}
 
 	return nullptr;
-}
-
-C_SyncObject _declspec(naked) *C_HumanScript::ScrAimAt(C_SyncObject **syncObject, M2Entity *ent, CVector3 const &pos, const bool smooth)
-{
-	_asm jmp COffsets::FUNC_CHuman__AimAt;
 }
 
 C_SyncObject * CM2Ped::AimAt(CVector3 vecPosition)
@@ -487,16 +488,6 @@ C_SyncObject * CM2Ped::AimAt(CVector3 vecPosition)
 	return nullptr;
 }
 
-C_SyncObject _declspec(naked) *C_HumanScript::ScrShootAt(C_SyncObject **syncObject, M2Entity *entity, CVector3 const &dir, const bool smooth)
-{
-	_asm jmp COffsets::FUNC_CHuman__ShootAt;
-}
-
-C_SyncObject _declspec(naked) *C_HumanScript::ScrShootAtEffect(C_SyncObject **syncObject, CVector3 const &dir, CVector3 const &unk1, CVector3 const &unk2, int unk, bool smooth)
-{
-	_asm jmp COffsets::FUNC_CHuman__ShootAtEffect;
-}
-
 C_SyncObject * CM2Ped::ShootAt(CVector3 vecPosition)
 {
 	if (m_pPed && m_pPed->m_pHumanScript)
@@ -510,11 +501,6 @@ C_SyncObject * CM2Ped::ShootAt(CVector3 vecPosition)
 		return pSyncObject;
 	}
 	return nullptr;
-}
-
-C_SyncObject _declspec(naked) *C_HumanScript::ScrLookAt(C_SyncObject **syncObject, M2Entity *entity, CVector3 const &dir, const bool smooth)
-{
-	_asm jmp COffsets::FUNC_CHuman__LookAt;
 }
 
 C_SyncObject * CM2Ped::LookAt(CVector3 vecPosition)
@@ -535,18 +521,6 @@ C_SyncObject * CM2Ped::LookAt(CVector3 vecPosition)
 		return pSyncObject;
 	}
 	return nullptr;
-}
-
-/*
-** Animation system
-*/
-
-int _declspec(naked) C_HumanScript::PlayAnim(C_SyncObject **syncObject, const char *const animName, const bool repeat, int, int, float, float, float)
-{
-	_asm {
-		mov eax, 0x0982CC0
-		jmp eax
-	}
 }
 
 C_SyncObject *CM2Ped::PlayAnimation(char *strAnimation, bool repeat)
@@ -633,24 +607,6 @@ bool CM2Ped::IsAnimFinished()
 	return bReturn;
 }
 
-int _declspec(naked) C_HumanScript::AnimPlayEffect(C_SyncObject **syncObject, const char *const effectName, const bool repeat, int)
-{
-	__asm
-	{
-		mov eax, 0x0951700
-		jmp eax
-	}
-}
-
-void _declspec(naked) C_HumanScript::AnimEffectStop()
-{
-	__asm
-	{
-		mov eax, 0x0985220
-		jmp eax
-	}
-}
-
 C_SyncObject  *CM2Ped::PlayAnimEffect(const char *effectName, bool bRepeat)
 {
 	if (!m_pPed || !m_pPed->m_pHumanScript)
@@ -676,8 +632,6 @@ void CM2Ped::AnimEffectStop(C_SyncObject *obj)
 	pHumanScript->AnimEffectStop();
 }
 
-/* End of animation system */
-
 void CM2Ped::ModelToHand(int iHand, int iModel)
 {
 	if (iHand < 1 || iHand > 3) // 1 : right hand & 2 : left hand & 3 : both hand
@@ -688,10 +642,6 @@ void CM2Ped::ModelToHand(int iHand, int iModel)
 
 	if (!m_pPed)
 		return;
-
-	C_HumanScript* pHumanScript = m_pPed->m_pHumanScript;
-
-	DWORD func = COffsets::FUNC_CHuman__SetModelToHand;
 
 	int leftModel = 0;
 	int rightModel = 0;
@@ -711,14 +661,7 @@ void CM2Ped::ModelToHand(int iHand, int iModel)
 		rightModel = iModel;
 	}
 
-	_asm
-	{
-		push rightModel;
-		push leftModel;
-		push 0;
-		mov ecx, pHumanScript;
-		call func;
-	}
+	m_pPed->m_pHumanScript->ModelToHand(0, leftModel, rightModel);
 }
 
 void CM2Ped::ModelToMouth(int iModel)
@@ -726,16 +669,7 @@ void CM2Ped::ModelToMouth(int iModel)
 	if (!m_pPed)
 		return;
 
-	C_HumanScript* pHumanScript = m_pPed->m_pHumanScript;
-
-	DWORD dwFunc = COffsets::FUNC_CHuman__SetModelToMouth;
-
-	__asm
-	{
-		push iModel;
-		mov ecx, pHumanScript;
-		call dwFunc;
-	}
+	m_pPed->m_pHumanScript->ModelToMouth(iModel);
 }
 
 void CM2Ped::SetAnimStyle(const char *dir, const char *set)
@@ -746,17 +680,7 @@ void CM2Ped::SetAnimStyle(const char *dir, const char *set)
 	if (!m_pPed)
 		return;
 
-	C_HumanScript* pHumanScript = m_pPed->m_pHumanScript;
-
-	DWORD func = COffsets::FUNC_CHuman__SetAnimStyle;
-
-	_asm
-	{
-		push set;
-		push dir;
-		mov ecx, pHumanScript;
-		call func;
-	}
+	m_pPed->m_pHumanScript->SetAnimStyle(dir, set);
 }
 
 void CM2Ped::SetPhysState(ePhysState state)
@@ -764,16 +688,7 @@ void CM2Ped::SetPhysState(ePhysState state)
 	if (!m_pPed)
 		return;
 
-	C_HumanScript* pHumanScript = m_pPed->m_pHumanScript;
-
-	DWORD dwFunc = COffsets::FUNC_CHuman__SetPhysState;
-
-	__asm
-	{
-		push state;
-		mov ecx, pHumanScript;
-		call dwFunc;
-	}
+	m_pPed->m_pHumanScript->SetPhysState(state);
 }
 
 ePhysState	CM2Ped::GetPhysState(void)
@@ -781,39 +696,17 @@ ePhysState	CM2Ped::GetPhysState(void)
 	if (!m_pPed)
 		return (E_DYNAMIC);
 
-	C_HumanScript* pHumanScript = m_pPed->m_pHumanScript;
+	ePhysState retn = m_pPed->m_pHumanScript->GetPhysState();
 
-	DWORD dwFunc = 0x090CA8;
-
-	int iRetn = E_DYNAMIC;
-
-	__asm
-	{
-		mov ecx, pHumanScript;
-		call dwFunc;
-		mov iRetn, eax;
-	}
-
-	return ((ePhysState)iRetn);
+	return (retn);
 }
-
-/* StealthMoving things */
 
 void CM2Ped::SetStealthMove(bool bStealthMove)
 {
 	if (!m_pPed)
 		return;
 
-	C_HumanScript *pHumanScript = m_pPed->m_pHumanScript;
-
-	DWORD dwFunc = COffsets::FUNC_CHuman__SetStealthMove; // C_HumanScript::SetStealthMove(bool)
-
-	__asm
-	{
-		push bStealthMove;
-		mov ecx, pHumanScript;
-		call  dwFunc;
-	}
+	m_pPed->m_pHumanScript->SetStealthMove(bStealthMove);
 }
 
 bool _declspec(naked) M2Ped::IsCrouch() const
@@ -832,5 +725,3 @@ bool CM2Ped::IsStealthMoving()
 
 	return (m_pPed->IsCrouch());
 }
-
-/* End of StealthMoving things */
