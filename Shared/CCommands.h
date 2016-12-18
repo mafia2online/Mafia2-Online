@@ -149,9 +149,10 @@ public:
 				if( !pVM || pVM == (*iter2)->GetScript() )
 				{
 					(*iter2)->Call( &pArguments );
-					return true;
 				}
 			}
+
+			return true;
 		}
 
 		return false;
