@@ -580,19 +580,6 @@ void CLocalPlayer::OnLeaveVehicle( void )
 			// Handle this enter with the network vehicle
 			m_pVehicle->HandlePlayerExit( this, seat, false );
 
-			// NOTE(inlife): FUCK THIS SHIT, vehicle should be at the place of death/drawn(logic yea)
-			// can be catched with underground falling check and destroted somewhere - real life man
-
-			// Do we need to respawn this vehicle? (Set to true when vehicle enters water)
-			// if( bRespawnVehicle && m_seat == 0 )
-			// {
-			// 	// Respawn the vehicle
-			// 	m_pVehicle->Respawn();
-
-			// 	//
-			// 	bRespawnVehicle = false;
-			// }
-
 			// Are we a passenger?
 			if( m_seat > 0 )
 			{
@@ -763,7 +750,6 @@ void CLocalPlayer::OnEnterWater( void )
 	if( !IsDead() && m_pVehicle )
 	{
 		// Mark the vehicle we exit to respawn
-		// bRespawnVehicle = true;
 		// TODO(inlife): destroy vehicle ?
 	}
 }
