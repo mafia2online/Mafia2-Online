@@ -18,6 +18,7 @@ class C3DTextLabelManager
 
 private:
 	C3DTextLabel					* m_p3DTextLabels[MAX_3DTEXTS];
+	int								m_count;
 
 
 public:
@@ -28,7 +29,6 @@ public:
 	bool							Remove(EntityId textID);
 	bool							IsActive(EntityId textID);
 	bool							IsOnScreen(EntityId textID);
-	void							PreRender(void);
 	void							Render(void);
 	EntityId						FindFreeSlot(void);
 	int								GetCount(void);
