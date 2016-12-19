@@ -1,5 +1,5 @@
 CFLAGS = -m32 -c -g -std=c++0x -Wno-write-strings -D_SERVER -D_LINUX -D_NO_GARBAGE_COLLECT -I../Shared -I../Libraries/squirrel -I../Libraries/ -I.
-LDFLAGS = -m32 -lpthread -ldl
+LDFLAGS = -static-libgcc -static-libstdc++ -m32 -lpthread -ldl
 SOURCES = $(wildcard *.cpp)
 SOURCES += $(wildcard ../Libraries/tinyxml/*.cpp)
 SOURCES += ../Shared/CEvents.cpp ../Shared/CCommands.cpp ../Shared/CLibrary.cpp ../Shared/CSQLite.cpp ../Shared/CXML.cpp
