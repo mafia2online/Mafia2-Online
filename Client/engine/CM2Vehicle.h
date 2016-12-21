@@ -129,6 +129,8 @@ public:
 
 	void		AddVehicleFlags		(const uint64_t flags);
 	void		ClearVehicleFlags	(const uint64_t flags);
+
+	void		PausePhysics		(bool pause);
 };
 
 class M2FuelTank

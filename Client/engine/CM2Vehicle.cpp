@@ -909,6 +909,14 @@ void _declspec(naked) C_Vehicle::ClearVehicleFlags(const uint64_t flags)
 	_asm jmp COffsets::FUNC_CVehicle__ClearVehicleFlags;
 }
 
+void _declspec(naked) C_Vehicle::PausePhysics(bool pause)
+{
+	_asm {
+		mov eax, 0x1272BE0;
+		jmp eax;
+	}
+}
+
 void _declspec(naked) M2Vehicle::LockThrowFromCar(int a2, bool lock)
 {
 	_asm jmp COffsets::FUNC_CCar__LockThrowFromCar;
