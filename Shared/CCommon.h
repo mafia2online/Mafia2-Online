@@ -24,6 +24,9 @@
 #define MASTERLIST_NONE_URL_PATH	"/api/v1/server?ordered=true"
 #define MASTERLIST_HOSTED_URL_PATH	"/api/v1/server?ordered=true&hosted=true"
 
+#define UPDATER_VERSION				"/api/v1/current/version"
+#define UPDATER_FILE				"/api/v1/current/dll"
+
 // Server stuff
 #define		SERVER_TITLE			MOD_NAME " - " MOD_OS_STRING " Dedicated Server"
 #ifdef _WIN32
