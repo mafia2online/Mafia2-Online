@@ -63,6 +63,9 @@
     <ClCompile Include="..\Shared\md5\md5.cpp">
       <Filter>Source Files\Shared\md5</Filter>
     </ClCompile>
+    <ClCompile Include="CUpdater.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="StdInc.h">
@@ -98,10 +101,18 @@
     <ClInclude Include="..\Shared\md5\md5.h">
       <Filter>Header Files\Shared\md5</Filter>
     </ClInclude>
+    <ClInclude Include="CUpdater.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="m2mp.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="101.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

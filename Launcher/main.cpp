@@ -9,6 +9,8 @@
 
 #include "StdInc.h"
 
+#include "CUpdater.h"
+
 #include "CLogFile.h"
 
 #pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
@@ -24,6 +26,37 @@
 int ShowMessageBox( const char * szText, UINT uType = (MB_ICONEXCLAMATION | MB_OK) )
 {
 	return MessageBox( NULL, szText, MOD_NAME, uType );
+}
+
+int StartInjecting(String strApplicationPath, String strBassPath, String strModulePath)
+{
+
+	STARTUPINFO siStartupInfo;
+	PROCESS_INFORMATION piProcessInfo;
+	memset(&siStartupInfo, 0, sizeof(siStartupInfo));
+	memset(&piProcessInfo, 0, sizeof(piProcessInfo));
+	siStartupInfo.cb = sizeof(siStartupInfo);
+
+	if (!CreateProcess(strApplicationPath.Get(), NULL, NULL, NULL, TRUE, CREATE_SUSPENDED, NULL, SharedUtility::GetAppPath(), &siStartupInfo, &piProcessInfo))
+	{
+		ShowMessageBox("Failed to start Mafia2.exe. Can't launch.");
+		return 1;
+	}
+
+	const SharedUtility::InjectLibraryResults bassInjectResult = SharedUtility::InjectLibraryIntoProcess(piProcessInfo.hProcess, strBassPath.Get());
+	const SharedUtility::InjectLibraryResults moduleInjectResult = SharedUtility::InjectLibraryIntoProcess(piProcessInfo.hProcess, strModulePath.Get());
+
+	if (moduleInjectResult != SharedUtility::INJECT_LIBRARY_RESULT_OK || bassInjectResult != SharedUtility::INJECT_LIBRARY_RESULT_OK)
+	{
+		String strError;
+		strError.Format("Failed to inject modules into game process.\nCore: %s (%i)\nBass:  %s (%i)", SharedUtility::InjectLibraryResultToString(moduleInjectResult), moduleInjectResult, SharedUtility::InjectLibraryResultToString(bassInjectResult), bassInjectResult);
+		ShowMessageBox(strError);
+
+		TerminateProcess(piProcessInfo.hProcess, 0);
+		return 1;
+	}
+
+	ResumeThread(piProcessInfo.hThread);
 }
 
 int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow )
@@ -70,26 +103,26 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	}
 
 	String strLaunchPath;
-	strLaunchPath.Format( "%s\\pc", szInstallDirectory );
+	strLaunchPath.Format("%s\\pc", szInstallDirectory);
 	String strApplicationPath;
-	strApplicationPath.Format( "%s\\Mafia2.exe", strLaunchPath.Get() );
+	strApplicationPath.Format("%s\\Mafia2.exe", strLaunchPath.Get());
 
-	if( !SharedUtility::Exists( strApplicationPath.Get() ) )
+	if (!SharedUtility::Exists(strApplicationPath.Get()))
 	{
-		ShowMessageBox( "Failed to find Mafia2.exe. Can't launch." );
+		ShowMessageBox("Failed to find Mafia2.exe. Can't launch.");
 		return 1;
 	}
 
-	if( bFoundCustomDirectory )
-		SharedUtility::WriteRegistryString( HKEY_LOCAL_MACHINE, "Software\\Wow6432Node\\Mafia2-Online", "GameDir", szInstallDirectory, sizeof(szInstallDirectory) );
+	if (bFoundCustomDirectory)
+		SharedUtility::WriteRegistryString(HKEY_LOCAL_MACHINE, "Software\\Wow6432Node\\Mafia2-Online", "GameDir", szInstallDirectory, sizeof(szInstallDirectory));
 
 	String strModulePath;
-	strModulePath.Format( "%s%s", SharedUtility::GetAppPath(), CORE_MODULE );
+	strModulePath.Format("%s%s", SharedUtility::GetAppPath(), CORE_MODULE);
 	CLogFile::Printf("M2Online: %s", strModulePath.Get());
 
-	if( !SharedUtility::Exists( strModulePath.Get() ) )
+	if (!SharedUtility::Exists(strModulePath.Get()))
 	{
-		ShowMessageBox( "Failed to find m2online.dll! Can't launch." );
+		ShowMessageBox("Failed to find m2online.dll! Can't launch.");
 		return 1;
 	}
 
@@ -106,39 +139,31 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 
 	if (SharedUtility::IsProcessRunning("Mafia2.exe"))
 	{
-		if (! SharedUtility::_TerminateProcess("Mafia2.exe"))
+		if (!SharedUtility::_TerminateProcess("Mafia2.exe"))
 		{
 			ShowMessageBox("Failed to kill Mafia 2 process. Cannot launch.");
 			return 1;
 		}
 	}
 
-	STARTUPINFO siStartupInfo;
-	PROCESS_INFORMATION piProcessInfo;
-	memset( &siStartupInfo, 0, sizeof(siStartupInfo) );
-	memset( &piProcessInfo, 0, sizeof(piProcessInfo) );
-	siStartupInfo.cb = sizeof(siStartupInfo);
-
-	if( !CreateProcess( strApplicationPath.Get(), NULL, NULL, NULL, TRUE, CREATE_SUSPENDED, NULL, SharedUtility::GetAppPath(), &siStartupInfo, &piProcessInfo ) )
+	CUpdater *updater = new CUpdater(strModulePath);
+	if (updater->IsNewVersionAvailable())
 	{
-		ShowMessageBox( "Failed to start Mafia2.exe. Can't launch." );
-		return 1;
+		int result = MessageBox(NULL, "A new version of Mafia2-Online is available, do you want to download it ?\n\nIf you choose yes, download will start and the mod will auto start once done.", MOD_NAME, MB_YESNOCANCEL);
+		switch(result)
+		{
+			case IDYES:
+				if (!updater->StartUpdating()) {
+					ShowMessageBox("Failed to update mod");
+					return 1;
+				}
+
+				ShowMessageBox("Update of Mafia2-Online is done ! Enjoy playing ;-)", MB_OK);
+			break;
+		}
 	}
 
-	const SharedUtility::InjectLibraryResults bassInjectResult = SharedUtility::InjectLibraryIntoProcess(piProcessInfo.hProcess, strBassPath.Get());
-	const SharedUtility::InjectLibraryResults moduleInjectResult = SharedUtility::InjectLibraryIntoProcess(piProcessInfo.hProcess, strModulePath.Get() );
-
-	if ( moduleInjectResult != SharedUtility::INJECT_LIBRARY_RESULT_OK || bassInjectResult != SharedUtility::INJECT_LIBRARY_RESULT_OK )
-	{
-		String strError;
-		strError.Format( "Failed to inject modules into game process.\nCore: %s (%i)\nBass:  %s (%i)", SharedUtility::InjectLibraryResultToString(moduleInjectResult), moduleInjectResult, SharedUtility::InjectLibraryResultToString(bassInjectResult), bassInjectResult);
-		ShowMessageBox( strError );
-
-		TerminateProcess( piProcessInfo.hProcess, 0 );
-		return 1;
-	}
-
-	ResumeThread( piProcessInfo.hThread );
+	StartInjecting(strApplicationPath,strBassPath, strModulePath);
 
 	return 0;
 }

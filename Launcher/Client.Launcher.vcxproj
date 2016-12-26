@@ -54,22 +54,22 @@
     <TargetName>m2online</TargetName>
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(IncludePath)</IncludePath>
-    <LibraryPath>$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(ProjectDir)..\Libraries\libcurl\builds\libcurl-vc14-x86-release-static-ipv6-sspi-winssl\lib;$(LibraryPath)</LibraryPath>
     <IntDir>$(SolutionDir)Objs\$(ProjectName)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\Shared;..\Libraries\tinyxml;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Libraries\libcurl\builds\libcurl-vc14-x86-release-static-ipv6-sspi-winssl\include;..\Shared;..\Libraries\tinyxml;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <DisableSpecificWarnings>4996</DisableSpecificWarnings>
-      <PreprocessorDefinitions>_DEBUG;_LAUNCHER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_LAUNCHER;CURL_STATICLIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>winmm.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>winmm.lib;ws2_32.lib;libcurl_a.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <UACExecutionLevel>AsInvoker</UACExecutionLevel>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
@@ -112,6 +112,7 @@
     <ClCompile Include="..\Shared\Threading\CMutex.cpp" />
     <ClCompile Include="..\Shared\Threading\CThread.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="CUpdater.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Shared\CCommon.h" />
@@ -123,11 +124,15 @@
     <ClInclude Include="..\Shared\SharedUtility.h" />
     <ClInclude Include="..\Shared\Threading\CMutex.h" />
     <ClInclude Include="..\Shared\Threading\CThread.h" />
+    <ClInclude Include="CUpdater.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="StdInc.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="m2mp.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="101.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
