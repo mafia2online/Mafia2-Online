@@ -131,15 +131,41 @@ void ConsoleInput( String strInput )
 		pCore->GetResourceManager()->GetRunningResources();
 		CLogFile::Print( "==============================================================" );
 	}
-	/*else if( strCommand == "netstats" || strCommand == "network" )
+	else if (strCommand == "kick")
 	{
-		CLogFile::Print( "==============================================================" );
+		if (strParams.IsEmpty())
+		{
+			CLogFile::Print("USAGE: kick <playerid>");
+			return;
+		}
 
-		// Print the network stats
-		CNetworkStats::GetStats ();
+		int playerId = atoi(strParams.Get());
 
-		CLogFile::Print( "==============================================================" );
-	}*/
+		if (pCore->GetPlayerManager()->Get(playerId))
+		{
+			pCore->GetPlayerManager()->Get(playerId)->Kick();
+			CLogFile::Printf("Successfully kicked player #%d", playerId);
+		}
+	}
+	else if (strCommand == "ban")
+	{
+		if (strParams.IsEmpty())
+		{
+			CLogFile::Print("USAGE: ban <playerid>");
+			return;
+		}
+
+		int playerId = atoi(strParams.Get());
+
+		if (pCore->GetPlayerManager()->Get(playerId))
+		{
+			String strSerial = pCore->GetPlayerManager()->Get(playerId)->GetSerial();
+
+			pCore->GetBanManager()->Add(strSerial, "Console", SharedUtility::GetTime(), 3600, "Banned by the console");
+
+			CLogFile::Printf("Successfully banned player #%d", playerId);
+		}
+	}
 	else if( strCommand == "uptime" )
 	{
 		CLogFile::Print( "==============================================================" );
@@ -151,7 +177,12 @@ void ConsoleInput( String strInput )
 		CSquirrelArguments pArguments;
 		pArguments.push( strCommand );
 		pArguments.push( strParams );
-		pCore->GetEvents()->Call( "onConsoleInput", &pArguments );
+
+		CEvents *const events = pCore->GetEvents();
+		if (!events)
+			return;
+
+		events->Call( "onConsoleInput", &pArguments );
 	}
 }
 
