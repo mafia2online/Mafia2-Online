@@ -182,22 +182,17 @@ SQInteger CPlayerNatives::GetPosition( SQVM * pVM )
 	return 1;
 }
 
-// sendPlayerMessage( playerId, message[, r = 255, g = 255, b = 255] );
 SQInteger CPlayerNatives::OutputMessage( SQVM * pVM )
 {
-	// Get the top of the stack
 	int iTop = (sq_gettop( pVM ) - 1);
 
-	// Invalid params?
 	if( iTop < 1 || iTop > 5 )
 		CHECK_PARAMS( "sendMessage", 2 );
 
-	//
 	SQInteger playerId;
 	const SQChar * szMessage;
-	SQInteger r = 255, g = 255, b = 255;
+	SQInteger r = 0, g = 0, b = 0;
 
-	// Do we only have a string?
 	if( iTop == 2 )
 	{
 		CHECK_TYPE( "sendMessage", 1, -2, OT_INTEGER );
@@ -239,25 +234,21 @@ SQInteger CPlayerNatives::OutputMessage( SQVM * pVM )
 		sq_getinteger( pVM, -1, &b );
 	}
 
-	// Is the player valid?
+	if (r == b == g == 0)
+	{
+		r = b = g = 255;
+	}
+
 	if( CCore::Instance()->GetPlayerManager()->IsActive( playerId ) )
 	{
-		// Construct a new bitstream
 		RakNet::BitStream bitStream;
 
-		// Write the string
 		bitStream.Write( RakNet::RakString( szMessage ) );
 
-		// Write the red value
 		bitStream.WriteCompressed( r );
-
-		// Write the green value
 		bitStream.WriteCompressed( g );
-
-		// Write the blue value
 		bitStream.WriteCompressed( b );
 
-		// Send it to the player
 		CCore::Instance()->GetNetworkModule()->Call( RPC_SENDPLAYERMESSAGE, &bitStream, IMMEDIATE_PRIORITY, RELIABLE, playerId, false );
 
 		sq_pushbool( pVM, true );
@@ -268,21 +259,16 @@ SQInteger CPlayerNatives::OutputMessage( SQVM * pVM )
 	return 1;
 }
 
-// sendMessageToAll( message[, r = 255, g = 255, b = 255] );
 SQInteger CPlayerNatives::OutputMessageToAll( SQVM * pVM )
 {
-	// Get the top of the stack
 	int iTop = (sq_gettop( pVM ) - 1);
 
-	// Invalid params?
 	if( iTop < 1 || iTop > 4 )
 		CHECK_PARAMS( "sendMessage", 1 );
 
-	//
 	const SQChar * szMessage;
-	SQInteger r = 255, g = 255, b = 255;
+	SQInteger r = 0, g = 0, b = 0;
 
-	// Do we only have a string?
 	if( iTop == 1 )
 	{
 		CHECK_TYPE( "sendMessage", 1, -1, OT_STRING );
@@ -316,25 +302,21 @@ SQInteger CPlayerNatives::OutputMessageToAll( SQVM * pVM )
 		sq_getinteger( pVM, -1, &b );
 	}
 
-	// Is the player active?
+	if (r == b == g == 0)
+	{
+		r = b = g = 255;
+	}
+
 	if( CCore::Instance()->GetPlayerManager()->GetCount() > 0 )
 	{
-		// Construct a new bitstream
 		RakNet::BitStream bitStream;
 
-		// Write the string
 		bitStream.Write( RakNet::RakString( szMessage ) );
 
-		// Write the red value
 		bitStream.WriteCompressed( r );
-
-		// Write the green value
 		bitStream.WriteCompressed( g );
-
-		// Write the blue value
 		bitStream.WriteCompressed( b );
 
-		// Send it to the player
 		CCore::Instance()->GetNetworkModule()->Call( RPC_SENDPLAYERMESSAGE, &bitStream, IMMEDIATE_PRIORITY, RELIABLE, INVALID_ENTITY_ID, true );
 
 		sq_pushbool( pVM, true );
