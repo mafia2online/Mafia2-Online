@@ -16,6 +16,7 @@
 
 #include "CMafia.h"
 #include "CM2Hud.h"
+#include "engine\CM2Navigation.h"
 
 #include "CGameNatives.h"
 
@@ -36,6 +37,7 @@ void CGameNatives::Register( CScriptingManager * pScriptingManager )
 	pScriptingManager->RegisterFunction( "openMap", OpenMap, 0, NULL );
 	pScriptingManager->RegisterFunction( "isMapOpen", IsMapOpen, 0, NULL );
 	pScriptingManager->RegisterFunction( "setGPSTarget", SetGPSTarget, 2, "ff" );
+	pScriptingManager->RegisterFunction( "hasGPSTarget", HasGPSTarget, 0, NULL );
 	pScriptingManager->RegisterFunction( "removeGPSTarget", RemoveGPSTarget, 0, NULL );
 	pScriptingManager->RegisterFunction( "disableTranslocator", DisableTranslocator, 1, "b");
 }
@@ -256,7 +258,11 @@ SQInteger	CGameNatives::SetGPSTarget(SQVM * pVM)
 	sq_getfloat(pVM, -2, &fX);
 	sq_getfloat(pVM, -1, &fY);
 
-	CCore::Instance()->GetHud()->StartGPS(fX, fY);
+	Vector2 pos;
+	pos.fX = fX;
+	pos.fY = fY;
+
+	CCore::Instance()->GetGame()->GetNavigation()->SetMarkUser(pos);
 	sq_pushbool(pVM, true);
 	return (1);
 }
@@ -264,8 +270,15 @@ SQInteger	CGameNatives::SetGPSTarget(SQVM * pVM)
 // removeGPSTarget();
 SQInteger	CGameNatives::RemoveGPSTarget(SQVM * pVM)
 {
-	CCore::Instance()->GetHud()->StopGPS();
+	CCore::Instance()->GetGame()->GetNavigation()->DeleteMarkUser();
 	sq_pushbool(pVM, true);
+	return (1);
+}
+
+// hasGPSTarget();
+SQInteger	CGameNatives::HasGPSTarget(SQVM * pVM)
+{
+	sq_pushbool(pVM, CCore::Instance()->GetGame()->GetNavigation()->HasMarkerUser());
 	return (1);
 }
 

@@ -31,6 +31,10 @@ public:
 
 	void SetForegroundColor(int iIconId, int iColor);
 	void SetBackgroundColor(int iIconId, int iColor);
+
+	void SetMarkUser(const Vector2& vecPosition);
+	bool HasMarkerUser();
+	void DeleteMarkUser();
 };
 
 class CM2Navigation
@@ -56,5 +60,9 @@ public:
 
 	void					SetForegroundColor				(int iIconId, int iColor);
 	void					SetBackgroundColor				(int iIconId, int iColor);
+
+	void					SetMarkUser						(const Vector2& vecPosition);
+	bool					HasMarkerUser					();
+	void					DeleteMarkUser					();
 
 };

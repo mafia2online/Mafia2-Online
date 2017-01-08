@@ -65,6 +65,29 @@ int _declspec(naked) M2Navigation::RegisterIconPos(const Vector2& vecPosition, i
 	_asm jmp COffsets::FUNC_CNavigation__RegisterIconPos;
 }
 
+bool _declspec(naked) M2Navigation::HasMarkerUser()
+{
+	__asm {
+		mov eax, 0x454110;
+		jmp eax;
+	}
+}
+
+void _declspec(naked) M2Navigation::SetMarkUser(const Vector2& vecPosition)
+{
+	__asm {
+		mov eax, 0x4D7A00;
+		jmp eax;
+	}
+}
+
+void _declspec(naked) M2Navigation::DeleteMarkUser()
+{
+	__asm {
+		mov eax, 0x4D7B00;
+		jmp eax;
+	}
+}
 
 CM2Navigation::CM2Navigation(M2Navigation * pNavigation) :
 	m_pNavigation(pNavigation)
@@ -163,4 +186,28 @@ void CM2Navigation::SetBackgroundColor(int iIconId, int iColor)
 	{
 		m_pNavigation->SetBackgroundColor(iIconId, iColor);
 	}
+}
+
+void CM2Navigation::SetMarkUser(const Vector2& pos)
+{
+	if (!m_pNavigation)
+		return;
+
+	m_pNavigation->SetMarkUser(pos);
+}
+
+void CM2Navigation::DeleteMarkUser()
+{
+	if (!m_pNavigation)
+		return;
+
+	m_pNavigation->DeleteMarkUser();
+}
+
+bool CM2Navigation::HasMarkerUser()
+{
+	if (!m_pNavigation)
+		return false;
+
+	return m_pNavigation->HasMarkerUser();
 }
