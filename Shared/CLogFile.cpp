@@ -54,17 +54,17 @@ void CLogFile::Print( const char * szString )
 	// Flush the output buffer
 	fflush( stdout );
 
+	// Unlock the mutex
+	m_mutex.Unlock( );
+	
 	// Print the message to the log file
 	PrintToFile( szString );
-
+	
 #ifdef _WIN32
 	// Print message to VS output.
 	OutputDebugStringA( szString );
 	OutputDebugStringA( "\r\n" );
 #endif
-
-	// Unlock the mutex
-	m_mutex.Unlock( );
 }
 
 void CLogFile::Printf( const char * szFormat, ... )
@@ -79,11 +79,11 @@ void CLogFile::Printf( const char * szFormat, ... )
 	vsnprintf(szBuffer, sizeof(szBuffer), szFormat, vaArgs);
 	va_end(vaArgs);
 
-	// Print the message
-	Print( szBuffer );
-
 	// Unlock the mutex
 	m_mutex.Unlock( );
+	
+	// Print the message
+	Print( szBuffer );
 }
 
 void CLogFile::PrintToFile( const char * szString )
@@ -120,11 +120,11 @@ void CLogFile::PrintfToFile( const char * szFormat, ... )
 	vsnprintf(szBuffer, sizeof(szBuffer), szFormat, vaArgs);
 	va_end(vaArgs);
 
-	// Print the message to the log file
-	PrintToFile( szBuffer );
-
 	// Unlock the mutex
 	m_mutex.Unlock( );
+	
+	// Print the message to the log file
+	PrintToFile( szBuffer );
 }
 
 void CLogFile::Close( void )

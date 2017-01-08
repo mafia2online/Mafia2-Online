@@ -26,3 +26,4 @@ wkernelbase*.pdb
 # GCC related stuff
 *.o
 *.h.gch
+.DS_Store
