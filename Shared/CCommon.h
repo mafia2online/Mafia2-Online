@@ -35,11 +35,11 @@
 #endif
 
 // Limits
-#define		MAX_PLAYERS				1000
-#define		MAX_VEHICLES			1000
+#define		MAX_PLAYERS				256
+#define		MAX_VEHICLES			512
 #define		MAX_BLIPS				256
-#define		MAX_PEDS				32
-#define		MAX_3DTEXTS				32
+#define		MAX_PEDS				64
+#define		MAX_3DTEXTS				64
 #define		MAX_PLAYER_NAME			32
 
 // Network
