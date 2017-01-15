@@ -415,6 +415,9 @@ void CPatches::Initialise( void )
 	// Stop game from changing vehicle indicator light state
 	CPatcher::InstallNopPatch( 0xCF6F7D, 0x1D);
 
+	// Prevent engine registering vehicle icon
+	CPatcher::PatchAddress(0x98FA30, 0xC300B0);
+
 	// Prevent vehicle starting animation and engine starting when entering
 	// CPatcher::InstallNopPatch(0x98A771, 0x8F); // This disable the whole system (you enter in vehicle but no door opening an you can't leave, no auto engine starting and no auto radio triggering)
 
