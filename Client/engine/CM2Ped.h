@@ -105,23 +105,12 @@ public:
 	bool HaveThrowingWeaponInHand();
 };
 
-class M2PedUnk001
+class C_BaseBrain
 {
 public:
-	PAD(M2PedUnk001, pad0, 0x44);							// 0000 - 0044
+	PAD(C_BaseBrain, pad0, 0x44);							// 0000 - 0044
 	void * m_pUnknown;										// 0044 - 004C
 };
-
-//class M2EntityData_Unknown_000
-//{
-//public:
-//	unsigned vtable;
-//
-//
-//	// Unknown Method in V table on heX offset 20.
-//	void UnknownMethodVX20();
-//	int	UnknowMethodVX198();
-//};
 
 enum E_HumanMoveMode
 {
@@ -141,7 +130,7 @@ public:
 	PAD(C_HumanScript, pad0, 0x18);							// 0004 - 001C
 	DWORD m_dwType;											// 001C - 0020
 	PAD(C_HumanScript, pad1, 0x88);							// 0020 - 00A8
-	M2PedUnk001 * m_pUnknown;								// 00A8 - 00AC
+	C_BaseBrain * m_pBrain;									// 00A8 - 00AC
 
 	int				PlayAnim(C_SyncObject **syncObject, const char *const animName, const bool unknown, int, int, float, float, float);
 	int				AnimPlayEffect(C_SyncObject **syncObject, const char *const effectName, const bool repeat, int);
@@ -160,6 +149,11 @@ public:
 	void			SetStealthMove(bool enable);
 
 	float			GetRealHealth();
+
+	int				AreControlsLocked();
+
+	void			EnableBloodParticles(bool enable);
+	void			ForceBloodPool(bool force);
 
 	C_SyncObject	*GetInOutCar(C_SyncObject **syncObject, M2Vehicle *pVehicle, int enter, int seat, bool forced, int unk, int unk2);
 	C_SyncObject	*ScrMoveV(C_SyncObject **syncObject, const CVector3 &begin, const E_HumanMoveMode moveMode, const CVector3 &target, const bool smoothStop = true);
@@ -240,7 +234,6 @@ public:
 	void					SetHealth(float fHealth);
 	float					GetHealth(void);
 
-	//void					SetHealthMax					( float fHealthMax );
 	float					GetHealthMax(void);
 	float					GetRealHealth(void);
 
@@ -277,7 +270,6 @@ public:
 
 	void					ModelToMouth(int iModel);
 	void					ModelToHand(int iHand, int iModel);
-	void					ActorItemToHand(int hand, int model);
 
 	void					SetAnimStyle(const char *dir, const char *set);
 
@@ -287,4 +279,8 @@ public:
 	void					SetStealthMove(bool bStealthMove);
 	bool					IsStealthMoving();
 
+	int						AreControlsLocked();
+
+	void					EnableBloodParticles(bool enable);
+	void					ForceBloodPool(bool force);
 };

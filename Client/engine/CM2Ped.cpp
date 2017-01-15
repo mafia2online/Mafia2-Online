@@ -120,6 +120,30 @@ float _declspec(naked) C_HumanScript::GetRealHealth()
 	_asm jmp COffsets::FUNC_CHuman__GetRealHealth;
 }
 
+int _declspec(naked) C_HumanScript::AreControlsLocked()
+{
+	_asm {
+		mov eax, 0x90CA00;
+		jmp eax;
+	}
+}
+
+void _declspec(naked) C_HumanScript::EnableBloodParticles(bool enable)
+{
+	_asm {
+		mov eax, 0x90CFD0;
+		jmp eax;
+	}
+}
+
+void _declspec(naked) C_HumanScript::ForceBloodPool(bool enable)
+{
+	_asm {
+		mov eax, 0x90CFE0;
+		jmp eax;
+	}
+}
+
 void _declspec(naked) M2WeaponData::AddWeapon(DWORD weapon, DWORD ammo)
 {
 	_asm jmp COffsets::FUNC_CHuman__InventoryAddWeapon;
@@ -536,63 +560,10 @@ C_SyncObject *CM2Ped::PlayAnimation(char *strAnimation, bool repeat)
 	return (pSyncObject);
 }
 
-class Allocator
-{
-public:
-	void *Alloc(size_t count);
-};
-
-void _declspec(naked) *Allocator::Alloc(size_t count)
-{
-	_asm {
-		mov eax, 0x410150
-		jmp eax
-	}
-}
-
-class UnknownPacket
-{
-public:
-	DWORD		vtable;		// 00-04
-	DWORD		unused[5];	// 04-18
-
-
-	void Initialize(int a1, int a2);
-};
-
-void _declspec(naked) UnknownPacket::Initialize(int a1, int a2)
-{
-	_asm {
-		mov eax, 0xF37EC0
-		jmp eax
-	}
-}
-
 void CM2Ped::StopAnimation(C_SyncObject *obj)
 {
-	if (m_pPed && m_pPed->m_pHumanScript)
-	{
-		// TODO FIX
-		//C_HumanScript * pHumanScript = m_pPed->m_pHumanScript;
-
-		//M2EntityData_Unknown_000 *unk000 = pHumanScript->m_pUnknown0;
-
-		//unk000->UnknownMethodVX20();
-
-		//Allocator *allocator = *(Allocator **)(0x1BB5AF4);
-		//UnknownPacket *data = (UnknownPacket *)allocator->Alloc(24);
-		//data->Initialize(0, 8);
-		//data->vtable = 0x18DDFA8;
-
-		//DWORD _data = *(DWORD *)((*(DWORD *)(*(DWORD *)((DWORD)(pHumanScript)) + 0xA8)) + 0xC);
-		//DWORD dwFunc = 0x0FA24C0;
-		//__asm
-		//{
-		//	push data
-		//	mov ecx, _data
-		//	call dwFunc
-		//}
-	}
+	if (!m_pPed || !m_pPed->m_pHumanScript)
+		return;
 }
 
 bool CM2Ped::IsAnimFinished()
@@ -612,24 +583,18 @@ C_SyncObject  *CM2Ped::PlayAnimEffect(const char *effectName, bool bRepeat)
 	if (!m_pPed || !m_pPed->m_pHumanScript)
 		return (NULL);
 
-	C_HumanScript *pHumanScript = m_pPed->m_pHumanScript;
-
 	C_SyncObject *pSyncObject = NULL;
-	pHumanScript->AnimPlayEffect(&pSyncObject, effectName, bRepeat, 0);
+	m_pPed->m_pHumanScript->AnimPlayEffect(&pSyncObject, effectName, bRepeat, 0);
 	++pSyncObject->m_dwState;
 	return (pSyncObject);
 }
-
-
 
 void CM2Ped::AnimEffectStop(C_SyncObject *obj)
 {
 	if (!m_pPed || !m_pPed->m_pHumanScript)
 		return;
 
-	M2Ped *ped = m_pPed;
-	C_HumanScript *pHumanScript = m_pPed->m_pHumanScript;
-	pHumanScript->AnimEffectStop();
+	m_pPed->m_pHumanScript->AnimEffectStop();
 }
 
 void CM2Ped::ModelToHand(int iHand, int iModel)
@@ -724,4 +689,28 @@ bool CM2Ped::IsStealthMoving()
 		return (false);
 
 	return (m_pPed->IsCrouch());
+}
+
+int CM2Ped::AreControlsLocked()
+{
+	if (!m_pPed || !m_pPed->m_pHumanScript)
+		return false;
+
+	return (m_pPed->m_pHumanScript->AreControlsLocked());
+}
+
+void CM2Ped::EnableBloodParticles(bool enable)
+{
+	if (!m_pPed || !m_pPed->m_pHumanScript)
+		return ;
+
+	m_pPed->m_pHumanScript->EnableBloodParticles(enable);
+}
+
+void CM2Ped::ForceBloodPool(bool enable)
+{
+	if (!m_pPed || !m_pPed->m_pHumanScript)
+		return;
+
+	m_pPed->m_pHumanScript->ForceBloodPool(enable);
 }
