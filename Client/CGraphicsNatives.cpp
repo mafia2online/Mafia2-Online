@@ -17,6 +17,8 @@
 #include "Scripting/CScriptingManager.h"
 #include "Scripting/CSquirrelCommon.h"
 
+#include "CM2Hud.h"
+
 #include "CFPSCounter.h"
 #include "CGraphics.h"
 #include "GUI/ChatBox.h"
@@ -34,6 +36,37 @@ void CGraphicsNatives::Register( CScriptingManager * pScriptingManager )
 	pScriptingManager->RegisterFunction( "isChatVisible", IsChatVisible, 0, NULL );
 	pScriptingManager->RegisterFunction( "isInputVisible", IsInputVisible, 0, NULL );
 	pScriptingManager->RegisterFunction( "sendMessage", SendMessage, -1, NULL );
+
+	pScriptingManager->RegisterFunction( "showHint", ShowHint, 4, "iisf");
+
+	pScriptingManager->RegisterConstant("POS_TOPLEFT", 0);
+	pScriptingManager->RegisterConstant("POS_BOTLEFT", 1);
+	pScriptingManager->RegisterConstant("POS_RADAR", 2);
+	pScriptingManager->RegisterConstant("POS_CENTER", 3);
+
+	pScriptingManager->RegisterConstant("MODE_GREY", 0);
+	pScriptingManager->RegisterConstant("MODE_RED", 1);
+	pScriptingManager->RegisterConstant("MODE_BLUE", 2);
+	pScriptingManager->RegisterConstant("MODE_FLUO", 3);
+}
+
+// showHint(position, mode, text, delay);
+SQInteger CGraphicsNatives::ShowHint(SQVM * pVM)
+{
+	SQInteger		position;
+	SQInteger		mode;
+	const SQChar	*text;
+	SQFloat			delay;
+
+	sq_getinteger(pVM, -4, &position);
+	sq_getinteger(pVM, -3, &mode);
+	sq_getstring(pVM, -2, &text);
+	sq_getfloat(pVM, -1, &delay);
+
+	CCore::Instance()->GetHud()->ShowMessage(position, mode, text, delay);
+	sq_pushbool(pVM, true);
+
+	return 1;
 }
 
 // getFPS( );

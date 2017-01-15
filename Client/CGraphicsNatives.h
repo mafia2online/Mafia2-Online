@@ -23,6 +23,7 @@ private:
 	static	SQInteger		IsChatVisible( SQVM * pVM );
 	static	SQInteger		IsInputVisible( SQVM * pVM );
 	static	SQInteger		SendMessage( SQVM * pVM );
+	static	SQInteger		ShowHint(SQVM *pVM);
 
 public:
 
