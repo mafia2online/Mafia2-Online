@@ -33,6 +33,112 @@ void CPedNatives::Register( CScriptingManager * pScriptingManager )
 	pScriptingManager->RegisterFunction( "setPedModel", SetPedModel, 2, "ii" );
 	pScriptingManager->RegisterFunction( "getPedModel", GetPedModel, 1, "i" );
 	pScriptingManager->RegisterFunction( "getPedPosition", GetPedPosition, 1, "i" );
+
+	pScriptingManager->RegisterFunction( "pedMoveTo", PedMove, 5, "ifffi");
+	pScriptingManager->RegisterFunction( "pedShootTo", PedShoot, 4, "ifff");
+	pScriptingManager->RegisterFunction( "pedAimTo", PedAim, 4, "ifff");
+
+	pScriptingManager->RegisterFunction( "givePedWeapon", GiveWeapon, 3, "iii");
+	pScriptingManager->RegisterFunction( "setPedWeapon", SetWeapon, 2, "ii");
+
+	pScriptingManager->RegisterConstant("MOVE_WALK", M2Enums::eMoveType::E_WALK);
+	pScriptingManager->RegisterConstant("MOVE_JOG", M2Enums::eMoveType::E_JOG);
+	pScriptingManager->RegisterConstant("MOVE_SPRINT", M2Enums::eMoveType::E_SPRINT);
+}
+
+SQInteger CPedNatives::GiveWeapon(SQVM * pVM)
+{
+	SQInteger pedId;
+	SQInteger weapon;
+	SQInteger ammo;
+
+	sq_getinteger(pVM, -3, &pedId);
+	sq_getinteger(pVM, -2, &weapon);
+	sq_getinteger(pVM, -1, &ammo);
+
+	if (CCore::Instance()->GetPedManager()->IsActive(pedId) && CCore::Instance()->GetPedManager()->Get(pedId) != NULL)
+	{
+		CCore::Instance()->GetPedManager()->Get(pedId)->GetPed()->GiveWeapon(weapon, ammo);
+		return 1;
+	}
+	sq_pushbool(pVM, false);
+	return 1;
+}
+
+SQInteger CPedNatives::SetWeapon(SQVM * pVM)
+{
+	SQInteger pedId;
+	SQInteger weapon;
+
+	sq_getinteger(pVM, -2, &pedId);
+	sq_getinteger(pVM, -1, &weapon);
+
+	if (CCore::Instance()->GetPedManager()->IsActive(pedId) && CCore::Instance()->GetPedManager()->Get(pedId) != NULL)
+	{
+		CCore::Instance()->GetPedManager()->Get(pedId)->GetPed()->SetSelectedWeapon(weapon, true);
+		return 1;
+	}
+	sq_pushbool(pVM, false);
+	return 1;
+}
+
+SQInteger CPedNatives::PedMove(SQVM * pVM)
+{
+	CVector3 pos;
+	SQInteger pedId;
+	SQInteger mode;
+
+	sq_getinteger(pVM, -5, &pedId);
+	sq_getfloat(pVM, -4, &pos.fX);
+	sq_getfloat(pVM, -3, &pos.fY);
+	sq_getfloat(pVM, -2, &pos.fZ);
+	sq_getinteger(pVM, -1, &mode);
+
+	if (CCore::Instance()->GetPedManager()->IsActive(pedId) && CCore::Instance()->GetPedManager()->Get(pedId) != NULL)
+	{
+		CCore::Instance()->GetPedManager()->Get(pedId)->GetPed()->MoveVec(pos, static_cast<M2Enums::eMoveType>(mode), pos);
+		return 1;
+	}
+	sq_pushbool(pVM, false);
+	return 1;
+}
+
+SQInteger CPedNatives::PedShoot(SQVM * pVM)
+{
+	CVector3 pos;
+	SQInteger pedId;
+
+	sq_getinteger(pVM, -4, &pedId);
+	sq_getfloat(pVM, -3, &pos.fX);
+	sq_getfloat(pVM, -2, &pos.fY);
+	sq_getfloat(pVM, -1, &pos.fZ);
+
+	if (CCore::Instance()->GetPedManager()->IsActive(pedId) && CCore::Instance()->GetPedManager()->Get(pedId) != NULL)
+	{
+		CCore::Instance()->GetPedManager()->Get(pedId)->GetPed()->ShootAt(pos);
+		return 1;
+	}
+	sq_pushbool(pVM, false);
+	return 1;
+}
+
+SQInteger CPedNatives::PedAim(SQVM * pVM)
+{
+	CVector3 pos;
+	SQInteger pedId;
+
+	sq_getinteger(pVM, -4, &pedId);
+	sq_getfloat(pVM, -3, &pos.fX);
+	sq_getfloat(pVM, -2, &pos.fY);
+	sq_getfloat(pVM, -1, &pos.fZ);
+
+	if (CCore::Instance()->GetPedManager()->IsActive(pedId) && CCore::Instance()->GetPedManager()->Get(pedId) != NULL)
+	{
+		CCore::Instance()->GetPedManager()->Get(pedId)->GetPed()->AimAt(pos);
+		return 1;
+	}
+	sq_pushbool(pVM, false);
+	return 1;
 }
 
 SQInteger CPedNatives::CreatePed( SQVM * pVM )
@@ -63,8 +169,13 @@ SQInteger CPedNatives::DestroyPed( SQVM * pVM )
 	SQInteger pedId;
 	sq_getinteger( pVM, -1, &pedId );
 
-	// Delete the ped from the manager
-	sq_pushbool( pVM, CCore::Instance()->GetPedManager()->Delete( pedId ) );
+	if (CCore::Instance()->GetPedManager()->IsActive(pedId) && CCore::Instance()->GetPedManager()->Get(pedId) != NULL)
+	{
+		// Delete the ped from the manager
+		sq_pushbool(pVM, CCore::Instance()->GetPedManager()->Delete(pedId));
+		return 1;
+	}
+	sq_pushbool(pVM, false);
 	return 1;
 }
 

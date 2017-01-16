@@ -296,6 +296,12 @@ public:
 	void		UnlockTrunks();
 
 	int			ResetRigidBody();
+
+	void		LockPlayerEntryPoints();
+	void		UnlockPlayerEntryPoints();
+
+	void		LockEntryPoints();
+	void		UnlockEntryPoints();
 };
 
 class CM2Vehicle : public CM2Entity

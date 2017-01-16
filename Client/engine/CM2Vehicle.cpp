@@ -932,6 +932,38 @@ void _declspec(naked) M2Vehicle::UnlockTrunks()
 	_asm jmp COffsets::FUNC_CCar__UnlockTrunks;
 }
 
+void _declspec(naked) M2Vehicle::LockPlayerEntryPoints()
+{
+	__asm {
+		mov eax, 0x9BC0F0;
+		jmp eax;
+	}
+}
+
+void _declspec(naked) M2Vehicle::UnlockPlayerEntryPoints()
+{
+	__asm {
+		mov eax, 0x9BC150;
+		jmp eax;
+	}
+}
+
+void _declspec(naked) M2Vehicle::LockEntryPoints()
+{
+	__asm {
+		mov eax, 0x9BC080;
+		jmp eax;
+	}
+}
+
+void _declspec(naked) M2Vehicle::UnlockEntryPoints()
+{
+	__asm {
+		mov eax, 0x9905B0;
+		jmp eax;
+	}
+}
+
 void CM2Vehicle::SetEngineOn(bool bEngine, bool bRevOnStart)
 {
 	if (!m_pVehicle)
@@ -1161,6 +1193,9 @@ void CM2Vehicle::Lock()
 	m_pVehicle->m_vehicleData.SetDynamic(false);
 	m_pVehicle->m_vehicleData.AddVehicleFlags(VEHICLEFLAGS_DOORS_LOCKED);
 	m_pVehicle->m_vehicleData.StopAllSounds();
+	m_pVehicle->LockTrunks();
+	m_pVehicle->LockPlayerEntryPoints();
+	m_pVehicle->LockEntryPoints();
 }
 
 void CM2Vehicle::Unlock()
@@ -1172,4 +1207,7 @@ void CM2Vehicle::Unlock()
 	m_pVehicle->m_vehicleData.SetDynamic(true);
 	m_pVehicle->m_vehicleData.ClearVehicleFlags(VEHICLEFLAGS_DOORS_LOCKED);
 	m_pVehicle->ResetRigidBody();
+	m_pVehicle->UnlockTrunks();
+	m_pVehicle->UnlockPlayerEntryPoints();
+	m_pVehicle->UnlockEntryPoints();
 }
