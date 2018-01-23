@@ -1,3 +1,6 @@
+# This mod is no longer maintained by the developers team. You can still contribute and we may release the contributions as official one. NEW ONE INCOMING#
+
+
 # Mafia 2 Online
 Source code of the M2Online mod, based on Mafia 2 MultiPlayer.
 
