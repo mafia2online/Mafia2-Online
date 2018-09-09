@@ -140,7 +140,6 @@ public:
 	void						GetForward( CVector3 * vecForward );
 	void						GetWorldViewProjection( D3DXMATRIX * mat );
 	void						GetWorldMatrix( Matrix43 * mat );
-	void						GetViewMatrix( D3DXMATRIX * mat );
 	void						GetProjectionMatrix( D3DXMATRIX * mat );
 	void						GetLookAt( CVector3 * vecLookAt );
 	bool						IsOnScreen( const CVector3 & vecPosition );
