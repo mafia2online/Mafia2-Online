@@ -46,7 +46,7 @@ public:
 		{
 			R = ((ulColor >> 24) & 0xFF);
 			G = ((ulColor >> 16) & 0xFF);
-			B = ((ulColor >> 8) && 0xFF);
+			B = ((ulColor >> 8) & 0xFF);
 			A = (ulColor & 0xFF);
 		}
 	}
