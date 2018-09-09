@@ -619,7 +619,7 @@ namespace SharedUtility
 			return false;
 		}
 
-		const bool Result = TerminateProcess(hProcess, 0);
+		const bool Result = TerminateProcess(hProcess, 0) == TRUE;
 		CloseHandle(hProcess);
 		return Result;
 	}
@@ -744,7 +744,7 @@ namespace SharedUtility
 		srand ( GetTime () );
 
 		// Appand a new character to cover the length
-		for ( int i = 0; i < uiLength; i ++ )
+		for ( unsigned i = 0; i < uiLength; i ++ )
 			strResult.Append  ( charset[ rand() % sizeof ( charset ) - 1 ] );
 
 		return strResult;
