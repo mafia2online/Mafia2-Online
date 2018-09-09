@@ -187,11 +187,11 @@ CSquirrel * CScriptingManager::Load( String strName, String strPath )
 	// Failed to execute the script?
 	if( !pScript->Execute() )
 	{
+		// Remove the script
+		m_scripts.remove(pScript);
+
 		// Delete the script
 		delete pScript;
-
-		// Remove the script
-		m_scripts.remove( pScript );
 
 		return NULL;
 	}
