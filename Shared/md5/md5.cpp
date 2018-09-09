@@ -186,7 +186,7 @@ void CMD5Hasher::Finalize ( void )
 	Encode ( m_digest, m_state, 16 );
 
 	// Zeroize sensitive information
-	memset ( m_buffer, 0, sizeof (*m_buffer) );
+	memset ( m_buffer, 0, sizeof (m_buffer) );
 }
 
 
