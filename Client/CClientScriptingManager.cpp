@@ -64,18 +64,7 @@ void CClientScriptingManager::AddScript( String strName, String strPath )
 
 void CClientScriptingManager::RemoveScript( String strName )
 {
-	SClientScript * pClientScript = NULL;
-
-	// Loop all clientscripts
-	for( std::list< SClientScript *>::iterator iter = m_clientScripts.begin(); iter != m_clientScripts.end(); iter++ )
-	{
-		//
-		pClientScript = (*iter);
-
-		// Is this clientscript the one we're looking for?
-		if( pClientScript && pClientScript->strName == strName )
-			break;
-	}
+	SClientScript * pClientScript = Find(strName);
 
 	// Did we find the script?
 	if( pClientScript )
@@ -90,40 +79,18 @@ void CClientScriptingManager::RemoveScript( String strName )
 
 void CClientScriptingManager::Load( String strName )
 {
-	// Does the script not exist?
-	if( !Exists( strName ) )
+	SClientScript* pClientScript = Find (strName);
+	if (!pClientScript)
 		return;
 
-	// Loop all clientscripts
-	for( std::list< SClientScript *>::iterator iter = m_clientScripts.begin(); iter != m_clientScripts.end(); iter++ )
-	{
-		// Is this clientscript the one we're looking for?
-		if( *iter && (*iter)->strName == strName )
-		{
-			// Load the script
-			(*iter)->pScript = m_pScriptingManager->Load( (*iter)->strName, (*iter)->strPath );
-
-			return;
-		}
-	}
+	pClientScript->pScript = m_pScriptingManager->Load( pClientScript->strName, pClientScript->strPath );
 }
 
 void CClientScriptingManager::Unload( String strName )
 {
-	// Does the script not exist?
-	if( !Exists( strName ) )
+	SClientScript* pClientScript = Find (strName);
+	if( !pClientScript )
 		return;
-
-	//
-	SClientScript* pClientScript = NULL;
-
-	// Loop all clientscripts
-	for( std::list< SClientScript *>::iterator iter = m_clientScripts.begin(); iter != m_clientScripts.end(); iter++ )
-	{
-		// Is this clientscript the one we're looking for?
-		if( *iter && (*iter)->strName == strName )
-			pClientScript = (*iter); break;
-	}
 
 	// Did we find the script?
 	if( pClientScript )
@@ -142,32 +109,34 @@ void CClientScriptingManager::Unload( String strName )
 	}
 }
 
-bool CClientScriptingManager::Exists( String strName )
+bool CClientScriptingManager::Exists( String strName ) const
 {
-	// Loop all clientscripts
-	for( std::list< SClientScript *>::iterator iter = m_clientScripts.begin(); iter != m_clientScripts.end(); iter++ )
-	{
-		// Is this clientscript the one we're looking for?
-		if( *iter && (*iter)->strName == strName )
-			return true;
-	}
+	return Find(strName) != nullptr;
+}
 
-	return false;
+SClientScript* CClientScriptingManager::Find ( String strName ) const
+{
+	for ( SClientScript* script : m_clientScripts )
+	{
+		if (script->strName == strName)
+			return script;
+	}
+	return nullptr;
 }
 
 void CClientScriptingManager::UnloadAll( void )
 {
 	// Loop all clientscripts
-	for( std::list< SClientScript *>::iterator iter = m_clientScripts.begin(); iter != m_clientScripts.end(); iter++ )
+	for ( SClientScript* script : m_clientScripts )
 	{
 		// Delete all gui elements linked to this script
-		m_pScriptGUIManager->DeleteAll( (*iter)->pScript );
+		m_pScriptGUIManager->DeleteAll( script->pScript );
 
 		// Unload the script
-		m_pScriptingManager->Unload( (*iter)->strName );
+		m_pScriptingManager->Unload( script->strName );
 
 		// Delete the client script instance
-		SAFE_DELETE( *iter );
+		SAFE_DELETE( script );
 	}
 
 	// Clear the scripts list
