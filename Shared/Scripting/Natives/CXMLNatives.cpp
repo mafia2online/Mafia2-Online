@@ -60,8 +60,7 @@ _MEMBER_FUNCTION_RELEASE_HOOK(xml)
 	CXML * pXML = reinterpret_cast< CXML* >( pInst );
 
 	// Delete the xml instance
-	if( pXML )
-		SAFE_DELETE( pXML );
+	SAFE_DELETE( pXML );
 
 	return 1;
 }
@@ -92,8 +91,7 @@ _MEMBER_FUNCTION_IMPL(xml, constructor)
 		if( !pXML || SQ_FAILED( sq_setinstance( pVM, pXML ) ) )
 		{
 			// Delete the xml instance
-			if( pXML )
-				SAFE_DELETE( pXML );
+			SAFE_DELETE( pXML );
 
 			//
 			sq_pushbool( pVM, false );
