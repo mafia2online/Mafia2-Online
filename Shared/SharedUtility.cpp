@@ -285,8 +285,10 @@ namespace SharedUtility
 		FILE * fDestination = fopen( szDestination, "wb" );
 
 		// Did the file fail to open?
-		if( !fDestination )
+		if( !fDestination ) {
+			fclose (fSource);
 			return false;
+		}
 
 		// Copy the source file to the destination file
 		char szBuffer[8192];
@@ -606,24 +608,20 @@ namespace SharedUtility
 		// Check if the process is running
 		DWORD dwProcessId = 0;
 
-		if(GetProcessIdFromProcessName(szProcessName, &dwProcessId))
+		if(!GetProcessIdFromProcessName(szProcessName, &dwProcessId))
 		{
-			// Attempt to open a handle to the process
-			HANDLE hProcess = OpenProcess(PROCESS_TERMINATE, false, dwProcessId);
-
-			// Did the process handle open successfully?
-			if(hProcess)
-			{
-				// Attempt to terminate the process
-				if(TerminateProcess(hProcess, 0))
-				{
-					// Process terminated
-					return true;
-				}
-			}
+			return true;
 		}
 
-		return false;
+		HANDLE hProcess = OpenProcess(PROCESS_TERMINATE, false, dwProcessId);
+		if (!hProcess)
+		{
+			return false;
+		}
+
+		const bool Result = TerminateProcess(hProcess, 0);
+		CloseHandle(hProcess);
+		return Result;
 	}
 
 	bool ReadRegistryString(HKEY hKeyLocation, const char * szSubKey, const char * szKey, const char * szDefault, char * szData, DWORD dwSize)
