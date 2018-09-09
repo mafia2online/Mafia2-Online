@@ -1,15 +1,24 @@
 #include "DbgView.h"
+#include <assert.h>
+
+const size_t MSG_MAX_LENGTH = 512;
+const size_t TAG_MAX_LENGTH = 128;
+const size_t TOTAL_MAX_LENGTH = MSG_MAX_LENGTH + TAG_MAX_LENGTH;
 
 void DbgView::PrintA( const char * pszTag, char * pszFmt, va_list& VAList )
 {
-	static char szBuffer[DV_MAX_BUFLEN];
-	ZeroMemory( szBuffer, DV_MAX_BUFLEN );
+	assert(pszTag);
+	assert(pszFmt);
 
-	_vsnprintf_s( szBuffer, sizeof( szBuffer ) - strlen( szBuffer ), pszFmt, VAList );
-	//_vsnprintf( szBuffer + strlen( szBuffer ), sizeof( szBuffer ) - strlen( szBuffer ), pszFmt, VAList );
+	static char szBuffer[TOTAL_MAX_LENGTH + 1];
+	memset(szBuffer, 0, sizeof(szBuffer));
 
-	sprintf_s( szBuffer, "%s (%s)\n", szBuffer, pszTag );
-	//sprintf_s( szBuffer, "%s (%s)\n", szBuffer, IsDebuggerPresent( ) ? "dbg" : pszTag );
+	vsnprintf (szBuffer, MSG_MAX_LENGTH, pszFmt, VAList);
+
+	static char szTag[TAG_MAX_LENGTH + 1] = { 0 };
+	snprintf(szTag, TAG_MAX_LENGTH, " (%s)\n", pszTag);
+
+	strcat(szBuffer, szTag);
 
 	OutputDebugStringA( szBuffer );
 }
