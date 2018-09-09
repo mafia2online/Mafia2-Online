@@ -46,7 +46,9 @@ public:
 	void										RemoveScript( String strName );
 	void										Load( String strName );
 	void										Unload( String strName );
-	bool										Exists( String strName );
+	bool										Exists( String strName ) const;
+
+	SClientScript*								Find ( String strName ) const;
 
 	void										UnloadAll( void );
 
