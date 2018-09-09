@@ -12,8 +12,6 @@
 #include <Windows.h>
 #include <iostream>
 
-#define DV_MAX_BUFLEN 512
-
 namespace DbgView
 {
 	void PrintA( const char * pszTag, char * pszFmt, va_list& VAList );
