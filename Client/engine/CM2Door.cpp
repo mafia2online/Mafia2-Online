@@ -30,7 +30,7 @@ const bool CM2Door::IsClosed(void) const
 
 const bool CM2Door::IsLocked(void) const
 {
-	return ((*(DWORD *)((DWORD)(this) + 0x2F4) == 0) == 0);
+	return ! (*(DWORD *)((DWORD)(this) + 0x2F4) == 0);
 }
 
 void _declspec(naked) M2Door::Open(CVector3 *position, bool sound, int unk)
