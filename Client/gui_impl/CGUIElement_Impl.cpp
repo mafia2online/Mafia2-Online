@@ -254,7 +254,8 @@ void CGUIElement_Impl::ForceRedraw( void )
 
 void CGUIElement_Impl::CorrectEdges( void )
 {
-	if( m_pWindow->getType() != "CGUI/FrameWindow" || m_pWindow->getType() == "CGUI/StaticText")
+	// if( m_pWindow->getType() != "CGUI/FrameWindow" || m_pWindow->getType() == "CGUI/StaticText") // wth?
+	if( m_pWindow->getType() != "CGUI/FrameWindow" )
 		return;
 
 	CEGUI::Point currentPoint = m_pWindow->getPosition( CEGUI::Absolute );
