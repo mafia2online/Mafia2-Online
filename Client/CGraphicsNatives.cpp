@@ -171,7 +171,7 @@ SQInteger CGraphicsNatives::SendMessage( SQVM * pVM )
 		CHECK_PARAMS( "sendMessage", 1 );
 
 	//
-	const SQChar * szMessage;
+	const SQChar * szMessage = nullptr;
 	int r = 255, g = 255, b = 255;
 
 	// Do we only have a string?
@@ -208,7 +208,7 @@ SQInteger CGraphicsNatives::SendMessage( SQVM * pVM )
 		sq_getinteger( pVM, -1, &b );
 	}
 
-	if (szMessage != NULL && strlen(szMessage) > 0)
+	if (szMessage && strlen(szMessage) > 0)
 	{
 		ChatBox::Instance()->Output(CColor(r, g, b, 255), szMessage);
 		sq_pushbool(pVM, true);

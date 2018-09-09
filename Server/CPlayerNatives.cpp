@@ -279,7 +279,7 @@ SQInteger CPlayerNatives::OutputMessageToAll( SQVM * pVM )
 		CHECK_PARAMS( "sendMessage", 1 );
 
 	//
-	const SQChar * szMessage;
+	const SQChar * szMessage = NULL;
 	SQInteger r = 255, g = 255, b = 255;
 
 	// Do we only have a string?
@@ -316,8 +316,8 @@ SQInteger CPlayerNatives::OutputMessageToAll( SQVM * pVM )
 		sq_getinteger( pVM, -1, &b );
 	}
 
-	// Is the player active?
-	if( CCore::Instance()->GetPlayerManager()->GetCount() > 0 )
+	// Is any player active?
+	if( szMessage && CCore::Instance()->GetPlayerManager()->GetCount() > 0 )
 	{
 		// Construct a new bitstream
 		RakNet::BitStream bitStream;
