@@ -50,11 +50,10 @@ bool CServerBrowser::Event_QuickConnectSubmitClick ( CGUIElement_Impl * pElement
 	m_iServerPort = m_pQuickConnectPort->GetText().ToInteger ();
 	m_strServerPassword = m_pQuickConnectPassword->GetText ();
 
-	if (m_strServerIP.GetLength() > 0 && m_iServerPort > 0){
+	if (m_iServerPort <= 0) // i don't get why its signed number...
+		m_iServerPort = DEFAULT_PORT;
 
-		if ( m_iServerPort == 0 )
-			m_iServerPort = DEFAULT_PORT;
-
+	if (m_strServerIP.GetLength() > 0) {
 		StartConnection ();
 
 		m_pQuickConnectWindow->SetVisible ( false );
