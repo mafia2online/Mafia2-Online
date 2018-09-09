@@ -29,9 +29,7 @@ CFont::CFont( String strName, unsigned int uiSize, bool bBold )
 
 CFont::~CFont( void )
 {
-	// Destroy the font
-	if( m_pFont )
-		SAFE_DELETE( m_pFont );
+	SAFE_DELETE( m_pFont );
 }
 
 bool CFont::Load( void )

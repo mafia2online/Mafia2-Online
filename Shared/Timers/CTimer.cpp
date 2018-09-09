@@ -23,12 +23,7 @@ CTimer::CTimer(CSquirrel * pSquirrel, SQObjectPtr pFunction, int iInterval, int 
 
 CTimer::~CTimer( void )
 {
-	// Do we have any arguments?
-	if( m_pArguments )
-	{
-		// Delete the arguments instance
-		SAFE_DELETE( m_pArguments );
-	}
+	SAFE_DELETE( m_pArguments );
 }
 
 bool CTimer::Pulse( void )
