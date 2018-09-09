@@ -1,4 +1,4 @@
-﻿/*************************************************************
+/*************************************************************
 *
 * Solution   : Mafia 2 Multiplayer
 * Project    : Client
@@ -453,8 +453,7 @@ void CCore::DoRender( void )
 
 	m_pGraphics->ExpireCachedTextures ();
 
-	if ( m_pGUI )
-		m_pGUI->Render ();
+	m_pGUI->Render ();
 
 	if ( IsConnectionProblem () )
 		m_pGraphics->DrawText ( (CCore::Instance()->GetGUI()->GetCEGUI()->GetResolution().fX - CCore::Instance()->GetGraphics()->GetTextWidth("Connection Problem", 1.0f, "tahoma-bold") - 5), 5, D3DCOLOR_ARGB(255, 255, 0, 0), 1.0f, "tahoma-bold", true, "Connection Problem" );
