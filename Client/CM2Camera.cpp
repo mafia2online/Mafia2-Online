@@ -1,4 +1,4 @@
-﻿/*************************************************************
+/*************************************************************
 *
 * Solution   : Mafia 2 Multiplayer
 * Project    : Client
@@ -208,15 +208,6 @@ bool CM2Camera::IsOnScreen(const CVector3 & vecPosition)
 	D3DXVec3Project(&vecSPos, &_vecPosition, &viewport, &matProj, &matView, &matWorld);
 
 	return (vecSPos.z < 1.f);
-}
-
-void CM2Camera::GetViewMatrix( D3DXMATRIX * mat )
-{
-	if( m_pGameCamera && m_pGameCamera->pCameraData )
-	{
-		memcpy( mat, &m_pGameCamera->pCameraData->m_viewMatrix, sizeof(D3DXMATRIX) );
-		D3DXMatrixTranspose( mat, mat );
-	}
 }
 
 void CM2Camera::GetProjectionMatrix( D3DXMATRIX * mat )
