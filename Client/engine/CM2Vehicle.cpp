@@ -980,7 +980,7 @@ float CM2Vehicle::GetSteer(void)
 
 void CM2Vehicle::SetPower(bool bPower)
 {
-	if (m_pVehicle)
+	if (!m_pVehicle)
 		return;
 
 	float fPower = 0.0f;
