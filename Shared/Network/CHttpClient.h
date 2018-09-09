@@ -85,7 +85,7 @@ private:
 public:
 
 									CHttpClient					( void );
-									~CHttpClient				( void );
+	virtual							~CHttpClient				( void );
 
 	virtual void					SetReceiveTimeout			( long lReceiveTimeout );
 	virtual long					GetReceiveTimeout			( void ) { return m_lReceiveTimeout; }
