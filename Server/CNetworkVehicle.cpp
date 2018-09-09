@@ -739,6 +739,7 @@ bool CNetworkVehicle::GetIndicatorLightState(int indicator)
 		return m_lastSyncData.m_bLeftIndicator;
 	else if (indicator == 1)
 		return m_lastSyncData.m_bRightIndicator;
+	return false;
 }
 
 void CNetworkVehicle::SetTaxiLightState(bool bLightState)
