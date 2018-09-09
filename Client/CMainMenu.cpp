@@ -123,7 +123,7 @@ std::shared_ptr<CGUIStaticImage_Impl> CMainMenu::CreateItem( String strLocation,
 
 	if( !pItem )
 	{
-		CLogFile::Printf( "Failed to create main menu item! (Location: %d, Callback: 0x%p)", strLocation.Get(), pfnHandler );
+		CLogFile::Printf( "Failed to create main menu item! (Location: %d)", strLocation.Get() );
 		return NULL;
 	}
 
