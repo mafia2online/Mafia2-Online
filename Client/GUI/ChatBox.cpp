@@ -69,7 +69,7 @@ void LuaHandler(const char *const command, const std::vector<String> &params)
 	String script;
 	for (size_t i = 0; i < params.size(); ++i) {
 		String param;
-		param.Format("%s ", params[i]);
+		param.Format("%s ", params[i].Get());
 		script.Append(param);
 	}
 
