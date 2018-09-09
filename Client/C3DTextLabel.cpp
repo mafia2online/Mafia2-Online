@@ -25,6 +25,7 @@ C3DTextLabel::C3DTextLabel(EntityId serverID, float fX, float fY, float fZ, Stri
 	m_text = text;
 	m_color = color;
 	m_distance = distance;
+	m_active = true;
 }
 
 C3DTextLabel::~C3DTextLabel(void)

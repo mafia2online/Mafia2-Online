@@ -48,71 +48,53 @@ C3DTextLabelManager::~C3DTextLabelManager(void)
 bool	C3DTextLabelManager::Add(float fX, float fY, float fZ, String text, int color, float distance)
 {
 	EntityId textID = FindFreeSlot();
-	if (textID < 0 || textID > MAX_3DTEXTS)
-		return (false);
+	if (textID == INVALID_ENTITY_ID)
+		return false;
 
 	m_p3DTextLabels[textID] = new C3DTextLabel(textID, fX, fY, fZ, text, color, distance);
-	m_p3DTextLabels[textID]->SetActive(true);
-
-	if (IsActive(textID) == false){
-		if (m_p3DTextLabels[textID] != nullptr)
-			SAFE_DELETE(m_p3DTextLabels[textID]);
-		return (false);
-	}
-	else {
-		m_count++;
-		return (true);
-	}
+	m_count++;
+	return true;
 }
 
-bool	C3DTextLabelManager::Remove(EntityId textID)
+bool C3DTextLabelManager::Remove(EntityId textID)
 {
-	if (IsActive(textID) == false)
-		return (false);
-
-	m_p3DTextLabels[textID]->SetActive(false);
-
-	SAFE_DELETE(m_p3DTextLabels[textID]);
-
-	if (IsActive(textID) == false){
+	if (IsActive(textID)) {
+		SAFE_DELETE(m_p3DTextLabels[textID]);
 		m_count--;
-		return (true);
+		return true;
 	}
-	else {
-		m_p3DTextLabels[textID]->SetActive(true);
-		return (false);
-	}
+	return false;
 }
 
-bool	C3DTextLabelManager::IsActive(EntityId textID)
+bool C3DTextLabelManager::IsActive(EntityId textID) const
 {
-	if (textID < 0 || textID == INVALID_ENTITY_ID)
-		return (false);
+	if (textID >= MAX_3DTEXTS) {
+		return false;
+	}
 
-	if (m_p3DTextLabels[textID] != nullptr){
-		return (m_p3DTextLabels[textID]->IsActive());
-	}
-	else {
-		return (false);
-	}
+	return m_p3DTextLabels[textID] != nullptr;
 }
 
-bool	C3DTextLabelManager::IsOnScreen(EntityId textID)
+bool C3DTextLabelManager::IsOnScreen(EntityId textID) const
 {
+	if (IsActive(textID)) {
+		return false;
+	}
+
 	CVector3 textPos;
 	CVector3 vecScreen;
 
 	m_p3DTextLabels[textID]->GetPosition(&textPos);
 	CCore::Instance()->GetGraphics()->WorldToScreen(textPos, &vecScreen);
-	return (CCore::Instance()->GetCamera()->IsOnScreen(textPos));
+	return CCore::Instance()->GetCamera()->IsOnScreen(textPos);
 }
 
-int		C3DTextLabelManager::GetCount(void)
+int	 C3DTextLabelManager::GetCount(void) const
 {
-	return (m_count);
+	return m_count;
 }
 
-EntityId C3DTextLabelManager::FindFreeSlot(void)
+EntityId C3DTextLabelManager::FindFreeSlot(void) const
 {
 	for (EntityId i = 0; i < MAX_3DTEXTS; i++)
 	{
@@ -123,33 +105,36 @@ EntityId C3DTextLabelManager::FindFreeSlot(void)
 	return INVALID_ENTITY_ID;
 }
 
-void	C3DTextLabelManager::Render(void)
+void C3DTextLabelManager::Render(void)
 {
 	CVector3 vecScreen;
 	CVector3 localPos;
 	CVector3 textPos;
 
-	for (EntityId i = 0; i < MAX_3DTEXTS; i++)
+	CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetPosition(&localPos);
+
+	CGraphics* Graphics = CCore::Instance()->GetGraphics();
+	for (EntityId i = 0; i < MAX_3DTEXTS; ++i)
 	{
 		if (!IsActive(i))
-			continue;
-		
-		CCore::Instance()->GetPlayerManager()->GetLocalPlayer()->GetPosition(&localPos);
-		
-		m_p3DTextLabels[i]->GetPosition(&textPos);
-
-		float fDistance = Math::GetDistanceBetweenPoints(localPos, textPos);
-		if (fDistance > m_p3DTextLabels[i]->GetDrawDistance())
 			continue;
 
 		if (!IsOnScreen(i))
 			return;
 
-		float fScale = 1.0f;
-		float dimensionWidth = CCore::Instance()->GetGraphics()->GetTextWidth(m_p3DTextLabels[i]->GetText().Get(), fScale, "tahoma-bold");
-		float dimensionHeight = CCore::Instance()->GetGraphics()->GetFontHeight(fScale, "tahoma-bold");
+		C3DTextLabel* Label = m_p3DTextLabels[i];
 
-		CCore::Instance()->GetGraphics()->WorldToScreen(textPos, &vecScreen);
-		CCore::Instance()->GetGraphics()->DrawText(vecScreen.fX - (dimensionWidth / 2), vecScreen.fY, 0xFFFFFFFF, fScale, "tahoma-bold", true, m_p3DTextLabels[i]->GetText().Get());
+		Label->GetPosition(&textPos);
+
+		float fDistance = Math::GetDistanceBetweenPoints(localPos, textPos);
+		if (fDistance > m_p3DTextLabels[i]->GetDrawDistance())
+			continue;
+
+		float fScale = 1.0f;
+		float dimensionWidth = Graphics->GetTextWidth(Label->GetText().Get(), fScale, "tahoma-bold");
+		float dimensionHeight = Graphics->GetFontHeight(fScale, "tahoma-bold");
+
+		Graphics->WorldToScreen(textPos, &vecScreen);
+		Graphics->DrawText(vecScreen.fX - (dimensionWidth / 2), vecScreen.fY, 0xFFFFFFFF, fScale, "tahoma-bold", true, Label->GetText().Get());
 	}
 }

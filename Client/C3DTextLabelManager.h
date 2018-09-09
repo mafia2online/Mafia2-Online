@@ -27,11 +27,11 @@ public:
 
 	bool							Add(float fX, float fY, float fZ, String text, int color, float distance);
 	bool							Remove(EntityId textID);
-	bool							IsActive(EntityId textID);
-	bool							IsOnScreen(EntityId textID);
+	bool							IsActive(EntityId textID) const;
+	bool							IsOnScreen(EntityId textID) const;
 	void							Render(void);
-	EntityId						FindFreeSlot(void);
-	int								GetCount(void);
+	EntityId						FindFreeSlot(void) const;
+	int								GetCount(void) const;
 
-	C3DTextLabel					* Get(EntityId textId) { return m_p3DTextLabels[textId]; }
+	C3DTextLabel					* Get(EntityId textId) const { return m_p3DTextLabels[textId]; }
 };
